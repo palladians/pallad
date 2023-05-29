@@ -23,17 +23,19 @@
     "story:preview": "ladle preview"
   },
   "dependencies": {
+    "@github/hotkey": "^2.0.1",
     "@ladle/react": "^2.13.0",
-    "cmdk": "^0.2.0",
-    "lucide-react": "^0.221.0",
     "react": "^18.2.0",
-    "react-day-picker": "^8.7.1",
     "react-dom": "^18.2.0",
+    "react-native-popper": "^0.3.2",
     "react-native-web": "^0.19.4",
-    "stitches-native": "^0.4.0"
+    "stitches-native": "^0.4.0",
+    "zeego": "^1.6.2"
   },
   "devDependencies": {
-    "esbuild-plugin-alias": "^0.2.1"
+    "esbuild-plugin-alias": "^0.2.1",
+    "vite": "^4.3.9",
+    "vitest": "^0.31.1"
   },
   "peerDependencies": {
     "react": "^18.2.0",

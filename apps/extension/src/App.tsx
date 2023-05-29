@@ -1,7 +1,7 @@
 import '@/assets/app.css'
 import { RouterProvider, createMemoryHistory } from '@tanstack/router'
 import { router } from './Router'
-import { ThemeProvider, theme } from './lib/styled'
+import { ThemeProvider, theme } from '@palladxyz/ui'
 
 function App() {
   const history = createMemoryHistory()
