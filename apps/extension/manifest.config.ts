@@ -1,6 +1,8 @@
-import { defineManifest } from '@crxjs/vite-plugin'
 import packageJson from './package.json'
 const { version } = packageJson
+import { createRequire } from 'node:module'
+const require = createRequire(import.meta.url)
+const { defineManifest } = require('@crxjs/vite-plugin')
 
 // Convert from Semver (example: 0.1.0-beta6)
 const [major, minor, patch, label = '0'] = version

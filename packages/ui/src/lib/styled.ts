@@ -14,7 +14,7 @@ export const { styled, ThemeProvider, theme, createTheme, useTheme, css, config 
       cardForeground: 'hsl(222, 47.4%, 11.2%)',
       border: 'hsl(214, 31.8%, 91.4%)',
       input: 'hsl(214, 31.8%, 91.4%)',
-      primary: 'hsl(222, 47.4%, 11.2%)',
+      primary: '#232429',
       primaryForeground: 'hsl(210, 40%, 98%)',
       secondary: 'hsl(210, 40%, 96.1%)',
       secondaryForeground: 'hsl(222, 47.4%, 11.2%)',
@@ -24,7 +24,7 @@ export const { styled, ThemeProvider, theme, createTheme, useTheme, css, config 
       destructiveForeground: 'hsl(210, 40%, 98%)',
       ring: 'hsl(215, 20.2%, 65.1%)',
       white: '#ffffff',
-      black: '#000000'
+      black: '#1a1a1a'
     },
     space: {
       xs: '4px',

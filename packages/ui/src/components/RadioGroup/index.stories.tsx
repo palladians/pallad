@@ -1,10 +1,9 @@
 import React from 'react'
 import { StoryDefault } from '@ladle/react'
-import { Select } from './index'
+import { RadioGroup } from './index'
 
 export const Basic = () => (
-  <Select
-    placeholder="Pick color"
+  <RadioGroup
     options={[
       { value: 'red', label: 'Red' },
       { value: 'green', label: 'Green' },
@@ -14,5 +13,5 @@ export const Basic = () => (
 )
 
 export default {
-  title: 'Select'
+  title: 'RadioGroup'
 } satisfies StoryDefault

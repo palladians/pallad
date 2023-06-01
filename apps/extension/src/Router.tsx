@@ -1,15 +1,19 @@
-import { Outlet, RootRoute, Router } from '@tanstack/router'
-import { overviewRoute } from './features/overview'
-import { Navbar } from './components/navbar'
+import { Box } from '@palladxyz/ui'
+import { Outlet, RootRoute, Router, useNavigate } from '@tanstack/router'
+import { overviewRoute } from '@/features/overview'
+import { menuRoute } from '@/features/walletMenu'
+import { startRoute } from '@/features/onboarding'
+import { useEffect } from 'react'
 
 const Root = () => {
+  const navigate = useNavigate()
+  useEffect(() => {
+    navigate({ to: '/start' })
+  }, [])
   return (
-    <div className="flex flex-col h-screen text-base">
-      <Navbar />
-      <div className="flex-1">
-        <Outlet />
-      </div>
-    </div>
+    <Box css={{ flex: 1, height: '100vh' }}>
+      <Outlet />
+    </Box>
   )
 }
 
@@ -17,7 +21,7 @@ export const rootRoute = new RootRoute({
   component: Root
 })
 
-const routeTree = rootRoute.addChildren([overviewRoute])
+const routeTree = rootRoute.addChildren([overviewRoute, menuRoute, startRoute])
 
 export const router = new Router({ routeTree })
 

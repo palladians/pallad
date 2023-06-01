@@ -6,14 +6,19 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:firefox": "web-ext build --source-dir=dist",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "@palladxyz/ui": "*",
-    "@tanstack/router": "^0.0.1-beta.89",
+    "@tanstack/router": "0.0.1-beta.86",
+    "easy-mesh-gradient": "^0.0.5",
+    "encrypt-storage": "^2.12.16",
+    "mina-signer": "^2.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-native": "^0.71.8",
     "react-native-web": "^0.19.4",
     "webextension-polyfill": "^0.10.0"
   },
@@ -28,8 +33,9 @@
     "@vitejs/plugin-react-swc": "^3.0.0",
     "concurrently": "^8.0.1",
     "path": "^0.12.7",
-    "react-native": "^0.71.8",
     "typescript": "^5.0.2",
-    "vite": "^4.3.2"
+    "vite": "^4.3.2",
+    "vite-plugin-commonjs": "^0.7.1",
+    "web-ext": "^7.6.2"
   }
 }

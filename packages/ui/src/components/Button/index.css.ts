@@ -6,7 +6,7 @@ export const buttonBase: CSS = {
   justifyContent: 'center',
   borderRadius: '0.375rem',
   fontSize: '0.875rem',
-  fontWeight: '500',
+  fontWeight: '600',
   transitionProperty: 'color',
   transitionDuration: '0.3s',
   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',

@@ -1,7 +1,9 @@
 import { CSS } from '../../lib/styled'
 
 export const selectTriggerBase: CSS = {
+  position: 'relative',
   display: 'flex',
+  flexDirection: 'column',
   height: '2.5rem',
   width: '100%',
   alignItems: 'center',
@@ -14,7 +16,6 @@ export const selectTriggerBase: CSS = {
   paddingRight: '0.75rem',
   paddingTop: '0.5rem',
   paddingBottom: '0.5rem',
-  fontSize: '0.875rem',
   outline: 'none',
   // boxShadow: 'var(--ring-offset-background) 0px 0px 0px 2px',
   '&::placeholder': {
@@ -34,6 +35,7 @@ export const selectContentBase: CSS = {
   top: 4,
   padding: 8,
   minWidth: 256,
+  maxWidth: '100vw',
   width: '100%',
   overflow: 'hidden',
   borderRadius: '4px',

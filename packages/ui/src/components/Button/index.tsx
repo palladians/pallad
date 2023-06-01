@@ -72,13 +72,17 @@ const StyledButtonText = styled(Text, {
   }
 })
 
-type ButtonProps = React.ComponentProps<typeof StyledButton>
+type ButtonProps = React.ComponentProps<typeof StyledButton> & {
+  textCss: any
+}
 
-export const Button = ({ children, variant, ...props }: ButtonProps) => {
+export const Button = React.forwardRef(({ children, variant, textCss, ...props }: ButtonProps, ref) => {
   return (
-    <StyledButton as={Pressable} variant={variant} {...props}>
-      <StyledButtonText variant={variant}>{children as React.ReactNode}</StyledButtonText>
+    <StyledButton as={Pressable} variant={variant} ref={ref} {...props}>
+      <StyledButtonText variant={variant} css={textCss}>
+        {children as React.ReactNode}
+      </StyledButtonText>
     </StyledButton>
   )
-}
+})
 Button.displayName = 'Button'
