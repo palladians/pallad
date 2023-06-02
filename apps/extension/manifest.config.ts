@@ -14,6 +14,12 @@ const [major, minor, patch, label = '0'] = version
 export default defineManifest(async (env) => ({
   manifest_version: 3,
   name: env.mode === 'DEVELOPMENT' ? '[DEV] Pallad' : 'Pallad',
+  icons: {
+    '16': 'icons/16.png',
+    '32': 'icons/32.png',
+    '48': 'icons/48.png',
+    '128': 'icons/128.png'
+  },
   version: `${major}.${minor}.${patch}.${label}`,
   version_name: version,
   action: { default_popup: 'index.html' },

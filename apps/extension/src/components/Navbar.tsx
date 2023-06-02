@@ -1,6 +1,7 @@
 import { Box, Text, icons, Image, composeBox } from '@palladxyz/ui'
 import { Pressable } from 'react-native'
 import { useNavigate, useRouter } from '@tanstack/router'
+import Logo from '../assets/logo.svg'
 
 export const Navbar = () => {
   const router = useRouter()
@@ -15,8 +16,8 @@ export const Navbar = () => {
   return (
     <Box
       css={{
-        backgroundColor: '$black',
-        paddingVertical: 16,
+        backgroundColor: '$gray900',
+        paddingVertical: 12,
         paddingHorizontal: 16,
         flexDirection: 'row',
         gap: 16,
@@ -25,12 +26,15 @@ export const Navbar = () => {
       }}
     >
       <Pressable onPress={() => navigate({ to: '/' })}>
+        <Image source={Logo} css={{ width: 24, height: 32 }} />
+      </Pressable>
+      <Pressable onPress={() => navigate({ to: '/' })}>
         <Text css={{ color: '$white', whiteSpace: 'nowrap', width: 'auto' }}>My wallet</Text>
       </Pressable>
       <Box css={{ flex: 1 }}>
-        <StyledPressable css={{ width: 24, padding: 4 }} onPress={openNewTab}>
-          <Image source={icons.iconExternal} css={{ width: 20, height: 20 }} />
-        </StyledPressable>
+        {/*<StyledPressable css={{ width: 24, padding: 4 }} onPress={openNewTab}>*/}
+        {/*  <Image source={icons.iconExternal} css={{ width: 20, height: 20 }} />*/}
+        {/*</StyledPressable>*/}
       </Box>
       <StyledPressable css={{ width: 'auto', padding: 4 }} onPress={handleMenuIcon}>
         <Image source={isMenu ? icons.iconX__white : icons.iconMenu} css={{ width: 20, height: 20, color: 'white' }} />

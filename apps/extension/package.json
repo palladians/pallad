@@ -8,10 +8,11 @@
     "build": "tsc && vite build",
     "build:firefox": "web-ext build --source-dir=dist",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:unit": "vitest run"
   },
   "dependencies": {
-    "@palladxyz/ui": "*",
+    "@palladxyz/ui": "workspace:*",
     "@tanstack/router": "0.0.1-beta.86",
     "easy-mesh-gradient": "^0.0.5",
     "encrypt-storage": "^2.12.16",
@@ -20,10 +21,13 @@
     "react-dom": "^18.2.0",
     "react-native": "^0.71.8",
     "react-native-web": "^0.19.4",
-    "webextension-polyfill": "^0.10.0"
+    "webextension-polyfill": "^0.10.0",
+    "zustand": "^4.3.8"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.17",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^20.2.3",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
@@ -32,10 +36,12 @@
     "@typescript-eslint/parser": "^5.57.1",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "concurrently": "^8.0.1",
+    "happy-dom": "^9.20.3",
     "path": "^0.12.7",
     "typescript": "^5.0.2",
     "vite": "^4.3.2",
     "vite-plugin-commonjs": "^0.7.1",
+    "vitest": "^0.31.4",
     "web-ext": "^7.6.2"
   }
 }

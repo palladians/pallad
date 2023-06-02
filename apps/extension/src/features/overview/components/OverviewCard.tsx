@@ -29,16 +29,16 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
         css={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', zIndex: 0 }}
       />
       <Box css={{ gap: 8 }}>
-        <Text css={{ fontSize: 14, fontWeight: 500 }}>Wallet Balance</Text>
+        <Text css={{ fontSize: 14, fontWeight: 700 }}>Balance</Text>
         <Text css={{ fontSize: 24, fontWeight: 700 }}>361.0465 MINA</Text>
         <Text css={{ fontSize: 14, fontWeight: 700 }}>361.0465 USD</Text>
       </Box>
       <Box css={{ gap: 8 }}>
-        <Text css={{ fontSize: 14, fontWeight: 500 }}>Wallet Address</Text>
+        <Text css={{ fontSize: 14, fontWeight: 700 }}>Address</Text>
         <Box css={{ flexDirection: 'row', gap: 8 }}>
           <Text
             css={{
-              fontSize: 16,
+              fontSize: 14,
               flex: 1,
               fontWeight: 700
             }}
@@ -55,9 +55,7 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
         <Button variant="secondary" css={{ flex: 1 }}>
           Send
         </Button>
-        <Button variant="secondary" css={{ flex: 1 }}>
-          Receive
-        </Button>
+        <Button css={{ flex: 1 }}>Receive</Button>
       </Box>
     </Box>
   )

@@ -1,25 +1,24 @@
 import { CSS } from '../../lib/styled'
 
 export const buttonBase: CSS = {
-  display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '0.375rem',
   fontSize: '0.875rem',
-  fontWeight: '600',
   transitionProperty: 'color',
   transitionDuration: '0.3s',
   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
   outline: '2px solid transparent',
-  outlineOffset: '2px'
+  outlineOffset: '2px',
+  flexDirection: 'row',
+  gap: 8
 }
 
 export const buttonVariantDefault: CSS = {
-  backgroundColor: '$primary',
+  backgroundColor: '$gray800',
   color: '$primaryForeground',
   '&:hover': {
-    backgroundColor: '$primary',
-    opacity: 0.9
+    backgroundColor: '$gray700'
   }
 }
 

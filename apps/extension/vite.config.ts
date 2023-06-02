@@ -24,5 +24,6 @@ export default defineConfig({
     commonjsOptions: {
       transformMixedEsModules: true
     }
-  }
+  },
+  publicDir: './public/'
 })
