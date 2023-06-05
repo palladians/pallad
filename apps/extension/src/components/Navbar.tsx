@@ -8,10 +8,10 @@ export const Navbar = () => {
   const navigate = useNavigate()
   const StyledPressable = composeBox({ baseComponent: Pressable })
   const isMenu = router.state.currentLocation.pathname === '/menu'
-  const openNewTab = () => {
-    // @ts-ignore
-    chrome.tabs.create({ url: 'app.html' })
-  }
+  // const openNewTab = () => {
+  //   // @ts-ignore
+  //   chrome.tabs.create({ url: 'app.html' })
+  // }
   const handleMenuIcon = () => (isMenu ? navigate({ to: '/' }) : navigate({ to: '/menu' }))
   return (
     <Box

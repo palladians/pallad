@@ -1,5 +1,6 @@
+import {} from 'react'
 import { createStitches } from 'stitches-native'
-import type * as Stitches from 'stitches-native'
+import type { CSS as StitchesCSS } from 'stitches-native'
 
 export const { styled, ThemeProvider, theme, createTheme, useTheme, css, config } = createStitches({
   theme: {
@@ -110,4 +111,4 @@ export const { styled, ThemeProvider, theme, createTheme, useTheme, css, config 
 })
 export const darkTheme = createTheme({})
 export type Theme = typeof theme
-export type CSS = Stitches.CSS<typeof config>
+export type CSS = StitchesCSS<typeof config>

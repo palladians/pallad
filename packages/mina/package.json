@@ -1,0 +1,29 @@
+{
+  "name": "@palladxyz/mina",
+  "version": "0.0.1",
+  "description": "Mina Protocol SDK for Pallad",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:unit": "vitest run"
+  },
+  "dependencies": {
+    "bip32": "^4.0.0",
+    "bip39": "^3.1.0",
+    "bs58check": "^3.0.1",
+    "mina-signer": "^2.0.3",
+    "tiny-secp256k1": "^2.2.2"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "happy-dom": "^9.20.3"
+  }
+}

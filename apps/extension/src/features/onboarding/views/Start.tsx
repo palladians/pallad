@@ -28,8 +28,8 @@ export const StartView = () => {
         >
           Pallad
         </Text>
-        <Text css={{ fontSize: 48, color: '$white' }}>- Mina Wallet You Deserve</Text>
-        <Text css={{ color: '$white', lineHeight: '220%', marginTop: 16 }}>
+        <Text css={{ fontSize: 48, color: '$gray50' }}>- Mina Wallet You Deserve</Text>
+        <Text css={{ color: '$gray100', lineHeight: '220%', marginTop: 16 }}>
           Take your Mina journey to the next level with out secure, transparent, and intuitive wallet interface.
         </Text>
       </>

@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url)
 
 export default defineConfig([
   {
-    name: 'main',
+    name: 'pallad/ui',
     entry: ['./src/index.ts'],
     outDir: './dist',
     format: 'esm',

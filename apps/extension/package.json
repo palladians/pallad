@@ -1,7 +1,6 @@
 {
   "name": "@palladxyz/extension",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,12 +12,18 @@
   },
   "dependencies": {
     "@palladxyz/ui": "workspace:*",
+    "@palladxyz/mina": "workspace:*",
+    "@plasmohq/messaging": "^0.3.3",
+    "@plasmohq/storage": "^1.6.1",
     "@tanstack/router": "0.0.1-beta.86",
+    "buffer": "^6.0.3",
     "easy-mesh-gradient": "^0.0.5",
     "encrypt-storage": "^2.12.16",
-    "mina-signer": "^2.0.3",
+    "immer": "^10.0.2",
+    "next-json": "^0.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.44.3",
     "react-native": "^0.71.8",
     "react-native-web": "^0.19.4",
     "webextension-polyfill": "^0.10.0",
@@ -26,7 +31,8 @@
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.17",
-    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/react": "^14.0.0",
+    "@total-typescript/ts-reset": "^0.4.2",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.2.3",
     "@types/react": "^18.0.28",
@@ -38,10 +44,8 @@
     "concurrently": "^8.0.1",
     "happy-dom": "^9.20.3",
     "path": "^0.12.7",
-    "typescript": "^5.0.2",
     "vite": "^4.3.2",
     "vite-plugin-commonjs": "^0.7.1",
-    "vitest": "^0.31.4",
     "web-ext": "^7.6.2"
   }
 }

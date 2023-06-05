@@ -4,6 +4,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "test:unit": "turbo run test:unit",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "preinstall": "npx only-allow pnpm"
   },
@@ -12,7 +13,8 @@
     "prettier": "^2.8.8",
     "tsup": "^6.7.0",
     "turbo": "^1.9.7",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vitest": "^0.31.4"
   },
   "name": "pallad",
   "packageManager": "pnpm@8.6.0",
