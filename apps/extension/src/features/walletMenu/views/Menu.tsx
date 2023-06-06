@@ -1,6 +1,7 @@
 import { Box, Button, icons } from '@palladxyz/ui'
 import { Navbar } from '@/components/Navbar'
 import { useNavigate } from '@tanstack/router'
+import { secureStorage, sessionData } from '@/lib/storage.ts'
 
 export const MenuView = () => {
   const navigate = useNavigate()
@@ -17,8 +18,8 @@ export const MenuView = () => {
     {
       label: 'Lock',
       onPress: () => {
-        console.log('>>>LOCK')
-        return navigate({ to: '/start' })
+        sessionData.set('spendingPassword', null)
+        return navigate({ to: '/unlock' })
       },
       icon: icons.iconLock
     }

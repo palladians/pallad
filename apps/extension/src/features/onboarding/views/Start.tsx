@@ -1,5 +1,5 @@
 import { Button, Text } from '@palladxyz/ui'
-import { WizardLayout } from '@/components/WizardLayout'
+import { WizardLayout } from '@/components'
 import { useNavigate } from '@tanstack/router'
 
 export const StartView = () => {
@@ -8,7 +8,9 @@ export const StartView = () => {
     <WizardLayout
       footer={
         <>
-          <Button css={{ flex: 1, width: 'auto' }}>Restore Wallet</Button>
+          <Button css={{ flex: 1, width: 'auto' }} onPress={() => navigate({ to: '/restore' })}>
+            Restore Wallet
+          </Button>
           <Button variant="secondary" css={{ flex: 1, width: 'auto' }} onPress={() => navigate({ to: '/create' })}>
             Create Wallet
           </Button>

@@ -1,8 +1,10 @@
-import { generateMnemonic, mnemonicToSeedSync } from 'bip39'
+import { mnemonicToSeedSync } from 'bip39'
 import { BIP32Factory } from 'bip32'
 import { encode } from 'bs58check'
 import * as ecc from 'tiny-secp256k1'
 import Client from 'mina-signer'
+import { Buffer } from 'buffer'
+export { generateMnemonic, validateMnemonic } from 'bip39'
 
 export const minaClient = new Client({ network: 'testnet' })
 
@@ -13,10 +15,6 @@ const bip32 = BIP32Factory(ecc)
 const reverseBytes = (bytes: any) => {
   const uint8 = new Uint8Array(bytes)
   return new Buffer(uint8.reverse())
-}
-
-export const getMnemonic = () => {
-  return generateMnemonic()
 }
 
 export const getHierarchicalDeterministicPath = ({ accountNumber = 0 }) => {

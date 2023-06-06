@@ -2,23 +2,26 @@ import { create } from 'zustand'
 import { produce } from 'immer'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { storagePersistence } from '../lib/storage'
-import { getMnemonic, deriveKeyPair } from '@palladxyz/mina'
+import { generateMnemonic, deriveKeyPair } from '@palladxyz/mina'
 
-type Credential = {
+type PublicCredential = {
   walletName: string
-  walletPubKey: string
+  walletPublicKey: string
+}
+
+type Credential = PublicCredential & {
   walletPrivateKey: string
 }
 
 type VaultState = {
-  currentWalletPubKey: string | null
+  currentWalletPublicKey: string | null
   credentials: Credential[]
 }
 
 type VaultMutators = {
-  setCurrentWalletPubKey: ({ currentWalletPubKey }: { currentWalletPubKey: string | null }) => void
+  setCurrentWalletPublicKey: ({ currentWalletPublicKey }: { currentWalletPublicKey: string | null }) => void
   addCredential: (credential: Credential) => void
-  getCurrentWallet: () => Credential | undefined
+  getCurrentWallet: () => PublicCredential | null
   createWallet: ({ walletName }: { walletName: string }) => Promise<{ publicKey: string; mnemonic: string }>
   restoreWallet: ({ walletName, mnemonic }: { walletName: string; mnemonic: string }) => Promise<{ publicKey: string }>
   reset: () => void
@@ -27,7 +30,7 @@ type VaultMutators = {
 type VaultStore = VaultState & VaultMutators
 
 const initialState = {
-  currentWalletPubKey: null,
+  currentWalletPublicKey: null,
   credentials: []
 } satisfies VaultState
 
@@ -36,49 +39,55 @@ export const useVaultStore = create<VaultStore>()(
     (set, get) => ({
       ...initialState,
       getCurrentWallet() {
-        const { currentWalletPubKey, credentials } = get()
-        return credentials.find((credential) => credential.walletPubKey === currentWalletPubKey)
+        const { currentWalletPublicKey, credentials } = get()
+        const wallet = credentials.find((credential) => credential.walletPublicKey === currentWalletPublicKey)
+        console.log('>>>WLT', wallet)
+        if (!wallet) return null
+        return {
+          walletName: wallet?.walletName,
+          walletPublicKey: wallet?.walletPublicKey
+        }
       },
       async createWallet({ walletName }) {
-        const { addCredential, setCurrentWalletPubKey } = get()
-        const mnemonic = getMnemonic()
+        const { addCredential, setCurrentWalletPublicKey } = get()
+        const mnemonic = generateMnemonic()
         const keypair = await deriveKeyPair({ mnemonic })
         addCredential({
           walletName,
-          walletPubKey: keypair.publicKey,
+          walletPublicKey: keypair.publicKey,
           walletPrivateKey: keypair.privateKey
         })
-        setCurrentWalletPubKey({ currentWalletPubKey: keypair.publicKey })
+        setCurrentWalletPublicKey({ currentWalletPublicKey: keypair.publicKey })
         return {
           publicKey: keypair.publicKey,
           mnemonic
         }
       },
       async restoreWallet({ walletName, mnemonic }) {
-        const { addCredential, setCurrentWalletPubKey } = get()
+        const { addCredential, setCurrentWalletPublicKey } = get()
         const keypair = await deriveKeyPair({ mnemonic })
         addCredential({
           walletName,
-          walletPubKey: keypair.publicKey,
+          walletPublicKey: keypair.publicKey,
           walletPrivateKey: keypair.privateKey
         })
-        setCurrentWalletPubKey({ currentWalletPubKey: keypair.publicKey })
+        setCurrentWalletPublicKey({ currentWalletPublicKey: keypair.publicKey })
         return {
           publicKey: keypair.publicKey
         }
       },
-      setCurrentWalletPubKey: ({ currentWalletPubKey }) =>
+      setCurrentWalletPublicKey: ({ currentWalletPublicKey }) =>
         set(
           produce((draft: VaultStore) => {
-            if (currentWalletPubKey === null) {
-              draft.currentWalletPubKey = null
+            if (currentWalletPublicKey === null) {
+              draft.currentWalletPublicKey = null
               return
             }
             const credentialExists = draft.credentials.find(
-              (credential: Credential) => credential.walletPubKey === currentWalletPubKey
+              (credential: Credential) => credential.walletPublicKey === currentWalletPublicKey
             )
             if (!credentialExists) throw new Error('Given credential does not exist')
-            draft.currentWalletPubKey = currentWalletPubKey
+            draft.currentWalletPublicKey = currentWalletPublicKey
           })
         ),
       addCredential: (credential) =>

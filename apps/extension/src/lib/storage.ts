@@ -2,6 +2,8 @@ import { Storage } from '@plasmohq/storage'
 import { SecureStorage } from '@plasmohq/storage/secure'
 import { StateStorage } from 'zustand/middleware'
 
+export const localData = new Storage({ area: 'local' })
+
 export const sessionData = new Storage({
   area: 'session'
 })

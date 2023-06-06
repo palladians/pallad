@@ -11,7 +11,7 @@ export const buttonBase: CSS = {
   outline: '2px solid transparent',
   outlineOffset: '2px',
   flexDirection: 'row',
-  gap: 8
+  gap: 12
 }
 
 export const buttonVariantDefault: CSS = {

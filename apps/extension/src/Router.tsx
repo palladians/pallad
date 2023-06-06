@@ -2,26 +2,33 @@ import { Box } from '@palladxyz/ui'
 import { Outlet, RootRoute, Router, useNavigate } from '@tanstack/router'
 import { overviewRoute } from '@/features/overview'
 import { menuRoute } from '@/features/walletMenu'
-import { createWalletRoute, startRoute } from '@/features/onboarding'
+import {
+  createWalletRoute,
+  mnemonicConfirmationRoute,
+  mnemonicInputRoute,
+  mnemonicWritedownRoute,
+  restoreWalletRoute,
+  startRoute
+} from '@/features/onboarding'
 import { useEffect } from 'react'
 import { unlockWalletRoute } from '@/features/lock'
-import { useStorage } from '@plasmohq/storage/hook'
-import { useVaultStore } from '@/store/vault'
-
-const INITIALIZED = 'INITIALIZED'
+import { VaultState } from '@/lib/const'
+import { useLocalWallet } from '@/lib/hooks.ts'
+import { sessionData } from '@/lib/storage.ts'
 
 const Root = () => {
   const navigate = useNavigate()
-  const [wallet] = useStorage('wallet')
-  const currentWallet = useVaultStore((state) => state.getCurrentWallet())
+  const [wallet] = useLocalWallet()
   useEffect(() => {
-    const initialRedirect = () => {
-      if (wallet?.vaultState !== INITIALIZED) return navigate({ to: '/start' })
-      if (!currentWallet) return navigate({ to: '/' })
-      return navigate({ to: '/unlock' })
+    const initialRedirect = async () => {
+      const spendingPassword = await sessionData.get('spendingPassword')
+      const initializedVault = wallet?.vaultState === VaultState[VaultState.INITIALIZED]
+      if (!initializedVault) return navigate({ to: '/start' })
+      if (initializedVault && !spendingPassword) return navigate({ to: '/unlock' })
+      return navigate({ to: '/' })
     }
     initialRedirect()
-  }, [])
+  }, [wallet])
   return (
     <Box css={{ flex: 1, height: '100vh' }}>
       <Outlet />
@@ -33,7 +40,17 @@ export const rootRoute = new RootRoute({
   component: Root
 })
 
-const routeTree = rootRoute.addChildren([overviewRoute, menuRoute, startRoute, createWalletRoute, unlockWalletRoute])
+const routeTree = rootRoute.addChildren([
+  overviewRoute,
+  menuRoute,
+  startRoute,
+  createWalletRoute,
+  unlockWalletRoute,
+  mnemonicWritedownRoute,
+  mnemonicConfirmationRoute,
+  restoreWalletRoute,
+  mnemonicInputRoute
+])
 
 export const router = new Router({ routeTree })
 

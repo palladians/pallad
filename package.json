@@ -12,7 +12,7 @@
     "@turbo/gen": "^1.9.7",
     "prettier": "^2.8.8",
     "tsup": "^6.7.0",
-    "turbo": "^1.9.7",
+    "turbo": "^1.10.1",
     "typescript": "^5.0.4",
     "vitest": "^0.31.4"
   },

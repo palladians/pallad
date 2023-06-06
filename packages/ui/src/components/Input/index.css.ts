@@ -13,6 +13,9 @@ export const inputBase: CSS = {
   paddingBottom: '0.5rem',
   fontSize: '0.875rem',
   outline: 'none',
+  '&:focus': {
+    display: 'none'
+  },
   // boxShadow: 'var(--ring-offset-background) 0px 0px 0px 2px',
   '&::placeholder': {
     color: '$mutedForeground'

@@ -56,7 +56,17 @@ export const { styled, ThemeProvider, theme, createTheme, useTheme, css, config 
       gray600: '#4c5667',
       gray700: '#363d4b',
       gray800: '#1e2530',
-      gray900: '#070c18'
+      gray900: '#070c18',
+      red50: '#ffe1f5',
+      red100: '#ffb1d9',
+      red200: '#ff7ebd',
+      red300: '#ff4ca3',
+      red400: '#ff1a89',
+      red500: '#e6006f',
+      red600: '#b40056',
+      red700: '#82003e',
+      red800: '#500025',
+      red900: '#20000e'
     },
     space: {
       xs: '4px',

@@ -4,10 +4,13 @@ import path from 'path'
 import manifest from './manifest.config'
 import commonjs from 'vite-plugin-commonjs'
 import { crx } from '@crxjs/vite-plugin'
+import wasm from 'vite-plugin-wasm'
+import topLevelAwait from 'vite-plugin-top-level-await'
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), crx({ manifest }), commonjs()],
+  plugins: [react(), crx({ manifest }), commonjs(), wasm(), topLevelAwait()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -25,5 +28,17 @@ export default defineConfig({
       transformMixedEsModules: true
     }
   },
-  publicDir: './public/'
+  publicDir: './public/',
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis'
+      },
+      plugins: [
+        NodeGlobalsPolyfillPlugin({
+          buffer: true
+        })
+      ]
+    }
+  }
 })
