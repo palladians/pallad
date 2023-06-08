@@ -1,12 +1,15 @@
 import { Box, Button, icons, Image, Text } from '@palladxyz/ui'
 import { Pressable, Clipboard } from 'react-native'
 import easyMeshGradient from 'easy-mesh-gradient'
+import { trpc } from '@/lib/trpc'
 
 interface OverviewCardProps {
   walletAddress: string
 }
 
 export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
+  const { data } = trpc.mina.fiatPrice.useSWR()
+  console.log('>>>DATA', data)
   const meshGradient = easyMeshGradient({
     seed: walletAddress,
     lightnessRange: [0.8, 1]
@@ -40,7 +43,8 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
             css={{
               fontSize: 14,
               flex: 1,
-              fontWeight: 700
+              fontWeight: 700,
+              color: '$primary700'
             }}
             numberOfLines={1}
           >

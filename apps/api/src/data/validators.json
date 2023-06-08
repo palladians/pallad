@@ -1,0 +1,17 @@
+{
+  "$schema": "./_validatorsSchema.json",
+  "validators": [
+    {
+      "publicKey": "B62qpge4uMq4Vv5Rvc8Gw9qSquUYd6xoW1pz7HQkMSHm6h1o7pvLPAN",
+      "name": "Mina Explorer",
+      "description": "The first Mina Protocol block explorer",
+      "fee": 5,
+      "meta": [
+        {
+          "key": "websiteUrl",
+          "value": "https://www.minaexplorer.com"
+        }
+      ]
+    }
+  ]
+}

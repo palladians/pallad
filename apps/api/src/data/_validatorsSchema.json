@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "validators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "publicKey": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "fee": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "meta": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "enum": ["websiteUrl", "discordUrl", "twitterUrl", "githubUrl", "telegramUrl"]
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": ["key", "value"]
+            }
+          }
+        },
+        "required": ["publicKey", "name", "description", "fee", "meta"]
+      }
+    }
+  },
+  "required": ["validators"]
+}

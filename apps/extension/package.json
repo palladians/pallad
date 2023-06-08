@@ -16,6 +16,8 @@
     "@plasmohq/messaging": "^0.3.3",
     "@plasmohq/storage": "^1.6.1",
     "@tanstack/router": "0.0.1-beta.86",
+    "@trpc-swr/client": "^1.0.1",
+    "@trpc/client": "^10.29.1",
     "buffer": "^6.0.3",
     "easy-mesh-gradient": "^0.0.5",
     "encrypt-storage": "^2.12.16",
@@ -30,6 +32,7 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
+    "@palladxyz/api": "workspace:*",
     "@crxjs/vite-plugin": "^2.0.0-beta.17",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@testing-library/react": "^14.0.0",
