@@ -1,6 +1,7 @@
-import React from 'react'
-import { Button } from '.'
 import { StoryDefault } from '@ladle/react'
+import React from 'react'
+
+import { Button } from '.'
 
 export const Basic = () => <Button>Send</Button>
 export const Destructive = () => <Button variant="destructive">Delete</Button>

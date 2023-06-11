@@ -1,6 +1,7 @@
-import React from 'react'
-import { Input } from '.'
 import { StoryDefault } from '@ladle/react'
+import React from 'react'
+
+import { Input } from '.'
 
 export const Basic = () => <Input placeholder="Email Address" />
 

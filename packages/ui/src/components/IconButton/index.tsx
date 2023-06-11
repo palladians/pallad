@@ -1,7 +1,8 @@
+import React from 'react'
 import { Pressable } from 'react-native'
+
 import { styled } from '../../lib/styled'
 import { iconButtonBase } from './index.css'
-import React from 'react'
 
 const StyledPressable = styled(Pressable, iconButtonBase)
 type StyledPressableProps = React.ComponentProps<typeof StyledPressable>

@@ -3,13 +3,21 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
+    "lint": "eslint packages apps",
+    "lint:fix": "pnpm lint --fix",
     "test:unit": "turbo run test:unit",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\" && pnpm lint:fix",
     "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
     "prettier": "^2.8.8",
     "tsup": "^6.7.0",
     "turbo": "^1.10.1",

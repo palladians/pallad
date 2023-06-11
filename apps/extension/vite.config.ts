@@ -1,12 +1,13 @@
-import { defineConfig } from 'vite'
+import { crx } from '@crxjs/vite-plugin'
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
-import manifest from './manifest.config'
+import { defineConfig } from 'vite'
 import commonjs from 'vite-plugin-commonjs'
-import { crx } from '@crxjs/vite-plugin'
-import wasm from 'vite-plugin-wasm'
 import topLevelAwait from 'vite-plugin-top-level-await'
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import wasm from 'vite-plugin-wasm'
+
+import manifest from './manifest.config'
 
 export default defineConfig({
   plugins: [react(), crx({ manifest }), commonjs(), wasm(), topLevelAwait()],

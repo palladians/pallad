@@ -1,12 +1,13 @@
-import { Popover } from 'react-native-popper'
-import { styled } from '../../lib/styled'
-import { selectContentBase, selectTriggerBase } from './index.css'
-import { Pressable, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
+import { Pressable, View } from 'react-native'
+import { Popover } from 'react-native-popper'
+
+import { iconChevronDown } from '../../assets/icons'
+import { styled } from '../../lib/styled'
 import { Button } from '../Button'
 import { Image } from '../Image'
 import { Text } from '../Text'
-import { iconChevronDown } from '../../assets/icons'
+import { selectContentBase, selectTriggerBase } from './index.css'
 
 export const SelectTrigger = styled(Pressable, selectTriggerBase)
 export const SelectContent = styled(View, selectContentBase)
@@ -21,7 +22,10 @@ interface SelectProps {
 export const Select = ({ options, placeholder }: SelectProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [value, setValue] = useState<string | null>(null)
-  const currentLabel = useMemo(() => options.find((option) => option.value === value)?.label, [value])
+  const currentLabel = useMemo(
+    () => options.find((option) => option.value === value)?.label,
+    [value]
+  )
   const setNewValue = (value: string) => {
     setValue(value)
     setIsOpen(false)
@@ -38,7 +42,16 @@ export const Select = ({ options, placeholder }: SelectProps) => {
       trigger={
         <SelectTrigger>
           <Text css={{ fontSize: 14 }}>{currentLabel || placeholder}</Text>
-          <Image source={iconChevronDown} css={{ width: 24, height: 24, position: 'absolute', right: 8, top: 8 }} />
+          <Image
+            source={iconChevronDown}
+            css={{
+              width: 24,
+              height: 24,
+              position: 'absolute',
+              right: 8,
+              top: 8
+            }}
+          />
         </SelectTrigger>
       }
       placement="bottom"

@@ -1,5 +1,6 @@
-import React from 'react'
 import { StoryDefault } from '@ladle/react'
+import React from 'react'
+
 import { Spinner } from './index'
 
 export const Basic = () => <Spinner />

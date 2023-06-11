@@ -1,9 +1,12 @@
-import React from 'react'
-import { Image } from '.'
 import { StoryDefault } from '@ladle/react'
-import { iconX } from '../../assets/icons'
+import React from 'react'
 
-export const Basic = () => <Image source={iconX} css={{ width: 24, height: 24 }} />
+import { iconX } from '../../assets/icons'
+import { Image } from '.'
+
+export const Basic = () => (
+  <Image source={iconX} css={{ width: 24, height: 24 }} />
+)
 
 export default {
   title: 'Image'

@@ -1,5 +1,9 @@
 import React from 'react'
 import { Pressable, Text } from 'react-native'
+
+import { styled } from '../../lib/styled'
+import { composeBox } from '../Box'
+import { Image } from '../Image'
 import {
   buttonBase,
   buttonSizeDefault,
@@ -12,9 +16,6 @@ import {
   buttonVariantOutline,
   buttonVariantSecondary
 } from './index.css'
-import { styled } from '../../lib/styled'
-import { composeBox } from '../Box'
-import { Image } from '../Image'
 
 const StyledPressable = composeBox({ baseComponent: Pressable })
 
@@ -79,14 +80,18 @@ type ButtonProps = React.ComponentProps<typeof StyledButton> & {
   leftIcon?: React.ReactNode
 }
 
-export const Button = React.forwardRef(({ children, variant, textCss, leftIcon, ...props }: ButtonProps, ref) => {
-  return (
-    <StyledButton as={Pressable} variant={variant} ref={ref} {...props}>
-      {leftIcon && <Image source={leftIcon} css={{ width: 24, height: 24 }} />}
-      <StyledButtonText variant={variant} css={textCss}>
-        {children as React.ReactNode}
-      </StyledButtonText>
-    </StyledButton>
-  )
-})
+export const Button = React.forwardRef(
+  ({ children, variant, textCss, leftIcon, ...props }: ButtonProps, ref) => {
+    return (
+      <StyledButton as={Pressable} variant={variant} ref={ref} {...props}>
+        {leftIcon && (
+          <Image source={leftIcon} css={{ width: 24, height: 24 }} />
+        )}
+        <StyledButtonText variant={variant} css={textCss}>
+          {children as React.ReactNode}
+        </StyledButtonText>
+      </StyledButton>
+    )
+  }
+)
 Button.displayName = 'Button'

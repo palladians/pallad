@@ -1,11 +1,12 @@
 import { createHTTPHandler } from '@trpc/server/adapters/standalone'
-import { router } from './trpc'
 import cors from 'cors'
+
 import { createContext } from './context'
-import { stakingRouter } from './routers/staking'
-import { minaRouter } from './routers/mina'
-import { transactionsRouter } from './routers/transactions'
 import { accountsRouter } from './routers/accounts'
+import { minaRouter } from './routers/mina'
+import { stakingRouter } from './routers/staking'
+import { transactionsRouter } from './routers/transactions'
+import { router } from './trpc'
 
 export const appRouter = router({
   staking: stakingRouter,

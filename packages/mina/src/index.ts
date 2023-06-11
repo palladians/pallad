@@ -1,1 +1,7 @@
-export { minaClient, generateMnemonic, validateMnemonic, deriveKeyPair } from './hd'
+export {
+  deriveKeyPair,
+  generateMnemonic,
+  minaClient,
+  validateMnemonic
+} from './hd'
+export { MinaNetwork } from './types'

@@ -1,5 +1,6 @@
-import { deriveKeyPair, generateMnemonic, validateMnemonic } from './hd'
 import { expect } from 'vitest'
+
+import { deriveKeyPair, generateMnemonic, validateMnemonic } from './hd'
 
 it('generates new mnemonic', () => {
   const mnemonic = generateMnemonic()
@@ -13,7 +14,8 @@ it('generates unique mnemonic', () => {
 })
 
 it('validates mnemonics', () => {
-  const validMnemonic = 'habit hope tip crystal because grunt nation idea electric witness alert like'
+  const validMnemonic =
+    'habit hope tip crystal because grunt nation idea electric witness alert like'
   const invalidMnemonic = 'habit hope tip crystal because grunt nation'
   expect(validateMnemonic(validMnemonic)).toBeTruthy()
   expect(validateMnemonic(invalidMnemonic)).toBeFalsy()
@@ -21,7 +23,10 @@ it('validates mnemonics', () => {
 
 it('derives a keypair', async () => {
   const keypair = await deriveKeyPair({
-    mnemonic: 'habit hope tip crystal because grunt nation idea electric witness alert like'
+    mnemonic:
+      'habit hope tip crystal because grunt nation idea electric witness alert like'
   })
-  expect(keypair.publicKey).toEqual('B62qnHVdf5V7JTiRJDZMXrLNxdcH3xGamp5fUs6uMo5TuwMGHdt1dW2')
+  expect(keypair.publicKey).toEqual(
+    'B62qnHVdf5V7JTiRJDZMXrLNxdcH3xGamp5fUs6uMo5TuwMGHdt1dW2'
+  )
 })

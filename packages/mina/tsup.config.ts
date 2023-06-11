@@ -12,7 +12,8 @@ export default defineConfig([
     dts: {
       compilerOptions: {
         moduleResolution: 'Node',
-        allowSyntheticDefaultImports: true
+        allowSyntheticDefaultImports: true,
+        esModuleInterop: true
       }
     }
   }

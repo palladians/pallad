@@ -1,5 +1,6 @@
 import React from 'react'
 import { Image as BaseImage } from 'react-native'
+
 import { styled } from '../../lib/styled'
 
 const StyledImage = styled(BaseImage)

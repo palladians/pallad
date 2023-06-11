@@ -1,8 +1,5 @@
-import { createRequire } from 'node:module'
-import { defineConfig } from 'tsup'
-import alias from 'esbuild-plugin-alias'
 import { commonjs } from '@hyrious/esbuild-plugin-commonjs'
-const require = createRequire(import.meta.url)
+import { defineConfig } from 'tsup'
 
 export default defineConfig([
   {
@@ -20,12 +17,7 @@ export default defineConfig([
         jsx: 'react'
       }
     },
-    esbuildPlugins: [
-      alias({
-        'react-native': require.resolve('react-native-web')
-      }),
-      commonjs()
-    ],
-    external: ['react-native']
+    esbuildPlugins: [commonjs()],
+    external: ['react-native', 'react-native-web']
   }
 ])

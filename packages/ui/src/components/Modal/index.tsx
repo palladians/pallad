@@ -1,22 +1,47 @@
 import React from 'react'
-import { Modal as StyledModal, View, TouchableWithoutFeedback, Pressable } from 'react-native'
-import { composeBox } from '../Box'
-import { Image } from '../Image'
-import { IconButton } from '../IconButton'
+import {
+  Animated,
+  Modal as NativeModal,
+  Pressable,
+  TouchableWithoutFeedback
+} from 'react-native'
+
 import { iconX } from '../../assets/icons'
+import { BoxProps, composeBox } from '../Box'
+import { IconButton } from '../IconButton'
+import { Image } from '../Image'
 
 interface ModalProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   children: React.ReactNode
+  maxHeight?: string | number
+  borderRadius?: string | number
+  contentProps?: BoxProps
+  containerProps?: BoxProps
 }
 
-export const Modal = ({ isOpen = false, setIsOpen, children, ...props }: ModalProps) => {
-  const StyledView = composeBox({ baseComponent: View })
+export const Modal = ({
+  isOpen = false,
+  setIsOpen,
+  children,
+  maxHeight = 480,
+  borderRadius = '$md',
+  contentProps,
+  containerProps
+}: ModalProps) => {
+  const StyledView = composeBox({ baseComponent: Animated.View })
   const StyledPressable = composeBox({ baseComponent: Pressable })
-  const StyledTouchableWithoutFeedback = composeBox({ baseComponent: TouchableWithoutFeedback })
+  const StyledTouchableWithoutFeedback = composeBox({
+    baseComponent: TouchableWithoutFeedback
+  })
   return (
-    <StyledModal transparent visible={isOpen} {...props}>
+    <NativeModal
+      transparent
+      visible={isOpen}
+      animationType="fade"
+      {...containerProps}
+    >
       <StyledPressable
         css={{
           justifyContent: 'center',
@@ -29,16 +54,18 @@ export const Modal = ({ isOpen = false, setIsOpen, children, ...props }: ModalPr
         <StyledTouchableWithoutFeedback>
           <StyledView
             css={{
+              ...contentProps?.css,
               position: 'relative',
               maxWidth: 600,
               width: '100%',
-              maxHeight: 480,
+              maxHeight,
               height: '100%',
               backgroundColor: '$white',
               margin: 'auto',
-              borderRadius: '$md',
+              borderRadius,
               padding: '$md'
             }}
+            {...contentProps}
           >
             <>
               <IconButton
@@ -52,6 +79,6 @@ export const Modal = ({ isOpen = false, setIsOpen, children, ...props }: ModalPr
           </StyledView>
         </StyledTouchableWithoutFeedback>
       </StyledPressable>
-    </StyledModal>
+    </NativeModal>
   )
 }

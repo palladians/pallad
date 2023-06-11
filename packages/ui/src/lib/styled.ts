@@ -1,8 +1,16 @@
 import {} from 'react'
-import { createStitches } from 'stitches-native'
 import type { CSS as StitchesCSS } from 'stitches-native'
+import { createStitches } from 'stitches-native'
 
-export const { styled, ThemeProvider, theme, createTheme, useTheme, css, config } = createStitches({
+export const {
+  styled,
+  ThemeProvider,
+  theme,
+  createTheme,
+  useTheme,
+  css,
+  config
+} = createStitches({
   theme: {
     colors: {
       background: 'hsl(0, 0%, 100%)',

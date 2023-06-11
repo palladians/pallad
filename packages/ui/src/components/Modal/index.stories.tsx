@@ -1,11 +1,12 @@
-import React from 'react'
-import { Modal } from '.'
 import { StoryDefault } from '@ladle/react'
+import React from 'react'
+import { Text } from 'react-native'
+
+import { useDisclosure } from '../../utils/useDisclosure'
 import { Box } from '../Box'
 import { Button } from '../Button'
-import { useDisclosure } from '../../utils/useDisclosure'
-import { Text } from 'react-native'
 import { Heading } from '../Heading'
+import { Modal } from '.'
 
 export const Basic = () => {
   const { isOpen, onOpen, setIsOpen } = useDisclosure()

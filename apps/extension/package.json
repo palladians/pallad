@@ -11,11 +11,11 @@
     "test:unit": "vitest run"
   },
   "dependencies": {
+    "@palladxyz/features": "workspace:*",
     "@palladxyz/mina": "workspace:*",
     "@palladxyz/ui": "workspace:*",
     "@plasmohq/messaging": "^0.3.3",
     "@plasmohq/storage": "^1.6.1",
-    "@tanstack/router": "0.0.1-beta.86",
     "@trpc-swr/client": "^1.0.1",
     "@trpc/client": "^10.29.1",
     "buffer": "^6.0.3",
@@ -28,13 +28,15 @@
     "react-hook-form": "^7.44.3",
     "react-native": "^0.71.8",
     "react-native-web": "^0.19.4",
+    "react-router-native": "^6.12.1",
+    "swr": "^2.1.5",
     "webextension-polyfill": "^0.10.0",
     "zustand": "^4.3.8"
   },
   "devDependencies": {
-    "@palladxyz/api": "workspace:*",
     "@crxjs/vite-plugin": "^2.0.0-beta.17",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@palladxyz/api": "workspace:*",
     "@testing-library/react": "^14.0.0",
     "@total-typescript/ts-reset": "^0.4.2",
     "@types/mocha": "^10.0.1",

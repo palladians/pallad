@@ -1,5 +1,6 @@
-import React from 'react'
 import { StoryDefault } from '@ladle/react'
+import React from 'react'
+
 import { RadioGroup } from './index'
 
 export const Basic = () => (

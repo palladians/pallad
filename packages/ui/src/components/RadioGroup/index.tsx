@@ -1,11 +1,12 @@
-import { Box } from '../Box'
-import { styled } from '../../lib/styled'
-import { Pressable } from 'react-native'
-import { radioButtonBase } from './index.css'
-import { Image } from '../Image'
-import { iconCircle } from '../../assets/icons'
-import { Text } from '../Text'
 import React, { useEffect, useState } from 'react'
+import { Pressable } from 'react-native'
+
+import { iconCircle } from '../../assets/icons'
+import { styled } from '../../lib/styled'
+import { Box } from '../Box'
+import { Image } from '../Image'
+import { Text } from '../Text'
+import { radioButtonBase } from './index.css'
 
 const RadioButton = styled(Pressable, radioButtonBase)
 
@@ -13,20 +14,26 @@ type Option = { value: string; label: string; defaultSelected?: boolean }
 
 interface RadioGroupProps {
   options: Option[]
+  onChange: (newValue: string) => void
 }
 
-export const RadioGroup = ({ options }: RadioGroupProps) => {
+export const RadioGroup = ({ options, onChange }: RadioGroupProps) => {
   const [value, setValue] = useState<string | null>(null)
   useEffect(() => {
     const nextSelected = options.find((option) => option.defaultSelected)
-    setValue(nextSelected.value)
+    nextSelected?.value && setValue(nextSelected?.value)
   }, [options])
+  useEffect(() => {
+    onChange(value)
+  }, [value])
   return (
     <Box css={{ gap: 12 }}>
       {options.map((option) => (
         <Box css={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
           <RadioButton onPress={() => setValue(option.value)}>
-            {value === option.value && <Image source={iconCircle} css={{ width: 16, height: 16 }} />}
+            {value === option.value && (
+              <Image source={iconCircle} css={{ width: 16, height: 16 }} />
+            )}
           </RadioButton>
           <Pressable onPress={() => setValue(option.value)}>
             <Text>{option.label}</Text>
