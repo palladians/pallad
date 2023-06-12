@@ -1,4 +1,5 @@
 {
+  "name": "pallad",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -6,8 +7,7 @@
     "lint": "eslint packages apps",
     "lint:fix": "pnpm lint --fix",
     "test:unit": "turbo run test:unit",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\" && pnpm lint:fix",
-    "preinstall": "npx only-allow pnpm"
+    "format": "prettier --write \"**/*.{ts,tsx,md}\" && pnpm lint:fix"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
@@ -24,11 +24,9 @@
     "typescript": "^5.0.4",
     "vitest": "^0.31.4"
   },
-  "name": "pallad",
-  "packageManager": "pnpm@8.6.0",
-  "pnpm": {
-    "patchedDependencies": {
-      "@crxjs/vite-plugin@2.0.0-beta.17": "patches/@crxjs__vite-plugin@2.0.0-beta.17.patch"
-    }
-  }
+  "packageManager": "npm@8.19.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

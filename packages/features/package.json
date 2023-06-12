@@ -17,8 +17,8 @@
     "test:unit": "echo 'no tests yet'"
   },
   "dependencies": {
-    "@palladxyz/mina": "workspace:*",
-    "@palladxyz/ui": "workspace:*",
+    "@palladxyz/mina": "*",
+    "@palladxyz/ui": "*",
     "@plasmohq/storage": "^1.6.1",
     "@total-typescript/ts-reset": "^0.4.2",
     "@trpc-swr/client": "^1.0.1",
@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@hyrious/esbuild-plugin-commonjs": "^0.2.2",
-    "@palladxyz/api": "workspace:*",
+    "@palladxyz/api": "*",
     "@testing-library/react": "^14.0.0",
     "@trpc/server": "^10.29.1",
     "@tsconfig/recommended": "^1.0.2",
@@ -47,8 +47,8 @@
     "swr": "^2.1.5"
   },
   "peerDependencies": {
-    "@palladxyz/mina": "workspace:*",
-    "@palladxyz/ui": "workspace:*",
+    "@palladxyz/mina": "*",
+    "@palladxyz/ui": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "^0.71.10"

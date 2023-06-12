@@ -1,5 +1,3 @@
-import './assets/app.css'
-
 import { Router, theme, ThemeProvider, trpc } from '@palladxyz/features'
 import { useState } from 'react'
 

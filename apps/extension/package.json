@@ -11,9 +11,8 @@
     "test:unit": "vitest run"
   },
   "dependencies": {
-    "@palladxyz/features": "workspace:*",
-    "@palladxyz/mina": "workspace:*",
-    "@palladxyz/ui": "workspace:*",
+    "@palladxyz/features": "*",
+    "@palladxyz/mina": "*",
     "@plasmohq/messaging": "^0.3.3",
     "@plasmohq/storage": "^1.6.1",
     "@trpc-swr/client": "^1.0.1",
@@ -36,7 +35,7 @@
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.17",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@palladxyz/api": "workspace:*",
+    "@palladxyz/api": "*",
     "@testing-library/react": "^14.0.0",
     "@total-typescript/ts-reset": "^0.4.2",
     "@types/mocha": "^10.0.1",

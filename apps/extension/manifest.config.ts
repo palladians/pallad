@@ -13,7 +13,7 @@ const [major, minor, patch, label = '0'] = version
 
 export default defineManifest(async (env) => ({
   manifest_version: 3,
-  name: env.mode === 'DEVELOPMENT' ? '[DEV] Pallad' : 'Pallad',
+  name: env.mode === 'DEVELOPMENT' ? '[DEV] mobile' : 'mobile',
   icons: {
     '16': 'icons/16.png',
     '32': 'icons/32.png',

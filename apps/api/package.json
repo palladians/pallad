@@ -18,7 +18,7 @@
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
-    "@palladxyz/mina": "workspace:*",
+    "@palladxyz/mina": "*",
     "@trpc/server": "^10.29.1",
     "cors": "^2.8.5",
     "graphql": "^16.6.0",
