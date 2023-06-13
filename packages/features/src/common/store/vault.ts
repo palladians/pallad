@@ -2,8 +2,7 @@ import { deriveKeyPair, generateMnemonic } from '@palladxyz/mina'
 import { produce } from 'immer'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-
-import { storagePersistence } from '../lib/storage'
+import { securePersistence } from '../lib/storage'
 
 type PublicCredential = {
   walletName: string
@@ -55,6 +54,7 @@ export const useVaultStore = create<VaultStore>()(
       ...initialState,
       getCurrentWallet() {
         const { currentWalletPublicKey, credentials } = get()
+        console.log('>>>CREDS', credentials)
         const wallet = credentials.find(
           (credential) => credential.walletPublicKey === currentWalletPublicKey
         )
@@ -74,7 +74,9 @@ export const useVaultStore = create<VaultStore>()(
           walletPublicKey: keypair.publicKey,
           walletPrivateKey: keypair.privateKey
         })
-        setCurrentWalletPublicKey({ currentWalletPublicKey: keypair.publicKey })
+        setCurrentWalletPublicKey({
+          currentWalletPublicKey: keypair.publicKey
+        })
         return {
           publicKey: keypair.publicKey,
           mnemonic
@@ -88,7 +90,9 @@ export const useVaultStore = create<VaultStore>()(
           walletPublicKey: keypair.publicKey,
           walletPrivateKey: keypair.privateKey
         })
-        setCurrentWalletPublicKey({ currentWalletPublicKey: keypair.publicKey })
+        setCurrentWalletPublicKey({
+          currentWalletPublicKey: keypair.publicKey
+        })
         return {
           publicKey: keypair.publicKey
         }
@@ -121,7 +125,7 @@ export const useVaultStore = create<VaultStore>()(
     }),
     {
       name: 'PalladVault',
-      storage: createJSONStorage(() => storagePersistence)
+      storage: createJSONStorage(() => securePersistence)
     }
   )
 )

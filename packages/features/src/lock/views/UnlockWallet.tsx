@@ -4,8 +4,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
-import { sessionData } from '../../common/lib/storage'
 import { useVaultStore } from '../../common/store/vault'
+import { sessionPersistence } from '../../common/lib/storage'
 
 export const UnlockWalletView = () => {
   const [passwordError, setPasswordError] = useState(false)
@@ -17,7 +17,7 @@ export const UnlockWalletView = () => {
     }
   })
   const onError = async () => {
-    await sessionData.set('spendingPassword', null)
+    await sessionPersistence.setItem('spendingPassword', '')
     return setPasswordError(true)
   }
   const onSubmit = async ({
@@ -25,7 +25,7 @@ export const UnlockWalletView = () => {
   }: {
     spendingPassword: string
   }) => {
-    await sessionData.set('spendingPassword', spendingPassword)
+    await sessionPersistence.setItem('spendingPassword', spendingPassword)
     await useVaultStore.destroy()
     await useVaultStore.persist.rehydrate()
     const wallet = await getCurrentWallet()

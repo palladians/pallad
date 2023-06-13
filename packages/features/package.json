@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "type": "module",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -14,12 +15,14 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test:unit": "echo 'no tests yet'"
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules"
   },
   "dependencies": {
     "@palladxyz/mina": "*",
     "@palladxyz/ui": "*",
     "@plasmohq/storage": "^1.6.1",
+    "@react-native-async-storage/async-storage": "^1.18.2",
     "@total-typescript/ts-reset": "^0.4.2",
     "@trpc-swr/client": "^1.0.1",
     "@trpc/client": "^10.29.1",
@@ -29,6 +32,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.3",
     "react-native": "^0.71.10",
+    "react-native-encrypted-storage": "^4.0.3",
     "react-native-web": "^0.19.4",
     "react-router-native": "^6.12.1",
     "zustand": "^4.3.8"
@@ -44,11 +48,14 @@
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "graphql-request": "^6.1.0",
-    "swr": "^2.1.5"
+    "swr": "^2.1.5",
+    "vitest": "^0.32.0"
   },
   "peerDependencies": {
     "@palladxyz/mina": "*",
     "@palladxyz/ui": "*",
+    "@types/mocha": "^10.0.1",
+    "happy-dom": "^9.20.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "^0.71.10"

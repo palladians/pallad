@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
 import { VaultState } from '../../common/lib/const'
-import { useLocalWallet } from '../../common/lib/hooks'
+import { useAppStore } from '../../common/store/app'
 import { useOnboardingStore } from '../../common/store/onboarding'
 import { useVaultStore } from '../../common/store/vault'
 
@@ -14,7 +14,7 @@ export const MnemonicInputView = () => {
   const navigate = useNavigate()
   const walletName = useOnboardingStore((state) => state.walletName)
   const restoreWallet = useVaultStore((state) => state.restoreWallet)
-  const [, setWallet] = useLocalWallet()
+  const setVaultState = useAppStore((state) => state.setVaultState)
   const [noOneIsLooking, setNoOneIsLooking] = useState(false)
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
@@ -26,9 +26,7 @@ export const MnemonicInputView = () => {
   const onSubmit = async ({ mnemonic }: { mnemonic: string }) => {
     if (!walletName) return
     await restoreWallet({ mnemonic, walletName })
-    await setWallet({
-      vaultState: VaultState[VaultState.INITIALIZED]
-    })
+    await setVaultState(VaultState[VaultState.INITIALIZED])
     return navigate('/dashboard')
   }
   return (

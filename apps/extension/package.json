@@ -8,7 +8,8 @@
     "build:firefox": "web-ext build --source-dir=dist",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test:unit": "vitest run"
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules"
   },
   "dependencies": {
     "@palladxyz/features": "*",
@@ -16,6 +17,7 @@
     "@plasmohq/messaging": "^0.3.3",
     "@plasmohq/storage": "^1.6.1",
     "buffer": "^6.0.3",
+    "dotenv": "^16.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "^0.71.8",

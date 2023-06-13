@@ -8,7 +8,7 @@ module.exports = function (api) {
     //     {
     //       root: ['../..'],
     //       alias: {
-    //         '@palladxyz/features': '../../packages/@palladxyz/features'
+    //         '@palladxyz/features': '../../packages/features'
     //       },
     //       extensions: ['.js', '.jsx', '.tsx', '.ts', '.ios.js', '.android.js']
     //     }

@@ -15,7 +15,8 @@
     "build": "tsup-node",
     "dev": "tsup-node --watch --onSuccess \"node dist/server.js\"",
     "start": "node dist/server.js",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "cleanup": "rimraf node_modules"
   },
   "dependencies": {
     "@palladxyz/mina": "*",

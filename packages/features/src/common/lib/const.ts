@@ -1,3 +1,4 @@
 export enum VaultState {
+  UNINITIALIZED = 'UNINITIALIZED',
   INITIALIZED = 'INITIALIZED'
 }

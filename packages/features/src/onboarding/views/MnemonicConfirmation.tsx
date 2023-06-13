@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
 import { VaultState } from '../../common/lib/const'
-import { useLocalWallet } from '../../common/lib/hooks'
+import { useAppStore } from '../../common/store/app'
 import { useOnboardingStore } from '../../common/store/onboarding'
 
 const getConfirmationIndex = () => {
@@ -14,7 +14,7 @@ const getConfirmationIndex = () => {
 
 export const MnemonicConfirmationView = () => {
   const [confirmationIndex] = useState(getConfirmationIndex())
-  const [, setWallet] = useLocalWallet()
+  const setVaultState = useAppStore((state) => state.setVaultState)
   const navigate = useNavigate()
   const mnemonic = useOnboardingStore((state) => state.mnemonic)
   const mnemonicSplit = useMemo(() => mnemonic?.split(' '), [mnemonic])
@@ -29,9 +29,7 @@ export const MnemonicConfirmationView = () => {
     [mnemonicWord, mnemonicSplit, confirmationIndex]
   )
   const onSubmit = async () => {
-    await setWallet({
-      vaultState: VaultState[VaultState.INITIALIZED]
-    })
+    await setVaultState(VaultState[VaultState.INITIALIZED])
     return navigate('/dashboard')
   }
   return (

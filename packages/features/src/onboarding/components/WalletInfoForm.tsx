@@ -28,6 +28,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
           <Button
             onPress={() => navigate('/')}
             css={{ flex: 1, width: 'auto' }}
+            testID="onboarding__backButton"
           >
             Back
           </Button>
@@ -41,6 +42,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
             }}
             disabled={!termsAccepted}
             onPress={handleSubmit(onSubmit)}
+            testID="onboarding__nextButton"
           >
             Next
           </Button>
@@ -63,6 +65,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
                 onBlur={onBlur}
                 value={value}
                 onSubmitEditing={handleSubmit(onSubmit)}
+                testID="onboarding__walletNameInput"
                 css={{
                   color: '$white',
                   borderColor: '$gray600',
@@ -84,6 +87,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
                 onBlur={onBlur}
                 value={value}
                 onSubmitEditing={handleSubmit(onSubmit)}
+                testID="onboarding__spendingPasswordInput"
                 css={{
                   color: '$white',
                   borderColor: '$gray600',
@@ -98,6 +102,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
           <Checkbox
             value={termsAccepted}
             onValueChange={(value: boolean) => setTermsAccepted(value)}
+            testID="onboarding__tosCheckbox"
           />
           <Pressable onPress={toggleAccepted}>
             <Text css={{ color: '$gray50' }}>I accept Terms of Service.</Text>

@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import '@total-typescript/ts-reset'
 
 import React from 'react'

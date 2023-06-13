@@ -2,8 +2,8 @@ import { Box, Button, Heading, icons, Modal } from '@palladxyz/ui'
 import React from 'react'
 import { useNavigate } from 'react-router-native'
 
-import { sessionData } from '../lib/storage'
 import { useVaultStore } from '../store/vault'
+import { sessionPersistence } from '../lib/storage'
 
 interface MenuModalProps {
   isOpen: boolean
@@ -36,7 +36,7 @@ export const MenuModal = ({ isOpen, setIsOpen }: MenuModalProps) => {
     {
       label: 'Lock',
       onPress: async () => {
-        await sessionData.set('spendingPassword', null)
+        await sessionPersistence.setItem('spendingPassword', '')
         await useVaultStore.persist.rehydrate()
         return navigate('/unlock')
       },

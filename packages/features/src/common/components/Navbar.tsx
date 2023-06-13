@@ -2,6 +2,7 @@ import { MinaNetwork } from '@palladxyz/mina'
 import { Box, composeBox, icons, Image, Text } from '@palladxyz/ui'
 import { Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
+import { shallow } from 'zustand/shallow'
 
 import Logo from '../assets/logo.svg'
 import { useAppStore } from '../store/app'
@@ -9,9 +10,14 @@ import { useVaultStore } from '../store/vault'
 
 export const Navbar = () => {
   const navigate = useNavigate()
-  const network = useAppStore((state) => state.network)
+  const { network, setMenuOpen } = useAppStore(
+    (state) => ({
+      network: state.network,
+      setMenuOpen: state.setMenuOpen
+    }),
+    shallow
+  )
   const testnetNetworkName = network !== MinaNetwork.MAINNET ? network : null
-  const setMenuOpen = useAppStore((state) => state.setMenuOpen)
   const StyledPressable = composeBox({ baseComponent: Pressable })
   const currentWallet = useVaultStore((state) => state.getCurrentWallet())
   return (

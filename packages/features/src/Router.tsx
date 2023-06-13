@@ -24,7 +24,7 @@ export const Router = () => {
           <Route path="unlock" element={<UnlockWalletView />} />
           <Route path="writedown" element={<MnemonicWritedownView />} />
           <Route path="confirmation" element={<MnemonicConfirmationView />} />
-          <Route path="input" element={<MnemonicInputView />} />
+          <Route path="mnemonic" element={<MnemonicInputView />} />
           <Route path="settings" element={<SettingsView />} />
         </Routes>
       </NativeRouter>

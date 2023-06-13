@@ -6,10 +6,13 @@
     "start": "expo start -c",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "cleanup": "rimraf node_modules"
   },
   "dependencies": {
     "@palladxyz/features": "*",
+    "@palladxyz/mina": "*",
+    "dotenv": "^16.1.4",
     "expo": "^48.0.19",
     "expo-status-bar": "^1.4.4",
     "react": "^18.2.0",
@@ -17,6 +20,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@rnx-kit/metro-resolver-symlinks": "^0.1.28",
     "@types/react": "~18.0.14",
     "babel-plugin-module-resolver": "^5.0.0"
   }

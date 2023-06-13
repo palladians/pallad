@@ -2,6 +2,7 @@
   "name": "@palladxyz/mina",
   "version": "0.0.1",
   "description": "Mina Protocol SDK for Pallad",
+  "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
@@ -13,7 +14,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test:unit": "vitest run"
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules"
   },
   "dependencies": {
     "bip32": "^4.0.0",

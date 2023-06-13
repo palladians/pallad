@@ -4,23 +4,27 @@ import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
 import { VaultState } from '../../common/lib/const'
-import { useLocalWallet } from '../../common/lib/hooks'
-import { sessionData } from '../../common/lib/storage'
+import { useAppStore } from '../../common/store/app'
+import { sessionPersistence } from '../../common/lib/storage'
 
 export const StartView = () => {
-  const [wallet] = useLocalWallet()
+  const vaultState = useAppStore((state) => state.vaultState)
   const navigate = useNavigate()
   useEffect(() => {
     const initialRedirect = async () => {
-      const spendingPassword = await sessionData.get('spendingPassword')
-      const initializedVault =
-        wallet?.vaultState === VaultState[VaultState.INITIALIZED]
+      const spendingPassword = await sessionPersistence.getItem(
+        'spendingPassword'
+      )
+      if (!spendingPassword) return
+      const spendingPasswordProvided = spendingPassword.length > 0
+      const initializedVault = vaultState === VaultState[VaultState.INITIALIZED]
       if (!initializedVault) return
-      if (initializedVault && !spendingPassword) return navigate('/unlock')
+      if (initializedVault && !spendingPasswordProvided)
+        return navigate('/unlock')
       return navigate('/dashboard')
     }
     initialRedirect()
-  }, [wallet])
+  }, [vaultState])
   return (
     <WizardLayout
       footer={
@@ -28,6 +32,7 @@ export const StartView = () => {
           <Button
             css={{ flex: 1, width: 'auto' }}
             onPress={() => navigate('/restore')}
+            testID="onboarding__restoreWalletButton"
           >
             Restore Wallet
           </Button>
@@ -35,6 +40,7 @@ export const StartView = () => {
             variant="secondary"
             css={{ flex: 1, width: 'auto' }}
             onPress={() => navigate('/create')}
+            testID="onboarding__createWalletButton"
           >
             Create Wallet
           </Button>

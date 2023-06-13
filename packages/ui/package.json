@@ -17,7 +17,8 @@
     "test:e2e": "playwright test",
     "story:dev": "ladle serve",
     "story:build": "ladle build -o ./build",
-    "story:preview": "ladle preview"
+    "story:preview": "ladle preview",
+    "cleanup": "rimraf node_modules"
   },
   "dependencies": {
     "@floating-ui/react-native": "^0.10.0",
