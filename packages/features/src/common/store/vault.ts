@@ -2,6 +2,7 @@ import { deriveKeyPair, generateMnemonic } from '@palladxyz/mina'
 import { produce } from 'immer'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+
 import { securePersistence } from '../lib/storage'
 
 type PublicCredential = {

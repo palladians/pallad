@@ -36,12 +36,7 @@ export const Modal = ({
     baseComponent: TouchableWithoutFeedback
   })
   return (
-    <NativeModal
-      transparent
-      visible={isOpen}
-      animationType="fade"
-      {...containerProps}
-    >
+    <NativeModal transparent visible={isOpen} {...containerProps}>
       <StyledPressable
         css={{
           justifyContent: 'center',
@@ -60,10 +55,12 @@ export const Modal = ({
               width: '100%',
               maxHeight,
               height: '100%',
-              backgroundColor: '$white',
+              backgroundColor: '$backgroundElevation1',
               margin: 'auto',
               borderRadius,
-              padding: '$md'
+              padding: '$md',
+              paddingTop: 'var(--safe-area-inset-top)',
+              paddingBottom: 'var(--safe-area-inset-bottom)'
             }}
             {...contentProps}
           >

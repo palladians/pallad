@@ -12,6 +12,7 @@ export const OverviewView = () => {
       <Box
         css={{
           paddingHorizontal: 16,
+          paddingTop: 16,
           paddingBottom: 16,
           backgroundColor: '$gray900'
         }}

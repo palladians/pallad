@@ -12,15 +12,12 @@ export const StartView = () => {
   const navigate = useNavigate()
   useEffect(() => {
     const initialRedirect = async () => {
-      const spendingPassword = await sessionPersistence.getItem(
-        'spendingPassword'
-      )
-      if (!spendingPassword) return
-      const spendingPasswordProvided = spendingPassword.length > 0
+      const spendingPassword =
+        (await sessionPersistence.getItem('spendingPassword')) || ''
+      const spendingPasswordSet = spendingPassword.length > 0
       const initializedVault = vaultState === VaultState[VaultState.INITIALIZED]
       if (!initializedVault) return
-      if (initializedVault && !spendingPasswordProvided)
-        return navigate('/unlock')
+      if (initializedVault && !spendingPasswordSet) return navigate('/unlock')
       return navigate('/dashboard')
     }
     initialRedirect()

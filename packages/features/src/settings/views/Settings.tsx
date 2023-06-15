@@ -9,7 +9,6 @@ export const SettingsView = () => {
     setNetwork: state.setNetwork,
     network: state.network
   }))
-  console.log('>>>N', network)
   return (
     <AppLayout>
       <Box css={{ padding: 16, gap: 16 }}>

@@ -43,7 +43,8 @@ const StyledButton = styled(StyledPressable, {
 })
 
 const StyledButtonText = styled(Text, {
-  fontWeight: '600',
+  color: '$body',
+  fontWeight: '$semibold',
   variants: {
     variant: {
       default: {
@@ -58,7 +59,7 @@ const StyledButtonText = styled(Text, {
         }
       },
       secondary: {
-        color: '$secondaryForeground'
+        color: '$gray900'
       },
       ghost: {
         '&:hover': {
@@ -66,7 +67,7 @@ const StyledButtonText = styled(Text, {
         }
       },
       link: {
-        color: '$primary'
+        color: '$primary500'
       }
     }
   },

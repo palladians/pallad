@@ -2,7 +2,6 @@
   "name": "@palladxyz/mina",
   "version": "0.0.1",
   "description": "Mina Protocol SDK for Pallad",
-  "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {

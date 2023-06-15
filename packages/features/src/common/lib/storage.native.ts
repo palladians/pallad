@@ -1,32 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import EncryptedStorage from 'react-native-encrypted-storage'
+import { Preferences } from '@capacitor/preferences'
+import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin'
 import { StateStorage } from 'zustand/middleware'
 
 const sessionData = new Map()
-
-export const securePersistence: StateStorage = {
-  getItem: async (name): Promise<string | null> => {
-    return (await EncryptedStorage.getItem(name)) || null
-  },
-  setItem: async (name, value) => {
-    await EncryptedStorage.setItem(name, value)
-  },
-  removeItem: async (name) => {
-    await EncryptedStorage.removeItem(name)
-  }
-}
-
-export const localPersistence: StateStorage = {
-  getItem: async (name): Promise<string | null> => {
-    return (await AsyncStorage.getItem(name)) || null
-  },
-  setItem: async (name, value) => {
-    await AsyncStorage.setItem(name, value)
-  },
-  removeItem: async (name) => {
-    await AsyncStorage.removeItem(name)
-  }
-}
 
 export const sessionPersistence: StateStorage = {
   getItem: async (name): Promise<string | null> => {
@@ -37,5 +13,29 @@ export const sessionPersistence: StateStorage = {
   },
   removeItem: async (name) => {
     await sessionData.delete(name)
+  }
+}
+
+export const localPersistence: StateStorage = {
+  getItem: async (name): Promise<string | null> => {
+    return (await Preferences.get({ key: name })).value || null
+  },
+  setItem: async (name, value) => {
+    await Preferences.set({ key: name, value })
+  },
+  removeItem: async (name) => {
+    await Preferences.remove({ key: name })
+  }
+}
+
+export const securePersistence: StateStorage = {
+  getItem: async (name): Promise<string | null> => {
+    return (await SecureStoragePlugin.get({ key: name })).value || null
+  },
+  setItem: async (name, value) => {
+    await SecureStoragePlugin.set({ key: name, value })
+  },
+  removeItem: async (name) => {
+    await SecureStoragePlugin.remove({ key: name })
   }
 }

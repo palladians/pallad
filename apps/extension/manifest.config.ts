@@ -2,7 +2,7 @@ import packageJson from './package.json'
 const { version } = packageJson
 import { createRequire } from 'node:module'
 const require = createRequire(import.meta.url)
-const { defineManifest } = require('@crxjs/vite-plugin')
+const { defineManifest } = require('@mvr-studio/crxjs-vite-plugin')
 
 // Convert from Semver (example: 0.1.0-beta6)
 const [major, minor, patch, label = '0'] = version
@@ -27,5 +27,8 @@ export default defineManifest(async (env) => ({
     service_worker: 'src/background/index.ts',
     type: 'module'
   },
-  permissions: ['storage']
+  permissions: ['storage'],
+  content_security_policy: {
+    extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  }
 }))

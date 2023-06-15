@@ -1,3 +1,6 @@
-const webMode = import.meta.env.VITE_APP_MODE === 'web'
+const VITE_APP_MODE = import.meta.env.VITE_APP_MODE
+
 export const { localPersistence, securePersistence, sessionPersistence } =
-  await import(webMode ? './storage.web' : './storage.native')
+  VITE_APP_MODE === 'web'
+    ? await import('./storage.web')
+    : await import('./storage.native')

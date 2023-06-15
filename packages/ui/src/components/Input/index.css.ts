@@ -3,7 +3,8 @@ import { CSS } from '../../lib/styled'
 export const inputBase: CSS = {
   height: '2.5rem',
   width: '100%',
-  borderColor: '$inputBorder',
+  color: '$body',
+  borderColor: '$border',
   borderRadius: '0.375rem',
   border: '1px solid',
   background: 'transparent',

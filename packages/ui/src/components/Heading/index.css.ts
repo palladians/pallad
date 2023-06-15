@@ -5,6 +5,7 @@ export const baseHeading: CSS = {
   ...boxStyles,
   fontWeight: '$bold',
   fontSize: '$2xl',
+  color: '$heading',
   variants: {
     size: {
       lg: {

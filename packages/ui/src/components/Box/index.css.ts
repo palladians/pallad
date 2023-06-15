@@ -4,7 +4,7 @@ export const boxStyles: CSS = {
   appearance: 'none',
   fontFamily: '$body',
   fontSize: '$md',
-  color: '$foreground',
+  color: '$body',
   padding: 0,
   margin: 0,
   boxSizing: 'border-box',

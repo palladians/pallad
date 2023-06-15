@@ -5,6 +5,7 @@ import { Clipboard, Pressable } from 'react-native'
 
 import { useAccount } from '../../common/lib/hooks'
 import { trpc } from '../../common/lib/trpc'
+import { truncateString } from '../../common/lib/string'
 
 interface OverviewCardProps {
   walletAddress: string
@@ -25,7 +26,7 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
   const fiatBalance = rawFiatBalance ? rawFiatBalance.toFixed(2) : '0'
   const meshGradient = easyMeshGradient({
     seed: walletAddress,
-    lightnessRange: [0.8, 1]
+    lightnessRange: [0, 0.25]
   })
   return (
     <Box
@@ -58,10 +59,10 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
       ) : (
         <Box css={{ flex: 1, gap: 8 }}>
           <Text css={{ fontSize: 14, fontWeight: 700 }}>Balance</Text>
-          <Text css={{ fontSize: 24, fontWeight: 700 }}>
+          <Text css={{ fontSize: 24, fontWeight: 700, color: '$white' }}>
             {totalBalance} MINA
           </Text>
-          <Text css={{ fontSize: 14, fontWeight: 700, color: '$primary700' }}>
+          <Text css={{ fontSize: 14, fontWeight: 700, color: '$primary500' }}>
             ~{fiatBalance} USD
           </Text>
         </Box>
@@ -72,13 +73,16 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
           <Text
             css={{
               fontSize: 14,
-              flex: 1,
               fontWeight: 700,
-              color: '$primary700'
+              color: '$primary500',
+              width: 'auto'
             }}
-            numberOfLines={1}
           >
-            {walletAddress}
+            {truncateString({
+              value: walletAddress,
+              firstCharCount: 8,
+              endCharCount: 8
+            })}
           </Text>
           <Pressable onPress={() => Clipboard.setString(walletAddress)}>
             <Image source={icons.iconCopy} css={{ width: 20, height: 20 }} />

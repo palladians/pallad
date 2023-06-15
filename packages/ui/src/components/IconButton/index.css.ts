@@ -5,7 +5,6 @@ export const iconButtonBase: CSS = {
   alignItems: 'center',
   width: '1.5rem',
   height: '1.5rem',
-  backgroundColor: '$muted',
-  color: 'white',
+  backgroundColor: '$gray700',
   borderRadius: '$full'
 }

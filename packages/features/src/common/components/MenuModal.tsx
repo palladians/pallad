@@ -55,7 +55,7 @@ export const MenuModal = ({ isOpen, setIsOpen }: MenuModalProps) => {
         {MENU_ITEMS.map((menuItem, i) => (
           <Button
             key={i}
-            variant="secondary"
+            variant="outline"
             css={{ justifyContent: 'flex-start' }}
             size="lg"
             leftIcon={menuItem.icon}

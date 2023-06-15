@@ -16,7 +16,6 @@ export const buttonBase: CSS = {
 
 export const buttonVariantDefault: CSS = {
   backgroundColor: '$gray800',
-  color: '$primaryForeground',
   '&:hover': {
     backgroundColor: '$gray700'
   }
@@ -24,7 +23,6 @@ export const buttonVariantDefault: CSS = {
 
 export const buttonVariantDestructive: CSS = {
   backgroundColor: '$destructive',
-  color: '$destructiveForeground',
   '&:hover': {
     backgroundColor: '$destructive',
     opacity: 0.9
@@ -33,7 +31,7 @@ export const buttonVariantDestructive: CSS = {
 
 export const buttonVariantOutline: CSS = {
   border: '1px solid',
-  borderColor: '$inputBorder',
+  borderColor: '$border',
   '&:hover': {
     backgroundColor: '$accent',
     color: '$accentForeground'
@@ -41,8 +39,7 @@ export const buttonVariantOutline: CSS = {
 }
 
 export const buttonVariantSecondary: CSS = {
-  backgroundColor: '$secondary',
-  color: '$secondaryForeground',
+  backgroundColor: '$gray100',
   '&:hover': {
     backgroundColor: '$secondary',
     opacity: 0.8
@@ -51,8 +48,7 @@ export const buttonVariantSecondary: CSS = {
 
 export const buttonVariantGhost: CSS = {
   '&:hover': {
-    backgroundColor: '$accent',
-    color: '$accentForeground'
+    backgroundColor: '$accent'
   }
 }
 
@@ -61,8 +57,7 @@ export const buttonVariantLink: CSS = {
   textDecorationOffset: '0.25rem',
   '&:hover': {
     textDecoration: 'underline'
-  },
-  color: '$primary'
+  }
 }
 
 export const buttonSizeDefault: CSS = {
