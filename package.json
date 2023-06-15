@@ -5,6 +5,7 @@
     "build": "turbo run build",
     "build:extension": "turbo run build --filter=@palladxyz/extension...",
     "build:mobile": "turbo run build --filter=@palladxyz/mobile...",
+    "build:website": "turbo run build --filter=@palladxyz/website...",
     "dev": "turbo run dev",
     "dev:extension": "turbo run dev --filter=@palladxyz/extension...",
     "dev:mobile": "turbo run dev --filter=@palladxyz/mobile...",
