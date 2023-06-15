@@ -15,12 +15,12 @@ export const AssetsList = () => {
   return (
     <Box css={{ flex: 1, padding: 16, gap: 12, backgroundColor: '$gray800' }}>
       <Box css={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Heading size="md" css={{ color: '$gray50' }}>
+        <Heading size="md" css={{ color: '$gray50', marginTop: 0 }}>
           Assets
         </Heading>
         <Button
           variant="link"
-          css={{ width: 'auto', paddingRight: 0, color: '$gray100' }}
+          css={{ width: 'auto', padding: 0, color: '$gray100' }}
         >
           See Transactions
         </Button>

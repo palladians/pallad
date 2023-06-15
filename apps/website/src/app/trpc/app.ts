@@ -1,5 +1,4 @@
-import { createHTTPHandler } from '@trpc/server/adapters/standalone'
-import cors from 'cors'
+import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 
 import { createContext } from './context'
 import { accountsRouter } from './routers/accounts'
@@ -15,12 +14,12 @@ export const appRouter = router({
   accounts: accountsRouter
 })
 
-export const handler = createHTTPHandler({
-  middleware: cors({
-    origin: '*'
-  }),
-  router: appRouter,
-  createContext
-})
+export const handler = (request: Request) =>
+  fetchRequestHandler({
+    req: request,
+    endpoint: '/trpc',
+    router: appRouter,
+    createContext
+  })
 
 export type AppRouter = typeof appRouter

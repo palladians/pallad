@@ -3,9 +3,8 @@ import React from 'react'
 import { shallow } from 'zustand/shallow'
 
 import { useAppStore } from '../store/app'
-import { MenuModal } from './MenuModal'
-import { Navbar } from './Navbar'
 import { BottomNavigation } from './BottomNavigation'
+import { MenuModal } from './MenuModal'
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -19,7 +18,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   return (
     <Box css={{ flex: 1, backgroundColor: '$background' }}>
       <MenuModal isOpen={menuOpen} setIsOpen={setMenuOpen} />
-      {children}
+      <Box css={{ flex: 1 }}>{children}</Box>
       <BottomNavigation />
     </Box>
   )

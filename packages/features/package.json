@@ -37,11 +37,12 @@
     "react-native-encrypted-storage": "^4.0.3",
     "react-native-web": "^0.19.4",
     "react-router-native": "^6.12.1",
+    "superjson": "^1.12.3",
     "zustand": "^4.3.8"
   },
   "devDependencies": {
     "@hyrious/esbuild-plugin-commonjs": "^0.2.2",
-    "@palladxyz/api": "*",
+    "@palladxyz/website": "*",
     "@testing-library/react": "^14.0.0",
     "@trpc/server": "^10.29.1",
     "@tsconfig/recommended": "^1.0.2",

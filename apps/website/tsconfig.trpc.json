@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "./dist",
+    "esModuleInterop": true
+  },
+  "include": ["src/app/trpc/app.ts"]
+}

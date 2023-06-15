@@ -23,7 +23,7 @@
     "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {
-    "@palladxyz/api": "*",
+    "@palladxyz/website": "*",
     "@mvr-studio/crxjs-vite-plugin": "^0.1.0",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",

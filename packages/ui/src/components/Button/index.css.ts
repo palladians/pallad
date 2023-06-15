@@ -53,8 +53,6 @@ export const buttonVariantGhost: CSS = {
 }
 
 export const buttonVariantLink: CSS = {
-  textDecoration: 'underline',
-  textDecorationOffset: '0.25rem',
   '&:hover': {
     textDecoration: 'underline'
   }
