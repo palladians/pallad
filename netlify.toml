@@ -4,4 +4,4 @@ package = "@netlify/plugin-nextjs"
 [build]
 base = "apps/website"
 publish = "apps/website/.next"
-command = "yarn build:website"
+command = "yarn build"
