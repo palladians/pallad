@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - apps/website/*
+  workflow_dispatch:
 jobs:
   build:
     name: Build and deploy
