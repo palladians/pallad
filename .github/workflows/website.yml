@@ -17,12 +17,11 @@ jobs:
           cache-dependency-path: yarn.lock
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Build file
-        run: yarn build:website
       - name: Publish website to Netlify
         uses: netlify/actions/cli@master
         with:
-          args: deploy --dir=apps/website/.next --functions=functions
+          args: deploy --build --prod --functions=functions
         env:
+          NETLIFY_BASE: apps/website
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
