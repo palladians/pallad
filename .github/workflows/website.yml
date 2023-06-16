@@ -1,3 +1,4 @@
+name: Deploy website to Netlify
 on:
   push:
     branches:
@@ -6,6 +7,7 @@ on:
       - apps/website/*
 jobs:
   build:
+    name: Build and deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,8 +22,7 @@ jobs:
       - name: Publish website to Netlify
         uses: netlify/actions/cli@master
         with:
-          args: deploy --build --prod --functions=functions
+          args: deploy --build --prod
         env:
-          NETLIFY_BASE: apps/website
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
