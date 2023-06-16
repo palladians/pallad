@@ -33,7 +33,6 @@
     "@graphql-codegen/cli": "^4.0.1",
     "@graphql-codegen/client-preset": "^4.0.0",
     "@graphql-codegen/typescript-graphql-request": "^5.0.0",
-    "@netlify/plugin-nextjs": "^4.37.4",
     "@types/node": "20.3.1",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.5"
