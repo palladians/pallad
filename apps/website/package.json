@@ -7,9 +7,11 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "cleanup": "rimraf node_modules"
   },
   "dependencies": {
+    "@palladxyz/mina": "*",
     "@trpc/server": "^10.30.0",
     "astro": "^1.9.2",
     "graphql": "^16.6.0",
