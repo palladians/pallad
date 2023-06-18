@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@hyrious/esbuild-plugin-commonjs": "^0.2.2",
-    "@palladxyz/website": "*",
+    "@palladxyz/api": "*",
     "@testing-library/react": "^14.0.0",
     "@trpc/server": "^10.29.1",
     "@tsconfig/recommended": "^1.0.2",
