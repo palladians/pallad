@@ -24,6 +24,7 @@ export const RadioGroup = ({ options, onChange }: RadioGroupProps) => {
     nextSelected?.value && setValue(nextSelected?.value)
   }, [options])
   useEffect(() => {
+    if (!value) return
     onChange(value)
   }, [value])
   return (
@@ -32,7 +33,10 @@ export const RadioGroup = ({ options, onChange }: RadioGroupProps) => {
         <Box css={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
           <RadioButton onPress={() => setValue(option.value)}>
             {value === option.value && (
-              <Image source={iconCircle} css={{ width: 16, height: 16 }} />
+              <Image
+                source={iconCircle as any}
+                css={{ width: 16, height: 16 }}
+              />
             )}
           </RadioButton>
           <Pressable onPress={() => setValue(option.value)}>

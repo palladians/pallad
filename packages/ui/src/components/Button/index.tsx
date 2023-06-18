@@ -84,11 +84,11 @@ type ButtonProps = React.ComponentProps<typeof StyledButton> & {
 export const Button = React.forwardRef(
   ({ children, variant, textCss, leftIcon, ...props }: ButtonProps, ref) => {
     return (
-      <StyledButton as={Pressable} variant={variant} ref={ref} {...props}>
+      <StyledButton variant={variant as any} ref={ref} {...props}>
         {leftIcon && (
-          <Image source={leftIcon} css={{ width: 24, height: 24 }} />
+          <Image source={leftIcon as any} css={{ width: 24, height: 24 }} />
         )}
-        <StyledButtonText variant={variant} css={textCss}>
+        <StyledButtonText variant={variant as any} css={textCss}>
           {children as React.ReactNode}
         </StyledButtonText>
       </StyledButton>

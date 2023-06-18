@@ -9,9 +9,8 @@ type StyledPressableProps = React.ComponentProps<typeof StyledPressable>
 
 interface IconButtonProps extends Partial<StyledPressableProps> {
   icon: React.ReactNode
-  css?: StyledPressableProps['css']
   onPress?: StyledPressableProps['onPress']
-  dataSet?: any
+  dataSet?: Record<string, any>
 }
 
 export const IconButton = ({ icon, ...rest }: IconButtonProps) => {

@@ -12,7 +12,7 @@ const MINA_COIN_INDEX = 12586
 
 const bip32 = BIP32Factory(ecc)
 
-const reverseBytes = (bytes: any) => {
+const reverseBytes = (bytes: Buffer) => {
   const uint8 = new Uint8Array(bytes)
   return new Buffer(uint8.reverse())
 }
@@ -32,17 +32,16 @@ export const deriveWalletByMnemonic = async (
   const masterNode = bip32.fromSeed(seed)
   const hdPath = getHierarchicalDeterministicPath({ accountNumber })
   const child0 = masterNode.derivePath(hdPath)
-  if (child0?.privateKey) {
-    child0.privateKey[0] &= 0x3f
-    const childPrivateKey = reverseBytes(child0.privateKey)
-    const privateKeyHex = `5a01${childPrivateKey.toString('hex')}`
-    const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
-    const publicKey = minaClient.derivePublicKey(privateKey)
-    return {
-      privateKey,
-      publicKey,
-      hdIndex: accountNumber
-    }
+  if (!child0?.privateKey) return null
+  child0.privateKey[0] &= 0x3f
+  const childPrivateKey = reverseBytes(child0.privateKey)
+  const privateKeyHex = `5a01${childPrivateKey.toString('hex')}`
+  const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
+  const publicKey = minaClient.derivePublicKey(privateKey)
+  return {
+    privateKey,
+    publicKey,
+    hdIndex: accountNumber
   }
 }
 

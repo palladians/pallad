@@ -16,6 +16,7 @@
     "cleanup": "turbo run cleanup"
   },
   "devDependencies": {
+    "@tsconfig/strictest": "^2.0.1",
     "@turbo/gen": "^1.9.7",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",

@@ -23,7 +23,7 @@ export const Select = ({ options, placeholder }: SelectProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [value, setValue] = useState<string | null>(null)
   const currentLabel = useMemo(
-    () => options.find((option) => option.value === value)?.label,
+    () => options?.find((option) => option.value === value)?.label,
     [value]
   )
   const setNewValue = (value: string) => {
@@ -31,7 +31,8 @@ export const Select = ({ options, placeholder }: SelectProps) => {
     setIsOpen(false)
   }
   useEffect(() => {
-    const nextSelected = options.find((option) => option.defaultSelected)
+    const nextSelected = options?.find((option) => option.defaultSelected)
+    if (!nextSelected) return
     setValue(nextSelected.value)
   }, [options])
   return (
@@ -43,7 +44,7 @@ export const Select = ({ options, placeholder }: SelectProps) => {
         <SelectTrigger>
           <Text css={{ fontSize: 14 }}>{currentLabel || placeholder}</Text>
           <Image
-            source={iconChevronDown}
+            source={iconChevronDown as any}
             css={{
               width: 24,
               height: 24,

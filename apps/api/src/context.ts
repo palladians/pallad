@@ -1,13 +1,13 @@
 import { MinaNetwork } from '@palladxyz/mina'
 import { inferAsyncReturnType } from '@trpc/server'
-import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch'
+import { CreateHTTPContextOptions } from '@trpc/server/adapters/standalone'
 import { GraphQLClient } from 'graphql-request'
 
 import { MinaExplorerGraphqlUrls, MinaExplorerUrls } from './constants'
 import { getSdk } from './gql/minaexplorer'
 
-export const createContext = async ({ req }: FetchCreateContextFnOptions) => {
-  const rawMinaNetwork = req.headers.get('p-mina-network') as MinaNetwork
+export const createContext = async ({ req }: CreateHTTPContextOptions) => {
+  const rawMinaNetwork = req.headers['p-mina-network'] as MinaNetwork
   const minaNetwork = rawMinaNetwork
     ? MinaNetwork[rawMinaNetwork]
     : MinaNetwork[MinaNetwork.MAINNET]

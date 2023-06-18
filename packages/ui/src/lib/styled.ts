@@ -33,7 +33,7 @@ const baseColors = {
   gray500: '#585786',
   gray600: '#454469',
   gray700: '#31314a',
-  gray800: '#1e1d2c',
+  gray800: '#0f172a',
   gray900: '#0a0a10',
   red50: '#ffe1f5',
   red100: '#ffb1d9',

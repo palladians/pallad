@@ -7,11 +7,6 @@ const StyledImage = styled(BaseImage)
 
 type StyledImageProps = React.ComponentProps<typeof StyledImage>
 
-interface ImageProps extends StyledImageProps {
-  source: any
-  css?: StyledImageProps['css']
-}
-
-export const Image = (props: ImageProps) => {
+export const Image = (props: StyledImageProps) => {
   return <StyledImage {...props} />
 }

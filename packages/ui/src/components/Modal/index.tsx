@@ -66,7 +66,12 @@ export const Modal = ({
           >
             <>
               <IconButton
-                icon={<Image source={iconX} css={{ width: 16, height: 16 }} />}
+                icon={
+                  <Image
+                    source={iconX as any}
+                    css={{ width: 16, height: 16 }}
+                  />
+                }
                 css={{ position: 'absolute', top: 16, right: 16, zIndex: 1 }}
                 onPress={() => setIsOpen(false)}
                 dataSet={{ hotkey: 'esc' }}
