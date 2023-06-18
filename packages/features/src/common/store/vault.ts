@@ -55,11 +55,9 @@ export const useVaultStore = create<VaultStore>()(
       ...initialState,
       getCurrentWallet() {
         const { currentWalletPublicKey, credentials } = get()
-        console.log('>>>CREDS', credentials)
         const wallet = credentials.find(
           (credential) => credential.walletPublicKey === currentWalletPublicKey
         )
-        console.log('>>>WLT', wallet)
         if (!wallet) return null
         return {
           walletName: wallet?.walletName,
