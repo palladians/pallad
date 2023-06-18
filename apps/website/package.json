@@ -1,7 +1,7 @@
 {
   "name": "@palladxyz/website",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -11,7 +11,6 @@
     "cleanup": "rimraf node_modules"
   },
   "dependencies": {
-    "@astrojs/netlify": "^2.3.0",
     "@astrojs/tailwind": "^3.1.3",
     "@trpc/server": "^10.30.0",
     "astro": "^2.6.0",
