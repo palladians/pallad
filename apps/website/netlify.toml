@@ -1,0 +1,6 @@
+[build]
+command = "yarn build"
+publish = "dist"
+
+[[plugins]]
+package = "@netlify/plugin-lighthouse"
