@@ -29,6 +29,7 @@
     "@graphql-codegen/add": "^5.0.0",
     "@graphql-codegen/cli": "^4.0.1",
     "@graphql-codegen/client-preset": "^4.0.0",
-    "@graphql-codegen/typescript-graphql-request": "^5.0.0"
+    "@graphql-codegen/typescript-graphql-request": "^5.0.0",
+    "@types/cors": "^2.8.13"
   }
 }
