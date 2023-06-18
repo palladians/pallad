@@ -16,10 +16,10 @@ jobs:
           cache: yarn
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Run unit tests
-        run: yarn test:unit
       - name: Build extension
         run: yarn build:extension
+      - name: Run unit tests
+        run: yarn test:unit
       - uses: actions/upload-artifact@v3
         with:
           name: pallad-chromium
