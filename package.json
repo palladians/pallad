@@ -12,6 +12,7 @@
     "lint": "eslint packages apps",
     "lint:fix": "yarn lint --fix",
     "test:unit": "turbo run test:unit",
+    "test:e2e:extension": "turbo run test:e2e --filter=@palladxyz/extension",
     "format": "prettier --write \"**/*.{ts,tsx,md}\" && pnpm lint:fix",
     "cleanup": "turbo run cleanup"
   },

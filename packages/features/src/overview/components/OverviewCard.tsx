@@ -59,7 +59,10 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
       ) : (
         <Box css={{ flex: 1, gap: 8 }}>
           <Text css={{ fontSize: 14, fontWeight: 700 }}>Balance</Text>
-          <Text css={{ fontSize: 24, fontWeight: 700, color: '$white' }}>
+          <Text
+            css={{ fontSize: 24, fontWeight: 700, color: '$white' }}
+            testID="dashboard__minaBalance"
+          >
             {totalBalance} MINA
           </Text>
           <Text css={{ fontSize: 14, fontWeight: 700, color: '$primary500' }}>
@@ -77,6 +80,7 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
               color: '$primary500',
               width: 'auto'
             }}
+            testID="dashboard__addressTruncated"
           >
             {truncateString({
               value: walletAddress,

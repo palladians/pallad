@@ -36,6 +36,7 @@ export const MnemonicInputView = () => {
           <Button
             onPress={() => navigate('/')}
             css={{ flex: 1, width: 'auto' }}
+            testID="onboarding__backButton"
           >
             Back
           </Button>
@@ -49,6 +50,7 @@ export const MnemonicInputView = () => {
             }}
             disabled={!mnemonicValid}
             onPress={handleSubmit(onSubmit)}
+            testID="onboarding__nextButton"
           >
             Next
           </Button>
@@ -78,6 +80,7 @@ export const MnemonicInputView = () => {
                     backgroundColor: '$gray800',
                     lineHeight: '175%'
                   }}
+                  testID="onboarding__yourMnemonicTextarea"
                 />
               )}
             />
@@ -85,7 +88,12 @@ export const MnemonicInputView = () => {
         ) : (
           <Box css={{ gap: 8 }}>
             <Text css={{ color: '$gray50' }}>Confirm No One Is Behind You</Text>
-            <Button onPress={() => setNoOneIsLooking(true)}>I am alone</Button>
+            <Button
+              onPress={() => setNoOneIsLooking(true)}
+              testID="onboarding__confirmAlone"
+            >
+              I am alone
+            </Button>
           </Box>
         )}
       </Box>

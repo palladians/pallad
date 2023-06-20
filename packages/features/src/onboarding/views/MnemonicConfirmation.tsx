@@ -39,6 +39,7 @@ export const MnemonicConfirmationView = () => {
           <Button
             onPress={() => navigate('/')}
             css={{ flex: 1, width: 'auto' }}
+            testID="onboarding__backButton"
           >
             Back
           </Button>
@@ -52,6 +53,7 @@ export const MnemonicConfirmationView = () => {
             }}
             disabled={!isValid}
             onPress={handleSubmit(onSubmit)}
+            testID="onboarding__nextButton"
           >
             Next
           </Button>
@@ -63,7 +65,7 @@ export const MnemonicConfirmationView = () => {
           Confirm The Mnemonic
         </Heading>
         <Box css={{ gap: 16 }}>
-          <Text css={{ color: '$gray50' }}>
+          <Text css={{ color: '$gray50' }} testID="onboarding__writedownIndex">
             Type in the word #{confirmationIndex + 1}
           </Text>
           <Controller
@@ -81,6 +83,7 @@ export const MnemonicConfirmationView = () => {
                   borderColor: '$gray600',
                   backgroundColor: '$gray800'
                 }}
+                testID="onboarding__mnemonicConfirmationInput"
               />
             )}
           />

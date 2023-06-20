@@ -10,8 +10,8 @@ export const MnemonicWritedownView = () => {
   const navigate = useNavigate()
   const mnemonic = useOnboardingStore((state) => state.mnemonic?.split(' '))
   const [noOneIsLooking, setNoOneIsLooking] = useState(false)
-  const [mnemonicWrote, setMnemonicWrote] = useState(false)
-  const toggleMnemonicWrote = () => setMnemonicWrote(!mnemonicWrote)
+  const [mnemonicWritten, setMnemonicWritten] = useState(false)
+  const toggleMnemonicWrote = () => setMnemonicWritten(!mnemonicWritten)
   return (
     <WizardLayout
       footer={
@@ -19,6 +19,7 @@ export const MnemonicWritedownView = () => {
           <Button
             onPress={() => navigate('/')}
             css={{ flex: 1, width: 'auto' }}
+            testID="onboarding__backButton"
           >
             Back
           </Button>
@@ -27,11 +28,12 @@ export const MnemonicWritedownView = () => {
             css={{
               flex: 1,
               width: 'auto',
-              opacity: mnemonicWrote ? 1 : 0.5,
+              opacity: mnemonicWritten ? 1 : 0.5,
               transition: 'opacity 0.3s'
             }}
-            disabled={!mnemonicWrote}
+            disabled={!mnemonicWritten}
             onPress={() => navigate('/confirmation')}
+            testID="onboarding__nextButton"
           >
             Next
           </Button>
@@ -58,6 +60,7 @@ export const MnemonicWritedownView = () => {
                     borderRadius: 32,
                     fontSize: 14
                   }}
+                  testID="onboarding__mnemonicWord"
                 >
                   {word}
                 </Text>
@@ -65,8 +68,9 @@ export const MnemonicWritedownView = () => {
             </Box>
             <Box css={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
               <Checkbox
-                value={mnemonicWrote}
-                onValueChange={(value: boolean) => setMnemonicWrote(value)}
+                value={mnemonicWritten}
+                onValueChange={(value: boolean) => setMnemonicWritten(value)}
+                testID="onboarding__mnemonicWrittenCheckbox"
               />
               <Pressable onPress={toggleMnemonicWrote}>
                 <Text css={{ color: '$gray50' }}>
@@ -78,7 +82,12 @@ export const MnemonicWritedownView = () => {
         ) : (
           <Box css={{ gap: 8 }}>
             <Text css={{ color: '$gray50' }}>Confirm No One Is Behind You</Text>
-            <Button onPress={() => setNoOneIsLooking(true)}>I am alone</Button>
+            <Button
+              onPress={() => setNoOneIsLooking(true)}
+              testID="onboarding__confirmAlone"
+            >
+              I am alone
+            </Button>
           </Box>
         )}
       </Box>

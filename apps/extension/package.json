@@ -8,7 +8,9 @@
     "build:firefox": "web-ext build --source-dir=dist",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "cleanup": "rimraf node_modules"
+    "cleanup": "rimraf node_modules",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@palladxyz/features": "*",
@@ -23,10 +25,11 @@
     "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {
-    "@palladxyz/api": "*",
-    "@mvr-studio/crxjs-vite-plugin": "^0.1.0",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+    "@mvr-studio/crxjs-vite-plugin": "^0.1.0",
+    "@palladxyz/api": "*",
+    "@playwright/test": "^1.35.1",
     "@testing-library/react": "^14.0.0",
     "@total-typescript/ts-reset": "^0.4.2",
     "@types/mocha": "^10.0.1",
