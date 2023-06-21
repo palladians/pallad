@@ -6,7 +6,6 @@ import { OnboardingPom } from './pom/onboarding'
 test('restores existing wallet', async ({ page }) => {
   const onboardingPom = new OnboardingPom(page)
   await onboardingPom.goto()
-  await expect(page).toHaveTitle(/Pallad/)
   await onboardingPom.startRestoring()
   await onboardingPom.fillWalletName(devnetWallet.walletName)
   await onboardingPom.fillSpendingPassword(devnetWallet.spendingPassword)

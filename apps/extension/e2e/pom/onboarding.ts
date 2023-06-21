@@ -1,4 +1,3 @@
-import { getTestId } from '../utils'
 import { BasePom } from './base'
 
 const TestId = {
@@ -24,66 +23,66 @@ export class OnboardingPom extends BasePom {
     return this.page.goto('/')
   }
   async startRestoring() {
-    const restoreWalletButton = await this.page.locator(
-      getTestId(TestId.RESTORE_WALLET_BUTTON)
+    const restoreWalletButton = await this.page.getByTestId(
+      TestId.RESTORE_WALLET_BUTTON
     )
     return restoreWalletButton.click()
   }
   async startCreating() {
-    const createWalletButton = await this.page.locator(
-      getTestId(TestId.CREATE_WALLET_BUTTON)
+    const createWalletButton = await this.page.getByTestId(
+      TestId.CREATE_WALLET_BUTTON
     )
     return createWalletButton.click()
   }
   async fillWalletName(walletName: string) {
-    const walletNameInput = await this.page.locator(
-      getTestId(TestId.WALLET_NAME_INPUT)
+    const walletNameInput = await this.page.getByTestId(
+      TestId.WALLET_NAME_INPUT
     )
     return walletNameInput.fill(walletName)
   }
   async fillSpendingPassword(spendingPassword: string) {
-    const spendingPasswordInput = await this.page.locator(
-      getTestId(TestId.SPENDING_PASSWORD_INPUT)
+    const spendingPasswordInput = await this.page.getByTestId(
+      TestId.SPENDING_PASSWORD_INPUT
     )
     return spendingPasswordInput.fill(spendingPassword)
   }
   async toggleTos() {
-    const tosCheckbox = await this.page.locator(getTestId(TestId.TOS_CHECKBOX))
+    const tosCheckbox = await this.page.getByTestId(TestId.TOS_CHECKBOX)
     return tosCheckbox.click()
   }
   async goNext() {
-    const nextButton = await this.page.locator(getTestId(TestId.NEXT_BUTTON))
+    const nextButton = await this.page.getByTestId(TestId.NEXT_BUTTON)
     return nextButton.click()
   }
   async goBack() {
-    const backButton = await this.page.locator(getTestId(TestId.BACK_BUTTON))
+    const backButton = await this.page.getByTestId(TestId.BACK_BUTTON)
     return backButton.click()
   }
   async confirmAlone() {
-    const backButton = await this.page.locator(getTestId(TestId.CONFIRM_ALONE))
+    const backButton = await this.page.getByTestId(TestId.CONFIRM_ALONE)
     return backButton.click()
   }
   async fillMnemonic(mnemonic: string) {
-    const mnemonicTextarea = await this.page.locator(
-      getTestId(TestId.YOUR_MNEMONIC_TEXTAREA)
+    const mnemonicTextarea = await this.page.getByTestId(
+      TestId.YOUR_MNEMONIC_TEXTAREA
     )
     return mnemonicTextarea.fill(mnemonic)
   }
   async getAddressTruncated() {
-    const addressTruncated = await this.page.locator(
-      getTestId(TestId.ADDRESS_TRUNCATED)
+    const addressTruncated = await this.page.getByTestId(
+      TestId.ADDRESS_TRUNCATED
     )
     return addressTruncated.textContent()
   }
   async getMnemonicWords() {
     const mnemonicWords = await this.page
-      .locator(getTestId(TestId.MNEMONIC_WORD))
+      .getByTestId(TestId.MNEMONIC_WORD)
       .all()
     return await Promise.all(mnemonicWords.map((word) => word.innerText()))
   }
   async toggleMnemonicWritten() {
-    const mnemonicWritten = await this.page.locator(
-      getTestId(TestId.MNEMONIC_WRITTEN_CHECKBOX)
+    const mnemonicWritten = await this.page.getByTestId(
+      TestId.MNEMONIC_WRITTEN_CHECKBOX
     )
     return mnemonicWritten.click()
   }
