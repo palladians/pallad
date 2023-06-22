@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Turborepo Caching Server
+        uses: felixmosh/turborepo-gh-artifacts@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -20,6 +24,10 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build extension
+        env:
+          TURBO_API: 'http://127.0.0.1:9080'
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: pallad
         run: VITE_APP_MODE=$VITE_APP_MODE yarn build:extension
       - name: Run unit tests
         run: yarn test:unit

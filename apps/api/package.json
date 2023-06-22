@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "build": "tsup-node",
+    "build": "yarn codegen && tsup-node",
     "dev": "tsup-node --watch --onSuccess \"node dist/server.js\"",
     "start": "node dist/server.js",
     "codegen": "graphql-codegen --config codegen.ts",
