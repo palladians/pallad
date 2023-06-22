@@ -1,4 +1,4 @@
-name: Browser extension's integration
+name: Extension E2E
 on:
   push:
     branches: [main]
@@ -10,16 +10,10 @@ jobs:
       VITE_APP_MODE: web
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Turborepo Caching Server
-        uses: felixmosh/turborepo-gh-artifacts@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup env
+        uses: ./.github/actions/setup
         with:
-          node-version-file: .nvmrc
-          cache: yarn
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build extension
         env:
           TURBO_API: 'http://127.0.0.1:9080'

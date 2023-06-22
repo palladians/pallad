@@ -1,0 +1,33 @@
+name: Setup Dependencies
+description: Sets up Node.js, cache and installs dependencies
+inputs:
+  GITHUB_TOKEN:
+    description: GitHub token to set up remote caching
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v3
+    - name: Turborepo Caching Server
+      uses: felixmosh/turborepo-gh-artifacts@v2
+      with:
+        repo-token: ${{ inputs.GITHUB_TOKEN }}
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: .nvmrc
+        cache: yarn
+    - name: Get yarn cache directory path
+      shell: bash
+      id: yarn-cache-dir-path
+      run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+    - uses: actions/cache@v3
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - name: Install dependencies
+      shell: bash
+      run: yarn install --frozen-lockfile
