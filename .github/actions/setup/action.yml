@@ -4,6 +4,9 @@ inputs:
   GITHUB_TOKEN:
     description: GitHub token to set up remote caching
     required: true
+  TURBO_SERVER_TOKEN:
+    description: Turborepo token
+    required: true
 runs:
   using: 'composite'
   steps:
@@ -11,6 +14,7 @@ runs:
       uses: felixmosh/turborepo-gh-artifacts@v2
       with:
         repo-token: ${{ inputs.GITHUB_TOKEN }}
+        server-token: ${{ inputs.TURBO_SERVER_TOKEN }}
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:

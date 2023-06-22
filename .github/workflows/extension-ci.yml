@@ -16,6 +16,7 @@ jobs:
         uses: ./.github/actions/setup
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TURBO_SERVER_TOKEN: ${{ secrets.TURBO_SERVER_TOKEN }}
       - name: Build extension
         env:
           TURBO_API: 'http://127.0.0.1:9080'
