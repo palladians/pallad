@@ -2,6 +2,7 @@ export {
   deriveKeyPair,
   generateMnemonic,
   minaClient,
-  validateMnemonic
+  validateMnemonic,
+  wordlist
 } from './hd'
 export { MinaNetwork } from './types'

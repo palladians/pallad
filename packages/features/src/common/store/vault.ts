@@ -1,4 +1,4 @@
-import { deriveKeyPair, generateMnemonic } from '@palladxyz/mina'
+import { deriveKeyPair, generateMnemonic, wordlist } from '@palladxyz/mina'
 import { produce } from 'immer'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
@@ -66,7 +66,7 @@ export const useVaultStore = create<VaultStore>()(
       },
       async createWallet({ walletName }) {
         const { addCredential, setCurrentWalletPublicKey } = get()
-        const mnemonic = generateMnemonic()
+        const mnemonic = generateMnemonic(wordlist)
         const keypair = await deriveKeyPair({ mnemonic })
         addCredential({
           walletName,

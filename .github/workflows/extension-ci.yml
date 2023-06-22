@@ -6,6 +6,9 @@ on:
     branches: [main]
 jobs:
   test_and_build:
+    name: 'Build and test'
+    env:
+      VITE_APP_MODE: web
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build extension
-        run: yarn build:extension
+        run: VITE_APP_MODE=$VITE_APP_MODE yarn build:extension
       - name: Run unit tests
         run: yarn test:unit
       - uses: actions/upload-artifact@v3

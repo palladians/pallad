@@ -1,4 +1,4 @@
-import { validateMnemonic } from '@palladxyz/mina'
+import { validateMnemonic, wordlist } from '@palladxyz/mina'
 import { Box, Button, Heading, Text, Textarea } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -22,7 +22,10 @@ export const MnemonicInputView = () => {
     }
   })
   const mnemonic = watch('mnemonic')
-  const mnemonicValid = useMemo(() => validateMnemonic(mnemonic), [mnemonic])
+  const mnemonicValid = useMemo(
+    () => validateMnemonic(mnemonic, wordlist),
+    [mnemonic]
+  )
   const onSubmit = async ({ mnemonic }: { mnemonic: string }) => {
     if (!walletName) return
     await restoreWallet({ mnemonic, walletName })

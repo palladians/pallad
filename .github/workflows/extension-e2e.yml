@@ -5,6 +5,9 @@ on:
   workflow_dispatch:
 jobs:
   e2e:
+    name: Run E2E tests
+    env:
+      VITE_APP_MODE: web
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -16,10 +19,10 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build extension
-        run: yarn build:extension
+        run: VITE_APP_MODE=$VITE_APP_MODE yarn build:extension
       - name: Install Chromium for Playwright
         run: npx playwright install chromium
-      - name: Run unit tests
+      - name: Run E2E tests
         run: yarn test:e2e:extension
       - uses: actions/upload-artifact@v3
         with:

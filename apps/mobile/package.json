@@ -1,6 +1,6 @@
 {
   "name": "@palladxyz/mobile",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -50,7 +50,7 @@
     "native-run": "^1.7.2",
     "path": "^0.12.7",
     "rollup-plugin-node-polyfills": "^0.2.1",
-    "vite": "^4.3.2",
+    "vite": "^4.3.9",
     "vite-plugin-commonjs": "^0.7.1",
     "vite-plugin-node-polyfills": "^0.9.0",
     "vite-plugin-top-level-await": "^1.3.1",

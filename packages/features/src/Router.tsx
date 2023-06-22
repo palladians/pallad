@@ -17,15 +17,15 @@ export const Router = () => {
     <Box css={{ flex: 1, height: '100vh' }}>
       <NativeRouter>
         <Routes>
-          <Route path="" element={<StartView />} />
-          <Route path="dashboard" element={<OverviewView />} />
-          <Route path="create" element={<CreateWalletView />} />
-          <Route path="restore" element={<RestoreWalletView />} />
-          <Route path="unlock" element={<UnlockWalletView />} />
-          <Route path="writedown" element={<MnemonicWritedownView />} />
-          <Route path="confirmation" element={<MnemonicConfirmationView />} />
-          <Route path="mnemonic" element={<MnemonicInputView />} />
-          <Route path="settings" element={<SettingsView />} />
+          <Route path="/" element={<StartView />} />
+          <Route path="/dashboard" element={<OverviewView />} />
+          <Route path="/create" element={<CreateWalletView />} />
+          <Route path="/restore" element={<RestoreWalletView />} />
+          <Route path="/unlock" element={<UnlockWalletView />} />
+          <Route path="/writedown" element={<MnemonicWritedownView />} />
+          <Route path="/confirmation" element={<MnemonicConfirmationView />} />
+          <Route path="/mnemonic" element={<MnemonicInputView />} />
+          <Route path="/settings" element={<SettingsView />} />
         </Routes>
       </NativeRouter>
     </Box>
