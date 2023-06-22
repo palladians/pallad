@@ -9,9 +9,13 @@ import { truncateString } from '../../common/lib/string'
 
 interface OverviewCardProps {
   walletAddress: string
+  openReceiveModal: () => void
 }
 
-export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
+export const OverviewCard = ({
+  walletAddress,
+  openReceiveModal
+}: OverviewCardProps) => {
   const { data: accountQuery, isLoading: accountLoading } = useAccount()
   const { data: priceQuery, isLoading: fiatPriceLoading } =
     trpc.mina.fiatPrice.useSWR()
@@ -97,7 +101,9 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
         <Button variant="secondary" css={{ flex: 1 }}>
           Send
         </Button>
-        <Button css={{ flex: 1 }}>Receive</Button>
+        <Button css={{ flex: 1 }} onPress={openReceiveModal}>
+          Receive
+        </Button>
       </Box>
     </Box>
   )

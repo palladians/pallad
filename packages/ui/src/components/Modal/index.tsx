@@ -59,8 +59,8 @@ export const Modal = ({
               margin: 'auto',
               borderRadius,
               padding: '$md',
-              paddingTop: 'var(--safe-area-inset-top)',
-              paddingBottom: 'var(--safe-area-inset-bottom)'
+              paddingTop: 16,
+              paddingBottom: 16
             }}
             {...contentProps}
           >
