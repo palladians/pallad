@@ -1,0 +1,56 @@
+name: UI CI
+on:
+  push:
+    branches: [main]
+    paths:
+      - packages/features/**
+      - packages/ui/**
+  pull_request:
+    branches: [main]
+    paths:
+      - packages/features/**
+      - packages/ui/**
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  ui_ci:
+    name: UI Continuous Integration
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      VITE_APP_MODE: web
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Setup env
+        uses: ./.github/actions/setup
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TURBO_SERVER_TOKEN: ${{ secrets.TURBO_SERVER_TOKEN }}
+      - name: Build features
+        env:
+          TURBO_API: 'http://127.0.0.1:9080'
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: pallad
+        run: VITE_APP_MODE=$VITE_APP_MODE yarn build:features
+      - name: Build features stories
+        run: yarn story:features
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          name: features-stories
+          path: packages/features/build
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+        with:
+          artifact_name: features-stories

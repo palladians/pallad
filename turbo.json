@@ -9,6 +9,7 @@
     "lint": {},
     "test:unit": {},
     "test:e2e": {},
+    "story:build": {},
     "cleanup": {},
     "dev": {
       "cache": false

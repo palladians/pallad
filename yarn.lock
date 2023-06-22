@@ -2024,7 +2024,7 @@
   resolved "https://registry.yarnpkg.com/@ladle/react-context/-/react-context-1.0.1.tgz#007ea641e4a1b25cafb8f5672977fdd1f9bb6f91"
   integrity sha512-xVQ8siyOEQG6e4Knibes1uA3PTyXnqiMmfSmd5pIbkzeDty8NCBtYHhTXSlfmcDNEsw/G8OzNWo4VbyQAVDl2A==
 
-"@ladle/react@^2.13.0":
+"@ladle/react@^2.13.0", "@ladle/react@^2.15.0":
   version "2.15.0"
   resolved "https://registry.yarnpkg.com/@ladle/react/-/react-2.15.0.tgz#8ff565f73301cf49dbf57ba7fc8aec647162000f"
   integrity sha512-rEl5WU1f0YQO+oXFV9fh2FQUHdXR/k4waLxHBnVyJoQvNvZKZJiKSXkzi7kNIxQazK5iVla12pbhlvDe2jR/Yw==

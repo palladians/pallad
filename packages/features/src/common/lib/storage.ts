@@ -1,4 +1,4 @@
-const VITE_APP_MODE = import.meta.env.VITE_APP_MODE
+const VITE_APP_MODE = import.meta.env.VITE_APP_MODE || 'web'
 
 export const { localPersistence, securePersistence, sessionPersistence } =
   VITE_APP_MODE === 'web'

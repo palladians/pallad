@@ -2,6 +2,8 @@ name: Extension E2E
 on:
   push:
     branches: [main]
+    paths:
+      - apps/extension/**
   workflow_dispatch:
 jobs:
   e2e:

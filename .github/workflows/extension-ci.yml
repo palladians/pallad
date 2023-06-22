@@ -2,8 +2,12 @@ name: Extension CI
 on:
   push:
     branches: [main]
+    paths:
+      - apps/extension/**
   pull_request:
     branches: [main]
+    paths:
+      - apps/extension/**
 jobs:
   test_and_build:
     name: 'Build and test'

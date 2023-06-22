@@ -1,6 +1,5 @@
 import { commonjs } from '@hyrious/esbuild-plugin-commonjs'
 import { defineConfig } from 'tsup'
-import alias from 'esbuild-plugin-alias'
 
 export default defineConfig([
   {
