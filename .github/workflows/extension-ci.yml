@@ -4,10 +4,12 @@ on:
     branches: [main]
     paths:
       - apps/extension/**
+      - packages/features/**
   pull_request:
     branches: [main]
     paths:
       - apps/extension/**
+      - packages/features/**
 jobs:
   test_and_build:
     name: 'Build and test'

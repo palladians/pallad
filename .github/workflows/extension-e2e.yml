@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - apps/extension/**
+      - packages/features/**
   workflow_dispatch:
 jobs:
   e2e:
