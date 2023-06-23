@@ -31,14 +31,14 @@ type VaultMutators = {
     walletName
   }: {
     walletName: string
-  }) => Promise<{ publicKey: string; mnemonic: string }>
+  }) => Promise<{ publicKey: string; mnemonic: string } | null>
   restoreWallet: ({
     walletName,
     mnemonic
   }: {
     walletName: string
     mnemonic: string
-  }) => Promise<{ publicKey: string }>
+  }) => Promise<{ publicKey: string } | null>
   reset: () => void
 }
 
@@ -68,6 +68,7 @@ export const useVaultStore = create<VaultStore>()(
         const { addCredential, setCurrentWalletPublicKey } = get()
         const mnemonic = generateMnemonic(wordlist)
         const keypair = await deriveKeyPair({ mnemonic })
+        if (!keypair) return null
         addCredential({
           walletName,
           walletPublicKey: keypair.publicKey,
@@ -84,6 +85,7 @@ export const useVaultStore = create<VaultStore>()(
       async restoreWallet({ walletName, mnemonic }) {
         const { addCredential, setCurrentWalletPublicKey } = get()
         const keypair = await deriveKeyPair({ mnemonic })
+        if (!keypair) return null
         addCredential({
           walletName,
           walletPublicKey: keypair.publicKey,

@@ -1,7 +1,8 @@
 import { Box, composeBox, icons, Image, Text } from '@palladxyz/ui'
-import { useAppStore } from '../store/app'
 import { Pressable } from 'react-native'
 import { useLocation } from 'react-router-native'
+
+import { useAppStore } from '../store/app'
 
 const StyledPressable = composeBox({ baseComponent: Pressable })
 

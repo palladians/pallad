@@ -4,8 +4,8 @@ import { useMemo } from 'react'
 import { Clipboard, Pressable } from 'react-native'
 
 import { useAccount } from '../../common/lib/hooks'
-import { trpc } from '../../common/lib/trpc'
 import { truncateString } from '../../common/lib/string'
+import { trpc } from '../../common/lib/trpc'
 
 interface OverviewCardProps {
   walletAddress: string

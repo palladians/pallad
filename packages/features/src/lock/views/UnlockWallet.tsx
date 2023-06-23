@@ -4,8 +4,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
-import { useVaultStore } from '../../common/store/vault'
 import { sessionPersistence } from '../../common/lib/storage'
+import { useVaultStore } from '../../common/store/vault'
 
 export const UnlockWalletView = () => {
   const [passwordError, setPasswordError] = useState(false)

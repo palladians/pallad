@@ -2,8 +2,8 @@ import { Box, Button, Heading, icons, Modal } from '@palladxyz/ui'
 import React from 'react'
 import { useNavigate } from 'react-router-native'
 
-import { useVaultStore } from '../store/vault'
 import { sessionPersistence } from '../lib/storage'
+import { useVaultStore } from '../store/vault'
 
 interface MenuModalProps {
   isOpen: boolean

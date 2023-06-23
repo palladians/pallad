@@ -1,6 +1,5 @@
 import { StoryDefault } from '@ladle/react'
 import React from 'react'
-import { Text } from 'react-native'
 
 import { useDisclosure } from '../../utils/useDisclosure'
 import { Box } from '../Box'

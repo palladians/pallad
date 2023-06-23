@@ -1,3 +1,5 @@
 node_modules
 dist
 .turbo
+minaexplorer.ts
+build

@@ -1,6 +1,6 @@
 import { Box, Heading, Modal, Text, theme } from '@palladxyz/ui'
-import QRCode from 'react-qr-code'
 import { Clipboard, Pressable } from 'react-native'
+import QRCode from 'react-qr-code'
 
 interface ReceiveModalProps {
   isOpen: boolean

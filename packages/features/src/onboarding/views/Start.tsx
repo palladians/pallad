@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
 import { VaultState } from '../../common/lib/const'
-import { useAppStore } from '../../common/store/app'
 import { sessionPersistence } from '../../common/lib/storage'
+import { useAppStore } from '../../common/store/app'
 
 export const StartView = () => {
   const vaultState = useAppStore((state) => state.vaultState)

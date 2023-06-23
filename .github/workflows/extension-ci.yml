@@ -23,6 +23,8 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TURBO_SERVER_TOKEN: ${{ secrets.TURBO_SERVER_TOKEN }}
+      - name: Lint the code
+        run: yarn lint
       - name: Build extension
         env:
           TURBO_API: 'http://127.0.0.1:9080'

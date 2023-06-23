@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-native'
 
+import { sessionPersistence } from '../../common/lib/storage'
 import { useOnboardingStore } from '../../common/store/onboarding'
 import { WalletInfoForm } from '../components/WalletInfoForm'
-import { sessionPersistence } from '../../common/lib/storage'
 
 export const RestoreWalletView = () => {
   const navigate = useNavigate()
