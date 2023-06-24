@@ -12,25 +12,15 @@
     }
   },
   "scripts": {
-    "build": "yarn codegen && tsup-node",
-    "dev": "tsup-node --watch --onSuccess \"node dist/server.js\"",
-    "start": "node dist/server.js",
-    "codegen": "graphql-codegen --config codegen.ts",
+    "build": "tsup-node",
+    "dev": "tsup-node --watch --onSuccess \"netlify dev\"",
     "cleanup": "rimraf node_modules"
   },
   "dependencies": {
-    "@trpc/server": "^10.30.0",
-    "cors": "^2.8.5",
     "graphql": "^16.6.0",
-    "graphql-request": "^6.1.0",
-    "zod": "^3.21.4"
+    "graphql-request": "^6.1.0"
   },
   "devDependencies": {
-    "@palladxyz/mina": "*",
-    "@graphql-codegen/add": "^5.0.0",
-    "@graphql-codegen/cli": "^4.0.1",
-    "@graphql-codegen/client-preset": "^4.0.0",
-    "@graphql-codegen/typescript-graphql-request": "^5.0.0",
-    "@types/cors": "^2.8.13"
+    "netlify-cli": "^15.6.0"
   }
 }
