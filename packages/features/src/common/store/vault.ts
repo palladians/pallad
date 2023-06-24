@@ -73,7 +73,7 @@ export const vaultStore = createStore<VaultStore>()(
       async createWallet({ walletName }) {
         const { addCredential, setCurrentWalletPublicKey } = get()
         const mnemonic = generateMnemonic(wordlist)
-        const keypair = await deriveKeyPair({ mnemonic })
+        const keypair = await deriveKeyPair({ mnemonic, accountNumber: 0 })
         if (!keypair) return null
         addCredential({
           walletName,
@@ -90,7 +90,7 @@ export const vaultStore = createStore<VaultStore>()(
       },
       async restoreWallet({ walletName, mnemonic }) {
         const { addCredential, setCurrentWalletPublicKey } = get()
-        const keypair = await deriveKeyPair({ mnemonic })
+        const keypair = await deriveKeyPair({ mnemonic, accountNumber: 0 })
         if (!keypair) return null
         addCredential({
           walletName,

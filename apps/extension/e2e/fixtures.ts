@@ -3,5 +3,5 @@ export const devnetWallet = {
   spendingPassword: 'SuperSecure777',
   mnemonic:
     'habit hope tip crystal because grunt nation idea electric witness alert like',
-  addressTruncated: 'B62qnHVd...GHdt1dW2'
+  addressTruncated: 'B62qjsV6...ZEumXzxb'
 }

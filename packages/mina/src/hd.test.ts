@@ -29,9 +29,18 @@ it('validates mnemonics', () => {
 it('derives a keypair', async () => {
   const keypair = await deriveKeyPair({
     mnemonic:
-      'habit hope tip crystal because grunt nation idea electric witness alert like'
+      'habit hope tip crystal because grunt nation idea electric witness alert like',
+    accountNumber: 0
   })
   expect(keypair?.publicKey).toEqual(
-    'B62qnHVdf5V7JTiRJDZMXrLNxdcH3xGamp5fUs6uMo5TuwMGHdt1dW2'
+    'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
   )
+})
+
+it('derives different keypairs for different account numbers', async () => {
+  const mnemonic =
+    'habit hope tip crystal because grunt nation idea electric witness alert like'
+  const keypair1 = await deriveKeyPair({ mnemonic, accountNumber: 0 })
+  const keypair2 = await deriveKeyPair({ mnemonic, accountNumber: 1 })
+  expect(keypair1?.publicKey).not.toEqual(keypair2?.publicKey)
 })
