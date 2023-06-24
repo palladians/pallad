@@ -8,6 +8,8 @@ jobs:
   build_api:
     name: Build and deploy API
     runs-on: ubuntu-latest
+    env:
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup env

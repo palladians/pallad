@@ -15,7 +15,7 @@
     "build": "tsup-node",
     "dev": "tsup-node --watch --onSuccess \"netlify dev\"",
     "deploy": "netlify deploy --prod",
-    "test:unit": "vitest run",
+    "test:unit": "echo \"No tests implemented yet\"",
     "cleanup": "rimraf node_modules"
   },
   "dependencies": {
