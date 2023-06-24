@@ -17,7 +17,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         app: 'app.html',
-        index: 'index.html'
+        index: 'index.html',
+        inject: 'src/inject/script.js'
       }
     },
     commonjsOptions: {

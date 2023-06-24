@@ -3069,10 +3069,20 @@
   resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.31.0.tgz#64f6198741a0b96f21671e0c3c0e2e211bae3cc9"
   integrity sha512-VCqbJEvFJb8C4hQFw7AD+dkQTjgEdV/QAzO4D+/cX5e93u5NpfNXI+PKS0QFXwG/zqgwQwVV6OkYc/D/MFwA6g==
 
+"@trpc/client@^10.32.0":
+  version "10.32.0"
+  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.32.0.tgz#f1565d9d68fb1ab4beb5fd8e301a16a0691396db"
+  integrity sha512-hrj6XV84nE6DH5AmsPJ0JzIRcx3f6zU0tvS705DnZtNBOoMk7Lx+wX+KCDxj4DxLsTXC+roAxZxWwAB6/LGsXA==
+
 "@trpc/server@^10.29.1", "@trpc/server@^10.30.0":
   version "10.31.0"
   resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.31.0.tgz#2a757e814d9a779d6faa8b4fd6bda80691179a19"
   integrity sha512-9EnRTSDE9nF11LZsvSOqNKqkRYzHqFX4ch5AJ6VIu8uta2vxVTN4FxxsNRSOluTzVYZDeaCISbwmOJ5iihCCIg==
+
+"@trpc/server@^10.32.0":
+  version "10.32.0"
+  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.32.0.tgz#15a32f251bdcab4536968aa98e2e397248f28051"
+  integrity sha512-C4HRHpaffw2pekpfNSHQtwlocq6kwAQq48mR9RIsUZGNbjXZbgvBC927vRP6QPAoG+n4oHPWyZ9G1hs3KMcPiw==
 
 "@tsconfig/node10@^1.0.7":
   version "1.0.9"
@@ -14066,6 +14076,11 @@ trough@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/trough/-/trough-2.1.0.tgz#0f7b511a4fde65a46f18477ab38849b22c554876"
   integrity sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==
+
+trpc-browser@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/trpc-browser/-/trpc-browser-1.3.1.tgz#3ab9f747b46d82ff9f33afc3e8feb2653246276e"
+  integrity sha512-76olyHiFcnzea+ccIrMg5RvxZSqkFIWqVjmdh36CNinanTc7JovTuKPe+91/U+v3i59Iw+rDm4JYpl0v+kNmVw==
 
 ts-interface-checker@^0.1.9:
   version "0.1.13"

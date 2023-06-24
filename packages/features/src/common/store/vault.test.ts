@@ -29,6 +29,18 @@ describe('VaultStore', () => {
     expect(result.current.credentials.length).toEqual(1)
   })
 
+  it('returns accounts', () => {
+    const { result } = renderHook(() => useVaultStore())
+    act(() => {
+      result.current.addCredential({
+        walletPublicKey: 'pubkey',
+        walletPrivateKey: 'privkey',
+        walletName: 'Test Wallet'
+      })
+    })
+    expect(result.current.getAccounts()).toEqual(['pubkey'])
+  })
+
   it('sets existing wallet', () => {
     const { result } = renderHook(() => useVaultStore())
     act(() => {

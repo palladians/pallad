@@ -4,7 +4,7 @@ import bs58check from 'bs58check'
 import { Buffer } from 'buffer'
 import Client from 'mina-signer'
 export { generateMnemonic, validateMnemonic } from '@scure/bip39'
-export { wordlist } from '@scure/bip39/wordlists/english'
+export { wordlist } from '@scure/bip39/wordlists/english.js'
 
 export const minaClient = new Client({ network: 'testnet' })
 
