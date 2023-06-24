@@ -94,7 +94,7 @@ describe('VaultStore', () => {
         mnemonic
       })
       expect(wallet.publicKey).toEqual(
-        'B62qnHVdf5V7JTiRJDZMXrLNxdcH3xGamp5fUs6uMo5TuwMGHdt1dW2'
+        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
       )
     })
     expect(result.current.credentials.length).toEqual(1)
