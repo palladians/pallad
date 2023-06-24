@@ -10,7 +10,7 @@ export const createContext = async ({ req }: CreateHTTPContextOptions) => {
   const rawMinaNetwork = req.headers['p-mina-network'] as MinaNetwork
   const minaNetwork = rawMinaNetwork
     ? MinaNetwork[rawMinaNetwork]
-    : MinaNetwork[MinaNetwork.MAINNET]
+    : MinaNetwork[MinaNetwork.Mainnet]
   const minaExplorerUrl = MinaExplorerUrls[minaNetwork]
   const minaExplorerClient = new GraphQLClient(
     MinaExplorerGraphqlUrls[minaNetwork]
