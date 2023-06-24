@@ -38,7 +38,8 @@ it('derives a keypair', async () => {
 })
 
 it('derives different keypairs for different account numbers', async () => {
-  const mnemonic = 'habit hope tip crystal because grunt nation idea electric witness alert like'
+  const mnemonic =
+    'habit hope tip crystal because grunt nation idea electric witness alert like'
   const keypair1 = await deriveKeyPair({ mnemonic, accountNumber: 0 })
   const keypair2 = await deriveKeyPair({ mnemonic, accountNumber: 1 })
   expect(keypair1?.publicKey).not.toEqual(keypair2?.publicKey)

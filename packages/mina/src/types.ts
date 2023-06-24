@@ -19,7 +19,7 @@ export const enum MinaPathLevelIndexes {
 }
 
 export interface MinaHDPath {
-  accountIndex: number;
-  change: number;
-  index: number;
+  accountIndex: number
+  change: number
+  index: number
 }
