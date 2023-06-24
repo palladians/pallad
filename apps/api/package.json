@@ -14,6 +14,8 @@
   "scripts": {
     "build": "tsup-node",
     "dev": "tsup-node --watch --onSuccess \"netlify dev\"",
+    "deploy": "netlify deploy --prod",
+    "test:unit": "vitest run",
     "cleanup": "rimraf node_modules"
   },
   "dependencies": {
@@ -21,6 +23,8 @@
     "graphql-request": "^6.1.0"
   },
   "devDependencies": {
-    "netlify-cli": "^15.6.0"
+    "happy-dom": "^9.20.3",
+    "netlify-cli": "^15.6.0",
+    "supertest": "^6.3.3"
   }
 }

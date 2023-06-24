@@ -4,7 +4,7 @@ export default defineConfig([
   {
     name: 'pallad/api',
     entry: ['./src/functions/'],
-    outDir: './dist',
+    outDir: './netlify/edge-functions',
     format: 'esm',
     clean: true,
     splitting: false

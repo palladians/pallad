@@ -3,3 +3,5 @@ dist
 .turbo
 minaexplorer.ts
 build
+apps/api/netlify
+apps/api/src/functions

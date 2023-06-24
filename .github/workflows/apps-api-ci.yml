@@ -1,0 +1,25 @@
+name: API CI
+on:
+  push:
+    branches: [main]
+    paths:
+      - apps/api/**
+jobs:
+  build_api:
+    name: Build and deploy API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup env
+        uses: ./.github/actions/setup
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TURBO_SERVER_TOKEN: ${{ secrets.TURBO_SERVER_TOKEN }}
+      - name: Build API
+        env:
+          TURBO_API: 'http://127.0.0.1:9080'
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: pallad
+        run: yarn build:api
+      - name: Deploy edge functions to Netlify
+        run: netlify deploy --prod --site pallad-api --auth $NETLIFY_AUTH_TOKEN

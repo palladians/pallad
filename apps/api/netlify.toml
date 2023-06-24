@@ -1,2 +1,23 @@
 [build]
-  edge_functions = "dist"
+  publish = "public"
+  command = "echo We are living on the edge"
+
+[[edge_functions]]
+  function = "getAccount"
+  path = "/getAccount"
+
+[[edge_functions]]
+  function = "getMinaFiatPrice"
+  path = "/getMinaFiatPrice"
+
+[[edge_functions]]
+  function = "getTransactions"
+  path = "/getTransactions"
+
+[[edge_functions]]
+  function = "getTransaction"
+  path = "/getTransaction"
+
+[[edge_functions]]
+  function = "getValidators"
+  path = "/getValidators"
