@@ -11,10 +11,6 @@ on:
       - packages/features/**
       - packages/ui/**
   workflow_dispatch:
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -25,6 +21,9 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
     env:
       VITE_APP_MODE: web
     steps:
