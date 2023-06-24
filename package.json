@@ -18,7 +18,8 @@
     "test:unit": "turbo run test:unit",
     "test:e2e:extension": "turbo run test:e2e --filter=@palladxyz/extension",
     "format": "prettier --write \"**/*.{ts,tsx,md}\" && pnpm lint:fix",
-    "cleanup": "turbo run cleanup"
+    "cleanup": "turbo run cleanup",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.1",
@@ -30,6 +31,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
+    "husky": "^8.0.3",
     "prettier": "^2.8.8",
     "rimraf": "^5.0.1",
     "tsup": "^6.7.0",
