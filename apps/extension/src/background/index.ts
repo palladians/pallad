@@ -1,8 +1,28 @@
-import browser from 'webextension-polyfill'
+import { initTRPC } from '@trpc/server'
+import { createChromeHandler } from 'trpc-browser/adapter'
+import { z } from 'zod'
 
-console.log('BG')
+const t = initTRPC.create({
+  isServer: false,
+  allowOutsideOfServer: true
+})
 
-browser.runtime.onMessage.addListener(async (msg, sender) => {
-  console.log('BG page received message', msg, 'from', sender)
-  console.log('Stored data', await browser.storage.local.get())
+export const router = t.router
+export const publicProcedure = t.procedure
+
+export const appRouter = router({
+  requestNetwork: publicProcedure
+    .input(z.object({ network: z.string() }))
+    .query(({ input }) => {
+      return input.network
+    }),
+  requestAccounts: publicProcedure
+    .input(z.object({ accounts: z.array(z.string()) }))
+    .query(({ input }) => {
+      return input.accounts
+    })
+})
+
+createChromeHandler({
+  router: appRouter
 })

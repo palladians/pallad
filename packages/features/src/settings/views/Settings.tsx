@@ -19,19 +19,19 @@ export const SettingsView = () => {
             onChange={(value) => setNetwork(value as MinaNetwork)}
             options={[
               {
-                value: MinaNetwork[MinaNetwork.MAINNET],
+                value: MinaNetwork[MinaNetwork.Mainnet],
                 label: 'Mainnet',
-                defaultSelected: network === MinaNetwork[MinaNetwork.MAINNET]
+                defaultSelected: network === MinaNetwork[MinaNetwork.Mainnet]
               },
               {
-                value: MinaNetwork[MinaNetwork.DEVNET],
+                value: MinaNetwork[MinaNetwork.Devnet],
                 label: 'Devnet',
-                defaultSelected: network === MinaNetwork[MinaNetwork.DEVNET]
+                defaultSelected: network === MinaNetwork[MinaNetwork.Devnet]
               },
               {
-                value: MinaNetwork[MinaNetwork.BERKELEY],
+                value: MinaNetwork[MinaNetwork.Berkeley],
                 label: 'Berkeley',
-                defaultSelected: network === MinaNetwork[MinaNetwork.BERKELEY]
+                defaultSelected: network === MinaNetwork[MinaNetwork.Berkeley]
               }
             ]}
           />

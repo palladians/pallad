@@ -1,7 +1,7 @@
 export enum MinaNetwork {
-  MAINNET = 'MAINNET',
-  DEVNET = 'DEVNET',
-  BERKELEY = 'BERKELEY'
+  Mainnet = 'Mainnet',
+  Devnet = 'Devnet',
+  Berkeley = 'Berkeley'
 }
 
 export const enum MinaKeyConst {

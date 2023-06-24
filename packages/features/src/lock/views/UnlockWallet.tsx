@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
 import { sessionPersistence } from '../../common/lib/storage'
-import { useVaultStore } from '../../common/store/vault'
+import { useVaultStore, vaultStore } from '../../common/store/vault'
 
 export const UnlockWalletView = () => {
   const [passwordError, setPasswordError] = useState(false)
@@ -26,8 +26,8 @@ export const UnlockWalletView = () => {
     spendingPassword: string
   }) => {
     await sessionPersistence.setItem('spendingPassword', spendingPassword)
-    await useVaultStore.destroy()
-    await useVaultStore.persist.rehydrate()
+    await vaultStore.destroy()
+    await vaultStore.persist.rehydrate()
     const wallet = await getCurrentWallet()
     if (!wallet) return await onError()
     return navigate('/dashboard')

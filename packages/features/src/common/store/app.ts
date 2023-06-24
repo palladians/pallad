@@ -1,6 +1,7 @@
 import { MinaNetwork } from '@palladxyz/mina'
-import { create } from 'zustand'
+import { useStore } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { createStore } from 'zustand/vanilla'
 
 import { VaultState } from '../lib/const'
 import { localPersistence } from '../lib/storage'
@@ -19,11 +20,11 @@ type AppMutators = {
 
 type AppStore = AppState & AppMutators
 
-export const useAppStore = create<AppStore>()(
+export const appStore = createStore<AppStore>()(
   persist(
     (set) => ({
       menuOpen: false,
-      network: MinaNetwork[MinaNetwork.MAINNET],
+      network: MinaNetwork[MinaNetwork.Mainnet],
       vaultState: VaultState[VaultState.UNINITIALIZED],
       setMenuOpen(menuOpen) {
         return set({ menuOpen })
@@ -45,3 +46,5 @@ export const useAppStore = create<AppStore>()(
     }
   )
 )
+
+export const useAppStore = (selector: any) => useStore(appStore, selector)

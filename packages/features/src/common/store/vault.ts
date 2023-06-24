@@ -1,7 +1,8 @@
 import { deriveKeyPair, generateMnemonic, wordlist } from '@palladxyz/mina'
 import { produce } from 'immer'
-import { create } from 'zustand'
+import { useStore } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { createStore } from 'zustand/vanilla'
 
 import { securePersistence } from '../lib/storage'
 
@@ -26,6 +27,7 @@ type VaultMutators = {
     currentWalletPublicKey: string | null
   }) => void
   addCredential: (credential: Credential) => void
+  getAccounts: () => string[]
   getCurrentWallet: () => PublicCredential | null
   createWallet: ({
     walletName
@@ -49,7 +51,7 @@ const initialState = {
   credentials: []
 } satisfies VaultState
 
-export const useVaultStore = create<VaultStore>()(
+export const vaultStore = createStore<VaultStore>()(
   persist(
     (set, get) => ({
       ...initialState,
@@ -63,6 +65,10 @@ export const useVaultStore = create<VaultStore>()(
           walletName: wallet?.walletName,
           walletPublicKey: wallet?.walletPublicKey
         }
+      },
+      getAccounts() {
+        const { credentials } = get()
+        return credentials.map((credential) => credential.walletPublicKey)
       },
       async createWallet({ walletName }) {
         const { addCredential, setCurrentWalletPublicKey } = get()
@@ -130,3 +136,5 @@ export const useVaultStore = create<VaultStore>()(
     }
   )
 )
+
+export const useVaultStore = (selector: any) => useStore(vaultStore, selector)

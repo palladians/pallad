@@ -3,7 +3,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-native'
 
 import { sessionPersistence } from '../lib/storage'
-import { useVaultStore } from '../store/vault'
+import { vaultStore } from '../store/vault'
 
 interface MenuModalProps {
   isOpen: boolean
@@ -37,7 +37,7 @@ export const MenuModal = ({ isOpen, setIsOpen }: MenuModalProps) => {
       label: 'Lock',
       onPress: async () => {
         await sessionPersistence.setItem('spendingPassword', '')
-        await useVaultStore.persist.rehydrate()
+        await vaultStore.persist.rehydrate()
         return navigate('/unlock')
       },
       icon: icons.iconLock

@@ -23,5 +23,17 @@ export default defineManifest(async (env) => ({
   version: `${major}.${minor}.${patch}.${label}`,
   version_name: version,
   action: { default_popup: 'index.html' },
-  permissions: ['storage']
+  permissions: ['storage', 'notifications', 'activeTab', 'offscreen'],
+  background: {
+    service_worker: 'src/background/index.ts',
+    type: 'module'
+  },
+  content_scripts: [
+    {
+      matches: ['https://*/*'],
+      js: ['src/inject/index.ts'],
+      run_at: 'document_start',
+      all_frames: true
+    }
+  ]
 }))
