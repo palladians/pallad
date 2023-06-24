@@ -1,3 +1,5 @@
 import { httpServer } from './app'
 
-httpServer.listen(3333)
+const PORT = import.meta.env?.PORT || 3333
+
+httpServer.listen(PORT)

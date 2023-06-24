@@ -3,10 +3,12 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:api": "turbo run build --filter=@palladxyz/api...",
     "build:extension": "turbo run build --filter=@palladxyz/extension...",
     "build:mobile": "turbo run build --filter=@palladxyz/mobile...",
     "build:website": "turbo run build --filter=@palladxyz/website...",
     "build:features": "turbo run build --filter=@palladxyz/features...",
+    "start:api": "turbo run start --filter=@palladxyz/api",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
     "dev": "turbo run dev",
     "dev:extension": "turbo run dev --filter=@palladxyz/extension...",
