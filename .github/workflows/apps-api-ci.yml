@@ -10,6 +10,9 @@ jobs:
   build_api:
     name: Build and deploy API
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     env:
       DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
     steps:
