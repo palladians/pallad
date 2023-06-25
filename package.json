@@ -1,6 +1,9 @@
 {
   "name": "pallad",
   "private": true,
+  "description": "A progressive Mina Protocol wallet.",
+  "homepage": "https://github.com/mvr-studio/pallad",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "turbo run build",
     "build:api": "turbo run build --filter=@palladxyz/api...",

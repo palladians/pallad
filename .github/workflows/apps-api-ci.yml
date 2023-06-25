@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
     paths:
+      - .github/workflows/apps-api-ci.yml
       - apps/api/**
   workflow_dispatch:
 jobs:

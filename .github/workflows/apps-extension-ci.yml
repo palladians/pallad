@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
     paths:
+      - .github/workflows/apps-extension-ci.yml
       - apps/extension/**
       - packages/features/**
   pull_request:
