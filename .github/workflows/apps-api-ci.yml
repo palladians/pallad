@@ -32,5 +32,4 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: pallad
-          entrypoint: trpc.js
-          root: apps/api/dist
+          entrypoint: apps/api/dist/trpc.js
