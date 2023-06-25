@@ -25,4 +25,4 @@ jobs:
           TURBO_TEAM: pallad
         run: yarn build:api
       - name: Deploy edge functions to Netlify
-        run: yarn deploy:api -- --auth $NETLIFY_AUTH_TOKEN
+        run: yarn deploy:api -- -- --auth $NETLIFY_AUTH_TOKEN
