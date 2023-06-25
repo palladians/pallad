@@ -33,3 +33,4 @@ jobs:
         with:
           project: pallad
           entrypoint: apps/api/dist/trpc.js
+          include: apps/api/dist
