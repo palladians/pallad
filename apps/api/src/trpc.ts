@@ -1,8 +1,8 @@
 import { serve } from 'https://deno.land/std@0.155.0/http/server.ts'
-import { initTRPC } from 'npm:@trpc/server'
-import { fetchRequestHandler } from 'npm:@trpc/server/adapters/fetch'
-import { gql, request } from 'npm:graphql-request'
-import { z } from 'npm:zod'
+import { initTRPC } from 'https://esm.sh/@trpc/server@10.32.0'
+import { fetchRequestHandler } from 'https://esm.sh/@trpc/server@10.32.0/adapters/fetch'
+import { gql, request } from 'https://esm.sh/graphql-request@6.1.0'
+import { z } from 'https://esm.sh/zod@3.21.4'
 
 import { MINA_FIAT_PRICE_URL } from './constants'
 import { Context, createContext } from './context'
