@@ -1,30 +1,18 @@
 {
   "name": "@palladxyz/api",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "module": "./dist/trpc.js",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "tsup-node && netlify build",
-    "dev": "tsup-node --watch --onSuccess \"netlify dev\"",
-    "deploy": "netlify deploy --prod",
+    "build": "tsup-node",
+    "dev": "tsup-node --watch --onSuccess \"deno run -A dist/trpc.js\"",
     "test:unit": "echo \"No tests implemented yet\"",
     "cleanup": "rimraf node_modules"
-  },
-  "dependencies": {
-    "graphql": "^16.6.0",
-    "graphql-request": "^6.1.0"
-  },
-  "devDependencies": {
-    "happy-dom": "^9.20.3",
-    "netlify-cli": "^15.6.0",
-    "supertest": "^6.3.3"
   }
 }

@@ -11,8 +11,7 @@ jobs:
     name: Build and deploy API
     runs-on: ubuntu-latest
     env:
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      NETLIFY_SITE_ID: pallad-api
+      DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup env
@@ -26,5 +25,8 @@ jobs:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
         run: yarn build:api
-      - name: Deploy edge functions to Netlify
-        run: yarn deploy:api -- -- --auth $NETLIFY_AUTH_TOKEN
+      - name: Deploy to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: pallad
+          entrypoint: apps/api/dist/trpc.js

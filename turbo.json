@@ -8,7 +8,6 @@
     },
     "lint": {},
     "start": {},
-    "deploy": {},
     "test:unit": {},
     "test:e2e": {},
     "story:build": {},
