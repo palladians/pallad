@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "build": "tsup-node",
+    "build": "tsup-node && netlify build",
     "dev": "tsup-node --watch --onSuccess \"netlify dev\"",
     "deploy": "netlify deploy --prod",
     "test:unit": "echo \"No tests implemented yet\"",
