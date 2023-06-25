@@ -1,7 +1,8 @@
-import { Box } from './components/Box'
-import { theme } from './lib/styled'
-import { Text } from './components/Text'
 import { StoryDefault } from '@ladle/react/lib/app/exports'
+
+import { Box } from './components/Box'
+import { Text } from './components/Text'
+import { theme } from './lib/styled'
 
 export const Colors = () => {
   const iterableColors = Object.entries(theme.colors)
