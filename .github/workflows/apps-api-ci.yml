@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: pallad-api
     steps:
       - uses: actions/checkout@v3
       - name: Setup env
