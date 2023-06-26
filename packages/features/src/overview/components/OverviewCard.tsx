@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { Clipboard, Pressable } from 'react-native'
 import useSWR from 'swr'
 
-import { fetcher } from '../../common/lib/api.ts'
+import { fetcher } from '../../common/lib/api'
 import { useAccount } from '../../common/lib/hooks'
 import { truncateString } from '../../common/lib/string'
 
