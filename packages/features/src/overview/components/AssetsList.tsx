@@ -11,7 +11,11 @@ import {
 import { useAccount } from '../../common/lib/hooks'
 
 export const AssetsList = () => {
-  const { data, isLoading } = useAccount()
+  const { data: accountQuery, isLoading } = useAccount()
+  const rawMinaBalance = parseFloat(
+    accountQuery?.result?.data?.account?.balance?.total
+  )
+  const minaBalance = rawMinaBalance ? rawMinaBalance.toFixed(4) : '0'
   return (
     <Box css={{ flex: 1, padding: 16, gap: 12, backgroundColor: '$gray800' }}>
       <Box css={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -31,9 +35,7 @@ export const AssetsList = () => {
         {isLoading ? (
           <Spinner />
         ) : (
-          <Text css={{ width: 'auto', color: '$gray100' }}>
-            {data?.account?.balance?.total}
-          </Text>
+          <Text css={{ width: 'auto', color: '$gray100' }}>{minaBalance}</Text>
         )}
       </Box>
     </Box>

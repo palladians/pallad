@@ -78,6 +78,8 @@ export const appRouter = router({
     })
 })
 
+export type AppRouter = typeof appRouter
+
 const handler = (request: Request) =>
   fetchRequestHandler({
     endpoint: '/trpc',

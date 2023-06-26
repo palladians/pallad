@@ -1,7 +1,18 @@
+import useSWR from 'swr'
+
 import { useVaultStore } from '../store/vault'
-import { trpc } from './trpc'
+import { fetcher } from './api'
+
+const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL
+const getAccountUrl = new URL(`${VITE_APP_API_URL}/trpc.getAccount`)
 
 export const useAccount = () => {
-  const currentWallet = useVaultStore((state) => state.getCurrentWallet())
-  return trpc.accounts.get.useSWR({ address: currentWallet?.walletPublicKey })
+  const walletPublicKey = useVaultStore(
+    (state) => state.getCurrentWallet()?.walletPublicKey
+  )
+  getAccountUrl.searchParams.set(
+    'input',
+    JSON.stringify({ address: walletPublicKey })
+  )
+  return useSWR(walletPublicKey ? getAccountUrl : null, fetcher)
 }

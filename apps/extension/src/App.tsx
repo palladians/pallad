@@ -1,16 +1,12 @@
 import './assets/app.css'
 
-import { Router, theme, ThemeProvider, trpc } from '@palladxyz/features'
-import { useState } from 'react'
+import { Router, theme, ThemeProvider } from '@palladxyz/features'
 
 function App() {
-  const [client] = useState(() => trpc.createClient())
   return (
-    <trpc.Provider client={client}>
-      <ThemeProvider theme={theme}>
-        <Router />
-      </ThemeProvider>
-    </trpc.Provider>
+    <ThemeProvider theme={theme}>
+      <Router />
+    </ThemeProvider>
   )
 }
 
