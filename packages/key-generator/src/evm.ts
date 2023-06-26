@@ -13,7 +13,7 @@ export class EVMKeyGenerator extends KeyGenerator {
   PURPOSE = KeyConst.PURPOSE
   COIN_TYPE = KeyConst.ETHEREUM_COIN_TYPE
 
-  async buildWalletFromChildNode(
+  async buildKeyPairFromChildNode(
     childNode: HDKey,
     accountNumber: number
   ): Promise<KeyPair> {

@@ -25,7 +25,7 @@ describe('MinaKeyGenerator class', () => {
   it('derives wallet by mnemonic', async () => {
     const mnemonic =
       'habit hope tip crystal because grunt nation idea electric witness alert like'
-    const wallet = await mina.deriveWalletByMnemonic(mnemonic, 0)
+    const wallet = await mina.deriveKeyPairByMnemonic(mnemonic, 0)
 
     expect(wallet).toHaveProperty('privateKey')
     expect(wallet).toHaveProperty('publicKey')
@@ -36,7 +36,7 @@ describe('MinaKeyGenerator class', () => {
   it('derives a known keypair', async () => {
     const mnemonic =
       'habit hope tip crystal because grunt nation idea electric witness alert like'
-    const wallet = await mina.deriveWalletByMnemonic(mnemonic, 0, 0, 0)
+    const wallet = await mina.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
     console.log(wallet)
     expect(wallet?.publicKey).toEqual(
       'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
@@ -49,8 +49,8 @@ describe('MinaKeyGenerator class', () => {
   it('derives different wallets for different account numbers', async () => {
     const mnemonic =
       'habit hope tip crystal because grunt nation idea electric witness alert like'
-    const wallet1 = await mina.deriveWalletByMnemonic(mnemonic, 0, 0, 0)
-    const wallet2 = await mina.deriveWalletByMnemonic(mnemonic, 1, 0, 0)
+    const wallet1 = await mina.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
+    const wallet2 = await mina.deriveKeyPairByMnemonic(mnemonic, 1, 0, 0)
 
     expect(wallet1?.publicKey).not.toEqual(wallet2?.publicKey)
   })

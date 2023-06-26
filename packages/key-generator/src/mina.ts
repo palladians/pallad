@@ -16,7 +16,7 @@ export class MinaKeyGenerator extends KeyGenerator {
     return new Buffer(uint8.reverse())
   }
 
-  async buildWalletFromChildNode(
+  async buildKeyPairFromChildNode(
     childNode: HDKey,
     accountNumber: number
   ): Promise<KeyPair> {

@@ -40,7 +40,7 @@ describe('EVMKeyGenerator', () => {
     // Use a mnemonic that will lead to an error
     const invalidMnemonic = 'invalid mnemonic'
     try {
-      await evm.deriveWalletByMnemonic(invalidMnemonic, 0, 0, 0)
+      await evm.deriveKeyPairByMnemonic(invalidMnemonic, 0, 0, 0)
       expect.fail('Expected error to be thrown')
     } catch (error) {
       if (error instanceof Error) {
@@ -67,7 +67,7 @@ describe('EVMKeyGenerator', () => {
       hdIndex: 0
     }
 
-    const wallet = await evm.deriveWalletByMnemonic(mnemonic, 0, 0, 0)
+    const wallet = await evm.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
     expect(wallet).to.deep.equal(expectedWalletData)
   })
 })

@@ -40,7 +40,7 @@ export abstract class KeyGenerator {
     return HDKey.fromMasterSeed(seed)
   }
 
-  async deriveWalletByMnemonic(
+  async deriveKeyPairByMnemonic(
     mnemonic: string,
     accountNumber: number,
     changeIndex?: number,
@@ -54,10 +54,10 @@ export abstract class KeyGenerator {
     )
     const hdPath = this.getHierarchicalDeterministicPath(hdPathObject)
     const childNode = masterNode.derive(hdPath)
-    return this.buildWalletFromChildNode(childNode, accountNumber)
+    return this.buildKeyPairFromChildNode(childNode, accountNumber)
   }
 
-  abstract buildWalletFromChildNode(
+  abstract buildKeyPairFromChildNode(
     childNode: HDKey,
     accountNumber: number
   ): Promise<KeyPair>
@@ -73,7 +73,7 @@ export abstract class KeyGenerator {
     changeIndex?: number
     addressIndex?: number
   }) {
-    const keys = await this.deriveWalletByMnemonic(
+    const keys = await this.deriveKeyPairByMnemonic(
       mnemonic,
       accountNumber,
       changeIndex,
