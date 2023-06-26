@@ -10,6 +10,7 @@ import { MnemonicWritedownView } from './onboarding/views/MnemonicWritedown'
 import { RestoreWalletView } from './onboarding/views/RestoreWallet'
 import { StartView } from './onboarding/views/Start'
 import { OverviewView } from './overview/views/Overview'
+import { SendView } from './send/views/Send'
 import { SettingsView } from './settings/views/Settings'
 
 export const Router = () => {
@@ -19,6 +20,7 @@ export const Router = () => {
         <Routes>
           <Route path="/" element={<StartView />} />
           <Route path="/dashboard" element={<OverviewView />} />
+          <Route path="/send" element={<SendView />} />
           <Route path="/create" element={<CreateWalletView />} />
           <Route path="/restore" element={<RestoreWalletView />} />
           <Route path="/unlock" element={<UnlockWalletView />} />

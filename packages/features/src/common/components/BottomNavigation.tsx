@@ -1,6 +1,6 @@
 import { Box, composeBox, icons, Image, Text } from '@palladxyz/ui'
 import { Pressable } from 'react-native'
-import { useLocation } from 'react-router-native'
+import { useLocation, useNavigate } from 'react-router-native'
 
 import { useAppStore } from '../store/app'
 
@@ -34,6 +34,7 @@ const MenuItem = ({ label, url, icon, iconActive, onPress }) => {
 }
 
 export const BottomNavigation = () => {
+  const navigate = useNavigate()
   const setMenuOpen = useAppStore((state) => state.setMenuOpen)
   return (
     <Box
@@ -48,6 +49,7 @@ export const BottomNavigation = () => {
         url="/dashboard"
         icon={icons.iconDashboard}
         iconActive={icons.iconDashboard__active}
+        onPress={() => navigate('/dashboard')}
       />
       <MenuItem label="Staking" url="/staking" icon={icons.iconStaking} />
       <MenuItem label="Swap" url="/swap" icon={icons.iconTransactions} />

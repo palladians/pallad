@@ -2,6 +2,7 @@ import { Box, Button, icons, Image, Spinner, Text } from '@palladxyz/ui'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
 import { Clipboard, Pressable } from 'react-native'
+import { useNavigate } from 'react-router-native'
 import useSWR from 'swr'
 
 import { fetcher } from '../../common/lib/api'
@@ -20,6 +21,7 @@ export const OverviewCard = ({
   walletAddress,
   openReceiveModal
 }: OverviewCardProps) => {
+  const navigate = useNavigate()
   const { data: accountQuery, isLoading: accountLoading } = useAccount()
   const account = accountQuery?.result?.data?.account
   const { data: priceQuery, isLoading: fiatPriceLoading } = useSWR(
@@ -105,7 +107,11 @@ export const OverviewCard = ({
         </Box>
       </Box>
       <Box css={{ flexDirection: 'row', gap: 8 }}>
-        <Button variant="secondary" css={{ flex: 1 }}>
+        <Button
+          variant="secondary"
+          css={{ flex: 1 }}
+          onPress={() => navigate('/send')}
+        >
           Send
         </Button>
         <Button css={{ flex: 1 }} onPress={openReceiveModal}>
