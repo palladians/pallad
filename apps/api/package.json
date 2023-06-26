@@ -10,6 +10,7 @@
     }
   },
   "scripts": {
+    "start": "deno run -A dist/trpc.js",
     "build": "tsup-node",
     "dev": "tsup-node --watch --onSuccess \"deno run -A dist/trpc.js\"",
     "test:unit": "echo \"No tests implemented yet\"",

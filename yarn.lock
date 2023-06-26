@@ -2466,16 +2466,6 @@
   resolved "https://registry.yarnpkg.com/@total-typescript/ts-reset/-/ts-reset-0.4.2.tgz#c564c173ba09973968e1046c93965b7a257878a4"
   integrity sha512-vqd7ZUDSrXFVT1n8b2kc3LnklncDQFPvR58yUS1kEP23/nHPAO9l1lMjUfnPrXYYk4Hj54rrLKMW5ipwk7k09A==
 
-"@trpc-swr/client@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@trpc-swr/client/-/client-1.0.1.tgz#eddc8eb173ab17c3b3220d007fa752ec971856d2"
-  integrity sha512-NtPL8YNN4Fz5GHjLZee3qLAuwZ8+S7P8qksNy74Mxj7FuZlL7rJ0V2YOuUOIMLyRKNg4yjJBENH6kFI4av3xiQ==
-
-"@trpc/client@^10.29.1":
-  version "10.31.0"
-  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.31.0.tgz#64f6198741a0b96f21671e0c3c0e2e211bae3cc9"
-  integrity sha512-VCqbJEvFJb8C4hQFw7AD+dkQTjgEdV/QAzO4D+/cX5e93u5NpfNXI+PKS0QFXwG/zqgwQwVV6OkYc/D/MFwA6g==
-
 "@trpc/client@^10.32.0":
   version "10.32.0"
   resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.32.0.tgz#f1565d9d68fb1ab4beb5fd8e301a16a0691396db"
