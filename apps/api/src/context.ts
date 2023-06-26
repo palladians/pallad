@@ -3,7 +3,11 @@ import { FetchCreateContextFnOptions } from 'https://esm.sh/@trpc/server@10.32.0
 
 import { MinaExplorerGraphqlUrls, MinaExplorerUrls } from './constants'
 
-export const createContext = ({ req }: FetchCreateContextFnOptions) => {
+export const createContext = ({
+  req,
+  resHeaders
+}: FetchCreateContextFnOptions) => {
+  resHeaders.set('Access-Control-Allow-Origin', '*')
   const minaNetwork = req.headers.get('p-mina-network') || 'Mainnet'
   const minaExplorerRest = MinaExplorerUrls[minaNetwork]
   const minaExplorerGql = MinaExplorerGraphqlUrls[minaNetwork]

@@ -7,14 +7,16 @@ An experimental and progressive Mina Protocol wallet.
 ## Prerequisite
 
 - [NVM](https://github.com/nvm-sh/nvm)
+- [DVM](https://github.com/justjavac/dvm)
 - Yarn
 
 ## Installation
 
-Make sure you're on the right Node.js version and you got Yarn installed.
+Make sure you're on the right Node.js and Deno version and you got Yarn installed.
 
 ```shell
 $ nvm use
+$ dvm use
 $ npm i -g yarn
 ```
 
@@ -37,7 +39,7 @@ $ yarn build
 This is a monorepo for all the Pallad-related code.
 
 - `apps`
-  - `api` - Backend API for chain data collection.
+  - `api` - Backend API for chain data providing created in Deno and TRPC.
   - `extension` - Browser extension app.
   - `mobile` - Proof of concept of mobile wallet with code shared with browser extension.
   - `website` - pallad.xyz website.

@@ -1,9 +1,5 @@
 name: Extension E2E
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - .github/workflows/apps-extension-e2e.yml
   workflow_run:
     workflows: ["Extension CI"]
     branches: [main]

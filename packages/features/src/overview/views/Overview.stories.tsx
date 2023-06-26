@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 
 import { useVaultStore } from '../../common/store/vault'
 import { OverviewView } from './Overview'
+import { useAppStore } from "../../common/store/app";
 
 const WALLET_NAME = 'Demo Wallet'
 const MNEMONIC =
@@ -10,7 +11,9 @@ const MNEMONIC =
 
 export const View = () => {
   const restoreWallet = useVaultStore((state) => state.restoreWallet)
+  const setNetwork = useAppStore((state) => state.setNetwork)
   useEffect(() => {
+    setNetwork('Devnet')
     restoreWallet({ walletName: WALLET_NAME, mnemonic: MNEMONIC })
   }, [])
   return <OverviewView />

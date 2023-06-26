@@ -1,4 +1,4 @@
-import { appStore } from '../store/app.ts'
+import { appStore } from '../store/app'
 
 export const fetcher = (url: string) =>
   fetch(url, {
