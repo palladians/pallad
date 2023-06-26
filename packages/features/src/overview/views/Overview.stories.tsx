@@ -12,7 +12,7 @@ export const View = () => {
   const restoreWallet = useVaultStore((state) => state.restoreWallet)
   useEffect(() => {
     restoreWallet({ walletName: WALLET_NAME, mnemonic: MNEMONIC })
-  }, [restoreWallet])
+  }, [])
   return <OverviewView />
 }
 
