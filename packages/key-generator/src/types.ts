@@ -23,9 +23,3 @@ export const enum PathLevelIndexes {
   CHANGE = 3,
   INDEX = 4
 }
-
-export interface HDPath {
-  accountIndex: number
-  change: number
-  index: number
-}

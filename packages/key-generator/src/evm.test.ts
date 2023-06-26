@@ -1,17 +1,17 @@
 import { HDKey } from '@scure/bip32'
 import { expect } from 'vitest'
 
-import { EVM } from './evm'
+import { EVMKeyGenerator } from './evm'
 import { KeyConst } from './types'
 
-describe('EVM', () => {
-  let evm: EVM
+describe('EVMKeyGenerator', () => {
+  let evm: EVMKeyGenerator
   let mnemonic: string
   let expectedSeed: string
   let expectedRootKey: string
 
   beforeEach(() => {
-    evm = new EVM()
+    evm = new EVMKeyGenerator()
     mnemonic =
       'habit hope tip crystal because grunt nation idea electric witness alert like'
     expectedSeed =
@@ -40,7 +40,7 @@ describe('EVM', () => {
     // Use a mnemonic that will lead to an error
     const invalidMnemonic = 'invalid mnemonic'
     try {
-      await evm.deriveWalletByMnemonic(invalidMnemonic)
+      await evm.deriveWalletByMnemonic(invalidMnemonic, 0, 0, 0)
       expect.fail('Expected error to be thrown')
     } catch (error) {
       if (error instanceof Error) {
@@ -67,7 +67,7 @@ describe('EVM', () => {
       hdIndex: 0
     }
 
-    const wallet = await evm.deriveWalletByMnemonic(mnemonic)
+    const wallet = await evm.deriveWalletByMnemonic(mnemonic, 0, 0, 0)
     expect(wallet).to.deep.equal(expectedWalletData)
   })
 })

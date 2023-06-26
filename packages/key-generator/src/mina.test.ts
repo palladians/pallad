@@ -1,9 +1,9 @@
 import { expect } from 'vitest'
 
-import { Mina } from './mina'
+import { MinaKeyGenerator } from './mina'
 
-describe('Mina class', () => {
-  const mina = new Mina()
+describe('MinaKeyGenerator class', () => {
+  const mina = new MinaKeyGenerator()
   // currently broken test
   /*it('reverses bytes', () => {
     const originalBytes = Buffer.from('abcd', 'hex')
@@ -36,7 +36,7 @@ describe('Mina class', () => {
   it('derives a known keypair', async () => {
     const mnemonic =
       'habit hope tip crystal because grunt nation idea electric witness alert like'
-    const wallet = await mina.deriveWalletByMnemonic(mnemonic, 0)
+    const wallet = await mina.deriveWalletByMnemonic(mnemonic, 0, 0, 0)
     console.log(wallet)
     expect(wallet?.publicKey).toEqual(
       'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
@@ -49,8 +49,8 @@ describe('Mina class', () => {
   it('derives different wallets for different account numbers', async () => {
     const mnemonic =
       'habit hope tip crystal because grunt nation idea electric witness alert like'
-    const wallet1 = await mina.deriveWalletByMnemonic(mnemonic, 0)
-    const wallet2 = await mina.deriveWalletByMnemonic(mnemonic, 1)
+    const wallet1 = await mina.deriveWalletByMnemonic(mnemonic, 0, 0, 0)
+    const wallet2 = await mina.deriveWalletByMnemonic(mnemonic, 1, 0, 0)
 
     expect(wallet1?.publicKey).not.toEqual(wallet2?.publicKey)
   })

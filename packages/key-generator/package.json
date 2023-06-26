@@ -1,7 +1,7 @@
 {
-  "name": "@palladxyz/blockchain",
+  "name": "@palladxyz/key-generator",
   "version": "0.0.1",
-  "description": "Blockchain SDK for Pallad",
+  "description": "Key Generator Package SDK for Pallad",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
