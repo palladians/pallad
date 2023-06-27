@@ -31,7 +31,7 @@ classDiagram
       +getHDPathObject(accountNumber: number, changeIndex: number, addressIndex: number): HDPathIndices
       +deriveMasterNodeFromMnemonic(mnemonic: string): Promise<HDKey>
       +deriveKeyPairByMnemonic(mnemonic: string, accountNumber: number, changeIndex: number, addressIndex: number): Promise<KeyPair>
-      +deriveKeyPair({mnemonic: string, accountNumber: number, changeIndex: number, addressIndex: number}): Promise<KeyPair | null>
+      +deriveKeyPair(params: DeriveKeyPairParams): Promise<KeyPair | null>
       #buildKeyPairFromChildNode(childNode: HDKey, accountNumber: number): Promise<KeyPair>
     }
     class EVMKeyGenerator {
