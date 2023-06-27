@@ -1,8 +1,8 @@
 import { HDKey } from '@scure/bip32'
 import { expect } from 'vitest'
 
-import { EVMKeyGenerator } from './evm'
-import { KeyConst } from './types'
+import { EVMKeyGenerator } from '../src/evm'
+import { KeyConst } from '../src/types'
 
 describe('EVMKeyGenerator', () => {
   let evm: EVMKeyGenerator

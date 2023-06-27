@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 
-import { MinaKeyGenerator } from './mina'
+import { MinaKeyGenerator } from '../src/mina'
 
 describe('MinaKeyGenerator class', () => {
   const mina = new MinaKeyGenerator()

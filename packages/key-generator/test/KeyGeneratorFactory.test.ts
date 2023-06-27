@@ -1,9 +1,9 @@
 import { expect } from 'vitest'
 
-import { EVMKeyGenerator } from './evm'
-import { KeyGeneratorFactory } from './KeyGeneratorFactory'
-import { MinaKeyGenerator } from './mina'
-import { Network } from './types'
+import { EVMKeyGenerator } from '../src/evm'
+import { KeyGeneratorFactory } from '../src/KeyGeneratorFactory'
+import { MinaKeyGenerator } from '../src/mina'
+import { Network } from '../src/types'
 
 describe('KeyGeneratorFactory', () => {
   it('should create an EVMKeyGenerator instance for Ethereum network', () => {
