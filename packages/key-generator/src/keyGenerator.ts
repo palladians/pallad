@@ -1,5 +1,7 @@
 import { HDKey } from '@scure/bip32'
 import { mnemonicToSeedSync } from '@scure/bip39'
+export { generateMnemonic } from '@scure/bip39'
+export { wordlist } from '@scure/bip39/wordlists/english.js'
 
 /**
  * Interface representing the HD (Hierarchical Deterministic) path indices.

@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup'
 
 export default defineConfig([
   {
-    name: 'pallad/blockchain',
+    name: 'pallad/key-generator',
     entry: ['./src/index.ts'],
     outDir: './dist',
     format: 'esm',
