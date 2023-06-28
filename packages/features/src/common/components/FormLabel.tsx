@@ -24,7 +24,7 @@ export const FormLabel = ({
         alignItems: 'center'
       }}
     >
-      <Text css={{ width: 'auto' }}>
+      <Text css={{ width: 'auto', fontSize: 14 }}>
         {children}
         {required && '*'}
       </Text>

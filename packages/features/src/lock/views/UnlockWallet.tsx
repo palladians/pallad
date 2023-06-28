@@ -4,6 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
+import { FormLabel } from '../../common/components/FormLabel'
 import { sessionPersistence } from '../../common/lib/storage'
 import { useVaultStore, vaultStore } from '../../common/store/vault'
 
@@ -53,7 +54,7 @@ export const UnlockWalletView = () => {
           </Text>
         )}
         <Box css={{ gap: 8 }}>
-          <Text css={{ color: '$gray50' }}>Spending Password</Text>
+          <FormLabel>Spending Password</FormLabel>
           <Controller
             control={control}
             name="spendingPassword"

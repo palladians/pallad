@@ -1,4 +1,4 @@
-import { Box, Button, Input, RadioGroup, Text } from '@palladxyz/ui'
+import { Box, Button, Input, RadioGroup } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
@@ -37,11 +37,11 @@ export const SendView = () => {
           <Input placeholder="Transaction Amount" />
         </Box>
         <Box css={{ gap: 4 }}>
-          <Text>Memo</Text>
+          <FormLabel>Memo</FormLabel>
           <Input placeholder="Memo" />
         </Box>
         <Box css={{ gap: 8, flex: 1 }}>
-          <Text>Fee</Text>
+          <FormLabel>Fee</FormLabel>
           <RadioGroup
             options={[
               { value: 'slow', label: 'Slow' },

@@ -1,10 +1,12 @@
-import { Box, Button, Checkbox, Heading, Input, Text } from '@palladxyz/ui'
+import { Box, Button, Checkbox, Input, Text } from '@palladxyz/ui'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
+import { FormLabel } from '../../common/components/FormLabel'
+import { ViewHeading } from '../../common/components/ViewHeading'
 
 interface WalletInfoFormProps {
   title: string
@@ -50,11 +52,12 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
       }
     >
       <Box css={{ gap: 24 }}>
-        <Heading size="lg" css={{ color: '$white' }}>
-          {title}
-        </Heading>
+        <ViewHeading
+          title={title}
+          backButton={{ onPress: () => navigate(-1) }}
+        />
         <Box css={{ gap: 8 }}>
-          <Text css={{ color: '$gray50' }}>Wallet Name</Text>
+          <FormLabel>Wallet Name</FormLabel>
           <Controller
             control={control}
             name="walletName"
@@ -65,13 +68,14 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
                 onBlur={onBlur}
                 value={value}
                 onSubmitEditing={handleSubmit(onSubmit)}
+                placeholder="Wallet Name"
                 testID="onboarding__walletNameInput"
               />
             )}
           />
         </Box>
         <Box css={{ gap: 8 }}>
-          <Text css={{ color: '$gray50' }}>Spending Password</Text>
+          <FormLabel>Spending Password</FormLabel>
           <Controller
             control={control}
             name="spendingPassword"
@@ -83,6 +87,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
                 value={value}
                 onSubmitEditing={handleSubmit(onSubmit)}
                 testID="onboarding__spendingPasswordInput"
+                placeholder="Password"
                 secureTextEntry
               />
             )}

@@ -1,10 +1,12 @@
 import { Network, validateMnemonic, wordlist } from '@palladxyz/key-generator'
-import { Box, Button, Heading, Text, Textarea } from '@palladxyz/ui'
+import { Box, Button, Textarea } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
+import { FormLabel } from '../../common/components/FormLabel'
+import { ViewHeading } from '../../common/components/ViewHeading'
 import { VaultState } from '../../common/lib/const'
 import { useAppStore } from '../../common/store/app'
 import { useOnboardingStore } from '../../common/store/onboarding'
@@ -66,12 +68,13 @@ export const MnemonicInputView = () => {
       }
     >
       <Box css={{ gap: 24 }}>
-        <Heading size="lg" css={{ color: '$white' }}>
-          Type In Your Mnemonic
-        </Heading>
+        <ViewHeading
+          title="Type In Your Mnemonic"
+          backButton={{ onPress: () => navigate(-1) }}
+        />
         {noOneIsLooking ? (
           <Box css={{ gap: 16 }}>
-            <Text css={{ color: '$gray50' }}>Your Mnemonic</Text>
+            <FormLabel>Your Mnemonic</FormLabel>
             <Controller
               control={control}
               name="mnemonic"
@@ -95,7 +98,7 @@ export const MnemonicInputView = () => {
           </Box>
         ) : (
           <Box css={{ gap: 8 }}>
-            <Text css={{ color: '$gray50' }}>Confirm No One Is Behind You</Text>
+            <FormLabel>Confirm No One Is Behind You</FormLabel>
             <Button
               onPress={() => setNoOneIsLooking(true)}
               testID="onboarding__confirmAlone"

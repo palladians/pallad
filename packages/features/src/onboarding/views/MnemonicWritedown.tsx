@@ -1,9 +1,11 @@
-import { Box, Button, Checkbox, Heading, Text } from '@palladxyz/ui'
+import { Box, Button, Checkbox, Text } from '@palladxyz/ui'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
+import { FormLabel } from '../../common/components/FormLabel'
+import { ViewHeading } from '../../common/components/ViewHeading'
 import { useOnboardingStore } from '../../common/store/onboarding'
 
 export const MnemonicWritedownView = () => {
@@ -41,12 +43,13 @@ export const MnemonicWritedownView = () => {
       }
     >
       <Box css={{ gap: 24 }}>
-        <Heading size="lg" css={{ color: '$white' }}>
-          Write Down The Mnemonic
-        </Heading>
+        <ViewHeading
+          title="Write Down The Mnemonic"
+          backButton={{ onPress: () => navigate(-1) }}
+        />
         {noOneIsLooking ? (
           <Box css={{ gap: 16 }}>
-            <Text css={{ color: '$gray50' }}>Write This Down</Text>
+            <FormLabel>Write This Down</FormLabel>
             <Box css={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {mnemonic?.map((word, i) => (
                 <Text
@@ -81,7 +84,7 @@ export const MnemonicWritedownView = () => {
           </Box>
         ) : (
           <Box css={{ gap: 8 }}>
-            <Text css={{ color: '$gray50' }}>Confirm No One Is Behind You</Text>
+            <FormLabel>Confirm No One Is Behind You</FormLabel>
             <Button
               onPress={() => setNoOneIsLooking(true)}
               testID="onboarding__confirmAlone"

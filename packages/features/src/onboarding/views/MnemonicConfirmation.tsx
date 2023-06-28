@@ -1,9 +1,11 @@
-import { Box, Button, Heading, Input, Text } from '@palladxyz/ui'
+import { Box, Button, Input } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
+import { FormLabel } from '../../common/components/FormLabel'
+import { ViewHeading } from '../../common/components/ViewHeading'
 import { VaultState } from '../../common/lib/const'
 import { useAppStore } from '../../common/store/app'
 import { useOnboardingStore } from '../../common/store/onboarding'
@@ -61,13 +63,12 @@ export const MnemonicConfirmationView = () => {
       }
     >
       <Box css={{ gap: 24 }}>
-        <Heading size="lg" css={{ color: '$white' }}>
-          Confirm The Mnemonic
-        </Heading>
-        <Box css={{ gap: 16 }}>
-          <Text css={{ color: '$gray50' }} testID="onboarding__writedownIndex">
-            Type in the word #{confirmationIndex + 1}
-          </Text>
+        <ViewHeading
+          title="Confirm The Mnemonic"
+          backButton={{ onPress: () => navigate(-1) }}
+        />
+        <Box css={{ gap: 8 }}>
+          <FormLabel>Type in the word #{confirmationIndex + 1}</FormLabel>
           <Controller
             control={control}
             name="mnemonicWord"

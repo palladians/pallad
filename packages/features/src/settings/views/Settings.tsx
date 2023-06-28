@@ -1,10 +1,14 @@
 import { MinaNetwork } from '@palladxyz/key-generator'
-import { Box, Heading, RadioGroup, Text } from '@palladxyz/ui'
+import { Box, RadioGroup } from '@palladxyz/ui'
+import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
+import { FormLabel } from '../../common/components/FormLabel'
+import { ViewHeading } from '../../common/components/ViewHeading'
 import { useAppStore } from '../../common/store/app'
 
 export const SettingsView = () => {
+  const navigate = useNavigate()
   const { setNetwork, network } = useAppStore((state) => ({
     setNetwork: state.setNetwork,
     network: state.network
@@ -12,9 +16,12 @@ export const SettingsView = () => {
   return (
     <AppLayout>
       <Box css={{ padding: 16, gap: 16 }}>
-        <Heading size="md">Settings</Heading>
+        <ViewHeading
+          title="Settings"
+          backButton={{ onPress: () => navigate(-1) }}
+        />
         <Box css={{ gap: 8 }}>
-          <Text>Network</Text>
+          <FormLabel>Network</FormLabel>
           <RadioGroup
             onChange={(value) => setNetwork(value as MinaNetwork)}
             options={[

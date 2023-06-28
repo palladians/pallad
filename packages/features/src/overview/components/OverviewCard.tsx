@@ -5,6 +5,7 @@ import { Clipboard, Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
 import useSWR from 'swr'
 
+import { FormLabel } from '../../common/components/FormLabel'
 import { fetcher } from '../../common/lib/api'
 import { useAccount } from '../../common/lib/hooks'
 import { truncateString } from '../../common/lib/string'
@@ -68,7 +69,7 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
         </Box>
       ) : (
         <Box css={{ flex: 1, gap: 8 }}>
-          <Text css={{ fontSize: 14, fontWeight: 700 }}>Balance</Text>
+          <FormLabel>Balance</FormLabel>
           <Text
             css={{ fontSize: 24, fontWeight: 700, color: '$white' }}
             testID="dashboard__minaBalance"
@@ -81,7 +82,7 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
         </Box>
       )}
       <Box css={{ gap: 8 }}>
-        <Text css={{ fontSize: 14, fontWeight: 700 }}>Address</Text>
+        <FormLabel>Address</FormLabel>
         <Box css={{ flexDirection: 'row', gap: 8 }}>
           <Text
             css={{

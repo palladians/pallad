@@ -1,7 +1,7 @@
 import { useVaultStore } from '../src/common/store/vault'
 import { useAppStore } from '../src/common/store/app'
 import { useEffect } from 'react'
-import { MinaNetwork } from '@palladxyz/key-generator'
+import { MinaNetwork, Network } from '@palladxyz/key-generator'
 
 const WALLET_NAME = 'Demo Wallet'
 const MNEMONIC =
@@ -12,6 +12,11 @@ export const useStoriesWallet = () => {
   const setNetwork = useAppStore((state) => state.setNetwork)
   useEffect(() => {
     setNetwork(MinaNetwork[MinaNetwork.Devnet])
-    restoreWallet({ walletName: WALLET_NAME, mnemonic: MNEMONIC })
+    restoreWallet({
+      walletName: WALLET_NAME,
+      mnemonic: MNEMONIC,
+      network: Network.Mina,
+      accountNumber: 0
+    })
   }, [])
 }
