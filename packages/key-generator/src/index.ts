@@ -27,6 +27,7 @@ export {
   HDPathIndices,
   KeyGenerator,
   KeyPair,
+  validateMnemonic,
   wordlist
 } from './keyGenerator'
 
@@ -54,7 +55,7 @@ export { MinaKeyGenerator } from './mina'
  * @preferred
  * @public
  */
-export { KeyConst, Network, PathLevelIndexes } from './types'
+export { KeyConst, MinaNetwork, Network, PathLevelIndexes } from './types'
 
 /**
  * Key generator factory.

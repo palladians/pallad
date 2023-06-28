@@ -1,4 +1,4 @@
-import { MinaNetwork } from '@palladxyz/mina'
+import { MinaNetwork } from '@palladxyz/key-generator'
 import { useStore } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
@@ -6,6 +6,7 @@ import { createStore } from 'zustand/vanilla'
 import { VaultState } from '../lib/const'
 import { localPersistence } from '../lib/storage'
 
+// TODO: Make network generic
 type AppState = {
   menuOpen: boolean
   network: MinaNetwork
