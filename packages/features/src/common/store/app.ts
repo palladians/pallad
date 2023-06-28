@@ -6,7 +6,7 @@ import { createStore } from 'zustand/vanilla'
 import { VaultState } from '../lib/const'
 import { localPersistence } from '../lib/storage'
 
-// TODO: Make network generic
+// TODO: Make network a generic type that can support networks other than just Mina
 type AppState = {
   menuOpen: boolean
   network: MinaNetwork
