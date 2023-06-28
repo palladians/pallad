@@ -26,20 +26,23 @@ export const ReceiveView = () => {
             gap: 24
           }}
         >
-          <QRCode
-            value={walletAddress}
-            bgColor={theme.colors.gray900.value}
-            fgColor={theme.colors.primary500.value}
-          />
+          {walletAddress && (
+            <QRCode
+              value={walletAddress}
+              bgColor={theme.colors.gray900.value}
+              fgColor={theme.colors.primary500.value}
+            />
+          )}
           <Pressable onPress={() => Clipboard.setString(walletAddress)}>
             <Text
               css={{
                 maxWidth: 320,
                 textAlign: 'center',
                 border: '1px solid',
-                borderColor: '$primary500',
+                borderColor: '$gray700',
                 borderRadius: '$md',
-                padding: '$sm'
+                padding: '$sm',
+                lineHeight: '175%'
               }}
               numberOfLines={2}
             >

@@ -5,5 +5,5 @@ import { SettingsView } from './Settings'
 export const View = () => <SettingsView />
 
 export default {
-  title: 'Settings / Settings'
+  title: 'Dashboard / Settings'
 } satisfies StoryDefault

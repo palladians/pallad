@@ -36,7 +36,7 @@ export const BottomNavigation = () => {
       css={{
         flexDirection: 'row',
         padding: '$sm',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-around'
       }}
     >
       <MenuItem

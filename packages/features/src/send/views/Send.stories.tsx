@@ -5,5 +5,5 @@ import { SendView } from './Send'
 export const View = () => <SendView />
 
 export default {
-  title: 'Send / Send'
+  title: 'Dashboard / Send'
 } satisfies StoryDefault

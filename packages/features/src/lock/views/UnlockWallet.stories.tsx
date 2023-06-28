@@ -5,5 +5,5 @@ import { UnlockWalletView } from './UnlockWallet'
 export const View = () => <UnlockWalletView />
 
 export default {
-  title: 'Lock / Unlock Wallet'
+  title: 'Dashboard / Unlock Wallet'
 } satisfies StoryDefault

@@ -78,11 +78,6 @@ export const MnemonicConfirmationView = () => {
                 value={value}
                 onBlur={onBlur}
                 onSubmitEditing={handleSubmit(onSubmit)}
-                css={{
-                  color: '$white',
-                  borderColor: '$gray600',
-                  backgroundColor: '$gray800'
-                }}
                 testID="onboarding__mnemonicConfirmationInput"
               />
             )}

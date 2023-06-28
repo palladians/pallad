@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import topLevelAwait from "vite-plugin-top-level-await";
+import topLevelAwait from 'vite-plugin-top-level-await'
 
 const env = (import.meta as any).env
 

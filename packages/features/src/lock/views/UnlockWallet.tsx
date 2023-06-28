@@ -60,11 +60,6 @@ export const UnlockWalletView = () => {
             rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
-                css={{
-                  color: '$white',
-                  borderColor: '$gray600',
-                  backgroundColor: '$gray800'
-                }}
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}

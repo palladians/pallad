@@ -10,7 +10,7 @@ jobs:
     name: Run E2E tests
     env:
       VITE_APP_MODE: web
-      VITE_APP_API_URL: https://pallad.deno.dev
+      VITE_APP_API_URL: https://api.pallad.xyz
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
