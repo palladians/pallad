@@ -4,7 +4,7 @@ export const inputBase: CSS = {
   height: '2.5rem',
   width: '100%',
   color: '$body',
-  backgroundColor: '$gray800',
+  backgroundColor: '$gray900',
   borderColor: '$border',
   borderRadius: '0.375rem',
   border: '1px solid',

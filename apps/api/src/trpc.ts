@@ -31,7 +31,12 @@ export const appRouter = router({
     .query(async ({ input, ctx }) => {
       const query = gql`
         query Transactions($address: String!) {
-          transactions(query: { OR: [{ to: $address }, { from: $address }] }) {
+          transactions(
+            query: {
+              canonical: true
+              OR: [{ to: $address }, { from: $address }]
+            }
+          ) {
             amount
             to
             token

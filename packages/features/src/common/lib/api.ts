@@ -1,6 +1,6 @@
 import { appStore } from '../store/app'
 
-export const fetcher = (url: string) =>
+export const fetcher = <T>(url: string) =>
   fetch(url, {
     headers: { 'p-mina-network': appStore.getState().network }
-  }).then((response) => response.json())
+  }).then((response) => response.json() as Promise<T>)

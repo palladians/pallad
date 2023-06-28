@@ -17,10 +17,7 @@ interface OverviewCardProps {
   openReceiveModal: () => void
 }
 
-export const OverviewCard = ({
-  walletAddress,
-  openReceiveModal
-}: OverviewCardProps) => {
+export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
   const navigate = useNavigate()
   const { data: accountQuery, isLoading: accountLoading } = useAccount()
   const account = accountQuery?.result?.data?.account
@@ -114,7 +111,7 @@ export const OverviewCard = ({
         >
           Send
         </Button>
-        <Button css={{ flex: 1 }} onPress={openReceiveModal}>
+        <Button css={{ flex: 1 }} onPress={() => navigate('/receive')}>
           Receive
         </Button>
       </Box>
