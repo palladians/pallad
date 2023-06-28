@@ -101,29 +101,27 @@ describe('VaultStore', () => {
   })
 
   it('restores wallet for Mina networks', async () => {
-    it('restores wallet for Mina networks', async () => {
-      const walletName = 'NiceWallet'
-      const mnemonic =
-        'habit hope tip crystal because grunt nation idea electric witness alert like'
-      const network = Network.Mina
-      const accountNumber = 0
+    const walletName = 'NiceWallet'
+    const mnemonic =
+      'habit hope tip crystal because grunt nation idea electric witness alert like'
+    const network = Network.Mina
+    const accountNumber = 0
 
-      resetVault()
+    resetVault()
 
-      await act(async () => {
-        const wallet = await result.current.restoreWallet({
-          walletName,
-          mnemonic,
-          network,
-          accountNumber
-        })
-        expect(wallet.publicKey).toEqual(
-          'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
-        )
+    await act(async () => {
+      const wallet = await result.current.restoreWallet({
+        walletName,
+        mnemonic,
+        network,
+        accountNumber
       })
-      expect(result.current.credentials.length).toEqual(1)
-      expect(result.current.getCurrentWallet()?.walletName).toEqual(walletName)
+      expect(wallet.publicKey).toEqual(
+        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+      )
     })
+    expect(result.current.credentials.length).toEqual(1)
+    expect(result.current.getCurrentWallet()?.walletName).toEqual(walletName)
   })
 
   it('creates a new wallet for EVM networks', async () => {
