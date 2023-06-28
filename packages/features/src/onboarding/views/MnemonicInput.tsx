@@ -1,4 +1,4 @@
-import { validateMnemonic, wordlist } from '@palladxyz/key-generator'
+import { Network, validateMnemonic, wordlist } from '@palladxyz/key-generator'
 import { Box, Button, Heading, Text, Textarea } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -28,7 +28,12 @@ export const MnemonicInputView = () => {
   )
   const onSubmit = async ({ mnemonic }: { mnemonic: string }) => {
     if (!walletName) return
-    await restoreWallet({ mnemonic, walletName })
+    await restoreWallet({
+      mnemonic,
+      walletName,
+      network: Network.Mina,
+      accountNumber: 0
+    })
     await setVaultState(VaultState[VaultState.INITIALIZED])
     return navigate('/dashboard')
   }

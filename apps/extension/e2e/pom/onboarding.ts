@@ -59,8 +59,8 @@ export class OnboardingPom extends BasePom {
     return backButton.click()
   }
   async confirmAlone() {
-    const backButton = await this.page.getByTestId(TestId.CONFIRM_ALONE)
-    return backButton.click()
+    const confirmAloneButton = await this.page.getByTestId(TestId.CONFIRM_ALONE)
+    return confirmAloneButton.click()
   }
   async fillMnemonic(mnemonic: string) {
     const mnemonicTextarea = await this.page.getByTestId(

@@ -1,3 +1,4 @@
+import { Network } from '@palladxyz/key-generator'
 import { useNavigate } from 'react-router-native'
 
 import { sessionPersistence } from '../../common/lib/storage'
@@ -17,7 +18,11 @@ export const CreateWalletView = () => {
     walletName: string
   }) => {
     await sessionPersistence.setItem('spendingPassword', spendingPassword)
-    const wallet = await createWallet({ walletName })
+    const wallet = await createWallet({
+      walletName,
+      network: Network.Mina,
+      accountNumber: 0
+    })
     setMnemonic(wallet.mnemonic)
     return navigate('/writedown')
   }
