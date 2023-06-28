@@ -1,4 +1,4 @@
-import { MinaNetwork } from '@palladxyz/mina'
+import { MinaNetwork } from '@palladxyz/key-generator'
 import { Box, Heading, RadioGroup, Text } from '@palladxyz/ui'
 
 import { AppLayout } from '../../common/components/AppLayout'

@@ -22,7 +22,14 @@ export { EVMKeyGenerator } from './evm'
  * @preferred
  * @public
  */
-export { HDPathIndices, KeyGenerator, KeyPair } from './keyGenerator'
+export {
+  generateMnemonic,
+  HDPathIndices,
+  KeyGenerator,
+  KeyPair,
+  validateMnemonic,
+  wordlist
+} from './keyGenerator'
 
 /**
  * Mina protocol-compatible key generator.
@@ -48,4 +55,17 @@ export { MinaKeyGenerator } from './mina'
  * @preferred
  * @public
  */
-export { KeyConst, Network, PathLevelIndexes } from './types'
+export { KeyConst, MinaNetwork, Network, PathLevelIndexes } from './types'
+
+/**
+ * Key generator factory.
+ *
+ * @remarks
+ * This module is part of the {@link @pallad/key-generator | pallad key-generator package}.
+ *
+ * @packageDocumentation
+ * @module KeyGeneratorFactory
+ * @preferred
+ * @public
+ */
+export { KeyGeneratorFactory } from './KeyGeneratorFactory'

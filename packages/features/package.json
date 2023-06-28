@@ -23,7 +23,7 @@
   "dependencies": {
     "@capacitor/preferences": "^5.0.4",
     "@capacitor/storage": "^1.2.5",
-    "@palladxyz/mina": "*",
+    "@palladxyz/key-generator": "*",
     "@palladxyz/ui": "*",
     "@plasmohq/storage": "^1.6.1",
     "@react-native-async-storage/async-storage": "^1.18.2",
@@ -60,7 +60,7 @@
     "vitest": "^0.32.0"
   },
   "peerDependencies": {
-    "@palladxyz/mina": "*",
+    "@palladxyz/key-generator": "*",
     "@palladxyz/ui": "*",
     "@types/mocha": "^10.0.1",
     "happy-dom": "^9.20.3",

@@ -1,4 +1,4 @@
-import { MinaNetwork } from '@palladxyz/mina'
+import { MinaNetwork } from '@palladxyz/key-generator'
 import { Box, composeBox, icons, Image, Text } from '@palladxyz/ui'
 import { Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'

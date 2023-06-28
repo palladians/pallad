@@ -19,7 +19,7 @@
     "@capacitor/ios": "^5.0.5",
     "@capacitor/status-bar": "^5.0.4",
     "@palladxyz/features": "*",
-    "@palladxyz/mina": "*",
+    "@palladxyz/key-generator": "*",
     "@palladxyz/ui": "*",
     "@plasmohq/messaging": "^0.3.3",
     "buffer": "^6.0.3",

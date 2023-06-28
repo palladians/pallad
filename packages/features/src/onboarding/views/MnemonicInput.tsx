@@ -1,4 +1,4 @@
-import { validateMnemonic, wordlist } from '@palladxyz/mina'
+import { validateMnemonic, wordlist } from '@palladxyz/key-generator'
 import { Box, Button, Heading, Text, Textarea } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'

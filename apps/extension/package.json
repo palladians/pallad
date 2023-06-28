@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@palladxyz/features": "*",
-    "@palladxyz/mina": "*",
+    "@palladxyz/key-generator": "*",
     "@plasmohq/messaging": "^0.3.3",
     "@trpc/client": "^10.32.0",
     "@trpc/server": "^10.32.0",
