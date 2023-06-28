@@ -1,7 +1,7 @@
 import { useVaultStore } from '../src/common/store/vault'
 import { useAppStore } from '../src/common/store/app'
 import { useEffect } from 'react'
-import { MinaNetwork } from '@palladxyz/mina'
+import { MinaNetwork } from '@palladxyz/key-generator'
 
 const WALLET_NAME = 'Demo Wallet'
 const MNEMONIC =
