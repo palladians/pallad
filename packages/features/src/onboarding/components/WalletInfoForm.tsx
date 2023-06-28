@@ -66,11 +66,6 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
                 value={value}
                 onSubmitEditing={handleSubmit(onSubmit)}
                 testID="onboarding__walletNameInput"
-                css={{
-                  color: '$white',
-                  borderColor: '$gray600',
-                  backgroundColor: '$gray800'
-                }}
               />
             )}
           />
@@ -88,11 +83,6 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
                 value={value}
                 onSubmitEditing={handleSubmit(onSubmit)}
                 testID="onboarding__spendingPasswordInput"
-                css={{
-                  color: '$white',
-                  borderColor: '$gray600',
-                  backgroundColor: '$gray800'
-                }}
                 secureTextEntry
               />
             )}

@@ -1,4 +1,4 @@
-import { CSS } from '../../lib/styled'
+import { CSS, theme } from '../../lib/styled'
 
 export const inputBase: CSS = {
   height: '2.5rem',
@@ -7,7 +7,7 @@ export const inputBase: CSS = {
   backgroundColor: '$gray900',
   borderColor: '$border',
   borderRadius: '0.375rem',
-  border: '1px solid',
+  border: `1px ${theme.colors.gray500.value} solid`,
   background: 'transparent',
   paddingLeft: '0.75rem',
   paddingRight: '0.75rem',
