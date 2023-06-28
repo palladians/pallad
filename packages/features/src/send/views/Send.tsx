@@ -1,25 +1,46 @@
-import { Box, Button, Heading, Input, RadioGroup, Text } from '@palladxyz/ui'
+import { Box, Button, Input, RadioGroup, Text } from '@palladxyz/ui'
+import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
+import { FormLabel } from '../../common/components/FormLabel'
+import { ViewHeading } from '../../common/components/ViewHeading'
 
 export const SendView = () => {
+  const navigate = useNavigate()
   return (
     <AppLayout>
       <Box css={{ padding: '$md', gap: 16, flex: 1 }}>
-        <Heading size="lg">Send</Heading>
-        <Box css={{ gap: 8 }}>
-          <Text>Receiver</Text>
+        <ViewHeading
+          title="Send"
+          backButton={{ onPress: () => navigate(-1) }}
+        />
+        <Box>
+          <FormLabel
+            button={{
+              label: 'Address Book',
+              onPress: () => console.log('Address Book')
+            }}
+          >
+            Receiver
+          </FormLabel>
           <Input placeholder="Receiver Address" autoFocus />
         </Box>
-        <Box css={{ gap: 8 }}>
-          <Text>Amount</Text>
+        <Box>
+          <FormLabel
+            button={{
+              label: 'Max Amount',
+              onPress: () => console.log('Max Amount')
+            }}
+          >
+            Amount
+          </FormLabel>
           <Input placeholder="Transaction Amount" />
         </Box>
-        <Box css={{ gap: 8 }}>
+        <Box css={{ gap: 4 }}>
           <Text>Memo</Text>
           <Input placeholder="Memo" />
         </Box>
-        <Box css={{ gap: 8 }}>
+        <Box css={{ gap: 8, flex: 1 }}>
           <Text>Fee</Text>
           <RadioGroup
             options={[
@@ -30,9 +51,7 @@ export const SendView = () => {
             onChange={(value: string) => console.log(value)}
           />
         </Box>
-        <Box css={{ flex: 1 }}>
-          <Button>Next</Button>
-        </Box>
+        <Button>Next</Button>
       </Box>
     </AppLayout>
   )

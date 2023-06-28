@@ -1,12 +1,10 @@
-import { Box, composeBox, icons, Image, Text } from '@palladxyz/ui'
+import { Box, composeBox, Icons, Text, theme } from '@palladxyz/ui'
 import { Pressable } from 'react-native'
 import { useLocation, useNavigate } from 'react-router-native'
 
-import { useAppStore } from '../store/app'
-
 const StyledPressable = composeBox({ baseComponent: Pressable })
 
-const MenuItem = ({ label, url, icon, iconActive, onPress }) => {
+const MenuItem = ({ label, url, Icon, onPress }) => {
   const location = useLocation()
   const isActive = location.pathname === url
   return (
@@ -19,12 +17,10 @@ const MenuItem = ({ label, url, icon, iconActive, onPress }) => {
       }}
       onPress={onPress}
     >
-      <Image
-        source={isActive ? iconActive : icon}
-        css={{
-          width: 24,
-          height: 24
-        }}
+      <Icon
+        color={
+          isActive ? theme.colors.primary500.value : theme.colors.gray50.value
+        }
       />
       <Text css={{ color: isActive ? '$primary500' : '$body', fontSize: 12 }}>
         {label}
@@ -35,7 +31,6 @@ const MenuItem = ({ label, url, icon, iconActive, onPress }) => {
 
 export const BottomNavigation = () => {
   const navigate = useNavigate()
-  const setMenuOpen = useAppStore((state) => state.setMenuOpen)
   return (
     <Box
       css={{
@@ -47,16 +42,16 @@ export const BottomNavigation = () => {
       <MenuItem
         label="Dashboard"
         url="/dashboard"
-        icon={icons.iconDashboard}
-        iconActive={icons.iconDashboard__active}
+        Icon={Icons.LayoutDashboard}
         onPress={() => navigate('/dashboard')}
       />
-      <MenuItem label="Staking" url="/staking" icon={icons.iconStaking} />
-      <MenuItem label="Swap" url="/swap" icon={icons.iconTransactions} />
+      <MenuItem label="Staking" url="/staking" Icon={Icons.Coins} />
+      <MenuItem label="Address Book" url="/addressbook" Icon={Icons.Contact} />
       <MenuItem
         label="Menu"
-        icon={icons.iconMenu}
-        onPress={() => setMenuOpen(true)}
+        Icon={Icons.Menu}
+        url="/menu"
+        onPress={() => navigate('/menu')}
       />
     </Box>
   )

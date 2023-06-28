@@ -14,7 +14,9 @@ export default defineConfig([
       compilerOptions: {
         moduleResolution: 'Node',
         allowSyntheticDefaultImports: true,
-        jsx: 'react'
+        jsx: 'react',
+        module: 'esm',
+        target: 'esnext'
       }
     },
     esbuildPlugins: [commonjs()],

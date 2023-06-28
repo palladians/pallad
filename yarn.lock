@@ -4816,6 +4816,14 @@ css-select@^5.1.0:
     domutils "^3.0.1"
     nth-check "^2.0.1"
 
+css-tree@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.1.3.tgz#eb4870fb6fd7707327ec95c2ff2ab09b5e8db91d"
+  integrity sha512-tRpdppF7TRazZrjJ6v3stzv93qxRcSsFmW6cX0Zm2NVKpxE1WV1HblnghVv9TreireHkqI/VDEsfolRF1p6y7Q==
+  dependencies:
+    mdn-data "2.0.14"
+    source-map "^0.6.1"
+
 css-what@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/css-what/-/css-what-6.1.0.tgz#fb5effcf76f1ddea2c81bdfaa4de44e79bac70f4"
@@ -4862,7 +4870,7 @@ date-time@^3.1.0:
   dependencies:
     time-zone "^1.0.0"
 
-dayjs@^1.8.15:
+dayjs@^1.11.8, dayjs@^1.8.15:
   version "1.11.8"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.8.tgz#4282f139c8c19dd6d0c7bd571e30c2d0ba7698ea"
   integrity sha512-LcgxzFoWMEPO7ggRv1Y2N31hUf2R0Vj7fuy/m+Bg1K8rr+KAs1AEy4y9jd5DXe8pbHgX+srkHNS7TH6Q6ZhYeQ==
@@ -8522,6 +8530,16 @@ lru-cache@^9.1.1:
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-9.1.2.tgz#255fdbc14b75589d6d0e73644ca167a8db506835"
   integrity sha512-ERJq3FOzJTxBbFjZ7iDs+NiK4VI9Wz+RdrrAB8dio1oV+YvdPzUEE4QNiT2VD51DkIbCYRUUzCRkssXCHqSnKQ==
 
+lucide-react-native@^0.255.0:
+  version "0.255.0"
+  resolved "https://registry.yarnpkg.com/lucide-react-native/-/lucide-react-native-0.255.0.tgz#fc4bc5ade93f15880362a5e5c85edf7b67c8491a"
+  integrity sha512-OGravCpGIjSeKY9p/NJNvcfVCOeHFnRQLQCpA3xRYvS+emPMr8Uy1ABbFP0zjobH2tq4Ws4hAnuUulZRMl0Dug==
+
+lucide-react@^0.255.0:
+  version "0.255.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.255.0.tgz#8845a5793925372104a2566fb84de6dba07e9cae"
+  integrity sha512-BsnpjPy2Dv3nqzZGgb6e/2WFp327Sa5sre5pFTBlAsSmmvOJ9y6tQ2VhgG7+mwaBS+9nYMR3BNaGLasAdCbhbQ==
+
 lz-string@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/lz-string/-/lz-string-1.5.0.tgz#c1ab50f77887b712621201ba9fd4e3a6ed099941"
@@ -8813,6 +8831,11 @@ mdast-util-to-string@^3.0.0, mdast-util-to-string@^3.1.0:
   integrity sha512-V4Zn/ncyN1QNSqSBxTrMOLpjr+IKdHl2v3KVLoWmDPscP4r9GcCi71gjgvUV1SFSKh92AjAG4peFuBl2/YgCJg==
   dependencies:
     "@types/mdast" "^3.0.0"
+
+mdn-data@2.0.14:
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.14.tgz#7113fc4281917d63ce29b43446f701e68c25ba50"
+  integrity sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -10956,6 +10979,11 @@ quick-lru@^5.1.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-5.1.1.tgz#366493e6b3e42a3a6885e2e99d18f80fb7a8c932"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
+rambda@^7.5.0:
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/rambda/-/rambda-7.5.0.tgz#1865044c59bc0b16f63026c6e5a97e4b1bbe98fe"
+  integrity sha512-y/M9weqWAH4iopRd7EHDEQQvpFPHj1AA3oHozE9tfITHUtTR7Z9PSlIRRG2l1GuW7sefC1cXFfIcF+cgnShdBA==
+
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
@@ -11059,6 +11087,14 @@ react-native-popper@^0.3.2:
   dependencies:
     "@react-native-aria/focus" "^0.2.5"
     "@react-native-aria/overlays" "^0.3.1"
+
+react-native-svg@^13.9.0:
+  version "13.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-13.9.0.tgz#8df8a690dd00362601f074dec5d3a86dd0f99c7f"
+  integrity sha512-Ey18POH0dA0ob/QiwCBVrxIiwflhYuw0P0hBlOHeY4J5cdbs8ngdKHeWC/Kt9+ryP6fNoEQ1PUgPYw2Bs/rp5Q==
+  dependencies:
+    css-select "^5.1.0"
+    css-tree "^1.1.3"
 
 react-native-web@^0.19.4:
   version "0.19.5"
