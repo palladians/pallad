@@ -3,7 +3,7 @@ import { boxStyles } from '../Box/index.css'
 
 export const baseHeading: CSS = {
   ...boxStyles,
-  fontWeight: '$bold',
+  fontWeight: '$semibold',
   fontSize: '$2xl',
   color: '$heading',
   variants: {

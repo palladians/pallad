@@ -27,7 +27,10 @@ export const FormLabel = ({
         alignItems: 'center'
       }}
     >
-      <Text css={{ width: 'auto', fontSize: 14 }} testID={testID}>
+      <Text
+        css={{ width: 'auto', fontSize: 14, fontWeight: '$semibold' }}
+        testID={testID}
+      >
         {children}
         {required && '*'}
       </Text>

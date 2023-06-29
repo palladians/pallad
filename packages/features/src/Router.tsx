@@ -16,7 +16,10 @@ import { StartView } from './onboarding/views/Start'
 import { OverviewView } from './overview/views/Overview'
 import { ReceiveView } from './receive/views/Receive'
 import { SendView } from './send/views/Send'
+import { TransactionErrorView } from './send/views/TransactionError'
+import { TransactionSuccessView } from './send/views/TransactionSuccess'
 import { SettingsView } from './settings/views/Settings'
+import { TransactionDetailsView } from './transactions/views/TransactionDetails'
 import { TransactionsView } from './transactions/views/Transactions'
 
 dayjs.extend(relativeTime)
@@ -31,6 +34,18 @@ export const Router = () => {
           <Route path="/menu" element={<MenuView />} />
           <Route path="/send" element={<SendView />} />
           <Route path="/receive" element={<ReceiveView />} />
+          <Route
+            path="/transactions/success"
+            element={<TransactionSuccessView />}
+          />
+          <Route
+            path="/transactions/error"
+            element={<TransactionErrorView />}
+          />
+          <Route
+            path="/transactions/:hash"
+            element={<TransactionDetailsView />}
+          />
           <Route path="/transactions" element={<TransactionsView />} />
           <Route path="/create" element={<CreateWalletView />} />
           <Route path="/restore" element={<RestoreWalletView />} />

@@ -1,10 +1,11 @@
-import { Box, Button, Heading, Input, Text } from '@palladxyz/ui'
+import { Box, Button, Input, Text } from '@palladxyz/ui'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
+import { ViewHeading } from '../../common/components/ViewHeading'
 import { sessionPersistence } from '../../common/lib/storage'
 import { useVaultStore, vaultStore } from '../../common/store/vault'
 
@@ -38,9 +39,13 @@ export const UnlockWalletView = () => {
       footer={<Button onPress={handleSubmit(onSubmit)}>Unlock</Button>}
     >
       <Box css={{ gap: 24 }}>
-        <Heading size="lg" css={{ color: '$white' }}>
-          Unlock Wallet
-        </Heading>
+        <ViewHeading
+          title="Unlock Wallet"
+          button={{
+            label: 'Restart Wallet',
+            onPress: () => console.log('restart')
+          }}
+        />
         {passwordError && (
           <Text
             css={{

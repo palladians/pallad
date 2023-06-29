@@ -8,7 +8,8 @@ const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL
 
 const Urls = {
   GET_ACCOUNT_URL: new URL(`${VITE_APP_API_URL}/trpc.getAccount`),
-  GET_TRANSACTIONS_URL: new URL(`${VITE_APP_API_URL}/trpc.getTransactions`)
+  GET_TRANSACTIONS_URL: new URL(`${VITE_APP_API_URL}/trpc.getTransactions`),
+  GET_TRANSACTION_URL: new URL(`${VITE_APP_API_URL}/trpc.getTransaction`)
 }
 
 export const useAccount = () => {
@@ -30,4 +31,10 @@ export const useTransactions = () => {
     walletPublicKey ? url : null,
     fetcher
   )
+}
+
+export const useTransaction = ({ hash }: { hash: string }) => {
+  const url = Urls.GET_TRANSACTION_URL
+  url.searchParams.set('input', JSON.stringify({ hash }))
+  return useSWR<TrpcResponse<Transaction>>(hash ? url : null, fetcher)
 }

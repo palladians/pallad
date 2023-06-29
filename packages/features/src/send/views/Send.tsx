@@ -1,4 +1,5 @@
 import { Box, Button, Input, RadioGroup } from '@palladxyz/ui'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
@@ -7,6 +8,7 @@ import { ViewHeading } from '../../common/components/ViewHeading'
 
 export const SendView = () => {
   const navigate = useNavigate()
+  const [txConfirmed, setTxConfirmed] = useState(false)
   return (
     <AppLayout>
       <Box css={{ padding: '$md', gap: 16, flex: 1 }}>
@@ -51,7 +53,16 @@ export const SendView = () => {
             onChange={(value: string) => console.log(value)}
           />
         </Box>
-        <Button>Next</Button>
+        {txConfirmed ? (
+          <Button
+            variant="destructive"
+            onPress={() => navigate('/transactions/success')}
+          >
+            Confirm Sending
+          </Button>
+        ) : (
+          <Button onPress={() => setTxConfirmed(true)}>Send</Button>
+        )}
       </Box>
     </AppLayout>
   )

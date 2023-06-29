@@ -28,7 +28,7 @@ const MenuItem = ({ index, item }) => {
       }}
     >
       <item.Icon />
-      <Text css={{ width: 'auto' }}>{item.label}</Text>
+      <Text css={{ width: 'auto', fontSize: 14 }}>{item.label}</Text>
     </StyledPressable>
   )
 }
