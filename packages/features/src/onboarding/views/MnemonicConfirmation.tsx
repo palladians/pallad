@@ -68,7 +68,9 @@ export const MnemonicConfirmationView = () => {
           backButton={{ onPress: () => navigate(-1) }}
         />
         <Box css={{ gap: 8 }}>
-          <FormLabel>Type in the word #{confirmationIndex + 1}</FormLabel>
+          <FormLabel testID="onboarding__writedownIndex">
+            Type in the word #{confirmationIndex + 1}
+          </FormLabel>
           <Controller
             control={control}
             name="mnemonicWord"
