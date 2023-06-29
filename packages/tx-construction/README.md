@@ -1,69 +1,81 @@
-# Cryptocurrency Key Generator
+# Transaction Construciton
 
-This TypeScript package allows you to generate cryptocurrency keys for multiple networks, such as Ethereum, Mina, and Polygon.
+This is a TypeScript package that assists in creating and signing transactions for Mina Protocol. Mina is a lightweight blockchain that's built to power decentralized applications with minimized data usage.
 
-## Table of Contents
-1. [Files](#files)
-2. [Package Class Structure and Interactions Diagram](#package-class-structure-and-interactions-diagram)
-3. [Usage](#usage)
-4. [Contributing](#contributing)
-5. [License](#license)
-
-## Files
-
-The package contains the following main files:
-* `keyGenerator.ts`: This is an abstract base class that defines the common interface and methods used by all key generators.
-* `emv.ts`: This file contains the Ethereum (and Polygon) key generator, which extends the base key generator.
-* `mina.ts`: This file contains the Mina key generator, which extends the base key generator.
-* `KeyGeneratorFactory.ts`: This file contains a factory class used to create instances of key generators based on the desired network.
-
-## Package Class Structure and Interactions Diagram
-
-This diagram depicts the inheritance relationship between the `KeyGenerator`, `EVMKeyGenerator`, and `MinaKeyGenerator` classes, and the responsibility of the `KeyGeneratorFactory` class for creating instances of these classes.
-
-```mermaid
-classDiagram
-    class KeyGenerator {
-      <<abstract>>
-      -PURPOSE: number
-      -COIN_TYPE: number
-      +getHierarchicalDeterministicPath(path: HDPathIndices): string
-      +getHDPathObject(accountNumber: number, changeIndex: number, addressIndex: number): HDPathIndices
-      +deriveMasterNodeFromMnemonic(mnemonic: string): Promise<HDKey>
-      +deriveKeyPairByMnemonic(mnemonic: string, accountNumber: number, changeIndex: number, addressIndex: number): Promise<KeyPair>
-      +deriveKeyPair(params: DeriveKeyPairParams): Promise<KeyPair | null>
-      #buildKeyPairFromChildNode(childNode: HDKey, accountNumber: number): Promise<KeyPair>
-    }
-    class EVMKeyGenerator {
-      +buildKeyPairFromChildNode(childNode: HDKey, accountNumber: number): Promise<KeyPair>
-    }
-    class MinaKeyGenerator {
-      +buildKeyPairFromChildNode(childNode: HDKey, accountNumber: number): Promise<KeyPair>
-    }
-    class KeyGeneratorFactory {
-      +create(network: Network): KeyGenerator
-    }
-    KeyGenerator <|-- EVMKeyGenerator: Inheritance
-    KeyGenerator <|-- MinaKeyGenerator: Inheritance
-    KeyGeneratorFactory ..> KeyGenerator: Creates
-    KeyGeneratorFactory ..> EVMKeyGenerator: Creates
-    KeyGeneratorFactory ..> MinaKeyGenerator: Creates
-```
+## Features
+- This package provides the ability to create and sign Payment and Delegation transactions.
+- It supports interaction with both mainnet and testnet.
+- Leverages the mina-signer package to sign transactions.
+- Includes robust error handling for transaction creation and signing.
 
 ## Usage
 
-Use the `KeyGeneratorFactory` to create an instance of the key generator you need.
+Here's a brief overview of how you can use the package.
 
 ```ts
-import { KeyGeneratorFactory, Network } from '@pallad/key-generator'
-
-const keyGenerator = KeyGeneratorFactory.create(Network.Mina)
+import {
+  getSignClient,
+  constructPaymentTx,
+  constructDelegationTx,
+  signPayment,
+  signDelegation,
+  NetworkType
+} from '@palladxyz/tx-construction';
 ```
 
-You can then use this instance to derive keys:
+### Get a client instance
+
+You can get a client instance by providing the network type:
+```ts
+const client = await getSignClient('mainnet');
+```
+
+### Construct a payment transaction
+To construct a payment transaction, you need to pass the transaction body:
 
 ```ts
-const keys = await keyGenerator.deriveKeyPair({ mnemonic: 'habit hope tip crystal because grunt nation idea electric witness alert like' })
+const paymentTx = constructPaymentTx({
+  to: 'B62...',
+  from: 'B62...',
+  fee: '500000000',
+  nonce: '1'
+});
+```
+
+### Construct a delegation transaction
+To construct a delegation transaction, you need to pass the transaction body:
+
+```ts
+const delegationTx = constructDelegationTx({
+  to: 'B62...',
+  from: 'B62...',
+  fee: '500000000',
+  nonce: '1'
+});
+```
+
+### Sign a payment transaction
+To sign a payment transaction, you need to pass the private key, transaction body, and network type:
+
+```ts
+Copy code
+const signedPaymentTx = await signPayment(
+  'PRIVATE_KEY',
+  paymentTx,
+  'mainnet'
+);
+```
+
+### Sign a delegation transaction
+To sign a delegation transaction, you need to pass the private key, transaction body, and network type:
+
+```ts
+Copy code
+const signedDelegationTx = await signDelegation(
+  'PRIVATE_KEY',
+  delegationTx,
+  'mainnet'
+);
 ```
 
 ## Contributing
