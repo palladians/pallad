@@ -15,8 +15,6 @@ jobs:
       contents: read
     env:
       DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
-      VITE_APP_MODE: web
-      VITE_APP_API_URL: https://api.pallad.xyz
     steps:
       - uses: actions/checkout@v3
       - name: Setup env

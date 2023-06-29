@@ -16,6 +16,7 @@ jobs:
     name: 'Build and test'
     env:
       VITE_APP_MODE: web
+      VITE_APP_API_URL: https://api.pallad.xyz
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
