@@ -1,8 +1,8 @@
-export  {
-  getSignClient,
-  constructPaymentTx,
+export {
   constructDelegationTx,
-  signPayment,
+  constructPaymentTx,
+  getSignClient,
+  NetworkType,
   signDelegation,
-  NetworkType
-} from './minaTransactions';
+  signPayment
+} from './minaTransactions'
