@@ -45,7 +45,12 @@ export const BottomNavigation = () => {
         Icon={Icons.LayoutDashboard}
         onPress={() => navigate('/dashboard')}
       />
-      <MenuItem label="Staking" url="/staking" Icon={Icons.Coins} />
+      <MenuItem
+        label="Staking"
+        url="/staking"
+        onPress={() => navigate('/staking')}
+        Icon={Icons.Coins}
+      />
       <MenuItem label="Address Book" url="/addressbook" Icon={Icons.Contact} />
       <MenuItem
         label="Menu"
