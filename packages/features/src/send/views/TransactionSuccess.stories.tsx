@@ -5,5 +5,5 @@ import { TransactionSuccessView } from './TransactionSuccess'
 export const View = () => <TransactionSuccessView />
 
 export default {
-  title: 'Dashboard / TransactionSuccess'
+  title: 'Dashboard / Send / Success'
 } satisfies StoryDefault

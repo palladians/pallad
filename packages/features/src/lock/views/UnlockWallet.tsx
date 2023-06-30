@@ -36,7 +36,11 @@ export const UnlockWalletView = () => {
   }
   return (
     <WizardLayout
-      footer={<Button onPress={handleSubmit(onSubmit)}>Unlock</Button>}
+      footer={
+        <Button onPress={handleSubmit(onSubmit)} css={{ flex: 1 }}>
+          Unlock
+        </Button>
+      }
     >
       <Box css={{ gap: 24 }}>
         <ViewHeading

@@ -41,7 +41,10 @@ export const TransactionResult = ({
         <result.icon size={56} color={result.iconColor} />
         <Box css={{ gap: 8 }}>
           <FormLabel>{result.label}</FormLabel>
-          <Text numberOfLines={2} css={{ width: 'auto', lineHeight: '175%' }}>
+          <Text
+            numberOfLines={2}
+            css={{ lineHeight: '175%', overflow: 'hidden', width: '100%' }}
+          >
             {result.content}
           </Text>
         </Box>

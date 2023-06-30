@@ -5,5 +5,5 @@ import { TransactionErrorView } from './TransactionError'
 export const View = () => <TransactionErrorView />
 
 export default {
-  title: 'Dashboard / TransactionError'
+  title: 'Dashboard / Send / Error'
 } satisfies StoryDefault
