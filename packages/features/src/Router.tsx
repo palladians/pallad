@@ -19,6 +19,7 @@ import { SendView } from './send/views/Send'
 import { TransactionErrorView } from './send/views/TransactionError'
 import { TransactionSuccessView } from './send/views/TransactionSuccess'
 import { SettingsView } from './settings/views/Settings'
+import { StakingOverviewView } from './staking/views/StakingOverview'
 import { TransactionDetailsView } from './transactions/views/TransactionDetails'
 import { TransactionsView } from './transactions/views/Transactions'
 
@@ -47,6 +48,7 @@ export const Router = () => {
             element={<TransactionDetailsView />}
           />
           <Route path="/transactions" element={<TransactionsView />} />
+          <Route path="/staking" element={<StakingOverviewView />} />
           <Route path="/create" element={<CreateWalletView />} />
           <Route path="/restore" element={<RestoreWalletView />} />
           <Route path="/unlock" element={<UnlockWalletView />} />
