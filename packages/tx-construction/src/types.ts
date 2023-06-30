@@ -4,6 +4,7 @@ export type KeyPair = {
 }
 
 export type TransactionBody = {
+  type: 'payment' | 'delegation' | 'zkApp'
   to: string
   from: string
   fee: string
@@ -12,3 +13,5 @@ export type TransactionBody = {
   memo?: string
   validUntil?: string
 }
+
+export type NetworkType = 'mainnet' | 'testnet'

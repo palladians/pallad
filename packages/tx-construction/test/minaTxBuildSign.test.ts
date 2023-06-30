@@ -6,13 +6,9 @@ import {
 import Client from 'mina-signer'
 import { expect } from 'vitest'
 
-import {
-  getSignClient,
-  NetworkType,
-  signDelegation,
-  signPayment
-} from '../src/minaTransactions'
-import { TransactionBody } from '../src/types'
+import { getSignClient } from '../src/minaClient'
+import { signTransaction } from '../src/minaTxSigner'
+import { NetworkType, TransactionBody } from '../src/types'
 
 describe('Transaction Construction & Signing', () => {
   let keyGen: MinaKeyGenerator
@@ -50,6 +46,7 @@ describe('Transaction Construction & Signing', () => {
     const keyPairBob = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 1)
     const privateKeyAlice = keyPairAlice.privateKey
     const payment: TransactionBody = {
+      type: 'payment',
       to: keyPairBob.publicKey,
       from: keyPairAlice.publicKey,
       fee: '1',
@@ -59,33 +56,32 @@ describe('Transaction Construction & Signing', () => {
       amount: '100'
     }
 
-    const signedPayment = await signPayment(privateKeyAlice, payment, network)
-    const isVerified = client.verifyPayment(signedPayment)
+    const signedPayment = await signTransaction(
+      privateKeyAlice,
+      payment,
+      network
+    )
+    const isVerified = client.verifyTransaction(signedPayment)
     expect(isVerified).toBeTruthy()
-
-    const isTransactionVerified = client.verifyTransaction(signedPayment)
-    expect(isTransactionVerified).toBeTruthy()
   })
 
   it('Alice should construct & sign a delegation transaction correctly', async () => {
     const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
     const privateKeyAlice = keyPairAlice.privateKey
     const delegation: TransactionBody = {
+      type: 'delegation',
       to: keyPairAlice.publicKey,
       from: keyPairAlice.publicKey,
       fee: '1',
       nonce: '0'
     }
 
-    const signedDelegation = await signDelegation(
+    const signedDelegation = await signTransaction(
       privateKeyAlice,
       delegation,
       network
     )
-    const isVerified = client.verifyStakeDelegation(signedDelegation)
+    const isVerified = client.verifyTransaction(signedDelegation)
     expect(isVerified).toBeTruthy()
-
-    const isDelegationVerified = client.verifyTransaction(signedDelegation)
-    expect(isDelegationVerified).toBeTruthy()
   })
 })

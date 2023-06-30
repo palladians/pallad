@@ -1,27 +1,9 @@
-import Client from 'mina-signer'
 import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
+import { getSignClient } from './minaClient'
+import { NetworkType } from './types'
 import { TransactionBody } from './types'
-
-export type NetworkType = 'mainnet' | 'testnet'
-
-interface NetConfig {
-  netType: NetworkType
-}
-
-async function getCurrentNetConfig(network: NetworkType): Promise<NetConfig> {
-  const netConfig: NetConfig = { netType: network }
-  return netConfig
-}
-
-export async function getSignClient(network: NetworkType): Promise<Client> {
-  const netConfig: NetConfig = await getCurrentNetConfig(network)
-  const netType: NetworkType = netConfig.netType || 'mainnet'
-
-  const client = new Client({ network: netType })
-  return client
-}
 
 export function constructPaymentTx(payment: TransactionBody): Json.Payment {
   const sendFee = BigInt(payment.fee)
@@ -36,7 +18,7 @@ export function constructPaymentTx(payment: TransactionBody): Json.Payment {
     fee: sendFee,
     nonce: BigInt(payment.nonce),
     memo: memo,
-    validUntil: validUntil
+    validUntil: validUntil // Mina Signer has a defaultValidUntil = '4294967295';
   }
 }
 
@@ -47,7 +29,7 @@ export function constructDelegationTx(
   const memo = delegation.memo || ''
   const validUntil = delegation.validUntil
     ? BigInt(delegation.validUntil)
-    : BigInt(0)
+    : BigInt(0) // Mina Signer has a defaultValidUntil = '4294967295';
 
   return {
     to: delegation.to,

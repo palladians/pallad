@@ -1,6 +1,6 @@
 # Transaction Construciton
 
-This is a TypeScript package that assists in creating and signing transactions for Mina Protocol. Mina is a lightweight blockchain that's built to power decentralized applications with minimized data usage.
+This is a TypeScript package that assists in creating and signing transactions for Mina Protocol. This package is a thin wrapper around `mina-signer`.
 
 ## Features
 - This package provides the ability to create and sign Payment and Delegation transactions.
