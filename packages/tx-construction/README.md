@@ -37,8 +37,8 @@ To construct a payment transaction, you need to pass the transaction body:
 const paymentTx = constructPaymentTx({
   to: 'B62...',
   from: 'B62...',
-  fee: '500000000',
-  nonce: '1'
+  fee: '1',
+  nonce: '0'
 });
 ```
 
