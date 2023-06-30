@@ -1,4 +1,6 @@
 import { commonjs } from '@hyrious/esbuild-plugin-commonjs'
+import svgJsx from '@svgr/plugin-jsx'
+import svgr from 'esbuild-plugin-svgr'
 import { defineConfig } from 'tsup'
 
 export default defineConfig([
@@ -17,7 +19,7 @@ export default defineConfig([
         jsx: 'react'
       }
     },
-    esbuildPlugins: [commonjs()],
+    esbuildPlugins: [commonjs(), svgr({ plugins: [svgJsx] })],
     external: ['react-native', 'react-native-web']
   }
 ])

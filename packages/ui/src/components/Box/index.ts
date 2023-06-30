@@ -6,10 +6,11 @@ import { boxStyles } from './index.css'
 
 interface ComposeBoxProps {
   baseComponent?: any
+  css?: any
 }
 
-export const composeBox = ({ baseComponent = View }: ComposeBoxProps) =>
-  styled(baseComponent, boxStyles)
+export const composeBox = ({ baseComponent = View, css }: ComposeBoxProps) =>
+  styled(baseComponent, { ...boxStyles, ...css })
 export const Box = composeBox({})
 
 export type BoxProps = ComponentProps<typeof Box>

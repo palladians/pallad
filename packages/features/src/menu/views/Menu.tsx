@@ -1,4 +1,4 @@
-import { Box, composeBox, Icons, Text, theme } from '@palladxyz/ui'
+import { Box, composeBox, composeCard, Icons, Text } from '@palladxyz/ui'
 import React from 'react'
 import { FlatList, Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
@@ -8,7 +8,7 @@ import { ViewHeading } from '../../common/components/ViewHeading'
 import { sessionPersistence } from '../../common/lib/storage'
 import { vaultStore } from '../../common/store/vault'
 
-const StyledPressable = composeBox({ baseComponent: Pressable })
+const StyledPressable = composeCard({ baseComponent: Pressable })
 const StyledFlatList = composeBox({ baseComponent: FlatList })
 
 const MenuItem = ({ index, item }) => {
@@ -16,14 +16,12 @@ const MenuItem = ({ index, item }) => {
     <StyledPressable
       onPress={item.onPress}
       css={{
-        border: `1px ${theme.colors.gray700.value} solid`,
         flex: 1,
         marginRight: index % 2 === 0 ? 8 : 0,
         marginLeft: index % 2 === 0 ? 0 : 8,
         height: 116,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: '$md',
         gap: 8
       }}
     >

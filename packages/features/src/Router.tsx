@@ -4,9 +4,12 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import React from 'react'
 import { NativeRouter, Route, Routes } from 'react-router-native'
 
+import { AboutView } from './about/views/About'
+import { AddressBookView } from './address-book/views/AddressBook'
+import { NewAddressView } from './address-book/views/NewAddress'
 import { UnlockWalletView } from './lock/views/UnlockWallet'
 import { MenuView } from './menu/views/Menu'
-import { NotFoundView } from './notFound/views/NotFound'
+import { NotFoundView } from './not-found/views/NotFound'
 import { CreateWalletView } from './onboarding/views/CreateWallet'
 import { MnemonicConfirmationView } from './onboarding/views/MnemonicConfirmation'
 import { MnemonicInputView } from './onboarding/views/MnemonicInput'
@@ -49,6 +52,8 @@ export const Router = () => {
           />
           <Route path="/transactions" element={<TransactionsView />} />
           <Route path="/staking" element={<StakingOverviewView />} />
+          <Route path="/contacts" element={<AddressBookView />} />
+          <Route path="/contacts/new" element={<NewAddressView />} />
           <Route path="/create" element={<CreateWalletView />} />
           <Route path="/restore" element={<RestoreWalletView />} />
           <Route path="/unlock" element={<UnlockWalletView />} />
@@ -56,6 +61,7 @@ export const Router = () => {
           <Route path="/confirmation" element={<MnemonicConfirmationView />} />
           <Route path="/mnemonic" element={<MnemonicInputView />} />
           <Route path="/settings" element={<SettingsView />} />
+          <Route path="/about" element={<AboutView />} />
           <Route path="/*" element={<NotFoundView />} />
         </Routes>
       </NativeRouter>
