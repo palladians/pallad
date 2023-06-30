@@ -6,6 +6,13 @@ import { constructDelegationTx, constructPaymentTx } from './minaTxBuilder'
 import { NetworkType } from './types'
 import { TransactionBody } from './types'
 
+/**
+ * Signs a transaction using the provided private key, transaction body, and network.
+ * @param privateKey The private key used for signing.
+ * @param transaction The transaction body.
+ * @param network The network type.
+ * @returns A Promise that resolves to the signed transaction.
+ */
 export async function signTransaction(
   privateKey: string,
   transaction: TransactionBody,
@@ -31,6 +38,12 @@ export async function signTransaction(
   return signedTransaction
 }
 
+/**
+ * Verifies the authenticity of a signed transaction using the provided network.
+ * @param signedTransaction The signed transaction to verify.
+ * @param network The network type.
+ * @returns A Promise that resolves to a boolean indicating the verification result.
+ */
 export async function verifyTransaction(
   signedTransaction:
     | SignedLegacy<Json.Payment>
@@ -45,6 +58,11 @@ export async function verifyTransaction(
   }
 }
 
+/**
+ * Retrieves the actual error message from an unknown error object.
+ * @param err The unknown error object.
+ * @returns The actual error message if available, or undefined otherwise.
+ */
 function getRealErrorMsg(err: unknown): string | undefined {
   throw new Error(err as string)
 }

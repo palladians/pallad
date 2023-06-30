@@ -55,27 +55,25 @@ const delegationTx = constructDelegationTx({
 ```
 
 ### Sign a payment transaction
-To sign a payment transaction, you need to pass the private key, transaction body, and network type:
+To sign a payment transaction, you need to pass the private key, transaction body object (that includes a field `type` to describe whether it is a `payment` or `delegation` transaction), and network type:
 
 ```ts
-Copy code
-const signedPaymentTx = await signPayment(
-  'PRIVATE_KEY',
-  paymentTx,
-  'mainnet'
-);
+const signedPayment = await signTransaction(
+      PRIVATE_KEY,
+      payment,
+      network
+    )
 ```
 
 ### Sign a delegation transaction
-To sign a delegation transaction, you need to pass the private key, transaction body, and network type:
+To sign a delegation transaction, you need to pass the private key, transaction body object  (that includes a field `type` to describe whether it is a `payment` or `delegation` transaction), and network type:
 
 ```ts
-Copy code
-const signedDelegationTx = await signDelegation(
-  'PRIVATE_KEY',
-  delegationTx,
-  'mainnet'
-);
+const signedDelegation = await signTransaction(
+      PRIVATE_KEY,
+      payment,
+      network
+    )
 ```
 
 ## Contributing

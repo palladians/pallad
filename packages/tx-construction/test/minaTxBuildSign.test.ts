@@ -61,6 +61,9 @@ describe('Transaction Construction & Signing', () => {
       payment,
       network
     )
+    expect(signedPayment.data).toBeDefined()
+    expect(signedPayment.signature).toBeDefined()
+
     const isVerified = client.verifyTransaction(signedPayment)
     expect(isVerified).toBeTruthy()
   })
@@ -81,6 +84,9 @@ describe('Transaction Construction & Signing', () => {
       delegation,
       network
     )
+    expect(signedDelegation.data).toBeDefined()
+    expect(signedDelegation.signature).toBeDefined()
+
     const isVerified = client.verifyTransaction(signedDelegation)
     expect(isVerified).toBeTruthy()
   })
