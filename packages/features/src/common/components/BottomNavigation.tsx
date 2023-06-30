@@ -51,7 +51,12 @@ export const BottomNavigation = () => {
         onPress={() => navigate('/staking')}
         Icon={Icons.Coins}
       />
-      <MenuItem label="Address Book" url="/addressbook" Icon={Icons.Contact} />
+      <MenuItem
+        label="Address Book"
+        url="/contacts"
+        onPress={() => navigate('/contacts')}
+        Icon={Icons.Contact}
+      />
       <MenuItem
         label="Menu"
         Icon={Icons.Menu}

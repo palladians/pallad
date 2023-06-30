@@ -20,7 +20,7 @@ export const SendView = () => {
           <FormLabel
             button={{
               label: 'Address Book',
-              onPress: () => console.log('Address Book')
+              onPress: () => navigate('/contacts')
             }}
           >
             Receiver

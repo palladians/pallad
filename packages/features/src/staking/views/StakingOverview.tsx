@@ -1,4 +1,4 @@
-import { Box, Text, theme } from '@palladxyz/ui'
+import { Box, Card, Text } from '@palladxyz/ui'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { FormLabel } from '../../common/components/FormLabel'
@@ -21,10 +21,8 @@ export const StakingOverviewView = () => {
             onPress: () => console.log('change pool')
           }}
         />
-        <Box
+        <Card
           css={{
-            border: `1px ${theme.colors.gray700.value} solid`,
-            borderRadius: '$md',
             padding: '$md',
             gap: 16
           }}
@@ -48,7 +46,7 @@ export const StakingOverviewView = () => {
               <EpochProgressChart progress={0.75} />
             </Box>
           </Box>
-        </Box>
+        </Card>
         <ViewHeading title="Delegation Info" />
         <Box css={{ gap: 24 }}>
           <Box css={{ gap: 8 }}>

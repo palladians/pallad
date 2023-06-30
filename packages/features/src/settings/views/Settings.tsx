@@ -1,11 +1,23 @@
 import { MinaNetwork } from '@palladxyz/key-generator'
-import { Box, RadioGroup } from '@palladxyz/ui'
+import {
+  Box,
+  Card,
+  composeBox,
+  Heading,
+  Icons,
+  RadioGroup,
+  Text,
+  theme
+} from '@palladxyz/ui'
+import { Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useAppStore } from '../../common/store/app'
+
+const StyledPressable = composeBox({ baseComponent: Pressable })
 
 export const SettingsView = () => {
   const navigate = useNavigate()
@@ -15,7 +27,7 @@ export const SettingsView = () => {
   }))
   return (
     <AppLayout>
-      <Box css={{ padding: 16, gap: 16 }}>
+      <Box css={{ padding: 16, gap: 24 }}>
         <ViewHeading
           title="Settings"
           backButton={{ onPress: () => navigate(-1) }}
@@ -42,6 +54,27 @@ export const SettingsView = () => {
               }
             ]}
           />
+        </Box>
+        <Box css={{ gap: 16 }}>
+          <Heading size="md">Authorized Domains</Heading>
+          <Box css={{ gap: 16 }}>
+            <Card
+              css={{
+                padding: '$md',
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}
+            >
+              <Text>Pallad</Text>
+              <Box css={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+                <Text>pallad.xyz</Text>
+                <StyledPressable>
+                  <Icons.Trash color={theme.colors.primary500.value} />
+                </StyledPressable>
+              </Box>
+            </Card>
+          </Box>
         </Box>
       </Box>
     </AppLayout>
