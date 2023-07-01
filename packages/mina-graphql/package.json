@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.1",
     "@types/secp256k1": "^4.0.3",
-    "happy-dom": "^9.20.3"
+    "happy-dom": "^9.20.3",
+    "msw": "^1.2.2"
   }
 }

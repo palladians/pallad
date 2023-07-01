@@ -7,7 +7,7 @@ export type Transaction = {
   fee: number
   from: string
   hash: string
-  id: string
+  id?: string
   isDelegation: boolean
   kind: TransactionKind
   memo: string

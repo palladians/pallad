@@ -9,11 +9,10 @@ export const healthCheckQuery = `
 `
 
 export const transactionsByAddressesQuery = `
-  query Transactions($address: String!, $limit: Int, $offset: Int) {
+  query Transactions($address: String!, $limit: Int) {
     transactions(
       query: { canonical: true, OR: [{ to: $address }, { from: $address }] }
       limit: $limit
-      offset: $offset
     ) {
       amount
       to
