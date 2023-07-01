@@ -8,6 +8,12 @@ import {
 } from '@palladxyz/mina-core'
 import { gql, request } from 'graphql-request'
 
+import {
+  healthCheckQuery,
+  transactionsByAddressesQuery,
+  transactionsByHashesQuery
+} from './queries'
+
 interface TransactionData {
   transaction: Mina.Transaction
 }
@@ -25,13 +31,7 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
 
   async healthCheck(): Promise<HealthCheckResponse> {
     const query = gql`
-      {
-        __schema {
-          types {
-            name
-          }
-        }
-      }
+      ${healthCheckQuery}
     `
 
     try {
@@ -62,25 +62,7 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
     args: TransactionsByAddressesArgs
   ): Promise<Mina.Paginated<Mina.Transaction>> {
     const query = gql`
-      query Transactions($address: String!, $limit: Int, $offset: Int) {
-        transactions(
-          query: { canonical: true, OR: [{ to: $address }, { from: $address }] }
-          limit: $limit
-          offset: $offset
-        ) {
-          amount
-          to
-          token
-          kind
-          isDelegation
-          hash
-          from
-          fee
-          failureReason
-          dateTime
-          blockHeight
-        }
-      }
+      ${transactionsByAddressesQuery}
     `
 
     const { startAt, limit } = args.pagination || { startAt: 0, limit: 10 }
@@ -94,7 +76,7 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
     // Assuming the 'transactions' field in the response contains the array of transactions.
     const transactions = data.transactions
 
-    // You may need to fetch the totalResultCount in a separate query if not returned by the server
+    // May need to fetch the totalResultCount in a separate query if not returned by the server
     const totalResultCount = transactions.length
 
     return {
@@ -107,24 +89,7 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
     args: TransactionsByIdsArgs
   ): Promise<Mina.Transaction[]> {
     const query = gql`
-      query Transaction($hash: String!) {
-        transaction(query: { hash: $hash }) {
-          amount
-          blockHeight
-          dateTime
-          failureReason
-          fee
-          from
-          hash
-          id
-          isDelegation
-          kind
-          memo
-          nonce
-          to
-          token
-        }
-      }
+      ${transactionsByHashesQuery}
     `
 
     const transactions = await Promise.all(
