@@ -1,11 +1,14 @@
 import { Box, Card, Text } from '@palladxyz/ui'
+import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { formatCompact } from '../../common/lib/numbers'
 import { EpochProgressChart } from '../components/EpochProgressChart'
 
 export const StakingOverviewView = () => {
+  const navigate = useNavigate()
   return (
     <AppLayout>
       <Box
@@ -18,7 +21,7 @@ export const StakingOverviewView = () => {
           title="Staking"
           button={{
             label: 'Change Pool',
-            onPress: () => console.log('change pool')
+            onPress: () => navigate('/staking/delegate')
           }}
         />
         <Card
@@ -55,7 +58,7 @@ export const StakingOverviewView = () => {
           </Box>
           <Box css={{ gap: 8 }}>
             <FormLabel>Total Stake</FormLabel>
-            <Text>208k MINA</Text>
+            <Text>{formatCompact({ value: 208000 })} MINA</Text>
           </Box>
           <Box css={{ gap: 8 }}>
             <FormLabel>Total Delegators</FormLabel>

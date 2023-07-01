@@ -18,6 +18,7 @@ export const AboutView = () => {
         <Card
           css={{
             justifyContent: 'space-between',
+            alignItems: 'center',
             padding: '$md',
             flexDirection: 'row'
           }}
