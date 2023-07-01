@@ -1,9 +1,14 @@
+import {
+  PrivateKey,
+  PublicKey,
+  UInt64
+} from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 /**
  * Represents a key pair consisting of a public key and a private key.
  */
 export type KeyPair = {
-  publicKey: string
-  privateKey: string
+  publicKey: PublicKey
+  privateKey: PrivateKey
 }
 
 /**
@@ -11,13 +16,13 @@ export type KeyPair = {
  */
 export type TransactionBody = {
   type: 'payment' | 'delegation' | 'zkApp'
-  to: string
-  from: string
-  fee: string
-  nonce: string
-  amount?: string
+  to: PublicKey
+  from: PublicKey
+  fee: UInt64
+  nonce: UInt64
+  amount?: UInt64
   memo?: string
-  validUntil?: string
+  validUntil?: UInt64
 }
 
 /**

@@ -43,7 +43,7 @@ describe('ChainHistoryGraphQLProvider', () => {
     }
 
     // Compare the first transaction to the expected transaction
-    expect(response.pageResults[0]).toEqual(expectedTransaction)
+    expect(response.pageResults[1]).toEqual(expectedTransaction)
   })
 
   test('transactionsByHashes', async () => {

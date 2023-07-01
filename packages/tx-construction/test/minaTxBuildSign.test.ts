@@ -49,11 +49,11 @@ describe('Transaction Construction & Signing', () => {
       type: 'payment',
       to: keyPairBob.publicKey,
       from: keyPairAlice.publicKey,
-      fee: '1',
-      nonce: '0',
+      fee: 1,
+      nonce: 0,
       memo: 'hello Bob',
-      validUntil: '321',
-      amount: '100'
+      validUntil: 321,
+      amount: 100
     }
 
     const signedPayment = await signTransaction(
@@ -75,8 +75,8 @@ describe('Transaction Construction & Signing', () => {
       type: 'delegation',
       to: keyPairAlice.publicKey,
       from: keyPairAlice.publicKey,
-      fee: '1',
-      nonce: '0'
+      fee: 1,
+      nonce: 0
     }
 
     const signedDelegation = await signTransaction(
