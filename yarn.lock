@@ -13930,6 +13930,11 @@ trpc-browser@^1.3.1:
   resolved "https://registry.npmjs.org/trpc-browser/-/trpc-browser-1.3.1.tgz"
   integrity sha512-76olyHiFcnzea+ccIrMg5RvxZSqkFIWqVjmdh36CNinanTc7JovTuKPe+91/U+v3i59Iw+rDm4JYpl0v+kNmVw==
 
+ts-custom-error@^3.2.0:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/ts-custom-error/-/ts-custom-error-3.3.1.tgz#8bd3c8fc6b8dc8e1cb329267c45200f1e17a65d1"
+  integrity sha512-5OX1tzOjxWEgsr/YEUWSuPrQ00deKLh6D7OTWcvNHm12/7QPyRh8SYpyWvA4IZv8H/+GQWQEh/kwo95Q9OVW1A==
+
 ts-interface-checker@^0.1.9:
   version "0.1.13"
   resolved "https://registry.npmjs.org/ts-interface-checker/-/ts-interface-checker-0.1.13.tgz"

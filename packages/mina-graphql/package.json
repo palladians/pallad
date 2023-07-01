@@ -1,0 +1,31 @@
+{
+  "name": "@palladxyz/mina-graphql",
+  "version": "0.0.1",
+  "description": "GraphQL Porivder Package SDK for Pallad",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules"
+  },
+  "dependencies": {
+    "@palladxyz/util": "*",
+    "@palladxyz/mina-core": "*",
+    "bs58check": "^3.0.1",
+    "buffer": "^6.0.3",
+    "mina-signer": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/secp256k1": "^4.0.3",
+    "happy-dom": "^9.20.3"
+  }
+}
