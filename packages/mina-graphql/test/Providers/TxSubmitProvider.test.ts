@@ -3,7 +3,7 @@ import {
   MinaKeyGenerator,
   Network
 } from '@palladxyz/key-generator'
-import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
+import { AccountInfoArgs, Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import {
   getSignClient,
   NetworkType,
@@ -13,9 +13,11 @@ import {
 import Client from 'mina-signer'
 import { expect } from 'vitest'
 
+import { AccountInfoGraphQLProvider } from '../../src/Providers/AccountInfo'
 import { TxSubmitGraphQLProvider } from '../../src/Providers/TxSubmit/TxSubmitProvider'
 // TO DO: create end-to-end suite with a local-network
 const minaTxSubmitGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a different API than the explorer
+const minaAccountInfoGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a different API than the explorer
 
 describe('TxSubmitGraphQLProvider', () => {
   test('healthCheck', async () => {
@@ -128,7 +130,14 @@ describe('TxSubmitGraphQLProvider', () => {
     const isVerified = client.verifyTransaction(signedPayment)
     expect(isVerified).toBeTruthy()
 
+    const accountProvider = new AccountInfoGraphQLProvider(minaAccountInfoGql)
+    const accountInfoArgs: AccountInfoArgs = {
+      publicKey: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+    }
+    const accountInfo = await accountProvider.getAccountInfo(accountInfoArgs)
+
     const provider = new TxSubmitGraphQLProvider(minaTxSubmitGql)
+
     const txArgs: SubmitTxArgs = {
       signedTransaction: signedPayment,
       kind: Mina.TransactionKind.PAYMENT,
@@ -136,7 +145,7 @@ describe('TxSubmitGraphQLProvider', () => {
         fee: '500000000',
         to: keyPairBob.publicKey,
         from: keyPairAlice.publicKey,
-        nonce: '3',
+        nonce: Number(accountInfo.nonce),
         memo: 'hello Bob',
         validUntil: '321',
         amount: '7000000000'
@@ -154,7 +163,7 @@ describe('TxSubmitGraphQLProvider', () => {
       to: keyPairAlice.publicKey,
       from: keyPairAlice.publicKey,
       fee: Number(500000000),
-      nonce: Number(3) // TODO get proper nonce from the network
+      nonce: Number(accountInfo.nonce)
     }
 
     const signedDelegation = await signTransaction(
@@ -165,6 +174,14 @@ describe('TxSubmitGraphQLProvider', () => {
 
     const isVerified = client.verifyTransaction(signedDelegation)
     expect(isVerified).toBeTruthy()
+
+    const accountProvider = new AccountInfoGraphQLProvider(minaAccountInfoGql)
+    const accountInfoArgs: AccountInfoArgs = {
+        publicKey: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+      }
+    const accountInfo = await accountProvider.getAccountInfo(
+        accountInfoArgs
+    )
 
     const provider = new TxSubmitGraphQLProvider(minaExplorerGql)
     const txArgs: SubmitTxArgs = {
