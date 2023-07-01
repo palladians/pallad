@@ -6,7 +6,7 @@ import {
 } from '@palladxyz/mina-core'
 
 import { ChainHistoryGraphQLProvider } from '../../src/Providers/ChainHistory/ChainHistoryProvider'
-
+// TO DO: create end-to-end suite with a local-network
 const minaExplorerGql = 'https://berkeley.graphql.minaexplorer.com'
 
 describe('ChainHistoryGraphQLProvider', () => {
@@ -41,7 +41,7 @@ describe('ChainHistoryGraphQLProvider', () => {
       to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
       token: 'wSHV2S4qX9jFsLjQo8r1BsMLH2ZRKsZx6EJd1sbozGPieEC4Jf'
     }
-    console.log(response.pageResults[0])
+
     // Compare the first transaction to the expected transaction
     expect(response.pageResults[0]).toEqual(expectedTransaction)
   })
