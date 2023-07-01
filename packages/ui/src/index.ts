@@ -1,4 +1,5 @@
 export * as icons from './assets/icons'
+export { Avatar } from './components/Avatar'
 export { BackgroundBox } from './components/BackgroundBox'
 export { Box, composeBox } from './components/Box'
 export { Button } from './components/Button'
