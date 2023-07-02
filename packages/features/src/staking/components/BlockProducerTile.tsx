@@ -8,6 +8,7 @@ const Card = composeCard({ baseComponent: Pressable })
 
 type BlockProducer = {
   name: string
+  publicKey: string
   stake: number
   delegatorsCount: number
 }
@@ -26,7 +27,11 @@ export const BlockProducerTile = ({ producer }: BlockProducerTileProps) => {
         alignItems: 'center',
         justifyContent: 'space-between'
       }}
-      onPress={() => navigate('/staking/delegate')}
+      onPress={() =>
+        navigate('/staking/delegate', {
+          state: { address: producer.publicKey }
+        })
+      }
     >
       <Box css={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
         <Avatar label={producer.name} />

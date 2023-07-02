@@ -29,7 +29,7 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
   const isLoading = accountLoading || fiatPriceLoading
   const rawTotalBalance = parseFloat(account?.balance?.total)
   const totalBalance = rawTotalBalance ? rawTotalBalance.toFixed(4) : '0'
-  const rawFiatPrice = parseFloat(priceQuery?.usd)
+  const rawFiatPrice = parseFloat(priceQuery?.result?.data?.usd)
   const rawFiatBalance = useMemo(
     () => rawTotalBalance * rawFiatPrice || 0,
     [rawTotalBalance, rawFiatPrice]

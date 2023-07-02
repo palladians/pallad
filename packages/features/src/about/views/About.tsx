@@ -1,10 +1,22 @@
 import { Box, Button, Card, Text } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-native'
 
+import packageJson from '../../../package.json'
 import Logo from '../../common/assets/logo.svg'
 import { AppLayout } from '../../common/components/AppLayout'
-import { FormLabel } from '../../common/components/FormLabel'
+import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'
+
+const AppMeta = [
+  {
+    label: 'Current Version',
+    value: packageJson.version
+  },
+  {
+    label: 'Commit Hash',
+    value: '9iufgds239803nf'
+  }
+]
 
 export const AboutView = () => {
   const navigate = useNavigate()
@@ -23,7 +35,10 @@ export const AboutView = () => {
             flexDirection: 'row'
           }}
         >
-          <Logo />
+          <Box css={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            <Logo />
+            <Text css={{ fontWeight: '$semibold' }}>Pallad</Text>
+          </Box>
           <Button
             variant="link"
             css={{ backgroundColor: '$primary800', borderRadius: '32px' }}
@@ -32,14 +47,9 @@ export const AboutView = () => {
           </Button>
         </Card>
         <Box css={{ gap: 16 }}>
-          <Box css={{ gap: 8 }}>
-            <FormLabel>Current Version</FormLabel>
-            <Text>v0.1.0</Text>
-          </Box>
-          <Box css={{ gap: 8 }}>
-            <FormLabel>Commit Hash</FormLabel>
-            <Text>9iufgds239803nf</Text>
-          </Box>
+          {AppMeta.map(({ label, value }) => (
+            <MetaField key={label} label={label} value={value} />
+          ))}
         </Box>
         <Box>
           <Button variant="link">Terms of Service</Button>

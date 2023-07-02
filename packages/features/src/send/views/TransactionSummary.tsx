@@ -4,9 +4,19 @@ import { useNavigate } from 'react-router-native'
 import { AppLayout } from '../../common/components/AppLayout'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { truncateString } from '../../common/lib/string'
+import { useTransactionStore } from '../../common/store/transaction'
+import { useVaultStore } from '../../common/store/vault'
 
 export const TransactionSummaryView = () => {
   const navigate = useNavigate()
+  const outgoingTransaction = useTransactionStore(
+    (state) => state.outgoingTransaction
+  )
+  const walletPublicKey = useVaultStore(
+    (state) => state.getCurrentWallet()?.walletPublicKey
+  )
+  console.log(outgoingTransaction)
   return (
     <AppLayout>
       <Box css={{ padding: '$md', gap: 16, flex: 1 }}>
@@ -27,26 +37,49 @@ export const TransactionSummaryView = () => {
           </Box>
           <Box css={{ gap: 8 }}>
             <FormLabel>From</FormLabel>
-            <Text>B62qk...SrTQrS</Text>
+            <Text>
+              {walletPublicKey &&
+                truncateString({
+                  value: walletPublicKey,
+                  endCharCount: 8,
+                  firstCharCount: 8
+                })}
+            </Text>
           </Box>
           <Box css={{ gap: 8 }}>
             <FormLabel>To</FormLabel>
-            <Text>B62qk...SrTQrS</Text>
+            <Text>
+              {truncateString({
+                value: outgoingTransaction.to,
+                endCharCount: 8,
+                firstCharCount: 8
+              })}
+            </Text>
           </Box>
         </Card>
         <Box css={{ gap: 16, flex: 1 }}>
           <Box css={{ gap: 4 }}>
-            <FormLabel>Amount</FormLabel>
-            <Text>15 MINA</Text>
+            <FormLabel>Kind</FormLabel>
+            <Text css={{ textTransform: 'capitalize' }}>
+              {outgoingTransaction.kind}
+            </Text>
           </Box>
+          {outgoingTransaction?.amount && (
+            <Box css={{ gap: 4 }}>
+              <FormLabel>Amount</FormLabel>
+              <Text>{outgoingTransaction.amount} MINA</Text>
+            </Box>
+          )}
           <Box css={{ gap: 4 }}>
             <FormLabel>Fee</FormLabel>
-            <Text>0.2 MINA</Text>
+            <Text>{outgoingTransaction.fee} MINA</Text>
           </Box>
-          <Box css={{ gap: 4 }}>
-            <FormLabel>Total</FormLabel>
-            <Text>15.2 MINA</Text>
-          </Box>
+          {outgoingTransaction?.amount && (
+            <Box css={{ gap: 4 }}>
+              <FormLabel>Total</FormLabel>
+              <Text>15.2 MINA</Text>
+            </Box>
+          )}
         </Box>
         <Button onPress={() => navigate('/transactions/success')}>Send</Button>
       </Box>
