@@ -1,19 +1,32 @@
 import { InvalidStringError, OpaqueString } from '@palladxyz/util'
+import {
+  PublicKey,
+  UInt32,
+  UInt64
+} from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 export type Transaction = {
-  amount: number
-  blockHeight: number
-  dateTime: string
-  failureReason: string
-  fee: number
-  from: string
-  hash: string
-  id?: string
-  isDelegation: boolean
-  kind: TransactionKind
-  memo: string
-  nonce: number
-  to: string
-  token: string
+  type: 'payment' | 'delegation' | 'zkApp'
+  to: PublicKey
+  from: PublicKey
+  fee: UInt64
+  nonce: UInt32
+  amount?: UInt64
+  memo?: string
+  validUntil?: UInt32
+}
+
+/**
+ * Represents the body of a transaction.
+ */
+export type TransactionBody = {
+  type: 'payment' | 'delegation' | 'zkApp'
+  to: PublicKey
+  from: PublicKey
+  fee: UInt64
+  nonce: UInt32
+  amount?: UInt64
+  memo?: string
+  validUntil?: UInt32
 }
 
 export enum TransactionKind {

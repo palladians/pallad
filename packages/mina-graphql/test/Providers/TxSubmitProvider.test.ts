@@ -7,8 +7,7 @@ import { AccountInfoArgs, Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import {
   getSignClient,
   NetworkType,
-  signTransaction,
-  TransactionBody
+  signTransaction
 } from '@palladxyz/tx-construction'
 import Client from 'mina-signer'
 import { expect } from 'vitest'
@@ -19,31 +18,43 @@ import { TxSubmitGraphQLProvider } from '../../src/Providers/TxSubmit/TxSubmitPr
 const minaTxSubmitGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a different API than the explorer
 const minaAccountInfoGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a different API than the explorer
 
-describe('TxSubmitGraphQLProvider', () => {
+/**
+ * 
+ * This test submtis a transaction to the Mina testnet (Berkley) using the TxSubmitGraphQLProvider
+ * NOTE: Changes are required for being able to submit a transaction to the mainnet
+ */
+
+describe('TxSubmitGraphQLProvider for Testnet', () => {
+  // Variables used across multiple tests
+  let keyGen: MinaKeyGenerator
+  let mnemonic: string
+  let client: Client
+  let network: NetworkType
+
+  // Test to check if the provider health check function works as expected
   test('healthCheck', async () => {
     const provider = new TxSubmitGraphQLProvider(minaTxSubmitGql)
     const response = await provider.healthCheck()
 
     expect(response).toEqual({ ok: true })
   })
-  let keyGen: MinaKeyGenerator
-  let mnemonic: string
-  let client: Client
-  let network: NetworkType
 
+  // Set up the network, client, key generator and mnemonic for every test
   beforeEach(async () => {
     keyGen = new MinaKeyGenerator()
-    const network: NetworkType = 'mainnet'
-    client = await getSignClient(network)
+    network = 'testnet' // Set network to 'testnet'
+    client = await getSignClient(network) // Client for the 'testnet'
     mnemonic =
-      'habit hope tip crystal because grunt nation idea electric witness alert like'
+      'habit hope tip crystal because grunt nation idea electric witness alert like' // Test mnemonic
   })
 
+  // This test checks if the key generator instance is correctly created
   it('should create a MinaKeyGenerator instance for Mina network', () => {
     const keyGen = KeyGeneratorFactory.create(Network.Mina)
     expect(keyGen).toBeInstanceOf(MinaKeyGenerator)
   })
 
+  // This test checks if the correct wallet data is returned for a known mnemonic
   it('should return the correct wallet data for a known mnemonic', async () => {
     const expectedKeyPairData = {
       privateKey: 'EKExKH31gXH7t5KiYxdyEbtgi22vgX6wnqwmcbrANs9nQJt487iN',
@@ -56,11 +67,12 @@ describe('TxSubmitGraphQLProvider', () => {
     expect(keyPair).to.deep.equal(expectedKeyPairData)
   })
 
+  // This test checks if a payment transaction from Alice to Bob is correctly constructed and signed
   it('Alice should construct & sign a payment transaction correctly to Bob', async () => {
     const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
     const keyPairBob = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 1)
     const privateKeyAlice = keyPairAlice.privateKey
-    const payment: TransactionBody = {
+    const payment: Mina.TransactionBody = {
       type: 'payment',
       to: keyPairBob.publicKey,
       from: keyPairAlice.publicKey,
@@ -83,10 +95,11 @@ describe('TxSubmitGraphQLProvider', () => {
     expect(isVerified).toBeTruthy()
   })
 
+  // This test checks if a delegation transaction is correctly constructed and signed
   it('Alice should construct & sign a delegation transaction correctly', async () => {
     const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
     const privateKeyAlice = keyPairAlice.privateKey
-    const delegation: TransactionBody = {
+    const delegation: Mina.TransactionBody = {
       type: 'delegation',
       to: keyPairAlice.publicKey,
       from: keyPairAlice.publicKey,
@@ -106,19 +119,27 @@ describe('TxSubmitGraphQLProvider', () => {
     expect(isVerified).toBeTruthy()
   })
 
+  // This test checks if a payment transaction from Alice to Bob can be submitted without any errors
   it('Alice submits a payment transaction to Bob', async () => {
     const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
     const keyPairBob = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 1)
     const privateKeyAlice = keyPairAlice.privateKey
-    const payment: TransactionBody = {
+
+    const accountProvider = new AccountInfoGraphQLProvider(minaAccountInfoGql)
+    const accountInfoArgs: AccountInfoArgs = {
+      publicKey: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+    }
+    const accountInfo = await accountProvider.getAccountInfo(accountInfoArgs)
+
+    const payment: Mina.TransactionBody = {
       type: 'payment',
       to: keyPairBob.publicKey,
       from: keyPairAlice.publicKey,
-      fee: Number(500000000),
-      nonce: Number(3), // TODO get proper nonce from the network
+      fee: 500000000,
+      nonce: Number(accountInfo.nonce),
       memo: 'hello Bob',
-      validUntil: Number(321),
-      amount: Number(7000000000)
+      amount: 7000000000,
+      validUntil: 4294967295
     }
 
     const signedPayment = await signTransaction(
@@ -130,28 +151,22 @@ describe('TxSubmitGraphQLProvider', () => {
     const isVerified = client.verifyTransaction(signedPayment)
     expect(isVerified).toBeTruthy()
 
-    const accountProvider = new AccountInfoGraphQLProvider(minaAccountInfoGql)
-    const accountInfoArgs: AccountInfoArgs = {
-      publicKey: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
-    }
-    const accountInfo = await accountProvider.getAccountInfo(accountInfoArgs)
-
-    const provider = new TxSubmitGraphQLProvider(minaTxSubmitGql)
+    const submitTxProvider = new TxSubmitGraphQLProvider(minaTxSubmitGql)
 
     const txArgs: SubmitTxArgs = {
       signedTransaction: signedPayment,
       kind: Mina.TransactionKind.PAYMENT,
       transactionDetails: {
-        fee: '500000000',
-        to: keyPairBob.publicKey,
-        from: keyPairAlice.publicKey,
-        nonce: Number(accountInfo.nonce),
-        memo: 'hello Bob',
-        validUntil: '321',
-        amount: '7000000000'
+        fee: payment.fee,
+        to: payment.to,
+        from: payment.from,
+        nonce: payment.nonce,
+        memo: payment.memo,
+        validUntil: payment.validUntil,
+        amount: payment.amount
       }
     }
-    await expect(provider.submitTx(txArgs)).resolves.not.toThrow()
+    await expect(submitTxProvider.submitTx(txArgs)).resolves.not.toThrow()
   })
 
   /* // commented out until send tx works
@@ -163,7 +178,7 @@ describe('TxSubmitGraphQLProvider', () => {
       to: keyPairAlice.publicKey,
       from: keyPairAlice.publicKey,
       fee: Number(500000000),
-      nonce: Number(accountInfo.nonce)
+      nonce: String(accountInfo.nonce), // must be current nonce + 1
     }
 
     const signedDelegation = await signTransaction(
@@ -183,11 +198,11 @@ describe('TxSubmitGraphQLProvider', () => {
         accountInfoArgs
     )
 
-    const provider = new TxSubmitGraphQLProvider(minaExplorerGql)
+    const submitTxProvider = new TxSubmitGraphQLProvider(minaExplorerGql)
     const txArgs: SubmitTxArgs = {
       signedTransaction: signedDelegation,
       kind: Mina.TransactionKind.STAKE_DELEGATION
     } // TODO: maintain the same value from the TransactionBody `type` field
-    await expect(provider.submitTx(txArgs)).resolves.not.toThrow()
+    await expect(submitTxProvider.submitTx(txArgs)).resolves.not.toThrow()
   })*/
 })

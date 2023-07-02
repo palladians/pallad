@@ -1,3 +1,4 @@
+import { Mina } from '@palladxyz/mina-core'
 import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import {
   PrivateKey,
@@ -7,7 +8,6 @@ import {
 import { getSignClient } from './minaClient'
 import { constructDelegationTx, constructPaymentTx } from './minaTxBuilder'
 import { NetworkType } from './types'
-import { TransactionBody } from './types'
 
 /**
  * Signs a transaction using the provided private key, transaction body, and network.
@@ -18,7 +18,7 @@ import { TransactionBody } from './types'
  */
 export async function signTransaction(
   privateKey: PrivateKey,
-  transaction: TransactionBody,
+  transaction: Mina.TransactionBody,
   network: NetworkType
 ): Promise<SignedLegacy<Json.Payment> | SignedLegacy<Json.StakeDelegation>> {
   let signedTransaction:
