@@ -19,7 +19,7 @@ const minaTxSubmitGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a di
 const minaAccountInfoGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a different API than the explorer
 
 /**
- * 
+ *
  * This test submtis a transaction to the Mina testnet (Berkley) using the TxSubmitGraphQLProvider
  * NOTE: Changes are required for being able to submit a transaction to the mainnet
  */
