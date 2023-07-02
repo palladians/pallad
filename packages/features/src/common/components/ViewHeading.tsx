@@ -30,7 +30,10 @@ export const ViewHeading = ({
         justifyContent: 'space-between'
       }}
     >
-      <Heading size="md" css={{ color: '$gray50', marginTop: 0 }}>
+      <Heading
+        size="md"
+        css={{ color: '$gray50', marginTop: 0, paddingVertical: 4 }}
+      >
         {title}
       </Heading>
       {backButton && (
@@ -51,7 +54,7 @@ export const ViewHeading = ({
       {button && (
         <Button
           variant="link"
-          css={{ width: 'auto', padding: 0, color: '$gray100' }}
+          css={{ width: 'auto', padding: 0, color: '$gray100', height: 'auto' }}
           onPress={button.onPress}
         >
           {button.label}

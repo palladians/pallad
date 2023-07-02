@@ -6,8 +6,18 @@ import { ViewHeading } from '../../common/components/ViewHeading'
 import { BlockProducerTile } from '../components/BlockProducerTile'
 
 const MOCKED_PRODUCERS = [
-  { name: 'Pallad', stake: 24000, delegatorsCount: 6000 },
-  { name: 'Pallad 2', stake: 12000, delegatorsCount: 3000 }
+  {
+    name: 'Pallad',
+    publicKey: 'B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS',
+    stake: 24000,
+    delegatorsCount: 6000
+  },
+  {
+    name: 'Pallad 2',
+    publicKey: 'B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS',
+    stake: 12000,
+    delegatorsCount: 3000
+  }
 ]
 
 export const BlockProducersView = () => {

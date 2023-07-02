@@ -7,20 +7,14 @@ import { useLocation, useNavigate } from 'react-router-native'
 import { FormError } from '../../common/components/FormError'
 import { FormLabel } from '../../common/components/FormLabel'
 import { TransactionFee } from '../../common/lib/const'
-import { useAccount } from '../../common/lib/hooks'
 import { useTransactionStore } from '../../common/store/transaction'
 import { OutgoingTransaction } from '../../common/types'
-import { SendFormSchema } from './SendForm.schema'
+import { DelegateFormSchema } from './DelegateForm.schema'
 
-export const SendForm = () => {
-  const navigate = useNavigate()
+export const DelegateForm = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const setTransactionDetails = useTransactionStore((state) => state.set)
-  const { data: accountQuery, isLoading: accountLoading } = useAccount()
-  if (accountLoading) return null
-  const account = accountQuery?.result?.data?.account
-  const totalBalance =
-    account?.balance?.total && parseFloat(account?.balance?.total)
   const {
     control,
     handleSubmit,
@@ -28,28 +22,21 @@ export const SendForm = () => {
     getValues,
     formState: { errors }
   } = useForm({
-    resolver: zodResolver(SendFormSchema),
+    resolver: zodResolver(DelegateFormSchema),
     defaultValues: {
       to: '',
-      amount: undefined as number | undefined,
       fee: 'default',
       memo: ''
     }
   })
-  const setMaxAmount = () => {
-    const { fee } = getValues()
-    const currentFee = TransactionFee[fee]
-    totalBalance && setValue('amount', totalBalance - currentFee)
-  }
   const onSubmit = (payload: OutgoingTransaction) => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
     setTransactionDetails({
       to: payload.to,
       fee: currentFee,
-      amount: payload.amount,
       memo: payload.memo,
-      kind: 'payment'
+      kind: 'staking'
     })
     navigate('/transactions/summary')
   }
@@ -57,16 +44,15 @@ export const SendForm = () => {
     setValue('to', location.state?.address || '')
   }, [])
   return (
-    <Box css={{ gap: 16, flex: 1 }}>
+    <Box css={{ flex: 1, gap: 16 }}>
       <Box css={{ gap: 8 }}>
         <FormLabel
           button={{
-            label: 'Address Book',
-            onPress: () => navigate('/contacts')
+            label: 'Find Producer',
+            onPress: () => navigate('/staking/producers')
           }}
-          required
         >
-          Receiver
+          Block Producer
         </FormLabel>
         <Controller
           control={control}
@@ -84,33 +70,6 @@ export const SendForm = () => {
           )}
         />
         <FormError>{errors.to?.message}</FormError>
-      </Box>
-      <Box css={{ gap: 8 }}>
-        <FormLabel
-          button={{
-            label: 'Max Amount',
-            onPress: setMaxAmount
-          }}
-          required
-        >
-          Amount
-        </FormLabel>
-        <Controller
-          control={control}
-          name="amount"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChange={onChange}
-              onBlur={onBlur}
-              value={value}
-              keyboardType="numeric"
-              placeholder="Transaction Amount"
-              onSubmitEditing={handleSubmit(onSubmit)}
-            />
-          )}
-        />
-        <FormError>{errors.amount?.message}</FormError>
       </Box>
       <Box css={{ gap: 8 }}>
         <FormLabel>Memo</FormLabel>
