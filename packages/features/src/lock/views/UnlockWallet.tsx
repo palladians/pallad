@@ -13,6 +13,7 @@ export const UnlockWalletView = () => {
   const [passwordError, setPasswordError] = useState(false)
   const navigate = useNavigate()
   const getCurrentWallet = useVaultStore((state) => state.getCurrentWallet)
+  const resetWallet = useVaultStore((state) => state.reset)
   const { control, handleSubmit } = useForm({
     defaultValues: {
       spendingPassword: ''
@@ -34,6 +35,10 @@ export const UnlockWalletView = () => {
     if (!wallet) return await onError()
     return navigate('/dashboard')
   }
+  const restartWallet = () => {
+    resetWallet()
+    navigate('/')
+  }
   return (
     <WizardLayout
       footer={
@@ -47,7 +52,7 @@ export const UnlockWalletView = () => {
           title="Unlock Wallet"
           button={{
             label: 'Restart Wallet',
-            onPress: () => console.log('restart')
+            onPress: restartWallet
           }}
         />
         {passwordError && (

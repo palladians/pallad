@@ -21,6 +21,7 @@ import { ReceiveView } from './receive/views/Receive'
 import { SendView } from './send/views/Send'
 import { TransactionErrorView } from './send/views/TransactionError'
 import { TransactionSuccessView } from './send/views/TransactionSuccess'
+import { TransactionSummaryView } from './send/views/TransactionSummary'
 import { SettingsView } from './settings/views/Settings'
 import { BlockProducersView } from './staking/views/BlockProducers'
 import { DelegateView } from './staking/views/Delegate'
@@ -40,6 +41,10 @@ export const Router = () => {
           <Route path="/menu" element={<MenuView />} />
           <Route path="/send" element={<SendView />} />
           <Route path="/receive" element={<ReceiveView />} />
+          <Route
+            path="/transactions/summary"
+            element={<TransactionSummaryView />}
+          />
           <Route
             path="/transactions/success"
             element={<TransactionSuccessView />}

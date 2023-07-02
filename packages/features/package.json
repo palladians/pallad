@@ -23,6 +23,7 @@
   "dependencies": {
     "@capacitor/preferences": "^5.0.4",
     "@capacitor/storage": "^1.2.5",
+    "@hookform/resolvers": "^3.1.1",
     "@palladxyz/key-generator": "*",
     "@palladxyz/ui": "*",
     "@plasmohq/storage": "^1.6.1",
@@ -43,6 +44,7 @@
     "react-router-native": "^6.12.1",
     "recharts": "^2.7.2",
     "superjson": "^1.12.3",
+    "zod": "^3.21.4",
     "zustand": "^4.3.8"
   },
   "devDependencies": {

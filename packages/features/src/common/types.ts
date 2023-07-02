@@ -86,3 +86,15 @@ export type Account = {
     blockchainLength: number
   }
 }
+
+export type Contact = {
+  name: string
+  address: string
+}
+
+export type OutgoingTransaction = {
+  to: string
+  amount: number
+  fee: number
+  memo: string
+}
