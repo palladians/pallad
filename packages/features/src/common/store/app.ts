@@ -8,13 +8,11 @@ import { localPersistence } from '../lib/storage'
 
 // TODO: Make network a generic type that can support networks other than just Mina
 type AppState = {
-  menuOpen: boolean
   network: MinaNetwork
   vaultState: VaultState
 }
 
 type AppMutators = {
-  setMenuOpen: (menuOpen: boolean) => void
   setNetwork: (network: MinaNetwork) => void
   setVaultState: (vaultState: VaultState) => void
 }
@@ -24,12 +22,8 @@ type AppStore = AppState & AppMutators
 export const appStore = createStore<AppStore>()(
   persist(
     (set) => ({
-      menuOpen: false,
       network: MinaNetwork[MinaNetwork.Mainnet],
       vaultState: VaultState[VaultState.UNINITIALIZED],
-      setMenuOpen(menuOpen) {
-        return set({ menuOpen })
-      },
       setNetwork(network) {
         return set({ network: MinaNetwork[network] })
       },

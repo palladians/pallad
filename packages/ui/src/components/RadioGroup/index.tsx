@@ -30,7 +30,10 @@ export const RadioGroup = ({ options, onChange }: RadioGroupProps) => {
   return (
     <Box css={{ gap: 12 }}>
       {options.map((option) => (
-        <Box css={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+        <Box
+          key={option.value}
+          css={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}
+        >
           <RadioButton onPress={() => setValue(option.value)}>
             {value === option.value && (
               <Image
