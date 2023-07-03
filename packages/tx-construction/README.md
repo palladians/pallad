@@ -1,4 +1,4 @@
-# Transaction Construciton
+# @palladxyz/ts-construction
 
 This is a TypeScript package that assists in creating and signing transactions for Mina Protocol. This package is a thin wrapper around `mina-signer`.
 
