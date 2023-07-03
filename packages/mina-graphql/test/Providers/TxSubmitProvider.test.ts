@@ -135,10 +135,10 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
       type: 'payment',
       to: keyPairBob.publicKey,
       from: keyPairAlice.publicKey,
-      fee: 500000000,
+      fee: 150000000,
       nonce: Number(accountInfo.nonce),
       memo: 'hello Bob',
-      amount: 7000000000,
+      amount: 3000000000,
       validUntil: 4294967295
     }
 
