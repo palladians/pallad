@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { sessionPersistence } from '../../common/lib/storage'
+import { getSessionPersistence } from '../../common/lib/storage'
 import { vaultStore } from '../../common/store/vault'
 
 const StyledPressable = composeCard({ baseComponent: Pressable })
@@ -52,7 +52,7 @@ export const MenuView = () => {
     {
       label: 'Lock',
       onPress: async () => {
-        await sessionPersistence.setItem('spendingPassword', '')
+        await getSessionPersistence().setItem('spendingPassword', '')
         await vaultStore.persist.rehydrate()
         return navigate('/unlock')
       },

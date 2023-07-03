@@ -11,6 +11,7 @@ import {
 } from '@palladxyz/ui'
 import { Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
+import { useSWRConfig } from 'swr'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { FormLabel } from '../../common/components/FormLabel'
@@ -21,10 +22,15 @@ const StyledPressable = composeBox({ baseComponent: Pressable })
 
 export const SettingsView = () => {
   const navigate = useNavigate()
+  const { mutate } = useSWRConfig()
   const { setNetwork, network } = useAppStore((state) => ({
     setNetwork: state.setNetwork,
     network: state.network
   }))
+  const handleNetworkSwitch = (value: MinaNetwork) => {
+    setNetwork(value)
+    mutate(() => true, undefined, { revalidate: false })
+  }
   return (
     <AppLayout>
       <Box css={{ padding: 16, gap: 24 }}>
@@ -35,7 +41,7 @@ export const SettingsView = () => {
         <Box css={{ gap: 8 }}>
           <FormLabel>Network</FormLabel>
           <RadioGroup
-            onChange={(value) => setNetwork(value as MinaNetwork)}
+            onChange={(value) => handleNetworkSwitch(value as MinaNetwork)}
             options={[
               {
                 value: MinaNetwork[MinaNetwork.Mainnet],

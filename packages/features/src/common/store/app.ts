@@ -4,7 +4,7 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
 import { VaultState } from '../lib/const'
-import { localPersistence } from '../lib/storage'
+import { getLocalPersistence } from '../lib/storage'
 
 // TODO: Make network a generic type that can support networks other than just Mina
 type AppState = {
@@ -33,7 +33,7 @@ export const appStore = createStore<AppStore>()(
     }),
     {
       name: 'PalladApp',
-      storage: createJSONStorage(() => localPersistence),
+      storage: createJSONStorage(getLocalPersistence),
       partialize: (state) =>
         Object.fromEntries(
           Object.entries(state).filter(([key]) => !['menuOpen'].includes(key))

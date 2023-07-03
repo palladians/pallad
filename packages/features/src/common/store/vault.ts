@@ -14,7 +14,7 @@ import { useStore } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
-import { securePersistence } from '../lib/storage'
+import { getSecurePersistence } from '../lib/storage'
 
 /**
  * Type representing a public credential.
@@ -226,7 +226,7 @@ export const vaultStore = createStore<VaultStore>()(
     }),
     {
       name: 'PalladVault',
-      storage: createJSONStorage(() => securePersistence)
+      storage: createJSONStorage(getSecurePersistence)
     }
   )
 )
