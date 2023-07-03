@@ -2,7 +2,7 @@ import { Box, Heading, Spinner, Text } from '@palladxyz/ui'
 import { useNavigate, useParams } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
-import { FormLabel } from '../../common/components/FormLabel'
+import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useTransaction } from '../../common/lib/hooks'
 import { useVaultStore } from '../../common/store/vault'
@@ -24,6 +24,12 @@ export const TransactionDetailsView = () => {
       tx: transactionData?.result.data,
       walletPublicKey
     })
+  const transactionMetaFields = transaction && [
+    { label: 'Hash', value: transaction.hash },
+    { label: 'Amount', value: `${transaction.minaAmount} MINA` },
+    { label: 'Sender', value: transaction.from },
+    { label: 'Receiver', value: transaction.to }
+  ]
   return (
     <AppLayout>
       <Box css={{ padding: '$md', flex: 1, gap: 20 }}>
@@ -40,39 +46,15 @@ export const TransactionDetailsView = () => {
                 css={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}
               >
                 <TxIndicator side={transaction.side} kind={transaction.kind} />
-                <Heading size="md">Incoming</Heading>
+                <Box css={{ gap: 4 }}>
+                  <Text css={{ fontSize: 14 }}>{transaction.dateTime}</Text>
+                  <Heading size="md">Incoming</Heading>
+                </Box>
               </Box>
             )}
-            {transaction && (
-              <Box css={{ gap: 8 }}>
-                <FormLabel>Hash</FormLabel>
-                <Text>{transaction.hash}</Text>
-              </Box>
-            )}
-            {transaction && (
-              <Box css={{ gap: 8 }}>
-                <FormLabel>Date</FormLabel>
-                <Text>{transaction.dateTime}</Text>
-              </Box>
-            )}
-            {transaction && (
-              <Box css={{ gap: 8 }}>
-                <FormLabel>Amount</FormLabel>
-                <Text>{transaction.minaAmount} MINA</Text>
-              </Box>
-            )}
-            {transaction && (
-              <Box css={{ gap: 8 }}>
-                <FormLabel>Sender</FormLabel>
-                <Text>{transaction.from}</Text>
-              </Box>
-            )}
-            {transaction && (
-              <Box css={{ gap: 8 }}>
-                <FormLabel>Receiver</FormLabel>
-                <Text>{transaction.to}</Text>
-              </Box>
-            )}
+            {transactionMetaFields?.map(({ label, value }) => (
+              <MetaField key={label} label={label} value={value} />
+            ))}
           </Box>
         )}
       </Box>

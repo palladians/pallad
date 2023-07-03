@@ -15,13 +15,13 @@ export const inputBase: CSS = {
   paddingBottom: '0.5rem',
   fontSize: '0.875rem',
   outline: 'none',
+  '&::placeholder': {
+    color: '$gray500'
+  },
   '&:focus': {
     display: 'none'
   },
   // boxShadow: 'var(--ring-offset-background) 0px 0px 0px 2px',
-  '&::placeholder': {
-    color: '$mutedForeground'
-  },
   // '&:focus-visible': {
   //   boxShadow: 'var(--ring-offset-background) 0px 0px 0px 2px, var(--ring) 0px 0px 0px 2px'
   // },

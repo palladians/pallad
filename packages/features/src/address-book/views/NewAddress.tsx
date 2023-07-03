@@ -1,9 +1,9 @@
-import { Box, Button, Input } from '@palladxyz/ui'
+import { Box } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { NewAddressForm } from '../components/NewAddressForm'
 
 export const NewAddressView = () => {
   const navigate = useNavigate()
@@ -14,17 +14,7 @@ export const NewAddressView = () => {
           title="New Address"
           backButton={{ onPress: () => navigate(-1) }}
         />
-        <Box css={{ flex: 1, gap: 16 }}>
-          <Box css={{ gap: 8 }}>
-            <FormLabel>Contact's Name</FormLabel>
-            <Input placeholder="Name" autoFocus />
-          </Box>
-          <Box css={{ gap: 8 }}>
-            <FormLabel>Receiver Address</FormLabel>
-            <Input placeholder="B62XXXXXXXXXXXX" />
-          </Box>
-        </Box>
-        <Button>Create Contact</Button>
+        <NewAddressForm />
       </Box>
     </AppLayout>
   )
