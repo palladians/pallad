@@ -4,8 +4,11 @@ export type TxStatusArgs = {
   ID: string
 }
 
-type TxStatus = {
-  status: 'PENDING' | 'INCLUDED' | 'UNKNOWN' | 'FAILED'
+enum TxStatus = {
+  PENDING = 'PENDING',
+  INCLUDED = 'INCLUDED',
+  UNKNOWN = 'UNKNOWN',
+  FAILED = 'FAILED'
 }
 
 export interface TxStatusProvider extends Provider {
