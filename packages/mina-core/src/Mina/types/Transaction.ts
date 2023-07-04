@@ -4,16 +4,6 @@ import {
   UInt32,
   UInt64
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
-export type Transaction = {
-  type: 'payment' | 'delegation' | 'zkApp'
-  to: PublicKey
-  from: PublicKey
-  fee: UInt64
-  nonce: UInt32
-  amount?: UInt64
-  memo?: string
-  validUntil?: UInt32
-}
 
 /**
  * Represents the body of a transaction.

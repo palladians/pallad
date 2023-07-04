@@ -23,10 +23,10 @@ interface TransactionsData {
 }
 
 export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
-  private minaExplorerGql: string
+  private minaGql: string
 
-  constructor(minaExplorerGql: string) {
-    this.minaExplorerGql = minaExplorerGql
+  constructor(minaGql: string) {
+    this.minaGql = minaGql
   }
 
   async healthCheck(): Promise<HealthCheckResponse> {
@@ -36,7 +36,7 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
 
     try {
       const data = (await request(
-        this.minaExplorerGql,
+        this.minaGql,
         query
       )) as HealthCheckResponseData
 
@@ -67,7 +67,7 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
 
     const { startAt, limit } = args.pagination || { startAt: 0, limit: 10 }
 
-    const data = (await request(this.minaExplorerGql, query, {
+    const data = (await request(this.minaGql, query, {
       address: args.addresses[0],
       limit,
       offset: startAt
@@ -94,7 +94,7 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
 
     const transactions = await Promise.all(
       args.ids.map(async (id: string) => {
-        const data = (await request(this.minaExplorerGql, query, {
+        const data = (await request(this.minaGql, query, {
           hash: id
         })) as TransactionData
         return data.transaction

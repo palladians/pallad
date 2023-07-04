@@ -14,10 +14,10 @@ interface AccountData {
 }
 
 export class AccountInfoGraphQLProvider implements AccountInfoProvider {
-  private minaExplorerGql: string
+  private minaGql: string
 
-  constructor(minaExplorerGql: string) {
-    this.minaExplorerGql = minaExplorerGql
+  constructor(minaGql: string) {
+    this.minaGql = minaGql
   }
 
   async healthCheck(): Promise<HealthCheckResponse> {
@@ -27,7 +27,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
 
     try {
       const data = (await request(
-        this.minaExplorerGql,
+        this.minaGql,
         query
       )) as HealthCheckResponseData
 
@@ -53,7 +53,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     const query = gql`
       ${getAccountBalance}
     `
-    const data = (await request(this.minaExplorerGql, query, {
+    const data = (await request(this.minaGql, query, {
       publicKey: args.publicKey
     })) as AccountData
 
