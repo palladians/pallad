@@ -6,7 +6,6 @@ import {
   SubmitTxArgs,
   TxSubmitProvider
 } from '@palladxyz/mina-core'
-import bs58check from 'bs58check'
 import { gql, request } from 'graphql-request'
 
 import { getStakeTxSend, getTxSend } from './mutations'
@@ -72,23 +71,6 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
       const result = (await request(this.minaGql, mutation, variables)) as
         | SendPaymentResult
         | SendDelegationResult
-
-      let txHash: string
-      if (
-        args.kind === 'PAYMENT' &&
-        (result as SendPaymentResult).sendPayment &&
-        (result as SendPaymentResult).sendPayment.payment
-      ) {
-        txHash = (result as SendPaymentResult).sendPayment.payment.hash
-      } else if (
-        args.kind === 'STAKE_DELEGATION' &&
-        (result as SendDelegationResult).sendDelegation &&
-        (result as SendDelegationResult).sendDelegation.delegation
-      ) {
-        txHash = (result as SendDelegationResult).sendDelegation.delegation.hash
-      } else {
-        throw new Error('Invalid transaction result')
-      }
       return result
     } catch (error: unknown) {
       let errorMessage: string
