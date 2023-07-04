@@ -15,11 +15,11 @@ import {
 } from './queries'
 
 interface TransactionData {
-  transaction: Mina.Transaction
+  transaction: Mina.TransactionBody
 }
 
 interface TransactionsData {
-  transactions: Mina.Transaction[]
+  transactions: Mina.TransactionBody[]
 }
 
 export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
@@ -60,7 +60,7 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
 
   async transactionsByAddresses(
     args: TransactionsByAddressesArgs
-  ): Promise<Mina.Paginated<Mina.Transaction>> {
+  ): Promise<Mina.Paginated<Mina.TransactionBody>> {
     const query = gql`
       ${transactionsByAddressesQuery}
     `
@@ -87,7 +87,7 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
 
   async transactionsByHashes(
     args: TransactionsByIdsArgs
-  ): Promise<Mina.Transaction[]> {
+  ): Promise<Mina.TransactionBody[]> {
     const query = gql`
       ${transactionsByHashesQuery}
     `

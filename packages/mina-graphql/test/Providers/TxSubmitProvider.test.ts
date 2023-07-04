@@ -131,6 +131,10 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
     }
     const accountInfo = await accountProvider.getAccountInfo(accountInfoArgs)
 
+    // Check if accountInfo.nonce is appropriately incremented, there may be transactions pending
+    // in the wallet we will need conditions for checking if there is a pending transaction
+    // and for checking if a send transaction is in-flight-pending/successful
+
     const payment: Mina.TransactionBody = {
       type: 'payment',
       to: keyPairBob.publicKey,
@@ -166,6 +170,7 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
         amount: payment.amount
       }
     }
+
     await expect(submitTxProvider.submitTx(txArgs)).resolves.not.toThrow()
   })
 

@@ -9,7 +9,7 @@ export interface TransactionsByAddressesArgs {
 }
 
 export type TransactionsByIdsArgs = { ids: Mina.TransactionId[] }
-export type PaginatedTransaction = Mina.Paginated<Mina.Transaction>
+export type PaginatedTransaction = Mina.Paginated<Mina.TransactionBody>
 
 export interface ChainHistoryProvider extends Provider {
   /**
@@ -19,19 +19,19 @@ export interface ChainHistoryProvider extends Provider {
    * @param {Mina.PaymentAddress[]} addresses array of addresses
    * @param {Mina.PaginationArgs} [pagination] pagination args
    * @param {Range<Mina.BlockNo>} [blockRange] transactions in specified block ranges (lower and upper bounds inclusive)
-   * @returns {Mina.Transaction[]} an array of transactions involving the addresses
+   * @returns {Mina.TransactionBody[]} an array of transactions involving the addresses
    */
   transactionsByAddresses: (
     args: TransactionsByAddressesArgs
-  ) => Promise<Mina.Paginated<Mina.Transaction>>
+  ) => Promise<Mina.Paginated<Mina.TransactionBody>>
 
   /**
    * Gets the transactions matching the provided hashes.
    *
    * @param {Mina.TransactionId[]} ids array of transaction ids
-   * @returns {Mina.Transaction[]} an array of transactions
+   * @returns {Mina.TransactionBody[]} an array of transactions
    */
   transactionsByHashes: (
     args: TransactionsByIdsArgs
-  ) => Promise<Mina.Transaction[]>
+  ) => Promise<Mina.TransactionBody[]>
 }
