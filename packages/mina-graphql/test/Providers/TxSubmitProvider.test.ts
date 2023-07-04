@@ -3,7 +3,7 @@ import {
   MinaKeyGenerator,
   Network
 } from '@palladxyz/key-generator'
-import { AccountInfoArgs, Mina, SubmitTxArgs } from '@palladxyz/mina-core'
+import { Mina } from '@palladxyz/mina-core' // SubmitTxArgs, AccountInfoArgs when local testnet ready
 import {
   getSignClient,
   NetworkType,
@@ -12,11 +12,11 @@ import {
 import Client from 'mina-signer'
 import { expect } from 'vitest'
 
-import { AccountInfoGraphQLProvider } from '../../src/Providers/AccountInfo'
+//import { AccountInfoGraphQLProvider } from '../../src/Providers/AccountInfo'
 import { TxSubmitGraphQLProvider } from '../../src/Providers/TxSubmit/TxSubmitProvider'
 // TO DO: create end-to-end suite with a local-network
 const minaTxSubmitGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a different API than the explorer
-const minaAccountInfoGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a different API than the explorer
+//const minaAccountInfoGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a different API than the explorer
 
 /**
  *
@@ -120,6 +120,7 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
   })
 
   // This test checks if a payment transaction from Alice to Bob can be submitted without any errors
+  /* // commented out until local network tests are set up
   it('Alice submits a payment transaction to Bob', async () => {
     const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
     const keyPairBob = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 1)
@@ -172,9 +173,9 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
     }
 
     await expect(submitTxProvider.submitTx(txArgs)).resolves.not.toThrow()
-  })
+  }) */
 
-  /* // commented out until send tx works
+  /* // commented out until local network tests are set up
   it('Alice submits a delegation transaction', async () => {
     const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
     const privateKeyAlice = keyPairAlice.privateKey
