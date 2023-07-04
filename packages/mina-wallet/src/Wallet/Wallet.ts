@@ -7,6 +7,13 @@ import {
   AccountInfoGraphQLProvider,
   ChainHistoryGraphQLProvider
 } from '@palladxyz/mina-graphql'
+import {
+  ConstructedTransaction,
+  constructTransaction,
+  NetworkType,
+  SignedTransaction,
+  signTransaction
+} from '@palladxyz/tx-construction'
 
 import { useStore } from '../store'
 import { MinaWallet } from '../types'
@@ -14,15 +21,17 @@ import { MinaWallet } from '../types'
 export class MinaWalletImpl implements MinaWallet {
   private accountProvider: AccountInfoGraphQLProvider
   private chainHistoryProvider: ChainHistoryGraphQLProvider
+  private network: NetworkType
   //private transactionSubmissionProvider: TxSubmitProvider;
 
   constructor(
     accountProvider: AccountInfoGraphQLProvider,
-    chainHistoryProvider: ChainHistoryGraphQLProvider
+    chainHistoryProvider: ChainHistoryGraphQLProvider,
+    network: NetworkType
   ) {
-    //, transactionSubmissionProvider: TxSubmitProvider) {
     this.accountProvider = accountProvider
     this.chainHistoryProvider = chainHistoryProvider
+    this.network = network
     //this.transactionSubmissionProvider = transactionSubmissionProvider;
   }
 
@@ -71,11 +80,30 @@ export class MinaWalletImpl implements MinaWallet {
     return transactions
   }
 
+  async constructTx(
+    transaction: Mina.TransactionBody,
+    kind: Mina.TransactionKind
+  ): Promise<ConstructedTransaction> {
+    const constructedTransaction: ConstructedTransaction = constructTransaction(
+      transaction,
+      kind
+    )
+    return constructedTransaction
+  }
+
+  async signTx(
+    privateKey: string,
+    transaction: ConstructedTransaction
+  ): Promise<SignedTransaction> {
+    const signedTransaction: SignedTransaction = await signTransaction(
+      privateKey,
+      transaction,
+      this.network
+    )
+    return signedTransaction
+  }
+
   /*
-    async createTx(transaction: TransactionBody, privateKey: string): Promise<SignedTransaction> {
-      // Implement the logic to create a transaction
-    }
-  
     async submitTx(signedTransaction: SignedTransaction): Promise<SubmitTxResult> {
       // Implement the logic to submit a transaction
       // Once the transaction is successful, update the balance and transaction history

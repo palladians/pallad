@@ -1,6 +1,8 @@
 import { Mina } from '@palladxyz/mina-core'
 import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
+import { ConstructedTransaction } from './types'
+
 /**
  * Constructs a payment transaction object.
  * @param payment The payment transaction body.
@@ -48,5 +50,31 @@ export function constructDelegationTx(
     nonce: BigInt(delegation.nonce),
     memo: memo,
     validUntil: validUntil
+  }
+}
+
+/**
+ * Constructs a transaction object based on the kind of transaction.
+ * @param transaction The transaction body.
+ * @param transactionKind The kind of transaction.
+ * @returns The constructed transaction object.
+ */
+export function constructTransaction(
+  transaction: Mina.TransactionBody,
+  transactionKind: Mina.TransactionKind
+): ConstructedTransaction {
+  switch (transactionKind) {
+    case Mina.TransactionKind.PAYMENT:
+      return {
+        ...constructPaymentTx(transaction),
+        type: Mina.TransactionKind.PAYMENT
+      }
+    case Mina.TransactionKind.STAKE_DELEGATION:
+      return {
+        ...constructDelegationTx(transaction),
+        type: Mina.TransactionKind.STAKE_DELEGATION
+      }
+    default:
+      throw new Error('Unsupported transaction kind')
   }
 }

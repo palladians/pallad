@@ -8,6 +8,7 @@ import Client from 'mina-signer'
 import { expect } from 'vitest'
 
 import { getSignClient } from '../src/minaClient'
+import { constructTransaction } from '../src/minaTxBuilder'
 import { signTransaction } from '../src/minaTxSigner'
 import { NetworkType } from '../src/types'
 
@@ -63,9 +64,14 @@ describe('Transaction Construction & Signing', () => {
         amount: 100
       }
 
+      const constructedPayment = constructTransaction(
+        payment,
+        Mina.TransactionKind.PAYMENT
+      )
+
       const signedPayment = await signTransaction(
         privateKeyAlice,
-        payment,
+        constructedPayment,
         network
       )
       expect(signedPayment.data).toBeDefined()
@@ -91,11 +97,17 @@ describe('Transaction Construction & Signing', () => {
         nonce: 0
       }
 
+      const constructedDelegation = constructTransaction(
+        delegation,
+        Mina.TransactionKind.STAKE_DELEGATION
+      )
+
       const signedDelegation = await signTransaction(
         privateKeyAlice,
-        delegation,
+        constructedDelegation,
         network
       )
+
       expect(signedDelegation.data).toBeDefined()
       expect(signedDelegation.signature).toBeDefined()
 
@@ -167,9 +179,14 @@ describe('Transaction Construction & Signing', () => {
         amount: 100
       }
 
+      const constructedPayment = constructTransaction(
+        payment,
+        Mina.TransactionKind.PAYMENT
+      )
+
       const signedPayment = await signTransaction(
         privateKeyAlice,
-        payment,
+        constructedPayment,
         network
       )
       expect(signedPayment.data).toBeDefined()
@@ -196,11 +213,17 @@ describe('Transaction Construction & Signing', () => {
         nonce: 0
       }
 
+      const constructedDelegation = constructTransaction(
+        delegation,
+        Mina.TransactionKind.STAKE_DELEGATION
+      )
+
       const signedDelegation = await signTransaction(
         privateKeyAlice,
-        delegation,
+        constructedDelegation,
         network
       )
+
       expect(signedDelegation.data).toBeDefined()
       expect(signedDelegation.signature).toBeDefined()
 

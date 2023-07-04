@@ -1,4 +1,3 @@
-import { Mina } from '@palladxyz/mina-core'
 import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import {
   PrivateKey,
@@ -6,40 +5,7 @@ import {
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 import { getSignClient } from './minaClient'
-import { constructDelegationTx, constructPaymentTx } from './minaTxBuilder'
-import { NetworkType } from './types'
-
-/**
- * Signs a transaction using the provided private key, transaction body, and network.
- * @param privateKey The private key used for signing.
- * @param transaction The transaction body.
- * @param network The network type.
- * @returns A Promise that resolves to the signed transaction.
- */
-export async function signTransaction(
-  privateKey: PrivateKey,
-  transaction: Mina.TransactionBody,
-  network: NetworkType
-): Promise<SignedLegacy<Json.Payment> | SignedLegacy<Json.StakeDelegation>> {
-  let signedTransaction:
-    | SignedLegacy<Json.Payment>
-    | SignedLegacy<Json.StakeDelegation>
-
-  try {
-    const signClient = await getSignClient(network)
-    const transactionTx =
-      transaction.type === 'payment'
-        ? constructPaymentTx(transaction)
-        : constructDelegationTx(transaction)
-
-    signedTransaction = signClient.signTransaction(transactionTx, privateKey)
-  } catch (err) {
-    const errorMessage = getRealErrorMsg(err) || 'Building transaction failed.'
-    throw new Error(errorMessage)
-  }
-
-  return signedTransaction
-}
+import { ConstructedTransaction, NetworkType, SignedTransaction } from './types'
 
 /**
  * Verifies the authenticity of a signed transaction using the provided network.
@@ -68,4 +34,30 @@ export async function verifyTransaction(
  */
 function getRealErrorMsg(err: unknown): string | undefined {
   throw new Error(err as string)
+}
+
+/**
+ * Signs a transaction using the provided private key and network.
+ * @param privateKey The private key used for signing.
+ * @param transactionTx The constructed transaction.
+ * @param network The network type.
+ * @returns A Promise that resolves to the signed transaction.
+ */
+export async function signTransaction(
+  privateKey: PrivateKey,
+  transactionTx: ConstructedTransaction,
+  network: NetworkType
+): Promise<SignedTransaction> {
+  let signedTransaction: SignedLegacy<ConstructedTransaction>
+
+  try {
+    const signClient = await getSignClient(network)
+
+    signedTransaction = signClient.signTransaction(transactionTx, privateKey)
+  } catch (err) {
+    const errorMessage = getRealErrorMsg(err) || 'Building transaction failed.'
+    throw new Error(errorMessage)
+  }
+
+  return signedTransaction
 }

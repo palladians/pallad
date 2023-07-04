@@ -1,12 +1,26 @@
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
-//import { SignedTransaction } from '@palladxyz/tx-construction';
-//import { SubmitTxResult } from "@palladxyz/mina-core"
+import {
+  ConstructedTransaction,
+  SignedTransaction
+} from '@palladxyz/tx-construction'
 
 export interface MinaWallet {
   getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo>
-  //transactions: Promise<Mina.TransactionBody[]>;
 
-  //createTx(transaction: TransactionBody, privateKey: string): Promise<SignedTransaction>;
-  //submitTx(signedTransaction: SignedTransaction): Promise<SubmitTxResult>;
+  getTransactions(publicKey: Mina.PublicKey): Promise<Mina.TransactionBody[]>
+
+  constructTx(
+    transaction: Mina.TransactionBody,
+    kind: Mina.TransactionKind
+  ): Promise<ConstructedTransaction>
+
+  signTx(
+    privateKey: string,
+    transaction: ConstructedTransaction
+  ): Promise<SignedTransaction>
+
+  // Uncomment when you implement submitTx in your MinaWalletImpl class
+  // submitTx(signedTransaction: SignedTransaction): Promise<SubmitTxResult>
+
   shutdown(): void
 }
