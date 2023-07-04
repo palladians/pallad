@@ -4,7 +4,7 @@ export type TxStatusArgs = {
   ID: string
 }
 
-enum TxStatus = {
+export enum TxStatus {
   PENDING = 'PENDING',
   INCLUDED = 'INCLUDED',
   UNKNOWN = 'UNKNOWN',

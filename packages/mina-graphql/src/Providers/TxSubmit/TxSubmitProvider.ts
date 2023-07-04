@@ -1,8 +1,7 @@
 import {
   HealthCheckResponse,
   HealthCheckResponseData,
-  SendDelegationResult,
-  SendPaymentResult,
+  SendTxResult,
   SubmitTxArgs,
   TxSubmitProvider
 } from '@palladxyz/mina-core'
@@ -46,9 +45,7 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
     }
   }
 
-  async submitTx(
-    args: SubmitTxArgs
-  ): Promise<SendPaymentResult | SendDelegationResult> {
+  async submitTx(args: SubmitTxArgs): Promise<SendTxResult> {
     const isRawSignature = typeof args.signedTransaction.signature === 'string'
     let mutation
     if (args.kind === 'PAYMENT') {
@@ -68,9 +65,11 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
     }
 
     try {
-      const result = (await request(this.minaGql, mutation, variables)) as
-        | SendPaymentResult
-        | SendDelegationResult
+      const result = (await request(
+        this.minaGql,
+        mutation,
+        variables
+      )) as SendTxResult
       return result
     } catch (error: unknown) {
       let errorMessage: string
