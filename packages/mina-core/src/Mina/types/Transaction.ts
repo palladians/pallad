@@ -17,6 +17,13 @@ export type TransactionBody = {
   amount?: UInt64
   memo?: string
   validUntil?: UInt32
+  blockHeight?: number
+  token?: string
+  hash?: string
+  failureReason?: string
+  dateTime?: string
+  isDelegation?: boolean
+  kind?: TransactionKind
 }
 
 export enum TransactionKind {

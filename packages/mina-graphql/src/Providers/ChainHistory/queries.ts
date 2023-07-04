@@ -13,6 +13,7 @@ export const transactionsByAddressesQuery = `
     transactions(
       query: { canonical: true, OR: [{ to: $address }, { from: $address }] }
       limit: $limit
+      sortBy: DATETIME_DESC
     ) {
       amount
       to

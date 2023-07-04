@@ -1,5 +1,5 @@
 import {
-  AccountBalance,
+  AccountInfo,
   AccountInfoArgs,
   AccountInfoProvider,
   HealthCheckResponse,
@@ -10,7 +10,7 @@ import { gql, request } from 'graphql-request'
 import { getAccountBalance, healthCheckQuery } from './queries'
 
 interface AccountData {
-  account: AccountBalance
+  account: AccountInfo
 }
 
 export class AccountInfoGraphQLProvider implements AccountInfoProvider {
@@ -49,7 +49,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     }
   }
 
-  async getAccountInfo(args: AccountInfoArgs): Promise<AccountBalance> {
+  async getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo> {
     const query = gql`
       ${getAccountBalance}
     `

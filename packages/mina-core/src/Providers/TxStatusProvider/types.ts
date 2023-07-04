@@ -17,5 +17,5 @@ export interface TxStatusProvider extends Provider {
    * @param args The ID string of a transaction.
    * @throws Will throw an error if the check fails.
    **/
-  submitTx: (args: TxStatusArgs) => Promise<TxStatus>
+  checkTxStatus: (args: TxStatusArgs) => Promise<TxStatus>
 }

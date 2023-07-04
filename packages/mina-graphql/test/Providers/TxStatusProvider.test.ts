@@ -14,7 +14,6 @@ describe('TxStatusGraphQLProvider', () => {
     const response = await provider.checkTxStatus(args)
 
     expect(response).toBeDefined()
-    expect(response.status).toBeDefined()
-    expect(response.status).toBe('INCLUDED')
+    expect(response.includes('INCLUDED')).toBe(true)
   })
 })

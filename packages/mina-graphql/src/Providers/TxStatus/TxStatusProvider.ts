@@ -49,7 +49,7 @@ export class TxStatusGraphQLProvider implements TxStatusProvider {
     `
 
     const variables = {
-      id: args.id
+      id: args.ID
     }
 
     try {
@@ -61,7 +61,7 @@ export class TxStatusGraphQLProvider implements TxStatusProvider {
         throw new Error('Invalid transaction status response')
       }
 
-      return { status: data.transactionStatus }
+      return data.transactionStatus as TxStatus
     } catch (error: unknown) {
       let errorMessage: string
 

@@ -34,20 +34,20 @@ export interface TxResult {
   to: string
 }
 
-export interface SendPaymentResult {
+export interface SubmitPaymentResult {
   sendPayment: {
     payment: TxResult
   }
 }
 
-export interface SendDelegationResult {
+export interface SubmitDelegationResult {
   sendDelegation: {
     delegation: TxResult
   }
 }
 
-export interface SendTxResult {
-  result: SendPaymentResult | SendDelegationResult
+export interface SubmitTxResult {
+  result: SubmitPaymentResult | SubmitDelegationResult
 }
 
 export interface TxSubmitProvider extends Provider {
@@ -56,5 +56,5 @@ export interface TxSubmitProvider extends Provider {
    * @param args The signed transaction to submit.
    * @throws Will throw an error if the transaction submission fails.
    **/
-  submitTx: (args: SubmitTxArgs) => Promise<SendTxResult>
+  submitTx: (args: SubmitTxArgs) => Promise<SubmitTxResult>
 }
