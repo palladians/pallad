@@ -1,0 +1,32 @@
+{
+  "name": "@palladxyz/mina-core",
+  "version": "0.0.1",
+  "description": "Core Mina Package SDK for Pallad",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules"
+  },
+  "dependencies": {
+    "@palladxyz/key-generator": "*",
+    "@palladxyz/tx-construction": "*",
+    "@palladxyz/util": "*",
+    "bs58check": "^3.0.1",
+    "buffer": "^6.0.3",
+    "mina-signer": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/secp256k1": "^4.0.3",
+    "happy-dom": "^9.20.3"
+  }
+}

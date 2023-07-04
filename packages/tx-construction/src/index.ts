@@ -1,5 +1,9 @@
 export { getSignClient } from './minaClient'
 export { signMessage, verifyMessage } from './minaMsgSigner'
-export { constructDelegationTx, constructPaymentTx } from './minaTxBuilder'
+export {
+  constructDelegationTx,
+  constructPaymentTx,
+  constructTransaction
+} from './minaTxBuilder'
 export { signTransaction, verifyTransaction } from './minaTxSigner'
-export { NetworkType, TransactionBody } from './types'
+export { ConstructedTransaction, NetworkType, SignedTransaction } from './types'

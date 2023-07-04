@@ -1,17 +1,22 @@
+import { Mina } from '@palladxyz/mina-core'
 import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
-import { TransactionBody } from './types'
+import { ConstructedTransaction } from './types'
 
 /**
  * Constructs a payment transaction object.
  * @param payment The payment transaction body.
  * @returns The constructed payment transaction object.
  */
-export function constructPaymentTx(payment: TransactionBody): Json.Payment {
+export function constructPaymentTx(
+  payment: Mina.TransactionBody
+): Json.Payment {
   const sendFee = BigInt(payment.fee)
   const sendAmount = payment.amount ? BigInt(payment.amount) : BigInt(0)
   const memo = payment.memo || ''
-  const validUntil = payment.validUntil ? BigInt(payment.validUntil) : BigInt(0) // Mina Signer has a defaultValidUntil = '4294967295';
+  const validUntil = payment.validUntil
+    ? BigInt(payment.validUntil)
+    : BigInt(4294967295) // Mina Signer has a defaultValidUntil = '4294967295';
 
   return {
     to: payment.to,
@@ -30,13 +35,13 @@ export function constructPaymentTx(payment: TransactionBody): Json.Payment {
  * @returns The constructed delegation transaction object.
  */
 export function constructDelegationTx(
-  delegation: TransactionBody
+  delegation: Mina.TransactionBody
 ): Json.StakeDelegation {
   const sendFee = BigInt(delegation.fee)
   const memo = delegation.memo || ''
   const validUntil = delegation.validUntil
     ? BigInt(delegation.validUntil)
-    : BigInt(0) // Mina Signer has a defaultValidUntil = '4294967295';
+    : BigInt(4294967295) // Mina Signer has a defaultValidUntil = '4294967295';
 
   return {
     to: delegation.to,
@@ -45,5 +50,31 @@ export function constructDelegationTx(
     nonce: BigInt(delegation.nonce),
     memo: memo,
     validUntil: validUntil
+  }
+}
+
+/**
+ * Constructs a transaction object based on the kind of transaction.
+ * @param transaction The transaction body.
+ * @param transactionKind The kind of transaction.
+ * @returns The constructed transaction object.
+ */
+export function constructTransaction(
+  transaction: Mina.TransactionBody,
+  transactionKind: Mina.TransactionKind
+): ConstructedTransaction {
+  switch (transactionKind) {
+    case Mina.TransactionKind.PAYMENT:
+      return {
+        ...constructPaymentTx(transaction),
+        type: Mina.TransactionKind.PAYMENT
+      }
+    case Mina.TransactionKind.STAKE_DELEGATION:
+      return {
+        ...constructDelegationTx(transaction),
+        type: Mina.TransactionKind.STAKE_DELEGATION
+      }
+    default:
+      throw new Error('Unsupported transaction kind')
   }
 }
