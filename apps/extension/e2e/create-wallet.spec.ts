@@ -1,10 +1,9 @@
-import { expect, test } from '@playwright/test'
-
+import { expect, test } from './extension'
 import { devnetWallet } from './fixtures'
 import { OnboardingPom } from './pom/onboarding'
 
-test('create new wallet', async ({ page }) => {
-  const onboardingPom = new OnboardingPom(page)
+test('create new wallet', async ({ page, extensionId }) => {
+  const onboardingPom = new OnboardingPom({ page, extensionId })
   await onboardingPom.goto()
   await onboardingPom.startCreating()
   await onboardingPom.fillWalletName(devnetWallet.walletName)
