@@ -3,10 +3,11 @@ import {
   MinaKeyGenerator,
   Network
 } from '@palladxyz/key-generator'
-import { Mina } from '@palladxyz/mina-core'
+import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import {
   AccountInfoGraphQLProvider,
-  ChainHistoryGraphQLProvider
+  ChainHistoryGraphQLProvider,
+  TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
 import { NetworkType } from '@palladxyz/tx-construction'
 import { expect, test } from 'vitest'
@@ -16,6 +17,7 @@ import { MinaWalletImpl } from '../src/Wallet'
 
 const ACCOUNT_INFO_PROVIDER_URL = 'https://proxy.berkeley.minaexplorer.com/'
 const CHAIN_HISTORY_PROVIDER_URL = 'https://berkeley.graphql.minaexplorer.com'
+const TX_SUBMIT_PROVIDER_URL = 'https://proxy.berkeley.minaexplorer.com/'
 
 describe('MinaWalletImpl', () => {
   let wallet: MinaWalletImpl
@@ -29,12 +31,15 @@ describe('MinaWalletImpl', () => {
     CHAIN_HISTORY_PROVIDER_URL
   )
 
+  const txSubmitProvider = new TxSubmitGraphQLProvider(TX_SUBMIT_PROVIDER_URL)
+
   beforeEach(() => {
     network = 'testnet'
     keyGen = new MinaKeyGenerator()
     wallet = new MinaWalletImpl(
       accountInfoProvider,
       chainHistoryProvider,
+      txSubmitProvider,
       network
     )
   })
@@ -137,6 +142,55 @@ describe('MinaWalletImpl', () => {
 
     expect(signedDelegation).toBeDefined()
     expect(signedDelegation.signature).toBeDefined()
+  })
+
+  test('Alice should construct, sign, and submit a transaction to Bob via the network', async () => {
+    const mnemonic =
+      'habit hope tip crystal because grunt nation idea electric witness alert like'
+    const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
+    const keyPairBob = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 1)
+    const storeState = useStore.getState()
+    const nonce = storeState.accountInfo.nonce
+    const payment: Mina.TransactionBody = {
+      type: 'payment',
+      to: keyPairBob.publicKey,
+      from: keyPairAlice.publicKey,
+      fee: 150000000,
+      nonce: Number(nonce),
+      memo: 'hello Bob from wallet',
+      amount: 3000000000,
+      validUntil: 4294967295
+    }
+
+    const constructedPayment = await wallet.constructTx(
+      payment,
+      Mina.TransactionKind.PAYMENT
+    )
+    const signedPayment = await wallet.signTx(
+      keyPairAlice.privateKey,
+      constructedPayment
+    )
+
+    expect(signedPayment).toBeDefined()
+    expect(signedPayment.signature).toBeDefined()
+
+    const txArgs: SubmitTxArgs = {
+      signedTransaction: signedPayment,
+      kind: Mina.TransactionKind.PAYMENT,
+      transactionDetails: {
+        fee: payment.fee,
+        to: payment.to,
+        from: payment.from,
+        nonce: payment.nonce,
+        memo: payment.memo,
+        validUntil: payment.validUntil,
+        amount: payment.amount
+      }
+    }
+    console.log('txArgs', txArgs)
+    // commented out until local testnet implemented
+    //const txResult = await wallet.submitTx(txArgs)
+    //console.log('txResult', txResult)
   })
 
   // TODO: Add more tests for other functionality when implemented

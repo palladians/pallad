@@ -1,11 +1,14 @@
 import {
   AccountInfo,
   Mina,
+  SubmitTxArgs,
+  SubmitTxResult,
   TransactionsByAddressesArgs
 } from '@palladxyz/mina-core'
 import {
   AccountInfoGraphQLProvider,
-  ChainHistoryGraphQLProvider
+  ChainHistoryGraphQLProvider,
+  TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
 import {
   ConstructedTransaction,
@@ -21,18 +24,19 @@ import { MinaWallet } from '../types'
 export class MinaWalletImpl implements MinaWallet {
   private accountProvider: AccountInfoGraphQLProvider
   private chainHistoryProvider: ChainHistoryGraphQLProvider
+  private transactionSubmissionProvider: TxSubmitGraphQLProvider
   private network: NetworkType
-  //private transactionSubmissionProvider: TxSubmitProvider;
 
   constructor(
     accountProvider: AccountInfoGraphQLProvider,
     chainHistoryProvider: ChainHistoryGraphQLProvider,
+    transactionSubmissionProvider: TxSubmitGraphQLProvider,
     network: NetworkType
   ) {
     this.accountProvider = accountProvider
     this.chainHistoryProvider = chainHistoryProvider
+    this.transactionSubmissionProvider = transactionSubmissionProvider
     this.network = network
-    //this.transactionSubmissionProvider = transactionSubmissionProvider;
   }
 
   async getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo> {
@@ -100,21 +104,17 @@ export class MinaWalletImpl implements MinaWallet {
       transaction,
       this.network
     )
+    // TODO: Verify that the transaction is valid before returning it
     return signedTransaction
   }
 
-  /*
-    async submitTx(signedTransaction: SignedTransaction): Promise<SubmitTxResult> {
-      // Implement the logic to submit a transaction
-      // Once the transaction is successful, update the balance and transaction history
-      const result = await this.transactionSubmissionProvider.submitTx(signedTransaction);
-      if (result.isSuccessful) {
-        await this.balance;
-        await this.transactions;
-      }
-      return result;
-    }
-    */
+  async submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult> {
+    const result = await this.transactionSubmissionProvider.submitTx(
+      submitTxArgs
+    )
+    // TODO: add pending transaction to pending tx store that checks for tx status at some interval
+    return result
+  }
 
   shutdown(): void {
     // Implement the logic to shut down the wallet
