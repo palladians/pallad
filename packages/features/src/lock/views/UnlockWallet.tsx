@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-native'
 import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { sessionPersistence } from '../../common/lib/storage'
+import { getSessionPersistence } from '../../common/lib/storage'
 import { useVaultStore, vaultStore } from '../../common/store/vault'
 
 export const UnlockWalletView = () => {
@@ -20,7 +20,7 @@ export const UnlockWalletView = () => {
     }
   })
   const onError = async () => {
-    await sessionPersistence.setItem('spendingPassword', '')
+    await getSessionPersistence().setItem('spendingPassword', '')
     return setPasswordError(true)
   }
   const onSubmit = async ({
@@ -28,7 +28,7 @@ export const UnlockWalletView = () => {
   }: {
     spendingPassword: string
   }) => {
-    await sessionPersistence.setItem('spendingPassword', spendingPassword)
+    await getSessionPersistence().setItem('spendingPassword', spendingPassword)
     await vaultStore.destroy()
     await vaultStore.persist.rehydrate()
     const wallet = await getCurrentWallet()

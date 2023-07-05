@@ -2,7 +2,7 @@ import { useStore } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
-import { localPersistence } from '../lib/storage'
+import { getLocalPersistence } from '../lib/storage'
 import { Contact } from '../types'
 
 type AddressBookState = {
@@ -32,7 +32,7 @@ export const addressBookStore = createStore<AddressBookStore>()(
     }),
     {
       name: 'PalladAddressBook',
-      storage: createJSONStorage(() => localPersistence)
+      storage: createJSONStorage(getLocalPersistence)
     }
   )
 )

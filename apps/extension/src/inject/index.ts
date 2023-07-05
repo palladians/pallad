@@ -1,31 +1,19 @@
-import { appStore } from '@palladxyz/features'
-import { createTRPCUntypedClient } from '@trpc/client'
-import { chromeLink } from 'trpc-browser/link'
+import { sendMessage } from 'webext-bridge/content-script'
 import { runtime } from 'webextension-polyfill'
-
-const port = runtime.connect()
-const trpcClient = createTRPCUntypedClient({
-  links: [chromeLink({ port })]
-})
 
 const inject = () => {
   const script = document.createElement('script')
   script.src = runtime.getURL('/inject.js')
   script.type = 'module'
   document.documentElement.appendChild(script)
-  console.log('[Pallad] Wallet Provider has been injected.')
+  console.info('[Pallad] RPC has been initialized.')
   const channel = new BroadcastChannel('pallad')
-  channel.addEventListener('message', ({ data }) => {
+  channel.addEventListener('message', async ({ data }) => {
     const responseChannel = new BroadcastChannel(data.respondAt)
     if (!data.isPallad)
       return responseChannel.postMessage({ error: 'Wrong context' })
-    trpcClient
-      .query(data.method, {
-        network: appStore.getState().network
-      })
-      .then((response) => {
-        return responseChannel.postMessage({ response })
-      })
+    const result = await sendMessage(data.method, data.payload, 'background')
+    return responseChannel.postMessage({ response: { jsonrpc: '1.0', result } })
   })
 }
 

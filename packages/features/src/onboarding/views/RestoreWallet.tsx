@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-native'
 
-import { sessionPersistence } from '../../common/lib/storage'
+import { getSessionPersistence } from '../../common/lib/storage'
 import { useOnboardingStore } from '../../common/store/onboarding'
 import { WalletInfoForm } from '../components/WalletInfoForm'
 
@@ -14,7 +14,7 @@ export const RestoreWalletView = () => {
     spendingPassword: string
     walletName: string
   }) => {
-    await sessionPersistence.setItem('spendingPassword', spendingPassword)
+    await getSessionPersistence().setItem('spendingPassword', spendingPassword)
     setWalletName(walletName)
     return navigate('/mnemonic')
   }

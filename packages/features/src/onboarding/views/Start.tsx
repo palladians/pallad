@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
 import { VaultState } from '../../common/lib/const'
-import { sessionPersistence } from '../../common/lib/storage'
+import { getSessionPersistence } from '../../common/lib/storage'
 import { useAppStore } from '../../common/store/app'
 
 export const StartView = () => {
@@ -13,7 +13,7 @@ export const StartView = () => {
   useEffect(() => {
     const initialRedirect = async () => {
       const spendingPassword =
-        (await sessionPersistence.getItem('spendingPassword')) || ''
+        (await getSessionPersistence().getItem('spendingPassword')) || ''
       const spendingPasswordSet = spendingPassword.length > 0
       const initializedVault = vaultState === VaultState[VaultState.INITIALIZED]
       if (!initializedVault) return

@@ -16,11 +16,12 @@ const callPalladAsync = ({ method, payload }) =>
       isPallad: true,
       respondAt: privateChannelId
     })
+    return channel.close()
   })
 const init = () => {
   window.mina = {
-    requestNetwork: () => callPalladAsync({ method: 'requestNetwork' }),
-    requestAccounts: () => callPalladAsync({ method: 'requestAccounts' })
+    request: ({ method, params }) =>
+      callPalladAsync({ method, payload: params })
   }
 }
 init()
