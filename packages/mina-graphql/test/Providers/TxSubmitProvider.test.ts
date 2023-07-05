@@ -5,6 +5,7 @@ import {
 } from '@palladxyz/key-generator'
 import { Mina } from '@palladxyz/mina-core' // SubmitTxArgs, AccountInfoArgs when local testnet ready
 import {
+  constructTransaction,
   getSignClient,
   NetworkType,
   signTransaction
@@ -83,9 +84,13 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
       amount: 100
     }
 
+    const constructedPayment = await constructTransaction(
+      payment,
+      Mina.TransactionKind.PAYMENT
+    )
     const signedPayment = await signTransaction(
       privateKeyAlice,
-      payment,
+      constructedPayment,
       network
     )
     expect(signedPayment.data).toBeDefined()
@@ -106,10 +111,13 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
       fee: 1,
       nonce: 0
     }
-
+    const constructedDelegation = await constructTransaction(
+      delegation,
+      Mina.TransactionKind.DELEGATION
+    )
     const signedDelegation = await signTransaction(
       privateKeyAlice,
-      delegation,
+      constructedDelegation,
       network
     )
     expect(signedDelegation.data).toBeDefined()

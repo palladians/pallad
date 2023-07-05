@@ -1,4 +1,9 @@
-import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import {
+  AccountInfo,
+  Mina,
+  SubmitTxArgs,
+  SubmitTxResult
+} from '@palladxyz/mina-core'
 import {
   ConstructedTransaction,
   SignedTransaction
@@ -19,8 +24,7 @@ export interface MinaWallet {
     transaction: ConstructedTransaction
   ): Promise<SignedTransaction>
 
-  // Uncomment when you implement submitTx in your MinaWalletImpl class
-  // submitTx(signedTransaction: SignedTransaction): Promise<SubmitTxResult>
+  submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>
 
   shutdown(): void
 }
