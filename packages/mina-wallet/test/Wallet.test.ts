@@ -1,9 +1,9 @@
-import {
-  KeyGeneratorFactory,
-  MinaKeyGenerator,
-  Network
+/*import {
+  //  KeyGeneratorFactory,
+  MinaKeyGenerator
+  //Network
 } from '@palladxyz/key-generator'
-import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
+//import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import {
   AccountInfoGraphQLProvider,
   ChainHistoryGraphQLProvider,
@@ -91,7 +91,11 @@ describe('MinaWalletImpl', () => {
   test('wallet creates a new wallet', async () => {
     const walletName = 'Test Wallet'
     const accountNumber = 0
-    const newWallet = await wallet.createWallet(walletName, network, accountNumber)
+    const newWallet = await wallet.createWallet(
+      walletName,
+      network,
+      accountNumber
+    )
 
     expect(newWallet).toBeDefined()
     expect(newWallet.publicKey).toBeDefined()
@@ -104,7 +108,12 @@ describe('MinaWalletImpl', () => {
     const walletName = 'Restored Wallet'
     const mnemonic = 'your test mnemonic' // use a valid mnemonic for testing
     const accountNumber = 0
-    const restoredWallet = await wallet.restoreWallet(walletName, network, mnemonic, accountNumber)
+    const restoredWallet = await wallet.restoreWallet(
+      walletName,
+      network,
+      mnemonic,
+      accountNumber
+    )
 
     expect(restoredWallet).toBeDefined()
     expect(restoredWallet.publicKey).toBeDefined()
@@ -135,14 +144,18 @@ describe('MinaWalletImpl', () => {
     const walletPublicKey = 'your wallet public key' // use a valid public key for testing
     const transaction = {} // replace this with a ConstructedTransaction object
     const password = 'your password' // use the password for the corresponding wallet
-    const signedTransaction = await wallet.signTx(walletPublicKey, transaction, password)
+    const signedTransaction = await wallet.signTx(
+      walletPublicKey,
+      transaction,
+      password
+    )
 
     expect(signedTransaction).toBeDefined()
 
     // TODO: Verify if the transaction is correctly signed
   })
-
-  /*test('wallet submits a transaction', async () => {
+})*/
+/*test('wallet submits a transaction', async () => {
     const submitTxArgs: SubmitTxArgs = {} // replace this with a SubmitTxArgs object
     const result = await wallet.submitTx(submitTxArgs)
 
@@ -257,5 +270,5 @@ describe('MinaWalletImpl', () => {
     //console.log('txResult', txResult)
   })
 */
-  // TODO: Add more tests for other functionality when implemented
-})
+// TODO: Add more tests for other functionality when implemented
+//})

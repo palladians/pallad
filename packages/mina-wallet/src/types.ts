@@ -1,4 +1,4 @@
-import { Network } from '@palladxyz/key-generator';
+import { Network } from '@palladxyz/key-generator'
 import {
   AccountInfo,
   Mina,
@@ -12,9 +12,18 @@ import {
 import { PublicCredential } from '@palladxyz/vault'
 
 export interface MinaWallet {
-  createWallet(walletName: string, network: Network, accountNumber: number): Promise<{ publicKey: string; mnemonic: string } | null>
+  createWallet(
+    walletName: string,
+    network: Network,
+    accountNumber: number
+  ): Promise<{ publicKey: string; mnemonic: string } | null>
 
-  restoreWallet(walletName: string, network: Network, mnemonic: string, accountNumber: number): Promise<{ publicKey: string } | null>
+  restoreWallet(
+    walletName: string,
+    network: Network,
+    mnemonic: string,
+    accountNumber: number
+  ): Promise<{ publicKey: string } | null>
 
   getCurrentWallet(): PublicCredential | null
 
