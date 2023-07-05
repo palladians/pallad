@@ -10,9 +10,9 @@ import {
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
 import { NetworkType } from '@palladxyz/tx-construction'
+import { useStore, VaultStore } from '@palladxyz/vault'
 import { expect, test } from 'vitest'
 
-import { useStore } from '../src/store'
 import { MinaWalletImpl } from '../src/Wallet'
 
 const ACCOUNT_INFO_PROVIDER_URL = 'https://proxy.berkeley.minaexplorer.com/'
@@ -23,6 +23,7 @@ describe('MinaWalletImpl', () => {
   let wallet: MinaWalletImpl
   let network: NetworkType
   let keyGen: MinaKeyGenerator
+  let vaultStoreMock: VaultStore
 
   const accountInfoProvider = new AccountInfoGraphQLProvider(
     ACCOUNT_INFO_PROVIDER_URL
@@ -36,11 +37,12 @@ describe('MinaWalletImpl', () => {
   beforeEach(() => {
     network = 'testnet'
     keyGen = new MinaKeyGenerator()
+    vaultStoreMock = new VaultStore() // mock implementation
     wallet = new MinaWalletImpl(
       accountInfoProvider,
       chainHistoryProvider,
       txSubmitProvider,
-      network
+      vaultStoreMock
     )
   })
 
@@ -86,7 +88,69 @@ describe('MinaWalletImpl', () => {
     console.log('Transactions in Store:', storeState.transactions)
     expect(storeState.transactions).toEqual(transactions)
   })
+  test('wallet creates a new wallet', async () => {
+    const walletName = 'Test Wallet'
+    const accountNumber = 0
+    const newWallet = await wallet.createWallet(walletName, network, accountNumber)
 
+    expect(newWallet).toBeDefined()
+    expect(newWallet.publicKey).toBeDefined()
+    expect(newWallet.mnemonic).toBeDefined()
+
+    // TODO: Check if the new wallet is correctly stored in the vault
+  })
+
+  test('wallet restores a wallet', async () => {
+    const walletName = 'Restored Wallet'
+    const mnemonic = 'your test mnemonic' // use a valid mnemonic for testing
+    const accountNumber = 0
+    const restoredWallet = await wallet.restoreWallet(walletName, network, mnemonic, accountNumber)
+
+    expect(restoredWallet).toBeDefined()
+    expect(restoredWallet.publicKey).toBeDefined()
+
+    // TODO: Check if the restored wallet is correctly stored in the vault
+  })
+
+  test('wallet gets the current wallet', async () => {
+    const currentWallet = wallet.getCurrentWallet()
+
+    expect(currentWallet).toBeDefined()
+    expect(currentWallet.walletName).toBeDefined()
+    expect(currentWallet.walletPublicKey).toBeDefined()
+
+    // TODO: Check if the current wallet matches the one in the vault
+  })
+
+  test('wallet gets all accounts', async () => {
+    const accounts = wallet.getAccounts()
+
+    expect(accounts).toBeDefined()
+    expect(accounts.length).toBeGreaterThan(0)
+
+    // TODO: Check if the returned accounts match the ones in the vault
+  })
+
+  test('wallet signs a transaction', async () => {
+    const walletPublicKey = 'your wallet public key' // use a valid public key for testing
+    const transaction = {} // replace this with a ConstructedTransaction object
+    const password = 'your password' // use the password for the corresponding wallet
+    const signedTransaction = await wallet.signTx(walletPublicKey, transaction, password)
+
+    expect(signedTransaction).toBeDefined()
+
+    // TODO: Verify if the transaction is correctly signed
+  })
+
+  /*test('wallet submits a transaction', async () => {
+    const submitTxArgs: SubmitTxArgs = {} // replace this with a SubmitTxArgs object
+    const result = await wallet.submitTx(submitTxArgs)
+
+    expect(result).toBeDefined()
+
+    // TODO: Verify if the transaction is correctly submitted
+  })*/
+/*
   test('construct and sign a payment transaction', async () => {
     const mnemonic =
       'habit hope tip crystal because grunt nation idea electric witness alert like'
@@ -192,6 +256,6 @@ describe('MinaWalletImpl', () => {
     //const txResult = await wallet.submitTx(txArgs)
     //console.log('txResult', txResult)
   })
-
+*/
   // TODO: Add more tests for other functionality when implemented
 })

@@ -113,7 +113,7 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
     }
     const constructedDelegation = await constructTransaction(
       delegation,
-      Mina.TransactionKind.DELEGATION
+      Mina.TransactionKind.STAKE_DELEGATION
     )
     const signedDelegation = await signTransaction(
       privateKeyAlice,

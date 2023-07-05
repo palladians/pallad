@@ -1,7 +1,7 @@
 {
-  "name": "@palladxyz/mina-wallet",
+  "name": "@palladxyz/vault",
   "version": "0.0.1",
-  "description": "Mina Wallet Package SDK for Pallad",
+  "description": "A Vault for the Mina Wallet Package for Pallad",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
@@ -19,10 +19,7 @@
   "dependencies": {
     "@palladxyz/util": "*",
     "@palladxyz/mina-core": "*",
-    "@palladxyz/tx-construction": "*",
     "@palladxyz/key-generator": "*",
-    "@palladxyz/mina-graphql": "*",
-    "@palladxyz/vault": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "mina-signer": "^2.0.3",

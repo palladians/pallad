@@ -1,3 +1,4 @@
+import { Network } from '@palladxyz/key-generator';
 import {
   AccountInfo,
   Mina,
@@ -8,8 +9,17 @@ import {
   ConstructedTransaction,
   SignedTransaction
 } from '@palladxyz/tx-construction'
+import { PublicCredential } from '@palladxyz/vault'
 
 export interface MinaWallet {
+  createWallet(walletName: string, network: Network, accountNumber: number): Promise<{ publicKey: string; mnemonic: string } | null>
+
+  restoreWallet(walletName: string, network: Network, mnemonic: string, accountNumber: number): Promise<{ publicKey: string } | null>
+
+  getCurrentWallet(): PublicCredential | null
+
+  getAccounts(): string[]
+
   getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo>
 
   getTransactions(publicKey: Mina.PublicKey): Promise<Mina.TransactionBody[]>
@@ -20,8 +30,9 @@ export interface MinaWallet {
   ): Promise<ConstructedTransaction>
 
   signTx(
-    privateKey: string,
-    transaction: ConstructedTransaction
+    walletPublicKey: string,
+    transaction: ConstructedTransaction,
+    password: string
   ): Promise<SignedTransaction>
 
   submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>

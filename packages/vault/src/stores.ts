@@ -1,6 +1,8 @@
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { create } from 'zustand'
 
+import { Store } from './types'
+
 export const useStore = create<Store>((set) => ({
   accountInfo: {
     balance: { total: 0 },
@@ -14,10 +16,3 @@ export const useStore = create<Store>((set) => ({
   setTransactions: (transactions: Mina.TransactionBody[]) =>
     set({ transactions })
 }))
-
-export type Store = {
-  accountInfo: AccountInfo
-  transactions: Mina.TransactionBody[]
-  setAccountInfo: (newAccountInfo: AccountInfo) => void
-  setTransactions: (newTransactions: Mina.TransactionBody[]) => void
-}
