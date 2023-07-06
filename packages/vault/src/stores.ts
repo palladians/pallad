@@ -1,19 +1,19 @@
-import { AccountInfo, Mina } from '@palladxyz/mina-core'
-import { create } from 'zustand'
 import {
   generateMnemonic,
   KeyGeneratorFactory,
   Network,
   wordlist
 } from '@palladxyz/key-generator'
+import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { produce } from 'immer'
+import { create } from 'zustand'
 import { useStore } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
 import { getSecurePersistence } from '../lib/storage'
 import { Store } from './types'
-import { VaultStore, VaultState, Credential} from './vault'
+import { Credential, VaultState, VaultStore } from './vault'
 
 export const accountStore = create<Store>((set) => ({
   accountInfo: {
@@ -37,7 +37,6 @@ const initialState: VaultState = {
   currentWalletPublicKey: null,
   credentials: []
 } satisfies VaultState
-
 
 /**
  * Store to manage the state of the vault.

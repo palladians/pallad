@@ -1,6 +1,4 @@
-import {
-  Network,
-} from '@palladxyz/key-generator'
+import { Network } from '@palladxyz/key-generator'
 import {
   AccountInfo,
   Mina,
@@ -19,10 +17,9 @@ import {
   SignedTransaction,
   signTransaction
 } from '@palladxyz/tx-construction'
-import { PublicCredential, vaultStore, accountStore } from '@palladxyz/vault'
+import { accountStore, PublicCredential, vaultStore } from '@palladxyz/vault'
 
 import { MinaWallet } from '../types'
-
 
 export class MinaWalletImpl implements MinaWallet {
   private accountProvider: AccountInfoGraphQLProvider
@@ -36,7 +33,7 @@ export class MinaWalletImpl implements MinaWallet {
     accountProvider: AccountInfoGraphQLProvider,
     chainHistoryProvider: ChainHistoryGraphQLProvider,
     transactionSubmissionProvider: TxSubmitGraphQLProvider,
-    network: Network,
+    network: Network
   ) {
     this.accountProvider = accountProvider
     this.chainHistoryProvider = chainHistoryProvider
@@ -104,7 +101,7 @@ export class MinaWalletImpl implements MinaWallet {
     // Get the credential for the wallet
     console.log('walletPublicKey', walletPublicKey)
     console.log('password', password)
-    const credential = {walletPrivateKey:"stubPrivateKey"} ////this.vaultStore.getCredential(walletPublicKey, password)
+    const credential = { walletPrivateKey: 'stubPrivateKey' } ////this.vaultStore.getCredential(walletPublicKey, password)
 
     // If there's no credential for the wallet, throw an error
     if (!credential) {
@@ -132,15 +129,17 @@ export class MinaWalletImpl implements MinaWallet {
     walletName: string,
     accountNumber: number
   ): Promise<{ publicKey: string; mnemonic: string } | null> {
-     // Create a new wallet
+    // Create a new wallet
     const result = await vaultStore.getState().createWallet({
-        walletName,
-        network: this.network,
-        accountNumber
-    });
+      walletName,
+      network: this.network,
+      accountNumber
+    })
 
     // Return the public key and mnemonic or null
-    return result? { publicKey: result.publicKey, mnemonic: result.mnemonic } : null
+    return result
+      ? { publicKey: result.publicKey, mnemonic: result.mnemonic }
+      : null
   }
 
   async restoreWallet(
@@ -150,12 +149,12 @@ export class MinaWalletImpl implements MinaWallet {
   ): Promise<{ publicKey: string } | null> {
     // Restore a wallet from a mnemonic
     const result = await vaultStore.getState().restoreWallet({
-        walletName,
-        network: this.network,
-        mnemonic,
-        accountNumber
-    });
-    return result? { publicKey: result.publicKey } : null
+      walletName,
+      network: this.network,
+      mnemonic,
+      accountNumber
+    })
+    return result ? { publicKey: result.publicKey } : null
   }
 
   getCurrentWallet(): PublicCredential | null {

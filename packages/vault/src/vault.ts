@@ -3,10 +3,7 @@
  * @module @palladxyz/features
  */
 
-import {
-  Network
-} from '@palladxyz/key-generator'
-
+import { Network } from '@palladxyz/key-generator'
 
 /**
  * Type representing a public credential.
