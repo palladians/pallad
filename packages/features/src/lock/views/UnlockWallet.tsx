@@ -1,4 +1,4 @@
-import { Box, Button, Input, Text } from '@palladxyz/ui'
+import { Box, Button, Icons, Input, Text, theme } from '@palladxyz/ui'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-native'
@@ -61,16 +61,20 @@ export const UnlockWalletView = () => {
           }}
         />
         {passwordError && (
-          <Text
+          <Box
             css={{
-              backgroundColor: '$red500',
-              color: '$gray50',
-              padding: 8,
-              borderRadius: 4
+              backgroundColor: '$red800',
+              padding: '$sm',
+              borderRadius: '$md',
+              flexDirection: 'row',
+              gap: 8,
+              alignItems: 'center',
+              justifyContent: 'flex-start'
             }}
           >
-            The password is wrong
-          </Text>
+            <Icons.AlertCircle color={theme.colors.red400.value} />
+            <Text css={{ color: '$red400' }}>The password is wrong</Text>
+          </Box>
         )}
         <Box css={{ gap: 8 }}>
           <FormLabel>Spending Password</FormLabel>
