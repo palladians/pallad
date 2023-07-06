@@ -38,11 +38,13 @@ export const ReceiveView = () => {
               css={{
                 maxWidth: 320,
                 textAlign: 'center',
-                border: '1px solid',
-                borderColor: '$gray700',
-                borderRadius: '$md',
-                padding: '$sm',
-                lineHeight: '175%'
+                borderRadius: 64,
+                paddingVertical: '$sm',
+                paddingHorizontal: '$md',
+                lineHeight: '175%',
+                backgroundColor: '$primary800',
+                color: '$primary400',
+                fontSize: 14
               }}
               numberOfLines={2}
             >

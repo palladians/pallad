@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-native'
 import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useViewAnimation } from '../../common/lib/animation'
 import { getSessionPersistence } from '../../common/lib/storage'
 import { useVaultStore, vaultStore } from '../../common/store/vault'
 
 export const UnlockWalletView = () => {
+  const { shift, opacity, scale } = useViewAnimation()
   const [passwordError, setPasswordError] = useState(false)
   const navigate = useNavigate()
   const getCurrentWallet = useVaultStore((state) => state.getCurrentWallet)
@@ -47,7 +49,10 @@ export const UnlockWalletView = () => {
         </Button>
       }
     >
-      <Box css={{ gap: 24 }}>
+      <Box
+        css={{ gap: 24 }}
+        style={{ opacity, marginTop: shift, transform: [{ scale }] }}
+      >
         <ViewHeading
           title="Unlock Wallet"
           button={{

@@ -1,38 +1,48 @@
-import { Box, composeBox, composeCard, Icons, Text } from '@palladxyz/ui'
+import { Box, composeBox, Icons, Text } from '@palladxyz/ui'
 import React from 'react'
-import { FlatList, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useViewAnimation } from '../../common/lib/animation'
 import { getSessionPersistence } from '../../common/lib/storage'
 import { vaultStore } from '../../common/store/vault'
 
-const StyledPressable = composeCard({ baseComponent: Pressable })
-const StyledFlatList = composeBox({ baseComponent: FlatList })
+const StyledPressable = composeBox({ baseComponent: Pressable })
 
-const MenuItem = ({ index, item }) => {
+const MenuItem = ({ item }) => {
   return (
     <StyledPressable
       onPress={item.onPress}
       css={{
         flex: 1,
-        marginRight: index % 2 === 0 ? 8 : 0,
-        marginLeft: index % 2 === 0 ? 0 : 8,
-        height: 116,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        gap: 8
+        flexDirection: 'row',
+        paddingVertical: '$sm',
+        paddingHorizontal: '$md',
+        gap: 16
       }}
     >
-      <item.Icon />
-      <Text css={{ width: 'auto', fontSize: 14 }}>{item.label}</Text>
+      <Box
+        css={{
+          padding: '$sm',
+          backgroundColor: '$gray800',
+          borderRadius: '50%'
+        }}
+      >
+        <item.Icon />
+      </Box>
+      <Text css={{ width: 'auto', flex: 1 }}>{item.label}</Text>
+      <Icons.ArrowRight />
     </StyledPressable>
   )
 }
 
 export const MenuView = () => {
   const navigate = useNavigate()
+  const { shift, opacity, scale } = useViewAnimation()
   const MENU_ITEMS = [
     {
       label: 'Transaction',
@@ -61,24 +71,15 @@ export const MenuView = () => {
   ]
   return (
     <AppLayout>
-      <Box css={{ padding: '$md' }}>
-        <ViewHeading
-          title="Menu"
-          backButton={{ onPress: () => navigate(-1) }}
-        />
-        <StyledFlatList
-          data={MENU_ITEMS}
-          renderItem={MenuItem}
-          ItemSeparatorComponent={() => <Box css={{ height: 16 }} />}
-          css={{
-            gap: 8,
-            marginTop: '$md'
-            // marginTop: 16,
-            // flexDirection: 'row',
-            // flexWrap: 'wrap'
-          }}
-          numColumns={2}
-        />
+      <Box style={{ opacity, marginTop: shift, transform: [{ scale }] }}>
+        <Box css={{ padding: '$md' }}>
+          <ViewHeading title="Menu" />
+        </Box>
+        <Box css={{ gap: 4 }}>
+          {MENU_ITEMS.map((item, i) => (
+            <MenuItem item={item} key={i} />
+          ))}
+        </Box>
       </Box>
     </AppLayout>
   )

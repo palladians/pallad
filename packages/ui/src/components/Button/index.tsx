@@ -1,9 +1,10 @@
 import React from 'react'
-import { Pressable, Text } from 'react-native'
+import { Pressable } from 'react-native'
 
 import { styled } from '../../lib/styled'
 import { composeBox } from '../Box'
 import { Image } from '../Image'
+import { Text } from '../Text'
 import {
   buttonBase,
   buttonSizeDefault,
@@ -45,6 +46,7 @@ const StyledButton = styled(StyledPressable, {
 const StyledButtonText = styled(Text, {
   color: '$body',
   fontWeight: '$semibold',
+  fontSize: 14,
   variants: {
     variant: {
       default: {
@@ -67,7 +69,7 @@ const StyledButtonText = styled(Text, {
         }
       },
       link: {
-        color: '$primary500'
+        color: '$primary400'
       }
     }
   },

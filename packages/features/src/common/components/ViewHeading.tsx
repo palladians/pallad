@@ -30,31 +30,38 @@ export const ViewHeading = ({
         justifyContent: 'space-between'
       }}
     >
-      <Heading
-        size="md"
-        css={{ color: '$gray50', marginTop: 0, paddingVertical: 4 }}
-      >
-        {title}
-      </Heading>
       {backButton && (
         <StyledPressable
           css={{
-            width: 28,
-            height: 28,
+            width: 32,
+            height: 32,
             borderRadius: '50%',
             backgroundColor: '$primary800',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            marginRight: 16
           }}
           onPress={backButton.onPress}
         >
-          <Icons.ArrowLeft color={theme.colors.primary500.value} size={20} />
+          <Icons.ArrowLeft color={theme.colors.primary400.value} size={20} />
         </StyledPressable>
       )}
+      <Heading
+        size="md"
+        css={{ flex: 1, color: '$gray50', marginTop: 0, paddingVertical: 4 }}
+      >
+        {title}
+      </Heading>
       {button && (
         <Button
           variant="link"
-          css={{ width: 'auto', padding: 0, color: '$gray100', height: 'auto' }}
+          css={{
+            width: 'auto',
+            paddingVertical: '$sm',
+            paddingHorizontal: '$md',
+            backgroundColor: '$primary800',
+            height: 'auto'
+          }}
           onPress={button.onPress}
         >
           {button.label}
