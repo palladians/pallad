@@ -94,22 +94,16 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   async signTx(
-    walletPublicKey: string,
-    transaction: ConstructedTransaction,
-    password: string
+    transaction: ConstructedTransaction
   ): Promise<SignedTransaction> {
-    // Get the credential for the wallet
-    console.log('walletPublicKey', walletPublicKey)
-    console.log('password', password)
-    const credential = { walletPrivateKey: 'stubPrivateKey' } ////this.vaultStore.getCredential(walletPublicKey, password)
-
-    // If there's no credential for the wallet, throw an error
-    if (!credential) {
-      throw new Error('Credential does not exist for the given public key')
+    const credential = vaultStore.getState().credentials[0]
+    const privateKey = credential?.walletPrivateKey
+    if (privateKey === undefined) {
+      throw new Error('Private key is undefined')
     }
 
     const signedTransaction: SignedTransaction = await signTransaction(
-      credential.walletPrivateKey,
+      privateKey,
       transaction,
       'testnet' // TODO: Define Mina NetworkType which is either 'testnet' or 'mainnet' and include in the vault
     )

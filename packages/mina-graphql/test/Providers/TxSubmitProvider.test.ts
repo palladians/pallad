@@ -16,7 +16,7 @@ import { expect } from 'vitest'
 //import { AccountInfoGraphQLProvider } from '../../src/Providers/AccountInfo'
 import { TxSubmitGraphQLProvider } from '../../src/Providers/TxSubmit/TxSubmitProvider'
 // TO DO: create end-to-end suite with a local-network
-const minaTxSubmitGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a different API than the explorer
+const minaTxSubmitGql = 'https://proxy.devnet.minaexplorer.com/' // Needs a different API than the explorer
 //const minaAccountInfoGql = 'https://proxy.berkeley.minaexplorer.com/' // Needs a different API than the explorer
 
 /**

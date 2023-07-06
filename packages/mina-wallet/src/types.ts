@@ -11,6 +11,7 @@ import {
 import { PublicCredential } from '@palladxyz/vault'
 
 export interface MinaWallet {
+  // TODO: where do we specify the unlock & spending password?
   createWallet(
     walletName: string,
     accountNumber: number
@@ -35,11 +36,7 @@ export interface MinaWallet {
     kind: Mina.TransactionKind
   ): Promise<ConstructedTransaction>
 
-  signTx(
-    walletPublicKey: string,
-    transaction: ConstructedTransaction,
-    password: string
-  ): Promise<SignedTransaction>
+  signTx(transaction: ConstructedTransaction): Promise<SignedTransaction>
 
   submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>
 

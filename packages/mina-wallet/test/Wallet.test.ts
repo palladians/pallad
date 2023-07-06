@@ -1,4 +1,5 @@
 import { Network } from '@palladxyz/key-generator'
+import { Mina } from '@palladxyz/mina-core'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import {
   AccountInfoGraphQLProvider,
@@ -10,9 +11,9 @@ import { expect, test } from 'vitest'
 
 import { MinaWalletImpl } from '../src/Wallet'
 
-const ACCOUNT_INFO_PROVIDER_URL = 'https://proxy.berkeley.minaexplorer.com/'
-const CHAIN_HISTORY_PROVIDER_URL = 'https://berkeley.graphql.minaexplorer.com'
-const TX_SUBMIT_PROVIDER_URL = 'https://proxy.berkeley.minaexplorer.com/'
+const ACCOUNT_INFO_PROVIDER_URL = 'https://proxy.devnet.minaexplorer.com/'
+const CHAIN_HISTORY_PROVIDER_URL = 'https://devnet.graphql.minaexplorer.com'
+const TX_SUBMIT_PROVIDER_URL = 'https://proxy.devnet.minaexplorer.com/'
 
 describe('MinaWalletImpl', () => {
   let wallet: MinaWalletImpl
@@ -98,7 +99,7 @@ describe('MinaWalletImpl', () => {
 
     // TODO: Check if the new wallet is correctly stored in the vault
     const walletStoreState = vaultStore.getState()
-    console.log('Account Info in Store:', walletStoreState)
+    console.log('Wallet Vault in Store:', walletStoreState)
     //expect(walletStoreState....).toEqual(...)
   })
 
@@ -139,20 +140,50 @@ describe('MinaWalletImpl', () => {
     // TODO: Check if the current wallet matches the one in the vault
   })
   /*
-  test('wallet signs a transaction', async () => {
-    const walletPublicKey = 'your wallet public key' // use a valid public key for testing
-    const transaction = {} // replace this with a ConstructedTransaction object
-    const password = 'your password' // use the password for the corresponding wallet
-    const signedTransaction = await wallet.signTx(
-      walletPublicKey,
-      transaction,
-      password
+  test('create multiple wallets using the same store', async () => {
+  })*/
+
+  test('restore a wallet and sign a transaction', async () => {
+    const walletName = 'Restored Wallet'
+    const mnemonic =
+      'habit hope tip crystal because grunt nation idea electric witness alert like'
+    const accountNumber = 0
+    const restoredWallet = await wallet.restoreWallet(
+      walletName,
+      mnemonic,
+      accountNumber
     )
 
-    expect(signedTransaction).toBeDefined()
+    if (restoredWallet === null) {
+      throw new Error('New wallet is undefined')
+    }
+
+    expect(restoredWallet).toBeDefined()
+    expect(restoredWallet.publicKey).toEqual(
+      'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+    )
+    const walletPublicKey = restoredWallet.publicKey
+    const payment: Mina.TransactionBody = {
+      type: 'payment',
+      to: walletPublicKey,
+      from: walletPublicKey,
+      fee: 1,
+      nonce: 0,
+      memo: 'hello Bob',
+      validUntil: 321,
+      amount: 100
+    }
+
+    const constructedPayment = await wallet.constructTx(
+      payment,
+      Mina.TransactionKind.PAYMENT
+    )
+    const signedPayment = await wallet.signTx(constructedPayment)
+    expect(signedPayment.data).toBeDefined()
+    expect(signedPayment.signature).toBeDefined()
 
     // TODO: Verify if the transaction is correctly signed
-  })*/
+  })
 })
 /*test('wallet submits a transaction', async () => {
     const submitTxArgs: SubmitTxArgs = {} // replace this with a SubmitTxArgs object

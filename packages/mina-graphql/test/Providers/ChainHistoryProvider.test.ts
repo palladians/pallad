@@ -7,7 +7,7 @@ import {
 
 import { ChainHistoryGraphQLProvider } from '../../src/Providers/ChainHistory/ChainHistoryProvider'
 // TO DO: create end-to-end suite with a local-network
-const minaExplorerGql = 'https://berkeley.graphql.minaexplorer.com'
+const minaExplorerGql = 'https://devnet.graphql.minaexplorer.com'
 
 describe('ChainHistoryGraphQLProvider', () => {
   test('healthCheck', async () => {
@@ -47,7 +47,7 @@ describe('ChainHistoryGraphQLProvider', () => {
   test('transactionsByHashes', async () => {
     const args: TransactionsByIdsArgs = {
       ids: [
-        '5JuWCbvWt6nXKJgbU5RyECSkxfdAL2azbsoTWP9sxqBD2e7HEaY6' as TransactionId
+        'CkpZwt2TjukbsTkGi72vB2acPtZsNFF8shMm4A9cR1eaRQFWfMwUJ' as TransactionId
       ]
     }
 
@@ -56,20 +56,20 @@ describe('ChainHistoryGraphQLProvider', () => {
 
     expect(response.length).toBeGreaterThan(0)
     const expectedTransaction: Transaction = {
-      amount: 5000000000,
-      blockHeight: 21098,
-      dateTime: '2023-07-01T12:00:01Z',
+      amount: 50000000000,
+      blockHeight: 204824,
+      dateTime: '2023-06-26T09:12:00Z',
       failureReason: null,
-      fee: 500000000,
-      from: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      hash: '5JuWCbvWt6nXKJgbU5RyECSkxfdAL2azbsoTWP9sxqBD2e7HEaY6',
-      id: 'Av0AZc0dKkQnEWXd3/ZrYjnOrvj81fp1VewI+XZSFJ/K4O8DbTIAAP//IgENSGVsbG8sIFdvcmxkIQAAAAAAAAAAAAAAAAAAAAAAAAAAKkQnEWXd3/ZrYjnOrvj81fp1VewI+XZSFJ/K4O8DbTIAKkQnEWXd3/ZrYjnOrvj81fp1VewI+XZSFJ/K4O8DbTIA/ADyBSoBAAAAKkQnEWXd3/ZrYjnOrvj81fp1VewI+XZSFJ/K4O8DbTIAjQsRbcG5Caa7IvxJ2a3LAlHRBeMxL/299Y3yLZQ3WBbsrSPG14AB4bExXHfsg7/BAQod6r84b3MoFNfgRE7gDQ==',
+      fee: 10000000,
+      from: 'B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69e',
+      hash: 'CkpZwt2TjukbsTkGi72vB2acPtZsNFF8shMm4A9cR1eaRQFWfMwUJ',
+      id: '3XpDTU4nx8aYjtRooxkf6eqLSVdzhEE4EEDQFTGkRYZZ9uRebxCTPYfC3731PKq5zK8nAqwQE7TUtGGveMGNhBhDrycFvnXEcWA6gtStmu4h9iiXG3CkFapgu9AZAKetNVjsx5ekVyRU8W5RHkBA9r5ntL36ddtodk9SCymkZ2qLhCGjpCaxuqih3kqWq3aVFwbNL5eQVrdgnYwZwuTTBdAVnYuqxkYKEKZuGGL12eZGBdnD1W9DMicXCkryzJx4dXJRas6ZrZGFEC8mTvtHZJ6ResVANXPfWuWKQu1xr8SPecfTuyKBC1VdeUqghpuHeznjTwdpNH6KBjvYkCzAuuaDrL8XgFHNC8Ka7bLBe9UXzemmtBxzQQs9uL3dZunhPudKn5aR42a4Z9rqtHC',
       isDelegation: false,
       kind: 'PAYMENT',
-      memo: 'E4YnrV1abo1sNxEd9hEeWymcX5hSXt3cNL3E9JcFbv1CtdtdKG2JP',
-      nonce: 0,
+      memo: 'E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH',
+      nonce: 2016,
       to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      token: 'wSHV2S4qX9jFsLjQo8r1BsMLH2ZRKsZx6EJd1sbozGPieEC4Jf'
+      token: 1
     }
     expect(response[0]).toEqual(expectedTransaction)
   })
