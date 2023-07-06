@@ -2,7 +2,7 @@ import { Network } from '@palladxyz/key-generator'
 import { act, renderHook } from '@testing-library/react'
 import { beforeEach, expect } from 'vitest'
 
-import { useVaultStore } from '../src/vault'
+import { useVaultStore } from '../src/stores'
 
 const credential = {
   walletPublicKey: 'pubkey',

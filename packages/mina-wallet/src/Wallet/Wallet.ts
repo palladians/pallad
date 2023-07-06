@@ -1,8 +1,5 @@
 import {
-  generateMnemonic,
-  KeyGeneratorFactory,
   Network,
-  wordlist
 } from '@palladxyz/key-generator'
 import {
   AccountInfo,
@@ -22,35 +19,34 @@ import {
   SignedTransaction,
   signTransaction
 } from '@palladxyz/tx-construction'
-import { PublicCredential, VaultStore } from '@palladxyz/vault'
+import { PublicCredential, vaultStore, accountStore } from '@palladxyz/vault'
 
 import { MinaWallet } from '../types'
+
 
 export class MinaWalletImpl implements MinaWallet {
   private accountProvider: AccountInfoGraphQLProvider
   private chainHistoryProvider: ChainHistoryGraphQLProvider
   private transactionSubmissionProvider: TxSubmitGraphQLProvider
   //private networkType: NetworkType
-  //private network: Network
+  private network: Network
   // Storage for the current wallet
-  private vaultStore: VaultStore
 
   constructor(
     accountProvider: AccountInfoGraphQLProvider,
     chainHistoryProvider: ChainHistoryGraphQLProvider,
     transactionSubmissionProvider: TxSubmitGraphQLProvider,
     network: Network,
-    vaultStore: VaultStore
   ) {
     this.accountProvider = accountProvider
     this.chainHistoryProvider = chainHistoryProvider
     this.transactionSubmissionProvider = transactionSubmissionProvider
     this.network = network
-    this.vaultStore = vaultStore
   }
 
   async getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo> {
     const accountInfo = await this.accountProvider.getAccountInfo({ publicKey })
+    accountStore.getState().setAccountInfo(accountInfo)
     return accountInfo
   }
 
@@ -84,6 +80,8 @@ export class MinaWalletImpl implements MinaWallet {
 
     transactions = transactions.slice(0, 20)
 
+    accountStore.getState().setTransactions(transactions)
+
     return transactions
   }
 
@@ -104,7 +102,9 @@ export class MinaWalletImpl implements MinaWallet {
     password: string
   ): Promise<SignedTransaction> {
     // Get the credential for the wallet
-    const credential = this.vaultStore.getCredential(walletPublicKey, password)
+    console.log('walletPublicKey', walletPublicKey)
+    console.log('password', password)
+    const credential = {walletPrivateKey:"stubPrivateKey"} ////this.vaultStore.getCredential(walletPublicKey, password)
 
     // If there's no credential for the wallet, throw an error
     if (!credential) {
@@ -130,104 +130,48 @@ export class MinaWalletImpl implements MinaWallet {
 
   async createWallet(
     walletName: string,
-    network: Network,
     accountNumber: number
   ): Promise<{ publicKey: string; mnemonic: string } | null> {
-    const mnemonic = generateMnemonic(wordlist)
-    const keyGenerator = KeyGeneratorFactory.create(network)
-    const keypair = await keyGenerator.deriveKeyPair({
-      mnemonic,
-      accountNumber
-    })
+     // Create a new wallet
+    const result = await vaultStore.getState().createWallet({
+        walletName,
+        network: this.network,
+        accountNumber
+    });
 
-    if (!keypair) {
-      return null
-    }
-
-    // Add the new wallet to the credentials
-    const newCredential = {
-      walletName,
-      walletPublicKey: keypair.publicKey,
-      walletPrivateKey: keypair.privateKey
-    }
-
-    this.vaultStore.addCredential(newCredential)
-
-    // Set the new wallet's public key as the current wallet's public key
-    this.vaultStore.setCurrentWalletPublicKey({
-      currentWalletPublicKey: keypair.publicKey
-    })
-
-    // Return the public key and mnemonic
-    return { publicKey: keypair.publicKey, mnemonic }
+    // Return the public key and mnemonic or null
+    return result? { publicKey: result.publicKey, mnemonic: result.mnemonic } : null
   }
 
   async restoreWallet(
     walletName: string,
-    network: Network,
     mnemonic: string,
     accountNumber: number
   ): Promise<{ publicKey: string } | null> {
-    const keyGenerator = KeyGeneratorFactory.create(network)
-    const keypair = await keyGenerator.deriveKeyPair({
-      mnemonic,
-      accountNumber
-    })
-
-    if (!keypair) {
-      return null
-    }
-
-    // Add the restored wallet to the credentials
-    const newCredential = {
-      walletName,
-      walletPublicKey: keypair.publicKey,
-      walletPrivateKey: keypair.privateKey
-    }
-
-    this.vaultStore.addCredential(newCredential)
-
-    // Set the restored wallet's public key as the current wallet's public key
-    this.vaultStore.setCurrentWalletPublicKey({
-      currentWalletPublicKey: keypair.publicKey
-    })
-
-    // Return the public key
-    return { publicKey: keypair.publicKey }
+    // Restore a wallet from a mnemonic
+    const result = await vaultStore.getState().restoreWallet({
+        walletName,
+        network: this.network,
+        mnemonic,
+        accountNumber
+    });
+    return result? { publicKey: result.publicKey } : null
   }
 
   getCurrentWallet(): PublicCredential | null {
-    // Get the current wallet's public key
-    const currentWalletPublicKey = this.vaultStore.getCurrentWalletPublicKey()
+    // Get the current wallet
+    const result = vaultStore.getState().getCurrentWallet()
 
-    // If there's no current wallet, return null
-    if (!currentWalletPublicKey) {
-      return null
-    }
-
-    // Get the credential for the current wallet
-    const credential = this.vaultStore.getCredential(currentWalletPublicKey)
-
-    // If there's no credential for the current wallet, return null
-    if (!credential) {
-      return null
-    }
-
-    // Return the public part of the credential (walletName and walletPublicKey)
-    return {
-      walletName: credential.walletName,
-      walletPublicKey: credential.walletPublicKey
-    }
+    // Return the public credential or null
+    return result ? result : null
   }
 
   getAccounts(): string[] {
-    // Get all credentials from the vault
-    const credentials = this.vaultStore.getCredentials()
+    // Get the list of accounts for the current wallet
+    const result = vaultStore.getState().getAccounts()
 
-    // Map each credential to its public key and return the array of public keys
-    return credentials.map(
-      (credential: { walletPublicKey: any }) => credential.walletPublicKey
-    )
+    // Return the list of accounts
+    return result
   }
 
   shutdown(): void {

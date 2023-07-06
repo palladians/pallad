@@ -1,7 +1,5 @@
-/*import {
-  //  KeyGeneratorFactory,
-  MinaKeyGenerator
-  //Network
+import {
+  MinaKeyGenerator, Network
 } from '@palladxyz/key-generator'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import {
@@ -9,8 +7,7 @@ import {
   ChainHistoryGraphQLProvider,
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
-import { NetworkType } from '@palladxyz/tx-construction'
-import { useStore, VaultStore } from '@palladxyz/vault'
+import { accountStore, vaultStore } from '@palladxyz/vault'
 import { expect, test } from 'vitest'
 
 import { MinaWalletImpl } from '../src/Wallet'
@@ -21,9 +18,8 @@ const TX_SUBMIT_PROVIDER_URL = 'https://proxy.berkeley.minaexplorer.com/'
 
 describe('MinaWalletImpl', () => {
   let wallet: MinaWalletImpl
-  let network: NetworkType
+  let network: Network
   let keyGen: MinaKeyGenerator
-  let vaultStoreMock: VaultStore
 
   const accountInfoProvider = new AccountInfoGraphQLProvider(
     ACCOUNT_INFO_PROVIDER_URL
@@ -35,20 +31,24 @@ describe('MinaWalletImpl', () => {
   const txSubmitProvider = new TxSubmitGraphQLProvider(TX_SUBMIT_PROVIDER_URL)
 
   beforeEach(() => {
-    network = 'testnet'
+    network = Network.Mina
     keyGen = new MinaKeyGenerator()
-    vaultStoreMock = new VaultStore() // mock implementation
+    
     wallet = new MinaWalletImpl(
       accountInfoProvider,
       chainHistoryProvider,
       txSubmitProvider,
-      vaultStoreMock
+      network,
     )
   })
 
   test('wallet fetches getAccountInfo', async () => {
     const publicKey = 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
     const accountInfo = await wallet.getAccountInfo(publicKey)
+
+    if (accountInfo === null) {
+      throw new Error('Account info is undefined')
+    }
 
     expect(accountInfo.balance).toBeDefined()
     expect(accountInfo.nonce).toBeDefined()
@@ -57,7 +57,7 @@ describe('MinaWalletImpl', () => {
     expect(accountInfo.publicKey).toBeDefined()
 
     // Check Zustand store has updated correctly
-    const storeState = useStore.getState()
+    const storeState = accountStore.getState()
     console.log('Account Info in Store:', storeState.accountInfo)
     expect(storeState.accountInfo).toEqual(accountInfo)
   })
@@ -84,7 +84,7 @@ describe('MinaWalletImpl', () => {
       expect(tx.token).toBeDefined()
     })
     // Check Zustand store has updated correctly
-    const storeState = useStore.getState()
+    const storeState = accountStore.getState()
     console.log('Transactions in Store:', storeState.transactions)
     expect(storeState.transactions).toEqual(transactions)
   })
@@ -93,53 +93,58 @@ describe('MinaWalletImpl', () => {
     const accountNumber = 0
     const newWallet = await wallet.createWallet(
       walletName,
-      network,
       accountNumber
     )
+
+    if (newWallet === null) {
+      throw new Error('New wallet is undefined')
+    }
 
     expect(newWallet).toBeDefined()
     expect(newWallet.publicKey).toBeDefined()
     expect(newWallet.mnemonic).toBeDefined()
 
     // TODO: Check if the new wallet is correctly stored in the vault
+    const walletStoreState = vaultStore.getState()
+    console.log('Account Info in Store:', walletStoreState)
+    //expect(walletStoreState....).toEqual(...)
   })
 
   test('wallet restores a wallet', async () => {
     const walletName = 'Restored Wallet'
-    const mnemonic = 'your test mnemonic' // use a valid mnemonic for testing
+    const mnemonic = 'habit hope tip crystal because grunt nation idea electric witness alert like'
     const accountNumber = 0
     const restoredWallet = await wallet.restoreWallet(
       walletName,
-      network,
       mnemonic,
       accountNumber
     )
 
+    if (restoredWallet === null) {
+      throw new Error('New wallet is undefined')
+    }
+
     expect(restoredWallet).toBeDefined()
-    expect(restoredWallet.publicKey).toBeDefined()
+    expect(restoredWallet.publicKey).toEqual('B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb')
 
     // TODO: Check if the restored wallet is correctly stored in the vault
+
   })
 
   test('wallet gets the current wallet', async () => {
     const currentWallet = wallet.getCurrentWallet()
 
+    if (currentWallet === null) {
+      throw new Error('New wallet is undefined')
+    }
+    
     expect(currentWallet).toBeDefined()
     expect(currentWallet.walletName).toBeDefined()
     expect(currentWallet.walletPublicKey).toBeDefined()
 
     // TODO: Check if the current wallet matches the one in the vault
   })
-
-  test('wallet gets all accounts', async () => {
-    const accounts = wallet.getAccounts()
-
-    expect(accounts).toBeDefined()
-    expect(accounts.length).toBeGreaterThan(0)
-
-    // TODO: Check if the returned accounts match the ones in the vault
-  })
-
+/*
   test('wallet signs a transaction', async () => {
     const walletPublicKey = 'your wallet public key' // use a valid public key for testing
     const transaction = {} // replace this with a ConstructedTransaction object
@@ -153,8 +158,8 @@ describe('MinaWalletImpl', () => {
     expect(signedTransaction).toBeDefined()
 
     // TODO: Verify if the transaction is correctly signed
-  })
-})*/
+  })*/
+})
 /*test('wallet submits a transaction', async () => {
     const submitTxArgs: SubmitTxArgs = {} // replace this with a SubmitTxArgs object
     const result = await wallet.submitTx(submitTxArgs)
@@ -163,112 +168,3 @@ describe('MinaWalletImpl', () => {
 
     // TODO: Verify if the transaction is correctly submitted
   })*/
-/*
-  test('construct and sign a payment transaction', async () => {
-    const mnemonic =
-      'habit hope tip crystal because grunt nation idea electric witness alert like'
-    const keyGen = KeyGeneratorFactory.create(Network.Mina)
-    const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
-    const keyPairBob = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 1)
-
-    const payment: Mina.TransactionBody = {
-      type: 'payment',
-      to: keyPairBob.publicKey,
-      from: keyPairAlice.publicKey,
-      fee: '1',
-      nonce: '0',
-      memo: 'hello Bob',
-      validUntil: '321',
-      amount: '100'
-    }
-
-    const constructedPayment = await wallet.constructTx(
-      payment,
-      Mina.TransactionKind.PAYMENT
-    )
-    const signedPayment = await wallet.signTx(
-      keyPairAlice.privateKey,
-      constructedPayment
-    )
-
-    expect(signedPayment).toBeDefined()
-    expect(signedPayment.signature).toBeDefined()
-  })
-
-  test('construct and sign a delegation transaction', async () => {
-    const mnemonic =
-      'habit hope tip crystal because grunt nation idea electric witness alert like'
-    const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
-
-    const delegation: Mina.TransactionBody = {
-      type: 'delegation',
-      to: keyPairAlice.publicKey,
-      from: keyPairAlice.publicKey,
-      fee: '1',
-      nonce: '0'
-    }
-
-    const constructedDelegation = await wallet.constructTx(
-      delegation,
-      Mina.TransactionKind.STAKE_DELEGATION
-    )
-    const signedDelegation = await wallet.signTx(
-      keyPairAlice.privateKey,
-      constructedDelegation
-    )
-
-    expect(signedDelegation).toBeDefined()
-    expect(signedDelegation.signature).toBeDefined()
-  })
-
-  test('Alice should construct, sign, and submit a transaction to Bob via the network', async () => {
-    const mnemonic =
-      'habit hope tip crystal because grunt nation idea electric witness alert like'
-    const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
-    const keyPairBob = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 1)
-    const storeState = useStore.getState()
-    const nonce = storeState.accountInfo.nonce
-    const payment: Mina.TransactionBody = {
-      type: 'payment',
-      to: keyPairBob.publicKey,
-      from: keyPairAlice.publicKey,
-      fee: 150000000,
-      nonce: Number(nonce),
-      memo: 'hello Bob from wallet',
-      amount: 3000000000,
-      validUntil: 4294967295
-    }
-
-    const constructedPayment = await wallet.constructTx(
-      payment,
-      Mina.TransactionKind.PAYMENT
-    )
-    const signedPayment = await wallet.signTx(
-      keyPairAlice.privateKey,
-      constructedPayment
-    )
-
-    expect(signedPayment).toBeDefined()
-    expect(signedPayment.signature).toBeDefined()
-
-    const txArgs: SubmitTxArgs = {
-      signedTransaction: signedPayment,
-      kind: Mina.TransactionKind.PAYMENT,
-      transactionDetails: {
-        fee: payment.fee,
-        to: payment.to,
-        from: payment.from,
-        nonce: payment.nonce,
-        memo: payment.memo,
-        validUntil: payment.validUntil,
-        amount: payment.amount
-      }
-    }
-    console.log('txArgs', txArgs)
-    // commented out until local testnet implemented
-    //const txResult = await wallet.submitTx(txArgs)
-    //console.log('txResult', txResult)
-  })
-*/
-// TODO: Add more tests for other functionality when implemented
-//})

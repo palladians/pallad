@@ -1,6 +1,6 @@
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 
-import { useStore } from '../src/stores'
+import { accountStore } from '../src/stores'
 
 describe('store', () => {
   test('setAccountInfo', async () => {
@@ -12,9 +12,9 @@ describe('store', () => {
       publicKey: 'publicKey'
     }
 
-    useStore.getState().setAccountInfo(accountInfo)
+    accountStore.getState().setAccountInfo(accountInfo)
 
-    expect(useStore.getState().accountInfo).toEqual(accountInfo)
+    expect(accountStore.getState().accountInfo).toEqual(accountInfo)
   })
 
   test('setTransactions', async () => {
@@ -33,8 +33,8 @@ describe('store', () => {
       // Add more transactions if needed
     ]
 
-    useStore.getState().setTransactions(transactions)
+    accountStore.getState().setTransactions(transactions)
 
-    expect(useStore.getState().transactions).toEqual(transactions)
+    expect(accountStore.getState().transactions).toEqual(transactions)
   })
 })
