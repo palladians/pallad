@@ -6,6 +6,9 @@ import { createStore } from 'zustand/vanilla'
 import { VaultState } from '../lib/const'
 import { getLocalPersistence } from '../lib/storage'
 
+const VITE_APP_DEFAULT_NETWORK =
+  import.meta.env.VITE_APP_DEFAULT_NETWORK || 'Mainnet'
+
 // TODO: Make network a generic type that can support networks other than just Mina
 type AppState = {
   network: MinaNetwork
@@ -19,10 +22,13 @@ type AppMutators = {
 
 type AppStore = AppState & AppMutators
 
+const defaultNetwork =
+  MinaNetwork[VITE_APP_DEFAULT_NETWORK as keyof typeof MinaNetwork]
+
 export const appStore = createStore<AppStore>()(
   persist(
     (set) => ({
-      network: MinaNetwork[MinaNetwork.Mainnet],
+      network: defaultNetwork,
       vaultState: VaultState[VaultState.UNINITIALIZED],
       setNetwork(network) {
         return set({ network: MinaNetwork[network] })
