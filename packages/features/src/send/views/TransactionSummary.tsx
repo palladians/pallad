@@ -16,7 +16,6 @@ export const TransactionSummaryView = () => {
   const walletPublicKey = useVaultStore(
     (state) => state.getCurrentWallet()?.walletPublicKey
   )
-  console.log(outgoingTransaction)
   return (
     <AppLayout>
       <Box css={{ padding: '$md', gap: 16, flex: 1 }}>
@@ -29,8 +28,7 @@ export const TransactionSummaryView = () => {
             css={{
               position: 'absolute',
               right: 16,
-              top: '50%',
-              transform: 'translate(0, -50%)'
+              top: '35%'
             }}
           >
             <Icons.ArrowDown color={theme.colors.primary500.value} />

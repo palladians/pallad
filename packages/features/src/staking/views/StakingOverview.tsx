@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-native'
 import { AppLayout } from '../../common/components/AppLayout'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useViewAnimation } from '../../common/lib/animation'
 import { formatCompact } from '../../common/lib/numbers'
 import { EpochProgressChart } from '../components/EpochProgressChart'
 
 export const StakingOverviewView = () => {
   const navigate = useNavigate()
+  const { shift, opacity, scale } = useViewAnimation()
   return (
     <AppLayout>
       <Box
@@ -16,6 +18,7 @@ export const StakingOverviewView = () => {
           padding: '$md',
           gap: 24
         }}
+        style={{ opacity, marginTop: shift, transform: [{ scale }] }}
       >
         <ViewHeading
           title="Staking"
