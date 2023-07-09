@@ -52,13 +52,10 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
       getPassphrase
     )
   }
-  /*
-  async exportRootPrivateKey(): Promise<string> {
-    return await this.#decryptRootPrivateKey(true)
-  }*/
   async exportRootPrivateKey(): Promise<Uint8Array> {
     try {
       return await this.decryptRootPrivateKey()
+      //return await this.decryptCoinTypePrivateKey()
     } catch (error) {
       throw new errors.AuthenticationError(
         'Failed to export root private key',
@@ -122,12 +119,6 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
       encryptedCoinTypePrivateKeyBytes: encryptedCoinTypePrivateKeyBytes,
       knownCredentials: [],
       getPassphrase
-      /*decryptCoinTypePrivateKey() {
-        return this.decryptCoinTypePrivateKey()
-      },
-      decryptRootPrivateKey() {
-        return this.decryptRootPrivateKey()
-      }*/
     })
   }
 
@@ -146,34 +137,4 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
       throw new Error(`Failed to decrypt coin type private key: ${error}`)
     }
   }
-
-  /**
-   * This method decrypts the root private key.
-   * It first prompts the user for a passphrase and uses it to decrypt the key.
-   * @param noCache A flag to indicate whether to use a cached passphrase or not
-   * @returns A Promise that resolves to the decrypted private key
-   * @throws AuthenticationError
-   */
-  /*async #decryptRootPrivateKey(noCache?: true) {
-    const passphrase = await getPassphraseRethrowTypedError(() =>
-      this.#getPassphrase(noCache)
-    )
-    let decryptedRootKeyBytes: Uint8Array
-    try {
-      decryptedRootKeyBytes = await emip3decrypt(
-        new Uint8Array(
-          (
-            this.serializableData as SerializableInMemoryKeyAgentData
-          ).encryptedRootPrivateKeyBytes
-        ),
-        passphrase
-      )
-    } catch (error) {
-      throw new errors.AuthenticationError(
-        'Failed to decrypt root private key',
-        error
-      )
-    }
-    return Buffer.from(decryptedRootKeyBytes).toString('hex')
-  }*/
 }

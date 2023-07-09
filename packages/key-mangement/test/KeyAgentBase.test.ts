@@ -87,7 +87,7 @@ describe('KeyAgentBase', () => {
         return Buffer.from(serializableData.encryptedRootPrivateKeyBytes)
       }
     }
-    network = Network.Mina
+    network = Network.Mina 
     networkType = 'testnet'
     accountKeyDerivationPath = { account_ix: 0 }
     accountAddressDerivationPath = { address_ix: 0 }
