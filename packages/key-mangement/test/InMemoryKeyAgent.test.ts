@@ -212,5 +212,5 @@ describe('InMemoryKeyAgent', () => {
       expect(groupedCredentials).to.deep.equal(expectedGroupedCredentials)
       sinon.assert.calledOnce(stubDerivePublicKey)
     })
-})
+  })
 })

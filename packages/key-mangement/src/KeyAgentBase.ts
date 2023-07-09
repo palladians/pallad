@@ -3,7 +3,9 @@ import { HDKey } from '@scure/bip32'
 import * as bs58check from 'bs58check'
 import { Buffer } from 'buffer'
 import Client from 'mina-signer'
+import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
+import { getRealErrorMsg } from './errors'
 import { Network } from './types'
 import {
   AccountAddressDerivationPath,
@@ -12,8 +14,6 @@ import {
   KeyAgent,
   SerializableKeyAgentData
 } from './types'
-import { getRealErrorMsg } from './errors'
-import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 export abstract class KeyAgentBase implements KeyAgent {
   readonly #serializableData: SerializableKeyAgentData
@@ -116,7 +116,10 @@ export abstract class KeyAgentBase implements KeyAgent {
       const privateKeyHex = `5a01${childPrivateKeyReversed}`
       const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))*/
       // Generate the private key
-      const privateKey = await this.#generatePrivateKeyFromCoinType(accountDerivationPath.account_ix, addressDerivationPath.address_ix)
+      const privateKey = await this.#generatePrivateKeyFromCoinType(
+        accountDerivationPath.account_ix,
+        addressDerivationPath.address_ix
+      )
 
       // Derive and return the Mina public key
       const publicKey = minaClient.derivePublicKey(privateKey)
@@ -145,20 +148,26 @@ export abstract class KeyAgentBase implements KeyAgent {
       // Mina network client.
       const minaClient = new Client({ network: networkType })
       // Generate the private key
-      const privateKey = await this.#generatePrivateKeyFromCoinType(accountDerivationPath.account_ix, addressDerivationPath.address_ix)
+      const privateKey = await this.#generatePrivateKeyFromCoinType(
+        accountDerivationPath.account_ix,
+        addressDerivationPath.address_ix
+      )
       // Sign the transaction
       signedTransaction = minaClient.signTransaction(transaction, privateKey)
     } catch (err) {
-      const errorMessage =
-        getRealErrorMsg(err) || 'Signing transaction failed.'
+      const errorMessage = getRealErrorMsg(err) || 'Signing transaction failed.'
       throw new Error(errorMessage)
     }
 
     return signedTransaction
   }
-  async #generatePrivateKeyFromCoinType(accountIx: number, addressIx: number): Promise<string> {
+  async #generatePrivateKeyFromCoinType(
+    accountIx: number,
+    addressIx: number
+  ): Promise<string> {
     // Decrypt your coinType private key first
-    const decryptedCoinTypePrivateKeyBytes = await this.decryptCoinTypePrivateKey()
+    const decryptedCoinTypePrivateKeyBytes =
+      await this.decryptCoinTypePrivateKey()
 
     // Create an HDKey from the coinType private key
     const coinTypeKey = HDKey.fromMasterSeed(decryptedCoinTypePrivateKeyBytes)
@@ -172,7 +181,9 @@ export abstract class KeyAgentBase implements KeyAgent {
     if (!addressKey.privateKey) throw new Error('Private key not found')
     const childPrivateKey = addressKey.privateKey
     childPrivateKey[0] &= 0x3f
-    const childPrivateKeyReversed = this.reverseBytes(new Buffer(childPrivateKey))
+    const childPrivateKeyReversed = this.reverseBytes(
+      new Buffer(childPrivateKey)
+    )
     const privateKeyHex = `5a01${childPrivateKeyReversed}`
     const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
 
