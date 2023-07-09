@@ -43,15 +43,25 @@ export class KeyDecryptor {
     )
     let decryptedKeyBytes: Uint8Array
     try {
-        console.log("Decrypting key...")
-        console.log(keyPropertyName, "is currently", this.serializableData[keyPropertyName])
-        console.log("as Uint8Array it is", new Uint8Array(this.serializableData[keyPropertyName]))
-            console.log("Passphrase is", passphrase.toString())
+      console.log('Decrypting key...')
+      console.log(
+        keyPropertyName,
+        'is currently',
+        this.serializableData[keyPropertyName]
+      )
+      console.log(
+        'as Uint8Array it is',
+        new Uint8Array(this.serializableData[keyPropertyName])
+      )
+      console.log('Passphrase is', passphrase.toString())
       decryptedKeyBytes = await emip3decrypt(
         new Uint8Array(this.serializableData[keyPropertyName]),
         passphrase
       )
-      console.log("Decrypted key bytes are as Uint8Array",  new Uint8Array(decryptedKeyBytes))
+      console.log(
+        'Decrypted key bytes are as Uint8Array',
+        new Uint8Array(decryptedKeyBytes)
+      )
     } catch (error) {
       throw new errors.AuthenticationError(errorMessage, error)
     }

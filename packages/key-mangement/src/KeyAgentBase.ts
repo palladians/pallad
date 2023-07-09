@@ -158,4 +158,3 @@ export abstract class KeyAgentBase implements KeyAgent {
   
     return publicKey as Mina.PublicKey
     */
-

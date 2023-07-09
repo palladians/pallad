@@ -90,7 +90,7 @@ describe('InMemoryKeyAgent', () => {
     sandbox.restore()
   })
 
- /*
+  /*
  it('should create an agent with given properties', async () => {
     expect(agent).to.be.instanceOf(InMemoryKeyAgent)
   })
@@ -151,20 +151,20 @@ describe('InMemoryKeyAgent', () => {
       expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
 
       const result = await agent.decryptRootPrivateKey()
-        expect(result).to.deep.equal(rootKeyBytes)
+      expect(result).to.deep.equal(rootKeyBytes)
     })
     it('should create an instance of InMemoryKeyAgent and decrypt the coin type private key', async () => {
-        const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
-            getPassphrase,
-            mnemonicWords: mnemonic
-        })
-        expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
-    
-        const result = await agent.decryptCoinTypePrivateKey()
-            expect(result).to.deep.equal(coinTypeKeyBytes)
-        })
+      const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
+        getPassphrase,
+        mnemonicWords: mnemonic
+      })
+      expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
+
+      const result = await agent.decryptCoinTypePrivateKey()
+      expect(result).to.deep.equal(coinTypeKeyBytes)
+    })
   })
-/*
+  /*
   it('should decrypt root private key', async () => {
     const result = await agent.decryptRootPrivateKey()
     console.log("encrypted root", agent.serializableData.encryptedRootPrivateKeyBytes.toString('hex'))
