@@ -1,3 +1,4 @@
+import { Mina } from '@palladxyz/mina-core'
 import * as bip32 from '@scure/bip32'
 import sinon from 'sinon'
 import { expect } from 'vitest'
@@ -11,8 +12,6 @@ import {
 } from '../src/InMemoryKeyAgent'
 import { KeyConst, Network } from '../src/types'
 import * as bip39 from '../src/util/bip39'
-import { deriveCoinTypePrivateKey } from '../src/util/key'
-import { Mina } from '@palladxyz/mina-core'
 
 // Create a sandbox for managing and restoring stubs
 const sandbox = sinon.createSandbox()
@@ -42,18 +41,18 @@ describe('InMemoryKeyAgent', () => {
   beforeEach(async () => {
     // Create keys for testing purposes
     mnemonic = [
-        'climb',
-        'acquire',
-        'robot',
-        'select',
-        'shaft',
-        'zebra',
-        'blush',
-        'extend',
-        'evolve',
-        'host',
-        'misery',
-        'busy'
+      'climb',
+      'acquire',
+      'robot',
+      'select',
+      'shaft',
+      'zebra',
+      'blush',
+      'extend',
+      'evolve',
+      'host',
+      'misery',
+      'busy'
     ] //bip39.generateMnemonicWords(strength)
     seed = bip39.mnemonicToSeed(mnemonic, '')
     // Create root node from seed
@@ -64,12 +63,17 @@ describe('InMemoryKeyAgent', () => {
     // unencrypted root key bytes
     rootKeyBytes = root.privateKey ? root.privateKey : Buffer.from([])
     // unencrypted coin type key bytes
-    coinTypeKeyBytes = coinTypeKey.privateKey ? coinTypeKey.privateKey : Buffer.from([])
+    coinTypeKeyBytes = coinTypeKey.privateKey
+      ? coinTypeKey.privateKey
+      : Buffer.from([])
     // define the agent properties
     passphrase = await getPassphraseRethrowTypedError(getPassphrase)
     encryptedRootPrivateKey = await emip3encrypt(rootKeyBytes, passphrase)
-    encryptedCoinTypePrivateKey = await emip3encrypt(coinTypeKeyBytes, passphrase)
-    
+    encryptedCoinTypePrivateKey = await emip3encrypt(
+      coinTypeKeyBytes,
+      passphrase
+    )
+
     // Prepare agent properties
     agentProps = {
       getPassphrase,
@@ -82,7 +86,7 @@ describe('InMemoryKeyAgent', () => {
     agent = new InMemoryKeyAgent(agentProps)
 
     // network
-    network = Network.Mina 
+    network = Network.Mina
     networkType = 'testnet'
   })
 
@@ -132,14 +136,15 @@ describe('InMemoryKeyAgent', () => {
       }
     })
     it('should create an instance of InMemoryKeyAgent and check if the encrypted root private key is not equal to the decrypted private key', async () => {
-        const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
-            getPassphrase,
-            mnemonicWords: mnemonic
-        })
-        expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
-        const decryptedRootPrivateKey_ = await agentFromBip39.decryptRootPrivateKey()
-        expect(encryptedRootPrivateKey).to.not.equal(decryptedRootPrivateKey_)
-        expect(decryptedRootPrivateKey_).to.deep.equal(rootKeyBytes)
+      const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
+        getPassphrase,
+        mnemonicWords: mnemonic
+      })
+      expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
+      const decryptedRootPrivateKey_ =
+        await agentFromBip39.decryptRootPrivateKey()
+      expect(encryptedRootPrivateKey).to.not.equal(decryptedRootPrivateKey_)
+      expect(decryptedRootPrivateKey_).to.deep.equal(rootKeyBytes)
     })
     it('should create an instance of InMemoryKeyAgent and decrypt the root private key', async () => {
       const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
@@ -179,35 +184,35 @@ describe('InMemoryKeyAgent', () => {
         });
         await expect(agentFromBip39.decryptCoinTypePrivateKey()).rejects.toThrow('Failed to decrypt coin type private key');
       });*/
-      it('should create an agent that can derive credentials', async () => {
-        const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
-          getPassphrase,
-          mnemonicWords: mnemonic
-        });
-      
-        const mockedPublicKey: Mina.PublicKey =
-      'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv'
-    const stubDerivePublicKey = sinon.stub(agentFromBip39, 'derivePublicKey')
-    stubDerivePublicKey.resolves(mockedPublicKey)
+    it('should create an agent that can derive credentials', async () => {
+      const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
+        getPassphrase,
+        mnemonicWords: mnemonic
+      })
 
-    const expectedGroupedCredentials = {
-      chain: Network.Mina,
-      accountIndex: 1,
-      address: mockedPublicKey,
-      addressIndex: 0
-    }
+      const mockedPublicKey: Mina.PublicKey =
+        'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv'
+      const stubDerivePublicKey = sinon.stub(agentFromBip39, 'derivePublicKey')
+      stubDerivePublicKey.resolves(mockedPublicKey)
 
-    const groupedCredentials = await agentFromBip39.deriveAddress(
-      { account_ix: 1 },
-      { address_ix: 0 },
-      network,
-      networkType,
-      true
-    )
-    console.dir(groupedCredentials)
-    console.dir(expectedGroupedCredentials)
-    expect(groupedCredentials).to.deep.equal(expectedGroupedCredentials)
-    sinon.assert.calledOnce(stubDerivePublicKey)
-    });
-});
-});
+      const expectedGroupedCredentials = {
+        chain: Network.Mina,
+        accountIndex: 1,
+        address: mockedPublicKey,
+        addressIndex: 0
+      }
+
+      const groupedCredentials = await agentFromBip39.deriveAddress(
+        { account_ix: 1 },
+        { address_ix: 0 },
+        network,
+        networkType,
+        true
+      )
+      console.dir(groupedCredentials)
+      console.dir(expectedGroupedCredentials)
+      expect(groupedCredentials).to.deep.equal(expectedGroupedCredentials)
+      sinon.assert.calledOnce(stubDerivePublicKey)
+    })
+  })
+})
