@@ -54,7 +54,12 @@ export interface KeyAgent {
   /**
    * @throws AuthenticationError
    */
-  //signTransaction(txInternals: Mina.TransactionBody): Promise<Mina.SignedTransaction>;
+  signTransaction(
+    accountDerivationPath: AccountKeyDerivationPath,
+    addressDerivationPath: AccountAddressDerivationPath,
+    transaction: Mina.ConstructedTransaction,
+    networkType: Mina.NetworkType
+  ): Promise<Mina.SignedTransaction>
   /**
    * @throws AuthenticationError
    */

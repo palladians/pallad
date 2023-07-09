@@ -1,7 +1,13 @@
+//import { Mina } from '@palladxyz/mina-core'
+//import { HDKey } from '@scure/bip32'
 import { wordlist } from '@scure/bip39/wordlists/english'
+//import * as bs58check from 'bs58check'
+//import Client from 'mina-signer'
+//import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 import { emip3encrypt } from './emip3'
 import * as errors from './errors'
+//import { getRealErrorMsg } from './errors'
 import { KeyAgentBase } from './KeyAgentBase'
 import { KeyDecryptor } from './KeyDecryptor'
 import {
@@ -121,6 +127,54 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
       getPassphrase
     })
   }
+
+  /*async signTransaction(
+    accountIx: number,
+    addressIx: number,
+    transaction: Mina.ConstructedTransaction,
+    networkType: Mina.NetworkType
+  ): Promise<Mina.SignedTransaction> {
+    let signedTransaction: SignedLegacy<Mina.ConstructedTransaction>
+
+    try {
+      // Mina network client.
+      const minaClient = new Client({ network: networkType })
+      // Decrypt your coinType private key first
+      const decryptedCoinTypePrivateKeyBytes =
+        await this.decryptCoinTypePrivateKey()
+
+      // Create an HDKey from the coinType private key
+      const coinTypeKey = HDKey.fromMasterSeed(decryptedCoinTypePrivateKeyBytes)
+
+      // Derive a child key from the given derivation path
+      const accountKey = coinTypeKey.deriveChild(accountIx)
+      const changeKey = accountKey.deriveChild(0)
+      const addressKey = changeKey.deriveChild(addressIx)
+
+      // Convert the childKey's private key into the format expected by the mina client
+      if (!addressKey.privateKey) throw new Error('Private key not found')
+      const childPrivateKey = addressKey.privateKey
+      childPrivateKey[0] &= 0x3f
+      const childPrivateKeyReversed = this.reverseBytes(
+        new Buffer(childPrivateKey)
+      )
+      const privateKeyHex = `5a01${childPrivateKeyReversed}`
+      const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
+
+      console.log(" ")
+      console.log(" ")
+      console.log("privateKey Sign Tx", privateKey)
+      console.log(" ")
+      console.log(" ")
+      signedTransaction = minaClient.signTransaction(transaction, privateKey)
+    } catch (err) {
+      const errorMessage =
+        getRealErrorMsg(err) || 'Signing transaction failed.'
+      throw new Error(errorMessage)
+    }
+
+    return signedTransaction
+  }*/
 
   async decryptRootPrivateKey() {
     try {

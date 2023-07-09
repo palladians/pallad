@@ -12,6 +12,8 @@ import {
   KeyAgent,
   SerializableKeyAgentData
 } from './types'
+import { getRealErrorMsg } from './errors'
+import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 export abstract class KeyAgentBase implements KeyAgent {
   readonly #serializableData: SerializableKeyAgentData
@@ -89,6 +91,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     if (network === Network.Mina) {
       // Mina network client.
       const minaClient = new Client({ network: networkType })
+      /*
       // Decrypt your coinType private key first
       const decryptedCoinTypePrivateKeyBytes =
         await this.decryptCoinTypePrivateKey()
@@ -111,16 +114,69 @@ export abstract class KeyAgentBase implements KeyAgent {
         new Buffer(childPrivateKey)
       )
       const privateKeyHex = `5a01${childPrivateKeyReversed}`
-      const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
+      const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))*/
+      // Generate the private key
+      const privateKey = await this.#generatePrivateKeyFromCoinType(accountDerivationPath.account_ix, addressDerivationPath.address_ix)
 
       // Derive and return the Mina public key
-      console.log('privateKey', privateKey)
       const publicKey = minaClient.derivePublicKey(privateKey)
 
       return publicKey as Mina.PublicKey
     } else {
       throw new Error('Unsupported network')
     }
+  }
+  /**
+   * Signs a transaction using the provided private key and network.
+   * @param privateKey The private key used for signing.
+   * @param transactionTx The constructed transaction.
+   * @param network The network type.
+   * @returns A Promise that resolves to the signed transaction.
+   */
+  async signTransaction(
+    accountDerivationPath: AccountKeyDerivationPath,
+    addressDerivationPath: AccountAddressDerivationPath,
+    transaction: Mina.ConstructedTransaction,
+    networkType: Mina.NetworkType
+  ): Promise<Mina.SignedTransaction> {
+    let signedTransaction: SignedLegacy<Mina.ConstructedTransaction>
+
+    try {
+      // Mina network client.
+      const minaClient = new Client({ network: networkType })
+      // Generate the private key
+      const privateKey = await this.#generatePrivateKeyFromCoinType(accountDerivationPath.account_ix, addressDerivationPath.address_ix)
+      // Sign the transaction
+      signedTransaction = minaClient.signTransaction(transaction, privateKey)
+    } catch (err) {
+      const errorMessage =
+        getRealErrorMsg(err) || 'Signing transaction failed.'
+      throw new Error(errorMessage)
+    }
+
+    return signedTransaction
+  }
+  async #generatePrivateKeyFromCoinType(accountIx: number, addressIx: number): Promise<string> {
+    // Decrypt your coinType private key first
+    const decryptedCoinTypePrivateKeyBytes = await this.decryptCoinTypePrivateKey()
+
+    // Create an HDKey from the coinType private key
+    const coinTypeKey = HDKey.fromMasterSeed(decryptedCoinTypePrivateKeyBytes)
+
+    // Derive a child key from the given derivation path
+    const accountKey = coinTypeKey.deriveChild(accountIx)
+    const changeKey = accountKey.deriveChild(0)
+    const addressKey = changeKey.deriveChild(addressIx)
+
+    // Convert the childKey's private key into the format expected by the mina client
+    if (!addressKey.privateKey) throw new Error('Private key not found')
+    const childPrivateKey = addressKey.privateKey
+    childPrivateKey[0] &= 0x3f
+    const childPrivateKeyReversed = this.reverseBytes(new Buffer(childPrivateKey))
+    const privateKeyHex = `5a01${childPrivateKeyReversed}`
+    const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
+
+    return privateKey
   }
 }
 
