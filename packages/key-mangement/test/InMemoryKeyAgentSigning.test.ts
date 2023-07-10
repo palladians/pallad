@@ -45,7 +45,6 @@ describe('InMemoryKeyAgent', () => {
   let minaClient: Client
   let accountKeyDerivationPath: AccountKeyDerivationPath
   let accountAddressDerivationPath: AccountAddressDerivationPath
-  let minaAddresses: Mina.PublicKey[]
 
   beforeEach(async () => {
     // Create keys for testing purposes
@@ -100,10 +99,6 @@ describe('InMemoryKeyAgent', () => {
     minaClient = new Client({ network: networkType })
     accountKeyDerivationPath = { account_ix: 0 }
     accountAddressDerivationPath = { address_ix: 0 }
-    minaAddresses = [
-      'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq',
-      'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv'
-    ]
   })
   afterEach(() => {
     // Restore all stubs after each test
@@ -130,6 +125,7 @@ describe('InMemoryKeyAgent', () => {
         network,
         networkType
       )
+
       const transaction: Mina.TransactionBody = {
         to: credentials.address,
         from: credentials.address,
@@ -144,7 +140,7 @@ describe('InMemoryKeyAgent', () => {
         transaction,
         Mina.TransactionKind.PAYMENT
       )
-  
+
       const signedTx = await agentFromBip39.signTransaction(
         accountKeyDerivationPath,
         accountAddressDerivationPath,
