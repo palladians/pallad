@@ -4,6 +4,7 @@ import Client from 'mina-signer'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
+import { emip3encrypt } from '../src/emip3'
 import { getPassphraseRethrowTypedError } from '../src/InMemoryKeyAgent'
 import { KeyAgentBase } from '../src/KeyAgentBase'
 import {
@@ -51,6 +52,8 @@ describe('KeyAgentBase', () => {
   let passphrase: Uint8Array
   let rootKeyBytes: Uint8Array
   let coinTypeKeyBytes: Uint8Array
+  let encryptedRootPrivateKey: Uint8Array
+  let encryptedCoinTypePrivateKey: Uint8Array
 
   beforeEach(async () => {
     // Generate a mnemonic (24 words)
@@ -84,6 +87,13 @@ describe('KeyAgentBase', () => {
 
     // passphrase
     passphrase = await getPassphraseRethrowTypedError(getPassphrase)
+    // define the agent properties
+    passphrase = await getPassphraseRethrowTypedError(getPassphrase)
+    encryptedRootPrivateKey = await emip3encrypt(rootKeyBytes, passphrase)
+    encryptedCoinTypePrivateKey = await emip3encrypt(
+      coinTypeKeyBytes,
+      passphrase
+    )
 
     // Define your own appropriate initial data, network, accountKeyDerivationPath, and accountAddressDerivationPath
     serializableData = {
@@ -102,26 +112,12 @@ describe('KeyAgentBase', () => {
           address: 'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv'
         }*/
       ],
-      encryptedRootPrivateKeyBytes: new Uint8Array([
-        2, 146, 16, 172, 81, 82, 189, 187, 33, 108, 5, 92, 208, 242, 67, 5, 140,
-        148, 20, 127, 200, 181, 213, 40, 147, 6, 119, 69, 161, 69, 168, 94, 250,
-        182, 179, 101, 90, 43, 24, 200, 111, 134, 190, 203, 140, 38, 26, 120,
-        12, 209, 46, 38, 125, 224, 216, 149, 142, 93, 216, 70, 115, 123, 42,
-        179, 189, 172, 196, 92, 12, 149, 184, 62, 96, 245, 108, 4, 128, 198, 74,
-        194, 39, 20, 3, 239, 188, 22, 15, 71, 11, 74, 196, 97
-      ]),
-      encryptedCoinTypePrivateKeyBytes: new Uint8Array([
-        233, 229, 85, 181, 247, 182, 25, 1, 189, 22, 38, 205, 60, 33, 64, 190,
-        118, 100, 154, 123, 77, 31, 214, 14, 196, 45, 51, 61, 28, 226, 172, 180,
-        203, 223, 201, 188, 167, 169, 157, 239, 91, 223, 176, 98, 171, 103, 147,
-        213, 144, 122, 220, 171, 230, 162, 83, 93, 229, 243, 120, 142, 86, 239,
-        253, 134, 63, 124, 88, 246, 111, 117, 92, 173, 60, 255, 148, 26, 206,
-        138, 172, 94, 100, 214, 162, 128, 146, 108, 17, 195, 35, 60, 90, 74
-      ])
+      encryptedRootPrivateKeyBytes: encryptedRootPrivateKey,
+      encryptedCoinTypePrivateKeyBytes: encryptedCoinTypePrivateKey
     }
     network = Network.Mina
     networkType = 'testnet'
-    accountKeyDerivationPath = { account_ix: 0 }
+    accountKeyDerivationPath = { account_ix: 1 }
     accountAddressDerivationPath = { address_ix: 0 }
     instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
     minaClient = new Client({ network: networkType })
@@ -262,9 +258,15 @@ describe('KeyAgentBase', () => {
   it('should sign transaction successfully', async () => {
     console.log(passphrase)
     console.log(minaClient)
+    const credentials = await instance.deriveAddress(
+      accountKeyDerivationPath,
+      accountAddressDerivationPath,
+      network,
+      networkType
+    )
     const transaction: Mina.TransactionBody = {
-      to: 'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv',
-      from: 'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv',
+      to: credentials.address,
+      from: credentials.address,
       fee: 1,
       amount: 100,
       nonce: 0,
@@ -279,15 +281,19 @@ describe('KeyAgentBase', () => {
 
     //const stubSignTransaction = sinon.stub(minaClient, 'signTransaction')
     //stubSignTransaction.resolves(signedTransaction)
-    console.log('constructedTx', constructedTx)
+    //console.log('constructedTx', constructedTx)
 
-    const result = await instance.signTransaction(
+    const signedTx = await instance.signTransaction(
       accountKeyDerivationPath,
       accountAddressDerivationPath,
       constructedTx,
       networkType
     )
-    console.log('signed Tx', result)
+    console.log('signed Tx', signedTx)
+    const isVerified = minaClient.verifyTransaction(signedTx)
+    console.log('Signed Transaction isVerified?', isVerified)
+    expect(isVerified).toBeTruthy()
+
     //expect(result).to.deep.equal(signedTransaction)
     //sinon.assert.calledOnce(stubSignTransaction)
   })

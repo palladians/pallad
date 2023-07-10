@@ -42,9 +42,9 @@ describe('InMemoryKeyAgent', () => {
   let coinTypeKey: bip32.HDKey
   let networkType: Mina.NetworkType
   let network: Network
-  let client: Client
-  let accountIndex: AccountKeyDerivationPath
-  let addressIndex: AccountAddressDerivationPath
+  let minaClient: Client
+  let accountKeyDerivationPath: AccountKeyDerivationPath
+  let accountAddressDerivationPath: AccountAddressDerivationPath
   let minaAddresses: Mina.PublicKey[]
 
   beforeEach(async () => {
@@ -97,9 +97,9 @@ describe('InMemoryKeyAgent', () => {
     // network
     network = Network.Mina
     networkType = 'testnet'
-    client = new Client({ network: networkType })
-    accountIndex = { account_ix: 1 }
-    addressIndex = { address_ix: 0 }
+    minaClient = new Client({ network: networkType })
+    accountKeyDerivationPath = { account_ix: 0 }
+    accountAddressDerivationPath = { address_ix: 0 }
     minaAddresses = [
       'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq',
       'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv'
@@ -124,66 +124,37 @@ describe('InMemoryKeyAgent', () => {
         mnemonicWords: mnemonic
       })
 
-      const mockedPublicKey: Mina.PublicKey = minaAddresses[
-        accountIndex.account_ix
-      ] as Mina.PublicKey
-      const stubDerivePublicKey = sinon.stub(agentFromBip39, 'derivePublicKey')
-      stubDerivePublicKey.resolves(mockedPublicKey)
-
-      const expectedGroupedCredentials = {
-        chain: Network.Mina,
-        accountIndex: accountIndex.account_ix,
-        address: mockedPublicKey,
-        addressIndex: addressIndex.address_ix
-      }
-
-      const groupedCredentials = await agentFromBip39.deriveAddress(
-        accountIndex,
-        addressIndex,
+      const credentials = await agentFromBip39.deriveAddress(
+        accountKeyDerivationPath,
+        accountAddressDerivationPath,
         network,
-        networkType,
-        true
+        networkType
       )
-      //console.log(groupedCredentials)
-      expect(groupedCredentials).to.deep.equal(expectedGroupedCredentials)
-      sinon.assert.calledOnce(stubDerivePublicKey)
-
-      const payment: Mina.TransactionBody = {
-        type: 'payment',
-        to: groupedCredentials.address,
-        from: groupedCredentials.address,
+      const transaction: Mina.TransactionBody = {
+        to: credentials.address,
+        from: credentials.address,
         fee: 1,
+        amount: 100,
         nonce: 0,
         memo: 'hello Bob',
         validUntil: 321,
-        amount: 100
+        type: 'payment'
       }
-
-      const constructedPayment = constructTransaction(
-        payment,
+      const constructedTx = constructTransaction(
+        transaction,
         Mina.TransactionKind.PAYMENT
       )
-
-      const signedPayment = await agentFromBip39.signTransaction(
-        accountIndex,
-        addressIndex,
-        constructedPayment,
+  
+      const signedTx = await agentFromBip39.signTransaction(
+        accountKeyDerivationPath,
+        accountAddressDerivationPath,
+        constructedTx,
         networkType
       )
-
-      expect(signedPayment.data).toBeDefined()
-      expect(signedPayment.signature).toBeDefined()
-      const isVerified = client.verifyTransaction(signedPayment)
-      // TODO: investigate why this is isVerified is false
-      console.log('isVerified', isVerified)
-      // console.log(' ')
-      // console.log(' ')
-      // console.log(' ')
-      //console.log('signedPayment', signedPayment)
-      //console.log(' ')
-      //console.log(' ')
-      //console.log(' ')
-      //expect(isVerified).toBeTruthy()
+      console.log('signed Tx', signedTx)
+      const isVerified = minaClient.verifyTransaction(signedTx)
+      console.log('Signed Transaction isVerified?', isVerified)
+      expect(isVerified).toBeTruthy()
     })
   })
 })

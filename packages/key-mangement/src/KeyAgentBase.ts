@@ -151,7 +151,6 @@ export abstract class KeyAgentBase implements KeyAgent {
       addressDerivationPath.address_ix
     )
     // Sign the transaction
-    console.log('signing transaction private key', privateKey)
     try {
       signedTransaction = minaClient.signTransaction(transaction, privateKey)
     } catch (err) {
