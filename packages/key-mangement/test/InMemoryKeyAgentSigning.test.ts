@@ -45,6 +45,7 @@ describe('InMemoryKeyAgent', () => {
   let client: Client
   let accountIndex: AccountKeyDerivationPath
   let addressIndex: AccountAddressDerivationPath
+  let minaAddresses: Mina.PublicKey[]
 
   beforeEach(async () => {
     // Create keys for testing purposes
@@ -99,6 +100,10 @@ describe('InMemoryKeyAgent', () => {
     client = new Client({ network: networkType })
     accountIndex = { account_ix: 1 }
     addressIndex = { address_ix: 0 }
+    minaAddresses = [
+      'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq',
+      'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv'
+    ]
   })
   afterEach(() => {
     // Restore all stubs after each test
@@ -119,8 +124,9 @@ describe('InMemoryKeyAgent', () => {
         mnemonicWords: mnemonic
       })
 
-      const mockedPublicKey: Mina.PublicKey =
-        'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv'
+      const mockedPublicKey: Mina.PublicKey = minaAddresses[
+        accountIndex.account_ix
+      ] as Mina.PublicKey
       const stubDerivePublicKey = sinon.stub(agentFromBip39, 'derivePublicKey')
       stubDerivePublicKey.resolves(mockedPublicKey)
 
@@ -138,14 +144,14 @@ describe('InMemoryKeyAgent', () => {
         networkType,
         true
       )
-      console.log(groupedCredentials)
+      //console.log(groupedCredentials)
       expect(groupedCredentials).to.deep.equal(expectedGroupedCredentials)
       sinon.assert.calledOnce(stubDerivePublicKey)
 
       const payment: Mina.TransactionBody = {
         type: 'payment',
-        to: mockedPublicKey,
-        from: mockedPublicKey,
+        to: groupedCredentials.address,
+        from: groupedCredentials.address,
         fee: 1,
         nonce: 0,
         memo: 'hello Bob',
@@ -170,6 +176,13 @@ describe('InMemoryKeyAgent', () => {
       const isVerified = client.verifyTransaction(signedPayment)
       // TODO: investigate why this is isVerified is false
       console.log('isVerified', isVerified)
+     // console.log(' ')
+     // console.log(' ')
+     // console.log(' ')
+      //console.log('signedPayment', signedPayment)
+      //console.log(' ')
+      //console.log(' ')
+      //console.log(' ')
       //expect(isVerified).toBeTruthy()
     })
   })

@@ -108,7 +108,7 @@ describe('InMemoryKeyAgent', () => {
         getPassphrase,
         mnemonicWords: mnemonic
       })
-      console.log('agentFromBip39: ', agentFromBip39)
+      //console.log('agentFromBip39: ', agentFromBip39)
 
       expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
     })

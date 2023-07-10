@@ -88,7 +88,15 @@ export interface KeyAgent {
   /**
    * @throws AuthenticationError
    */
-  //exportRootPrivateKey(): Promise<string>;
+  exportRootPrivateKey(): Promise<Uint8Array>
+  /**
+   * @throws AuthenticationError
+   */
+  decryptRootPrivateKey(): Promise<Uint8Array>
+  /**
+   * @throws AuthenticationError
+   */
+  decryptCoinTypePrivateKey(): Promise<Uint8Array>
 }
 
 /**

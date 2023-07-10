@@ -1,26 +1,43 @@
 import { Mina } from '@palladxyz/mina-core'
 import * as bip32 from '@scure/bip32'
+import Client from 'mina-signer'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
+import { getPassphraseRethrowTypedError } from '../src/InMemoryKeyAgent'
 import { KeyAgentBase } from '../src/KeyAgentBase'
 import {
   AccountAddressDerivationPath,
   AccountKeyDerivationPath,
+  GetPassphrase,
   KeyAgentType,
   KeyConst,
   Network,
   SerializableKeyAgentData
 } from '../src/types'
 import * as bip39 from '../src/util/bip39'
+import { constructTransaction } from '../src/util/buildTx'
+
+// Provide the passphrase for testing purposes
+const params = {
+  passphrase: 'passphrase'
+}
+const getPassphrase = async () => Buffer.from(params.passphrase)
 
 describe('KeyAgentBase', () => {
   class KeyAgentBaseInstance extends KeyAgentBase {
-    override decryptCoinTypePrivateKey(): Promise<Uint8Array> {
-      throw new Error('Method not implemented.')
+    override exportRootPrivateKey(): Promise<Uint8Array> {
+      return Promise.resolve(
+        new Uint8Array([
+          13, 171, 6, 146, 209, 160, 249, 212, 124, 244, 9, 93, 100, 119, 106,
+          182, 8, 206, 168, 211, 211, 121, 250, 248, 228, 4, 35, 169, 204, 12,
+          117, 226
+        ])
+      )
     }
-    constructor(data: SerializableKeyAgentData) {
-      super(data)
+
+    constructor(data: SerializableKeyAgentData, getPassphrase: GetPassphrase) {
+      super(data, getPassphrase)
     }
   }
 
@@ -30,8 +47,12 @@ describe('KeyAgentBase', () => {
   let accountAddressDerivationPath: AccountAddressDerivationPath
   let networkType: Mina.NetworkType
   let network: Network
+  let minaClient: Client
+  let passphrase: Uint8Array
+  let rootKeyBytes: Uint8Array
+  let coinTypeKeyBytes: Uint8Array
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // Generate a mnemonic (24 words)
     //const strength = 128 // increase to 256 for a 24-word mnemonic
     const mnemonic = [
@@ -52,14 +73,17 @@ describe('KeyAgentBase', () => {
     // Create root node from seed
     const root = bip32.HDKey.fromMasterSeed(seed)
     // unencrypted root key bytes
-    const rootKeyBytes = root.privateKey ? root.privateKey : Buffer.from([])
+    rootKeyBytes = root.privateKey ? root.privateKey : Buffer.from([])
 
     // Derive a child key from the given derivation path
     const purposeKey = root.deriveChild(KeyConst.PURPOSE)
     const coinTypeKey = purposeKey.deriveChild(KeyConst.MINA_COIN_TYPE)
-    const cointTypeKeyBytes = coinTypeKey.privateKey
+    coinTypeKeyBytes = coinTypeKey.privateKey
       ? coinTypeKey.privateKey
       : Buffer.from([])
+
+    // passphrase
+    passphrase = await getPassphraseRethrowTypedError(getPassphrase)
 
     // Define your own appropriate initial data, network, accountKeyDerivationPath, and accountAddressDerivationPath
     serializableData = {
@@ -78,20 +102,33 @@ describe('KeyAgentBase', () => {
           address: 'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv'
         }*/
       ],
-      encryptedRootPrivateKeyBytes: rootKeyBytes,
-      decryptRootPrivateKey: async () => {
-        return Buffer.from(serializableData.encryptedRootPrivateKeyBytes)
-      },
-      encryptedCoinTypePrivateKeyBytes: cointTypeKeyBytes,
-      decryptCoinTypePrivateKey: async () => {
-        return Buffer.from(serializableData.encryptedRootPrivateKeyBytes)
-      }
+      encryptedRootPrivateKeyBytes: new Uint8Array([
+        2, 146,  16, 172,  81,  82, 189, 187,  33, 108,   5,  92,
+      208, 242,  67,   5, 140, 148,  20, 127, 200, 181, 213,  40,
+      147,   6, 119,  69, 161,  69, 168,  94, 250, 182, 179, 101,
+       90,  43,  24, 200, 111, 134, 190, 203, 140,  38,  26, 120,
+       12, 209,  46,  38, 125, 224, 216, 149, 142,  93, 216,  70,
+      115, 123,  42, 179, 189, 172, 196,  92,  12, 149, 184,  62,
+       96, 245, 108,   4, 128, 198,  74, 194,  39,  20,   3, 239,
+      188,  22,  15,  71,  11,  74, 196,  97
+    ]),
+      encryptedCoinTypePrivateKeyBytes: new Uint8Array([
+        233, 229,  85, 181, 247, 182,  25,   1, 189,  22,  38, 205,
+         60,  33,  64, 190, 118, 100, 154, 123,  77,  31, 214,  14,
+        196,  45,  51,  61,  28, 226, 172, 180, 203, 223, 201, 188,
+        167, 169, 157, 239,  91, 223, 176,  98, 171, 103, 147, 213,
+        144, 122, 220, 171, 230, 162,  83,  93, 229, 243, 120, 142,
+         86, 239, 253, 134,  63, 124,  88, 246, 111, 117,  92, 173,
+         60, 255, 148,  26, 206, 138, 172,  94, 100, 214, 162, 128,
+        146, 108,  17, 195,  35,  60,  90,  74
+      ])
     }
     network = Network.Mina
     networkType = 'testnet'
     accountKeyDerivationPath = { account_ix: 0 }
     accountAddressDerivationPath = { address_ix: 0 }
-    instance = new KeyAgentBaseInstance(serializableData)
+    instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
+    minaClient = new Client({ network: networkType })
   })
 
   afterEach(() => {
@@ -130,7 +167,7 @@ describe('KeyAgentBase', () => {
       networkType,
       true
     )
-    console.log('groupedAddress', groupedAddress)
+    //console.log('groupedAddress', groupedAddress)
 
     expect(groupedAddress).to.deep.equal(expectedGroupedCredentials)
     sinon.assert.calledOnce(stubDerivePublicKey)
@@ -195,11 +232,6 @@ describe('KeyAgentBase', () => {
       resultArray.push(result)
     }
 
-    //console.log(
-    //  "the KeyAgent's instance of knownCredentials",
-    //  instance.knownCredentials
-    //)
-
     // Check if the credentials were stored properly.
     expect(instance.knownCredentials).to.deep.equal(
       expectedGroupedCredentialsArray
@@ -216,5 +248,43 @@ describe('KeyAgentBase', () => {
     expect(instance.reverseBytes(originalBuffer)).to.deep.equal(reversedBuffer)
   })
 
-  // More tests for derivePublicKey, etc...
+  it('should decrypt root key successfully', async () => {
+    const decryptedRootKey = await instance.decryptRootPrivateKey()
+    expect(Buffer.from(decryptedRootKey)).to.deep.equal(Buffer.from(rootKeyBytes))
+  })
+
+  it('should decrypt coin type key successfully', async () => {
+    const decryptedCoinTypeKey = await instance.decryptCoinTypePrivateKey()
+    expect(Buffer.from(decryptedCoinTypeKey)).to.deep.equal(Buffer.from(coinTypeKeyBytes))
+  })
+    
+  // TODO: add transaction signing tests
+  
+  it('should sign transaction successfully', async () => {
+    const transaction: Mina.TransactionBody = {
+      to: 'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv',
+      from: 'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv',
+      fee: 1,
+      amount: 100,
+      nonce: 0,
+      memo: 'hello Bob',
+      validUntil: 321,
+      type: 'payment'
+    }
+    const constructedTx = constructTransaction(transaction, Mina.TransactionKind.PAYMENT)
+
+    //const stubSignTransaction = sinon.stub(minaClient, 'signTransaction')
+    //stubSignTransaction.resolves(signedTransaction)
+    console.log('constructedTx', constructedTx)
+
+    const result = await instance.signTransaction(
+      accountKeyDerivationPath,
+      accountAddressDerivationPath,
+      constructedTx,
+      networkType
+    )
+    console.log('signed Tx', result)
+    //expect(result).to.deep.equal(signedTransaction)
+    //sinon.assert.calledOnce(stubSignTransaction)
+  })
 })

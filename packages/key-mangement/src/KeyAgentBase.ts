@@ -6,7 +6,8 @@ import Client from 'mina-signer'
 import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 import { getRealErrorMsg } from './errors'
-import { Network } from './types'
+import { KeyDecryptor } from './KeyDecryptor'
+import { GetPassphrase, Network, KeyConst } from './types'
 import {
   AccountAddressDerivationPath,
   AccountKeyDerivationPath,
@@ -17,6 +18,7 @@ import {
 
 export abstract class KeyAgentBase implements KeyAgent {
   readonly #serializableData: SerializableKeyAgentData
+  private keyDecryptor: KeyDecryptor
 
   get knownCredentials(): GroupedCredentials[] {
     return this.#serializableData.knownCredentials
@@ -28,9 +30,15 @@ export abstract class KeyAgentBase implements KeyAgent {
     return this.#serializableData
   }
 
-  constructor(serializableData: SerializableKeyAgentData) {
+  constructor(
+    serializableData: SerializableKeyAgentData,
+    getPassphrase: GetPassphrase
+  ) {
     this.#serializableData = serializableData
+    this.keyDecryptor = new KeyDecryptor(serializableData, getPassphrase)
   }
+
+  abstract exportRootPrivateKey(): Promise<Uint8Array>
 
   async deriveAddress(
     { account_ix }: AccountKeyDerivationPath,
@@ -78,7 +86,22 @@ export abstract class KeyAgentBase implements KeyAgent {
   }
 
   // because the decrypt function is a method on InMemoryKeyAgent this function must be abstract
-  abstract decryptCoinTypePrivateKey(): Promise<Uint8Array>
+  //abstract decryptCoinTypePrivateKey(): Promise<Uint8Array>
+  async decryptRootPrivateKey(): Promise<Uint8Array> {
+    try {
+      return await this.keyDecryptor.decryptRootPrivateKey()
+    } catch (error) {
+      throw new Error(`Failed to decrypt root private key: ${error}`)
+    }
+  }
+
+  async decryptCoinTypePrivateKey(): Promise<Uint8Array> {
+    try {
+      return await this.keyDecryptor.decryptCoinTypePrivateKey()
+    } catch (error) {
+      throw new Error(`Failed to decrypt coin type private key: ${error}`)
+    }
+  }
 
   async derivePublicKey(
     accountDerivationPath: AccountKeyDerivationPath,
@@ -91,32 +114,8 @@ export abstract class KeyAgentBase implements KeyAgent {
     if (network === Network.Mina) {
       // Mina network client.
       const minaClient = new Client({ network: networkType })
-      /*
-      // Decrypt your coinType private key first
-      const decryptedCoinTypePrivateKeyBytes =
-        await this.decryptCoinTypePrivateKey()
-
-      // Create an HDKey from the coinType private key
-      const coinTypeKey = HDKey.fromMasterSeed(decryptedCoinTypePrivateKeyBytes)
-
-      // Derive a child key from the given derivation path
-      const accountKey = coinTypeKey.deriveChild(
-        accountDerivationPath.account_ix
-      )
-      const changeKey = accountKey.deriveChild(0)
-      const addressKey = changeKey.deriveChild(addressDerivationPath.address_ix)
-
-      // Convert the childKey's private key into the format expected by the mina client
-      if (!addressKey.privateKey) throw new Error('Private key not found')
-      const childPrivateKey = addressKey.privateKey
-      childPrivateKey[0] &= 0x3f
-      const childPrivateKeyReversed = this.reverseBytes(
-        new Buffer(childPrivateKey)
-      )
-      const privateKeyHex = `5a01${childPrivateKeyReversed}`
-      const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))*/
       // Generate the private key
-      const privateKey = await this.#generatePrivateKeyFromCoinType(
+      const privateKey = await this.#generatePrivateKeyFromRoot(
         accountDerivationPath.account_ix,
         addressDerivationPath.address_ix
       )
@@ -144,15 +143,17 @@ export abstract class KeyAgentBase implements KeyAgent {
   ): Promise<Mina.SignedTransaction> {
     let signedTransaction: SignedLegacy<Mina.ConstructedTransaction>
 
-    try {
+    
       // Mina network client.
       const minaClient = new Client({ network: networkType })
       // Generate the private key
-      const privateKey = await this.#generatePrivateKeyFromCoinType(
+      const privateKey = await this.#generatePrivateKeyFromRoot(
         accountDerivationPath.account_ix,
         addressDerivationPath.address_ix
       )
       // Sign the transaction
+      console.log("signing transaction private key", privateKey)
+      try {
       signedTransaction = minaClient.signTransaction(transaction, privateKey)
     } catch (err) {
       const errorMessage = getRealErrorMsg(err) || 'Signing transaction failed.'
@@ -161,7 +162,7 @@ export abstract class KeyAgentBase implements KeyAgent {
 
     return signedTransaction
   }
-  async #generatePrivateKeyFromCoinType(
+  /*async #generatePrivateKeyFromCoinType(
     accountIx: number,
     addressIx: number
   ): Promise<string> {
@@ -188,7 +189,27 @@ export abstract class KeyAgentBase implements KeyAgent {
     const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
 
     return privateKey
-  }
+  }*/
+  async #generatePrivateKeyFromRoot(
+    accountIx: number,
+    addressIx: number
+  ): Promise<string> {
+    // Decrypt your root private key first
+    const decryptedRootPrivateKeyBytes = await this.decryptRootPrivateKey()
+
+    // Create an HDKey from the root private key
+    const rootKey = HDKey.fromMasterSeed(decryptedRootPrivateKeyBytes)
+    const path = `m/${KeyConst.PURPOSE}'/${KeyConst.MINA_COIN_TYPE}'/${accountIx}'/0/${addressIx}`
+    const childNode = rootKey.derive(path)
+    if (!childNode?.privateKey) throw new Error('Unable to derive private key')
+
+    childNode.privateKey[0] &= 0x3f
+    const childPrivateKey = this.reverseBytes(new Buffer(childNode.privateKey))
+    const privateKeyHex = `5a01${childPrivateKey.toString('hex')}`
+    const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
+
+    return privateKey
+}
 }
 
 /**
