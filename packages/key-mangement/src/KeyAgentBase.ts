@@ -7,7 +7,7 @@ import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 import { getRealErrorMsg } from './errors'
 import { KeyDecryptor } from './KeyDecryptor'
-import { GetPassphrase, Network, KeyConst } from './types'
+import { GetPassphrase, KeyConst, Network } from './types'
 import {
   AccountAddressDerivationPath,
   AccountKeyDerivationPath,
@@ -143,17 +143,16 @@ export abstract class KeyAgentBase implements KeyAgent {
   ): Promise<Mina.SignedTransaction> {
     let signedTransaction: SignedLegacy<Mina.ConstructedTransaction>
 
-    
-      // Mina network client.
-      const minaClient = new Client({ network: networkType })
-      // Generate the private key
-      const privateKey = await this.#generatePrivateKeyFromRoot(
-        accountDerivationPath.account_ix,
-        addressDerivationPath.address_ix
-      )
-      // Sign the transaction
-      console.log("signing transaction private key", privateKey)
-      try {
+    // Mina network client.
+    const minaClient = new Client({ network: networkType })
+    // Generate the private key
+    const privateKey = await this.#generatePrivateKeyFromRoot(
+      accountDerivationPath.account_ix,
+      addressDerivationPath.address_ix
+    )
+    // Sign the transaction
+    console.log('signing transaction private key', privateKey)
+    try {
       signedTransaction = minaClient.signTransaction(transaction, privateKey)
     } catch (err) {
       const errorMessage = getRealErrorMsg(err) || 'Signing transaction failed.'
@@ -209,7 +208,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
 
     return privateKey
-}
+  }
 }
 
 /**

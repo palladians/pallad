@@ -23,8 +23,8 @@ describe('Transaction Construction & Signing', () => {
       keyGen = new MinaKeyGenerator()
       const network: NetworkType = 'mainnet'
       client = await getSignClient(network)
-      mnemonic ='habit hope tip crystal because grunt nation idea electric witness alert like' //'climb acquire robot select shaft zebra blush extend evolve host misery busy'
-      
+      mnemonic =
+        'habit hope tip crystal because grunt nation idea electric witness alert like' //'climb acquire robot select shaft zebra blush extend evolve host misery busy'
     })
 
     it('should create a MinaKeyGenerator instance for Mina network', () => {
@@ -190,11 +190,11 @@ describe('Transaction Construction & Signing', () => {
         network
       )
 
-      console.log("keyPairAlice 0/0/0", keyPairAlice)
-      console.log("keyPairBob 0/0/1", keyPairBob)
-      console.log("payment", payment)
-      console.log("constructedPayment", constructedPayment)
-      console.log("signedPayment", signedPayment)
+      console.log('keyPairAlice 0/0/0', keyPairAlice)
+      console.log('keyPairBob 0/0/1', keyPairBob)
+      console.log('payment', payment)
+      console.log('constructedPayment', constructedPayment)
+      console.log('signedPayment', signedPayment)
       expect(signedPayment.data).toBeDefined()
       expect(signedPayment.signature).toBeDefined()
 

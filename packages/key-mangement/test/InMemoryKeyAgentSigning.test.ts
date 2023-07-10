@@ -176,9 +176,9 @@ describe('InMemoryKeyAgent', () => {
       const isVerified = client.verifyTransaction(signedPayment)
       // TODO: investigate why this is isVerified is false
       console.log('isVerified', isVerified)
-     // console.log(' ')
-     // console.log(' ')
-     // console.log(' ')
+      // console.log(' ')
+      // console.log(' ')
+      // console.log(' ')
       //console.log('signedPayment', signedPayment)
       //console.log(' ')
       //console.log(' ')
