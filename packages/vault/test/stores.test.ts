@@ -1,6 +1,11 @@
+import {
+  FromBip39MnemonicWordsProps,
+  GetPassphrase,
+  InMemoryKeyAgent
+} from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 
-import { accountStore } from '../src/stores'
+import { accountStore, keyAgentStore } from '../src/stores'
 
 describe('store', () => {
   test('setAccountInfo', async () => {
@@ -28,13 +33,55 @@ describe('store', () => {
         nonce: '1',
         memo: 'test memo',
         hash: 'hash1'
-        // Include other required properties
       }
-      // Add more transactions if needed
     ]
 
     accountStore.getState().setTransactions(transactions)
 
     expect(accountStore.getState().transactions).toEqual(transactions)
   })
+
+  test('restoreWallet', async () => {
+    const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
+    const mnemonic = [
+      'climb',
+      'acquire',
+      'robot',
+      'select',
+      'shaft',
+      'zebra',
+      'blush',
+      'extend',
+      'evolve',
+      'host',
+      'misery',
+      'busy'
+    ]
+    const agentProps: FromBip39MnemonicWordsProps = {
+      getPassphrase: getPassword,
+      mnemonicWords: mnemonic
+    }
+    const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords(agentProps)
+
+    const storeKeyAgent = await keyAgentStore.getState().restoreWallet({ mnemonic, getPassword })
+    console.log('storeKeyAgent', storeKeyAgent)
+    console.log('keyAgent', keyAgent) 
+    expect(keyAgentStore.getState().keyAgent?.serializableData.encryptedSeedBytes).toEqual(keyAgent.serializableData.encryptedSeedBytes)
+  })
+
+  /*test('addCredentials', async () => {
+
+    const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords(agentProps)
+    keyAgentStore.getState().keyAgent = keyAgent
+
+    const credentialsData = {
+      account_ix: 1,
+      address_ix: 1,
+      network: 'test network',
+      networkType: 'test network type',
+      pure: true
+    }
+
+    await keyAgentStore.getState().addCredentials(credentialsData)
+  })*/
 })

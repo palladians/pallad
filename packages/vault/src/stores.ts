@@ -1,19 +1,17 @@
-import {
-  generateMnemonic,
-  KeyGeneratorFactory,
-  Network,
-  wordlist
-} from '@palladxyz/key-generator'
-import { AccountInfo, Mina } from '@palladxyz/mina-core'
-import { produce } from 'immer'
-import { create } from 'zustand'
-import { useStore } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
-import { createStore } from 'zustand/vanilla'
+//import { produce } from 'immer'
+//import { persist } from 'zustand/middleware'
+//import { createJSONStorage } from 'zustand/vanilla'
 
-import { getSecurePersistence } from '../lib/storage'
+import {
+  FromBip39MnemonicWordsProps,
+  InMemoryKeyAgent
+} from '@palladxyz/key-management'
+import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import { create } from 'zustand'
+
+//import { getSecurePersistence } from '../lib/storage'
 import { Store } from './types'
-import { Credential, VaultState, VaultStore } from './vault'
+import { VaultStore } from './vault'
 
 export const accountStore = create<Store>((set) => ({
   accountInfo: {
@@ -29,136 +27,88 @@ export const accountStore = create<Store>((set) => ({
     set({ transactions })
 }))
 
-/**
- * The initial state of the vault store.
- */
+// define the initial state
+const initialState: VaultStore = {
+  keyAgent: null,
+  restoreWallet: async () => null,
+  addCredentials: async () => Promise.resolve()
+}
 
-const initialState: VaultState = {
-  currentWalletPublicKey: null,
-  credentials: []
-} satisfies VaultState
+// Zustand store using immer for immutable updates and persist middleware
+export const keyAgentStore = create<VaultStore>((set, get) => ({
+  keyAgent: initialState.keyAgent,
+  restoreWallet: async ({ mnemonic, getPassword }) => {
+    const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords({
+      getPassphrase: getPassword,
+      mnemonicWords: mnemonic
+    } as FromBip39MnemonicWordsProps)
 
-/**
- * Store to manage the state of the vault.
- * @type {VaultStore}
- */
-
-export const vaultStore = createStore<VaultStore>()(
-  persist(
-    (set, get) => ({
-      ...initialState,
-      getCurrentWallet() {
-        const { currentWalletPublicKey, credentials } = get()
-        const wallet = credentials.find(
-          (credential) => credential.walletPublicKey === currentWalletPublicKey
-        )
-        if (!wallet) return null
-        return {
-          walletName: wallet?.walletName,
-          walletPublicKey: wallet?.walletPublicKey
-        }
-      },
-      getAccounts() {
-        const { credentials } = get()
-        return credentials.map((credential) => credential.walletPublicKey)
-      },
-      async createWallet({
-        walletName,
+    set({ keyAgent })
+    return keyAgent
+  },
+  addCredentials: async ({
+    account_ix,
+    address_ix,
+    network,
+    networkType,
+    pure
+  }) => {
+    const keyAgent = get().keyAgent
+    if (keyAgent) {
+      await keyAgent.deriveCredentials(
+        { account_ix },
+        { address_ix },
         network,
-        accountNumber
-      }: {
-        walletName: string
-        network: Network
-        accountNumber: number
-      }) {
-        const { addCredential, setCurrentWalletPublicKey } = get()
-        const mnemonic = generateMnemonic(wordlist)
-        const keyGenerator = KeyGeneratorFactory.create(network)
-        const keypair = await keyGenerator.deriveKeyPair({
-          mnemonic,
-          accountNumber
-        })
-        if (!keypair) return null
-        addCredential({
-          walletName,
-          walletPublicKey: keypair.publicKey,
-          walletPrivateKey: keypair.privateKey
-        })
-        setCurrentWalletPublicKey({
-          currentWalletPublicKey: keypair.publicKey
-        })
-        return {
-          publicKey: keypair.publicKey,
-          mnemonic
-        }
-      },
-      async restoreWallet({
-        walletName,
-        mnemonic,
-        network,
-        accountNumber
-      }: {
-        walletName: string
-        mnemonic: string
-        network: Network
-        accountNumber: number
-      }) {
-        const { addCredential, setCurrentWalletPublicKey } = get()
-        const keyGenerator = KeyGeneratorFactory.create(network)
-        const keypair = await keyGenerator.deriveKeyPair({
-          mnemonic,
-          accountNumber
-        })
-        if (!keypair) return null
-        addCredential({
-          walletName,
-          walletPublicKey: keypair.publicKey,
-          walletPrivateKey: keypair.privateKey
-        })
-        setCurrentWalletPublicKey({
-          currentWalletPublicKey: keypair.publicKey
-        })
-        return {
-          publicKey: keypair.publicKey
-        }
-      },
-      setCurrentWalletPublicKey: ({ currentWalletPublicKey }) =>
-        set(
-          produce((draft: VaultStore) => {
-            if (currentWalletPublicKey === null) {
-              draft.currentWalletPublicKey = null
-              return
-            }
-            const credentialExists = draft.credentials.find(
-              (credential: Credential) =>
-                credential.walletPublicKey === currentWalletPublicKey
-            )
-            if (!credentialExists)
-              throw new Error('Given credential does not exist')
-            draft.currentWalletPublicKey = currentWalletPublicKey
-          })
-        ),
-      addCredential: (credential) =>
-        set(
-          produce((draft: VaultStore) => {
-            draft.credentials.push(credential)
-          })
-        ),
-      reset() {
-        return set(initialState)
-      }
-    }),
-    {
-      name: 'PalladVault',
-      storage: createJSONStorage(getSecurePersistence)
+        networkType,
+        pure
+      )
     }
-  )
-)
+  }
+}))
 
-/**
- * Hook to use the vault store.
- * @param {any} selector - Selector function to choose which part of the state to subscribe to.
- * @returns {any} Selected state.
- */
+/*
+export const useStore = create<KeyAgentStore>(persist(
+  (set) => ({
+    // Initial values for required properties
+    serializableKeyAgentData: initialState.serializableKeyAgentData,
+    // Mutators
+    setAccountInfo: (accountInfo) => set((state) => {
+      state.accountInfo = accountInfo;
+    }),
+    setTransactions: (transactions) => set((state) => {
+      state.transactions = transactions;
+    }),
+    restoreWallet: async ({
+      walletName,
+      mnemonic,
+      network,
+      accountNumber,
+      accountIndex
+    }: {
+      walletName: string
+      mnemonic: string
+      network: Network
+      accountNumber: number
+      accountIndex: number
+    }): Promise<SerializableKeyAgentData | null> => {
+      const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords({
+        getPassphrase: async () => new Uint8Array(), // TODO: Add your getPassphrase logic
+        mnemonicWords: mnemonic.split(' ')
+      } as FromBip39MnemonicWordsProps);
 
-export const useVaultStore = (selector: any) => useStore(vaultStore, selector)
+      if (!keyAgent) {
+        return null;
+      }
+
+      // Logic to restore wallet
+      return keyAgent.serializableData;
+    },
+    reset: () => set(() => ({ ...initialState })),
+  }),
+  {
+    name: 'PalladVault',
+    getStorage: () => createJSONStorage(), // custom storage (optional)
+  },
+));*/
+
+// dont forget the hook!

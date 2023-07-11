@@ -1,3 +1,4 @@
+import { GroupedCredentials } from '@palladxyz/key-management'
 import {
   AccountInfo,
   Mina,
@@ -11,7 +12,11 @@ import {
 import { PublicCredential } from '@palladxyz/vault'
 
 export interface MinaWallet {
-  // TODO: where do we specify the unlock & spending password?
+  readonly credentials: GroupedCredentials[]
+  readonly balance: number
+
+  getName(): Promise<string>
+
   createWallet(
     walletName: string,
     accountNumber: number

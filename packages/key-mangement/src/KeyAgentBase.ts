@@ -18,24 +18,25 @@ import {
 import * as util from './util'
 
 export abstract class KeyAgentBase implements KeyAgent {
-  readonly #serializableData: SerializableKeyAgentData
+  readonly serializableData: SerializableKeyAgentData
   private keyDecryptor: KeyDecryptor
+  // private #getPassphrase: GetPassphrase
 
   get knownCredentials(): GroupedCredentials[] {
-    return this.#serializableData.knownCredentials
+    return this.serializableData.knownCredentials
   }
   set knownCredentials(credentials: GroupedCredentials[]) {
-    this.#serializableData.knownCredentials = credentials
+    this.serializableData.knownCredentials = credentials
   }
-  get serializableData(): SerializableKeyAgentData {
-    return this.#serializableData
-  }
+  /*get serializableData(): SerializableKeyAgentData {
+    return this.serializableData
+  }*/
 
   constructor(
     serializableData: SerializableKeyAgentData,
     getPassphrase: GetPassphrase
   ) {
-    this.#serializableData = serializableData
+    this.serializableData = serializableData
     this.keyDecryptor = new KeyDecryptor(serializableData, getPassphrase)
   }
 

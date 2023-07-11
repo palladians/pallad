@@ -19,7 +19,7 @@
   "dependencies": {
     "@palladxyz/util": "*",
     "@palladxyz/mina-core": "*",
-    "@palladxyz/key-generator": "*",
+    "@palladxyz/key-management": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "mina-signer": "^2.0.3",

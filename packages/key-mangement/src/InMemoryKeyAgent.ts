@@ -46,14 +46,14 @@ export const getPassphraseRethrowTypedError = async (
 }
 
 export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
-  readonly #getPassphrase: GetPassphrase
+  //readonly #getPassphrase: GetPassphrase
 
   constructor({ getPassphrase, ...serializableData }: InMemoryKeyAgentProps) {
     super(
       { ...serializableData, __typename: KeyAgentType.InMemory },
       getPassphrase
     )
-    this.#getPassphrase = getPassphrase
+    //this.#getPassphrase = getPassphrase
   }
 
   /**

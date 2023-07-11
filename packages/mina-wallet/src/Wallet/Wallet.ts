@@ -1,4 +1,8 @@
-import { Network } from '@palladxyz/key-generator'
+import {
+  GroupedCredentials,
+  InMemoryKeyAgent,
+  Network
+} from '@palladxyz/key-management'
 import {
   AccountInfo,
   Mina,
@@ -17,32 +21,70 @@ import {
   SignedTransaction,
   signTransaction
 } from '@palladxyz/tx-construction'
-import { accountStore, PublicCredential, vaultStore } from '@palladxyz/vault'
+import { accountStore, keyAgentStore, PublicCredential } from '@palladxyz/vault'
 
 import { MinaWallet } from '../types'
+/*
+enum providerURLs {
+  txSubmitURL = 'https://proxy.devnet.minaexplorer.com/',
+  chainHistoryURL = 'https://devnet.graphql.minaexplorer.com',
+  accountInfoURL = 'https://proxy.devnet.minaexplorer.com/'
+}*/
+
+export interface MinaWalletDependencies {
+  readonly keyAgent: InMemoryKeyAgent
+  readonly txSubmitProvider: TxSubmitGraphQLProvider
+  readonly chainHistoryProvider: ChainHistoryGraphQLProvider
+  readonly accountInfoProvider: AccountInfoGraphQLProvider
+  readonly network: Network
+  //readonly stores?: WalletStores;
+}
+
+export interface MinaWalletProps {
+  readonly name: string
+}
 
 export class MinaWalletImpl implements MinaWallet {
-  private accountProvider: AccountInfoGraphQLProvider
-  private chainHistoryProvider: ChainHistoryGraphQLProvider
-  private transactionSubmissionProvider: TxSubmitGraphQLProvider
-  //private networkType: NetworkType
-  private network: Network
+  readonly keyAgent: InMemoryKeyAgent
+  readonly balance: number
+  readonly credentials: GroupedCredentials[]
+  readonly accountInfoProvider: AccountInfoGraphQLProvider
+  readonly chainHistoryProvider: ChainHistoryGraphQLProvider
+  readonly txSubmitProvider: TxSubmitGraphQLProvider
+  readonly name: string
+  //readonly networkType: NetworkType
+  readonly network: Network
   // Storage for the current wallet
 
   constructor(
-    accountProvider: AccountInfoGraphQLProvider,
-    chainHistoryProvider: ChainHistoryGraphQLProvider,
-    transactionSubmissionProvider: TxSubmitGraphQLProvider,
-    network: Network
+    { name }: MinaWalletProps,
+    {
+      keyAgent,
+      txSubmitProvider,
+      chainHistoryProvider,
+      accountInfoProvider,
+      network
+    }: //stores = createInMemoryWalletStores()
+    MinaWalletDependencies
   ) {
-    this.accountProvider = accountProvider
-    this.chainHistoryProvider = chainHistoryProvider
-    this.transactionSubmissionProvider = transactionSubmissionProvider
+    this.accountInfoProvider = accountInfoProvider //new AccountInfoGraphQLProvider(providerURLs.accountInfoURL)
+    this.chainHistoryProvider = chainHistoryProvider //new ChainHistoryGraphQLProvider(providerURLs.chainHistoryURL)
+    this.txSubmitProvider = txSubmitProvider //new TxSubmitGraphQLProvider(providerURLs.txSubmitURL)
+    this.keyAgent = keyAgent
+    this.name = name
     this.network = network
+    this.credentials = []
+    this.balance = 0
+  }
+
+  getName(): Promise<string> {
+    throw new Error('Method not implemented.')
   }
 
   async getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo> {
-    const accountInfo = await this.accountProvider.getAccountInfo({ publicKey })
+    const accountInfo = await this.accountInfoProvider.getAccountInfo({
+      publicKey
+    })
     accountStore.getState().setAccountInfo(accountInfo)
     return accountInfo
   }
@@ -96,7 +138,7 @@ export class MinaWalletImpl implements MinaWallet {
   async signTx(
     transaction: ConstructedTransaction
   ): Promise<SignedTransaction> {
-    const credential = vaultStore.getState().credentials[0]
+    const credential = keyAgentStore.getState().credentials[0]
     const privateKey = credential?.walletPrivateKey
     if (privateKey === undefined) {
       throw new Error('Private key is undefined')
@@ -113,9 +155,7 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   async submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult> {
-    const result = await this.transactionSubmissionProvider.submitTx(
-      submitTxArgs
-    )
+    const result = await this.txSubmitProvider.submitTx(submitTxArgs)
     return result
   }
 
@@ -124,7 +164,7 @@ export class MinaWalletImpl implements MinaWallet {
     accountNumber: number
   ): Promise<{ publicKey: string; mnemonic: string } | null> {
     // Create a new wallet
-    const result = await vaultStore.getState().createWallet({
+    const result = await keyAgentStore.getState().createWallet({
       walletName,
       network: this.network,
       accountNumber
@@ -142,7 +182,7 @@ export class MinaWalletImpl implements MinaWallet {
     accountNumber: number
   ): Promise<{ publicKey: string } | null> {
     // Restore a wallet from a mnemonic
-    const result = await vaultStore.getState().restoreWallet({
+    const result = await keyAgentStore.getState().restoreWallet({
       walletName,
       network: this.network,
       mnemonic,
@@ -153,7 +193,7 @@ export class MinaWalletImpl implements MinaWallet {
 
   getCurrentWallet(): PublicCredential | null {
     // Get the current wallet
-    const result = vaultStore.getState().getCurrentWallet()
+    const result = keyAgentStore.getState().getCurrentWallet()
 
     // Return the public credential or null
     return result ? result : null
@@ -161,7 +201,7 @@ export class MinaWalletImpl implements MinaWallet {
 
   getAccounts(): string[] {
     // Get the list of accounts for the current wallet
-    const result = vaultStore.getState().getAccounts()
+    const result = keyAgentStore.getState().getAccounts()
 
     // Return the list of accounts
     return result
