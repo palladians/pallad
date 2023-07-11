@@ -92,7 +92,7 @@ export interface KeyAgent {
   /**
    * @throws AuthenticationError
    */
-  decryptRootPrivateKey(): Promise<Uint8Array>
+  decryptSeed(): Promise<Uint8Array>
   /**
    * @throws AuthenticationError
    */

@@ -1,5 +1,7 @@
 import { Mina } from '@palladxyz/mina-core'
 import * as bip32 from '@scure/bip32'
+import * as bip39 from '@scure/bip39'
+import bs58check from 'bs58check'
 import Client from 'mina-signer'
 import sinon from 'sinon'
 import { expect } from 'vitest'
@@ -16,9 +18,13 @@ import {
   Network,
   SerializableKeyAgentData
 } from '../src/types'
-import * as bip39 from '../src/util/bip39'
+import * as util from '../src/util/bip39'
 import { constructTransaction } from '../src/util/buildTx'
 
+function reverseBytes(bytes: Buffer) {
+  const uint8 = new Uint8Array(bytes)
+  return new Buffer(uint8.reverse())
+}
 // Provide the passphrase for testing purposes
 const params = {
   passphrase: 'passphrase'
@@ -54,25 +60,26 @@ describe('KeyAgentBase', () => {
   let coinTypeKeyBytes: Uint8Array
   let encryptedRootPrivateKey: Uint8Array
   let encryptedCoinTypePrivateKey: Uint8Array
+  let mnemonic: string[]
 
   beforeEach(async () => {
     // Generate a mnemonic (24 words)
     //const strength = 128 // increase to 256 for a 24-word mnemonic
-    const mnemonic = [
-      'climb',
-      'acquire',
-      'robot',
-      'select',
-      'shaft',
-      'zebra',
-      'blush',
-      'extend',
-      'evolve',
-      'host',
-      'misery',
-      'busy'
+    mnemonic = [
+      'habit',
+      'hope',
+      'tip',
+      'crystal',
+      'because',
+      'grunt',
+      'nation',
+      'idea',
+      'electric',
+      'witness',
+      'alert',
+      'like'
     ] //bip39.generateMnemonicWords(strength)
-    const seed = bip39.mnemonicToSeed(mnemonic, '')
+    const seed = util.mnemonicToSeed(mnemonic)
     // Create root node from seed
     const root = bip32.HDKey.fromMasterSeed(seed)
     // unencrypted root key bytes
@@ -117,7 +124,7 @@ describe('KeyAgentBase', () => {
     }
     network = Network.Mina
     networkType = 'testnet'
-    accountKeyDerivationPath = { account_ix: 1 }
+    accountKeyDerivationPath = { account_ix: 0 }
     accountAddressDerivationPath = { address_ix: 0 }
     instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
     minaClient = new Client({ network: networkType })
@@ -127,7 +134,35 @@ describe('KeyAgentBase', () => {
     // Clean up all sinon stubs after each test.
     sinon.restore()
   })
-
+  it('should derive the correct root and seed keys', async () => {
+    const seed = util.mnemonicToSeed(mnemonic)
+    const seedBIP39 = await bip39.mnemonicToSeed(
+      util.joinMnemonicWords(mnemonic)
+    )
+    // Create root node from seed
+    const root = bip32.HDKey.fromMasterSeed(seed)
+    const rootKey = root.privateExtendedKey
+      ? root.privateExtendedKey
+      : Buffer.from([])
+    const expectedSeed =
+      '9d394cc4a658fe8023c6ddf1a6bea918d717543c8eeb30c115051a58993ba26c9af33b2f7f1bae7aa9428933b9e01c026619ac579a9cf789c39b4e10a4bf7240'
+    const expectedRootKey =
+      'xprv9s21ZrQH143K3kFcvB64V5doa7swe81fWMQuMVWCbKGq835dB3E5isyDhjimNjhrbRm171Q5D4Uy4wKGixKUvsy53hhaBPHDVenm1tsKzdz'
+    expect(expectedSeed).to.deep.equal(Buffer.from(seed).toString('hex'))
+    expect(expectedRootKey).to.deep.equal(rootKey)
+    expect(seedBIP39).to.deep.equal(seed)
+    const path = `m/${KeyConst.PURPOSE}'/${KeyConst.MINA_COIN_TYPE}'/${accountKeyDerivationPath.account_ix}'/0/${accountAddressDerivationPath.address_ix}`
+    const childNode = root.derive(path)
+    if (!childNode?.privateKey) throw new Error('Unable to derive private key')
+    childNode.privateKey[0] &= 0x3f
+    const childPrivateKey = reverseBytes(new Buffer(childNode.privateKey))
+    const privateKeyHex = `5a01${childPrivateKey.toString('hex')}`
+    const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
+    const publicKey = minaClient.derivePublicKey(privateKey)
+    console.log('privateKey', privateKey)
+    console.log('publicKey', publicKey)
+    // This correctly derives the addressses and private keys -- must check against the current keyAgent implementation
+  })
   it('should return the correct knownAddresses', () => {
     expect(instance.knownCredentials).to.deep.equal(
       serializableData.knownCredentials
@@ -241,7 +276,7 @@ describe('KeyAgentBase', () => {
   })
 
   it('should decrypt root key successfully', async () => {
-    const decryptedRootKey = await instance.decryptRootPrivateKey()
+    const decryptedRootKey = await instance.decryptSeed()
     expect(Buffer.from(decryptedRootKey)).to.deep.equal(
       Buffer.from(rootKeyBytes)
     )

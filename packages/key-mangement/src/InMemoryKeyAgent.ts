@@ -18,7 +18,7 @@ import {
 } from './types'
 import {
   deriveCoinTypePrivateKey,
-  entropyToRootKey,
+  entropyToSeed,
   joinMnemonicWords,
   mnemonicWordsToEntropy,
   validateMnemonic
@@ -48,7 +48,6 @@ export const getPassphraseRethrowTypedError = async (
 
 export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
   readonly #getPassphrase: GetPassphrase
-  //private keyDecryptor: KeyDecryptor
 
   constructor({ getPassphrase, ...serializableData }: InMemoryKeyAgentProps) {
     super(
@@ -56,14 +55,10 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
       getPassphrase
     )
     this.#getPassphrase = getPassphrase
-    /*this.keyDecryptor = new KeyDecryptor(
-      { ...serializableData, __typename: KeyAgentType.InMemory },
-      getPassphrase
-    )*/
   }
   async exportRootPrivateKey(): Promise<Uint8Array> {
     try {
-      return await this.decryptRootPrivateKey()
+      return await this.decryptSeed()
     } catch (error) {
       throw new errors.AuthenticationError(
         'Failed to export root private key',
@@ -104,18 +99,12 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     if (!validMnemonic) throw new errors.InvalidMnemonicError()
 
     const entropy = mnemonicWordsToEntropy(mnemonicWords)
-    const rootPrivateKeyBytes = await entropyToRootKey(
-      entropy,
-      mnemonic2ndFactorPassphrase
-    )
+    const seedBytes = await entropyToSeed(entropy, mnemonic2ndFactorPassphrase)
     const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
-    const encryptedRootPrivateKeyBytes = await emip3encrypt(
-      rootPrivateKeyBytes,
-      passphrase
-    )
+    const encryptedSeedBytes = await emip3encrypt(seedBytes, passphrase)
 
     const coinTypePrivateKeyBytes = await deriveCoinTypePrivateKey({
-      rootPrivateKey: rootPrivateKeyBytes
+      rootPrivateKey: seedBytes
     })
     const encryptedCoinTypePrivateKeyBytes = await emip3encrypt(
       coinTypePrivateKeyBytes,
@@ -123,7 +112,7 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     )
 
     return new InMemoryKeyAgent({
-      encryptedRootPrivateKeyBytes: encryptedRootPrivateKeyBytes,
+      encryptedRootPrivateKeyBytes: encryptedSeedBytes,
       encryptedCoinTypePrivateKeyBytes: encryptedCoinTypePrivateKeyBytes,
       knownCredentials: [],
       getPassphrase

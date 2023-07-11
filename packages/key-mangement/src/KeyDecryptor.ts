@@ -17,7 +17,7 @@ export class KeyDecryptor {
     this.getPassphrase = getPassphrase
   }
 
-  async decryptRootPrivateKey(noCache?: true) {
+  async decryptSeed(noCache?: true) {
     return this.decryptKey(
       'encryptedRootPrivateKeyBytes',
       'Failed to decrypt root private key',

@@ -87,9 +87,9 @@ export abstract class KeyAgentBase implements KeyAgent {
 
   // because the decrypt function is a method on InMemoryKeyAgent this function must be abstract
   //abstract decryptCoinTypePrivateKey(): Promise<Uint8Array>
-  async decryptRootPrivateKey(): Promise<Uint8Array> {
+  async decryptSeed(): Promise<Uint8Array> {
     try {
-      return await this.keyDecryptor.decryptRootPrivateKey()
+      return await this.keyDecryptor.decryptSeed()
     } catch (error) {
       throw new Error(`Failed to decrypt root private key: ${error}`)
     }
@@ -193,10 +193,11 @@ export abstract class KeyAgentBase implements KeyAgent {
     addressIx: number
   ): Promise<string> {
     // Decrypt your root private key first
-    const decryptedRootPrivateKeyBytes = await this.decryptRootPrivateKey()
+    const decryptedSeedBytes = await this.decryptSeed()
 
     // Create an HDKey from the root private key
-    const rootKey = HDKey.fromMasterSeed(decryptedRootPrivateKeyBytes)
+    // TODO: the decryptedRootPrivateKeyBytes is NOT the seed! Need to change this to either the seed or a different function
+    const rootKey = HDKey.fromMasterSeed(decryptedSeedBytes)
     const path = `m/${KeyConst.PURPOSE}'/${KeyConst.MINA_COIN_TYPE}'/${accountIx}'/0/${addressIx}`
     const childNode = rootKey.derive(path)
     if (!childNode?.privateKey) throw new Error('Unable to derive private key')

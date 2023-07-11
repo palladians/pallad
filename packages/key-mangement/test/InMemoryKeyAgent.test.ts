@@ -141,10 +141,10 @@ describe('InMemoryKeyAgent', () => {
         mnemonicWords: mnemonic
       })
       expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
-      const decryptedRootPrivateKey_ =
-        await agentFromBip39.decryptRootPrivateKey()
-      expect(encryptedRootPrivateKey).to.not.equal(decryptedRootPrivateKey_)
-      expect(decryptedRootPrivateKey_).to.deep.equal(rootKeyBytes)
+      const decryptedSeedBytes = await agentFromBip39.decryptSeed()
+      const rootKey = bip32.HDKey.fromMasterSeed(decryptedSeedBytes)
+      expect(encryptedRootPrivateKey).to.not.equal(rootKey.privateKey)
+      expect(rootKey.privateKey).to.deep.equal(rootKeyBytes)
     })
     it('should create an instance of InMemoryKeyAgent and decrypt the root private key', async () => {
       const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
@@ -153,7 +153,7 @@ describe('InMemoryKeyAgent', () => {
       })
       expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
 
-      const result = await agent.decryptRootPrivateKey()
+      const result = await agent.decryptSeed()
       expect(result).to.deep.equal(rootKeyBytes)
     })
     it('should create an instance of InMemoryKeyAgent and decrypt the coin type private key', async () => {
@@ -174,7 +174,7 @@ describe('InMemoryKeyAgent', () => {
           getPassphrase: fakeGetPassphrase,
           mnemonicWords: mnemonic
         });
-        await expect(agentFromBip39.decryptRootPrivateKey()).rejects.toThrow('Failed to decrypt root private key');
+        await expect(agentFromBip39.decryptSeed()).rejects.toThrow('Failed to decrypt root private key');
       });
       it('should throw error when decrypting coin type private key fails', async () => {
         const fakeGetPassphrase = async () => Buffer.from('wrong_passphrase');
