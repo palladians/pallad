@@ -16,7 +16,7 @@ export const RestoreWalletView = () => {
   }) => {
     await getSessionPersistence().setItem('spendingPassword', spendingPassword)
     setWalletName(walletName)
-    return navigate('/mnemonic')
+    return navigate('/onboarding/mnemonic')
   }
   return <WalletInfoForm title="Restore Wallet" onSubmit={onSubmit} />
 }

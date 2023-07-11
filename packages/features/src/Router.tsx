@@ -16,6 +16,7 @@ import { MnemonicInputView } from './onboarding/views/MnemonicInput'
 import { MnemonicWritedownView } from './onboarding/views/MnemonicWritedown'
 import { RestoreWalletView } from './onboarding/views/RestoreWallet'
 import { StartView } from './onboarding/views/Start'
+import { StayConnectedView } from './onboarding/views/StayConnected'
 import { OverviewView } from './overview/views/Overview'
 import { ReceiveView } from './receive/views/Receive'
 import { SendView } from './send/views/Send'
@@ -63,12 +64,19 @@ export const Router = () => {
           <Route path="/staking/producers" element={<BlockProducersView />} />
           <Route path="/contacts" element={<AddressBookView />} />
           <Route path="/contacts/new" element={<NewAddressView />} />
-          <Route path="/create" element={<CreateWalletView />} />
-          <Route path="/restore" element={<RestoreWalletView />} />
+          <Route path="/onboarding/create" element={<CreateWalletView />} />
+          <Route path="/onboarding/restore" element={<RestoreWalletView />} />
           <Route path="/unlock" element={<UnlockWalletView />} />
-          <Route path="/writedown" element={<MnemonicWritedownView />} />
-          <Route path="/confirmation" element={<MnemonicConfirmationView />} />
-          <Route path="/mnemonic" element={<MnemonicInputView />} />
+          <Route
+            path="/onboarding/writedown"
+            element={<MnemonicWritedownView />}
+          />
+          <Route
+            path="/onboarding/confirmation"
+            element={<MnemonicConfirmationView />}
+          />
+          <Route path="/onboarding/mnemonic" element={<MnemonicInputView />} />
+          <Route path="/onboarding/finish" element={<StayConnectedView />} />
           <Route path="/settings" element={<SettingsView />} />
           <Route path="/about" element={<AboutView />} />
           <Route path="/*" element={<NotFoundView />} />
