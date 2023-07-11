@@ -10,7 +10,7 @@ import {
   InMemoryKeyAgent,
   InMemoryKeyAgentProps
 } from '../src/InMemoryKeyAgent'
-import { KeyConst, Network } from '../src/types'
+import { Network } from '../src/types'
 import * as bip39 from '../src/util/bip39'
 
 // Create a sandbox for managing and restoring stubs
@@ -26,15 +26,11 @@ describe('InMemoryKeyAgent', () => {
   let agentProps: InMemoryKeyAgentProps
   let agent: InMemoryKeyAgent
   let passphrase: Uint8Array
-  let encryptedRootPrivateKey: Uint8Array
-  let encryptedCoinTypePrivateKey: Uint8Array
+  let encryptedSeedBytes: Uint8Array
   let rootKeyBytes: Uint8Array
-  let coinTypeKeyBytes: Uint8Array
   let mnemonic: string[]
   let seed: Uint8Array
   let root: bip32.HDKey
-  let purposeKey: bip32.HDKey
-  let coinTypeKey: bip32.HDKey
   let networkType: Mina.NetworkType
   let network: Network
 
@@ -58,27 +54,19 @@ describe('InMemoryKeyAgent', () => {
     // Create root node from seed
     root = bip32.HDKey.fromMasterSeed(seed)
     // Derive a child key from the given derivation path
-    purposeKey = root.deriveChild(KeyConst.PURPOSE)
-    coinTypeKey = purposeKey.deriveChild(KeyConst.MINA_COIN_TYPE)
+    //purposeKey = root.deriveChild(KeyConst.PURPOSE)
+    //coinTypeKey = purposeKey.deriveChild(KeyConst.MINA_COIN_TYPE)
     // unencrypted root key bytes
     rootKeyBytes = root.privateKey ? root.privateKey : Buffer.from([])
-    // unencrypted coin type key bytes
-    coinTypeKeyBytes = coinTypeKey.privateKey
-      ? coinTypeKey.privateKey
-      : Buffer.from([])
+
     // define the agent properties
     passphrase = await getPassphraseRethrowTypedError(getPassphrase)
-    encryptedRootPrivateKey = await emip3encrypt(rootKeyBytes, passphrase)
-    encryptedCoinTypePrivateKey = await emip3encrypt(
-      coinTypeKeyBytes,
-      passphrase
-    )
+    encryptedSeedBytes = await emip3encrypt(seed, passphrase)
 
     // Prepare agent properties
     agentProps = {
       getPassphrase,
-      encryptedRootPrivateKeyBytes: encryptedRootPrivateKey,
-      encryptedCoinTypePrivateKeyBytes: encryptedCoinTypePrivateKey,
+      encryptedSeedBytes: encryptedSeedBytes,
       knownCredentials: []
     }
 
@@ -108,8 +96,6 @@ describe('InMemoryKeyAgent', () => {
         getPassphrase,
         mnemonicWords: mnemonic
       })
-      //console.log('agentFromBip39: ', agentFromBip39)
-
       expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
     })
     it('should throw error when invalid mnemonic is provided', async () => {
@@ -143,7 +129,7 @@ describe('InMemoryKeyAgent', () => {
       expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
       const decryptedSeedBytes = await agentFromBip39.decryptSeed()
       const rootKey = bip32.HDKey.fromMasterSeed(decryptedSeedBytes)
-      expect(encryptedRootPrivateKey).to.not.equal(rootKey.privateKey)
+      expect(encryptedSeedBytes).to.not.equal(rootKey.privateKey)
       expect(rootKey.privateKey).to.deep.equal(rootKeyBytes)
     })
     it('should create an instance of InMemoryKeyAgent and decrypt the root private key', async () => {
@@ -153,18 +139,8 @@ describe('InMemoryKeyAgent', () => {
       })
       expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
 
-      const result = await agent.decryptSeed()
+      const result = await agent.exportRootPrivateKey()
       expect(result).to.deep.equal(rootKeyBytes)
-    })
-    it('should create an instance of InMemoryKeyAgent and decrypt the coin type private key', async () => {
-      const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
-        getPassphrase,
-        mnemonicWords: mnemonic
-      })
-      expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
-
-      const result = await agent.decryptCoinTypePrivateKey()
-      expect(result).to.deep.equal(coinTypeKeyBytes)
     })
     /*
     // Need to fix this test
@@ -202,7 +178,7 @@ describe('InMemoryKeyAgent', () => {
         addressIndex: 0
       }
 
-      const groupedCredentials = await agentFromBip39.deriveAddress(
+      const groupedCredentials = await agentFromBip39.deriveCredentials(
         { account_ix: 1 },
         { address_ix: 0 },
         network,

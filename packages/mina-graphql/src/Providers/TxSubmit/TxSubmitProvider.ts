@@ -48,7 +48,7 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
   async submitTx(args: SubmitTxArgs): Promise<SubmitTxResult> {
     const isRawSignature = typeof args.signedTransaction.signature === 'string'
     let mutation
-    if (args.kind === 'PAYMENT') {
+    if (args.kind === 'payment') {
       mutation = gql`
         ${getTxSend(isRawSignature)}
       `

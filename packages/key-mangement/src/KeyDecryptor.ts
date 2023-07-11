@@ -17,23 +17,15 @@ export class KeyDecryptor {
     this.getPassphrase = getPassphrase
   }
 
-  async decryptSeed(noCache?: true) {
-    return this.decryptKey(
-      'encryptedRootPrivateKeyBytes',
-      'Failed to decrypt root private key',
+  async decryptSeedBytes(noCache?: true) {
+    return this.decryptSeed(
+      'encryptedSeedBytes',
+      'Failed to decrypt seed bytes',
       noCache
     )
   }
 
-  async decryptCoinTypePrivateKey(noCache?: true) {
-    return this.decryptKey(
-      'encryptedCoinTypePrivateKeyBytes',
-      'Failed to decrypt coin type private key',
-      noCache
-    )
-  }
-
-  private async decryptKey(
+  private async decryptSeed(
     keyPropertyName: EncryptedKeyPropertyName,
     errorMessage: string,
     noCache?: true
@@ -50,7 +42,6 @@ export class KeyDecryptor {
     } catch (error) {
       throw new errors.AuthenticationError(errorMessage, error)
     }
-    //return Buffer.from(decryptedKeyBytes).toString('hex');
     return decryptedKeyBytes
   }
 }

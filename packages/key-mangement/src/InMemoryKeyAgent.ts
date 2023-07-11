@@ -17,7 +17,6 @@ import {
   SerializableInMemoryKeyAgentData
 } from './types'
 import {
-  deriveCoinTypePrivateKey,
   entropyToSeed,
   joinMnemonicWords,
   mnemonicWordsToEntropy,
@@ -56,16 +55,6 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     )
     this.#getPassphrase = getPassphrase
   }
-  async exportRootPrivateKey(): Promise<Uint8Array> {
-    try {
-      return await this.decryptSeed()
-    } catch (error) {
-      throw new errors.AuthenticationError(
-        'Failed to export root private key',
-        error
-      )
-    }
-  }
 
   /**
    * Creates an instance of the InMemoryKeyAgent class using mnemonic words.
@@ -103,35 +92,10 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
     const encryptedSeedBytes = await emip3encrypt(seedBytes, passphrase)
 
-    const coinTypePrivateKeyBytes = await deriveCoinTypePrivateKey({
-      rootPrivateKey: seedBytes
-    })
-    const encryptedCoinTypePrivateKeyBytes = await emip3encrypt(
-      coinTypePrivateKeyBytes,
-      passphrase
-    )
-
     return new InMemoryKeyAgent({
-      encryptedRootPrivateKeyBytes: encryptedSeedBytes,
-      encryptedCoinTypePrivateKeyBytes: encryptedCoinTypePrivateKeyBytes,
+      encryptedSeedBytes: encryptedSeedBytes,
       knownCredentials: [],
       getPassphrase
     })
   }
-
-  /*async decryptRootPrivateKey() {
-    try {
-      return await this.keyDecryptor.decryptRootPrivateKey()
-    } catch (error) {
-      throw new Error(`Failed to decrypt root private key: ${error}`)
-    }
-  }
-
-  async decryptCoinTypePrivateKey() {
-    try {
-      return await this.keyDecryptor.decryptCoinTypePrivateKey()
-    } catch (error) {
-      throw new Error(`Failed to decrypt coin type private key: ${error}`)
-    }
-  }*/
 }

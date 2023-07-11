@@ -1,8 +1,6 @@
 import { Mina } from '@palladxyz/mina-core'
 
-export type EncryptedKeyPropertyName =
-  | 'encryptedRootPrivateKeyBytes'
-  | 'encryptedCoinTypePrivateKeyBytes'
+export type EncryptedKeyPropertyName = 'encryptedSeedBytes' // TODO: Generalise
 
 export enum KeyAgentType {
   InMemory = 'InMemory',
@@ -17,8 +15,7 @@ export interface SerializableKeyAgentDataBase {
 export interface SerializableInMemoryKeyAgentData
   extends SerializableKeyAgentDataBase {
   __typename: KeyAgentType.InMemory
-  encryptedCoinTypePrivateKeyBytes: Uint8Array
-  encryptedRootPrivateKeyBytes: Uint8Array
+  encryptedSeedBytes: Uint8Array
 }
 
 export interface GroupedCredentials {
@@ -50,7 +47,7 @@ export interface KeyAgent {
   /**
    * @throws AuthenticationError
    */
-  //signBlob(derivationPath: AccountKeyDerivationPath, blob: HexBlob): Promise<SignBlobResult>;
+  signMessage(accountDerivationPath: AccountKeyDerivationPath, addressDerivationPath: AccountAddressDerivationPath, message: Mina.MessageBody, networkType: Mina.NetworkType): Promise<Mina.SignedMessage>;
   /**
    * @throws AuthenticationError
    */
@@ -60,6 +57,15 @@ export interface KeyAgent {
     transaction: Mina.ConstructedTransaction,
     networkType: Mina.NetworkType
   ): Promise<Mina.SignedTransaction>
+  /**
+   * generic sign
+   */
+  sign<T>(
+    accountDerivationPath: AccountKeyDerivationPath,
+    addressDerivationPath: AccountAddressDerivationPath,
+    payload: T,
+    networkType: Mina.NetworkType,
+  ): Promise<Mina.SignedTransaction | Mina.SignedMessage> 
   /**
    * @throws AuthenticationError
    */
@@ -72,13 +78,13 @@ export interface KeyAgent {
 
   reverseBytes(bytes: Buffer): Buffer
   /**
-   * Derives an address from the given payment key and stake key derivation path.
+   * Derives an address/credentials from the given payment key derivation path.
    *
    * @param paymentKeyDerivationPath The payment key derivation path.
    * @param stakeKeyDerivationIndex The stake key index. This field is optional. If not provided it defaults to index 0.
    * @param pure If set to true, the key agent will derive a new address without mutating its internal state.
    */
-  deriveAddress(
+  deriveCredentials(
     accountIndex: AccountKeyDerivationPath,
     addressIndex: AccountAddressDerivationPath,
     network: Network,
@@ -93,10 +99,6 @@ export interface KeyAgent {
    * @throws AuthenticationError
    */
   decryptSeed(): Promise<Uint8Array>
-  /**
-   * @throws AuthenticationError
-   */
-  decryptCoinTypePrivateKey(): Promise<Uint8Array>
 }
 
 /**
