@@ -9526,6 +9526,11 @@ lucide-react@^0.255.0:
   resolved "https://registry.npmjs.org/lucide-react/-/lucide-react-0.255.0.tgz"
   integrity sha512-BsnpjPy2Dv3nqzZGgb6e/2WFp327Sa5sre5pFTBlAsSmmvOJ9y6tQ2VhgG7+mwaBS+9nYMR3BNaGLasAdCbhbQ==
 
+lucide-react@^0.259.0:
+  version "0.259.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.259.0.tgz#7d9ef054e74cbed4bd10943dbac772ce4b89a68e"
+  integrity sha512-dFBLc6jRDfcpD9NQ7NyFVa+YR3RHX6+bs+f/UiotvNPho+kd4WyeXWMCCchUf7i/pq3BAaHkbmtkbx/GxxHVUw==
+
 lz-string@^1.5.0:
   version "1.5.0"
   resolved "https://registry.npmjs.org/lz-string/-/lz-string-1.5.0.tgz"
