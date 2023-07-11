@@ -7,16 +7,14 @@ An experimental and progressive Mina Protocol wallet.
 ## Prerequisite
 
 - [NVM](https://github.com/nvm-sh/nvm)
-- [DVM](https://github.com/justjavac/dvm)
 - Yarn
 
 ## Installation
 
-Make sure you're on the right Node.js and Deno version and you got Yarn installed.
+Make sure you're on the right Node.js version, and you got Yarn installed.
 
 ```shell
 $ nvm use
-$ dvm use
 $ npm i -g yarn
 ```
 
@@ -39,14 +37,18 @@ $ yarn build
 This is a monorepo for all the Pallad-related code.
 
 - `apps`
-  - `api` - Backend API for chain data providing created in Deno and TRPC.
   - `extension` - Browser extension app.
   - `mobile` - Proof of concept of mobile wallet with code shared with browser extension.
   - `website` - pallad.xyz website.
 - `packages`
   - `features` - Common codebase for the extension and mobile app.
-  - `mina` - Key management and data manipulation module for Mina Protocol.
+  - `key-generator` - Key Generator SDK.
+  - `mina-core` - Core Mina Package SDK.
+  - `mina-graphql` - GraphQL API client for the Mina Protocol.
+  - `offchain-data` - Client for fetching off-chain data like fiat price.
+  - `tx-construction` - creating and signing transactions for Mina Protocol.
   - `ui` - UI framework based on CSS-in-JS and React Native Web.
+  - `util` - Pallad SDK utils.
 
 ## Development
 
@@ -81,4 +83,4 @@ $ yarn test:e2e:extension
 
 [pallad.xyz - The official website of Pallad](https://pallad.xyz/)
 
-[Ladle](https://mvr-studio.github.io/pallad/)
+[Ladle](https://palladians.github.io/pallad/)
