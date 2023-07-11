@@ -268,10 +268,12 @@ describe('KeyAgentBase', () => {
       message: 'Hello, Bob!'
     }
 
-    const signedMessage = await instance.signMessage(accountKeyDerivationPath,
+    const signedMessage = await instance.signMessage(
+      accountKeyDerivationPath,
       accountAddressDerivationPath,
       message,
-      networkType)
+      networkType
+    )
     const isVerified = await minaClient.verifyMessage(signedMessage)
     expect(isVerified).toBeTruthy()
   })
@@ -279,8 +281,15 @@ describe('KeyAgentBase', () => {
     const message: Mina.MessageBody = {
       message: 'Hello, Bob!'
     }
-    const signedMessage = await instance.sign<Mina.MessageBody>(accountKeyDerivationPath, accountAddressDerivationPath, message, networkType)
-    const isVerified = await minaClient.verifyMessage(signedMessage as Mina.SignedMessage)
+    const signedMessage = await instance.sign<Mina.MessageBody>(
+      accountKeyDerivationPath,
+      accountAddressDerivationPath,
+      message,
+      networkType
+    )
+    const isVerified = await minaClient.verifyMessage(
+      signedMessage as Mina.SignedMessage
+    )
     expect(isVerified).toBeTruthy()
   })
 })

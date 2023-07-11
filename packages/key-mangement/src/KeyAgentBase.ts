@@ -4,7 +4,6 @@ import * as bs58check from 'bs58check'
 import { Buffer } from 'buffer'
 import Client from 'mina-signer'
 import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
-import * as util from './util'
 
 import * as errors from './errors'
 import { KeyDecryptor } from './KeyDecryptor'
@@ -16,6 +15,7 @@ import {
   KeyAgent,
   SerializableKeyAgentData
 } from './types'
+import * as util from './util'
 
 export abstract class KeyAgentBase implements KeyAgent {
   readonly #serializableData: SerializableKeyAgentData
@@ -131,7 +131,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     }
   }
   /**
-   * Signs a transaction 
+   * Signs a transaction
    */
   async signTransaction(
     accountDerivationPath: AccountKeyDerivationPath,
@@ -183,7 +183,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     accountDerivationPath: AccountKeyDerivationPath,
     addressDerivationPath: AccountAddressDerivationPath,
     payload: T,
-    networkType: Mina.NetworkType,
+    networkType: Mina.NetworkType
   ): Promise<Mina.SignedTransaction | Mina.SignedMessage> {
     // Mina network client.
     const minaClient = new Client({ network: networkType })
@@ -192,22 +192,22 @@ export abstract class KeyAgentBase implements KeyAgent {
       accountDerivationPath.account_ix,
       addressDerivationPath.address_ix
     )
-  
+
     // Perform the specific signing action
     try {
       if (util.isConstructedTransaction(payload)) {
-        return minaClient.signTransaction(payload, privateKey);
+        return minaClient.signTransaction(payload, privateKey)
       } else if (util.isMessageBody(payload)) {
-        return minaClient.signMessage(payload.message, privateKey);
+        return minaClient.signMessage(payload.message, privateKey)
       } else {
-        throw new Error("Unsupported payload type.");
+        throw new Error('Unsupported payload type.')
       }
     } catch (err) {
-      const errorMessage = errors.getRealErrorMsg(err) || 'Signing action failed.';
+      const errorMessage =
+        errors.getRealErrorMsg(err) || 'Signing action failed.'
       throw new Error(errorMessage)
     }
   }
-  
 
   async #generatePrivateKeyFromSeed(
     accountIx: number,

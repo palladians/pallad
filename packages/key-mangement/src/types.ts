@@ -47,7 +47,12 @@ export interface KeyAgent {
   /**
    * @throws AuthenticationError
    */
-  signMessage(accountDerivationPath: AccountKeyDerivationPath, addressDerivationPath: AccountAddressDerivationPath, message: Mina.MessageBody, networkType: Mina.NetworkType): Promise<Mina.SignedMessage>;
+  signMessage(
+    accountDerivationPath: AccountKeyDerivationPath,
+    addressDerivationPath: AccountAddressDerivationPath,
+    message: Mina.MessageBody,
+    networkType: Mina.NetworkType
+  ): Promise<Mina.SignedMessage>
   /**
    * @throws AuthenticationError
    */
@@ -64,8 +69,8 @@ export interface KeyAgent {
     accountDerivationPath: AccountKeyDerivationPath,
     addressDerivationPath: AccountAddressDerivationPath,
     payload: T,
-    networkType: Mina.NetworkType,
-  ): Promise<Mina.SignedTransaction | Mina.SignedMessage> 
+    networkType: Mina.NetworkType
+  ): Promise<Mina.SignedTransaction | Mina.SignedMessage>
   /**
    * @throws AuthenticationError
    */
