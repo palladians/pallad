@@ -1,7 +1,7 @@
+import { Mina } from '@palladxyz/mina-core'
 import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 import { getSignClient } from './minaClient'
-import { Mina } from '@palladxyz/mina-core'
 
 /**
  * Represents the body of a message.

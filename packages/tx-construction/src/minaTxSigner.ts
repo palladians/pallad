@@ -1,3 +1,4 @@
+import { Mina } from '@palladxyz/mina-core'
 import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import {
   PrivateKey,
@@ -5,7 +6,6 @@ import {
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 import { getSignClient } from './minaClient'
-import { Mina } from '@palladxyz/mina-core'
 
 /**
  * Verifies the authenticity of a signed transaction using the provided network.

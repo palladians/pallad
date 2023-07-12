@@ -1,6 +1,5 @@
-import Client from 'mina-signer'
-
 import { Mina } from '@palladxyz/mina-core'
+import Client from 'mina-signer'
 /**
  * Represents the network configuration.
  */
@@ -13,7 +12,9 @@ interface NetConfig {
  * @param network The network type.
  * @returns A Promise that resolves to the current network configuration.
  */
-async function getCurrentNetConfig(network: Mina.NetworkType): Promise<NetConfig> {
+async function getCurrentNetConfig(
+  network: Mina.NetworkType
+): Promise<NetConfig> {
   const netConfig: NetConfig = { netType: network }
   return netConfig
 }
@@ -23,7 +24,9 @@ async function getCurrentNetConfig(network: Mina.NetworkType): Promise<NetConfig
  * @param network The network type.
  * @returns A Promise that resolves to the signing client for the specified network.
  */
-export async function getSignClient(network: Mina.NetworkType): Promise<Client> {
+export async function getSignClient(
+  network: Mina.NetworkType
+): Promise<Client> {
   const netConfig: NetConfig = await getCurrentNetConfig(network)
   const netType: Mina.NetworkType = netConfig.netType || 'mainnet'
 
