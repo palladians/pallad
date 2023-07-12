@@ -69,12 +69,15 @@ describe('store', () => {
     const storeKeyAgent = await keyAgentStore
       .getState()
       .restoreWallet(agentProps)
-    //console.log('storeKeyAgent', storeKeyAgent)
+    console.log('storeKeyAgent', storeKeyAgent)
     //console.log('keyAgent', keyAgent)
-    const storeRootPrivateKey = await keyAgentStore.getState().keyAgent?.exportRootPrivateKey()
-    const storeEncryptedSeedBytes = keyAgentStore.getState().keyAgent?.serializableData.encryptedSeedBytes
+    const storeRootPrivateKey = await keyAgentStore
+      .getState()
+      .keyAgent?.exportRootPrivateKey()
+    const storeEncryptedSeedBytes =
+      keyAgentStore.getState().keyAgent?.serializableData.encryptedSeedBytes
     expect(storeRootPrivateKey).toEqual(rootPrivateKey)
-    // The encryptedSeedBytes should be different 
+    // The encryptedSeedBytes should be different
     expect(storeEncryptedSeedBytes).not.toBe(encryptedSeedBytes)
   })
 
