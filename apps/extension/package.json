@@ -8,7 +8,7 @@
     "build:firefox": "web-ext build --source-dir=dist",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "cleanup": "rimraf node_modules",
+    "cleanup": "rimraf node_modules dist .turbo",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"
   },

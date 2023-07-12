@@ -7,13 +7,11 @@
   "scripts": {
     "build": "turbo run build",
     "build:extension": "turbo run build --filter=@palladxyz/extension...",
-    "build:mobile": "turbo run build --filter=@palladxyz/mobile...",
     "build:website": "turbo run build --filter=@palladxyz/website...",
     "build:features": "turbo run build --filter=@palladxyz/features...",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
     "dev": "turbo run dev",
     "dev:extension": "turbo run dev --filter=@palladxyz/extension...",
-    "dev:mobile": "turbo run dev --filter=@palladxyz/mobile...",
     "lint": "eslint \"{apps,packages}/**/*.{ts,tsx,js,jsx,cjs,mjs}\"",
     "lint:fix": "yarn lint --fix",
     "test:unit": "turbo run test:unit",
