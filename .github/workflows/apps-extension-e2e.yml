@@ -11,6 +11,7 @@ jobs:
     env:
       VITE_APP_MODE: web
       VITE_APP_API_URL: https://api.pallad.xyz
+      VITE_APP_DEFAULT_NETWORK: Devnet
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

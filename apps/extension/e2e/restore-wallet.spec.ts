@@ -1,19 +1,10 @@
-import { expect, test } from '@playwright/test'
-
+import { expect, test } from './extension'
 import { devnetWallet } from './fixtures'
 import { OnboardingPom } from './pom/onboarding'
 
-test('restores existing wallet', async ({ page }) => {
-  const onboardingPom = new OnboardingPom(page)
-  await onboardingPom.goto()
-  await onboardingPom.startRestoring()
-  await onboardingPom.fillWalletName(devnetWallet.walletName)
-  await onboardingPom.fillSpendingPassword(devnetWallet.spendingPassword)
-  await onboardingPom.toggleTos()
-  await onboardingPom.goNext()
-  await onboardingPom.confirmAlone()
-  await onboardingPom.fillMnemonic(devnetWallet.mnemonic)
-  await onboardingPom.goNext()
+test('restores existing wallet', async ({ page, extensionId }) => {
+  const onboardingPom = new OnboardingPom({ page, extensionId })
+  await onboardingPom.restoreTestWallet()
   await expect(await onboardingPom.getAddressTruncated()).toEqual(
     devnetWallet.addressTruncated
   )

@@ -1,0 +1,21 @@
+{
+  "name": "@palladxyz/offchain-data",
+  "description": "Off-chain data fetching services.",
+  "version": "1.0.0",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "cleanup": "rimraf node_modules"
+  },
+  "dependencies": {
+    "swr": "^2.2.0"
+  }
+}

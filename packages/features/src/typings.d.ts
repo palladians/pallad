@@ -5,6 +5,7 @@ declare module '*.svg' {
 interface ImportMetaEnv {
   readonly VITE_APP_API_URL: string
   readonly VITE_APP_MODE: string
+  readonly VITE_APP_DEFAULT_NETWORK: string
 }
 
 interface ImportMeta {

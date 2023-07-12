@@ -1,8 +1,9 @@
-import { Box, Button } from '@palladxyz/ui'
+import { Box } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useViewAnimation } from '../../common/lib/animation'
 import { useAddressBookStore } from '../../common/store/addressBook'
 import { ContactTile } from '../components/ContactTile'
 
@@ -13,13 +14,20 @@ const DonatePallad = {
 
 export const AddressBookView = () => {
   const navigate = useNavigate()
+  const { shift, opacity, scale } = useViewAnimation()
   const contacts = useAddressBookStore((state) => state.contacts)
   return (
     <AppLayout>
-      <Box css={{ padding: '$md', flex: 1, gap: 16 }}>
+      <Box
+        css={{ padding: '$md', flex: 1, gap: 16 }}
+        style={{ opacity, marginTop: shift, transform: [{ scale }] }}
+      >
         <ViewHeading
           title="Address Book"
-          backButton={{ onPress: () => navigate(-1) }}
+          button={{
+            label: 'Add Address',
+            onPress: () => navigate('/contacts/new')
+          }}
         />
         <Box css={{ gap: 8 }}>
           <ContactTile
@@ -31,9 +39,6 @@ export const AddressBookView = () => {
           {contacts.map((contact, i) => (
             <ContactTile key={i} contact={contact} index={i} />
           ))}
-          <Button variant="link" onPress={() => navigate('/contacts/new')}>
-            Add New Address
-          </Button>
         </Box>
       </Box>
     </AppLayout>

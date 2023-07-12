@@ -1,3 +1,4 @@
+import { devnetWallet } from '../fixtures'
 import { BasePom } from './base'
 
 const TestId = {
@@ -20,7 +21,7 @@ const TestId = {
 
 export class OnboardingPom extends BasePom {
   goto() {
-    return this.page.goto('/')
+    return this.page.goto(`chrome-extension://${this.extensionId}/index.html`)
   }
   async startRestoring() {
     const restoreWalletButton = await this.page.getByTestId(
@@ -102,5 +103,17 @@ export class OnboardingPom extends BasePom {
   async getMinaBalance() {
     const minaBalance = await this.page.getByTestId(TestId.MINA_BALANCE)
     return minaBalance.innerText()
+  }
+
+  async restoreTestWallet() {
+    await this.goto()
+    await this.startRestoring()
+    await this.fillWalletName(devnetWallet.walletName)
+    await this.fillSpendingPassword(devnetWallet.spendingPassword)
+    await this.toggleTos()
+    await this.goNext()
+    await this.confirmAlone()
+    await this.fillMnemonic(devnetWallet.mnemonic)
+    await this.goNext()
   }
 }

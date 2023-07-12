@@ -1,10 +1,10 @@
-import { Box, composeBox, Icons, Text, theme } from '@palladxyz/ui'
+import { Box, composeBox, Icons, theme } from '@palladxyz/ui'
 import { Pressable } from 'react-native'
 import { useLocation, useNavigate } from 'react-router-native'
 
 const StyledPressable = composeBox({ baseComponent: Pressable })
 
-const MenuItem = ({ label, url, Icon, onPress }) => {
+const MenuItem = ({ url, Icon, onPress }) => {
   const location = useLocation()
   const isActive = location.pathname === url
   return (
@@ -13,18 +13,50 @@ const MenuItem = ({ label, url, Icon, onPress }) => {
         width: 'auto',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 4
+        gap: 4,
+        padding: '$sm',
+        borderRadius: '50%',
+        position: 'relative'
       }}
       onPress={onPress}
     >
-      <Icon
-        color={
-          isActive ? theme.colors.primary500.value : theme.colors.gray50.value
-        }
+      <Box css={{ padding: '$sm' }}>
+        <Icon
+          color={
+            isActive
+              ? theme.colors.primary400.value
+              : theme.colors.gray100.value
+          }
+        />
+      </Box>
+      <Box
+        css={{
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          right: 0,
+          height: '16px',
+          width: '100%',
+          backgroundColor: isActive ? '$primary400' : 'transparent',
+          borderTopLeftRadius: '2px',
+          borderTopRightRadius: '2px',
+          filter: 'blur(16px)',
+          opacity: 0.3
+        }}
       />
-      <Text css={{ color: isActive ? '$primary500' : '$body', fontSize: 12 }}>
-        {label}
-      </Text>
+      <Box
+        css={{
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          right: 0,
+          height: '2px',
+          width: '100%',
+          backgroundColor: isActive ? '$primary400' : 'transparent',
+          borderTopLeftRadius: '2px',
+          borderTopRightRadius: '2px'
+        }}
+      />
     </StyledPressable>
   )
 }
@@ -35,8 +67,8 @@ export const BottomNavigation = () => {
     <Box
       css={{
         flexDirection: 'row',
-        padding: '$sm',
-        justifyContent: 'space-around'
+        justifyContent: 'space-evenly',
+        borderTop: `1px ${theme.colors.gray700.value} solid`
       }}
     >
       <MenuItem
@@ -55,7 +87,7 @@ export const BottomNavigation = () => {
         label="Address Book"
         url="/contacts"
         onPress={() => navigate('/contacts')}
-        Icon={Icons.Contact}
+        Icon={Icons.Book}
       />
       <MenuItem
         label="Menu"

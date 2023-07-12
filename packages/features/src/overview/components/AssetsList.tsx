@@ -24,7 +24,17 @@ export const AssetsList = () => {
         <Spinner />
       ) : (
         <Box css={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
-          <Image source={icons.iconMina} css={{ width: 40, height: 40 }} />
+          <Box
+            css={{
+              padding: 12,
+              borderRadius: '50%',
+              backgroundColor: '$gray800',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Image source={icons.iconMina} css={{ width: 28, height: 28 }} />
+          </Box>
           <Text css={{ flex: 1, fontWeight: 500, color: '$gray100' }}>
             MINA
           </Text>

@@ -37,14 +37,14 @@ export const MnemonicInputView = () => {
       accountNumber: 0
     })
     await setVaultState(VaultState[VaultState.INITIALIZED])
-    return navigate('/dashboard')
+    return navigate('/onboarding/finish')
   }
   return (
     <WizardLayout
       footer={
         <>
           <Button
-            onPress={() => navigate('/')}
+            onPress={() => navigate(-1)}
             css={{ flex: 1, width: 'auto' }}
             testID="onboarding__backButton"
           >

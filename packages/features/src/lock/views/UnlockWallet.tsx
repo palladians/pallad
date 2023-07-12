@@ -1,4 +1,4 @@
-import { Box, Button, Input, Text } from '@palladxyz/ui'
+import { Box, Button, Icons, Input, Text, theme } from '@palladxyz/ui'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-native'
@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-native'
 import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useViewAnimation } from '../../common/lib/animation'
 import { getSessionPersistence } from '../../common/lib/storage'
 import { useVaultStore, vaultStore } from '../../common/store/vault'
 
 export const UnlockWalletView = () => {
+  const { shift, opacity, scale } = useViewAnimation()
   const [passwordError, setPasswordError] = useState(false)
   const navigate = useNavigate()
   const getCurrentWallet = useVaultStore((state) => state.getCurrentWallet)
@@ -47,7 +49,10 @@ export const UnlockWalletView = () => {
         </Button>
       }
     >
-      <Box css={{ gap: 24 }}>
+      <Box
+        css={{ gap: 24 }}
+        style={{ opacity, marginTop: shift, transform: [{ scale }] }}
+      >
         <ViewHeading
           title="Unlock Wallet"
           button={{
@@ -56,16 +61,20 @@ export const UnlockWalletView = () => {
           }}
         />
         {passwordError && (
-          <Text
+          <Box
             css={{
-              backgroundColor: '$red500',
-              color: '$gray50',
-              padding: 8,
-              borderRadius: 4
+              backgroundColor: '$red800',
+              padding: '$sm',
+              borderRadius: '$md',
+              flexDirection: 'row',
+              gap: 8,
+              alignItems: 'center',
+              justifyContent: 'flex-start'
             }}
           >
-            The password is wrong
-          </Text>
+            <Icons.AlertCircle color={theme.colors.red400.value} />
+            <Text css={{ color: '$red400' }}>The password is wrong</Text>
+          </Box>
         )}
         <Box css={{ gap: 8 }}>
           <FormLabel>Spending Password</FormLabel>

@@ -3,7 +3,7 @@ import { CSS } from '../../lib/styled'
 export const buttonBase: CSS = {
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: '0.375rem',
+  borderRadius: '2rem',
   fontSize: '0.875rem',
   transitionProperty: 'color',
   transitionDuration: '0.3s',
@@ -41,7 +41,7 @@ export const buttonVariantOutline: CSS = {
 export const buttonVariantSecondary: CSS = {
   backgroundColor: '$gray100',
   '&:hover': {
-    backgroundColor: '$secondary',
+    backgroundColor: '$gray200',
     opacity: 0.8
   }
 }

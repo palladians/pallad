@@ -1,13 +1,16 @@
-import { Button, Text } from '@palladxyz/ui'
-import { useEffect } from 'react'
+import { Box, Button, Text } from '@palladxyz/ui'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
+import { useViewAnimation } from '../../common/lib/animation'
 import { VaultState } from '../../common/lib/const'
 import { getSessionPersistence } from '../../common/lib/storage'
 import { useAppStore } from '../../common/store/app'
 
 export const StartView = () => {
+  const [appInitialized, setAppInitialized] = useState<boolean>(false)
+  const { scale, opacity, shift } = useViewAnimation()
   const vaultState = useAppStore((state) => state.vaultState)
   const navigate = useNavigate()
   useEffect(() => {
@@ -16,19 +19,21 @@ export const StartView = () => {
         (await getSessionPersistence().getItem('spendingPassword')) || ''
       const spendingPasswordSet = spendingPassword.length > 0
       const initializedVault = vaultState === VaultState[VaultState.INITIALIZED]
+      setAppInitialized(true)
       if (!initializedVault) return
       if (initializedVault && !spendingPasswordSet) return navigate('/unlock')
       return navigate('/dashboard')
     }
     initialRedirect()
   }, [vaultState])
+  if (!appInitialized) return null
   return (
     <WizardLayout
       footer={
         <>
           <Button
             css={{ flex: 1, width: 'auto' }}
-            onPress={() => navigate('/restore')}
+            onPress={() => navigate('/onboarding/restore')}
             testID="onboarding__restoreWalletButton"
           >
             Restore Wallet
@@ -36,7 +41,7 @@ export const StartView = () => {
           <Button
             variant="secondary"
             css={{ flex: 1, width: 'auto' }}
-            onPress={() => navigate('/create')}
+            onPress={() => navigate('/onboarding/create')}
             testID="onboarding__createWalletButton"
           >
             Create Wallet
@@ -44,7 +49,7 @@ export const StartView = () => {
         </>
       }
     >
-      <>
+      <Box style={{ opacity, marginTop: shift, transform: [{ scale }] }}>
         <Text
           css={{
             fontSize: 48,
@@ -64,7 +69,7 @@ export const StartView = () => {
           Take your Mina journey to the next level with out secure, transparent,
           and intuitive wallet interface.
         </Text>
-      </>
+      </Box>
     </WizardLayout>
   )
 }
