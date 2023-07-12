@@ -62,15 +62,20 @@ describe('store', () => {
       mnemonicWords: mnemonic
     }
     const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords(agentProps)
-
+    const rootPrivateKey = await keyAgent.exportRootPrivateKey()
+    const encryptedSeedBytes = keyAgent.serializableData.encryptedSeedBytes
+    //console.log("encryptedSeedBytes", encryptedSeedBytes)
+    //console.log("rootPrivateKey", rootPrivateKey)
     const storeKeyAgent = await keyAgentStore
       .getState()
-      .restoreWallet({ mnemonic, getPassword })
-    console.log('storeKeyAgent', storeKeyAgent)
-    console.log('keyAgent', keyAgent)
-    expect(
-      keyAgentStore.getState().keyAgent?.serializableData.encryptedSeedBytes
-    ).toEqual(keyAgent.serializableData.encryptedSeedBytes)
+      .restoreWallet(agentProps)
+    //console.log('storeKeyAgent', storeKeyAgent)
+    //console.log('keyAgent', keyAgent)
+    const storeRootPrivateKey = await keyAgentStore.getState().keyAgent?.exportRootPrivateKey()
+    const storeEncryptedSeedBytes = keyAgentStore.getState().keyAgent?.serializableData.encryptedSeedBytes
+    expect(storeRootPrivateKey).toEqual(rootPrivateKey)
+    // The encryptedSeedBytes should be different 
+    expect(storeEncryptedSeedBytes).not.toBe(encryptedSeedBytes)
   })
 
   /*test('addCredentials', async () => {

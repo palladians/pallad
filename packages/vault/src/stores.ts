@@ -37,11 +37,11 @@ const initialState: VaultStore = {
 // Zustand store using immer for immutable updates and persist middleware
 export const keyAgentStore = create<VaultStore>((set, get) => ({
   keyAgent: initialState.keyAgent,
-  restoreWallet: async ({ mnemonic, getPassword }) => {
+  restoreWallet: async ({ mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps) => {
     const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords({
-      getPassphrase: getPassword,
-      mnemonicWords: mnemonic
-    } as FromBip39MnemonicWordsProps)
+      getPassphrase: getPassphrase,
+      mnemonicWords: mnemonicWords
+    })
 
     set({ keyAgent })
     return keyAgent

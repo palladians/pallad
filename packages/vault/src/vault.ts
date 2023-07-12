@@ -39,11 +39,11 @@ export type VaultState = {
  */
 type VaultMutators = {
   restoreWallet: ({
-    mnemonic,
-    getPassword
+    mnemonicWords,
+    getPassphrase
   }: {
-    mnemonic: string[]
-    getPassword: GetPassphrase
+    mnemonicWords: string[]
+    getPassphrase: GetPassphrase
   }) => Promise<InMemoryKeyAgent | null>
   addCredentials: ({
     account_ix,
