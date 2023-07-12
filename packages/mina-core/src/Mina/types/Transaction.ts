@@ -1,9 +1,12 @@
 import { InvalidStringError, OpaqueString } from '@palladxyz/util'
 import {
+  PrivateKey,
   PublicKey,
+  SignedLegacy,
   UInt32,
   UInt64
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 /**
  * Represents the body of a transaction.
@@ -27,10 +30,30 @@ export type TransactionBody = {
 }
 
 export enum TransactionKind {
-  PAYMENT = 'PAYMENT',
-  STAKE_DELEGATION = 'STAKE_DELEGATION'
+  PAYMENT = 'payment',
+  STAKE_DELEGATION = 'delegation'
   // Add other kinds of transactions as needed
 }
+
+/**
+ * Represents a key pair consisting of a public key and a private key.
+ */
+export type KeyPair = {
+  publicKey: PublicKey
+  privateKey: PrivateKey
+}
+
+/**
+ * Represents the network type.
+ * It can be either 'mainnet' or 'testnet'.
+ */
+export type NetworkType = 'mainnet' | 'testnet'
+
+export type ConstructedTransaction =
+  | (Json.Payment & { type: TransactionKind.PAYMENT })
+  | (Json.StakeDelegation & { type: TransactionKind.STAKE_DELEGATION })
+
+export type SignedTransaction = SignedLegacy<ConstructedTransaction>
 
 /**
  * transaction hash as base64 string

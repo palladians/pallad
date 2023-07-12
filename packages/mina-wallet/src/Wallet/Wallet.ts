@@ -1,8 +1,14 @@
 import {
+  FromBip39MnemonicWordsProps,
+  GroupedCredentials,
+  InMemoryKeyAgent,
+  Network
+} from '@palladxyz/key-management'
+import {
   AccountInfo,
   Mina,
-  SubmitTxArgs,
-  SubmitTxResult,
+  //SubmitTxArgs,
+  //SubmitTxResult,
   TransactionsByAddressesArgs
 } from '@palladxyz/mina-core'
 import {
@@ -10,47 +16,86 @@ import {
   ChainHistoryGraphQLProvider,
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
-import {
+/*import {
   ConstructedTransaction,
   constructTransaction,
-  NetworkType,
   SignedTransaction,
   signTransaction
-} from '@palladxyz/tx-construction'
+} from '@palladxyz/tx-construction'*/
+import { accountStore, keyAgentStore } from '@palladxyz/vault'
 
-import { useStore } from '../store'
 import { MinaWallet } from '../types'
+/*
+enum providerURLs {
+  txSubmitURL = 'https://proxy.devnet.minaexplorer.com/',
+  chainHistoryURL = 'https://devnet.graphql.minaexplorer.com',
+  accountInfoURL = 'https://proxy.devnet.minaexplorer.com/'
+}*/
+
+export interface MinaWalletDependencies {
+  readonly keyAgent: InMemoryKeyAgent | null
+  readonly txSubmitProvider: TxSubmitGraphQLProvider
+  readonly chainHistoryProvider: ChainHistoryGraphQLProvider
+  readonly accountInfoProvider: AccountInfoGraphQLProvider
+  readonly network: Network
+  //readonly stores?: WalletStores;
+}
+
+export interface MinaWalletProps {
+  readonly name: string
+}
 
 export class MinaWalletImpl implements MinaWallet {
-  private accountProvider: AccountInfoGraphQLProvider
-  private chainHistoryProvider: ChainHistoryGraphQLProvider
-  private transactionSubmissionProvider: TxSubmitGraphQLProvider
-  private network: NetworkType
+  readonly keyAgent: InMemoryKeyAgent | null
+  readonly balance: number
+  readonly credentials: GroupedCredentials[]
+  readonly accountInfoProvider: AccountInfoGraphQLProvider
+  readonly chainHistoryProvider: ChainHistoryGraphQLProvider
+  readonly txSubmitProvider: TxSubmitGraphQLProvider
+  readonly name: string
+  //readonly networkType: NetworkType
+  readonly network: Network
+  // Storage for the current wallet
 
   constructor(
-    accountProvider: AccountInfoGraphQLProvider,
-    chainHistoryProvider: ChainHistoryGraphQLProvider,
-    transactionSubmissionProvider: TxSubmitGraphQLProvider,
-    network: NetworkType
+    { name }: MinaWalletProps,
+    {
+      keyAgent,
+      txSubmitProvider,
+      chainHistoryProvider,
+      accountInfoProvider,
+      network
+    }: //stores = createInMemoryWalletStores()
+    MinaWalletDependencies
   ) {
-    this.accountProvider = accountProvider
-    this.chainHistoryProvider = chainHistoryProvider
-    this.transactionSubmissionProvider = transactionSubmissionProvider
+    this.accountInfoProvider = accountInfoProvider //new AccountInfoGraphQLProvider(providerURLs.accountInfoURL)
+    this.chainHistoryProvider = chainHistoryProvider //new ChainHistoryGraphQLProvider(providerURLs.chainHistoryURL)
+    this.txSubmitProvider = txSubmitProvider //new TxSubmitGraphQLProvider(providerURLs.txSubmitURL)
+    this.keyAgent = keyAgent
+    this.name = name
     this.network = network
+    this.credentials = []
+    this.balance = 0
   }
 
+  //getName(): Promise<string> {
+  //  throw new Error('Method not implemented.')
+  //}
+
   async getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo> {
-    const accountInfo = await this.accountProvider.getAccountInfo({ publicKey })
-    useStore.getState().setAccountInfo(accountInfo)
+    const accountInfo = await this.accountInfoProvider.getAccountInfo({
+      publicKey
+    })
+    accountStore.getState().setAccountInfo(accountInfo)
     return accountInfo
   }
 
   async getTransactions(
     publicKey: Mina.PublicKey
   ): Promise<Mina.TransactionBody[]> {
-    const limit = 10 // Number of transactions per page
-    let startAt = 0 // Starting point for the next page of data
-    let transactions: Mina.TransactionBody[] = [] // Holds all transactions across all pages
+    const limit = 10
+    let startAt = 0
+    let transactions: Mina.TransactionBody[] = []
 
     while (transactions.length < 20) {
       const args: TransactionsByAddressesArgs = {
@@ -63,8 +108,6 @@ export class MinaWalletImpl implements MinaWallet {
 
       transactions = [...transactions, ...transactionPage.pageResults]
 
-      // If the number of transactions returned is less than the limit, then it means we have fetched all transactions
-      // or if we've already fetched 20 transactions, we stop
       if (
         transactionPage.pageResults.length < limit ||
         transactions.length >= 20
@@ -72,18 +115,16 @@ export class MinaWalletImpl implements MinaWallet {
         break
       }
 
-      // Update the startAt for the next iteration
       startAt += limit
     }
 
-    // Trim transactions array to only first 20 elements
     transactions = transactions.slice(0, 20)
 
-    useStore.getState().setTransactions(transactions)
+    accountStore.getState().setTransactions(transactions)
 
     return transactions
   }
-
+  /*
   async constructTx(
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
@@ -96,25 +137,73 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   async signTx(
-    privateKey: string,
     transaction: ConstructedTransaction
   ): Promise<SignedTransaction> {
+    const credential = keyAgentStore.getState().credentials[0]
+    const privateKey = credential?.walletPrivateKey
+    if (privateKey === undefined) {
+      throw new Error('Private key is undefined')
+    }
+
     const signedTransaction: SignedTransaction = await signTransaction(
       privateKey,
       transaction,
-      this.network
+      'testnet' // TODO: Define Mina NetworkType which is either 'testnet' or 'mainnet' and include in the vault
     )
+
     // TODO: Verify that the transaction is valid before returning it
     return signedTransaction
   }
 
   async submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult> {
-    const result = await this.transactionSubmissionProvider.submitTx(
-      submitTxArgs
-    )
-    // TODO: add pending transaction to pending tx store that checks for tx status at some interval
+    const result = await this.txSubmitProvider.submitTx(submitTxArgs)
     return result
   }
+
+  async createWallet(
+    walletName: string,
+    accountNumber: number
+  ): Promise<{ publicKey: string; mnemonic: string } | null> {
+    // Create a new wallet
+    const result = await keyAgentStore.getState().createWallet({
+      walletName,
+      network: this.network,
+      accountNumber
+    })
+
+    // Return the public key and mnemonic or null
+    return result
+      ? { publicKey: result.publicKey, mnemonic: result.mnemonic }
+      : null
+  }*/
+
+  async restoreWallet({
+    mnemonicWords,
+    getPassphrase
+  }: FromBip39MnemonicWordsProps): Promise<InMemoryKeyAgent | null> {
+    // Restore a wallet from a mnemonic
+    const keyAgent = await keyAgentStore.getState().restoreWallet({
+      mnemonicWords,
+      getPassphrase
+    })
+    return keyAgent ? keyAgent : null
+  }
+  /*
+  getCurrentWallet(): PublicCredential | null {
+    // Get the current wallet
+    const result = keyAgentStore.getState().getCurrentWallet()
+
+    // Return the public credential or null
+    return result ? result : null
+  }
+
+  getAccounts(): string[] {
+    // Get the list of accounts for the current wallet
+    const result = keyAgentStore.getState().getAccounts()
+
+    // Return the list of accounts
+    return result
+  }*/
 
   shutdown(): void {
     // Implement the logic to shut down the wallet

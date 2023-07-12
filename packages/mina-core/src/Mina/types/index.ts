@@ -1,5 +1,6 @@
 export * from './Account'
 export * from './Address'
 export * from './Block'
+export * from './Message'
 export * from './Pagination'
 export * from './Transaction'

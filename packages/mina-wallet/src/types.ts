@@ -1,30 +1,52 @@
 import {
-  AccountInfo,
-  Mina,
-  SubmitTxArgs,
-  SubmitTxResult
-} from '@palladxyz/mina-core'
+  FromBip39MnemonicWordsProps,
+  GroupedCredentials,
+  InMemoryKeyAgent
+} from '@palladxyz/key-management'
 import {
+  AccountInfo,
+  Mina
+  // SubmitTxArgs,
+  // SubmitTxResult
+} from '@palladxyz/mina-core'
+/*import {
   ConstructedTransaction,
   SignedTransaction
-} from '@palladxyz/tx-construction'
+} from '@palladxyz/tx-construction'*/
+//import { PublicCredential } from '@palladxyz/vault'
 
 export interface MinaWallet {
+  readonly credentials: GroupedCredentials[]
+  readonly balance: number
+
+  /*getName(): Promise<string>
+
+  createWallet(
+    walletName: string,
+    accountNumber: number
+  ): Promise<{ publicKey: string; mnemonic: string } | null>*/
+
+  restoreWallet({
+    mnemonicWords,
+    getPassphrase
+  }: FromBip39MnemonicWordsProps): Promise<InMemoryKeyAgent | null>
+
+  //getCurrentWallet(): PublicCredential | null
+
+  //getAccounts(): string[]
+
   getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo>
 
   getTransactions(publicKey: Mina.PublicKey): Promise<Mina.TransactionBody[]>
 
-  constructTx(
+  /*constructTx(
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
   ): Promise<ConstructedTransaction>
 
-  signTx(
-    privateKey: string,
-    transaction: ConstructedTransaction
-  ): Promise<SignedTransaction>
+  signTx(transaction: ConstructedTransaction): Promise<SignedTransaction>
 
-  submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>
+  submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>*/
 
   shutdown(): void
 }
