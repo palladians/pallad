@@ -1,17 +1,13 @@
+import { useFiatPrice } from '@palladxyz/offchain-data'
 import { Avatar, Box, Button, icons, Image, Spinner, Text } from '@palladxyz/ui'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
 import { Clipboard, Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
-import useSWR from 'swr'
 
 import { FormLabel } from '../../common/components/FormLabel'
-import { fetcher } from '../../common/lib/api'
 import { useAccount } from '../../common/lib/hooks'
 import { truncateString } from '../../common/lib/string'
-
-const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL
-const getMinaFiatPriceUrl = new URL(`${VITE_APP_API_URL}/trpc.getMinaFiatPrice`)
 
 interface OverviewCardProps {
   walletAddress: string
@@ -22,14 +18,11 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
   const navigate = useNavigate()
   const { data: accountQuery, isLoading: accountLoading } = useAccount()
   const account = accountQuery?.result?.data?.account
-  const { data: priceQuery, isLoading: fiatPriceLoading } = useSWR(
-    getMinaFiatPriceUrl,
-    fetcher
-  )
+  const { data: priceQuery, isLoading: fiatPriceLoading } = useFiatPrice()
   const isLoading = accountLoading || fiatPriceLoading
   const rawTotalBalance = parseFloat(account?.balance?.total)
   const totalBalance = rawTotalBalance ? rawTotalBalance.toFixed(4) : '0'
-  const rawFiatPrice = parseFloat(priceQuery?.result?.data?.usd)
+  const rawFiatPrice = parseFloat(priceQuery?.['mina-protocol']?.usd)
   const rawFiatBalance = useMemo(
     () => rawTotalBalance * rawFiatPrice || 0,
     [rawTotalBalance, rawFiatPrice]

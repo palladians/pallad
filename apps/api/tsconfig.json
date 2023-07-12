@@ -1,8 +1,0 @@
-{
-  "extends": "@tsconfig/strictest/tsconfig.json",
-  "compilerOptions": {
-    "module": "es2020",
-    "moduleResolution": "Node"
-  },
-  "include": ["src"]
-}
