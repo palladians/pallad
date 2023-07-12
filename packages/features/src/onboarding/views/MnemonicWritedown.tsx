@@ -19,7 +19,7 @@ export const MnemonicWritedownView = () => {
       footer={
         <>
           <Button
-            onPress={() => navigate('/')}
+            onPress={() => navigate(-1)}
             css={{ flex: 1, width: 'auto' }}
             testID="onboarding__backButton"
           >
@@ -34,7 +34,7 @@ export const MnemonicWritedownView = () => {
               transition: 'opacity 0.3s'
             }}
             disabled={!mnemonicWritten}
-            onPress={() => navigate('/confirmation')}
+            onPress={() => navigate('/onboarding/confirmation')}
             testID="onboarding__nextButton"
           >
             Next

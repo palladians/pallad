@@ -33,7 +33,7 @@ export const StartView = () => {
         <>
           <Button
             css={{ flex: 1, width: 'auto' }}
-            onPress={() => navigate('/restore')}
+            onPress={() => navigate('/onboarding/restore')}
             testID="onboarding__restoreWalletButton"
           >
             Restore Wallet
@@ -41,7 +41,7 @@ export const StartView = () => {
           <Button
             variant="secondary"
             css={{ flex: 1, width: 'auto' }}
-            onPress={() => navigate('/create')}
+            onPress={() => navigate('/onboarding/create')}
             testID="onboarding__createWalletButton"
           >
             Create Wallet

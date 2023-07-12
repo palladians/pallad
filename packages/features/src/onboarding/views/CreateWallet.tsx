@@ -24,7 +24,7 @@ export const CreateWalletView = () => {
       accountNumber: 0
     })
     setMnemonic(wallet.mnemonic)
-    return navigate('/writedown')
+    return navigate('/onboarding/writedown')
   }
   return <WalletInfoForm title="Create Wallet" onSubmit={onSubmit} />
 }

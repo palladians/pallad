@@ -28,7 +28,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
       footer={
         <>
           <Button
-            onPress={() => navigate('/')}
+            onPress={() => navigate(-1)}
             css={{ flex: 1, width: 'auto' }}
             testID="onboarding__backButton"
           >
