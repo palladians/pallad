@@ -1,8 +1,6 @@
 import { Mina } from '@palladxyz/mina-core'
 import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
-import { ConstructedTransaction } from './types'
-
 /**
  * Constructs a payment transaction object.
  * @param payment The payment transaction body.
@@ -62,7 +60,7 @@ export function constructDelegationTx(
 export function constructTransaction(
   transaction: Mina.TransactionBody,
   transactionKind: Mina.TransactionKind
-): ConstructedTransaction {
+): Mina.ConstructedTransaction {
   switch (transactionKind) {
     case Mina.TransactionKind.PAYMENT:
       return {
