@@ -6,4 +6,3 @@ export {
   constructTransaction
 } from './minaTxBuilder'
 export { signTransaction, verifyTransaction } from './minaTxSigner'
-export { ConstructedTransaction, NetworkType, SignedTransaction } from './types'
