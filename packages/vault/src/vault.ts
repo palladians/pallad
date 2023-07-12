@@ -45,10 +45,10 @@ export type VaultState = {
  * @property {() => void} reset - Function to reset the state
  */
 type VaultMutators = {
-  restoreWallet: ({
-    mnemonicWords,
-    getPassphrase
-  }: FromBip39MnemonicWordsProps, {network, networkType}: NetworkArgs) => Promise<InMemoryKeyAgent | null>
+  restoreWallet: (
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
+    { network, networkType }: NetworkArgs
+  ) => Promise<InMemoryKeyAgent | null>
   addCredentials: ({
     account_ix,
     address_ix,

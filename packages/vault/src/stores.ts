@@ -4,14 +4,16 @@
 
 import {
   FromBip39MnemonicWordsProps,
-  InMemoryKeyAgent, GroupedCredentials, KeyAgentType
+  GroupedCredentials,
+  InMemoryKeyAgent,
+  KeyAgentType
 } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { create } from 'zustand'
 
 //import { getSecurePersistence } from '../lib/storage'
 import { Store } from './types'
-import { VaultStore, NetworkArgs } from './vault'
+import { NetworkArgs, VaultStore } from './vault'
 
 export const accountStore = create<Store>((set) => ({
   accountInfo: {
@@ -43,10 +45,10 @@ const initialState: VaultStore = {
 export const keyAgentStore = create<VaultStore>((set, get) => ({
   keyAgent: initialState.keyAgent,
   serializableKeyAgentData: initialState.serializableKeyAgentData,
-  restoreWallet: async ({
-    mnemonicWords,
-    getPassphrase
-  }: FromBip39MnemonicWordsProps, {network, networkType}: NetworkArgs) => {
+  restoreWallet: async (
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
+    { network, networkType }: NetworkArgs
+  ) => {
     const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords({
       getPassphrase: getPassphrase,
       mnemonicWords: mnemonicWords
@@ -74,20 +76,20 @@ export const keyAgentStore = create<VaultStore>((set, get) => ({
   }): Promise<GroupedCredentials | null> => {
     const serializableKeyAgentData = get().serializableKeyAgentData
     const { knownCredentials } = serializableKeyAgentData
-  
+
     // Find if the credentials already exist in knownCredentials based on the function's arguments
     const existingCredential = knownCredentials.find(
-      knownCredential =>
+      (knownCredential) =>
         knownCredential.accountIndex === account_ix &&
         knownCredential.addressIndex === address_ix &&
         knownCredential.chain === network
     )
-  
+
     // If credentials already exist, return the existing credential
     if (existingCredential) {
       return existingCredential
     }
-  
+
     const keyAgent = get().keyAgent
     if (keyAgent) {
       const credential = await keyAgent.deriveCredentials(
@@ -97,7 +99,7 @@ export const keyAgentStore = create<VaultStore>((set, get) => ({
         networkType,
         pure
       )
-  
+
       // Add new credential to knownCredentials
       set({
         serializableKeyAgentData: {
@@ -109,7 +111,6 @@ export const keyAgentStore = create<VaultStore>((set, get) => ({
     }
     return null
   }
-  
 }))
 
 /*

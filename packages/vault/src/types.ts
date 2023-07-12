@@ -1,4 +1,7 @@
-import { GroupedCredentials, SerializableKeyAgentData } from '@palladxyz/key-management'
+import {
+  GroupedCredentials,
+  SerializableKeyAgentData
+} from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 
 export type Store = {

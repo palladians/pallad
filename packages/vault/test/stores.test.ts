@@ -7,7 +7,7 @@ import {
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 
 import { accountStore, keyAgentStore } from '../src/stores'
-import { NetworkArgs} from '../src/vault'
+import { NetworkArgs } from '../src/vault'
 
 describe('store', () => {
   test('setAccountInfo', async () => {
@@ -85,7 +85,8 @@ describe('store', () => {
     expect(storeEncryptedSeedBytes).not.toBe(encryptedSeedBytes)
 
     // check there exists the first account and address in knownCredentials
-    const serializedKeyAgentData = keyAgentStore.getState().serializableKeyAgentData
+    const serializedKeyAgentData =
+      keyAgentStore.getState().serializableKeyAgentData
     const knownCredentials = serializedKeyAgentData.knownCredentials
     console.log('knownCredentials', knownCredentials)
     expect(knownCredentials).toHaveLength(1)
@@ -115,9 +116,7 @@ describe('store', () => {
       network: Network.Mina,
       networkType: 'testnet'
     }
-    await keyAgentStore
-      .getState()
-      .restoreWallet(agentProps, networkProps)
+    await keyAgentStore.getState().restoreWallet(agentProps, networkProps)
 
     const credentialsData = {
       account_ix: 1,
@@ -127,11 +126,14 @@ describe('store', () => {
       pure: true
     }
     // derive next credentials
-    const credentials = await keyAgentStore.getState().addCredentials(credentialsData)
+    const credentials = await keyAgentStore
+      .getState()
+      .addCredentials(credentialsData)
     console.log('credentials', credentials)
     // after adding credentials, the keyAgent should have the new credentials
-    const keyAgentCredentials = await keyAgentStore.getState().serializableKeyAgentData
+    const keyAgentCredentials = await keyAgentStore.getState()
+      .serializableKeyAgentData
 
-    expect(keyAgentCredentials.knownCredentials).toHaveLength(2)  
+    expect(keyAgentCredentials.knownCredentials).toHaveLength(2)
   })
 })
