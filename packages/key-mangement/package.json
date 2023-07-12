@@ -14,7 +14,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test:unit": "vitest run",
-    "cleanup": "rimraf node_modules"
+    "cleanup": "rimraf node_modules .dist .turbo"
   },
   "dependencies": {
     "@ethereumjs/util": "^8.1.0",
@@ -23,7 +23,7 @@
     "@scure/bip39": "^1.2.0",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
-    "chacha": "^2.1.0",
+    "chacha-js": "^2.1.1",
     "get-random-values": "^2.0.0",
     "lodash": "^4.17.21",
     "mina-signer": "^2.0.3",

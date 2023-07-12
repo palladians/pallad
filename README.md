@@ -38,7 +38,6 @@ This is a monorepo for all the Pallad-related code.
 
 - `apps`
   - `extension` - Browser extension app.
-  - `mobile` - Proof of concept of mobile wallet with code shared with browser extension.
   - `website` - pallad.xyz website.
 - `packages`
   - `features` - Common codebase for the extension and mobile app.

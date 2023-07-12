@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "cleanup": "rimraf node_modules"
+    "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
     "swr": "^2.2.0"

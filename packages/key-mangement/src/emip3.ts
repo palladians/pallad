@@ -1,4 +1,4 @@
-import chacha from 'chacha'
+import chacha from 'chacha-js'
 import getRandomValues from 'get-random-values'
 import { pbkdf2 } from 'pbkdf2'
 

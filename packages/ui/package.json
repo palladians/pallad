@@ -18,7 +18,7 @@
     "story:dev": "ladle serve",
     "story:build": "ladle build -o ./build",
     "story:preview": "ladle preview",
-    "cleanup": "rimraf node_modules"
+    "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
     "@floating-ui/react-native": "^0.10.0",
