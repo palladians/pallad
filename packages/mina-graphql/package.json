@@ -19,7 +19,6 @@
   "dependencies": {
     "@palladxyz/util": "*",
     "@palladxyz/mina-core": "*",
-    "@palladxyz/tx-construction": "*",
     "@palladxyz/key-generator": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",

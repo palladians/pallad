@@ -9,10 +9,7 @@ import {
   // SubmitTxArgs,
   // SubmitTxResult
 } from '@palladxyz/mina-core'
-/*import {
-  ConstructedTransaction,
-  SignedTransaction
-} from '@palladxyz/tx-construction'*/
+
 //import { PublicCredential } from '@palladxyz/vault'
 
 export interface MinaWallet {
