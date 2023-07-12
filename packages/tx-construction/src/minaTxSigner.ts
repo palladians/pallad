@@ -1,3 +1,4 @@
+import { Mina } from '@palladxyz/mina-core'
 import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import {
   PrivateKey,
@@ -5,7 +6,6 @@ import {
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 import { getSignClient } from './minaClient'
-import { ConstructedTransaction, NetworkType, SignedTransaction } from './types'
 
 /**
  * Verifies the authenticity of a signed transaction using the provided network.
@@ -17,7 +17,7 @@ export async function verifyTransaction(
   signedTransaction:
     | SignedLegacy<Json.Payment>
     | SignedLegacy<Json.StakeDelegation>,
-  network: NetworkType
+  network: Mina.NetworkType
 ): Promise<boolean> {
   try {
     const signClient = await getSignClient(network)
@@ -45,10 +45,10 @@ function getRealErrorMsg(err: unknown): string | undefined {
  */
 export async function signTransaction(
   privateKey: PrivateKey,
-  transactionTx: ConstructedTransaction,
-  network: NetworkType
-): Promise<SignedTransaction> {
-  let signedTransaction: SignedLegacy<ConstructedTransaction>
+  transactionTx: Mina.ConstructedTransaction,
+  network: Mina.NetworkType
+): Promise<Mina.SignedTransaction> {
+  let signedTransaction: SignedLegacy<Mina.ConstructedTransaction>
 
   try {
     const signClient = await getSignClient(network)

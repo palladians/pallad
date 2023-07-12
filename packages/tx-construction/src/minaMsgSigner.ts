@@ -1,7 +1,7 @@
+import { Mina } from '@palladxyz/mina-core'
 import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 import { getSignClient } from './minaClient'
-import { NetworkType } from './types'
 
 /**
  * Represents the body of a message.
@@ -20,7 +20,7 @@ export interface MessageBody {
 export async function signMessage(
   privateKey: string,
   message: MessageBody,
-  network: NetworkType
+  network: Mina.NetworkType
 ): Promise<SignedLegacy<string>> {
   let signedMessage: SignedLegacy<string>
 
@@ -43,7 +43,7 @@ export async function signMessage(
  */
 export async function verifyMessage(
   signedMessage: SignedLegacy<string>,
-  network: NetworkType
+  network: Mina.NetworkType
 ): Promise<boolean> {
   let isMessageValid: boolean
 
