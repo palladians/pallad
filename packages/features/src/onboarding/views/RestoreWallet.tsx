@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-native'
 
 import { getSessionPersistence } from '../../common/lib/storage'
-import { useOnboardingStore } from '../../common/store/onboarding'
+import { useOnboardingStore } from '../../wallet/store/onboarding'
 import { WalletInfoForm } from '../components/WalletInfoForm'
 
 export const RestoreWalletView = () => {

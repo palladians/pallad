@@ -8,9 +8,8 @@ import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { VaultState } from '../../common/lib/const'
-import { useAppStore } from '../../common/store/app'
-import { useOnboardingStore } from '../../common/store/onboarding'
-import { useVaultStore } from '../../common/store/vault'
+import { useAppStore } from '../../wallet/store/app'
+import { useOnboardingStore } from '../../wallet/store/onboarding'
 
 export const MnemonicInputView = () => {
   const navigate = useNavigate()

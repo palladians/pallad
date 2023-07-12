@@ -7,13 +7,13 @@ import {
   InMemoryKeyAgent
 } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
-import { create } from 'zustand'
+import { createStore } from 'zustand/vanilla'
 
 //import { getSecurePersistence } from '../lib/storage'
 import { Store } from './types'
 import { VaultStore } from './vault'
 
-export const accountStore = create<Store>((set) => ({
+export const accountStore = createStore<Store>((set) => ({
   accountInfo: {
     balance: { total: 0 },
     nonce: 0,
@@ -35,7 +35,7 @@ const initialState: VaultStore = {
 }
 
 // Zustand store using immer for immutable updates and persist middleware
-export const keyAgentStore = create<VaultStore>((set, get) => ({
+export const keyAgentStore = createStore<VaultStore>((set, get) => ({
   keyAgent: initialState.keyAgent,
   restoreWallet: async ({
     mnemonicWords,

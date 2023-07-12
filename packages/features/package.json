@@ -24,8 +24,8 @@
     "@capacitor/preferences": "^5.0.4",
     "@capacitor/storage": "^1.2.5",
     "@hookform/resolvers": "^3.1.1",
-    "@palladxyz/offchain-data": "*",
     "@palladxyz/key-generator": "*",
+    "@palladxyz/offchain-data": "*",
     "@palladxyz/ui": "*",
     "@plasmohq/storage": "^1.6.1",
     "@react-native-async-storage/async-storage": "^1.18.2",
@@ -49,6 +49,7 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
+    "@capacitor/core": "^5.1.1",
     "@hyrious/esbuild-plugin-commonjs": "^0.2.2",
     "@ladle/react": "^2.15.0",
     "@svgr/plugin-jsx": "^8.0.1",

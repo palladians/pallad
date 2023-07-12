@@ -6,9 +6,8 @@ import { useNavigate } from 'react-router-native'
 import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { VaultState } from '../../common/lib/const'
-import { useAppStore } from '../../common/store/app'
-import { useOnboardingStore } from '../../common/store/onboarding'
+import { useAppStore } from '../../wallet/store/app'
+import { useOnboardingStore } from '../../wallet/store/onboarding'
 
 const getConfirmationIndex = () => {
   return Math.floor(Math.random() * 12)

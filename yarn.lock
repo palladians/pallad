@@ -1275,6 +1275,13 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
+"@capacitor/core@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-5.1.1.tgz#5c161ef54928ae257b26692c2a9758738166637f"
+  integrity sha512-17rZMGpZYQgBAmUS1uAS1GrRkPAQiUfpTfvd2wWS9z87GoTL/5vtpPAtI0/XLtr4eve2TsATY2r8BaW2NfEO6Q==
+  dependencies:
+    tslib "^2.1.0"
+
 "@capacitor/preferences@^5.0.4":
   version "5.0.4"
   resolved "https://registry.npmjs.org/@capacitor/preferences/-/preferences-5.0.4.tgz"

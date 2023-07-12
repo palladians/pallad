@@ -1,10 +1,9 @@
 import { MinaNetwork } from '@palladxyz/key-generator'
-import { useStore } from 'zustand'
+import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { createStore } from 'zustand/vanilla'
 
+import { getLocalPersistence } from '../../common/lib/storage'
 import { VaultState } from '../lib/const'
-import { getLocalPersistence } from '../lib/storage'
 
 const VITE_APP_DEFAULT_NETWORK =
   import.meta.env.VITE_APP_DEFAULT_NETWORK || 'Mainnet'
@@ -15,26 +14,39 @@ type AppState = {
   vaultState: VaultState
 }
 
+type AppQueries = {
+  isInitialized: () => void
+}
+
 type AppMutators = {
   setNetwork: (network: MinaNetwork) => void
   setVaultState: (vaultState: VaultState) => void
+  setVaultStateInitialized: () => void
 }
 
-type AppStore = AppState & AppMutators
+type AppStore = AppState & AppMutators & AppQueries
 
 const defaultNetwork =
   MinaNetwork[VITE_APP_DEFAULT_NETWORK as keyof typeof MinaNetwork]
 
-export const appStore = createStore<AppStore>()(
+export const useAppStore = create<AppStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       network: defaultNetwork,
       vaultState: VaultState[VaultState.UNINITIALIZED],
+      isInitialized: () => {
+        const { vaultState } = get()
+        return vaultState === VaultState[VaultState.UNINITIALIZED]
+      },
       setNetwork(network) {
         return set({ network: MinaNetwork[network] })
       },
       setVaultState(vaultState) {
         return set({ vaultState })
+      },
+      setVaultStateInitialized: () => {
+        const { setVaultState } = get()
+        return setVaultState(VaultState.UNINITIALIZED)
       }
     }),
     {
@@ -47,5 +59,3 @@ export const appStore = createStore<AppStore>()(
     }
   )
 )
-
-export const useAppStore = (selector: any) => useStore(appStore, selector)
