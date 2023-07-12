@@ -1,4 +1,4 @@
-import { SerializableKeyAgentData } from '@palladxyz/key-management'
+import { GroupedCredentials, SerializableKeyAgentData } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 
 export type Store = {
@@ -15,4 +15,5 @@ export type KeyAgentStore = {
     newSerializableKeyAgentData: SerializableKeyAgentData
   ) => void
   restoreWallet: (walletName: string) => Promise<void>
+  addCredentials: (walletName: string) => Promise<GroupedCredentials | null>
 }
