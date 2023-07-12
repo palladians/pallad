@@ -71,7 +71,7 @@ describe('MinaWalletImpl', () => {
       }
     )
   })
-  
+
   test('wallet fetches getAccountInfo', async () => {
     const publicKey = minaAddresses[0] as string
     const accountInfo = await wallet.getAccountInfo(publicKey)
