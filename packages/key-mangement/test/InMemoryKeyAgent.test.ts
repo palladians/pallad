@@ -58,7 +58,6 @@ describe('InMemoryKeyAgent', () => {
     //coinTypeKey = purposeKey.deriveChild(KeyConst.MINA_COIN_TYPE)
     // unencrypted root key bytes
     rootKeyBytes = root.privateKey ? root.privateKey : Buffer.from([])
-
     // define the agent properties
     passphrase = await getPassphraseRethrowTypedError(getPassphrase)
     encryptedSeedBytes = await emip3encrypt(seed, passphrase)

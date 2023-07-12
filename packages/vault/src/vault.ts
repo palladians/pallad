@@ -4,7 +4,7 @@
  */
 
 import {
-  GetPassphrase,
+  FromBip39MnemonicWordsProps,
   InMemoryKeyAgent,
   Network,
   SerializableKeyAgentData
@@ -41,10 +41,7 @@ type VaultMutators = {
   restoreWallet: ({
     mnemonicWords,
     getPassphrase
-  }: {
-    mnemonicWords: string[]
-    getPassphrase: GetPassphrase
-  }) => Promise<InMemoryKeyAgent | null>
+  }: FromBip39MnemonicWordsProps) => Promise<InMemoryKeyAgent | null>
   addCredentials: ({
     account_ix,
     address_ix,

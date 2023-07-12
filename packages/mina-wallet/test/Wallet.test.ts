@@ -1,4 +1,5 @@
 import { Network } from '@palladxyz/key-generator'
+import { GetPassphrase } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import {
@@ -6,41 +7,75 @@ import {
   ChainHistoryGraphQLProvider,
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
-import { accountStore, vaultStore } from '@palladxyz/vault'
+import { accountStore, keyAgentStore } from '@palladxyz/vault'
 import { expect, test } from 'vitest'
 
 import { MinaWalletImpl } from '../src/Wallet'
 
-const ACCOUNT_INFO_PROVIDER_URL = 'https://proxy.devnet.minaexplorer.com/'
-const CHAIN_HISTORY_PROVIDER_URL = 'https://devnet.graphql.minaexplorer.com'
-const TX_SUBMIT_PROVIDER_URL = 'https://proxy.devnet.minaexplorer.com/'
+enum providerURLs {
+  txSubmitURL = 'https://proxy.devnet.minaexplorer.com/',
+  chainHistoryURL = 'https://devnet.graphql.minaexplorer.com',
+  accountInfoURL = 'https://proxy.devnet.minaexplorer.com/'
+}
 
 describe('MinaWalletImpl', () => {
   let wallet: MinaWalletImpl
   let network: Network
 
   const accountInfoProvider = new AccountInfoGraphQLProvider(
-    ACCOUNT_INFO_PROVIDER_URL
+    providerURLs.accountInfoURL
   )
   const chainHistoryProvider = new ChainHistoryGraphQLProvider(
-    CHAIN_HISTORY_PROVIDER_URL
+    providerURLs.chainHistoryURL
   )
+  const txSubmitProvider = new TxSubmitGraphQLProvider(providerURLs.txSubmitURL)
 
-  const txSubmitProvider = new TxSubmitGraphQLProvider(TX_SUBMIT_PROVIDER_URL)
+  const networkType: Mina.NetworkType = 'testnet'
+  const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
+  const mnemonic = [
+    'climb',
+    'acquire',
+    'robot',
+    'select',
+    'shaft',
+    'zebra',
+    'blush',
+    'extend',
+    'evolve',
+    'host',
+    'misery',
+    'busy'
+  ]
+
+  const accountKeyDerivationPath = { account_ix: 0 }
+  const accountAddressDerivationPath = { address_ix: 0 }
+  const minaAddresses = [
+    'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq',
+    'B62qn2bkAtVmN6dptpYtU5i9gnq4SwDakFDo7Je7Fp8Tc8TtXnPxfVv'
+  ]
+  const expectedRootKeyBytes = new Uint8Array([
+    13, 171, 6, 146, 209, 160, 249, 212, 124, 244, 9, 93, 100, 119, 106, 182, 8,
+    206, 168, 211, 211, 121, 250, 248, 228, 4, 35, 169, 204, 12, 117, 226
+  ])
 
   beforeEach(() => {
     network = Network.Mina
     wallet = new MinaWalletImpl(
-      accountInfoProvider,
-      chainHistoryProvider,
-      txSubmitProvider,
-      network
+      { name: 'Test Wallet' },
+      {
+        keyAgent: keyAgentStore.getState().keyAgent,
+        txSubmitProvider,
+        chainHistoryProvider,
+        accountInfoProvider,
+        network
+      }
     )
   })
-
+  
   test('wallet fetches getAccountInfo', async () => {
-    const publicKey = 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+    const publicKey = minaAddresses[0] as string
     const accountInfo = await wallet.getAccountInfo(publicKey)
+    console.log('Account Info:', accountInfo)
 
     if (accountInfo === null) {
       throw new Error('Account info is undefined')
@@ -59,7 +94,7 @@ describe('MinaWalletImpl', () => {
   })
 
   test('wallet fetches getTransactions', async () => {
-    const publicKey = 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+    const publicKey = minaAddresses[0] as string
     const transactions = await wallet.getTransactions(publicKey)
 
     expect(transactions).toBeDefined()
@@ -84,6 +119,7 @@ describe('MinaWalletImpl', () => {
     console.log('Transactions in Store:', storeState.transactions)
     expect(storeState.transactions).toEqual(transactions)
   })
+  /*
   test('wallet creates a new wallet', async () => {
     const walletName = 'Test Wallet'
     const accountNumber = 0
@@ -102,30 +138,45 @@ describe('MinaWalletImpl', () => {
     console.log('Wallet Vault in Store:', walletStoreState)
     //expect(walletStoreState....).toEqual(...)
   })
-
+*/
   test('wallet restores a wallet', async () => {
-    const walletName = 'Restored Wallet'
-    const mnemonic =
-      'habit hope tip crystal because grunt nation idea electric witness alert like'
-    const accountNumber = 0
-    const restoredWallet = await wallet.restoreWallet(
-      walletName,
-      mnemonic,
-      accountNumber
-    )
+    const restoredWallet = await wallet.restoreWallet({
+      mnemonicWords: mnemonic,
+      getPassphrase: getPassword
+    })
 
     if (restoredWallet === null) {
       throw new Error('New wallet is undefined')
     }
 
     expect(restoredWallet).toBeDefined()
-    expect(restoredWallet.publicKey).toEqual(
-      'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
-    )
+    const storeRootPrivateKey = await keyAgentStore
+      .getState()
+      .keyAgent?.exportRootPrivateKey()
+    expect(storeRootPrivateKey).toEqual(expectedRootKeyBytes)
+    const credentials = await keyAgentStore
+      .getState()
+      .keyAgent?.deriveCredentials(
+        accountKeyDerivationPath,
+        accountAddressDerivationPath,
+        network,
+        networkType
+      )
+
+    const expectedGroupedCredentials = {
+      chain: Network.Mina,
+      accountIndex: accountKeyDerivationPath.account_ix,
+      address: minaAddresses[accountKeyDerivationPath.account_ix],
+      addressIndex: accountAddressDerivationPath.address_ix
+    }
+    console.log('Derived Credentials:', credentials)
+    console.log('Expected Credentials:', expectedGroupedCredentials)
+
+    expect(credentials).toEqual(expectedGroupedCredentials)
 
     // TODO: Check if the restored wallet is correctly stored in the vault
   })
-
+  /*
   test('wallet gets the current wallet', async () => {
     const currentWallet = wallet.getCurrentWallet()
 
@@ -139,9 +190,9 @@ describe('MinaWalletImpl', () => {
 
     // TODO: Check if the current wallet matches the one in the vault
   })
-  /*
+
   test('create multiple wallets using the same store', async () => {
-  })*/
+  })
 
   test('restore a wallet and sign a transaction', async () => {
     const walletName = 'Restored Wallet'
@@ -183,7 +234,7 @@ describe('MinaWalletImpl', () => {
     expect(signedPayment.signature).toBeDefined()
 
     // TODO: Verify if the transaction is correctly signed
-  })
+  })*/
 })
 /*test('wallet submits a transaction', async () => {
     const submitTxArgs: SubmitTxArgs = {} // replace this with a SubmitTxArgs object

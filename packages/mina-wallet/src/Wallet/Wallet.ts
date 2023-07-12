@@ -1,4 +1,5 @@
 import {
+  FromBip39MnemonicWordsProps,
   GroupedCredentials,
   InMemoryKeyAgent,
   Network
@@ -6,8 +7,8 @@ import {
 import {
   AccountInfo,
   Mina,
-  SubmitTxArgs,
-  SubmitTxResult,
+  //SubmitTxArgs,
+  //SubmitTxResult,
   TransactionsByAddressesArgs
 } from '@palladxyz/mina-core'
 import {
@@ -15,13 +16,13 @@ import {
   ChainHistoryGraphQLProvider,
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
-import {
+/*import {
   ConstructedTransaction,
   constructTransaction,
   SignedTransaction,
   signTransaction
-} from '@palladxyz/tx-construction'
-import { accountStore, keyAgentStore, PublicCredential } from '@palladxyz/vault'
+} from '@palladxyz/tx-construction'*/
+import { accountStore, keyAgentStore } from '@palladxyz/vault'
 
 import { MinaWallet } from '../types'
 /*
@@ -32,7 +33,7 @@ enum providerURLs {
 }*/
 
 export interface MinaWalletDependencies {
-  readonly keyAgent: InMemoryKeyAgent
+  readonly keyAgent: InMemoryKeyAgent | null
   readonly txSubmitProvider: TxSubmitGraphQLProvider
   readonly chainHistoryProvider: ChainHistoryGraphQLProvider
   readonly accountInfoProvider: AccountInfoGraphQLProvider
@@ -45,7 +46,7 @@ export interface MinaWalletProps {
 }
 
 export class MinaWalletImpl implements MinaWallet {
-  readonly keyAgent: InMemoryKeyAgent
+  readonly keyAgent: InMemoryKeyAgent | null
   readonly balance: number
   readonly credentials: GroupedCredentials[]
   readonly accountInfoProvider: AccountInfoGraphQLProvider
@@ -77,9 +78,9 @@ export class MinaWalletImpl implements MinaWallet {
     this.balance = 0
   }
 
-  getName(): Promise<string> {
-    throw new Error('Method not implemented.')
-  }
+  //getName(): Promise<string> {
+  //  throw new Error('Method not implemented.')
+  //}
 
   async getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo> {
     const accountInfo = await this.accountInfoProvider.getAccountInfo({
@@ -123,7 +124,7 @@ export class MinaWalletImpl implements MinaWallet {
 
     return transactions
   }
-
+  /*
   async constructTx(
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
@@ -174,23 +175,20 @@ export class MinaWalletImpl implements MinaWallet {
     return result
       ? { publicKey: result.publicKey, mnemonic: result.mnemonic }
       : null
-  }
+  }*/
 
-  async restoreWallet(
-    walletName: string,
-    mnemonic: string,
-    accountNumber: number
-  ): Promise<{ publicKey: string } | null> {
+  async restoreWallet({
+    mnemonicWords,
+    getPassphrase
+  }: FromBip39MnemonicWordsProps): Promise<InMemoryKeyAgent | null> {
     // Restore a wallet from a mnemonic
-    const result = await keyAgentStore.getState().restoreWallet({
-      walletName,
-      network: this.network,
-      mnemonic,
-      accountNumber
+    const keyAgent = await keyAgentStore.getState().restoreWallet({
+      mnemonicWords,
+      getPassphrase
     })
-    return result ? { publicKey: result.publicKey } : null
+    return keyAgent ? keyAgent : null
   }
-
+  /*
   getCurrentWallet(): PublicCredential | null {
     // Get the current wallet
     const result = keyAgentStore.getState().getCurrentWallet()
@@ -205,7 +203,7 @@ export class MinaWalletImpl implements MinaWallet {
 
     // Return the list of accounts
     return result
-  }
+  }*/
 
   shutdown(): void {
     // Implement the logic to shut down the wallet
