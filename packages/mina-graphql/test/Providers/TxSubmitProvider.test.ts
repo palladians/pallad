@@ -3,14 +3,8 @@ import {
   MinaKeyGenerator,
   Network
 } from '@palladxyz/key-generator'
-import { Mina } from '@palladxyz/mina-core' // SubmitTxArgs, AccountInfoArgs when local testnet ready
-import {
-  constructTransaction,
-  getSignClient,
-  NetworkType,
-  signTransaction
-} from '@palladxyz/tx-construction'
-import Client from 'mina-signer'
+//import { Mina } from '@palladxyz/mina-core' // SubmitTxArgs, AccountInfoArgs when local testnet ready
+//import Client from 'mina-signer'
 import { expect } from 'vitest'
 
 //import { AccountInfoGraphQLProvider } from '../../src/Providers/AccountInfo'
@@ -27,10 +21,10 @@ const minaTxSubmitGql = 'https://proxy.devnet.minaexplorer.com/' // Needs a diff
 
 describe('TxSubmitGraphQLProvider for Testnet', () => {
   // Variables used across multiple tests
-  let keyGen: MinaKeyGenerator
+  //let keyGen: MinaKeyGenerator
   let mnemonic: string
-  let client: Client
-  let network: NetworkType
+  //let client: Client
+  //let network: Mina.NetworkType
 
   // Test to check if the provider health check function works as expected
   test('healthCheck', async () => {
@@ -42,9 +36,9 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
 
   // Set up the network, client, key generator and mnemonic for every test
   beforeEach(async () => {
-    keyGen = new MinaKeyGenerator()
-    network = 'testnet' // Set network to 'testnet'
-    client = await getSignClient(network) // Client for the 'testnet'
+    // keyGen = new MinaKeyGenerator()
+    // network = 'testnet' // Set network to 'testnet'
+    //client = new Client({ network }) // Client for the 'testnet'
     mnemonic =
       'habit hope tip crystal because grunt nation idea electric witness alert like' // Test mnemonic
   })
@@ -69,6 +63,7 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
   })
 
   // This test checks if a payment transaction from Alice to Bob is correctly constructed and signed
+  /* TODO: re-write with key-management package
   it('Alice should construct & sign a payment transaction correctly to Bob', async () => {
     const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
     const keyPairBob = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 1)
@@ -98,9 +93,10 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
 
     const isVerified = client.verifyTransaction(signedPayment)
     expect(isVerified).toBeTruthy()
-  })
+  })*/
 
   // This test checks if a delegation transaction is correctly constructed and signed
+  /*TODO: re-write with key-management package
   it('Alice should construct & sign a delegation transaction correctly', async () => {
     const keyPairAlice = await keyGen.deriveKeyPairByMnemonic(mnemonic, 0, 0, 0)
     const privateKeyAlice = keyPairAlice.privateKey
@@ -125,7 +121,7 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
 
     const isVerified = client.verifyTransaction(signedDelegation)
     expect(isVerified).toBeTruthy()
-  })
+  })*/
 
   // This test checks if a payment transaction from Alice to Bob can be submitted without any errors
   /* // commented out until local network tests are set up

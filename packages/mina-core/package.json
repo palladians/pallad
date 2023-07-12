@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "@palladxyz/key-generator": "*",
-    "@palladxyz/tx-construction": "*",
     "@palladxyz/util": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",

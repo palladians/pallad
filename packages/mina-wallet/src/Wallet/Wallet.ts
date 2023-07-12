@@ -16,12 +16,6 @@ import {
   ChainHistoryGraphQLProvider,
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
-/*import {
-  ConstructedTransaction,
-  constructTransaction,
-  SignedTransaction,
-  signTransaction
-} from '@palladxyz/tx-construction'*/
 import { accountStore, keyAgentStore } from '@palladxyz/vault'
 
 import { MinaWallet } from '../types'
