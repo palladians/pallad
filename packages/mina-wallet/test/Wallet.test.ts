@@ -140,10 +140,13 @@ describe('MinaWalletImpl', () => {
   })
 */
   test('wallet restores a wallet', async () => {
-    const restoredWallet = await wallet.restoreWallet({
-      mnemonicWords: mnemonic,
-      getPassphrase: getPassword
-    })
+    const restoredWallet = await wallet.restoreWallet(
+      {
+        mnemonicWords: mnemonic,
+        getPassphrase: getPassword
+      },
+      { network, networkType }
+    )
 
     if (restoredWallet === null) {
       throw new Error('New wallet is undefined')
