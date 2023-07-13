@@ -1,7 +1,7 @@
 import { HDKey } from '@scure/bip32'
-import bs58check from 'bs58check'
 import { Buffer } from 'buffer'
 import Client from 'mina-signer'
+import * as bs58check from 'noble-base58check'
 
 import { KeyGenerator, KeyPair } from './keyGenerator'
 import { KeyConst } from './types'
@@ -55,7 +55,7 @@ export class MinaKeyGenerator extends KeyGenerator {
     childNode.privateKey[0] &= 0x3f
     const childPrivateKey = this.reverseBytes(new Buffer(childNode.privateKey))
     const privateKeyHex = `5a01${childPrivateKey.toString('hex')}`
-    const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
+    const privateKey = await bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
     const publicKey = this.minaClient.derivePublicKey(privateKey)
 
     return {

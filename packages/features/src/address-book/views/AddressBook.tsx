@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-native'
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useViewAnimation } from '../../common/lib/animation'
-import { useAddressBookStore } from '../../common/store/addressBook'
+import { useAddressBookStore } from '../../wallet/store/addressBook'
 import { ContactTile } from '../components/ContactTile'
 
 const DonatePallad = {

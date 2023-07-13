@@ -2,13 +2,14 @@ import { Box } from '@palladxyz/ui'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { useViewAnimation } from '../../common/lib/animation'
-import { useVaultStore } from '../../common/store/vault'
 import { AssetsList } from '../components/AssetsList'
 import { OverviewCard } from '../components/OverviewCard'
 
 export const OverviewView = () => {
+  const currentWallet = {
+    walletPublicKey: 'B62XD'
+  }
   const { shift, opacity, scale } = useViewAnimation()
-  const currentWallet = useVaultStore((state) => state.getCurrentWallet())
   return (
     <AppLayout>
       <Box

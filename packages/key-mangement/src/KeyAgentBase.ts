@@ -1,9 +1,9 @@
 import { Mina } from '@palladxyz/mina-core'
 import { HDKey } from '@scure/bip32'
-import * as bs58check from 'bs58check'
 import { Buffer } from 'buffer'
 import Client from 'mina-signer'
 import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+import * as bs58check from 'noble-base58check'
 
 import * as errors from './errors'
 import { KeyDecryptor } from './KeyDecryptor'
@@ -175,9 +175,7 @@ export abstract class KeyAgentBase implements KeyAgent {
       addressDerivationPath.address_ix
     )
     // Sign the message
-    const signature = minaClient.signMessage(message.message, privateKey)
-
-    return signature
+    return minaClient.signMessage(message.message, privateKey)
   }
 
   async sign<T>(
@@ -227,8 +225,6 @@ export abstract class KeyAgentBase implements KeyAgent {
     childNode.privateKey[0] &= 0x3f
     const childPrivateKey = this.reverseBytes(new Buffer(childNode.privateKey))
     const privateKeyHex = `5a01${childPrivateKey.toString('hex')}`
-    const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
-
-    return privateKey
+    return bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
   }
 }

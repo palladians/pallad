@@ -5,17 +5,19 @@ import { AppLayout } from '../../common/components/AppLayout'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { truncateString } from '../../common/lib/string'
-import { useTransactionStore } from '../../common/store/transaction'
-import { useVaultStore } from '../../common/store/vault'
+// import { useTransactionStore } from '../../common/store/transaction'
+// import { useVaultStore } from '../../common/store/vault'
 
 export const TransactionSummaryView = () => {
   const navigate = useNavigate()
-  const outgoingTransaction = useTransactionStore(
-    (state) => state.outgoingTransaction
-  )
-  const walletPublicKey = useVaultStore(
-    (state) => state.getCurrentWallet()?.walletPublicKey
-  )
+  // const outgoingTransaction = useTransactionStore(
+  //   (state) => state.outgoingTransaction
+  // )
+  const outgoingTransaction = {}
+  // const walletPublicKey = useVaultStore(
+  //   (state) => state.getCurrentWallet()?.walletPublicKey
+  // )
+  const walletPublicKey = 'B62XXX'
   return (
     <AppLayout>
       <Box css={{ padding: '$md', gap: 16, flex: 1 }}>

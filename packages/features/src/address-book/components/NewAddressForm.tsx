@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-native'
 
 import { FormError } from '../../common/components/FormError'
 import { FormLabel } from '../../common/components/FormLabel'
-import { useAddressBookStore } from '../../common/store/addressBook'
+import { useAddressBookStore } from '../../wallet/store/addressBook'
 import { NewAddressFormSchema } from './NewAddressForm.schema'
 
 export const NewAddressForm = () => {

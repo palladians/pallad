@@ -1275,21 +1275,21 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
-"@capacitor/core@^5.1.1":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-5.1.1.tgz#5c161ef54928ae257b26692c2a9758738166637f"
-  integrity sha512-17rZMGpZYQgBAmUS1uAS1GrRkPAQiUfpTfvd2wWS9z87GoTL/5vtpPAtI0/XLtr4eve2TsATY2r8BaW2NfEO6Q==
+"@capacitor/core@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-5.2.0.tgz#834af523c82b97c9e0d83d2cb51651daced21ac2"
+  integrity sha512-OQB33JCYzL9P8y4QcjKO+wt8dvh7CoQxbA1wvvAmdPO6M7FESxS7InO0wKWhgIXgW1GZRAri2NGYcxdvbazVKA==
   dependencies:
     tslib "^2.1.0"
 
-"@capacitor/preferences@^5.0.4":
-  version "5.0.4"
-  resolved "https://registry.npmjs.org/@capacitor/preferences/-/preferences-5.0.4.tgz"
-  integrity sha512-GV3QysJ724GO/CE8KHRYdq8tpzCrJWKVtOJGkLoPt+qlr88SNN+ayNMXlZE1LCMJ5eevdWDreSjQXiYfkUvnoA==
+"@capacitor/preferences@^5.0.6":
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/@capacitor/preferences/-/preferences-5.0.6.tgz#96ce925001cc41272a93b6860160fb10d335cbe0"
+  integrity sha512-aDe4wGTVSAIue6XXdUFgyz7SGszxK/Ptt/iWTydMpzc1PlZXw1XTTnciM+S+SLLNZFzXlkpXT3wMnh9t0DojUA==
 
 "@capacitor/storage@^1.2.5":
   version "1.2.5"
-  resolved "https://registry.npmjs.org/@capacitor/storage/-/storage-1.2.5.tgz"
+  resolved "https://registry.yarnpkg.com/@capacitor/storage/-/storage-1.2.5.tgz#48206869cbbf1404fcdbb5c440a882140bd3abd8"
   integrity sha512-pWhnw4U7wN/zFV4lA4BLMypSufTktCbk548Yk4whSb0KAq3R0mLfSubRIHkGdcPqQWCsM6g/zUuszurhz6ncWQ==
 
 "@crxjs/vite-plugin@^2.0.0-beta.18":
@@ -1955,9 +1955,9 @@
   resolved "https://registry.npmjs.org/@noble/hashes/-/hashes-1.3.0.tgz"
   integrity sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==
 
-"@noble/hashes@^1.2.0", "@noble/hashes@~1.3.0":
+"@noble/hashes@^1.2.0", "@noble/hashes@^1.3.1", "@noble/hashes@~1.3.0":
   version "1.3.1"
-  resolved "https://registry.npmjs.org/@noble/hashes/-/hashes-1.3.1.tgz"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.1.tgz#8831ef002114670c603c458ab8b11328406953a9"
   integrity sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==
 
 "@nodelib/fs.scandir@2.1.5":
@@ -2010,10 +2010,10 @@
   dependencies:
     nanoid "4.0.2"
 
-"@plasmohq/storage@^1.6.1":
-  version "1.6.1"
-  resolved "https://registry.npmjs.org/@plasmohq/storage/-/storage-1.6.1.tgz"
-  integrity sha512-FgykO3m5YhOBA/xANpsLTGGKkBD1uVmymnG7aMck4BS962Tz+bDv476NFVoSrOtduadBpRFTsBAsyXUMdY8YKA==
+"@plasmohq/storage@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@plasmohq/storage/-/storage-1.6.2.tgz#668b3e036fe0f410c3fe9728d8ef7a811a33a477"
+  integrity sha512-NYCBW0FA3dhWKnN/zYc2alLucyPMzKFAVB47jhE524UUWKIFyjVvtVLCJmqPIuBwmGU5dYCQd3skLA/lLGQ0hg==
   dependencies:
     pify "6.1.0"
 
@@ -2419,10 +2419,10 @@
     "@react-aria/ssr" "^3.0.1"
     "@react-aria/utils" "^3.3.0"
 
-"@react-native-async-storage/async-storage@^1.18.2":
-  version "1.18.2"
-  resolved "https://registry.npmjs.org/@react-native-async-storage/async-storage/-/async-storage-1.18.2.tgz"
-  integrity sha512-dM8AfdoeIxlh+zqgr0o5+vCTPQ0Ru1mrPzONZMsr7ufp5h+6WgNxQNza7t0r5qQ6b04AJqTlBNixTWZxqP649Q==
+"@react-native-async-storage/async-storage@^1.19.0":
+  version "1.19.0"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.19.0.tgz#594aca9c20924b7955d62cf43797b4187e1e6cf8"
+  integrity sha512-xOFkz/FaQctD6yNJDur+WnHdSTigOs3pTz6HmfC8X8PYwcnnN3R9UxuWiwsfK8vvT2WioAxUkQt3lB7GySNA2w==
   dependencies:
     merge-options "^3.0.4"
 
@@ -4802,7 +4802,7 @@ caniuse-lite@^1.0.30001464, caniuse-lite@^1.0.30001503:
 
 capacitor-secure-storage-plugin@^0.9.0:
   version "0.9.0"
-  resolved "https://registry.npmjs.org/capacitor-secure-storage-plugin/-/capacitor-secure-storage-plugin-0.9.0.tgz"
+  resolved "https://registry.yarnpkg.com/capacitor-secure-storage-plugin/-/capacitor-secure-storage-plugin-0.9.0.tgz#4537081aac734691530ac878234fcd3154c81be0"
   integrity sha512-P5fiC94opcLHu41vceo9weXH+20g0SPYKkeAx+qm9eKNcVFqpcuI4dqwivXlGXYNMDygyjSQuAaFwZ4gW0Y91Q==
 
 caseless@~0.12.0:
@@ -10747,6 +10747,11 @@ no-case@^3.0.4:
   dependencies:
     lower-case "^2.0.2"
     tslib "^2.0.3"
+
+noble-base58check@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/noble-base58check/-/noble-base58check-0.1.4.tgz#d62cb85b61be1c0ef1cbc76c369fb6e16085bf8c"
+  integrity sha512-WtLJoC6CxLi1K7wIQRJgPwUI3yOmCA7M6GvEmkHqhnBIHE3PvSdyEeO1fyim1UUCxR3AxkCoub5Jcc9hd5feZA==
 
 nocache@^3.0.1:
   version "3.0.4"

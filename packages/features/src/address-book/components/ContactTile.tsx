@@ -3,8 +3,8 @@ import { Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
 
 import { truncateString } from '../../common/lib/string'
-import { useAddressBookStore } from '../../common/store/addressBook'
 import { Contact } from '../../common/types'
+import { useAddressBookStore } from '../../wallet/store/addressBook'
 
 interface ContactTileProps {
   contact: Contact

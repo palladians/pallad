@@ -1,6 +1,6 @@
+import { getSessionPersistence } from '@palladxyz/persistence'
 import { useNavigate } from 'react-router-native'
 
-import { getSessionPersistence } from '../../common/lib/storage'
 import { useOnboardingStore } from '../../wallet/store/onboarding'
 import { WalletInfoForm } from '../components/WalletInfoForm'
 

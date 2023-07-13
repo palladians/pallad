@@ -1,6 +1,5 @@
 import { Box, Text } from '@palladxyz/ui'
 
-import { useVaultStore } from '../../common/store/vault'
 import { StructurizedTransaction, Transaction } from '../../common/types'
 import { structurizeTransactions } from '../utils/structurizeTransactions'
 import { TxTile } from './TxTile'
@@ -12,9 +11,10 @@ interface TransactionsListProps {
 }
 
 export const TransactionsList = ({ transactions }: TransactionsListProps) => {
-  const walletPublicKey = useVaultStore(
-    (state) => state.getCurrentWallet()?.walletPublicKey
-  ) as string
+  // const walletPublicKey = useVaultStore(
+  //   (state) => state.getCurrentWallet()?.walletPublicKey
+  // ) as string
+  const walletPublicKey = 'B62XXX'
   const txDates: TxDate[] =
     transactions &&
     Object.entries(structurizeTransactions([transactions, walletPublicKey]))

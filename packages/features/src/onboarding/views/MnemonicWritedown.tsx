@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-native'
 import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useOnboardingStore } from '../../common/store/onboarding'
+import { useOnboardingStore } from '../../wallet/store/onboarding'
 
 export const MnemonicWritedownView = () => {
   const navigate = useNavigate()

@@ -1,3 +1,4 @@
+import { getSessionPersistence } from '@palladxyz/persistence'
 import { Box, composeBox, Icons, Text } from '@palladxyz/ui'
 import React from 'react'
 import { Pressable } from 'react-native'
@@ -6,8 +7,6 @@ import { useNavigate } from 'react-router-native'
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useViewAnimation } from '../../common/lib/animation'
-import { getSessionPersistence } from '../../common/lib/storage'
-import { vaultStore } from '../../common/store/vault'
 
 const StyledPressable = composeBox({ baseComponent: Pressable })
 
@@ -63,7 +62,7 @@ export const MenuView = () => {
       label: 'Lock',
       onPress: async () => {
         await getSessionPersistence().setItem('spendingPassword', '')
-        await vaultStore.persist.rehydrate()
+        // await vaultStore.persist.rehydrate()
         return navigate('/unlock')
       },
       Icon: Icons.Lock

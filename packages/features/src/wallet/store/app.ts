@@ -1,8 +1,8 @@
 import { MinaNetwork } from '@palladxyz/key-generator'
+import { getLocalPersistence } from '@palladxyz/persistence'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-import { getLocalPersistence } from '../../common/lib/storage'
 import { VaultState } from '../lib/const'
 
 const VITE_APP_DEFAULT_NETWORK =
@@ -15,7 +15,7 @@ type AppState = {
 }
 
 type AppQueries = {
-  isInitialized: () => void
+  isInitialized: () => boolean
 }
 
 type AppMutators = {

@@ -1,13 +1,14 @@
-import { Network } from '@palladxyz/key-generator'
+import { getSessionPersistence } from '@palladxyz/persistence'
 import { useNavigate } from 'react-router-native'
 
-import { getSessionPersistence } from '../../common/lib/storage'
+import { useWallet } from '../../wallet/hooks/useWallet'
 import { useOnboardingStore } from '../../wallet/store/onboarding'
 import { WalletInfoForm } from '../components/WalletInfoForm'
 
 export const CreateWalletView = () => {
+  const { wallet } = useWallet()
+  console.log(wallet)
   const navigate = useNavigate()
-  const createWallet = useVaultStore((state) => state.createWallet)
   const setMnemonic = useOnboardingStore((state) => state.setMnemonic)
   const onSubmit = async ({
     spendingPassword,
@@ -17,11 +18,12 @@ export const CreateWalletView = () => {
     walletName: string
   }) => {
     await getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    const wallet = await createWallet({
-      walletName,
-      network: Network.Mina,
-      accountNumber: 0
-    })
+    console.log('>>>WN', walletName)
+    // const wallet = await createWallet({
+    //   walletName,
+    //   network: Network.Mina,
+    //   accountNumber: 0
+    // })
     setMnemonic(wallet.mnemonic)
     return navigate('/onboarding/writedown')
   }

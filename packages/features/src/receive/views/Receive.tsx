@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-native'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useVaultStore } from '../../common/store/vault'
 
 export const ReceiveView = () => {
   const navigate = useNavigate()
-  const currentWallet = useVaultStore((state) => state.getCurrentWallet())
-  const walletAddress = currentWallet?.walletPublicKey
+  // const currentWallet = useVaultStore((state) => state.getCurrentWallet())
+  // const walletAddress = currentWallet?.walletPublicKey
+  const walletAddress = 'B62XXX'
   return (
     <AppLayout>
       <Box css={{ padding: 16, flex: 1 }}>

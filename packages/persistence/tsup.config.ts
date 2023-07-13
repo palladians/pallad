@@ -1,10 +1,8 @@
-import svgJsx from '@svgr/plugin-jsx'
-import svgr from 'esbuild-plugin-svgr'
 import { defineConfig } from 'tsup'
 
 export default defineConfig([
   {
-    name: 'pallad/features',
+    name: 'pallad/offchain-data',
     entry: ['./src/index.ts'],
     outDir: './dist',
     format: 'esm',
@@ -15,10 +13,8 @@ export default defineConfig([
       compilerOptions: {
         moduleResolution: 'Node',
         allowSyntheticDefaultImports: true,
-        jsx: 'react'
+        esModuleInterop: true
       }
-    },
-    esbuildPlugins: [svgr({ plugins: [svgJsx] })],
-    external: ['react-native', 'react-native-web']
+    }
   }
 ])

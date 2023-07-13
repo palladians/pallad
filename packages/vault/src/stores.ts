@@ -11,7 +11,6 @@ import {
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { createStore } from 'zustand/vanilla'
 
-//import { getSecurePersistence } from '../lib/storage'
 import { Store } from './types'
 import { NetworkArgs, VaultStore } from './vault'
 

@@ -1,5 +1,4 @@
-import { useStore } from 'zustand'
-import { createStore } from 'zustand/vanilla'
+import { create } from 'zustand'
 
 import { OutgoingTransaction } from '../types'
 
@@ -17,7 +16,7 @@ const initialState = {
   outgoingTransaction: null
 }
 
-export const transactionStore = createStore<TransactionStore>()((set) => ({
+export const useTransactionStore = create<TransactionStore>()((set) => ({
   ...initialState,
   set(outgoingTransaction) {
     return set({ outgoingTransaction })
@@ -26,6 +25,3 @@ export const transactionStore = createStore<TransactionStore>()((set) => ({
     return set(initialState)
   }
 }))
-
-export const useTransactionStore = (selector: any) =>
-  useStore(transactionStore, selector)

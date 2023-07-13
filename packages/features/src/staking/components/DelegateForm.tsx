@@ -6,20 +6,20 @@ import { useLocation, useNavigate } from 'react-router-native'
 
 import { FormError } from '../../common/components/FormError'
 import { FormLabel } from '../../common/components/FormLabel'
-import { TransactionFee } from '../../common/lib/const'
-import { useTransactionStore } from '../../common/store/transaction'
 import { OutgoingTransaction } from '../../common/types'
+import { TransactionFee } from '../../wallet/lib/const'
+// import { useTransactionStore } from '../../wallet/store/transaction'
 import { DelegateFormSchema } from './DelegateForm.schema'
 
 export const DelegateForm = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  const setTransactionDetails = useTransactionStore((state) => state.set)
+  // const setTransactionDetails = useTransactionStore((state) => state.set)
   const {
     control,
     handleSubmit,
     setValue,
-    getValues,
+    // getValues,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(DelegateFormSchema),
@@ -30,14 +30,15 @@ export const DelegateForm = () => {
     }
   })
   const onSubmit = (payload: OutgoingTransaction) => {
-    const { fee } = getValues()
-    const currentFee = TransactionFee[fee]
-    setTransactionDetails({
-      to: payload.to,
-      fee: currentFee,
-      memo: payload.memo,
-      kind: 'staking'
-    })
+    console.log('>>>P', payload)
+    // const { fee } = getValues()
+    // const currentFee = TransactionFee[fee]
+    // setTransactionDetails({
+    //   to: payload.to,
+    //   fee: currentFee,
+    //   memo: payload.memo,
+    //   kind: 'staking'
+    // })
     navigate('/transactions/summary')
   }
   useEffect(() => {

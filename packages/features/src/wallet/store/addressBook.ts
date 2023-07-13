@@ -1,8 +1,7 @@
-import { useStore } from 'zustand'
+import { getLocalPersistence } from '@palladxyz/persistence'
+import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { createStore } from 'zustand/vanilla'
 
-import { getLocalPersistence } from '../lib/storage'
 import { Contact } from '../types'
 
 type AddressBookState = {
@@ -16,7 +15,7 @@ type AddressBookMutators = {
 
 type AddressBookStore = AddressBookState & AddressBookMutators
 
-export const addressBookStore = createStore<AddressBookStore>()(
+export const useAddressBookStore = create<AddressBookStore>()(
   persist(
     (set, get) => ({
       contacts: [],
@@ -36,6 +35,3 @@ export const addressBookStore = createStore<AddressBookStore>()(
     }
   )
 )
-
-export const useAddressBookStore = (selector: any) =>
-  useStore(addressBookStore, selector)

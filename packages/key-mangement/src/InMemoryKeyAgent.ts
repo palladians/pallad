@@ -2,7 +2,6 @@
 //import { HDKey } from '@scure/bip32'
 import { wordlist } from '@scure/bip39/wordlists/english'
 
-//import * as bs58check from 'bs58check'
 //import Client from 'mina-signer'
 //import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import { emip3encrypt } from './emip3'

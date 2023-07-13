@@ -1,3 +1,4 @@
+import { getSessionPersistence } from '@palladxyz/persistence'
 import { Box, Button, Icons, Input, Text, theme } from '@palladxyz/ui'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -7,38 +8,37 @@ import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useViewAnimation } from '../../common/lib/animation'
-import { getSessionPersistence } from '../../common/lib/storage'
-import { useVaultStore, vaultStore } from '../../common/store/vault'
 
 export const UnlockWalletView = () => {
   const { shift, opacity, scale } = useViewAnimation()
   const [passwordError, setPasswordError] = useState(false)
+  console.log('>>PE', setPasswordError)
   const navigate = useNavigate()
-  const getCurrentWallet = useVaultStore((state) => state.getCurrentWallet)
-  const resetWallet = useVaultStore((state) => state.reset)
+  // const getCurrentWallet = useVaultStore((state) => state.getCurrentWallet)
+  // const resetWallet = useVaultStore((state) => state.reset)
   const { control, handleSubmit } = useForm({
     defaultValues: {
       spendingPassword: ''
     }
   })
-  const onError = async () => {
-    await getSessionPersistence().setItem('spendingPassword', '')
-    return setPasswordError(true)
-  }
+  // const onError = async () => {
+  //   await getSessionPersistence().setItem('spendingPassword', '')
+  //   return setPasswordError(true)
+  // }
   const onSubmit = async ({
     spendingPassword
   }: {
     spendingPassword: string
   }) => {
     await getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    await vaultStore.destroy()
-    await vaultStore.persist.rehydrate()
-    const wallet = await getCurrentWallet()
-    if (!wallet) return await onError()
+    // await vaultStore.destroy()
+    // await vaultStore.persist.rehydrate()
+    // const wallet = await getCurrentWallet()
+    // if (!wallet) return await onError()
     return navigate('/dashboard')
   }
   const restartWallet = () => {
-    resetWallet()
+    // resetWallet()
     navigate('/')
   }
   return (

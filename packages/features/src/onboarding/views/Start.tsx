@@ -1,31 +1,29 @@
+import { getSessionPersistence } from '@palladxyz/persistence'
 import { Box, Button, Text } from '@palladxyz/ui'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-native'
 
 import { WizardLayout } from '../../common/components'
 import { useViewAnimation } from '../../common/lib/animation'
-import { VaultState } from '../../common/lib/const'
-import { getSessionPersistence } from '../../common/lib/storage'
-import { useAppStore } from '../../common/store/app'
+import { useAppStore } from '../../wallet/store/app'
 
 export const StartView = () => {
   const [appInitialized, setAppInitialized] = useState<boolean>(false)
   const { scale, opacity, shift } = useViewAnimation()
-  const vaultState = useAppStore((state) => state.vaultState)
+  const isInitialized = useAppStore((state) => state.isInitialized())
   const navigate = useNavigate()
   useEffect(() => {
     const initialRedirect = async () => {
       const spendingPassword =
         (await getSessionPersistence().getItem('spendingPassword')) || ''
       const spendingPasswordSet = spendingPassword.length > 0
-      const initializedVault = vaultState === VaultState[VaultState.INITIALIZED]
       setAppInitialized(true)
-      if (!initializedVault) return
-      if (initializedVault && !spendingPasswordSet) return navigate('/unlock')
+      if (!isInitialized) return
+      if (isInitialized && !spendingPasswordSet) return navigate('/unlock')
       return navigate('/dashboard')
     }
     initialRedirect()
-  }, [vaultState])
+  }, [isInitialized])
   if (!appInitialized) return null
   return (
     <WizardLayout

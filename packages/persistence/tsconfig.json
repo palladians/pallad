@@ -1,0 +1,8 @@
+{
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "types": ["vite/client"]
+  }
+}

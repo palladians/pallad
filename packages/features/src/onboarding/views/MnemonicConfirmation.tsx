@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-native'
 import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useWallet } from '../../wallet/hooks/useWallet'
 import { useAppStore } from '../../wallet/store/app'
 import { useOnboardingStore } from '../../wallet/store/onboarding'
 
@@ -14,8 +15,12 @@ const getConfirmationIndex = () => {
 }
 
 export const MnemonicConfirmationView = () => {
+  const { wallet } = useWallet()
+  console.log(wallet)
   const [confirmationIndex] = useState(getConfirmationIndex())
-  const setVaultState = useAppStore((state) => state.setVaultState)
+  const setVaultStateInitialized = useAppStore(
+    (state) => state.setVaultStateInitialized
+  )
   const navigate = useNavigate()
   const mnemonic = useOnboardingStore((state) => state.mnemonic)
   const mnemonicSplit = useMemo(() => mnemonic?.split(' '), [mnemonic])
@@ -30,7 +35,7 @@ export const MnemonicConfirmationView = () => {
     [mnemonicWord, mnemonicSplit, confirmationIndex]
   )
   const onSubmit = async () => {
-    await setVaultState(VaultState[VaultState.INITIALIZED])
+    await setVaultStateInitialized()
     return navigate('/onboarding/finish')
   }
   return (

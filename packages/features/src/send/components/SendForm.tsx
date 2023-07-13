@@ -6,21 +6,20 @@ import { useLocation, useNavigate } from 'react-router-native'
 
 import { FormError } from '../../common/components/FormError'
 import { FormLabel } from '../../common/components/FormLabel'
-import { TransactionFee } from '../../common/lib/const'
-import { useAccount } from '../../common/lib/hooks'
-import { useTransactionStore } from '../../common/store/transaction'
 import { OutgoingTransaction } from '../../common/types'
+import { TransactionFee } from '../../wallet/lib/const'
+import { useTransactionStore } from '../../wallet/store/transaction'
 import { SendFormSchema } from './SendForm.schema'
 
 export const SendForm = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const setTransactionDetails = useTransactionStore((state) => state.set)
-  const { data: accountQuery, isLoading: accountLoading } = useAccount()
-  if (accountLoading) return null
-  const account = accountQuery?.result?.data?.account
-  const totalBalance =
-    account?.balance?.total && parseFloat(account?.balance?.total)
+  // const { data: accountQuery, isLoading: accountLoading } = useAccount()
+  // if (accountLoading) return null
+  // const account = accountQuery?.result?.data?.account
+  // const totalBalance =
+  //   account?.balance?.total && parseFloat(account?.balance?.total)
   const {
     control,
     handleSubmit,
@@ -37,9 +36,9 @@ export const SendForm = () => {
     }
   })
   const setMaxAmount = () => {
-    const { fee } = getValues()
-    const currentFee = TransactionFee[fee]
-    totalBalance && setValue('amount', totalBalance - currentFee)
+    // const { fee } = getValues()
+    // const currentFee = TransactionFee[fee]
+    // totalBalance && setValue('amount', totalBalance - currentFee)
   }
   const onSubmit = (payload: OutgoingTransaction) => {
     const { fee } = getValues()

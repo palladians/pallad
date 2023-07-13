@@ -1,4 +1,4 @@
-import { Network, validateMnemonic, wordlist } from '@palladxyz/key-generator'
+import { validateMnemonic, wordlist } from '@palladxyz/key-generator'
 import { Box, Button, Textarea } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -7,15 +7,18 @@ import { useNavigate } from 'react-router-native'
 import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { VaultState } from '../../common/lib/const'
+import { useWallet } from '../../wallet/hooks/useWallet'
 import { useAppStore } from '../../wallet/store/app'
 import { useOnboardingStore } from '../../wallet/store/onboarding'
 
 export const MnemonicInputView = () => {
+  const { wallet } = useWallet()
+  console.log(wallet)
   const navigate = useNavigate()
   const walletName = useOnboardingStore((state) => state.walletName)
-  const restoreWallet = useVaultStore((state) => state.restoreWallet)
-  const setVaultState = useAppStore((state) => state.setVaultState)
+  const setVaultStateInitialized = useAppStore(
+    (state) => state.setVaultStateInitialized
+  )
   const [noOneIsLooking, setNoOneIsLooking] = useState(false)
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
@@ -29,13 +32,8 @@ export const MnemonicInputView = () => {
   )
   const onSubmit = async ({ mnemonic }: { mnemonic: string }) => {
     if (!walletName) return
-    await restoreWallet({
-      mnemonic,
-      walletName,
-      network: Network.Mina,
-      accountNumber: 0
-    })
-    await setVaultState(VaultState[VaultState.INITIALIZED])
+    console.log('>>>MN', mnemonic)
+    await setVaultStateInitialized()
     return navigate('/onboarding/finish')
   }
   return (

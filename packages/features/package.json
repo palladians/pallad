@@ -21,16 +21,12 @@
     "cleanup": "rimraf node_modules dist .turbo build"
   },
   "dependencies": {
-    "@capacitor/preferences": "^5.0.4",
-    "@capacitor/storage": "^1.2.5",
     "@hookform/resolvers": "^3.1.1",
     "@palladxyz/key-generator": "*",
     "@palladxyz/offchain-data": "*",
+    "@palladxyz/persistence": "*",
     "@palladxyz/ui": "*",
-    "@plasmohq/storage": "^1.6.1",
-    "@react-native-async-storage/async-storage": "^1.18.2",
     "@total-typescript/ts-reset": "^0.4.2",
-    "capacitor-secure-storage-plugin": "^0.9.0",
     "dayjs": "^1.11.8",
     "easy-mesh-gradient": "^0.0.5",
     "immer": "^10.0.2",
@@ -49,7 +45,6 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
-    "@capacitor/core": "^5.1.1",
     "@hyrious/esbuild-plugin-commonjs": "^0.2.2",
     "@ladle/react": "^2.15.0",
     "@svgr/plugin-jsx": "^8.0.1",
