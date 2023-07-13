@@ -5,11 +5,17 @@
 
 import {
   FromBip39MnemonicWordsProps,
+  GroupedCredentials,
   InMemoryKeyAgent,
   Network,
   SerializableKeyAgentData
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
+
+export type NetworkArgs = {
+  network: Network
+  networkType: Mina.NetworkType
+}
 
 /**
  * Type representing a public credential.
@@ -29,6 +35,7 @@ export type PublicCredential = {
  */
 export type VaultState = {
   keyAgent: InMemoryKeyAgent | null
+  serializableKeyAgentData: SerializableKeyAgentData
 }
 
 /**
@@ -38,10 +45,10 @@ export type VaultState = {
  * @property {() => void} reset - Function to reset the state
  */
 type VaultMutators = {
-  restoreWallet: ({
-    mnemonicWords,
-    getPassphrase
-  }: FromBip39MnemonicWordsProps) => Promise<InMemoryKeyAgent | null>
+  restoreWallet: (
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
+    { network, networkType }: NetworkArgs
+  ) => Promise<InMemoryKeyAgent | null>
   addCredentials: ({
     account_ix,
     address_ix,
@@ -54,7 +61,7 @@ type VaultMutators = {
     network: Network
     networkType: Mina.NetworkType
     pure: boolean
-  }) => Promise<void>
+  }) => Promise<GroupedCredentials | null>
 }
 
 /**
