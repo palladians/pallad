@@ -9,6 +9,7 @@ import {
   // SubmitTxArgs,
   // SubmitTxResult
 } from '@palladxyz/mina-core'
+import { NetworkArgs } from '@palladxyz/vault'
 
 //import { PublicCredential } from '@palladxyz/vault'
 
@@ -26,7 +27,7 @@ export interface MinaWallet {
   restoreWallet({
     mnemonicWords,
     getPassphrase
-  }: FromBip39MnemonicWordsProps): Promise<InMemoryKeyAgent | null>
+  }: FromBip39MnemonicWordsProps, {network, networkType}: NetworkArgs): Promise<InMemoryKeyAgent | null>
 
   //getCurrentWallet(): PublicCredential | null
 
