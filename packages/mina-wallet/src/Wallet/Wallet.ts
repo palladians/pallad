@@ -16,7 +16,7 @@ import {
   ChainHistoryGraphQLProvider,
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
-import { NetworkArgs, accountStore, keyAgentStore } from '@palladxyz/vault'
+import { accountStore, keyAgentStore, NetworkArgs } from '@palladxyz/vault'
 
 import { MinaWallet } from '../types'
 /*
@@ -171,15 +171,18 @@ export class MinaWalletImpl implements MinaWallet {
       : null
   }*/
 
-  async restoreWallet({
-    mnemonicWords,
-    getPassphrase
-  }: FromBip39MnemonicWordsProps, {network, networkType}: NetworkArgs): Promise<InMemoryKeyAgent | null> {
+  async restoreWallet(
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
+    { network, networkType }: NetworkArgs
+  ): Promise<InMemoryKeyAgent | null> {
     // Restore a wallet from a mnemonic
-    const keyAgent = await keyAgentStore.getState().restoreWallet({
-      mnemonicWords,
-      getPassphrase
-    }, {network, networkType})
+    const keyAgent = await keyAgentStore.getState().restoreWallet(
+      {
+        mnemonicWords,
+        getPassphrase
+      },
+      { network, networkType }
+    )
     return keyAgent ? keyAgent : null
   }
   /*
