@@ -1,69 +1,43 @@
-import chacha from 'chacha-js'
-import getRandomValues from 'get-random-values'
-import { pbkdf2 } from 'pbkdf2'
+import { chacha20_poly1305 } from '@noble/ciphers/chacha'
+import { pbkdf2Async } from '@noble/hashes/pbkdf2'
+import { randomBytes } from '@noble/ciphers/webcrypto/utils'
+import { sha512 } from '@noble/hashes/sha512'
 
 const KEY_LENGTH = 32
 const NONCE_LENGTH = 12
 const PBKDF2_ITERATIONS = 19_162
 const SALT_LENGTH = 32
-const TAG_LENGTH = 16
-const AAD = Buffer.from('', 'hex')
+//const TAG_LENGTH = 16
 
 export const createPbkdf2Key = async (
   passphrase: Uint8Array,
-  salt: Uint8Array | Uint16Array
+  salt: Uint8Array
 ) =>
-  await new Promise<Buffer>((resolve, reject) =>
-    pbkdf2(
-      passphrase,
-      salt,
-      PBKDF2_ITERATIONS,
-      KEY_LENGTH,
-      'sha512',
-      (err, derivedKey) => {
-        if (err) return reject(err)
-        resolve(derivedKey)
-      }
-    )
-  )
+  pbkdf2Async(sha512, passphrase, salt, {
+    c: PBKDF2_ITERATIONS,
+    dkLen: KEY_LENGTH
+  })
 
-/**
- * https://github.com/Emurgo/EmIPs/blob/master/specs/emip-003.md
- */
 export const emip3encrypt = async (
   data: Uint8Array,
   passphrase: Uint8Array
 ): Promise<Uint8Array> => {
-  const salt = new Uint8Array(SALT_LENGTH)
-  getRandomValues(salt)
+  const salt = randomBytes(SALT_LENGTH)
   const key = await createPbkdf2Key(passphrase, salt)
-  const nonce = new Uint8Array(NONCE_LENGTH)
-  getRandomValues(nonce)
-  const cipher = chacha.createCipher(key, Buffer.from(nonce))
-  cipher.setAAD(AAD, { plaintextLength: data.length })
-  const head = cipher.update(data)
-  const final = cipher.final()
-  const tag = cipher.getAuthTag()
-  return Buffer.concat([salt, nonce, tag, head, final])
+  const nonce = randomBytes(NONCE_LENGTH)
+  const cipher = chacha20_poly1305(key, nonce)
+  const encrypted = cipher.encrypt(data)
+  return Buffer.concat([salt, nonce, encrypted])
 }
 
-/**
- * https://github.com/Emurgo/EmIPs/blob/master/specs/emip-003.md
- */
 export const emip3decrypt = async (
   encrypted: Uint8Array,
   passphrase: Uint8Array
 ): Promise<Uint8Array> => {
   const salt = encrypted.slice(0, SALT_LENGTH)
   const nonce = encrypted.slice(SALT_LENGTH, SALT_LENGTH + NONCE_LENGTH)
-  const tag = encrypted.slice(
-    SALT_LENGTH + NONCE_LENGTH,
-    SALT_LENGTH + NONCE_LENGTH + TAG_LENGTH
-  )
-  const data = encrypted.slice(SALT_LENGTH + NONCE_LENGTH + TAG_LENGTH)
+  const data = encrypted.slice(SALT_LENGTH + NONCE_LENGTH)
   const key = await createPbkdf2Key(passphrase, salt)
-  const decipher = chacha.createDecipher(key, Buffer.from(nonce))
-  decipher.setAuthTag(Buffer.from(tag))
-  decipher.setAAD(AAD)
-  return Buffer.concat([decipher.update(Buffer.from(data)), decipher.final()])
+  const decipher = chacha20_poly1305(key, nonce)
+  return decipher.decrypt(data)
 }

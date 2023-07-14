@@ -45,6 +45,7 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
+    "@chialab/esbuild-plugin-commonjs": "^0.17.2",
     "@hyrious/esbuild-plugin-commonjs": "^0.2.2",
     "@ladle/react": "^2.15.0",
     "@svgr/plugin-jsx": "^8.0.1",

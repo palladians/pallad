@@ -11,13 +11,7 @@ export default defineConfig([
     sourcemap: true,
     clean: true,
     bundle: true,
-    dts: {
-      compilerOptions: {
-        moduleResolution: 'Node',
-        allowSyntheticDefaultImports: true,
-        jsx: 'react'
-      }
-    },
+    dts: true,
     esbuildPlugins: [svgr({ plugins: [svgJsx] })],
     external: ['react-native', 'react-native-web']
   }

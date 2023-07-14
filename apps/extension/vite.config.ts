@@ -27,9 +27,6 @@ export default defineConfig({
         index: 'index.html',
         inject: 'src/inject/script.js'
       }
-    },
-    commonjsOptions: {
-      transformMixedEsModules: true
     }
   }
 })

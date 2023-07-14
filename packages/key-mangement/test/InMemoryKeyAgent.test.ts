@@ -128,7 +128,8 @@ describe('InMemoryKeyAgent', () => {
       expect(agentFromBip39).to.be.instanceOf(InMemoryKeyAgent)
       const decryptedSeedBytes = await agentFromBip39.decryptSeed()
       const rootKey = bip32.HDKey.fromMasterSeed(decryptedSeedBytes)
-      expect(encryptedSeedBytes).to.not.equal(rootKey.privateKey)
+      // check the encrypted seed bytes are not equal to the seed
+      expect(encryptedSeedBytes).to.not.equal(seed)
       expect(rootKey.privateKey).to.deep.equal(rootKeyBytes)
     })
     it('should create an instance of InMemoryKeyAgent and decrypt the root private key', async () => {

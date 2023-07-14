@@ -2,6 +2,11 @@
   "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "jsx": "react"
-  }
+    "jsx": "react",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "module": "esnext",
+    "target": "esnext"
+  },
+  "include": ["styled-system"]
 }

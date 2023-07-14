@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable } from 'react-native'
 
 import { iconCircle } from '../../assets/icons'
 import { styled } from '../../lib/styled'

@@ -1,19 +1,19 @@
-import { CSS } from '../../lib/styled'
-import { boxStyles } from '../Box/index.css'
+import { cva } from '../../../styled-system/css'
 
-export const baseHeading: CSS = {
-  ...boxStyles,
-  fontWeight: '$semibold',
-  fontSize: '$2xl',
-  color: '$heading',
+export const headingStyle = cva({
+  base: {
+    fontWeight: 'semibold',
+    fontSize: '2xl',
+    color: 'gray.50'
+  },
   variants: {
     size: {
       lg: {
-        fontSize: '$xl'
+        fontSize: 'xl'
       },
       md: {
-        fontSize: '$lg'
+        fontSize: 'lg'
       }
     }
   }
-}
+})

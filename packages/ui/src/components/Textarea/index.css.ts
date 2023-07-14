@@ -1,7 +1,12 @@
-import { CSS } from '../../lib/styled'
-import { inputBase } from '../Input/index.css'
+import { cva } from '../../../styled-system/css'
+import { SystemStyleObject } from '../../../styled-system/types'
+import { base as inputBase } from '../Input/index.css'
 
-export const textareaBase: CSS = {
+export const base: SystemStyleObject = {
   ...inputBase,
-  minHeight: '80px'
+  minHeight: '5rem'
 }
+
+export const textareaStyle = cva({
+  base
+})

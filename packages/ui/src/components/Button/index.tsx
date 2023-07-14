@@ -1,40 +1,87 @@
-import React from 'react'
-import { Pressable } from 'react-native'
+import { cva } from '../../../styled-system/css'
+import { styled } from '../../../styled-system/jsx'
 
-import { styled } from '../../lib/styled'
-import { composeBox } from '../Box'
-import { Image } from '../Image'
-import { Text } from '../Text'
-import {
-  buttonBase,
-  buttonSizeDefault,
-  buttonSizeLg,
-  buttonSizeSm,
-  buttonVariantDefault,
-  buttonVariantDestructive,
-  buttonVariantGhost,
-  buttonVariantLink,
-  buttonVariantOutline,
-  buttonVariantSecondary
-} from './index.css'
-
-const StyledPressable = composeBox({ baseComponent: Pressable })
-
-const StyledButton = styled(StyledPressable, {
-  ...buttonBase,
+const buttonStyle = cva({
+  base: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '2rem',
+    fontSize: '0.875rem',
+    transition:
+      'color 0.3s ease-out, background-color 0.3s ease-out, border-color 0.3s ease-out',
+    outline: '2px solid transparent',
+    outlineOffset: '2px',
+    flexDirection: 'row',
+    gap: 12,
+    color: '$body',
+    fontWeight: 'semibold',
+    cursor: 'pointer'
+  },
   variants: {
     variant: {
-      default: buttonVariantDefault,
-      destructive: buttonVariantDestructive,
-      outline: buttonVariantOutline,
-      secondary: buttonVariantSecondary,
-      ghost: buttonVariantGhost,
-      link: buttonVariantLink
+      default: {
+        color: 'gray.50',
+        backgroundColor: 'gray.800',
+        '&:hover': {
+          backgroundColor: 'gray.700'
+        }
+      },
+      destructive: {
+        color: 'red.100',
+        backgroundColor: 'red.600',
+        '&:hover': {
+          backgroundColor: 'red.500',
+          opacity: 0.9
+        }
+      },
+      outline: {
+        border: '1px solid',
+        borderColor: 'gray.500',
+        '&:hover': {
+          backgroundColor: 'primary.50',
+          color: 'primary.600',
+          borderColor: 'primary.600'
+        }
+      },
+      secondary: {
+        backgroundColor: 'gray.100',
+        '&:hover': {
+          backgroundColor: 'gray.200',
+          opacity: 0.8
+        }
+      },
+      ghost: {
+        '&:hover': {
+          backgroundColor: 'primary.50'
+        }
+      },
+      link: {
+        color: 'primary.600',
+        '&:hover': {
+          textDecoration: 'underline'
+        }
+      }
     },
     size: {
-      default: buttonSizeDefault,
-      sm: buttonSizeSm,
-      lg: buttonSizeLg
+      default: {
+        height: '2.5rem',
+        paddingTop: '0.5rem',
+        paddingBottom: '0.5rem',
+        paddingLeft: '1rem',
+        paddingRight: '1rem'
+      },
+      sm: {
+        height: '2.25rem',
+        paddingLeft: '0.75rem',
+        paddingRight: '0.75rem',
+        borderRadius: '0.375rem'
+      },
+      lg: {
+        height: '2.75rem',
+        paddingLeft: '2rem',
+        paddingRight: '2rem',
+        borderRadius: '0.375rem'
+      }
     }
   },
   defaultVariants: {
@@ -43,58 +90,4 @@ const StyledButton = styled(StyledPressable, {
   }
 })
 
-const StyledButtonText = styled(Text, {
-  color: '$body',
-  fontWeight: '$semibold',
-  fontSize: 14,
-  variants: {
-    variant: {
-      default: {
-        color: '$primaryForeground'
-      },
-      destructive: {
-        color: '$destructiveForeground'
-      },
-      outline: {
-        '&:hover': {
-          color: '$accentForeground'
-        }
-      },
-      secondary: {
-        color: '$gray900'
-      },
-      ghost: {
-        '&:hover': {
-          color: '$accentForeground'
-        }
-      },
-      link: {
-        color: '$primary400'
-      }
-    }
-  },
-  defaultVariants: {
-    variant: 'default'
-  }
-})
-
-type ButtonProps = React.ComponentProps<typeof StyledButton> & {
-  textCss?: any
-  leftIcon?: React.ReactNode
-}
-
-export const Button = React.forwardRef(
-  ({ children, variant, textCss, leftIcon, ...props }: ButtonProps, ref) => {
-    return (
-      <StyledButton variant={variant as any} ref={ref} {...props}>
-        {leftIcon && (
-          <Image source={leftIcon as any} css={{ width: 24, height: 24 }} />
-        )}
-        <StyledButtonText variant={variant as any} css={textCss}>
-          {children as React.ReactNode}
-        </StyledButtonText>
-      </StyledButton>
-    )
-  }
-)
-Button.displayName = 'Button'
+export const Button = styled('button', buttonStyle)

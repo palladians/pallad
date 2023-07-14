@@ -1,6 +1,4 @@
-import { Text } from 'react-native'
+import { styled } from '../../../styled-system/jsx'
+import { headingStyle } from './index.css'
 
-import { styled } from '../../lib/styled'
-import { baseHeading } from './index.css'
-
-export const Heading = styled(Text, baseHeading)
+export const Heading = styled('h1', headingStyle)
