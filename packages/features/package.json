@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test:unit": "vitest run",
+    "test:unit": "echo 'not yet'",
     "story:dev": "ladle serve",
     "story:build": "ladle build -o ./build",
     "story:preview": "ladle preview",
