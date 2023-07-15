@@ -185,7 +185,12 @@ export abstract class KeyAgentBase implements KeyAgent {
     addressDerivationPath: AccountAddressDerivationPath,
     payload: T,
     networkType: Mina.NetworkType
-  ): Promise<Mina.SignedTransaction | Mina.SignedMessage> {
+  ): Promise<
+    | Mina.SignedTransaction
+    | Mina.SignedMessage
+    | Mina.SignedFields
+    | Mina.SignedZkAppCommand
+  > {
     // Mina network client.
     const minaClient = new Client({ network: networkType })
     // Generate the private key
@@ -193,13 +198,16 @@ export abstract class KeyAgentBase implements KeyAgent {
       accountDerivationPath.account_ix,
       addressDerivationPath.address_ix
     )
-
     // Perform the specific signing action
     try {
       if (util.isConstructedTransaction(payload)) {
         return minaClient.signTransaction(payload, privateKey)
       } else if (util.isMessageBody(payload)) {
         return minaClient.signMessage(payload.message, privateKey)
+      } else if (util.isFields(payload)) {
+        return minaClient.signFields(payload.fields, privateKey)
+      } else if (util.isZkAppTransaction(payload)) {
+        return minaClient.signZkappCommand(payload.command, privateKey)
       } else {
         throw new Error('Unsupported payload type.')
       }
