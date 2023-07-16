@@ -1,30 +1,24 @@
 import { chacha20_poly1305 } from '@noble/ciphers/chacha'
 import { randomBytes } from '@noble/ciphers/webcrypto/utils'
-import { pbkdf2 } from 'pbkdf2'
+import { pbkdf2Async } from '@noble/hashes/pbkdf2'
+import { sha512 } from '@noble/hashes/sha512'
 
 const KEY_LENGTH = 32
 const NONCE_LENGTH = 12
 const PBKDF2_ITERATIONS = 19_162
 const SALT_LENGTH = 32
-//const TAG_LENGTH = 16
 
 export const createPbkdf2Key = async (
   passphrase: Uint8Array,
   salt: Uint8Array | Uint16Array
-) =>
-  await new Promise<Buffer>((resolve, reject) =>
-    pbkdf2(
-      passphrase,
-      salt,
-      PBKDF2_ITERATIONS,
-      KEY_LENGTH,
-      'sha512',
-      (err, derivedKey) => {
-        if (err) return reject(err)
-        resolve(derivedKey)
-      }
-    )
-  )
+) => {
+  const saltAsUint8Array = new Uint8Array(salt.buffer)
+  const derivedKey = await pbkdf2Async(sha512, passphrase, saltAsUint8Array, {
+    c: PBKDF2_ITERATIONS,
+    dkLen: KEY_LENGTH
+  })
+  return derivedKey
+}
 
 export const emip3encrypt = async (
   data: Uint8Array,

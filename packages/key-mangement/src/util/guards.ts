@@ -15,3 +15,13 @@ export function isConstructedTransaction(
 export function isMessageBody(payload: any): payload is Mina.MessageBody {
   return payload && typeof payload === 'object' && 'message' in payload
 }
+
+export function isFields(payload: any): payload is Mina.SignableFields {
+  return payload && typeof payload === 'object' && 'fields' in payload
+}
+
+export function isZkAppTransaction(
+  payload: any
+): payload is Mina.SignableZkAppCommand {
+  return payload && typeof payload === 'object' && 'command' in payload
+}

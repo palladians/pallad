@@ -230,6 +230,20 @@ describe('KeyAgentBase', () => {
     const isVerified = minaClient.verifyTransaction(signedTx)
     expect(isVerified).toBeTruthy()
   })
+  it('should sign a message correctly and the client should be able to verify it', async () => {
+    const message: Mina.MessageBody = {
+      message: 'Hello, Bob!'
+    }
+
+    const signedMessage = await instance.signMessage(
+      accountKeyDerivationPath,
+      accountAddressDerivationPath,
+      message,
+      networkType
+    )
+    const isVerified = await minaClient.verifyMessage(signedMessage)
+    expect(isVerified).toBeTruthy()
+  })
   it('should use the generic sign<T> function for signing a transaction', async () => {
     const credentials = await instance.deriveCredentials(
       accountKeyDerivationPath,
@@ -251,30 +265,14 @@ describe('KeyAgentBase', () => {
       transaction,
       Mina.TransactionKind.PAYMENT
     )
-    const signedTx = await instance.sign<Mina.TransactionBody>(
+    const signedTx = await instance.sign<Mina.ConstructedTransaction>(
       accountKeyDerivationPath,
       accountAddressDerivationPath,
-      // investigate compiler error
       constructedTx,
       networkType
     )
 
     const isVerified = minaClient.verifyTransaction(signedTx)
-    expect(isVerified).toBeTruthy()
-  })
-
-  it('should sign a message correctly and the client should be able to verify it', async () => {
-    const message: Mina.MessageBody = {
-      message: 'Hello, Bob!'
-    }
-
-    const signedMessage = await instance.signMessage(
-      accountKeyDerivationPath,
-      accountAddressDerivationPath,
-      message,
-      networkType
-    )
-    const isVerified = await minaClient.verifyMessage(signedMessage)
     expect(isVerified).toBeTruthy()
   })
   it('should use the generic sign<T> function for signing a message', async () => {
@@ -289,6 +287,57 @@ describe('KeyAgentBase', () => {
     )
     const isVerified = await minaClient.verifyMessage(
       signedMessage as Mina.SignedMessage
+    )
+    expect(isVerified).toBeTruthy()
+  })
+  it('should use the generic sign<T> function to sign fields correctly and the client should be able to verify it', async () => {
+    const fields: Mina.SignableFields = {
+      fields: [10n, 20n, 30n, 340817401n, 2091283n, 1n, 0n]
+    }
+    const signedFields = await instance.sign<Mina.SignableFields>(
+      accountKeyDerivationPath,
+      accountAddressDerivationPath,
+      fields,
+      networkType
+    )
+    const isVerified = await minaClient.verifyFields(
+      signedFields as Mina.SignedFields
+    )
+    expect(isVerified).toBeTruthy()
+  })
+  it('should use the generic sign<T> function to sign a zkapp command correctly and the client should be able to verify it', async () => {
+    const zkAppCommand: Mina.SignableZkAppCommand = {
+      command: {
+        zkappCommand: {
+          accountUpdates: [],
+          memo: 'E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH',
+          feePayer: {
+            body: {
+              publicKey:
+                'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+              fee: '100000000',
+              validUntil: '100000',
+              nonce: '1'
+            },
+            authorization: ''
+          }
+        },
+        feePayer: {
+          feePayer: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+          fee: '100000000',
+          nonce: '1',
+          memo: 'test memo'
+        }
+      }
+    }
+    const signedZkAppCommand = await instance.sign<Mina.SignableZkAppCommand>(
+      accountKeyDerivationPath,
+      accountAddressDerivationPath,
+      zkAppCommand,
+      networkType
+    )
+    const isVerified = await minaClient.verifyZkappCommand(
+      signedZkAppCommand as Mina.SignedZkAppCommand
     )
     expect(isVerified).toBeTruthy()
   })

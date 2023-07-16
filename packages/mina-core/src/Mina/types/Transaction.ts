@@ -31,7 +31,8 @@ export type TransactionBody = {
 
 export enum TransactionKind {
   PAYMENT = 'payment',
-  STAKE_DELEGATION = 'delegation'
+  STAKE_DELEGATION = 'delegation',
+  ZK_APP = 'zkApp'
   // Add other kinds of transactions as needed
 }
 
