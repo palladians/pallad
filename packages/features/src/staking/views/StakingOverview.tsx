@@ -1,74 +1,61 @@
-import { Box, Card, Text } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-native'
+import { Card, Label } from '@palladxyz/ui'
+import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useViewAnimation } from '../../common/lib/animation'
 import { formatCompact } from '../../common/lib/numbers'
 import { EpochProgressChart } from '../components/EpochProgressChart'
 
 export const StakingOverviewView = () => {
   const navigate = useNavigate()
-  const { shift, opacity, scale } = useViewAnimation()
   return (
     <AppLayout>
-      <Box
-        css={{
-          padding: '$md',
-          gap: 24
-        }}
-        style={{ opacity, marginTop: shift, transform: [{ scale }] }}
-      >
+      <div className="p-4 gap-4">
         <ViewHeading
           title="Staking"
           button={{
             label: 'Change Pool',
-            onPress: () => navigate('/staking/delegate')
+            onClick: () => navigate('/staking/delegate')
           }}
         />
-        <Card
-          css={{
-            padding: '$md',
-            gap: 16
-          }}
-        >
-          <Box css={{ flexDirection: 'row', gap: 8 }}>
-            <Box css={{ flex: 1, gap: 8 }}>
-              <FormLabel>Epoch</FormLabel>
-              <Text>55</Text>
-            </Box>
-            <Box css={{ flex: 1, gap: 8 }}>
-              <FormLabel>Slot</FormLabel>
-              <Text>6894/7140</Text>
-            </Box>
-          </Box>
-          <Box css={{ flexDirection: 'row', gap: 8 }}>
-            <Box css={{ flex: 1, gap: 8 }}>
-              <FormLabel>Epoch ends in</FormLabel>
-              <Text>01d : 3h : 7m</Text>
-            </Box>
-            <Box css={{ flex: 1, gap: 8 }}>
+        <Card>
+          <div className="gap-2">
+            <div className="flex-1, gap-2">
+              <Label>Epoch</Label>
+              <div>55</div>
+            </div>
+            <div className="flex-1 gap-2">
+              <Label>Slot</Label>
+              <div>6894/7140</div>
+            </div>
+          </div>
+          <div className="gap-2">
+            <div className="flex-1 gap-2">
+              <Label>Epoch ends in</Label>
+              <div>01d : 3h : 7m</div>
+            </div>
+            <div className="flex-1 gap-2">
               <EpochProgressChart progress={0.75} />
-            </Box>
-          </Box>
+            </div>
+          </div>
         </Card>
         <ViewHeading title="Delegation Info" />
-        <Box css={{ gap: 24 }}>
-          <Box css={{ gap: 8 }}>
-            <FormLabel>Block Producer</FormLabel>
-            <Text>B62qm...iQvm</Text>
-          </Box>
-          <Box css={{ gap: 8 }}>
-            <FormLabel>Total Stake</FormLabel>
-            <Text>{formatCompact({ value: 208000 })} MINA</Text>
-          </Box>
-          <Box css={{ gap: 8 }}>
-            <FormLabel>Total Delegators</FormLabel>
-            <Text>56</Text>
-          </Box>
-        </Box>
-      </Box>
+        <div className="gap-6">
+          <div className="gap-2">
+            <Label>Block Producer</Label>
+            <div>B62qm...iQvm</div>
+          </div>
+          <div className="gap-2">
+            <Label>Total Stake</Label>
+            <div>{formatCompact({ value: 208000 })} MINA</div>
+          </div>
+          <div className="gap-2">
+            <Label>Total Delegators</Label>
+            <div>56</div>
+          </div>
+        </div>
+      </div>
     </AppLayout>
   )
 }

@@ -1,9 +1,8 @@
-import { Box, Button, icons, Image, Text } from '@palladxyz/ui'
+import { Button, Label } from '@palladxyz/ui'
 import easyMeshGradient from 'easy-mesh-gradient'
-import { Clipboard, Pressable } from 'react-native'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
+import { CopyIcon } from 'lucide-react'
 
-import { FormLabel } from '../../common/components/FormLabel'
 import { truncateString } from '../../common/lib/string'
 
 interface OverviewCardProps {
@@ -29,54 +28,18 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
     hueRange: [180, 240]
   })
   return (
-    <Box
-      css={{
-        width: '100%',
-        height: 232,
-        borderRadius: 16,
-        padding: 16,
-        gap: 16,
-        position: 'relative',
-        zIndex: 0
-      }}
-    >
-      <Box
-        css={{
-          position: 'absolute',
-          backgroundImage: meshGradientBright,
-          width: '100%',
-          height: '100%',
-          filter: 'blur(64px)',
-          borderRadius: 16,
-          opacity: 0.3
-        }}
+    <div className="h-232 rounded-md p-4 gap-4 relative">
+      <div
+        className="absolute w-full h-full blur-[64px] rounded-md opacity-30"
+        style={{ backgroundImage: meshGradientBright }}
       />
-      <Box
-        css={{
-          position: 'absolute',
-          backgroundImage: meshGradientBright,
-          width: '100%',
-          height: '100%',
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          borderRadius: 16
-        }}
+      <div
+        className="absolute w-full h-full inset-0 rounded-md"
+        style={{ backgroundImage: meshGradientBright }}
       />
-      <Box
-        css={{
-          position: 'absolute',
-          backgroundColor: '$gray900',
-          top: 2,
-          left: 2,
-          right: 2,
-          bottom: 2,
-          width: 'calc(100% - 4px)',
-          height: 'calc(100% - 4px)',
-          borderRadius: 14,
-          opacity: 0.8
-        }}
+      <div
+        className="absolute bg-slate-900 inset-[2px] rounded-[14px] opacity-80"
+        style={{ width: 'calc(100% - 4px)', height: 'calc(100% - 4px)' }}
       />
       {/*{isLoading ? (*/}
       {/*  <Box css={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>*/}
@@ -99,45 +62,40 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
       {/*    <Avatar label={walletAddress} />*/}
       {/*  </Box>*/}
       {/*)}*/}
-      <Box css={{ gap: 8 }}>
-        <FormLabel>Address</FormLabel>
-        <Box css={{ flexDirection: 'row', gap: 8 }}>
-          <Text
-            css={{
-              fontSize: 14,
-              fontWeight: 700,
-              color: '$primary400',
-              width: 'auto'
-            }}
-            testID="dashboard__addressTruncated"
+      <div className="gap-2">
+        <Label>Address</Label>
+        <div className="gap-2">
+          <div
+            className="text-md font-semibold text-sky-400"
+            data-testid="dashboard__addressTruncated"
           >
             {truncateString({
               value: walletAddress,
               firstCharCount: 8,
               endCharCount: 8
             })}
-          </Text>
-          <Pressable onPress={() => Clipboard.setString(walletAddress)}>
-            <Image source={icons.iconCopy} css={{ width: 20, height: 20 }} />
-          </Pressable>
-        </Box>
-      </Box>
-      <Box css={{ flexDirection: 'row', gap: 8 }}>
+          </div>
+          <div onClick={() => console.log('copy')}>
+            <CopyIcon />
+          </div>
+        </div>
+      </div>
+      <div className="gap-2">
         <Button
           variant="secondary"
-          css={{ flex: 1 }}
-          onPress={() => navigate('/send')}
+          className="flex-1"
+          onClick={() => navigate('/send')}
         >
           Send
         </Button>
         <Button
           variant="outline"
-          css={{ flex: 1 }}
-          onPress={() => navigate('/receive')}
+          className="flex-1"
+          onClick={() => navigate('/receive')}
         >
           Receive
         </Button>
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }

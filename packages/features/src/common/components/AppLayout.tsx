@@ -1,4 +1,3 @@
-import { Box } from '@palladxyz/ui'
 import React from 'react'
 
 import { BottomNavigation } from './BottomNavigation'
@@ -9,9 +8,9 @@ interface AppLayoutProps {
 
 export const AppLayout = ({ children }: AppLayoutProps) => {
   return (
-    <Box css={{ flex: 1, backgroundColor: '$background' }}>
-      <Box css={{ flex: 1 }}>{children}</Box>
+    <div className="flex-1 bg-sky-950">
+      <div className="flex-1">{children}</div>
       <BottomNavigation />
-    </Box>
+    </div>
   )
 }

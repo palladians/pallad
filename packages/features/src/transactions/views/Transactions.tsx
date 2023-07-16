@@ -1,27 +1,18 @@
-import { Box } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
 
 export const TransactionsView = () => {
   const navigate = useNavigate()
-  // const { data: transactionsData, isLoading: transactionsLoading } =
-  //   useTransactions()
-  // const transactions = transactionsData?.result?.data
   return (
     <AppLayout>
-      <Box css={{ padding: '$md', gap: 16 }}>
+      <div className="p-4 gap-4">
         <ViewHeading
           title="Transactions"
-          button={{ label: 'Send', onPress: () => navigate('/send') }}
+          button={{ label: 'Send', onClick: () => navigate('/send') }}
         />
-        {/*{transactionsLoading ? (*/}
-        {/*  <Spinner />*/}
-        {/*) : (*/}
-        {/*  transactions && <TransactionsList transactions={transactions} />*/}
-        {/*)}*/}
-      </Box>
+      </div>
     </AppLayout>
   )
 }

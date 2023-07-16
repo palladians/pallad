@@ -1,8 +1,7 @@
-import { Box } from '@palladxyz/ui'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import React from 'react'
-import { NativeRouter, Route, Routes } from 'react-router-native'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import { AboutView } from './about/views/About'
 import { AddressBookView } from './address-book/views/AddressBook'
@@ -34,8 +33,8 @@ dayjs.extend(relativeTime)
 
 export const Router = () => {
   return (
-    <Box css={{ flex: 1, height: '100vh' }}>
-      <NativeRouter>
+    <div className="flex-1 h-100vh">
+      <MemoryRouter>
         <Routes>
           <Route path="/" element={<StartView />} />
           <Route path="/dashboard" element={<OverviewView />} />
@@ -81,7 +80,7 @@ export const Router = () => {
           <Route path="/about" element={<AboutView />} />
           <Route path="/*" element={<NotFoundView />} />
         </Routes>
-      </NativeRouter>
-    </Box>
+      </MemoryRouter>
+    </div>
   )
 }

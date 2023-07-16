@@ -1,5 +1,5 @@
 import { getSessionPersistence } from '@palladxyz/persistence'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { useWallet } from '../../wallet/hooks/useWallet'
 import { useOnboardingStore } from '../../wallet/store/onboarding'

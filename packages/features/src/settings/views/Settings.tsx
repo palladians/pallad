@@ -1,24 +1,12 @@
 import { MinaNetwork } from '@palladxyz/key-generator'
-import {
-  Box,
-  Card,
-  composeBox,
-  Heading,
-  Icons,
-  RadioGroup,
-  Text,
-  theme
-} from '@palladxyz/ui'
-import { Pressable } from 'react-native'
-import { useNavigate } from 'react-router-native'
+import { Card, Label } from '@palladxyz/ui'
+import { useNavigate } from 'react-router-dom'
 import { useSWRConfig } from 'swr'
 
 import { AppLayout } from '../../common/components/AppLayout'
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useAppStore } from '../../wallet/store/app'
-
-const StyledPressable = composeBox({ baseComponent: Pressable })
+import { TrashIcon } from 'lucide-react'
 
 export const SettingsView = () => {
   const navigate = useNavigate()
@@ -33,37 +21,37 @@ export const SettingsView = () => {
   }
   return (
     <AppLayout>
-      <Box css={{ padding: 16, gap: 24 }}>
+      <div className="p-4 gap-6">
         <ViewHeading
           title="Settings"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
-        <Box css={{ gap: 8 }}>
-          <FormLabel>Network</FormLabel>
-          <RadioGroup
-            onChange={(value) => handleNetworkSwitch(value as MinaNetwork)}
-            options={[
-              {
-                value: MinaNetwork[MinaNetwork.Mainnet],
-                label: 'Mainnet',
-                defaultSelected: network === MinaNetwork[MinaNetwork.Mainnet]
-              },
-              {
-                value: MinaNetwork[MinaNetwork.Devnet],
-                label: 'Devnet',
-                defaultSelected: network === MinaNetwork[MinaNetwork.Devnet]
-              },
-              {
-                value: MinaNetwork[MinaNetwork.Berkeley],
-                label: 'Berkeley',
-                defaultSelected: network === MinaNetwork[MinaNetwork.Berkeley]
-              }
-            ]}
-          />
-        </Box>
-        <Box css={{ gap: 16 }}>
-          <Heading size="md">Authorized Domains</Heading>
-          <Box css={{ gap: 16 }}>
+        <div className="gap-2">
+          <Label>Network</Label>
+          {/*<RadioGroup*/}
+          {/*  onChange={(value) => handleNetworkSwitch(value as MinaNetwork)}*/}
+          {/*  options={[*/}
+          {/*    {*/}
+          {/*      value: MinaNetwork[MinaNetwork.Mainnet],*/}
+          {/*      label: 'Mainnet',*/}
+          {/*      defaultSelected: network === MinaNetwork[MinaNetwork.Mainnet]*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      value: MinaNetwork[MinaNetwork.Devnet],*/}
+          {/*      label: 'Devnet',*/}
+          {/*      defaultSelected: network === MinaNetwork[MinaNetwork.Devnet]*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      value: MinaNetwork[MinaNetwork.Berkeley],*/}
+          {/*      label: 'Berkeley',*/}
+          {/*      defaultSelected: network === MinaNetwork[MinaNetwork.Berkeley]*/}
+          {/*    }*/}
+          {/*  ]}*/}
+          {/*/>*/}
+        </div>
+        <div className="gap-4">
+          <h2>Authorized Domains</h2>
+          <div className="gap-4">
             <Card
               css={{
                 padding: '$md',
@@ -72,17 +60,17 @@ export const SettingsView = () => {
                 alignItems: 'center'
               }}
             >
-              <Text>Pallad</Text>
-              <Box css={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
-                <Text>pallad.xyz</Text>
-                <StyledPressable>
-                  <Icons.Trash color={theme.colors.primary500.value} />
-                </StyledPressable>
-              </Box>
+              <div>Pallad</div>
+              <div className="gap-2 items-center">
+                <div>pallad.xyz</div>
+                <a>
+                  <TrashIcon />
+                </a>
+              </div>
             </Card>
-          </Box>
-        </Box>
-      </Box>
+          </div>
+        </div>
+      </div>
     </AppLayout>
   )
 }

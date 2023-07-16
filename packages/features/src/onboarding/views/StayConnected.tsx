@@ -1,14 +1,14 @@
-import { Box, Button, icons, Text } from '@palladxyz/ui'
-import { Linking } from 'react-native'
-import { useNavigate } from 'react-router-native'
+import { Button } from '@palladxyz/ui'
+import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'
 
+const DISCORD_URL = 'https://discord.gg/ExzzfTGUnB'
+const TWITTER_URL = 'https://twitter.com/pallad_xyz'
+
 export const StayConnectedView = () => {
   const navigate = useNavigate()
-  const openDiscord = () => Linking.openURL('https://discord.gg/ExzzfTGUnB')
-  const openTwitter = () => Linking.openURL('https://twitter.com/pallad_xyz')
   return (
     <WizardLayout
       footer={
@@ -19,7 +19,7 @@ export const StayConnectedView = () => {
               flex: 1,
               width: 'auto'
             }}
-            onPress={() => navigate('/dashboard')}
+            onClick={() => navigate('/dashboard')}
             testID="onboarding__nextButton"
           >
             Go to Dashboard
@@ -27,28 +27,24 @@ export const StayConnectedView = () => {
         </>
       }
     >
-      <Box css={{ gap: 24 }}>
+      <div className="gap-6">
         <ViewHeading title="Stay Connected" />
-        <Text css={{ lineHeight: '200%' }}>
+        <div className="leading-6">
           That's it. Before moving to Dashboard consider joining our Community.
-        </Text>
-        <Box css={{ gap: 8, flexDirection: 'row' }}>
-          <Button
-            leftIcon={icons.iconDiscord}
-            css={{ flex: 1 }}
-            onPress={openDiscord}
-          >
-            Discord
+        </div>
+        <div className="gap-2">
+          <Button asChild className="flex-1">
+            <a href={DISCORD_URL} target="_blank">
+              Discord
+            </a>
           </Button>
-          <Button
-            leftIcon={icons.iconTwitter}
-            css={{ flex: 1 }}
-            onPress={openTwitter}
-          >
-            Twitter
+          <Button asChild className="flex-1">
+            <a href={TWITTER_URL} target="_blank">
+              Twitter
+            </a>
           </Button>
-        </Box>
-      </Box>
+        </div>
+      </div>
     </WizardLayout>
   )
 }

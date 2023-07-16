@@ -1,5 +1,7 @@
 import { definePreset } from '@pandacss/dev'
 
+import { buttonRecipe } from './components/Button'
+
 const baseColors = {
   'primary.50': { value: '#d8f9ff' },
   'primary.100': { value: '#abe7ff' },
@@ -35,6 +37,9 @@ export const preset = definePreset({
           heading: { value: 'Georgia, serif' },
           mono: { value: 'Menlo, monospace' }
         }
+      },
+      recipes: {
+        button: buttonRecipe
       }
     }
   },

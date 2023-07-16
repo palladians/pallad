@@ -1,14 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Button, Input, RadioGroup } from '@palladxyz/ui'
+import { Button, Input, Label } from '@palladxyz/ui'
 import { useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useLocation, useNavigate } from 'react-router-native'
+import { useForm } from 'react-hook-form'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { FormError } from '../../common/components/FormError'
-import { FormLabel } from '../../common/components/FormLabel'
 import { OutgoingTransaction } from '../../common/types'
-import { TransactionFee } from '../../wallet/lib/const'
-// import { useTransactionStore } from '../../wallet/store/transaction'
 import { DelegateFormSchema } from './DelegateForm.schema'
 
 export const DelegateForm = () => {
@@ -16,6 +12,7 @@ export const DelegateForm = () => {
   const navigate = useNavigate()
   // const setTransactionDetails = useTransactionStore((state) => state.set)
   const {
+    register,
     control,
     handleSubmit,
     setValue,
@@ -45,68 +42,34 @@ export const DelegateForm = () => {
     setValue('to', location.state?.address || '')
   }, [])
   return (
-    <Box css={{ flex: 1, gap: 16 }}>
-      <Box css={{ gap: 8 }}>
-        <FormLabel
-          button={{
-            label: 'Find Producer',
-            onPress: () => navigate('/staking/producers')
-          }}
-        >
-          Block Producer
-        </FormLabel>
-        <Controller
-          control={control}
-          name="to"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChange={onChange}
-              onBlur={onBlur}
-              value={value}
-              placeholder="Receiver Address"
-              onSubmitEditing={handleSubmit(onSubmit)}
-              autoFocus
-            />
-          )}
-        />
-        <FormError>{errors.to?.message}</FormError>
-      </Box>
-      <Box css={{ gap: 8 }}>
-        <FormLabel>Memo</FormLabel>
-        <Controller
-          control={control}
-          name="memo"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Memo"
-              onChange={onChange}
-              onBlur={onBlur}
-              value={value}
-              onSubmitEditing={handleSubmit(onSubmit)}
-            />
-          )}
-        />
-        <FormError>{errors.memo?.message}</FormError>
-      </Box>
-      <Box css={{ gap: 8, flex: 1 }}>
-        <FormLabel>Fee</FormLabel>
-        <RadioGroup
-          options={[
-            { value: 'slow', label: `Slow (${TransactionFee.slow} MINA)` },
-            {
-              value: 'default',
-              label: `Default (${TransactionFee.default} MINA)`,
-              defaultSelected: true
-            },
-            { value: 'fast', label: `Fast (${TransactionFee.fast} MINA)` }
-          ]}
-          onChange={(value: string) => setValue('fee', value)}
-        />
-        <FormError>{errors.fee?.message}</FormError>
-      </Box>
-      <Button onPress={handleSubmit(onSubmit)}>Next</Button>
-    </Box>
+    <form className="flex-1 gap-4" onSubmit={handleSubmit(onSubmit)}>
+      <div className="gap-2">
+        <Label>Block Producer</Label>
+        <Input placeholder="Receiver Address" autoFocus {...register('to')} />
+        <p>{errors.to?.message}</p>
+      </div>
+      <div className="gap-2">
+        <Label>Memo</Label>
+        <Input placeholder="Memo" {...register('memo')} />
+        <p>{errors.memo?.message}</p>
+      </div>
+      <div className="gap-2 flex-1">
+        <Label>Fee</Label>
+        {/*<RadioGroup*/}
+        {/*  options={[*/}
+        {/*    { value: 'slow', label: `Slow (${TransactionFee.slow} MINA)` },*/}
+        {/*    {*/}
+        {/*      value: 'default',*/}
+        {/*      label: `Default (${TransactionFee.default} MINA)`,*/}
+        {/*      defaultSelected: true*/}
+        {/*    },*/}
+        {/*    { value: 'fast', label: `Fast (${TransactionFee.fast} MINA)` }*/}
+        {/*  ]}*/}
+        {/*  onChange={(value: string) => setValue('fee', value)}*/}
+        {/*/>*/}
+        <p>{errors.fee?.message}</p>
+      </div>
+      <Button type="submit">Next</Button>
+    </form>
   )
 }

@@ -1,22 +1,21 @@
 import { getSessionPersistence } from '@palladxyz/persistence'
-import { Box, Button, Icons, Input, Text, theme } from '@palladxyz/ui'
+import { Button, Input } from '@palladxyz/ui'
 import { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-native'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { AlertCircleIcon } from 'lucide-react'
 
 import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useViewAnimation } from '../../common/lib/animation'
 
 export const UnlockWalletView = () => {
-  const { shift, opacity, scale } = useViewAnimation()
-  const [passwordError, setPasswordError] = useState(false)
+  const [passwordError, setPasswordError] = useState(true)
   console.log('>>PE', setPasswordError)
   const navigate = useNavigate()
   // const getCurrentWallet = useVaultStore((state) => state.getCurrentWallet)
   // const resetWallet = useVaultStore((state) => state.reset)
-  const { control, handleSubmit } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: {
       spendingPassword: ''
     }
@@ -44,57 +43,30 @@ export const UnlockWalletView = () => {
   return (
     <WizardLayout
       footer={
-        <Button onPress={handleSubmit(onSubmit)} css={{ flex: 1 }}>
+        <Button onClick={handleSubmit(onSubmit)} className="flex-1">
           Unlock
         </Button>
       }
     >
-      <Box
-        css={{ gap: 24 }}
-        style={{ opacity, marginTop: shift, transform: [{ scale }] }}
-      >
+      <div className="gap-6">
         <ViewHeading
           title="Unlock Wallet"
           button={{
             label: 'Restart Wallet',
-            onPress: restartWallet
+            onClick: () => console.log('restart')
           }}
         />
         {passwordError && (
-          <Box
-            css={{
-              backgroundColor: '$red800',
-              padding: '$sm',
-              borderRadius: '$md',
-              flexDirection: 'row',
-              gap: 8,
-              alignItems: 'center',
-              justifyContent: 'flex-start'
-            }}
-          >
-            <Icons.AlertCircle color={theme.colors.red400.value} />
-            <Text css={{ color: '$red400' }}>The password is wrong</Text>
-          </Box>
+          <div className="bg-red-800 p-2 rounded-md gap-2 items-center">
+            <AlertCircleIcon />
+            <p className="text-red-400">The password is wrong</p>
+          </div>
         )}
-        <Box css={{ gap: 8 }}>
+        <div className="gap-2">
           <FormLabel>Spending Password</FormLabel>
-          <Controller
-            control={control}
-            name="spendingPassword"
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChange={onChange}
-                onBlur={onBlur}
-                value={value}
-                onSubmitEditing={handleSubmit(onSubmit)}
-                secureTextEntry
-                autoFocus
-              />
-            )}
-          />
-        </Box>
-      </Box>
+          <Input autoFocus {...register('spendingPassword')} />
+        </div>
+      </div>
     </WizardLayout>
   )
 }

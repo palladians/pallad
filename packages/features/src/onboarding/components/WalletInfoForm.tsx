@@ -1,11 +1,9 @@
-import { Box, Button, Checkbox, Input, Text } from '@palladxyz/ui'
+import { Button, Checkbox, cn, Input, Label } from '@palladxyz/ui'
 import { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { Pressable } from 'react-native'
-import { useNavigate } from 'react-router-native'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 
 interface WalletInfoFormProps {
@@ -17,7 +15,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
   const [termsAccepted, setTermsAccepted] = useState(false)
   const toggleAccepted = () => setTermsAccepted(!termsAccepted)
   const navigate = useNavigate()
-  const { control, handleSubmit } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: {
       walletName: '',
       spendingPassword: ''
@@ -28,82 +26,57 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
       footer={
         <>
           <Button
-            onPress={() => navigate(-1)}
-            css={{ flex: 1, width: 'auto' }}
-            testID="onboarding__backButton"
+            onClick={() => navigate(-1)}
+            className="flex-1"
+            data-testid="onboarding__backButton"
           >
             Back
           </Button>
           <Button
             variant="secondary"
-            css={{
-              flex: 1,
-              width: 'auto',
-              opacity: termsAccepted ? 1 : 0.5,
-              transition: 'opacity 0.3s'
-            }}
+            className={cn([
+              'flex-1 transition-opacity opacity-50',
+              termsAccepted && 'opacity-100'
+            ])}
             disabled={!termsAccepted}
-            onPress={handleSubmit(onSubmit)}
-            testID="onboarding__nextButton"
+            onClick={handleSubmit(onSubmit)}
+            data-testid="onboarding__nextButton"
           >
             Next
           </Button>
         </>
       }
     >
-      <Box css={{ gap: 24 }}>
+      <div className="gap-6">
         <ViewHeading
           title={title}
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
-        <Box css={{ gap: 8 }}>
-          <FormLabel>Wallet Name</FormLabel>
-          <Controller
-            control={control}
-            name="walletName"
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChange={onChange}
-                onBlur={onBlur}
-                value={value}
-                onSubmitEditing={handleSubmit(onSubmit)}
-                placeholder="Wallet Name"
-                testID="onboarding__walletNameInput"
-              />
-            )}
+        <div className="gap-2">
+          <Label>Wallet Name</Label>
+          <Input
+            placeholder="Wallet Name"
+            data-testid="onboarding__walletNameInput"
+            {...register('walletName')}
           />
-        </Box>
-        <Box css={{ gap: 8 }}>
-          <FormLabel>Spending Password</FormLabel>
-          <Controller
-            control={control}
-            name="spendingPassword"
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChange={onChange}
-                onBlur={onBlur}
-                value={value}
-                onSubmitEditing={handleSubmit(onSubmit)}
-                testID="onboarding__spendingPasswordInput"
-                placeholder="Password"
-                secureTextEntry
-              />
-            )}
+        </div>
+        <div className="gap-2">
+          <Label>Spending Password</Label>
+          <Input
+            data-testid="onboarding__spendingPasswordInput"
+            placeholder="Password"
+            {...register('spendingPassword')}
           />
-        </Box>
-        <Box css={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+        </div>
+        <div className="items-center gap-4">
           <Checkbox
             value={termsAccepted}
-            onValueChange={(value: boolean) => setTermsAccepted(value)}
-            testID="onboarding__tosCheckbox"
+            onClick={toggleAccepted}
+            data-testid="onboarding__tosCheckbox"
           />
-          <Pressable onPress={toggleAccepted}>
-            <Text css={{ color: '$gray50' }}>I accept Terms of Service.</Text>
-          </Pressable>
-        </Box>
-      </Box>
+          <label>I accept Terms of Service.</label>
+        </div>
+      </div>
     </WizardLayout>
   )
 }

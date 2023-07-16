@@ -1,15 +1,13 @@
 import { getSessionPersistence } from '@palladxyz/persistence'
-import { Box, Button, Text } from '@palladxyz/ui'
+import { Button } from '@palladxyz/ui'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
-import { useViewAnimation } from '../../common/lib/animation'
 import { useAppStore } from '../../wallet/store/app'
 
 export const StartView = () => {
   const [appInitialized, setAppInitialized] = useState<boolean>(false)
-  const { scale, opacity, shift } = useViewAnimation()
   const isInitialized = useAppStore((state) => state.isInitialized())
   const navigate = useNavigate()
   useEffect(() => {
@@ -30,44 +28,30 @@ export const StartView = () => {
       footer={
         <>
           <Button
-            css={{ flex: 1, width: 'auto' }}
-            onPress={() => navigate('/onboarding/restore')}
-            testID="onboarding__restoreWalletButton"
+            onClick={() => navigate('/onboarding/restore')}
+            data-testid="onboarding__restoreWalletButton"
           >
             Restore Wallet
           </Button>
           <Button
             variant="secondary"
-            css={{ flex: 1, width: 'auto' }}
-            onPress={() => navigate('/onboarding/create')}
-            testID="onboarding__createWalletButton"
+            className="flex-1"
+            onClick={() => navigate('/onboarding/create')}
+            data-testid="onboarding__createWalletButton"
           >
             Create Wallet
           </Button>
         </>
       }
     >
-      <Box style={{ opacity, marginTop: shift, transform: [{ scale }] }}>
-        <Text
-          css={{
-            fontSize: 48,
-            background: '-webkit-linear-gradient(45deg, #8D7AFF, #1FD7FF)',
-            color: 'transparent',
-            WebkitBackgroundClip: 'text',
-            fontWeight: 600,
-            width: 'auto'
-          }}
-        >
-          Pallad
-        </Text>
-        <Text css={{ fontSize: 48, color: '$gray50' }}>
-          - Mina Wallet You Deserve
-        </Text>
-        <Text css={{ color: '$gray100', lineHeight: '220%', marginTop: 16 }}>
+      <div>
+        <h1 className="text-5xl text-sky-500 font-semibold">Pallad</h1>
+        <h2 className="text-5xl text-gray-500">- Mina Wallet You Deserve</h2>
+        <p className="text-gray-100 leading-5 mt-16">
           Take your Mina journey to the next level with out secure, transparent,
           and intuitive wallet interface.
-        </Text>
-      </Box>
+        </p>
+      </div>
     </WizardLayout>
   )
 }

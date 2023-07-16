@@ -12,7 +12,6 @@ export default defineConfig([
     clean: true,
     bundle: true,
     dts: true,
-    esbuildPlugins: [svgr({ plugins: [svgJsx] })],
-    external: ['react-native', 'react-native-web']
+    esbuildPlugins: [svgr({ plugins: [svgJsx] })]
   }
 ])

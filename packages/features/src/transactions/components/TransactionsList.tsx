@@ -1,5 +1,3 @@
-import { Box, Text } from '@palladxyz/ui'
-
 import { StructurizedTransaction, Transaction } from '../../common/types'
 import { structurizeTransactions } from '../utils/structurizeTransactions'
 import { TxTile } from './TxTile'
@@ -19,11 +17,11 @@ export const TransactionsList = ({ transactions }: TransactionsListProps) => {
     transactions &&
     Object.entries(structurizeTransactions([transactions, walletPublicKey]))
   return txDates?.map(([date, txs]) => (
-    <Box key={date} css={{ gap: 16 }}>
-      <Text css={{ fontWeight: '600' }}>{date}</Text>
+    <div className="gap-4" key={date}>
+      <div className="font-semibold">{date}</div>
       {txs.map((tx) => (
         <TxTile key={tx.hash} tx={tx} />
       ))}
-    </Box>
+    </div>
   ))
 }

@@ -1,10 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Button, Input } from '@palladxyz/ui'
-import { Controller, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-native'
+import { Button, Input, Label } from '@palladxyz/ui'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
-import { FormError } from '../../common/components/FormError'
-import { FormLabel } from '../../common/components/FormLabel'
 import { useAddressBookStore } from '../../wallet/store/addressBook'
 import { NewAddressFormSchema } from './NewAddressForm.schema'
 
@@ -12,7 +10,7 @@ export const NewAddressForm = () => {
   const navigate = useNavigate()
   const addContact = useAddressBookStore((state) => state.addContact)
   const {
-    control,
+    register,
     handleSubmit,
     formState: { errors }
   } = useForm({
@@ -27,46 +25,26 @@ export const NewAddressForm = () => {
     return navigate('/contacts')
   }
   return (
-    <Box css={{ flex: 1, gap: 16 }}>
-      <Box css={{ gap: 8 }}>
-        <FormLabel>Contact's Name</FormLabel>
-        <Controller
-          control={control}
-          name="name"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChange={onChange}
-              value={value}
-              onBlur={onBlur}
-              onSubmitEditing={handleSubmit(onSubmit)}
-              placeholder="Name"
-              testID="send__contactName"
-            />
-          )}
+    <form className="flex-1 gap-4" onSubmit={handleSubmit(onSubmit)}>
+      <div className="gap-2">
+        <Label>Contact's Name</Label>
+        <Input
+          placeholder="Name"
+          data-testid="send__contactName"
+          {...register('name')}
         />
-        <FormError>{errors.name?.message}</FormError>
-      </Box>
-      <Box css={{ gap: 8, flex: 1 }}>
-        <FormLabel>Receiver Address</FormLabel>
-        <Controller
-          control={control}
-          name="address"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChange={onChange}
-              value={value}
-              onBlur={onBlur}
-              onSubmitEditing={handleSubmit(onSubmit)}
-              placeholder="B62XXXXXXXXXXXX"
-              testID="send__contactAddress"
-            />
-          )}
+        <p>{errors.name?.message}</p>
+      </div>
+      <div className="gap-2 flex-1">
+        <Label>Receiver Address</Label>
+        <Input
+          placeholder="B62XXXXXXXXXXXX"
+          data-testid="send__contactAddress"
+          {...register('address')}
         />
-        <FormError>{errors.address?.message}</FormError>
-      </Box>
-      <Button onPress={handleSubmit(onSubmit)}>Create Contact</Button>
-    </Box>
+        <p>{errors.address?.message}</p>
+      </div>
+      <Button type="submit">Create Contact</Button>
+    </form>
   )
 }

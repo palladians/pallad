@@ -1,5 +1,4 @@
-import { Box } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
@@ -9,13 +8,13 @@ export const DelegateView = () => {
   const navigate = useNavigate()
   return (
     <AppLayout>
-      <Box css={{ padding: '$md', gap: 16, flex: 1 }}>
+      <div className="padding-4 gap-4 flex-1">
         <ViewHeading
           title="Delegate"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
         <DelegateForm />
-      </Box>
+      </div>
     </AppLayout>
   )
 }

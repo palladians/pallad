@@ -1,10 +1,9 @@
-import { Box, Button, Input } from '@palladxyz/ui'
+import { Button, cn, Input, Label } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-native'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useWallet } from '../../wallet/hooks/useWallet'
 import { useAppStore } from '../../wallet/store/app'
@@ -24,7 +23,7 @@ export const MnemonicConfirmationView = () => {
   const navigate = useNavigate()
   const mnemonic = useOnboardingStore((state) => state.mnemonic)
   const mnemonicSplit = useMemo(() => mnemonic?.split(' '), [mnemonic])
-  const { control, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch } = useForm({
     defaultValues: {
       mnemonicWord: ''
     }
@@ -43,54 +42,42 @@ export const MnemonicConfirmationView = () => {
       footer={
         <>
           <Button
-            onPress={() => navigate(-1)}
-            css={{ flex: 1, width: 'auto' }}
-            testID="onboarding__backButton"
+            onClick={() => navigate(-1)}
+            className="flex-1"
+            data-testid="onboarding__backButton"
           >
             Back
           </Button>
           <Button
             variant="secondary"
-            css={{
-              flex: 1,
-              width: 'auto',
-              opacity: isValid ? 1 : 0.5,
-              transition: 'opacity 0.3s'
-            }}
+            className={cn([
+              'flex-1 opacity-50 transition-opacity',
+              isValid && 'opavity-100'
+            ])}
             disabled={!isValid}
-            onPress={handleSubmit(onSubmit)}
-            testID="onboarding__nextButton"
+            onClick={handleSubmit(onSubmit)}
+            data-testid="onboarding__nextButton"
           >
             Next
           </Button>
         </>
       }
     >
-      <Box css={{ gap: 24 }}>
+      <div className="gap-6">
         <ViewHeading
           title="Confirm The Mnemonic"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
-        <Box css={{ gap: 8 }}>
-          <FormLabel testID="onboarding__writedownIndex">
+        <div className="gap-8">
+          <Label data-testid="onboarding__writedownIndex">
             Type in the word #{confirmationIndex + 1}
-          </FormLabel>
-          <Controller
-            control={control}
-            name="mnemonicWord"
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChange={onChange}
-                value={value}
-                onBlur={onBlur}
-                onSubmitEditing={handleSubmit(onSubmit)}
-                testID="onboarding__mnemonicConfirmationInput"
-              />
-            )}
+          </Label>
+          <Input
+            data-testid="onboarding__mnemonicConfirmationInput"
+            {...register('mnemonicWord')}
           />
-        </Box>
-      </Box>
+        </div>
+      </div>
     </WizardLayout>
   )
 }

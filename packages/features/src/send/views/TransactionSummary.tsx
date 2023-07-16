@@ -1,5 +1,6 @@
-import { Box, Button, Card, Icons, Text, theme } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-native'
+import { Button, Card, Label } from '@palladxyz/ui'
+import { ArrowDownLeftIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { FormLabel } from '../../common/components/FormLabel'
@@ -20,69 +21,61 @@ export const TransactionSummaryView = () => {
   const walletPublicKey = 'B62XXX'
   return (
     <AppLayout>
-      <Box css={{ padding: '$md', gap: 16, flex: 1 }}>
+      <div className="p-4 gap-4 flex-1">
         <ViewHeading
           title="Transaction Summary"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
-        <Card css={{ padding: '$sm', gap: 16, position: 'relative' }}>
-          <Box
-            css={{
-              position: 'absolute',
-              right: 16,
-              top: '35%'
-            }}
-          >
-            <Icons.ArrowDown color={theme.colors.primary500.value} />
-          </Box>
-          <Box css={{ gap: 8 }}>
+        <Card>
+          <div className="absolute right-4 top-35/100">
+            <ArrowDownLeftIcon />
+          </div>
+          <div className="gap-2">
             <FormLabel>From</FormLabel>
-            <Text>
+            <div>
               {walletPublicKey &&
                 truncateString({
                   value: walletPublicKey,
                   endCharCount: 8,
                   firstCharCount: 8
                 })}
-            </Text>
-          </Box>
-          <Box css={{ gap: 8 }}>
+            </div>
+          </div>
+          <div className="gap-2">
             <FormLabel>To</FormLabel>
-            <Text>
+            <div>
               {truncateString({
                 value: outgoingTransaction.to,
                 endCharCount: 8,
                 firstCharCount: 8
               })}
-            </Text>
-          </Box>
+            </div>
+          </div>
         </Card>
-        <Box css={{ gap: 16, flex: 1 }}>
-          <Box css={{ gap: 4 }}>
+        <div className="gap-4 flex-1">
+          <div className="gap-1">
             <FormLabel>Kind</FormLabel>
-            <Text css={{ textTransform: 'capitalize' }}>
-              {outgoingTransaction.kind}
-            </Text>
-          </Box>
+            <div className="capitalize">{outgoingTransaction.kind}</div>
+          </div>
           {outgoingTransaction?.amount && (
-            <Box css={{ gap: 4 }}>
-              <FormLabel>Amount</FormLabel>
-              <Text>{outgoingTransaction.amount} MINA</Text>
-            </Box>
+            <div className="gap-1">
+              <Label>Amount</Label>
+              <div>{outgoingTransaction.amount} MINA</div>
+            </div>
           )}
-          <Box css={{ gap: 4 }}>
+          <div className="gap-1">
             <FormLabel>Fee</FormLabel>
-            <Text>{outgoingTransaction.fee} MINA</Text>
-          </Box>
+            <div>{outgoingTransaction.fee} MINA</div>
+          </div>
           {outgoingTransaction?.amount && (
-            <Box css={{ gap: 4 }}>
-              <FormLabel>Total</FormLabel>
-              <Text>15.2 MINA</Text>
-            </Box>
+            <div className="gap-1">
+              <Label>Total</Label>
+              <div>15.2 MINA</div>
+            </div>
           )}
-        </Box>
-        <Button onPress={() => navigate('/transactions/success')}>Send</Button>
-      </Box>
+        </div>
+        <Button onClick={() => navigate('/transactions/success')}>Send</Button>
+      </div>
     </AppLayout>
   )
 }

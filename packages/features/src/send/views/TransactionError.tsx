@@ -1,4 +1,4 @@
-import { Icons, theme } from '@palladxyz/ui'
+import { AlertOctagonIcon } from 'lucide-react'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { TransactionResult } from '../components/TransactionResult'
@@ -9,14 +9,14 @@ export const TransactionErrorView = () => {
       <TransactionResult
         title="Submission Error"
         result={{
-          icon: Icons.AlertOctagon,
-          iconColor: theme.colors.red500.value,
+          icon: AlertOctagonIcon,
+          iconColor: '#ff0000',
           label: 'Transaction Failed',
           content: 'Error: 500 Broadcast API not reachable'
         }}
         button={{
           label: 'Try Again',
-          onPress: () => console.log('details')
+          onClick: () => console.log('details')
         }}
       />
     </AppLayout>

@@ -1,8 +1,6 @@
-import { Box, Button, Text } from '@palladxyz/ui'
-
 type ButtonProps = {
   label: string
-  onPress: () => void
+  onClick: () => void
   testID?: string
 }
 
@@ -20,32 +18,33 @@ export const FormLabel = ({
   required = false
 }: FormLabelProps) => {
   return (
-    <Box
-      css={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}
-    >
-      <Box css={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text
-          css={{ width: 'auto', fontSize: 14, fontWeight: '$semibold' }}
-          testID={testID}
-        >
-          {children}
-        </Text>
-        <Text css={{ color: '$red200' }}>{required && '*'}</Text>
-      </Box>
-      {button && (
-        <Button
-          variant="link"
-          css={{ width: 'auto', padding: 0, height: 'auto' }}
-          onPress={button.onPress}
-          testID={button?.testID}
-        >
-          {button.label}
-        </Button>
-      )}
-    </Box>
+    <p>label</p>
+    // <Box
+    //   css={{
+    //     flexDirection: 'row',
+    //     justifyContent: 'space-between',
+    //     alignItems: 'center'
+    //   }}
+    // >
+    //   <Box css={{ flexDirection: 'row', alignItems: 'center' }}>
+    //     <Text
+    //       css={{ width: 'auto', fontSize: 14, fontWeight: '$semibold' }}
+    //       testID={testID}
+    //     >
+    //       {children}
+    //     </Text>
+    //     <Text css={{ color: '$red200' }}>{required && '*'}</Text>
+    //   </Box>
+    //   {button && (
+    //     <Button
+    //       variant="link"
+    //       css={{ width: 'auto', padding: 0, height: 'auto' }}
+    //       onClick={button.onClick}
+    //       testID={button?.testID}
+    //     >
+    //       {button.label}
+    //     </Button>
+    //   )}
+    // </Box>
   )
 }

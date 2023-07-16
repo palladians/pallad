@@ -1,4 +1,3 @@
-import { theme } from '@palladxyz/ui'
 import { Pie, PieChart, ResponsiveContainer } from 'recharts'
 
 interface EpochProgressChartProps {
@@ -11,7 +10,7 @@ export const EpochProgressChart = ({ progress }: EpochProgressChartProps) => {
   const data = [
     {
       progress: 1,
-      fill: theme.colors.primary500.value
+      fill: '#ff0000'
     }
   ]
   return (

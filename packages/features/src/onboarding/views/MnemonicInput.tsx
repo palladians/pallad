@@ -1,8 +1,8 @@
 import { validateMnemonic, wordlist } from '@palladxyz/key-generator'
-import { Box, Button, Textarea } from '@palladxyz/ui'
+import { Button, Label, Textarea } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
 import { FormLabel } from '../../common/components/FormLabel'
@@ -20,7 +20,7 @@ export const MnemonicInputView = () => {
     (state) => state.setVaultStateInitialized
   )
   const [noOneIsLooking, setNoOneIsLooking] = useState(false)
-  const { control, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch } = useForm({
     defaultValues: {
       mnemonic: ''
     }
@@ -41,9 +41,9 @@ export const MnemonicInputView = () => {
       footer={
         <>
           <Button
-            onPress={() => navigate(-1)}
+            onClick={() => navigate(-1)}
             css={{ flex: 1, width: 'auto' }}
-            testID="onboarding__backButton"
+            data-testid="onboarding__backButton"
           >
             Back
           </Button>
@@ -56,55 +56,45 @@ export const MnemonicInputView = () => {
               transition: 'opacity 0.3s'
             }}
             disabled={!mnemonicValid}
-            onPress={handleSubmit(onSubmit)}
-            testID="onboarding__nextButton"
+            onClick={handleSubmit(onSubmit)}
+            data-testid="onboarding__nextButton"
           >
             Next
           </Button>
         </>
       }
     >
-      <Box css={{ gap: 24 }}>
+      <div className="gap-6">
         <ViewHeading
           title="Type In Your Mnemonic"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
         {noOneIsLooking ? (
-          <Box css={{ gap: 16 }}>
-            <FormLabel>Your Mnemonic</FormLabel>
-            <Controller
-              control={control}
-              name="mnemonic"
-              rules={{ required: true }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Textarea
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  onSubmitEditing={handleSubmit(onSubmit)}
-                  css={{
-                    color: '$white',
-                    borderColor: '$gray600',
-                    backgroundColor: '$gray800',
-                    lineHeight: '175%'
-                  }}
-                  testID="onboarding__yourMnemonicTextarea"
-                />
-              )}
+          <div className="gap-4">
+            <Label>Your Mnemonic</Label>
+            <Textarea
+              css={{
+                color: '$white',
+                borderColor: '$gray600',
+                backgroundColor: '$gray800',
+                lineHeight: '175%'
+              }}
+              data-testid="onboarding__yourMnemonicTextarea"
+              {...register('mnemonic')}
             />
-          </Box>
+          </div>
         ) : (
-          <Box css={{ gap: 8 }}>
+          <div className="gap-2">
             <FormLabel>Confirm No One Is Behind You</FormLabel>
             <Button
-              onPress={() => setNoOneIsLooking(true)}
-              testID="onboarding__confirmAlone"
+              onClick={() => setNoOneIsLooking(true)}
+              data-testid="onboarding__confirmAlone"
             >
               I am alone
             </Button>
-          </Box>
+          </div>
         )}
-      </Box>
+      </div>
     </WizardLayout>
   )
 }

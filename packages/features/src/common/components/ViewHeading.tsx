@@ -1,13 +1,13 @@
-import { Box, Button, composeBox, Heading, Icons, theme } from '@palladxyz/ui'
-import { Pressable } from 'react-native'
+import { Button } from '@palladxyz/ui'
+import { ArrowLeftIcon } from 'lucide-react'
 
 type ButtonProps = {
   label: string
-  onPress: () => void
+  onClick: () => void
 }
 
 type BackButtonProps = {
-  onPress: () => void
+  onClick: () => void
 }
 
 interface ViewHeadingProps {
@@ -21,52 +21,19 @@ export const ViewHeading = ({
   button,
   backButton
 }: ViewHeadingProps) => {
-  const StyledPressable = composeBox({ baseComponent: Pressable })
   return (
-    <Box
-      css={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}
-    >
+    <div className="items-center justify-between">
       {backButton && (
-        <StyledPressable
-          css={{
-            width: 32,
-            height: 32,
-            borderRadius: '50%',
-            backgroundColor: '$primary800',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginRight: 16
-          }}
-          onPress={backButton.onPress}
-        >
-          <Icons.ArrowLeft color={theme.colors.primary400.value} size={20} />
-        </StyledPressable>
+        <Button onClick={backButton.onClick}>
+          <ArrowLeftIcon className="text-sky-500" size={20} />
+        </Button>
       )}
-      <Heading
-        size="md"
-        css={{ flex: 1, color: '$gray50', marginTop: 0, paddingVertical: 4 }}
-      >
-        {title}
-      </Heading>
+      <h2 className="flex-1 text-gray-50 px-1">{title}</h2>
       {button && (
-        <Button
-          variant="link"
-          css={{
-            width: 'auto',
-            paddingVertical: '$sm',
-            paddingHorizontal: '$md',
-            backgroundColor: '$primary800',
-            height: 'auto'
-          }}
-          onPress={button.onPress}
-        >
+        <Button variant="link" onClick={button.onClick}>
           {button.label}
         </Button>
       )}
-    </Box>
+    </div>
   )
 }

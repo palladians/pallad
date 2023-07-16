@@ -1,4 +1,4 @@
-import { Box, Button, Text } from '@palladxyz/ui'
+import { Button } from '@palladxyz/ui'
 import { ElementType } from 'react'
 
 import { FormLabel } from '../../common/components/FormLabel'
@@ -13,7 +13,7 @@ type TxResult = {
 
 type TxButton = {
   label: string
-  onPress: () => void
+  onClick: () => void
 }
 
 interface TransactionResultProps {
@@ -28,28 +28,16 @@ export const TransactionResult = ({
   button
 }: TransactionResultProps) => {
   return (
-    <Box css={{ flex: 1, padding: '$md' }}>
+    <div className="flex-1 p-4">
       <ViewHeading title={title} />
-      <Box
-        css={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 40
-        }}
-      >
+      <div className="flex-1 justify-center items-center gap-10">
         <result.icon size={56} color={result.iconColor} />
-        <Box css={{ gap: 8 }}>
+        <div className="gap-2">
           <FormLabel>{result.label}</FormLabel>
-          <Text
-            numberOfLines={2}
-            css={{ lineHeight: '175%', overflow: 'hidden', width: '100%' }}
-          >
-            {result.content}
-          </Text>
-        </Box>
-      </Box>
-      <Button onPress={button.onPress}>{button.label}</Button>
-    </Box>
+          <div className="leading-6 overflow-hidden">{result.content}</div>
+        </div>
+      </div>
+      <Button onClick={button.onClick}>{button.label}</Button>
+    </div>
   )
 }

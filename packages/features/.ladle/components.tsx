@@ -5,9 +5,8 @@ import {
   ThemeState,
   useLadleContext
 } from '@ladle/react'
-import { Box } from '@palladxyz/ui'
-import { theme, ThemeProvider } from '../src'
-import { NativeRouter } from 'react-router-native'
+import { MemoryRouter } from 'react-router-dom'
+import '@palladxyz/ui/dist/index.css'
 
 export const Provider: GlobalProvider = ({ children }) => {
   const { dispatch } = useLadleContext()
@@ -15,12 +14,8 @@ export const Provider: GlobalProvider = ({ children }) => {
     dispatch({ type: ActionType.UpdateTheme, value: ThemeState.Dark })
   }, [])
   return (
-    <ThemeProvider theme={theme}>
-      <NativeRouter>
-        <Box css={{ width: 400, height: 600, backgroundColor: '$gray900' }}>
-          {children}
-        </Box>
-      </NativeRouter>
-    </ThemeProvider>
+    <MemoryRouter>
+      <div className="w-400 h-600 bg-sky-950">{children}</div>
+    </MemoryRouter>
   )
 }

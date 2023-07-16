@@ -1,5 +1,4 @@
-import { Box } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { ViewHeading } from '../../common/components/ViewHeading'
 
@@ -11,12 +10,12 @@ export const AssetsList = () => {
   // )
   // const minaBalance = rawMinaBalance ? rawMinaBalance.toFixed(4) : '0'
   return (
-    <Box css={{ flex: 1, padding: 16, gap: 12 }}>
+    <div className="flex-1 p-4 gap-3">
       <ViewHeading
         title="Assets"
         button={{
           label: 'See Transactions',
-          onPress: () => navigate('/transactions')
+          onClick: () => navigate('/transactions')
         }}
       />
       {/*{isLoading ? (*/}
@@ -41,6 +40,6 @@ export const AssetsList = () => {
       {/*    <Text css={{ width: 'auto', color: '$gray100' }}>{minaBalance}</Text>*/}
       {/*  </Box>*/}
       {/*)}*/}
-    </Box>
+    </div>
   )
 }

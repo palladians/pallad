@@ -1,5 +1,4 @@
-import { Box } from '@palladxyz/ui'
-import { useNavigate, useParams } from 'react-router-native'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
@@ -28,10 +27,10 @@ export const TransactionDetailsView = () => {
   // ]
   return (
     <AppLayout>
-      <Box css={{ padding: '$md', flex: 1, gap: 20 }}>
+      <div className="p-4 flex-1 gap-4">
         <ViewHeading
           title="Transaction Details"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
         {/*{transactionLoading ? (*/}
         {/*  <Spinner />*/}
@@ -53,7 +52,7 @@ export const TransactionDetailsView = () => {
         {/*    ))}*/}
         {/*  </Box>*/}
         {/*)}*/}
-      </Box>
+      </div>
     </AppLayout>
   )
 }

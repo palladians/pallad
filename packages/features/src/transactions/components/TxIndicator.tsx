@@ -1,4 +1,4 @@
-import { Box, Icons, theme } from '@palladxyz/ui'
+import { ArrowDownLeftIcon, ArrowUpRightIcon, CoinsIcon } from 'lucide-react'
 
 import { TxKind, TxSide } from '../../common/types'
 
@@ -9,25 +9,16 @@ interface TxSideIndicatorProps {
 
 export const TxIndicator = ({ kind, side }: TxSideIndicatorProps) => {
   return (
-    <Box
-      css={{
-        borderRadius: '50%',
-        backgroundColor: theme.colors.primary800.value,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
-    >
+    <div className="rounded-full bg-sky-900 w-10 h-10 justify-between items-center">
       {kind === TxKind.PAYMENT ? (
         side === TxSide.INCOMING ? (
-          <Icons.ArrowDownLeft color={theme.colors.primary500.value} />
+          <ArrowDownLeftIcon />
         ) : (
-          <Icons.ArrowUpRight color={theme.colors.primary500.value} />
+          <ArrowUpRightIcon />
         )
       ) : (
-        <Icons.Coins color={theme.colors.primary500.value} />
+        <CoinsIcon />
       )}
-    </Box>
+    </div>
   )
 }
