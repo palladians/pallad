@@ -1,7 +1,7 @@
+import { sha256 } from '@noble/hashes/sha256'
 import { Mina } from '@palladxyz/mina-core'
-import { HDKey } from '@scure/bip32'
 import { base58check } from '@scure/base'
-import { sha256 } from '@noble/hashes/sha256';
+import { HDKey } from '@scure/bip32'
 import { Buffer } from 'buffer'
 import Client from 'mina-signer'
 import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
@@ -236,20 +236,21 @@ export abstract class KeyAgentBase implements KeyAgent {
     childNode.privateKey[0] &= 0x3f
     const childPrivateKey = this.reverseBytes(new Buffer(childNode.privateKey))
     const privateKeyHex = `5a01${childPrivateKey.toString('hex')}`
-    //const privateKey = bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
     // Convert the hex string to a Uint8Array
     if (!privateKeyHex) {
-      throw new Error('privateKeyHex is empty');
+      throw new Error('privateKeyHex is empty')
     }
-    
-    const hexMatches = privateKeyHex.match(/.{1,2}/g);
+
+    const hexMatches = privateKeyHex.match(/.{1,2}/g)
     if (!hexMatches) {
-      throw new Error('Failed to split privateKeyHex into bytes');
+      throw new Error('Failed to split privateKeyHex into bytes')
     }
-    const privateKeyBytes = new Uint8Array(hexMatches.map(byte => parseInt(byte, 16)));
+    const privateKeyBytes = new Uint8Array(
+      hexMatches.map((byte) => parseInt(byte, 16))
+    )
 
     // Encode the Uint8Array into a base58 string with checksum
-    const privateKey = base58check(sha256).encode(privateKeyBytes);
+    const privateKey = base58check(sha256).encode(privateKeyBytes)
     return privateKey
   }
 }
