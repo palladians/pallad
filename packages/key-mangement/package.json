@@ -18,10 +18,11 @@
   },
   "dependencies": {
     "@noble/ciphers": "^0.1.3",
+    "@noble/hashes": "^1.3.1",
     "@palladxyz/mina-core": "*",
+    "@scure/base": "^1.1.1",
     "@scure/bip32": "^1.3.0",
     "@scure/bip39": "^1.2.0",
-    "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "get-random-values": "^2.0.0",
     "mina-signer": "^2.0.3",
