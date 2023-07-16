@@ -8,7 +8,7 @@ export const DelegateView = () => {
   const navigate = useNavigate()
   return (
     <AppLayout>
-      <div className="padding-4 gap-4 flex-1">
+      <div className="flex flex-col gap-4 flex-1">
         <ViewHeading
           title="Delegate"
           backButton={{ onClick: () => navigate(-1) }}

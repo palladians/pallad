@@ -11,27 +11,21 @@ import { useMemo } from 'react'
 import { useAppStore } from '../store/app'
 
 const MinaProxyUrl = {
-  [MinaNetwork[MinaNetwork.Mainnet]]: new URL(
-    import.meta.env.VITE_APP_MINA_PROXY_MAINNET_URL
-  ),
-  [MinaNetwork[MinaNetwork.Devnet]]: new URL(
-    import.meta.env.VITE_APP_MINA_PROXY_DEVNET_URL
-  ),
-  [MinaNetwork[MinaNetwork.Berkeley]]: new URL(
-    import.meta.env.VITE_APP_MINA_PROXY_BERKELEY_URL
-  )
+  [MinaNetwork[MinaNetwork.Mainnet]]: import.meta.env
+    .VITE_APP_MINA_PROXY_MAINNET_URL,
+  [MinaNetwork[MinaNetwork.Devnet]]: import.meta.env
+    .VITE_APP_MINA_PROXY_DEVNET_URL,
+  [MinaNetwork[MinaNetwork.Berkeley]]: import.meta.env
+    .VITE_APP_MINA_PROXY_BERKELEY_URL
 }
 
 const MinaExplorerUrl = {
-  [MinaNetwork[MinaNetwork.Mainnet]]: new URL(
-    import.meta.env.VITE_APP_MINA_EXPLORER_MAINNET_URL
-  ),
-  [MinaNetwork[MinaNetwork.Devnet]]: new URL(
-    import.meta.env.VITE_APP_MINA_EXPLORER_DEVNET_URL
-  ),
-  [MinaNetwork[MinaNetwork.Berkeley]]: new URL(
-    import.meta.env.VITE_APP_MINA_EXPLORER_BERKELEY_URL
-  )
+  [MinaNetwork[MinaNetwork.Mainnet]]: import.meta.env
+    .VITE_APP_MINA_EXPLORER_MAINNET_URL,
+  [MinaNetwork[MinaNetwork.Devnet]]: import.meta.env
+    .VITE_APP_MINA_EXPLORER_DEVNET_URL,
+  [MinaNetwork[MinaNetwork.Berkeley]]: import.meta.env
+    .VITE_APP_MINA_EXPLORER_BERKELEY_URL
 }
 
 export const useWallet = () => {
@@ -44,13 +38,9 @@ export const useWallet = () => {
     () => MinaExplorerUrl[currentNetwork],
     [currentNetwork]
   )
-  const txSubmitProvider = new TxSubmitGraphQLProvider(minaProxyUrl.toString())
-  const chainHistoryProvider = new ChainHistoryGraphQLProvider(
-    minaExplorerUrl.toString()
-  )
-  const accountInfoProvider = new AccountInfoGraphQLProvider(
-    minaProxyUrl.toString()
-  )
+  const txSubmitProvider = new TxSubmitGraphQLProvider(minaProxyUrl)
+  const chainHistoryProvider = new ChainHistoryGraphQLProvider(minaExplorerUrl)
+  const accountInfoProvider = new AccountInfoGraphQLProvider(minaProxyUrl)
   const wallet = new MinaWalletImpl(
     { name: 'Pallad' },
     {

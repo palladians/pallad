@@ -25,7 +25,10 @@ export const NewAddressForm = () => {
     return navigate('/contacts')
   }
   return (
-    <form className="flex-1 gap-4" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col flex-1 gap-4"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="gap-2">
         <Label>Contact's Name</Label>
         <Input

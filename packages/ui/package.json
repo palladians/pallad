@@ -5,6 +5,8 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
+    "postcss.config.mjs",
+    "tailwind.config.mjs",
     "dist"
   ],
   "exports": {
@@ -15,6 +17,14 @@
     "./dist/index.css": {
       "import": "./dist/index.css",
       "require": "./dist/index.css"
+    },
+    "./tailwind.config.mjs": {
+      "import": "./tailwind.config.mjs",
+      "require": "./tailwind.config.mjs"
+    },
+    "./postcss.config.mjs": {
+      "import": "./postcss.config.mjs",
+      "require": "./postcss.config.mjs"
     }
   },
   "scripts": {

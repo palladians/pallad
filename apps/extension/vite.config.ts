@@ -12,14 +12,9 @@ export default defineConfig({
     react(),
     crx({ manifest }),
     topLevelAwait(),
-    nodePolyfills(),
+    nodePolyfills({ protocolImports: true }),
     svgr({ exportAsDefault: true })
   ],
-  resolve: {
-    alias: {
-      'react-native': 'react-native-web'
-    }
-  },
   build: {
     rollupOptions: {
       input: {

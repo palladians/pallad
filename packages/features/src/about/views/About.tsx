@@ -22,27 +22,29 @@ export const AboutView = () => {
   const navigate = useNavigate()
   return (
     <AppLayout>
-      <div className="p-4 gap-4">
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="About"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <Card>
-          <div className="flex-row items-center gap-4">
+        <Card className="flex gap-4 p-4 justify-between">
+          <div className="flex items-center gap-4">
             <Logo />
             <div className="font-semibold">Pallad</div>
           </div>
-          <Button variant="link">Up to date</Button>
+          <Button variant="outline" disabled>
+            Up to date
+          </Button>
         </Card>
-        <div className="gap-4">
+        <Card className="flex flex-col gap-4 p-4">
           {AppMeta.map(({ label, value }) => (
             <MetaField key={label} label={label} value={value} />
           ))}
-        </div>
-        <div>
+        </Card>
+        <Card className="flex flex-col items-start">
           <Button variant="link">Terms of Service</Button>
           <Button variant="link">Privacy Policy</Button>
-        </div>
+        </Card>
       </div>
     </AppLayout>
   )

@@ -51,7 +51,7 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
       {/*      <FormLabel>Balance</FormLabel>*/}
       {/*      <Text*/}
       {/*        css={{ fontSize: 24, fontWeight: 700, color: '$white' }}*/}
-      {/*        testID="dashboard__minaBalance"*/}
+      {/*        data-testid="dashboard__minaBalance"*/}
       {/*      >*/}
       {/*        {totalBalance} MINA*/}
       {/*      </Text>*/}

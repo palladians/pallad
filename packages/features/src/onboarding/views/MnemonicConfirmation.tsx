@@ -40,27 +40,18 @@ export const MnemonicConfirmationView = () => {
   return (
     <WizardLayout
       footer={
-        <>
-          <Button
-            onClick={() => navigate(-1)}
-            className="flex-1"
-            data-testid="onboarding__backButton"
-          >
-            Back
-          </Button>
-          <Button
-            variant="secondary"
-            className={cn([
-              'flex-1 opacity-50 transition-opacity',
-              isValid && 'opavity-100'
-            ])}
-            disabled={!isValid}
-            onClick={handleSubmit(onSubmit)}
-            data-testid="onboarding__nextButton"
-          >
-            Next
-          </Button>
-        </>
+        <Button
+          variant="secondary"
+          className={cn([
+            'flex-1 opacity-50 transition-opacity',
+            isValid && 'opavity-100'
+          ])}
+          disabled={!isValid}
+          onClick={handleSubmit(onSubmit)}
+          data-testid="onboarding__nextButton"
+        >
+          Next
+        </Button>
       }
     >
       <div className="gap-6">

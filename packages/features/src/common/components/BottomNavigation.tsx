@@ -1,4 +1,11 @@
 import { useLocation } from 'react-router-dom'
+import { Button, Card } from '@palladxyz/ui'
+import {
+  CoinsIcon,
+  LayoutDashboardIcon,
+  BookIcon,
+  MenuIcon
+} from 'lucide-react'
 
 const MenuItem = ({ url, Icon, onClick }) => {
   const location = useLocation()
@@ -61,7 +68,24 @@ const MenuItem = ({ url, Icon, onClick }) => {
 export const BottomNavigation = () => {
   //   const navigate = useNavigate()
   return (
-    <p>bb</p>
+    <Card className="flex justify-around p-1">
+      <Button variant="ghost">
+        <LayoutDashboardIcon />
+        <span className="hidden">Dashboard</span>
+      </Button>
+      <Button variant="ghost">
+        <CoinsIcon />
+        <span className="hidden">Staking</span>
+      </Button>
+      <Button variant="ghost">
+        <BookIcon />
+        <span className="hidden">Contacts</span>
+      </Button>
+      <Button variant="ghost">
+        <MenuIcon />
+        <span className="hidden">Menu</span>
+      </Button>
+    </Card>
     //     <Box
     //       css={{
     //         flexDirection: 'row',

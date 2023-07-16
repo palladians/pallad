@@ -18,16 +18,16 @@ export const BlockProducerTile = ({ producer }: BlockProducerTileProps) => {
   const navigate = useNavigate()
   return (
     <Card
-      className="justify-between items-center"
+      className="flex flex-1 justify-between items-center p-2"
       onClick={() =>
         navigate('/staking/delegate', {
           state: { address: producer.publicKey }
         })
       }
     >
-      <div className="items-center gap-4">
+      <div className="flex items-center gap-4">
         <Avatar>
-          <AvatarFallback>{producer.name}</AvatarFallback>
+          <AvatarFallback>{producer.name?.[0]}</AvatarFallback>
         </Avatar>
         <div className="font-semibold">{producer.name}</div>
       </div>

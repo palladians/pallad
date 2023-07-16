@@ -1,4 +1,7 @@
 import Logo from '../assets/logo.svg'
+import { Toggle } from '@palladxyz/ui'
+import { SunIcon, MoonIcon } from 'lucide-react'
+import { useTheme } from 'next-themes'
 
 interface WizardLayoutProps {
   children: React.ReactNode
@@ -6,13 +9,20 @@ interface WizardLayoutProps {
 }
 
 export const WizardLayout = ({ children, footer }: WizardLayoutProps) => {
+  const { setTheme, theme } = useTheme()
+  const toggleTheme = () => {
+    theme === 'dark' ? setTheme('light') : setTheme('dark')
+  }
   return (
-    <div className="bg-sky-950">
-      <div>
+    <div className="flex flex-1 dark:bg-slate-950 bg-white flex-col p-4">
+      <div className="flex justify-between">
         <Logo />
+        <Toggle size="sm" onClick={toggleTheme}>
+          {theme === 'dark' ? <SunIcon size={16} /> : <MoonIcon size={16} />}
+        </Toggle>
       </div>
-      <div className="flex justify-center">{children}</div>
-      <div className="gap-8">{footer}</div>
+      <div className="flex flex-1 items-center">{children}</div>
+      <div className="flex gap-4">{footer}</div>
     </div>
   )
 }

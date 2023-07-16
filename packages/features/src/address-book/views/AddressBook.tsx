@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { PlusIcon } from 'lucide-react'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
@@ -15,11 +16,16 @@ export const AddressBookView = () => {
   const contacts = useAddressBookStore((state) => state.contacts)
   return (
     <AppLayout>
-      <div className="p-4 flex-1 gap-4">
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Address Book"
           button={{
-            label: 'Add Address',
+            label: (
+              <div className="flex justify-center items-center gap-2">
+                <PlusIcon size={14} />
+                Add Address
+              </div>
+            ),
             onClick: () => navigate('/contacts/new')
           }}
         />

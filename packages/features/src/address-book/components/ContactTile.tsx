@@ -1,4 +1,4 @@
-import { Button, Card } from '@palladxyz/ui'
+import { Avatar, AvatarFallback, Button, Card } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
 import { TrashIcon } from 'lucide-react'
 
@@ -15,15 +15,21 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
   const navigate = useNavigate()
   const removeContact = useAddressBookStore((state) => state.removeContact)
   return (
-    <Card>
-      <Button
-        variant="link"
-        onClick={() =>
-          navigate('/send', { state: { address: contact.address } })
-        }
-      >
-        {contact.name}
-      </Button>
+    <Card className="flex items-center justify-between p-2">
+      <div className="flex items-center justify-center">
+        <Avatar>
+          <AvatarFallback>{contact.name?.[0]}</AvatarFallback>
+        </Avatar>
+        <Button
+          variant="link"
+          className="text-sky-400"
+          onClick={() =>
+            navigate('/send', { state: { address: contact.address } })
+          }
+        >
+          {contact.name}
+        </Button>
+      </div>
       <div className="items-center gap-2">
         <p className="text-sm">
           {contact?.address &&

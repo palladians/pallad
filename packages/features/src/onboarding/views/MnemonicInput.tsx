@@ -39,29 +39,20 @@ export const MnemonicInputView = () => {
   return (
     <WizardLayout
       footer={
-        <>
-          <Button
-            onClick={() => navigate(-1)}
-            css={{ flex: 1, width: 'auto' }}
-            data-testid="onboarding__backButton"
-          >
-            Back
-          </Button>
-          <Button
-            variant="secondary"
-            css={{
-              flex: 1,
-              width: 'auto',
-              opacity: mnemonicValid ? 1 : 0.5,
-              transition: 'opacity 0.3s'
-            }}
-            disabled={!mnemonicValid}
-            onClick={handleSubmit(onSubmit)}
-            data-testid="onboarding__nextButton"
-          >
-            Next
-          </Button>
-        </>
+        <Button
+          variant="secondary"
+          css={{
+            flex: 1,
+            width: 'auto',
+            opacity: mnemonicValid ? 1 : 0.5,
+            transition: 'opacity 0.3s'
+          }}
+          disabled={!mnemonicValid}
+          onClick={handleSubmit(onSubmit)}
+          data-testid="onboarding__nextButton"
+        >
+          Next
+        </Button>
       }
     >
       <div className="gap-6">

@@ -1,5 +1,6 @@
 import { Button } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
+import { TwitterIcon } from 'lucide-react'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'
@@ -15,31 +16,29 @@ export const StayConnectedView = () => {
         <>
           <Button
             variant="secondary"
-            css={{
-              flex: 1,
-              width: 'auto'
-            }}
+            className="flex-1"
             onClick={() => navigate('/dashboard')}
-            testID="onboarding__nextButton"
+            data-testid="onboarding__nextButton"
           >
             Go to Dashboard
           </Button>
         </>
       }
     >
-      <div className="gap-6">
+      <div className="flex flex-col gap-6">
         <ViewHeading title="Stay Connected" />
-        <div className="leading-6">
+        <div className="leading-8">
           That's it. Before moving to Dashboard consider joining our Community.
         </div>
-        <div className="gap-2">
-          <Button asChild className="flex-1">
+        <div className="flex gap-2">
+          <Button variant="outline" asChild className="flex-1">
             <a href={DISCORD_URL} target="_blank">
               Discord
             </a>
           </Button>
-          <Button asChild className="flex-1">
-            <a href={TWITTER_URL} target="_blank">
+          <Button variant="outline" asChild className="flex-1">
+            <a href={TWITTER_URL} className="flex gap-2" target="_blank">
+              <TwitterIcon size={16} />
               Twitter
             </a>
           </Button>

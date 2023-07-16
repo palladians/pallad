@@ -28,6 +28,7 @@ export const StartView = () => {
       footer={
         <>
           <Button
+            className="flex-1"
             onClick={() => navigate('/onboarding/restore')}
             data-testid="onboarding__restoreWalletButton"
           >
@@ -44,10 +45,12 @@ export const StartView = () => {
         </>
       }
     >
-      <div>
-        <h1 className="text-5xl text-sky-500 font-semibold">Pallad</h1>
-        <h2 className="text-5xl text-gray-500">- Mina Wallet You Deserve</h2>
-        <p className="text-gray-100 leading-5 mt-16">
+      <div className="flex flex-col gap-8">
+        <div>
+          <h1 className="text-5xl text-sky-500 font-semibold">Pallad</h1>
+          <h2 className="text-5xl">- Mina Wallet You Deserve</h2>
+        </div>
+        <p className="leading-8">
           Take your Mina journey to the next level with out secure, transparent,
           and intuitive wallet interface.
         </p>

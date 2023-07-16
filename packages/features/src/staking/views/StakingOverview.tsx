@@ -11,7 +11,7 @@ export const StakingOverviewView = () => {
   const navigate = useNavigate()
   return (
     <AppLayout>
-      <div className="p-4 gap-4">
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Staking"
           button={{
@@ -19,29 +19,25 @@ export const StakingOverviewView = () => {
             onClick: () => navigate('/staking/delegate')
           }}
         />
-        <Card>
-          <div className="gap-2">
-            <div className="flex-1, gap-2">
-              <Label>Epoch</Label>
-              <div>55</div>
-            </div>
-            <div className="flex-1 gap-2">
-              <Label>Slot</Label>
-              <div>6894/7140</div>
-            </div>
+        <Card className="grid grid-cols-2 p-4 gap-2">
+          <div className="flex-1, gap-2">
+            <Label>Epoch</Label>
+            <div>55</div>
           </div>
-          <div className="gap-2">
-            <div className="flex-1 gap-2">
-              <Label>Epoch ends in</Label>
-              <div>01d : 3h : 7m</div>
-            </div>
-            <div className="flex-1 gap-2">
-              <EpochProgressChart progress={0.75} />
-            </div>
+          <div className="flex-1 gap-2">
+            <Label>Slot</Label>
+            <div>6894/7140</div>
+          </div>
+          <div className="flex-1 gap-2">
+            <Label>Epoch ends in</Label>
+            <div>01d : 3h : 7m</div>
+          </div>
+          <div className="flex-1 gap-2">
+            <EpochProgressChart progress={0.75} />
           </div>
         </Card>
         <ViewHeading title="Delegation Info" />
-        <div className="gap-6">
+        <div className="flex flex-col gap-4">
           <div className="gap-2">
             <Label>Block Producer</Label>
             <div>B62qm...iQvm</div>

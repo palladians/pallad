@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { Button } from '@palladxyz/ui'
 
 const MenuItem = ({ item }) => {
   return (
@@ -57,13 +58,21 @@ export const MenuView = () => {
   ]
   return (
     <AppLayout>
-      <div>
-        <div className="p-4">
-          <ViewHeading title="Menu" />
-        </div>
-        <div className="gap-1">
+      <div className="flex flex-1 flex-col gap-4">
+        <ViewHeading title="Menu" />
+        <div className="flex flex-col gap-2">
           {MENU_ITEMS.map((item, i) => (
-            <MenuItem item={item} key={i} />
+            <Button
+              key={i}
+              variant="outline"
+              className="flex-1 justify-between items-center"
+            >
+              <div className="flex items-center gap-6">
+                <item.Icon />
+                {item.label}
+              </div>
+              <ArrowRightIcon />
+            </Button>
           ))}
         </div>
       </div>

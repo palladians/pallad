@@ -24,12 +24,12 @@ export const BlockProducersView = () => {
   const navigate = useNavigate()
   return (
     <AppLayout>
-      <div className="p-4 gap-4">
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Find Producers"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <div className="gap-3">
+        <div className="flex flex-col gap-3">
           {MOCKED_PRODUCERS.map((producer, i) => (
             <BlockProducerTile key={i} producer={producer} />
           ))}

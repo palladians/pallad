@@ -24,57 +24,57 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
   return (
     <WizardLayout
       footer={
-        <>
-          <Button
-            onClick={() => navigate(-1)}
-            className="flex-1"
-            data-testid="onboarding__backButton"
-          >
-            Back
-          </Button>
-          <Button
-            variant="secondary"
-            className={cn([
-              'flex-1 transition-opacity opacity-50',
-              termsAccepted && 'opacity-100'
-            ])}
-            disabled={!termsAccepted}
-            onClick={handleSubmit(onSubmit)}
-            data-testid="onboarding__nextButton"
-          >
-            Next
-          </Button>
-        </>
+        <Button
+          variant="secondary"
+          className={cn([
+            'flex-1 transition-opacity opacity-50',
+            termsAccepted && 'opacity-100'
+          ])}
+          disabled={!termsAccepted}
+          onClick={handleSubmit(onSubmit)}
+          data-testid="onboarding__nextButton"
+        >
+          Next
+        </Button>
       }
     >
-      <div className="gap-6">
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title={title}
           backButton={{ onClick: () => navigate(-1) }}
         />
         <div className="gap-2">
-          <Label>Wallet Name</Label>
+          <Label htmlFor="walletNameInput" className="cursor-pointer">
+            Wallet Name
+          </Label>
           <Input
+            id="walletNameInput"
             placeholder="Wallet Name"
             data-testid="onboarding__walletNameInput"
             {...register('walletName')}
           />
         </div>
         <div className="gap-2">
-          <Label>Spending Password</Label>
+          <Label htmlFor="spendingPasswordInput" className="cursor-pointer">
+            Spending Password
+          </Label>
           <Input
+            id="spendingPasswordInput"
             data-testid="onboarding__spendingPasswordInput"
             placeholder="Password"
             {...register('spendingPassword')}
           />
         </div>
-        <div className="items-center gap-4">
+        <div className="flex items-center gap-4">
           <Checkbox
             value={termsAccepted}
             onClick={toggleAccepted}
             data-testid="onboarding__tosCheckbox"
+            id="tosCheckbox"
           />
-          <label>I accept Terms of Service.</label>
+          <Label htmlFor="tosCheckbox" className="cursor-pointer">
+            I accept Terms of Service.
+          </Label>
         </div>
       </div>
     </WizardLayout>

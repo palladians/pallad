@@ -1,5 +1,5 @@
 import { MinaNetwork } from '@palladxyz/key-generator'
-import { Card, Label } from '@palladxyz/ui'
+import { Card, Label, RadioGroup, RadioGroupItem } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
 import { useSWRConfig } from 'swr'
 
@@ -21,50 +21,54 @@ export const SettingsView = () => {
   }
   return (
     <AppLayout>
-      <div className="p-4 gap-6">
+      <div className="flex flex-col flex-1 gap-6">
         <ViewHeading
           title="Settings"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <div className="gap-2">
+        <div className="flex flex-col gap-2">
           <Label>Network</Label>
-          {/*<RadioGroup*/}
-          {/*  onChange={(value) => handleNetworkSwitch(value as MinaNetwork)}*/}
-          {/*  options={[*/}
-          {/*    {*/}
-          {/*      value: MinaNetwork[MinaNetwork.Mainnet],*/}
-          {/*      label: 'Mainnet',*/}
-          {/*      defaultSelected: network === MinaNetwork[MinaNetwork.Mainnet]*/}
-          {/*    },*/}
-          {/*    {*/}
-          {/*      value: MinaNetwork[MinaNetwork.Devnet],*/}
-          {/*      label: 'Devnet',*/}
-          {/*      defaultSelected: network === MinaNetwork[MinaNetwork.Devnet]*/}
-          {/*    },*/}
-          {/*    {*/}
-          {/*      value: MinaNetwork[MinaNetwork.Berkeley],*/}
-          {/*      label: 'Berkeley',*/}
-          {/*      defaultSelected: network === MinaNetwork[MinaNetwork.Berkeley]*/}
-          {/*    }*/}
-          {/*  ]}*/}
-          {/*/>*/}
+          <RadioGroup defaultValue="comfortable">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="default" id="r1" />
+              <Label htmlFor="r1">Mainnet</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="comfortable" id="r2" />
+              <Label htmlFor="r2">Devnet</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="compact" id="r3" />
+              <Label htmlFor="r3">Berkeley</Label>
+            </div>
+          </RadioGroup>
         </div>
-        <div className="gap-4">
+        <div className="flex flex-col gap-2">
+          <Label>Theme</Label>
+          <RadioGroup defaultValue="comfortable">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="default" id="r1" />
+              <Label htmlFor="r1">Light</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="comfortable" id="r2" />
+              <Label htmlFor="r2">Dark</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="compact" id="r3" />
+              <Label htmlFor="r3">System</Label>
+            </div>
+          </RadioGroup>
+        </div>
+        <div className="flex flex-col gap-4">
           <h2>Authorized Domains</h2>
-          <div className="gap-4">
-            <Card
-              css={{
-                padding: '$md',
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}
-            >
+          <div className="flex flex-col gap-2">
+            <Card className="flex p-2 justify-between">
               <div>Pallad</div>
-              <div className="gap-2 items-center">
+              <div className="flex gap-2 items-center">
                 <div>pallad.xyz</div>
                 <a>
-                  <TrashIcon />
+                  <TrashIcon size={16} />
                 </a>
               </div>
             </Card>

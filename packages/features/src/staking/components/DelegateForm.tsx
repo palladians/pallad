@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Input, Label } from '@palladxyz/ui'
+import { Button, Input, Label, RadioGroup, RadioGroupItem } from '@palladxyz/ui'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -13,7 +13,6 @@ export const DelegateForm = () => {
   // const setTransactionDetails = useTransactionStore((state) => state.set)
   const {
     register,
-    control,
     handleSubmit,
     setValue,
     // getValues,
@@ -42,19 +41,36 @@ export const DelegateForm = () => {
     setValue('to', location.state?.address || '')
   }, [])
   return (
-    <form className="flex-1 gap-4" onSubmit={handleSubmit(onSubmit)}>
-      <div className="gap-2">
+    <form
+      className="flex flex-col flex-1 gap-4"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className="flex flex-col gap-2">
         <Label>Block Producer</Label>
         <Input placeholder="Receiver Address" autoFocus {...register('to')} />
         <p>{errors.to?.message}</p>
       </div>
-      <div className="gap-2">
+      <div className="flex flex-col gap-2">
         <Label>Memo</Label>
         <Input placeholder="Memo" {...register('memo')} />
         <p>{errors.memo?.message}</p>
       </div>
-      <div className="gap-2 flex-1">
+      <div className="flex flex-col gap-2 flex-1">
         <Label>Fee</Label>
+        <RadioGroup defaultValue="comfortable">
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="flow" id="feeSlow" />
+            <Label htmlFor="feeSlow">Slow</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="default" id="feeDefault" defaultChecked />
+            <Label htmlFor="feeDefault">Default</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="fast" id="feeFast" />
+            <Label htmlFor="feeFast">Fast</Label>
+          </div>
+        </RadioGroup>
         {/*<RadioGroup*/}
         {/*  options={[*/}
         {/*    { value: 'slow', label: `Slow (${TransactionFee.slow} MINA)` },*/}

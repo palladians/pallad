@@ -1,5 +1,5 @@
 import { getSessionPersistence } from '@palladxyz/persistence'
-import { Button, Input } from '@palladxyz/ui'
+import { Alert, AlertTitle, Button, Input, Label } from '@palladxyz/ui'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -48,7 +48,7 @@ export const UnlockWalletView = () => {
         </Button>
       }
     >
-      <div className="gap-6">
+      <div className="flex flex-col flex-1 gap-6">
         <ViewHeading
           title="Unlock Wallet"
           button={{
@@ -57,13 +57,13 @@ export const UnlockWalletView = () => {
           }}
         />
         {passwordError && (
-          <div className="bg-red-800 p-2 rounded-md gap-2 items-center">
+          <Alert variant="destructive" className="flex items-center">
             <AlertCircleIcon />
-            <p className="text-red-400">The password is wrong</p>
-          </div>
+            <AlertTitle>The password is wrong</AlertTitle>
+          </Alert>
         )}
-        <div className="gap-2">
-          <FormLabel>Spending Password</FormLabel>
+        <div className="flex flex-col gap-2">
+          <Label>Spending Password</Label>
           <Input autoFocus {...register('spendingPassword')} />
         </div>
       </div>
