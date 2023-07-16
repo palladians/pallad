@@ -1,0 +1,36 @@
+{
+  "name": "@palladxyz/key-management-agnostic",
+  "version": "0.0.1",
+  "description": "An Agnostic key management package for Pallad",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules .dist .turbo"
+  },
+  "dependencies": {
+    "@noble/ciphers": "^0.1.3",
+    "@noble/hashes": "^1.3.1",
+    "@palladxyz/mina-core": "*",
+    "@scure/base": "^1.1.1",
+    "@scure/bip32": "^1.3.0",
+    "@scure/bip39": "^1.2.0",
+    "buffer": "^6.0.3",
+    "mina-signer": "^2.0.3",
+    "sinon": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/secp256k1": "^4.0.3",
+    "@types/sinon": "^10.0.15",
+    "happy-dom": "^9.20.3"
+  }
+}
