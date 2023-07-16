@@ -19,21 +19,18 @@ export function deriveMinaCredentials(
   publicCredential: Mina.PublicKey
 ): MinaGroupedCredentials {
   return {
-    "@context": [
-      "https://w3id.org/wallet/v1"
-    ],
-    "id": "did:mina:" + publicCredential,
-    "type": "MinaAddress",
-    "controller": "did:mina:" + publicCredential,
-    "name": "Mina Account",
-    "description": "My Mina account.",
-    "chain": payload.network,
-    "addressIndex": payload.addressIndex,
-    "accountIndex": payload.accountIndex,
-    "address": publicCredential
+    '@context': ['https://w3id.org/wallet/v1'],
+    id: 'did:mina:' + publicCredential,
+    type: 'MinaAddress',
+    controller: 'did:mina:' + publicCredential,
+    name: 'Mina Account',
+    description: 'My Mina account.',
+    chain: payload.network,
+    addressIndex: payload.addressIndex,
+    accountIndex: payload.accountIndex,
+    address: publicCredential
   }
 }
-
 
 export function isMinaCredential(
   credential: MinaGroupedCredentials,

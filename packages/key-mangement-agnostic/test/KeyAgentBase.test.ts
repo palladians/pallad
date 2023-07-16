@@ -3,6 +3,8 @@ import * as bip32 from '@scure/bip32'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
+import { MinaSpecificPayload } from '../src/chains/Mina'
+import { reverseBytes } from '../src/chains/Mina/keyDerivationUtils'
 import { emip3encrypt } from '../src/emip3'
 import { getPassphraseRethrowTypedError } from '../src/InMemoryKeyAgent'
 import { KeyAgentBase } from '../src/KeyAgentBase'
@@ -13,8 +15,6 @@ import {
   SerializableKeyAgentData
 } from '../src/types'
 import * as util from '../src/util/bip39'
-import { MinaSpecificPayload } from '../src/chains/Mina'
-import { reverseBytes } from '../src/chains/Mina/keyDerivationUtils'
 
 // Provide the passphrase for testing purposes
 const params = {
@@ -76,136 +76,138 @@ describe('KeyAgentBase', () => {
   describe('Mina KeyAgent', () => {
     beforeEach(() => {
       // Define your own appropriate initial data, network, accountKeyDerivationPath, and accountAddressDerivationPath
-    serializableData = {
-      __typename: KeyAgentType.InMemory,
-      knownCredentials: [],
-      encryptedSeedBytes: encryptedSeedBytes
-    }
-    networkType = 'testnet'
-    instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
-  })
-  it('should return the correct knownAddresses', () => {
-    expect(instance.knownCredentials).to.deep.equal(
-      serializableData.knownCredentials
-    )
-  })
+      serializableData = {
+        __typename: KeyAgentType.InMemory,
+        knownCredentials: [],
+        encryptedSeedBytes: encryptedSeedBytes
+      }
+      networkType = 'testnet'
+      instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
+    })
+    it('should return the correct knownAddresses', () => {
+      expect(instance.knownCredentials).to.deep.equal(
+        serializableData.knownCredentials
+      )
+    })
 
-  it('should return the correct serializableData', () => {
-    expect(instance.serializableData).to.deep.equal(serializableData)
-  })
+    it('should return the correct serializableData', () => {
+      expect(instance.serializableData).to.deep.equal(serializableData)
+    })
 
-  it('should derive correct Mina address', async () => {
-    // Define a mocked publicKey, which should be expected from the derivation
-    const expectedPublicKey: Mina.PublicKey =
-      'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+    it('should derive correct Mina address', async () => {
+      // Define a mocked publicKey, which should be expected from the derivation
+      const expectedPublicKey: Mina.PublicKey =
+        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
 
-    const expectedGroupedCredentials = {
-      '@context': [ 'https://w3id.org/wallet/v1' ],
-      id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      type: 'MinaAddress',
-      controller: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      name: 'Mina Account',
-      description: 'My Mina account.',
-      chain: Network.Mina,
-      accountIndex: 0,
-      addressIndex: 0,
-      address: expectedPublicKey
-    }
-
-    const payload: MinaSpecificPayload = {
-      network: Network.Mina,
-      accountIndex: 0,
-      addressIndex: 0,
-      networkType: networkType
-    }
-    console.log('payload', payload)
-  
-    const groupedCredential = await instance.deriveCredentials(payload, true)
-    console.log('groupedCredential account index 0', groupedCredential)
-
-    expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
-  })
-
-  it('should derive correct address for account index other than 0', async () => {
-    // Define a mocked publicKey, which should be expected from the derivation
-    const expectedPublicKey: Mina.PublicKey =
-      'B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB'
-
-    const expectedGroupedCredentials = {
-      '@context': [ 'https://w3id.org/wallet/v1' ],
-      id: 'did:mina:B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB',
-      type: 'MinaAddress',
-      controller: 'did:mina:B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB',
-      name: 'Mina Account',
-      description: 'My Mina account.',
-      chain: Network.Mina,
-      accountIndex: 1,
-      addressIndex: 0,
-      address: expectedPublicKey
-    }
-
-    const payload: MinaSpecificPayload = {
-      network: Network.Mina,
-      accountIndex: 1,
-      addressIndex: 0,
-      networkType: networkType
-    }
-
-    const groupedCredential = await instance.deriveCredentials(payload, true)
-    expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
-  })
-
-  it('should derive multiple unique addresses for each account index and store credentials properly', async () => {
-    const mockedPublicKeys: Mina.PublicKey[] = [
-      'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      'B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB'
-    ]
-
-    const expectedGroupedCredentialsArray = mockedPublicKeys.map(
-      (publicKey, index) => ({
-        '@context': [ 'https://w3id.org/wallet/v1' ],
-        id: `did:mina:${publicKey}`,
+      const expectedGroupedCredentials = {
+        '@context': ['https://w3id.org/wallet/v1'],
+        id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
         type: 'MinaAddress',
-        controller: `did:mina:${publicKey}`,
+        controller:
+          'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
         name: 'Mina Account',
         description: 'My Mina account.',
         chain: Network.Mina,
-        accountIndex: index,
+        accountIndex: 0,
         addressIndex: 0,
-        address: publicKey
-      })
-    )
+        address: expectedPublicKey
+      }
 
-    const resultArray = []
-
-    for (let i = 0; i < mockedPublicKeys.length; i++) {
       const payload: MinaSpecificPayload = {
         network: Network.Mina,
-        accountIndex: i,
+        accountIndex: 0,
         addressIndex: 0,
         networkType: networkType
       }
-      const result = await instance.deriveCredentials(payload)
+      console.log('payload', payload)
 
-      resultArray.push(result)
-    }
+      const groupedCredential = await instance.deriveCredentials(payload, true)
+      console.log('groupedCredential account index 0', groupedCredential)
 
-    // Check if the credentials were stored properly.
-    expect(instance.knownCredentials).to.deep.equal(
-      expectedGroupedCredentialsArray
-    )
+      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+    })
+
+    it('should derive correct address for account index other than 0', async () => {
+      // Define a mocked publicKey, which should be expected from the derivation
+      const expectedPublicKey: Mina.PublicKey =
+        'B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB'
+
+      const expectedGroupedCredentials = {
+        '@context': ['https://w3id.org/wallet/v1'],
+        id: 'did:mina:B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB',
+        type: 'MinaAddress',
+        controller:
+          'did:mina:B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB',
+        name: 'Mina Account',
+        description: 'My Mina account.',
+        chain: Network.Mina,
+        accountIndex: 1,
+        addressIndex: 0,
+        address: expectedPublicKey
+      }
+
+      const payload: MinaSpecificPayload = {
+        network: Network.Mina,
+        accountIndex: 1,
+        addressIndex: 0,
+        networkType: networkType
+      }
+
+      const groupedCredential = await instance.deriveCredentials(payload, true)
+      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+    })
+
+    it('should derive multiple unique addresses for each account index and store credentials properly', async () => {
+      const mockedPublicKeys: Mina.PublicKey[] = [
+        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        'B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB'
+      ]
+
+      const expectedGroupedCredentialsArray = mockedPublicKeys.map(
+        (publicKey, index) => ({
+          '@context': ['https://w3id.org/wallet/v1'],
+          id: `did:mina:${publicKey}`,
+          type: 'MinaAddress',
+          controller: `did:mina:${publicKey}`,
+          name: 'Mina Account',
+          description: 'My Mina account.',
+          chain: Network.Mina,
+          accountIndex: index,
+          addressIndex: 0,
+          address: publicKey
+        })
+      )
+
+      const resultArray = []
+
+      for (let i = 0; i < mockedPublicKeys.length; i++) {
+        const payload: MinaSpecificPayload = {
+          network: Network.Mina,
+          accountIndex: i,
+          addressIndex: 0,
+          networkType: networkType
+        }
+        const result = await instance.deriveCredentials(payload)
+
+        resultArray.push(result)
+      }
+
+      // Check if the credentials were stored properly.
+      expect(instance.knownCredentials).to.deep.equal(
+        expectedGroupedCredentialsArray
+      )
+    })
+
+    it('should reverse bytes correctly', () => {
+      const originalBuffer = Buffer.from('1234', 'hex')
+      const reversedBuffer = Buffer.from('3412', 'hex')
+
+      expect(reverseBytes(originalBuffer)).to.deep.equal(reversedBuffer)
+    })
+
+    it('should export root key successfully', async () => {
+      const decryptedRootKey = await instance.exportRootPrivateKey()
+      expect(decryptedRootKey).to.deep.equal(rootKeyBytes)
+    })
   })
-
-  it('should reverse bytes correctly', () => {
-    const originalBuffer = Buffer.from('1234', 'hex')
-    const reversedBuffer = Buffer.from('3412', 'hex')
-
-    expect(reverseBytes(originalBuffer)).to.deep.equal(reversedBuffer)
-  })
-
-  it('should export root key successfully', async () => {
-    const decryptedRootKey = await instance.exportRootPrivateKey()
-    expect(decryptedRootKey).to.deep.equal(rootKeyBytes)
-  })
-})
 })
