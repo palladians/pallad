@@ -3,19 +3,18 @@ import { base58check } from '@scure/base'
 import { HDKey } from '@scure/bip32'
 import { Buffer } from 'buffer'
 
-import { ChainSpecificPayload } from '../../types'
 import { reverseBytes } from './keyDerivationUtils'
-import { MinaKeyConst } from './types'
+import { MinaKeyConst, MinaSpecificPayload } from './types'
 
 export async function deriveMinaPrivateKey(
-  payload: ChainSpecificPayload,
+  payload: MinaSpecificPayload,
   decryptedSeedBytes: Uint8Array
 ): Promise<string> {
-  const { accountIx, addressIx } = payload
+  const { accountIndex, addressIndex } = payload
 
   // Create an HDKey from the root private key
   const rootKey = HDKey.fromMasterSeed(decryptedSeedBytes)
-  const path = `m/${MinaKeyConst.PURPOSE}'/${MinaKeyConst.MINA_COIN_TYPE}'/${accountIx}'/0/${addressIx}`
+  const path = `m/${MinaKeyConst.PURPOSE}'/${MinaKeyConst.MINA_COIN_TYPE}'/${accountIndex}'/0/${addressIndex}`
   const childNode = rootKey.derive(path)
   if (!childNode?.privateKey) throw new Error('Unable to derive private key')
 

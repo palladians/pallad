@@ -1,4 +1,3 @@
-import { Mina } from '@palladxyz/mina-core'
 import { HDKey } from '@scure/bip32'
 
 import {
@@ -10,6 +9,7 @@ import { MinaSigningOperations } from './chains/Mina/signingOperations'
 import * as errors from './errors'
 import { KeyDecryptor } from './KeyDecryptor'
 import {
+  ChainPublicKey,
   ChainSignatureResult,
   ChainSpecificPayload,
   credentialMatchers,
@@ -96,7 +96,7 @@ export abstract class KeyAgentBase implements KeyAgent {
 
   async derivePublicCredential<T extends ChainSpecificPayload>(
     payload: T
-  ): Promise<Mina.PublicKey> {
+  ): Promise<ChainPublicKey> {
     // Generate the private key
     const privateKey = await this.#generatePrivateKeyFromSeed(payload)
     try {

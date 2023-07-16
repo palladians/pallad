@@ -19,22 +19,30 @@ export function deriveMinaCredentials(
   publicCredential: Mina.PublicKey
 ): MinaGroupedCredentials {
   return {
-    chain: payload.network,
-    addressIndex: payload.addressIx,
-    accountIndex: payload.accountIx,
-    address: publicCredential
+    "@context": [
+      "https://w3id.org/wallet/v1"
+    ],
+    "id": "did:mina:" + publicCredential,
+    "type": "MinaAddress",
+    "controller": "did:mina:" + publicCredential,
+    "name": "Mina Account",
+    "description": "My Mina account.",
+    "chain": payload.network,
+    "addressIndex": payload.addressIndex,
+    "accountIndex": payload.accountIndex,
+    "address": publicCredential
   }
 }
+
 
 export function isMinaCredential(
   credential: MinaGroupedCredentials,
   payload: MinaSpecificPayload
 ): boolean {
   // Check if the credential matches the payload
-  // This is just an example, replace with your actual logic
   return (
     credential.chain === 'Mina' &&
-    credential.accountIndex === payload.accountIx &&
-    credential.addressIndex === payload.addressIx
+    credential.accountIndex === payload.accountIndex &&
+    credential.addressIndex === payload.addressIndex
   )
 }

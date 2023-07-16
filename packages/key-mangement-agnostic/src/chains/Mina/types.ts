@@ -10,17 +10,33 @@ export type MinaSignatureResult =
 
 export type MinaSpecificPayload = {
   network: Network.Mina
-  accountIx: number
-  addressIx: number
+  accountIndex: number
+  addressIndex: number
   networkType: Mina.NetworkType
 }
 
-export type MinaGroupedCredentials = {
+/*export type MinaGroupedCredentials = {
   chain: Network.Mina
   addressIndex: number
   accountIndex: number
   address: Mina.PublicKey
+}*/
+
+export type MinaGroupedCredentials = {
+  "@context": [
+    "https://w3id.org/wallet/v1"
+  ],
+  "id": string,
+  "type": "MinaAddress",
+  "controller": string,
+  "name": string,
+  "description": string,
+  "chain": Network.Mina,
+  "addressIndex": number,
+  "accountIndex": number,
+  "address": Mina.PublicKey
 }
+
 
 export type MinaPayloadType =
   | Mina.ConstructedTransaction
