@@ -15,6 +15,9 @@ export default defineConfig({
     nodePolyfills({ protocolImports: true }),
     svgr({ exportAsDefault: true })
   ],
+  define: {
+    global: {}
+  },
   build: {
     rollupOptions: {
       input: {

@@ -47,11 +47,14 @@ export const MnemonicWritedownView = () => {
             </div>
             <div className="flex items-center gap-4">
               <Checkbox
+                id="mnemonicWrittenCheckbox"
                 checked={mnemonicWritten}
                 onClick={() => setMnemonicWritten(!mnemonicWritten)}
                 data-testid="onboarding__mnemonicWrittenCheckbox"
               />
-              <Label>I have written down the mnemonic.</Label>
+              <Label htmlFor="mnemonicWrittenCheckbox">
+                I have written down the mnemonic.
+              </Label>
             </div>
           </div>
         ) : (

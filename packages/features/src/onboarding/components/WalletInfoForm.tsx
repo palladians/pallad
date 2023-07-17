@@ -1,4 +1,5 @@
 import { Button, Checkbox, cn, Input, Label } from '@palladxyz/ui'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -12,6 +13,7 @@ interface WalletInfoFormProps {
 }
 
 export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
+  const [showPassword, setShowPassword] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState(false)
   const toggleAccepted = () => setTermsAccepted(!termsAccepted)
   const navigate = useNavigate()
@@ -58,12 +60,22 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
           <Label htmlFor="spendingPasswordInput" className="cursor-pointer">
             Spending Password
           </Label>
-          <Input
-            id="spendingPasswordInput"
-            data-testid="onboarding__spendingPasswordInput"
-            placeholder="Password"
-            {...register('spendingPassword')}
-          />
+          <div className="flex gap-2">
+            <Input
+              id="spendingPasswordInput"
+              type={showPassword ? 'text' : 'password'}
+              data-testid="onboarding__spendingPasswordInput"
+              placeholder="Password"
+              {...register('spendingPassword')}
+            />
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+            </Button>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <Checkbox

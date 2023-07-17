@@ -1,12 +1,18 @@
-import { getSessionPersistence } from '@palladxyz/persistence'
 import { useNavigate } from 'react-router-dom'
+import { shallow } from 'zustand/shallow'
 
 import { useOnboardingStore } from '../../wallet/store/onboarding'
 import { WalletInfoForm } from '../components/WalletInfoForm'
 
 export const RestoreWalletView = () => {
   const navigate = useNavigate()
-  const setWalletName = useOnboardingStore((state) => state.setWalletName)
+  const { setWalletName, setSpendingPassword } = useOnboardingStore(
+    (state) => ({
+      setWalletName: state.setWalletName,
+      setSpendingPassword: state.setSpendingPassword
+    }),
+    shallow
+  )
   const onSubmit = async ({
     spendingPassword,
     walletName
@@ -14,7 +20,7 @@ export const RestoreWalletView = () => {
     spendingPassword: string
     walletName: string
   }) => {
-    await getSessionPersistence().setItem('spendingPassword', spendingPassword)
+    setSpendingPassword(spendingPassword)
     setWalletName(walletName)
     return navigate('/onboarding/mnemonic')
   }

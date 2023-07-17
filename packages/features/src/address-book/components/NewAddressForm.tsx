@@ -30,8 +30,9 @@ export const NewAddressForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="gap-2">
-        <Label>Contact's Name</Label>
+        <Label htmlFor="contactName">Contact's Name</Label>
         <Input
+          id="contactName"
           placeholder="Name"
           data-testid="send__contactName"
           {...register('name')}
@@ -39,8 +40,9 @@ export const NewAddressForm = () => {
         <p>{errors.name?.message}</p>
       </div>
       <div className="gap-2 flex-1">
-        <Label>Receiver Address</Label>
+        <Label htmlFor="contactAddress">Receiver Address</Label>
         <Input
+          id="contactAddress"
           placeholder="B62XXXXXXXXXXXX"
           data-testid="send__contactAddress"
           {...register('address')}

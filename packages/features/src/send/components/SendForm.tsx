@@ -61,18 +61,27 @@ export const SendForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-2">
-        <Label>Receiver</Label>
-        <Input placeholder="Receiver Address" autoFocus {...register('to')} />
+        <Label htmlFor="receiverAddress">Receiver</Label>
+        <Input
+          id="receiverAddress"
+          placeholder="Receiver Address"
+          autoFocus
+          {...register('to')}
+        />
         <FormError>{errors.to?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2">
-        <Label>Amount</Label>
-        <Input placeholder="Transaction Amount" {...register('amount')} />
+        <Label htmlFor="amount">Amount</Label>
+        <Input
+          id="amount"
+          placeholder="Transaction Amount"
+          {...register('amount')}
+        />
         <p>{errors.amount?.message}</p>
       </div>
       <div className="flex flex-col gap-2">
-        <Label>Memo</Label>
-        <Input placeholder="Memo" {...register('memo')} />
+        <Label htmlFor="memo">Memo</Label>
+        <Input id="memo" placeholder="Memo" {...register('memo')} />
         <p>{errors.memo?.message}</p>
       </div>
       <div className="flex flex-col gap-2 flex-1">

@@ -11,18 +11,18 @@ export const StartView = () => {
   const isInitialized = useAppStore((state) => state.isInitialized())
   const navigate = useNavigate()
   useEffect(() => {
-    const initialRedirect = async () => {
-      const spendingPassword =
-        (await getSessionPersistence().getItem('spendingPassword')) || ''
-      const spendingPasswordSet = spendingPassword.length > 0
-      setAppInitialized(true)
-      if (!isInitialized) return
-      if (isInitialized && !spendingPasswordSet) return navigate('/unlock')
-      return navigate('/dashboard')
-    }
-    initialRedirect()
+    // const initialRedirect = async () => {
+    //   const spendingPassword =
+    //     (await getSessionPersistence().getItem('spendingPassword')) || ''
+    //   const spendingPasswordSet = spendingPassword.length > 0
+    //   setAppInitialized(true)
+    //   if (!isInitialized) return
+    //   if (isInitialized && !spendingPasswordSet) return navigate('/unlock')
+    //   return navigate('/dashboard')
+    // }
+    // initialRedirect()
   }, [isInitialized])
-  if (!appInitialized) return null
+  // if (!appInitialized) return null
   return (
     <WizardLayout
       footer={

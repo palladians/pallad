@@ -1,3 +1,4 @@
+import { Network } from '@palladxyz/key-management'
 import { Button, cn, Input, Label } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -15,13 +16,18 @@ const getConfirmationIndex = () => {
 
 export const MnemonicConfirmationView = () => {
   const { wallet } = useWallet()
-  console.log(wallet)
   const [confirmationIndex] = useState(getConfirmationIndex())
   const setVaultStateInitialized = useAppStore(
     (state) => state.setVaultStateInitialized
   )
   const navigate = useNavigate()
-  const mnemonic = useOnboardingStore((state) => state.mnemonic)
+  const { spendingPassword, walletName, mnemonic } = useOnboardingStore(
+    (state) => ({
+      spendingPassword: state.spendingPassword,
+      walletName: state.walletName,
+      mnemonic: state.mnemonic
+    })
+  )
   const mnemonicSplit = useMemo(() => mnemonic?.split(' '), [mnemonic])
   const { register, handleSubmit, watch } = useForm({
     defaultValues: {
@@ -34,6 +40,19 @@ export const MnemonicConfirmationView = () => {
     [mnemonicWord, mnemonicSplit, confirmationIndex]
   )
   const onSubmit = async () => {
+    if (!walletName) return
+    if (!spendingPassword) return
+    await wallet.restoreWallet(
+      {
+        mnemonicWords: mnemonic.split(' '),
+        getPassphrase: async () => Buffer.from('passphrase')
+      },
+      {
+        network: Network.Mina,
+        networkType: 'mainnet'
+      }
+    )
+    console.log(wallet)
     await setVaultStateInitialized()
     return navigate('/onboarding/finish')
   }
@@ -41,25 +60,31 @@ export const MnemonicConfirmationView = () => {
     <WizardLayout
       footer={
         <Button
+          type="submit"
+          form="mnemonicConfirmationForm"
           variant="secondary"
           className={cn([
             'flex-1 opacity-50 transition-opacity',
-            isValid && 'opavity-100'
+            isValid && 'opacity-100'
           ])}
           disabled={!isValid}
-          onClick={handleSubmit(onSubmit)}
           data-testid="onboarding__nextButton"
         >
           Next
         </Button>
       }
     >
-      <div className="gap-6">
+      <form
+        className="flex flex-col flex-1 gap-6"
+        id="mnemonicConfirmationForm"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
         <ViewHeading
           title="Confirm The Mnemonic"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <div className="gap-8">
+        <div className="flex flex-col flex-1 gap-4">
           <Label data-testid="onboarding__writedownIndex">
             Type in the word #{confirmationIndex + 1}
           </Label>
@@ -68,7 +93,7 @@ export const MnemonicConfirmationView = () => {
             {...register('mnemonicWord')}
           />
         </div>
-      </div>
+      </form>
     </WizardLayout>
   )
 }

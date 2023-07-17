@@ -46,13 +46,18 @@ export const DelegateForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-2">
-        <Label>Block Producer</Label>
-        <Input placeholder="Receiver Address" autoFocus {...register('to')} />
+        <Label htmlFor="blockProducer">Block Producer</Label>
+        <Input
+          id="blockProducer"
+          placeholder="Receiver Address"
+          autoFocus
+          {...register('to')}
+        />
         <p>{errors.to?.message}</p>
       </div>
       <div className="flex flex-col gap-2">
-        <Label>Memo</Label>
-        <Input placeholder="Memo" {...register('memo')} />
+        <Label htmlFor="memo">Memo</Label>
+        <Input id="memo" placeholder="Memo" {...register('memo')} />
         <p>{errors.memo?.message}</p>
       </div>
       <div className="flex flex-col gap-2 flex-1">
