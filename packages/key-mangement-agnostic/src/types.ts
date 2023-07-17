@@ -1,5 +1,10 @@
 import { Mina } from '@palladxyz/mina-core'
 
+import { isEthereumCredential } from './chains/Ethereum/credentialDerivation'
+import {
+  EthereumGroupedCredentials,
+  EthereumSpecificPayload
+} from './chains/Ethereum/types'
 import { isMinaCredential } from './chains/Mina/credentialDerivation'
 import {
   MinaGroupedCredentials,
@@ -50,6 +55,7 @@ export type SerializableKeyAgentData = SerializableInMemoryKeyAgentData
 export type GroupedCredentials =
   | MinaGroupedCredentials
   | StarknetGroupedCredentials
+  | EthereumGroupedCredentials
 
 export type CredentialMatcher<T extends ChainSpecificPayload> = (
   credential: GroupedCredentials,
@@ -58,7 +64,8 @@ export type CredentialMatcher<T extends ChainSpecificPayload> = (
 
 export const credentialMatchers: Record<Network, CredentialMatcher<any>> = {
   Mina: isMinaCredential as CredentialMatcher<MinaSpecificPayload>,
-  Starknet: isStarknetCredential as CredentialMatcher<StarknetSpecificPayload>
+  Starknet: isStarknetCredential as CredentialMatcher<StarknetSpecificPayload>,
+  Ethereum: isEthereumCredential as CredentialMatcher<EthereumSpecificPayload>
   // Add more as needed...
 }
 
@@ -120,29 +127,25 @@ export enum Network {
   /**
    * Ethereum network option
    */
+
+  Ethereum = 'Ethereum',
+
+  /**
+   * Starknet network option
+   */
   Starknet = 'Starknet'
 }
 
-export type ChainSpecificPayload = MinaSpecificPayload | StarknetSpecificPayload
+export type ChainSpecificPayload =
+  | MinaSpecificPayload
+  | StarknetSpecificPayload
+  | EthereumSpecificPayload
 
 export type ChainPublicKey = Mina.PublicKey | string
 
 export type ChainSignatureResult = MinaSignatureResult
 
-export enum MinaNetwork {
-  /**
-   * Mina mainnet network option
-   */
-  Mainnet = 'Mainnet',
-  /**
-   * Mina devnet network option
-   */
-  Devnet = 'Devnet',
-  /**
-   * Mina berkeley network option
-   */
-  Berkeley = 'Berkeley'
-}
+export type PrivateKey = String | Uint8Array
 
 export const enum PathLevelIndexes {
   /**

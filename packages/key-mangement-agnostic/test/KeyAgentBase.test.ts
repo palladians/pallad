@@ -3,6 +3,7 @@ import * as bip32 from '@scure/bip32'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
+import { EthereumSpecificPayload } from '../src/chains/Ethereum/types'
 import { MinaSpecificPayload } from '../src/chains/Mina'
 import { reverseBytes } from '../src/chains/Mina/keyDerivationUtils'
 import { emip3encrypt } from '../src/emip3'
@@ -129,7 +130,7 @@ describe('KeyAgentBase', () => {
       console.log('payload', payload)
 
       const groupedCredential = await instance.deriveCredentials(payload, true)
-      console.log('groupedCredential account index 0', groupedCredential)
+      console.log('Mina groupedCredential account index 0', groupedCredential)
 
       expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
     })
@@ -215,6 +216,61 @@ describe('KeyAgentBase', () => {
     it('should export root key successfully', async () => {
       const decryptedRootKey = await instance.exportRootPrivateKey()
       expect(decryptedRootKey).to.deep.equal(rootKeyBytes)
+    })
+  })
+  describe('Ethereum KeyAgent', () => {
+    beforeEach(() => {
+      // Define your own appropriate initial data, network, accountKeyDerivationPath, and accountAddressDerivationPath
+      serializableData = {
+        __typename: KeyAgentType.InMemory,
+        encryptedSeedBytes: encryptedSeedBytes,
+        id: 'http://example.gov/wallet/3732',
+        type: ['VerifiableCredential', 'EncryptedWallet'],
+        issuer: 'did:example:123',
+        issuanceDate: '2020-05-22T17:38:21.910Z',
+        credentialSubject: {
+          id: 'did:example:123',
+          contents: [] // contents is an array of credentials shoud refactor knownCredentials to contents
+        }
+      }
+      networkType = 'testnet'
+      instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
+    })
+    it('should return the correct knownAddresses', () => {
+      expect(instance.knownCredentials).to.deep.equal(
+        serializableData.credentialSubject.contents
+      )
+    })
+    it('should derive correct Ethereum address', async () => {
+      // Define a mocked publicKey, which should be expected from the derivation
+      const expectedPublicKey = '0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9'
+      const expectedGroupedCredentials = {
+        '@context': ['https://w3id.org/wallet/v1'],
+        id: 'did:ethr:0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9',
+        type: 'EthereumAddress',
+        controller: 'did:ethr:0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9',
+        name: 'Ethereum Account',
+        description: 'My Ethereum account.',
+        chain: Network.Ethereum,
+        accountIndex: 0,
+        addressIndex: 0,
+        address: expectedPublicKey
+      }
+
+      const payload: EthereumSpecificPayload = {
+        network: Network.Ethereum,
+        accountIndex: 0,
+        addressIndex: 0
+      }
+      console.log('payload', payload)
+
+      const groupedCredential = await instance.deriveCredentials(payload, true)
+      console.log(
+        'Ethereum groupedCredential account index 0',
+        groupedCredential
+      )
+
+      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
     })
   })
 })

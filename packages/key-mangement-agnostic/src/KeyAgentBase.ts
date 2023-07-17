@@ -1,5 +1,6 @@
 import { HDKey } from '@scure/bip32'
 
+import { deriveEthereumCredentials, deriveEthereumPublicAddress } from './chains/Ethereum/credentialDerivation'
 import {
   deriveMinaCredentials,
   deriveMinaPublicKey
@@ -13,9 +14,11 @@ import {
   ChainSignatureResult,
   ChainSpecificPayload,
   credentialMatchers,
-  GetPassphrase
+  GetPassphrase,
+  PrivateKey
 } from './types'
 import { GroupedCredentials, KeyAgent, SerializableKeyAgentData } from './types'
+import { deriveEthereumPrivateKey } from './chains/Ethereum/keyDerivation'
 
 export abstract class KeyAgentBase implements KeyAgent {
   readonly serializableData: SerializableKeyAgentData
@@ -79,10 +82,18 @@ export abstract class KeyAgentBase implements KeyAgent {
 
     try {
       if (payload.network === 'Mina') {
-        const groupedCredential = await deriveMinaCredentials(
+        const groupedCredential = deriveMinaCredentials(
           payload,
           derivedPublicCredential
         )
+        if (!pure)
+          this.serializableData.credentialSubject.contents = [
+            ...this.serializableData.credentialSubject.contents,
+            groupedCredential
+          ]
+        return groupedCredential
+      } else if (payload.network === 'Ethereum') {
+        const groupedCredential = deriveEthereumCredentials(payload, derivedPublicCredential)
         if (!pure)
           this.serializableData.credentialSubject.contents = [
             ...this.serializableData.credentialSubject.contents,
@@ -105,7 +116,9 @@ export abstract class KeyAgentBase implements KeyAgent {
     const privateKey = await this.#generatePrivateKeyFromSeed(payload)
     try {
       if (payload.network === 'Mina') {
-        return deriveMinaPublicKey(payload, privateKey)
+        return deriveMinaPublicKey(payload, privateKey as string)
+      } else if (payload.network === 'Ethereum') {
+        return await deriveEthereumPublicAddress(privateKey as Uint8Array)
       } else {
         throw new Error('Unsupported network')
       }
@@ -122,7 +135,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     const privateKey = await this.#generatePrivateKeyFromSeed(payload)
     try {
       if (payload.network === 'Mina') {
-        return MinaSigningOperations(payload, privateKey)
+        return MinaSigningOperations(payload, privateKey as string)
       } else {
         throw new Error('Unsupported network')
       }
@@ -134,7 +147,7 @@ export abstract class KeyAgentBase implements KeyAgent {
 
   async #generatePrivateKeyFromSeed<T extends ChainSpecificPayload>(
     payload: T
-  ): Promise<string> {
+  ): Promise<PrivateKey> {
     // Decrypt your seed
     const decryptedSeedBytes = await this.decryptSeed()
 
@@ -142,7 +155,10 @@ export abstract class KeyAgentBase implements KeyAgent {
     try {
       if (payload.network === 'Mina') {
         return deriveMinaPrivateKey(payload, decryptedSeedBytes)
-      } else {
+      } else if (payload.network === 'Ethereum') {
+        return await deriveEthereumPrivateKey(payload, decryptedSeedBytes)
+      }
+      else {
         throw new Error('Unsupported payload type.')
       }
     } catch (error) {
