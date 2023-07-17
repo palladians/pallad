@@ -1,4 +1,4 @@
-import { Button, Label } from '@palladxyz/ui'
+import { Avatar, AvatarFallback, Button, Label, Skeleton } from '@palladxyz/ui'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useNavigate } from 'react-router-dom'
 import { CopyIcon } from 'lucide-react'
@@ -23,6 +23,7 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
   //   [rawTotalBalance, rawFiatPrice]
   // )
   // const fiatBalance = rawFiatBalance ? rawFiatBalance.toFixed(2) : '0'
+  const isLoading = false
   const meshGradientBright = easyMeshGradient({
     seed: walletAddress,
     hueRange: [180, 240]
@@ -41,27 +42,27 @@ export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
         className="absolute bg-slate-900 inset-[2px] rounded-[14px] opacity-80"
         style={{ width: 'calc(100% - 4px)', height: 'calc(100% - 4px)' }}
       />
-      {/*{isLoading ? (*/}
-      {/*  <Box css={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>*/}
-      {/*    <Spinner />*/}
-      {/*  </Box>*/}
-      {/*) : (*/}
-      {/*  <Box css={{ flex: 1, flexDirection: 'row' }}>*/}
-      {/*    <Box css={{ flex: 1, gap: 8 }}>*/}
-      {/*      <FormLabel>Balance</FormLabel>*/}
-      {/*      <Text*/}
-      {/*        css={{ fontSize: 24, fontWeight: 700, color: '$white' }}*/}
-      {/*        data-testid="dashboard__minaBalance"*/}
-      {/*      >*/}
-      {/*        {totalBalance} MINA*/}
-      {/*      </Text>*/}
-      {/*      <Text css={{ fontSize: 14, fontWeight: 700, color: '$primary400' }}>*/}
-      {/*        ~{fiatBalance} USD*/}
-      {/*      </Text>*/}
-      {/*    </Box>*/}
-      {/*    <Avatar label={walletAddress} />*/}
-      {/*  </Box>*/}
-      {/*)}*/}
+      {isLoading ? (
+        <div className="flex flex-1 justify-center items-center">
+          <Skeleton className="h-4" />
+        </div>
+      ) : (
+        <div className="flex flex-1">
+          <div className="flex flex-1 gap-2">
+            <Label>Balance</Label>
+            <div
+              className="text-lg font-semibold"
+              data-testid="dashboard__minaBalance"
+            >
+              50 MINA
+            </div>
+            <div className="text-sm font-semibold">~25 USD</div>
+          </div>
+          <Avatar>
+            <AvatarFallback>T</AvatarFallback>
+          </Avatar>
+        </div>
+      )}
       <div className="gap-2">
         <Label>Address</Label>
         <div className="gap-2">

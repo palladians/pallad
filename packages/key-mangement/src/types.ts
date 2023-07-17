@@ -1,5 +1,17 @@
 import { Mina } from '@palladxyz/mina-core'
 
+export type PayloadType =
+  | Mina.ConstructedTransaction
+  | Mina.MessageBody
+  | Mina.SignableFields
+export type PayloadTypes = 'transaction' | 'message' | 'fields'
+
+export interface Result<T> {
+  success: boolean
+  data?: T
+  error?: string
+}
+
 export type EncryptedKeyPropertyName = 'encryptedSeedBytes' // TODO: Generalise
 
 export enum KeyAgentType {
@@ -70,7 +82,12 @@ export interface KeyAgent {
     addressDerivationPath: AccountAddressDerivationPath,
     payload: T,
     networkType: Mina.NetworkType
-  ): Promise<Mina.SignedTransaction | Mina.SignedMessage>
+  ): Promise<
+    | Mina.SignedTransaction
+    | Mina.SignedMessage
+    | Mina.SignedFields
+    | Mina.SignedZkAppCommand
+  >
   /**
    * @throws AuthenticationError
    */

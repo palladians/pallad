@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Input, Label } from '@palladxyz/ui'
+import { Button, Input, Label, RadioGroup, RadioGroupItem } from '@palladxyz/ui'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -56,44 +56,41 @@ export const SendForm = () => {
     setValue('to', location.state?.address || '')
   }, [])
   return (
-    <form className="gap-4 flex-1" onSubmit={handleSubmit(onSubmit)}>
-      <div className="gap-2">
+    <form
+      className="flex flex-col gap-4 flex-1"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className="flex flex-col gap-2">
         <Label>Receiver</Label>
         <Input placeholder="Receiver Address" autoFocus {...register('to')} />
         <FormError>{errors.to?.message}</FormError>
       </div>
-      <div className="gap-2">
-        <FormLabel
-          button={{
-            label: 'Max Amount',
-            onClick: setMaxAmount
-          }}
-          required
-        >
-          Amount
-        </FormLabel>
+      <div className="flex flex-col gap-2">
+        <Label>Amount</Label>
         <Input placeholder="Transaction Amount" {...register('amount')} />
         <p>{errors.amount?.message}</p>
       </div>
-      <div className="gap-2">
+      <div className="flex flex-col gap-2">
         <Label>Memo</Label>
         <Input placeholder="Memo" {...register('memo')} />
         <p>{errors.memo?.message}</p>
       </div>
-      <div className="gap-2 flex-1">
+      <div className="flex flex-col gap-2 flex-1">
         <Label>Fee</Label>
-        {/*<RadioGroup*/}
-        {/*  options={[*/}
-        {/*    { value: 'slow', label: `Slow (${TransactionFee.slow} MINA)` },*/}
-        {/*    {*/}
-        {/*      value: 'default',*/}
-        {/*      label: `Default (${TransactionFee.default} MINA)`,*/}
-        {/*      defaultSelected: true*/}
-        {/*    },*/}
-        {/*    { value: 'fast', label: `Fast (${TransactionFee.fast} MINA)` }*/}
-        {/*  ]}*/}
-        {/*  onChange={(value: string) => setValue('fee', value)}*/}
-        {/*/>*/}
+        <RadioGroup defaultValue="comfortable">
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="flow" id="feeSlow" />
+            <Label htmlFor="feeSlow">Slow</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="default" id="feeDefault" defaultChecked />
+            <Label htmlFor="feeDefault">Default</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="fast" id="feeFast" />
+            <Label htmlFor="feeFast">Fast</Label>
+          </div>
+        </RadioGroup>
         <p>{errors.fee?.message}</p>
       </div>
       <Button type="submit">Next</Button>

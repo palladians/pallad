@@ -4,6 +4,7 @@ module.exports = {
   content: [
     '../../packages/features/src/**/*.{ts,tsx}',
     '../../packages/ui/src/**/*.{ts,tsx}',
+    '../../apps/extension/src/**/*.{ts,tsx}',
     '../../packages/features/.ladle/**/*.{ts,tsx}'
   ],
   theme: {

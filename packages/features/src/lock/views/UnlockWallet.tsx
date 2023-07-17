@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { AlertCircleIcon } from 'lucide-react'
 
 import { WizardLayout } from '../../common/components'
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 
 export const UnlockWalletView = () => {
@@ -63,8 +62,14 @@ export const UnlockWalletView = () => {
           </Alert>
         )}
         <div className="flex flex-col gap-2">
-          <Label>Spending Password</Label>
-          <Input autoFocus {...register('spendingPassword')} />
+          <Label htmlFor="spendingPassword" className="cursor-pointer">
+            Spending Password
+          </Label>
+          <Input
+            id="spendingPassword"
+            autoFocus
+            {...register('spendingPassword')}
+          />
         </div>
       </div>
     </WizardLayout>

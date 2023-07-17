@@ -1,9 +1,10 @@
+import { sha256 } from '@noble/hashes/sha256'
 import { Mina } from '@palladxyz/mina-core'
+import { base58check } from '@scure/base'
 import { HDKey } from '@scure/bip32'
 import { Buffer } from 'buffer'
 import Client from 'mina-signer'
 import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
-import * as bs58check from 'noble-base58check'
 
 import * as errors from './errors'
 import { KeyDecryptor } from './KeyDecryptor'
@@ -175,7 +176,9 @@ export abstract class KeyAgentBase implements KeyAgent {
       addressDerivationPath.address_ix
     )
     // Sign the message
-    return minaClient.signMessage(message.message, privateKey)
+    const signature = minaClient.signMessage(message.message, privateKey)
+
+    return signature
   }
 
   async sign<T>(
@@ -183,7 +186,12 @@ export abstract class KeyAgentBase implements KeyAgent {
     addressDerivationPath: AccountAddressDerivationPath,
     payload: T,
     networkType: Mina.NetworkType
-  ): Promise<Mina.SignedTransaction | Mina.SignedMessage> {
+  ): Promise<
+    | Mina.SignedTransaction
+    | Mina.SignedMessage
+    | Mina.SignedFields
+    | Mina.SignedZkAppCommand
+  > {
     // Mina network client.
     const minaClient = new Client({ network: networkType })
     // Generate the private key
@@ -191,13 +199,16 @@ export abstract class KeyAgentBase implements KeyAgent {
       accountDerivationPath.account_ix,
       addressDerivationPath.address_ix
     )
-
     // Perform the specific signing action
     try {
       if (util.isConstructedTransaction(payload)) {
         return minaClient.signTransaction(payload, privateKey)
       } else if (util.isMessageBody(payload)) {
         return minaClient.signMessage(payload.message, privateKey)
+      } else if (util.isFields(payload)) {
+        return minaClient.signFields(payload.fields, privateKey)
+      } else if (util.isZkAppTransaction(payload)) {
+        return minaClient.signZkappCommand(payload.command, privateKey)
       } else {
         throw new Error('Unsupported payload type.')
       }
@@ -225,6 +236,21 @@ export abstract class KeyAgentBase implements KeyAgent {
     childNode.privateKey[0] &= 0x3f
     const childPrivateKey = this.reverseBytes(new Buffer(childNode.privateKey))
     const privateKeyHex = `5a01${childPrivateKey.toString('hex')}`
-    return bs58check.encode(Buffer.from(privateKeyHex, 'hex'))
+    // Convert the hex string to a Uint8Array
+    if (!privateKeyHex) {
+      throw new Error('privateKeyHex is empty')
+    }
+
+    const hexMatches = privateKeyHex.match(/.{1,2}/g)
+    if (!hexMatches) {
+      throw new Error('Failed to split privateKeyHex into bytes')
+    }
+    const privateKeyBytes = new Uint8Array(
+      hexMatches.map((byte) => parseInt(byte, 16))
+    )
+
+    // Encode the Uint8Array into a base58 string with checksum
+    const privateKey = base58check(sha256).encode(privateKeyBytes)
+    return privateKey
   }
 }

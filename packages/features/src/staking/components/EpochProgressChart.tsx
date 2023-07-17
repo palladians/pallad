@@ -1,4 +1,5 @@
 import { Pie, PieChart, ResponsiveContainer } from 'recharts'
+import colors from 'tailwindcss/colors'
 
 interface EpochProgressChartProps {
   progress: number
@@ -10,7 +11,7 @@ export const EpochProgressChart = ({ progress }: EpochProgressChartProps) => {
   const data = [
     {
       progress: 1,
-      fill: '#ff0000'
+      fill: colors.sky['500']
     }
   ]
   return (

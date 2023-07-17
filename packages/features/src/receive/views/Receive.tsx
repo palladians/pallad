@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { Card } from '@palladxyz/ui'
 
 export const ReceiveView = () => {
   const navigate = useNavigate()
@@ -11,16 +12,22 @@ export const ReceiveView = () => {
   const walletAddress = 'B62XXX'
   return (
     <AppLayout>
-      <div className="p-4 flex-1">
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Receive"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <div className="justify-center items-center flex-1 gap-6">
-          {walletAddress && (
-            <QRCode value={walletAddress} bgColor="#ff0000" fgColor="#00ff00" />
-          )}
-          <a>{walletAddress}</a>
+        <div className="flex flex-col flex-1 gap-6">
+          <Card className="flex justify-center items-center p-4">
+            {walletAddress && (
+              <QRCode
+                value={walletAddress}
+                bgColor="#020617"
+                fgColor="#0ea5e9"
+              />
+            )}
+          </Card>
+          <Card className="p-2">{walletAddress}</Card>
         </div>
       </div>
     </AppLayout>

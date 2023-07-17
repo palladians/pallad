@@ -10,7 +10,7 @@ export const AssetsList = () => {
   // )
   // const minaBalance = rawMinaBalance ? rawMinaBalance.toFixed(4) : '0'
   return (
-    <div className="flex-1 p-4 gap-3">
+    <div className="flex flex-col flex-1 gap-3">
       <ViewHeading
         title="Assets"
         button={{

@@ -1,4 +1,4 @@
-import { Button } from '@palladxyz/ui'
+import { Button, Label } from '@palladxyz/ui'
 import { ElementType } from 'react'
 
 import { FormLabel } from '../../common/components/FormLabel'
@@ -28,13 +28,15 @@ export const TransactionResult = ({
   button
 }: TransactionResultProps) => {
   return (
-    <div className="flex-1 p-4">
+    <div className="flex flex-col flex-1">
       <ViewHeading title={title} />
-      <div className="flex-1 justify-center items-center gap-10">
+      <div className="flex flex-1 justify-center items-center gap-4">
         <result.icon size={56} color={result.iconColor} />
         <div className="gap-2">
-          <FormLabel>{result.label}</FormLabel>
-          <div className="leading-6 overflow-hidden">{result.content}</div>
+          <Label>{result.label}</Label>
+          <div className="leading-6 overflow-hidden break-all">
+            {result.content}
+          </div>
         </div>
       </div>
       <Button onClick={button.onClick}>{button.label}</Button>

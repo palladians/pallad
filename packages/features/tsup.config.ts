@@ -1,5 +1,6 @@
 import svgJsx from '@svgr/plugin-jsx'
 import svgr from 'esbuild-plugin-svgr'
+import { polyfillNode } from 'esbuild-plugin-polyfill-node'
 import { defineConfig } from 'tsup'
 
 export default defineConfig([
@@ -12,6 +13,13 @@ export default defineConfig([
     clean: true,
     bundle: true,
     dts: true,
-    esbuildPlugins: [svgr({ plugins: [svgJsx] })]
+    esbuildPlugins: [
+      polyfillNode({
+        polyfills: { crypto: true },
+        globals: { process: true }
+      }),
+      svgr({ plugins: [svgJsx] })
+    ],
+    external: ['swr']
   }
 ])

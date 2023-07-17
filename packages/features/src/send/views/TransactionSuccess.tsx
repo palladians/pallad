@@ -1,5 +1,6 @@
 import { ClockIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import colors from 'tailwindcss/colors'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { TransactionResult } from '../components/TransactionResult'
@@ -12,7 +13,7 @@ export const TransactionSuccessView = () => {
         title="Submitted successfully"
         result={{
           icon: ClockIcon,
-          iconColor: '#ff00ff',
+          iconColor: colors.sky['500'],
           label: 'Pending Transaction Hash',
           content: 'Ckpa3EsAv91c4btWWbvdKNeddEEkvMxgUM5SzVBr48hNizyLrwxeN'
         }}

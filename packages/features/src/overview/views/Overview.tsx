@@ -8,12 +8,10 @@ export const OverviewView = () => {
   }
   return (
     <AppLayout>
-      <div>
-        <div className="p-4 bg-sky-960">
-          {currentWallet?.walletPublicKey && (
-            <OverviewCard walletAddress={currentWallet.walletPublicKey} />
-          )}
-        </div>
+      <div className="flex flex-col flex-1 gap-4">
+        {currentWallet?.walletPublicKey && (
+          <OverviewCard walletAddress={currentWallet.walletPublicKey} />
+        )}
         <AssetsList />
       </div>
     </AppLayout>

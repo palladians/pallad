@@ -17,7 +17,17 @@ export const Provider: GlobalProvider = ({ children }) => {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <MemoryRouter>
-        <div style={{ width: 400, height: 600, display: 'flex' }}>
+        <div
+          style={{
+            maxWidth: 400,
+            width: '100%',
+            maxHeight: 600,
+            height: '100%',
+            display: 'flex',
+            overflowX: 'hidden',
+            overflowY: 'scroll'
+          }}
+        >
           {children}
         </div>
       </MemoryRouter>
