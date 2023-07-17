@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { FormError } from '../../common/components/FormError'
-import { FormLabel } from '../../common/components/FormLabel'
 import { OutgoingTransaction } from '../../common/types'
 import { TransactionFee } from '../../wallet/lib/const'
 import { useTransactionStore } from '../../wallet/store/transaction'
@@ -35,11 +34,11 @@ export const SendForm = () => {
       memo: ''
     }
   })
-  const setMaxAmount = () => {
-    // const { fee } = getValues()
-    // const currentFee = TransactionFee[fee]
-    // totalBalance && setValue('amount', totalBalance - currentFee)
-  }
+  // const setMaxAmount = () => {
+  //   // const { fee } = getValues()
+  //   // const currentFee = TransactionFee[fee]
+  //   // totalBalance && setValue('amount', totalBalance - currentFee)
+  // }
   const onSubmit = (payload: OutgoingTransaction) => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]

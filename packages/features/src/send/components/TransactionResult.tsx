@@ -1,7 +1,6 @@
 import { Button, Label } from '@palladxyz/ui'
 import { ElementType } from 'react'
 
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 
 type TxResult = {

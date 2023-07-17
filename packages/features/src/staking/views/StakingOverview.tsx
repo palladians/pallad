@@ -2,7 +2,6 @@ import { Card, Label } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { formatCompact } from '../../common/lib/numbers'
 import { EpochProgressChart } from '../components/EpochProgressChart'

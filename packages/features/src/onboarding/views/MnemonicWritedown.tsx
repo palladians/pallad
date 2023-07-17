@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useOnboardingStore } from '../../wallet/store/onboarding'
 
@@ -12,7 +11,6 @@ export const MnemonicWritedownView = () => {
   const mnemonic = useOnboardingStore((state) => state.mnemonic?.split(' '))
   const [noOneIsLooking, setNoOneIsLooking] = useState(false)
   const [mnemonicWritten, setMnemonicWritten] = useState(false)
-  const toggleMnemonicWrote = () => setMnemonicWritten(!mnemonicWritten)
   return (
     <WizardLayout
       footer={

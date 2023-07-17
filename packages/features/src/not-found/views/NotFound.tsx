@@ -1,8 +1,8 @@
 import { Button } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
 
-import { ViewHeading } from '../../common/components/ViewHeading'
 import { AppLayout } from '../../common/components/AppLayout'
+import { ViewHeading } from '../../common/components/ViewHeading'
 
 export const NotFoundView = () => {
   const navigate = useNavigate()

@@ -1,4 +1,4 @@
-import { FormLabel } from './FormLabel'
+import { Label } from '@palladxyz/ui'
 
 interface MetaFieldProps {
   label: string
@@ -8,7 +8,7 @@ interface MetaFieldProps {
 export const MetaField = ({ label, value }: MetaFieldProps) => {
   return (
     <div className="gap-2">
-      <FormLabel>{label}</FormLabel>
+      <Label>{label}</Label>
       <div className="leading-6">{value}</div>
     </div>
   )

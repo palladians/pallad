@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, Button, Card } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-dom'
 import { TrashIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 import { truncateString } from '../../common/lib/string'
 import { Contact } from '../../common/types'

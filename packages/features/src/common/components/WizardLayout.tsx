@@ -1,7 +1,8 @@
-import Logo from '../assets/logo.svg'
 import { Toggle } from '@palladxyz/ui'
-import { SunIcon, MoonIcon } from 'lucide-react'
+import { MoonIcon, SunIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
+
+import Logo from '../assets/logo.svg'
 
 interface WizardLayoutProps {
   children: React.ReactNode

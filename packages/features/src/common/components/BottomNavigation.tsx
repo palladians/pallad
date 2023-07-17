@@ -1,8 +1,8 @@
 import { Button, Card } from '@palladxyz/ui'
 import {
+  BookIcon,
   CoinsIcon,
   LayoutDashboardIcon,
-  BookIcon,
   MenuIcon
 } from 'lucide-react'
 

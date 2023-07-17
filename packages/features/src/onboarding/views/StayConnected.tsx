@@ -1,6 +1,6 @@
 import { Button } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-dom'
 import { TwitterIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'

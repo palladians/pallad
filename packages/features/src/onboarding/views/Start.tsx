@@ -1,13 +1,13 @@
-import { getSessionPersistence } from '@palladxyz/persistence'
+// import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button } from '@palladxyz/ui'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
 import { useAppStore } from '../../wallet/store/app'
 
 export const StartView = () => {
-  const [appInitialized, setAppInitialized] = useState<boolean>(false)
+  // const [appInitialized, setAppInitialized] = useState<boolean>(false)
   const isInitialized = useAppStore((state) => state.isInitialized())
   const navigate = useNavigate()
   useEffect(() => {

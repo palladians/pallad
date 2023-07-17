@@ -1,8 +1,8 @@
 import { AlertOctagonIcon } from 'lucide-react'
+import colors from 'tailwindcss/colors'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { TransactionResult } from '../components/TransactionResult'
-import colors from 'tailwindcss/colors'
 
 export const TransactionErrorView = () => {
   return (

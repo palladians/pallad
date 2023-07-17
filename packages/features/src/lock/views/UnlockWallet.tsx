@@ -1,9 +1,9 @@
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { Alert, AlertTitle, Button, Input, Label } from '@palladxyz/ui'
+import { AlertCircleIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { AlertCircleIcon } from 'lucide-react'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'
@@ -35,10 +35,10 @@ export const UnlockWalletView = () => {
     // if (!wallet) return await onError()
     return navigate('/dashboard')
   }
-  const restartWallet = () => {
-    // resetWallet()
-    navigate('/')
-  }
+  // const restartWallet = () => {
+  //   // resetWallet()
+  //   navigate('/')
+  // }
   return (
     <WizardLayout
       footer={

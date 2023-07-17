@@ -1,6 +1,6 @@
 import svgJsx from '@svgr/plugin-jsx'
-import svgr from 'esbuild-plugin-svgr'
 import { polyfillNode } from 'esbuild-plugin-polyfill-node'
+import svgr from 'esbuild-plugin-svgr'
 import { defineConfig } from 'tsup'
 
 export default defineConfig([

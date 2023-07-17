@@ -109,11 +109,11 @@ SelectSeparator.displayName = SelectPrimitive.Separator.displayName
 
 export {
   Select,
-  SelectGroup,
-  SelectValue,
-  SelectTrigger,
   SelectContent,
-  SelectLabel,
+  SelectGroup,
   SelectItem,
-  SelectSeparator
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue
 }

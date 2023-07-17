@@ -1,9 +1,9 @@
+import { Card } from '@palladxyz/ui'
 import QRCode from 'react-qr-code'
 import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { Card } from '@palladxyz/ui'
 
 export const ReceiveView = () => {
   const navigate = useNavigate()

@@ -16,7 +16,7 @@ export default defineConfig({
     svgr({ exportAsDefault: true })
   ],
   define: {
-    global: {}
+    'global.browser': {}
   },
   build: {
     rollupOptions: {

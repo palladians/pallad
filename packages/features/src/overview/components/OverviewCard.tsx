@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, Button, Label, Skeleton } from '@palladxyz/ui'
 import easyMeshGradient from 'easy-mesh-gradient'
-import { useNavigate } from 'react-router-dom'
 import { CopyIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 import { truncateString } from '../../common/lib/string'
 

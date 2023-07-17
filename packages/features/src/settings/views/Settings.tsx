@@ -1,24 +1,20 @@
-import { MinaNetwork } from '@palladxyz/key-generator'
 import { Card, Label, RadioGroup, RadioGroupItem } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-dom'
-import { useSWRConfig } from 'swr'
+import { TrashIcon } from 'lucide-react'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useAppStore } from '../../wallet/store/app'
-import { TrashIcon } from 'lucide-react'
 
 export const SettingsView = () => {
   const navigate = useNavigate()
-  const { mutate } = useSWRConfig()
-  const { setNetwork, network } = useAppStore((state) => ({
-    setNetwork: state.setNetwork,
-    network: state.network
-  }))
-  const handleNetworkSwitch = (value: MinaNetwork) => {
-    setNetwork(value)
-    mutate(() => true, undefined, { revalidate: false })
-  }
+  // const { mutate } = useSWRConfig()
+  // const { setNetwork, network } = useAppStore((state) => ({
+  //   setNetwork: state.setNetwork,
+  //   network: state.network
+  // }))
+  // const handleNetworkSwitch = (value: MinaNetwork) => {
+  //   setNetwork(value)
+  //   mutate(() => true, undefined, { revalidate: false })
+  // }
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-6">
