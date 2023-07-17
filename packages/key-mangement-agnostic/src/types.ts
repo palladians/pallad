@@ -145,7 +145,7 @@ export type ChainPublicKey = Mina.PublicKey | string
 
 export type ChainSignatureResult = MinaSignatureResult
 
-export type PrivateKey = String | Uint8Array
+export type PrivateKey = string | Uint8Array
 
 export const enum PathLevelIndexes {
   /**

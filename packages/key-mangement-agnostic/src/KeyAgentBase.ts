@@ -1,6 +1,10 @@
 import { HDKey } from '@scure/bip32'
 
-import { deriveEthereumCredentials, deriveEthereumPublicAddress } from './chains/Ethereum/credentialDerivation'
+import {
+  deriveEthereumCredentials,
+  deriveEthereumPublicAddress
+} from './chains/Ethereum/credentialDerivation'
+import { deriveEthereumPrivateKey } from './chains/Ethereum/keyDerivation'
 import {
   deriveMinaCredentials,
   deriveMinaPublicKey
@@ -18,7 +22,6 @@ import {
   PrivateKey
 } from './types'
 import { GroupedCredentials, KeyAgent, SerializableKeyAgentData } from './types'
-import { deriveEthereumPrivateKey } from './chains/Ethereum/keyDerivation'
 
 export abstract class KeyAgentBase implements KeyAgent {
   readonly serializableData: SerializableKeyAgentData
@@ -93,7 +96,10 @@ export abstract class KeyAgentBase implements KeyAgent {
           ]
         return groupedCredential
       } else if (payload.network === 'Ethereum') {
-        const groupedCredential = deriveEthereumCredentials(payload, derivedPublicCredential)
+        const groupedCredential = deriveEthereumCredentials(
+          payload,
+          derivedPublicCredential
+        )
         if (!pure)
           this.serializableData.credentialSubject.contents = [
             ...this.serializableData.credentialSubject.contents,
@@ -157,8 +163,7 @@ export abstract class KeyAgentBase implements KeyAgent {
         return deriveMinaPrivateKey(payload, decryptedSeedBytes)
       } else if (payload.network === 'Ethereum') {
         return await deriveEthereumPrivateKey(payload, decryptedSeedBytes)
-      }
-      else {
+      } else {
         throw new Error('Unsupported payload type.')
       }
     } catch (error) {
