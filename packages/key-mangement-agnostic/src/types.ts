@@ -32,14 +32,17 @@ export enum KeyAgentType {
   Trezor = 'Trezor'
 }
 
-export interface SerializableKeyAgentDataBase {
-  knownCredentials: GroupedCredentials[]
-}
-
-export interface SerializableInMemoryKeyAgentData
-  extends SerializableKeyAgentDataBase {
+export interface SerializableInMemoryKeyAgentData {
   __typename: KeyAgentType.InMemory
   encryptedSeedBytes: Uint8Array
+  type: string[]
+  id: string
+  issuer: string
+  issuanceDate: string
+  credentialSubject: {
+    id: string
+    contents: GroupedCredentials[]
+  }
 }
 
 export type SerializableKeyAgentData = SerializableInMemoryKeyAgentData

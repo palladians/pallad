@@ -23,10 +23,10 @@ export abstract class KeyAgentBase implements KeyAgent {
   // private #getPassphrase: GetPassphrase
 
   get knownCredentials(): GroupedCredentials[] {
-    return this.serializableData.knownCredentials
+    return this.serializableData.credentialSubject.contents
   }
   set knownCredentials(credentials: GroupedCredentials[]) {
-    this.serializableData.knownCredentials = credentials
+    this.serializableData.credentialSubject.contents = credentials
   }
 
   constructor(
@@ -67,7 +67,7 @@ export abstract class KeyAgentBase implements KeyAgent {
       throw new Error(`Unsupported network: ${payload.network}`)
     }
 
-    const knownCredential = this.knownCredentials.find((credential) =>
+    const knownCredential = this.serializableData.credentialSubject.contents.find((credential) =>
       matcher(credential, payload)
     )
 
@@ -83,7 +83,7 @@ export abstract class KeyAgentBase implements KeyAgent {
           derivedPublicCredential
         )
         if (!pure)
-          this.knownCredentials = [...this.knownCredentials, groupedCredential]
+          this.serializableData.credentialSubject.contents = [...this.serializableData.credentialSubject.contents, groupedCredential]
         return groupedCredential
       } else {
         throw new Error('Unsupported network')

@@ -71,7 +71,7 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     getPassphrase,
     mnemonicWords,
     mnemonic2ndFactorPassphrase = ''
-  }: FromBip39MnemonicWordsProps): Promise<InMemoryKeyAgent> {
+  }: FromBip39MnemonicWordsProps): Promise<Uint8Array> {
     const mnemonic = joinMnemonicWords(mnemonicWords)
     const validMnemonic = validateMnemonic(mnemonic, wordlist)
     if (!validMnemonic) throw new errors.InvalidMnemonicError()
@@ -81,10 +81,11 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
     const encryptedSeedBytes = await emip3encrypt(seedBytes, passphrase)
 
-    return new InMemoryKeyAgent({
+    return encryptedSeedBytes /*new InMemoryKeyAgent({
       encryptedSeedBytes: encryptedSeedBytes,
       knownCredentials: [],
-      getPassphrase
-    })
+      getPassphrase,
+      type, id, issuer, issuanceDate, credentialSubject
+    })*/
   }
 }

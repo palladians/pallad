@@ -78,15 +78,22 @@ describe('KeyAgentBase', () => {
       // Define your own appropriate initial data, network, accountKeyDerivationPath, and accountAddressDerivationPath
       serializableData = {
         __typename: KeyAgentType.InMemory,
-        knownCredentials: [],
-        encryptedSeedBytes: encryptedSeedBytes
+        encryptedSeedBytes: encryptedSeedBytes,
+        id: 'http://example.gov/wallet/3732',
+        type: ['VerifiableCredential', 'EncryptedWallet'],
+        issuer: 'did:example:123',
+        issuanceDate: '2020-05-22T17:38:21.910Z',
+        credentialSubject: {
+          id: 'did:example:123',
+          contents: [] // contents is an array of credentials shoud refactor knownCredentials to contents
+        }
       }
       networkType = 'testnet'
       instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
     })
     it('should return the correct knownAddresses', () => {
       expect(instance.knownCredentials).to.deep.equal(
-        serializableData.knownCredentials
+        serializableData.credentialSubject.contents
       )
     })
 
