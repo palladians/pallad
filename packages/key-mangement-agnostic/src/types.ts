@@ -3,23 +3,22 @@ import { Mina } from '@palladxyz/mina-core'
 import { isEthereumCredential } from './chains/Ethereum/credentialDerivation'
 import {
   EthereumGroupedCredentials,
-  EthereumSpecificPayload
+  EthereumSpecificArgs
 } from './chains/Ethereum/types'
 import { isMinaCredential } from './chains/Mina/credentialDerivation'
 import {
   MinaGroupedCredentials,
   MinaKeyConst,
-  MinaPayloadType,
+  MinaSignablePayload,
   MinaSignatureResult,
-  MinaSpecificPayload
+  MinaSpecificArgs
 } from './chains/Mina/types'
 import { isStarknetCredential } from './chains/Starknet/credentialDerivation'
 import {
   StarknetGroupedCredentials,
-  StarknetSpecificPayload
+  StarknetSpecificArgs
 } from './chains/Starknet/types'
 
-export type ChainPayloadType = MinaPayloadType
 export type ChainKeyConst = MinaKeyConst
 export type PayloadTypes = 'transaction' | 'message' | 'fields'
 
@@ -57,15 +56,15 @@ export type GroupedCredentials =
   | StarknetGroupedCredentials
   | EthereumGroupedCredentials
 
-export type CredentialMatcher<T extends ChainSpecificPayload> = (
+export type CredentialMatcher<T extends ChainSpecificArgs> = (
   credential: GroupedCredentials,
-  payload: T
+  args: T
 ) => boolean
 
 export const credentialMatchers: Record<Network, CredentialMatcher<any>> = {
-  Mina: isMinaCredential as CredentialMatcher<MinaSpecificPayload>,
-  Starknet: isStarknetCredential as CredentialMatcher<StarknetSpecificPayload>,
-  Ethereum: isEthereumCredential as CredentialMatcher<EthereumSpecificPayload>
+  Mina: isMinaCredential as CredentialMatcher<MinaSpecificArgs>,
+  Starknet: isStarknetCredential as CredentialMatcher<StarknetSpecificArgs>,
+  Ethereum: isEthereumCredential as CredentialMatcher<EthereumSpecificArgs>
   // Add more as needed...
 }
 
@@ -90,31 +89,25 @@ export interface KeyAgent {
   /**
    * generic sign
    */
-  sign<T extends ChainSpecificPayload>(
-    payload: T
+  sign<T extends ChainSpecificPayload_>(
+    payload: T,
+    signable: ChainSignablePayload,
+    args: ChainSpecificArgs
   ): Promise<ChainSignatureResult>
-  /**
-   * @throws AuthenticationError
-   */
-  derivePublicCredential<T extends ChainSpecificPayload>(
-    payload: T
+
+  derivePublicCredential<T extends ChainSpecificPayload_>(
+    payload: T,
+    args: ChainSpecificArgs
   ): Promise<ChainPublicKey>
 
-  /**
-   * Derives an address/credentials from the given payment key derivation path.
-   * @param pure If set to true, the key agent will derive a new address without mutating its internal state.
-   */
-  deriveCredentials<T extends ChainSpecificPayload>(
+  deriveCredentials<T extends ChainSpecificPayload_>(
     payload: T,
+    args: ChainSpecificArgs,
     pure?: boolean
   ): Promise<GroupedCredentials>
-  /**
-   * @throws AuthenticationError
-   */
+
   exportRootPrivateKey(): Promise<Uint8Array>
-  /**
-   * @throws AuthenticationError
-   */
+
   decryptSeed(): Promise<Uint8Array>
 }
 
@@ -136,16 +129,42 @@ export enum Network {
   Starknet = 'Starknet'
 }
 
-export type ChainSpecificPayload =
-  | MinaSpecificPayload
-  | StarknetSpecificPayload
-  | EthereumSpecificPayload
+export type ChainSpecificArgs =
+  | MinaSpecificArgs
+  | StarknetSpecificArgs
+  | EthereumSpecificArgs
+
+export interface ChainSpecificPayload_ {
+  network: Network
+  derivePublicKey(
+    privateKey: ChainPrivateKey,
+    args: ChainSpecificArgs
+  ): Promise<ChainPublicKey>
+  derivePrivateKey(
+    decryptedSeedBytes: Uint8Array,
+    args: ChainSpecificArgs
+  ): Promise<ChainPrivateKey>
+}
 
 export type ChainPublicKey = Mina.PublicKey | string
 
 export type ChainSignatureResult = MinaSignatureResult
 
-export type PrivateKey = string | Uint8Array
+export type ChainPrivateKey = string | Uint8Array
+
+export type ChainSigningFunction = (
+  args: ChainSpecificArgs,
+  privateKey: ChainPrivateKey
+) => Promise<ChainSignatureResult>
+
+export type ChainSignablePayload = MinaSignablePayload
+
+/*export const chainSigningOperations: Record<string, ChainSigningFunction> = {
+  'Mina': MinaSigningOperations,
+  'Starknet': () => { throw new Error('Not implemented') },
+  'Ethereum': () => { throw new Error('Not implemented') }
+  // add other chains here
+}*/
 
 export const enum PathLevelIndexes {
   /**

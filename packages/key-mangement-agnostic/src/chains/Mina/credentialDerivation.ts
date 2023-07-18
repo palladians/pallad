@@ -1,21 +1,22 @@
 import { Mina } from '@palladxyz/mina-core'
 import Client from 'mina-signer'
 
-import { MinaGroupedCredentials, MinaSpecificPayload } from './types'
+import { MinaGroupedCredentials, MinaSpecificArgs } from './types'
 
 export function deriveMinaPublicKey(
-  payload: MinaSpecificPayload,
+  //rename payload to args
+  args: MinaSpecificArgs,
   privateKey: string
 ): Mina.PublicKey {
   // Mina network client.
-  const minaClient = new Client({ network: payload.networkType })
+  const minaClient = new Client({ network: args.networkType })
   // Derive and return the Mina public key
   const publicKey = minaClient.derivePublicKey(privateKey)
   return publicKey as Mina.PublicKey
 }
 
 export function deriveMinaCredentials(
-  payload: MinaSpecificPayload,
+  args: MinaSpecificArgs,
   publicCredential: Mina.PublicKey
 ): MinaGroupedCredentials {
   return {
@@ -25,21 +26,21 @@ export function deriveMinaCredentials(
     controller: 'did:mina:' + publicCredential,
     name: 'Mina Account',
     description: 'My Mina account.',
-    chain: payload.network,
-    addressIndex: payload.addressIndex,
-    accountIndex: payload.accountIndex,
+    chain: args.network,
+    addressIndex: args.addressIndex,
+    accountIndex: args.accountIndex,
     address: publicCredential
   }
 }
 
 export function isMinaCredential(
   credential: MinaGroupedCredentials,
-  payload: MinaSpecificPayload
+  args: MinaSpecificArgs
 ): boolean {
-  // Check if the credential matches the payload
+  // Check if the credential matches the args
   return (
     credential.chain === 'Mina' &&
-    credential.accountIndex === payload.accountIndex &&
-    credential.addressIndex === payload.addressIndex
+    credential.accountIndex === args.accountIndex &&
+    credential.addressIndex === args.addressIndex
   )
 }

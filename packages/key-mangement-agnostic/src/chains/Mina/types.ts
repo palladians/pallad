@@ -1,6 +1,9 @@
 import { Mina } from '@palladxyz/mina-core'
 
-import { Network } from '../../types'
+import { ChainSpecificPayload_, Network } from '../../types'
+import { ChainPublicKey } from '../../types'
+import { deriveMinaPublicKey } from './credentialDerivation'
+import { deriveMinaPrivateKey } from './keyDerivation'
 
 export type MinaSignatureResult =
   | Mina.SignedTransaction
@@ -15,12 +18,12 @@ export type MinaSpecificPayload = {
   networkType: Mina.NetworkType
 }
 
-/*export type MinaGroupedCredentials = {
-  chain: Network.Mina
-  addressIndex: number
+export type MinaSpecificArgs = {
+  network: Network.Mina
   accountIndex: number
-  address: Mina.PublicKey
-}*/
+  addressIndex: number
+  networkType: Mina.NetworkType
+}
 
 export type MinaGroupedCredentials = {
   '@context': ['https://w3id.org/wallet/v1']
@@ -35,10 +38,29 @@ export type MinaGroupedCredentials = {
   address: Mina.PublicKey
 }
 
-export type MinaPayloadType =
+export type MinaSignablePayload =
   | Mina.ConstructedTransaction
   | Mina.MessageBody
   | Mina.SignableFields
+  | Mina.SignableZkAppCommand
+
+export class MinaPayload implements ChainSpecificPayload_ {
+  network = Network.Mina
+
+  async derivePublicKey(
+    privateKey: string,
+    args: MinaSpecificArgs
+  ): Promise<ChainPublicKey> {
+    console.log('Mina Args', args)
+    return deriveMinaPublicKey(args, privateKey)
+  }
+  async derivePrivateKey(
+    decryptedSeedBytes: Uint8Array,
+    args: MinaSpecificArgs
+  ): Promise<string> {
+    return deriveMinaPrivateKey(args, decryptedSeedBytes)
+  }
+}
 
 export const enum MinaKeyConst {
   /**

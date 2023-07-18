@@ -1,12 +1,12 @@
 import { HDKey } from '@scure/bip32'
 
-import { EthereumKeyConst, EthereumSpecificPayload } from './types'
+import { EthereumKeyConst, EthereumSpecificArgs } from './types'
 
 export async function deriveEthereumPrivateKey(
-  payload: EthereumSpecificPayload,
+  args: EthereumSpecificArgs,
   decryptedSeedBytes: Uint8Array
 ): Promise<Uint8Array> {
-  const { accountIndex, addressIndex } = payload
+  const { accountIndex, addressIndex } = args
 
   // Create an HDKey from the root private key
   const rootKey = HDKey.fromMasterSeed(decryptedSeedBytes)

@@ -3,9 +3,9 @@ import {
   privateToAddress,
   privateToPublic,
   toChecksumAddress
-} from '@ethereumjs/util'
+} from '@ethereumjs/util' // need to replace with noble hashes
 
-import { EthereumGroupedCredentials, EthereumSpecificPayload } from './types'
+import { EthereumGroupedCredentials, EthereumSpecificArgs } from './types'
 
 export async function deriveEthereumPublicAddress(
   privateKey: Uint8Array
@@ -25,7 +25,7 @@ export function deriveEthereumPublicKey(privateKey: Uint8Array): string {
 }
 
 export function deriveEthereumCredentials(
-  payload: EthereumSpecificPayload,
+  args: EthereumSpecificArgs,
   publicCredential: string
 ): EthereumGroupedCredentials {
   return {
@@ -35,23 +35,23 @@ export function deriveEthereumCredentials(
     controller: 'did:ethr:' + publicCredential,
     name: 'Ethereum Account',
     description: 'My Ethereum account.',
-    chain: payload.network,
-    addressIndex: payload.addressIndex,
-    accountIndex: payload.accountIndex,
+    chain: args.network,
+    addressIndex: args.addressIndex,
+    accountIndex: args.accountIndex,
     address: publicCredential
   }
 }
 
 export function isEthereumCredential(
   credential: EthereumGroupedCredentials,
-  payload: EthereumSpecificPayload
+  args: EthereumSpecificArgs
 ): boolean {
   // Check if the credential matches the payload
   // This is just an example, replace with your actual logic
   // This is just a mock implementation, replace with your actual logic
   return (
     credential.chain === 'Ethereum' &&
-    credential.accountIndex === payload.accountIndex &&
-    credential.addressIndex === payload.addressIndex
+    credential.accountIndex === args.accountIndex &&
+    credential.addressIndex === args.addressIndex
   )
 }

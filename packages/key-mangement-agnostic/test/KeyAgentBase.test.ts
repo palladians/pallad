@@ -1,10 +1,14 @@
 import { Mina } from '@palladxyz/mina-core'
 import * as bip32 from '@scure/bip32'
+import Client from 'mina-signer'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
-import { EthereumSpecificPayload } from '../src/chains/Ethereum/types'
-import { MinaSpecificPayload } from '../src/chains/Mina'
+import {
+  EthereumPayload,
+  EthereumSpecificArgs
+} from '../src/chains/Ethereum/types'
+import { MinaPayload, MinaSpecificArgs } from '../src/chains/Mina'
 import { reverseBytes } from '../src/chains/Mina/keyDerivationUtils'
 import { emip3encrypt } from '../src/emip3'
 import { getPassphraseRethrowTypedError } from '../src/InMemoryKeyAgent'
@@ -16,6 +20,7 @@ import {
   SerializableKeyAgentData
 } from '../src/types'
 import * as util from '../src/util/bip39'
+import { constructTransaction } from '../src/util/Transactions/buildMinaTx'
 
 // Provide the passphrase for testing purposes
 const params = {
@@ -92,13 +97,13 @@ describe('KeyAgentBase', () => {
       networkType = 'testnet'
       instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
     })
-    it('should return the correct knownAddresses', () => {
+    it('should return the correct empty knownAddresses', () => {
       expect(instance.knownCredentials).to.deep.equal(
         serializableData.credentialSubject.contents
       )
     })
 
-    it('should return the correct serializableData', () => {
+    it('should return the correct empty serializableData', () => {
       expect(instance.serializableData).to.deep.equal(serializableData)
     })
 
@@ -121,15 +126,19 @@ describe('KeyAgentBase', () => {
         address: expectedPublicKey
       }
 
-      const payload: MinaSpecificPayload = {
+      const args: MinaSpecificArgs = {
         network: Network.Mina,
         accountIndex: 0,
         addressIndex: 0,
         networkType: networkType
       }
-      console.log('payload', payload)
+      const payload = new MinaPayload()
 
-      const groupedCredential = await instance.deriveCredentials(payload, true)
+      const groupedCredential = await instance.deriveCredentials(
+        payload,
+        args,
+        true
+      )
       console.log('Mina groupedCredential account index 0', groupedCredential)
 
       expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
@@ -154,22 +163,28 @@ describe('KeyAgentBase', () => {
         address: expectedPublicKey
       }
 
-      const payload: MinaSpecificPayload = {
+      const args: MinaSpecificArgs = {
         network: Network.Mina,
         accountIndex: 1,
         addressIndex: 0,
         networkType: networkType
       }
+      const payload = new MinaPayload()
 
-      const groupedCredential = await instance.deriveCredentials(payload, true)
+      const groupedCredential = await instance.deriveCredentials(
+        payload,
+        args,
+        true
+      )
       expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
     })
 
-    it('should derive multiple unique addresses for each account index and store credentials properly', async () => {
+    it('should derive multiple unique Mina addresses for each account index and store credentials properly', async () => {
       const mockedPublicKeys: Mina.PublicKey[] = [
         'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
         'B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB'
       ]
+      const payload = new MinaPayload()
 
       const expectedGroupedCredentialsArray = mockedPublicKeys.map(
         (publicKey, index) => ({
@@ -189,13 +204,14 @@ describe('KeyAgentBase', () => {
       const resultArray = []
 
       for (let i = 0; i < mockedPublicKeys.length; i++) {
-        const payload: MinaSpecificPayload = {
+        const args: MinaSpecificArgs = {
           network: Network.Mina,
           accountIndex: i,
           addressIndex: 0,
           networkType: networkType
         }
-        const result = await instance.deriveCredentials(payload)
+        // when pure is false it will store the credentials
+        const result = await instance.deriveCredentials(payload, args, false)
 
         resultArray.push(result)
       }
@@ -217,6 +233,227 @@ describe('KeyAgentBase', () => {
       const decryptedRootKey = await instance.exportRootPrivateKey()
       expect(decryptedRootKey).to.deep.equal(rootKeyBytes)
     })
+    it('should use the generic sign<T> function for signing a transaction', async () => {
+      // Define a mocked publicKey, which should be expected from the derivation
+      const expectedPublicKey: Mina.PublicKey =
+        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+
+      const expectedGroupedCredentials = {
+        '@context': ['https://w3id.org/wallet/v1'],
+        id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        type: 'MinaAddress',
+        controller:
+          'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        name: 'Mina Account',
+        description: 'My Mina account.',
+        chain: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        address: expectedPublicKey
+      }
+
+      const args: MinaSpecificArgs = {
+        network: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        networkType: networkType
+      }
+      const payload = new MinaPayload()
+
+      const groupedCredential = await instance.deriveCredentials(
+        payload,
+        args,
+        true
+      )
+
+      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+
+      const transaction: Mina.TransactionBody = {
+        to: groupedCredential.address,
+        from: groupedCredential.address,
+        fee: 1,
+        amount: 100,
+        nonce: 0,
+        memo: 'hello Bob',
+        validUntil: 321,
+        type: 'payment'
+      }
+      const constructedTx: Mina.ConstructedTransaction = constructTransaction(
+        transaction,
+        Mina.TransactionKind.PAYMENT
+      )
+      const signedTx = await instance.sign(payload, constructedTx, args)
+      const minaClient = new Client({ network: args.networkType })
+      const isVerified = minaClient.verifyTransaction(
+        signedTx as Mina.SignedTransaction
+      )
+      expect(isVerified).toBeTruthy()
+    })
+    it('should use the generic sign<T> function for signing a message', async () => {
+      // Define a mocked publicKey, which should be expected from the derivation
+      const expectedPublicKey: Mina.PublicKey =
+        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+
+      const expectedGroupedCredentials = {
+        '@context': ['https://w3id.org/wallet/v1'],
+        id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        type: 'MinaAddress',
+        controller:
+          'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        name: 'Mina Account',
+        description: 'My Mina account.',
+        chain: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        address: expectedPublicKey
+      }
+
+      const args: MinaSpecificArgs = {
+        network: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        networkType: networkType
+      }
+      const payload = new MinaPayload()
+
+      const groupedCredential = await instance.deriveCredentials(
+        payload,
+        args,
+        true
+      )
+      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+
+      const message: Mina.MessageBody = {
+        message: 'Hello, Bob!'
+      }
+      const signedMessage = await instance.sign(payload, message, args)
+      const minaClient = new Client({ network: args.networkType })
+      const isVerified = await minaClient.verifyMessage(
+        signedMessage as Mina.SignedMessage
+      )
+      expect(isVerified).toBeTruthy()
+    })
+    it('should use the generic sign<T> function to sign fields correctly and the client should be able to verify it', async () => {
+      // Define a mocked publicKey, which should be expected from the derivation
+      const expectedPublicKey: Mina.PublicKey =
+        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+
+      const expectedGroupedCredentials = {
+        '@context': ['https://w3id.org/wallet/v1'],
+        id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        type: 'MinaAddress',
+        controller:
+          'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        name: 'Mina Account',
+        description: 'My Mina account.',
+        chain: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        address: expectedPublicKey
+      }
+
+      const args: MinaSpecificArgs = {
+        network: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        networkType: networkType
+      }
+      const payload = new MinaPayload()
+
+      const groupedCredential = await instance.deriveCredentials(
+        payload,
+        args,
+        true
+      )
+      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+
+      const fields: Mina.SignableFields = {
+        fields: [
+          BigInt(10),
+          BigInt(20),
+          BigInt(30),
+          BigInt(340817401),
+          BigInt(2091283),
+          BigInt(1),
+          BigInt(0)
+        ]
+      }
+      const signedFields = await instance.sign(payload, fields, args)
+      const minaClient = new Client({ network: args.networkType })
+      const isVerified = await minaClient.verifyFields(
+        signedFields as Mina.SignedFields
+      )
+      expect(isVerified).toBeTruthy()
+    })
+    it('should use the generic sign<T> function to sign a zkapp command correctly and the client should be able to verify it', async () => {
+      // Define a mocked publicKey, which should be expected from the derivation
+      const expectedPublicKey: Mina.PublicKey =
+        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+
+      const expectedGroupedCredentials = {
+        '@context': ['https://w3id.org/wallet/v1'],
+        id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        type: 'MinaAddress',
+        controller:
+          'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        name: 'Mina Account',
+        description: 'My Mina account.',
+        chain: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        address: expectedPublicKey
+      }
+
+      const args: MinaSpecificArgs = {
+        network: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        networkType: networkType
+      }
+      const payload = new MinaPayload()
+
+      const groupedCredential = await instance.deriveCredentials(
+        payload,
+        args,
+        true
+      )
+      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+
+      const zkAppCommand: Mina.SignableZkAppCommand = {
+        command: {
+          zkappCommand: {
+            accountUpdates: [],
+            memo: 'E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH',
+            feePayer: {
+              body: {
+                publicKey:
+                  'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+                fee: '100000000',
+                validUntil: '100000',
+                nonce: '1'
+              },
+              authorization: ''
+            }
+          },
+          feePayer: {
+            feePayer: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+            fee: '100000000',
+            nonce: '1',
+            memo: 'test memo'
+          }
+        }
+      }
+      const signedZkAppCommand = await instance.sign(
+        payload,
+        zkAppCommand,
+        args
+      )
+      const minaClient = new Client({ network: args.networkType })
+      const isVerified = await minaClient.verifyZkappCommand(
+        signedZkAppCommand as Mina.SignedZkAppCommand
+      )
+      expect(isVerified).toBeTruthy()
+    })
   })
   describe('Ethereum KeyAgent', () => {
     beforeEach(() => {
@@ -236,7 +473,7 @@ describe('KeyAgentBase', () => {
       networkType = 'testnet'
       instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
     })
-    it('should return the correct knownAddresses', () => {
+    it('should return the correct empty knownAddresses', () => {
       expect(instance.knownCredentials).to.deep.equal(
         serializableData.credentialSubject.contents
       )
@@ -257,14 +494,18 @@ describe('KeyAgentBase', () => {
         address: expectedPublicKey
       }
 
-      const payload: EthereumSpecificPayload = {
+      const args: EthereumSpecificArgs = {
         network: Network.Ethereum,
         accountIndex: 0,
         addressIndex: 0
       }
-      console.log('payload', payload)
+      const payload = new EthereumPayload()
 
-      const groupedCredential = await instance.deriveCredentials(payload, true)
+      const groupedCredential = await instance.deriveCredentials(
+        payload,
+        args,
+        true
+      )
       console.log(
         'Ethereum groupedCredential account index 0',
         groupedCredential

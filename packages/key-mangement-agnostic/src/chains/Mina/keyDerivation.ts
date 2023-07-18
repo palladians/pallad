@@ -4,13 +4,13 @@ import { HDKey } from '@scure/bip32'
 import { Buffer } from 'buffer'
 
 import { reverseBytes } from './keyDerivationUtils'
-import { MinaKeyConst, MinaSpecificPayload } from './types'
+import { MinaKeyConst, MinaSpecificArgs } from './types'
 
 export async function deriveMinaPrivateKey(
-  payload: MinaSpecificPayload,
+  args: MinaSpecificArgs,
   decryptedSeedBytes: Uint8Array
 ): Promise<string> {
-  const { accountIndex, addressIndex } = payload
+  const { accountIndex, addressIndex } = args
 
   // Create an HDKey from the root private key
   const rootKey = HDKey.fromMasterSeed(decryptedSeedBytes)
