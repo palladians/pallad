@@ -48,7 +48,8 @@ export const MnemonicInputView = () => {
       {
         network: Network.Mina,
         networkType: 'mainnet'
-      }
+      },
+      false
     )
     console.log(wallet)
     await setVaultStateInitialized()

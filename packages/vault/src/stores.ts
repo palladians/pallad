@@ -9,6 +9,8 @@ import {
   KeyAgentType
 } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import { getSecurePersistence } from '@palladxyz/persistence'
+import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
 import { Store } from './types'
@@ -41,76 +43,84 @@ const initialState: VaultStore = {
 }
 
 // Zustand store using immer for immutable updates and persist middleware
-export const keyAgentStore = createStore<VaultStore>((set, get) => ({
-  keyAgent: initialState.keyAgent,
-  serializableKeyAgentData: initialState.serializableKeyAgentData,
-  restoreWallet: async (
-    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
-    { network, networkType }: NetworkArgs
-  ) => {
-    const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords({
-      getPassphrase: getPassphrase,
-      mnemonicWords: mnemonicWords
-    })
-    // set both the keyAgent and the serializableKeyAgentData
-    set({ keyAgent, serializableKeyAgentData: keyAgent.serializableData })
+export const keyAgentStore = createStore<VaultStore>()(
+  persist(
+    (set, get) => ({
+      keyAgent: initialState.keyAgent,
+      serializableKeyAgentData: initialState.serializableKeyAgentData,
+      restoreWallet: async (
+        { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
+        { network, networkType }: NetworkArgs
+      ) => {
+        const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords({
+          getPassphrase: getPassphrase,
+          mnemonicWords: mnemonicWords
+        })
+        // set both the keyAgent and the serializableKeyAgentData
+        set({ keyAgent, serializableKeyAgentData: keyAgent.serializableData })
 
-    // derive the credentials for the first account and address & mutate the serializableKeyAgentData state
-    await get().addCredentials({
-      account_ix: 0,
-      address_ix: 0,
-      network: network,
-      networkType: networkType,
-      pure: false
-    })
+        // derive the credentials for the first account and address & mutate the serializableKeyAgentData state
+        await get().addCredentials({
+          account_ix: 0,
+          address_ix: 0,
+          network: network,
+          networkType: networkType,
+          pure: false
+        })
 
-    return keyAgent
-  },
-  addCredentials: async ({
-    account_ix,
-    address_ix,
-    network,
-    networkType,
-    pure
-  }): Promise<GroupedCredentials | null> => {
-    const serializableKeyAgentData = get().serializableKeyAgentData
-    const { knownCredentials } = serializableKeyAgentData
-
-    // Find if the credentials already exist in knownCredentials based on the function's arguments
-    const existingCredential = knownCredentials.find(
-      (knownCredential) =>
-        knownCredential.accountIndex === account_ix &&
-        knownCredential.addressIndex === address_ix &&
-        knownCredential.chain === network
-    )
-
-    // If credentials already exist, return the existing credential
-    if (existingCredential) {
-      return existingCredential
-    }
-
-    const keyAgent = get().keyAgent
-    if (keyAgent) {
-      const credential = await keyAgent.deriveCredentials(
-        { account_ix },
-        { address_ix },
+        return keyAgent
+      },
+      addCredentials: async ({
+        account_ix,
+        address_ix,
         network,
         networkType,
         pure
-      )
+      }): Promise<GroupedCredentials | null> => {
+        const serializableKeyAgentData = get().serializableKeyAgentData
+        const { knownCredentials } = serializableKeyAgentData
 
-      // Add new credential to knownCredentials
-      set({
-        serializableKeyAgentData: {
-          ...serializableKeyAgentData,
-          knownCredentials: [...knownCredentials, credential]
+        // Find if the credentials already exist in knownCredentials based on the function's arguments
+        const existingCredential = knownCredentials.find(
+          (knownCredential) =>
+            knownCredential.accountIndex === account_ix &&
+            knownCredential.addressIndex === address_ix &&
+            knownCredential.chain === network
+        )
+
+        // If credentials already exist, return the existing credential
+        if (existingCredential) {
+          return existingCredential
         }
-      })
-      return credential
+
+        const keyAgent = get().keyAgent
+        if (keyAgent) {
+          const credential = await keyAgent.deriveCredentials(
+            { account_ix },
+            { address_ix },
+            network,
+            networkType,
+            pure
+          )
+
+          // Add new credential to knownCredentials
+          set({
+            serializableKeyAgentData: {
+              ...serializableKeyAgentData,
+              knownCredentials: [...knownCredentials, credential]
+            }
+          })
+          return credential
+        }
+        return null
+      }
+    }),
+    {
+      name: 'PalladVault',
+      storage: createJSONStorage(getSecurePersistence)
     }
-    return null
-  }
-}))
+  )
+)
 
 /*
 export const useStore = create<KeyAgentStore>(persist(

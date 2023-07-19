@@ -5,26 +5,32 @@ import {
   LayoutDashboardIcon,
   MenuIcon
 } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+const NAV_ITEMS = [
+  { icon: LayoutDashboardIcon, label: 'Dashboard', url: '/dashboard' },
+  { icon: CoinsIcon, label: 'Staking', url: '/staking' },
+  { icon: BookIcon, label: 'Contacts', url: '/contacts' },
+  { icon: MenuIcon, label: 'Menu', url: '/menu' }
+]
 
 export const BottomNavigation = () => {
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+  console.log(pathname)
   return (
     <Card className="flex justify-around p-1">
-      <Button variant="ghost">
-        <LayoutDashboardIcon />
-        <span className="hidden">Dashboard</span>
-      </Button>
-      <Button variant="ghost">
-        <CoinsIcon />
-        <span className="hidden">Staking</span>
-      </Button>
-      <Button variant="ghost">
-        <BookIcon />
-        <span className="hidden">Contacts</span>
-      </Button>
-      <Button variant="ghost">
-        <MenuIcon />
-        <span className="hidden">Menu</span>
-      </Button>
+      {NAV_ITEMS.map((navItem) => {
+        const active = pathname === navItem.url
+        return (
+          <Button
+            variant={active ? '' : 'ghost'}
+            onClick={() => navigate(navItem.url)}
+          >
+            <navItem.icon />
+          </Button>
+        )
+      })}
     </Card>
   )
 }

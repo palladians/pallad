@@ -4,9 +4,12 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
+import { useWallet } from '../../wallet/hooks/useWallet'
 import { useAppStore } from '../../wallet/store/app'
 
 export const StartView = () => {
+  const { wallet } = useWallet()
+  console.log('>W', wallet)
   // const [appInitialized, setAppInitialized] = useState<boolean>(false)
   const isInitialized = useAppStore((state) => state.isInitialized())
   const navigate = useNavigate()
