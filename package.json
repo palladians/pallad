@@ -37,7 +37,8 @@
     "tsup": "^6.7.0",
     "turbo": "^1.10.1",
     "typescript": "^5.0.4",
-    "vitest": "^0.31.4"
+    "vitest": "^0.31.4",
+    "happy-dom": "^9.20.3"
   },
   "packageManager": "yarn@1.22.19",
   "workspaces": {

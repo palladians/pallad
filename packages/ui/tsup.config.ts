@@ -1,14 +1,11 @@
+import { baseTsupConfig } from '@palladxyz/common'
 import { defineConfig } from 'tsup'
+
+import packageJson from './package.json'
 
 export default defineConfig([
   {
-    name: 'pallad/ui',
-    entry: ['./src/index.ts'],
-    outDir: './dist',
-    format: 'esm',
-    sourcemap: true,
-    clean: true,
-    bundle: true,
-    dts: true
+    ...baseTsupConfig,
+    name: packageJson.name
   }
 ])

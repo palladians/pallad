@@ -1,22 +1,21 @@
 {
-  "name": "@palladxyz/offchain-data",
-  "description": "Off-chain data fetching services.",
+  "name": "@palladxyz/template",
+  "description": "Module template for new packages",
   "version": "1.0.0",
-  "module": "dist/index.mjs",
+  "type": "module",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.mjs"
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
+    "test:unit": "echo 'not yet'",
     "cleanup": "rimraf node_modules dist .turbo"
-  },
-  "dependencies": {
-    "swr": "^2.2.0"
   },
   "devDependencies": {
     "@palladxyz/common": "*"

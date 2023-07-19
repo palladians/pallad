@@ -1,10 +1,7 @@
 {
-  "extends": "@tsconfig/strictest/tsconfig.json",
+  "extends": "@palladxyz/common/tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "paths": {
       "@/*": ["./src/*"]
     }

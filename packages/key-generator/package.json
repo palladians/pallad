@@ -25,8 +25,8 @@
     "mina-signer": "^2.0.3"
   },
   "devDependencies": {
+    "@palladxyz/common": "*",
     "@types/mocha": "^10.0.1",
-    "@types/secp256k1": "^4.0.3",
-    "happy-dom": "^9.20.3"
+    "@types/secp256k1": "^4.0.3"
   }
 }
