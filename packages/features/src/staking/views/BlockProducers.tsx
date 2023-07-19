@@ -1,5 +1,5 @@
-import { Box, Button } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-native'
+import { Button } from '@palladxyz/ui'
+import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
@@ -24,18 +24,18 @@ export const BlockProducersView = () => {
   const navigate = useNavigate()
   return (
     <AppLayout>
-      <Box css={{ padding: '$md', gap: 16 }}>
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Find Producers"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
-        <Box css={{ gap: 12 }}>
+        <div className="flex flex-col gap-3">
           {MOCKED_PRODUCERS.map((producer, i) => (
             <BlockProducerTile key={i} producer={producer} />
           ))}
           <Button variant="link">Add Your Pool</Button>
-        </Box>
-      </Box>
+        </div>
+      </div>
     </AppLayout>
   )
 }

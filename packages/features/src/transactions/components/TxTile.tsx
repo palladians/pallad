@@ -1,11 +1,7 @@
-import { Box, composeBox, Text } from '@palladxyz/ui'
-import { Pressable } from 'react-native'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { StructurizedTransaction } from '../../common/types'
 import { TxIndicator } from './TxIndicator'
-
-const StyledPressable = composeBox({ baseComponent: Pressable })
 
 interface TxTileProps {
   tx: StructurizedTransaction
@@ -14,28 +10,17 @@ interface TxTileProps {
 export const TxTile = ({ tx }: TxTileProps) => {
   const navigate = useNavigate()
   return (
-    <StyledPressable
+    <a
       key={tx.hash}
-      css={{
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
-        gap: 16
-      }}
-      onPress={() => navigate(`/transactions/${tx.hash}`)}
+      className="justify-between items-center gap-4"
+      onClick={() => navigate(`/transactions/${tx.hash}`)}
     >
       <TxIndicator side={tx.side} kind={tx.kind} />
-      <Box css={{ width: 'auto', flex: 1, gap: 8 }}>
-        <Text css={{ width: 'auto', flex: 1, fontWeight: '600' }}>
-          Received
-        </Text>
-        <Text css={{ width: 'auto', flex: 1, fontSize: 14 }}>{tx.time}</Text>
-      </Box>
-      <Box css={{ width: 'auto' }}>
-        <Text css={{ width: 'auto', fontWeight: '600' }}>
-          {tx.minaAmount} MINA
-        </Text>
-      </Box>
-    </StyledPressable>
+      <div className="flex-1 gap-2">
+        <div className="flex-1 font-semibold">Received</div>
+        <div className="flex-1 text-sm">{tx.time}</div>
+      </div>
+      <div className="font-semibold">{tx.minaAmount} MINA</div>
+    </a>
   )
 }

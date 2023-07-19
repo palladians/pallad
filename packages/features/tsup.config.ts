@@ -1,5 +1,5 @@
-import { commonjs } from '@hyrious/esbuild-plugin-commonjs'
 import svgJsx from '@svgr/plugin-jsx'
+import { polyfillNode } from 'esbuild-plugin-polyfill-node'
 import svgr from 'esbuild-plugin-svgr'
 import { defineConfig } from 'tsup'
 
@@ -12,14 +12,14 @@ export default defineConfig([
     sourcemap: true,
     clean: true,
     bundle: true,
-    dts: {
-      compilerOptions: {
-        moduleResolution: 'Node',
-        allowSyntheticDefaultImports: true,
-        jsx: 'react'
-      }
-    },
-    esbuildPlugins: [commonjs(), svgr({ plugins: [svgJsx] })],
-    external: ['react-native', 'react-native-web']
+    dts: true,
+    esbuildPlugins: [
+      polyfillNode({
+        polyfills: { crypto: true },
+        globals: { process: true }
+      }),
+      svgr({ plugins: [svgJsx] })
+    ],
+    external: ['swr']
   }
 ])

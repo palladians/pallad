@@ -1,5 +1,4 @@
-import { Box } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
@@ -9,13 +8,13 @@ export const NewAddressView = () => {
   const navigate = useNavigate()
   return (
     <AppLayout>
-      <Box css={{ padding: '$md', flex: 1, gap: 24 }}>
+      <div className="flex flex-col flex-1 gap-6">
         <ViewHeading
           title="New Address"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
         <NewAddressForm />
-      </Box>
+      </div>
     </AppLayout>
   )
 }

@@ -1,99 +1,73 @@
-import { Box, Button, Checkbox, Text } from '@palladxyz/ui'
+import { Badge, Button, Checkbox, cn, Label } from '@palladxyz/ui'
 import { useState } from 'react'
-import { Pressable } from 'react-native'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useOnboardingStore } from '../../common/store/onboarding'
+import { useOnboardingStore } from '../../wallet/store/onboarding'
 
 export const MnemonicWritedownView = () => {
   const navigate = useNavigate()
   const mnemonic = useOnboardingStore((state) => state.mnemonic?.split(' '))
   const [noOneIsLooking, setNoOneIsLooking] = useState(false)
   const [mnemonicWritten, setMnemonicWritten] = useState(false)
-  const toggleMnemonicWrote = () => setMnemonicWritten(!mnemonicWritten)
   return (
     <WizardLayout
       footer={
-        <>
-          <Button
-            onPress={() => navigate(-1)}
-            css={{ flex: 1, width: 'auto' }}
-            testID="onboarding__backButton"
-          >
-            Back
-          </Button>
-          <Button
-            variant="secondary"
-            css={{
-              flex: 1,
-              width: 'auto',
-              opacity: mnemonicWritten ? 1 : 0.5,
-              transition: 'opacity 0.3s'
-            }}
-            disabled={!mnemonicWritten}
-            onPress={() => navigate('/onboarding/confirmation')}
-            testID="onboarding__nextButton"
-          >
-            Next
-          </Button>
-        </>
+        <Button
+          variant="secondary"
+          className={cn([
+            'flex-1 transition-opacity opacity-50',
+            mnemonicWritten && 'opacity-100'
+          ])}
+          disabled={!mnemonicWritten}
+          onClick={() => navigate('/onboarding/confirmation')}
+          data-testid="onboarding__nextButton"
+        >
+          Next
+        </Button>
       }
     >
-      <Box css={{ gap: 24 }}>
+      <div className="flex flex-col flex-1 gap-8">
         <ViewHeading
           title="Write Down The Mnemonic"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
         {noOneIsLooking ? (
-          <Box css={{ gap: 16 }}>
-            <FormLabel>Write This Down</FormLabel>
-            <Box css={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+          <div className="flex flex-col gap-4">
+            <Label>Write This Down</Label>
+            <div className="flex flex-wrap gap-2">
               {mnemonic?.map((word, i) => (
-                <Text
-                  key={i}
-                  css={{
-                    backgroundColor: '$secondary600',
-                    color: '$white',
-                    width: 'auto',
-                    paddingHorizontal: '$md',
-                    paddingVertical: '$sm',
-                    borderRadius: 32,
-                    fontSize: 14
-                  }}
-                  testID="onboarding__mnemonicWord"
-                >
+                <Badge key={i} data-testid="onboarding__mnemonicWord">
                   {word}
-                </Text>
+                </Badge>
               ))}
-            </Box>
-            <Box css={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            </div>
+            <div className="flex items-center gap-4">
               <Checkbox
-                value={mnemonicWritten}
-                onValueChange={(value: boolean) => setMnemonicWritten(value)}
-                testID="onboarding__mnemonicWrittenCheckbox"
+                id="mnemonicWrittenCheckbox"
+                checked={mnemonicWritten}
+                onClick={() => setMnemonicWritten(!mnemonicWritten)}
+                data-testid="onboarding__mnemonicWrittenCheckbox"
               />
-              <Pressable onPress={toggleMnemonicWrote}>
-                <Text css={{ color: '$gray50' }}>
-                  I have written down the mnemonic.
-                </Text>
-              </Pressable>
-            </Box>
-          </Box>
+              <Label htmlFor="mnemonicWrittenCheckbox">
+                I have written down the mnemonic.
+              </Label>
+            </div>
+          </div>
         ) : (
-          <Box css={{ gap: 8 }}>
-            <FormLabel>Confirm No One Is Behind You</FormLabel>
+          <div className="flex flex-col flex-1 gap-2">
+            <Label>Confirm No One Is Behind You</Label>
             <Button
-              onPress={() => setNoOneIsLooking(true)}
-              testID="onboarding__confirmAlone"
+              onClick={() => setNoOneIsLooking(true)}
+              className="flex-1"
+              data-testid="onboarding__confirmAlone"
             >
               I am alone
             </Button>
-          </Box>
+          </div>
         )}
-      </Box>
+      </div>
     </WizardLayout>
   )
 }

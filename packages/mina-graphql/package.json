@@ -17,9 +17,9 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/util": "*",
-    "@palladxyz/mina-core": "*",
     "@palladxyz/key-generator": "*",
+    "@palladxyz/mina-core": "*",
+    "@palladxyz/util": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "mina-signer": "^2.0.3"
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.1",
     "@types/secp256k1": "^4.0.3",
+    "esbuild-plugin-polyfill-node": "^0.3.0",
     "happy-dom": "^9.20.3",
     "msw": "^1.2.2"
   }

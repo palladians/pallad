@@ -1,147 +1,102 @@
-import { useFiatPrice } from '@palladxyz/offchain-data'
-import { Avatar, Box, Button, icons, Image, Spinner, Text } from '@palladxyz/ui'
+import { Avatar, AvatarFallback, Button, Label, Skeleton } from '@palladxyz/ui'
 import easyMeshGradient from 'easy-mesh-gradient'
-import { useMemo } from 'react'
-import { Clipboard, Pressable } from 'react-native'
-import { useNavigate } from 'react-router-native'
+import { CopyIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
-import { FormLabel } from '../../common/components/FormLabel'
-import { useAccount } from '../../common/lib/hooks'
 import { truncateString } from '../../common/lib/string'
 
 interface OverviewCardProps {
   walletAddress: string
-  openReceiveModal: () => void
 }
 
 export const OverviewCard = ({ walletAddress }: OverviewCardProps) => {
   const navigate = useNavigate()
-  const { data: accountQuery, isLoading: accountLoading } = useAccount()
-  const account = accountQuery?.result?.data?.account
-  const { data: priceQuery, isLoading: fiatPriceLoading } = useFiatPrice()
-  const isLoading = accountLoading || fiatPriceLoading
-  const rawTotalBalance = parseFloat(account?.balance?.total)
-  const totalBalance = rawTotalBalance ? rawTotalBalance.toFixed(4) : '0'
-  const rawFiatPrice = parseFloat(priceQuery?.['mina-protocol']?.usd)
-  const rawFiatBalance = useMemo(
-    () => rawTotalBalance * rawFiatPrice || 0,
-    [rawTotalBalance, rawFiatPrice]
-  )
-  const fiatBalance = rawFiatBalance ? rawFiatBalance.toFixed(2) : '0'
+  // const { data: accountQuery, isLoading: accountLoading } = useAccount()
+  // const account = accountQuery?.result?.data?.account
+  // const { data: priceQuery, isLoading: fiatPriceLoading } = useFiatPrice()
+  // const isLoading = accountLoading || fiatPriceLoading
+  // const rawTotalBalance = parseFloat(account?.balance?.total)
+  // const totalBalance = rawTotalBalance ? rawTotalBalance.toFixed(4) : '0'
+  // const rawFiatPrice = parseFloat(priceQuery?.['mina-protocol']?.usd)
+  // const rawFiatBalance = useMemo(
+  //   () => rawTotalBalance * rawFiatPrice || 0,
+  //   [rawTotalBalance, rawFiatPrice]
+  // )
+  // const fiatBalance = rawFiatBalance ? rawFiatBalance.toFixed(2) : '0'
+  const isLoading = false
   const meshGradientBright = easyMeshGradient({
     seed: walletAddress,
     hueRange: [180, 240]
   })
   return (
-    <Box
-      css={{
-        width: '100%',
-        height: 232,
-        borderRadius: 16,
-        padding: 16,
-        gap: 16,
-        position: 'relative',
-        zIndex: 0
-      }}
-    >
-      <Box
-        css={{
-          position: 'absolute',
-          backgroundImage: meshGradientBright,
-          width: '100%',
-          height: '100%',
-          filter: 'blur(64px)',
-          borderRadius: 16,
-          opacity: 0.3
-        }}
+    <div className="h-232 rounded-md p-4 gap-4 relative">
+      <div
+        className="absolute w-full h-full blur-[64px] rounded-md opacity-30"
+        style={{ backgroundImage: meshGradientBright }}
       />
-      <Box
-        css={{
-          position: 'absolute',
-          backgroundImage: meshGradientBright,
-          width: '100%',
-          height: '100%',
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          borderRadius: 16
-        }}
+      <div
+        className="absolute w-full h-full inset-0 rounded-md"
+        style={{ backgroundImage: meshGradientBright }}
       />
-      <Box
-        css={{
-          position: 'absolute',
-          backgroundColor: '$gray900',
-          top: 2,
-          left: 2,
-          right: 2,
-          bottom: 2,
-          width: 'calc(100% - 4px)',
-          height: 'calc(100% - 4px)',
-          borderRadius: 14,
-          opacity: 0.8
-        }}
+      <div
+        className="absolute bg-slate-900 inset-[2px] rounded-[14px] opacity-80"
+        style={{ width: 'calc(100% - 4px)', height: 'calc(100% - 4px)' }}
       />
       {isLoading ? (
-        <Box css={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Spinner />
-        </Box>
+        <div className="flex flex-1 justify-center items-center">
+          <Skeleton className="h-4" />
+        </div>
       ) : (
-        <Box css={{ flex: 1, flexDirection: 'row' }}>
-          <Box css={{ flex: 1, gap: 8 }}>
-            <FormLabel>Balance</FormLabel>
-            <Text
-              css={{ fontSize: 24, fontWeight: 700, color: '$white' }}
-              testID="dashboard__minaBalance"
+        <div className="flex flex-1">
+          <div className="flex flex-1 gap-2">
+            <Label>Balance</Label>
+            <div
+              className="text-lg font-semibold"
+              data-testid="dashboard__minaBalance"
             >
-              {totalBalance} MINA
-            </Text>
-            <Text css={{ fontSize: 14, fontWeight: 700, color: '$primary400' }}>
-              ~{fiatBalance} USD
-            </Text>
-          </Box>
-          <Avatar label={walletAddress} />
-        </Box>
+              50 MINA
+            </div>
+            <div className="text-sm font-semibold">~25 USD</div>
+          </div>
+          <Avatar>
+            <AvatarFallback>T</AvatarFallback>
+          </Avatar>
+        </div>
       )}
-      <Box css={{ gap: 8 }}>
-        <FormLabel>Address</FormLabel>
-        <Box css={{ flexDirection: 'row', gap: 8 }}>
-          <Text
-            css={{
-              fontSize: 14,
-              fontWeight: 700,
-              color: '$primary400',
-              width: 'auto'
-            }}
-            testID="dashboard__addressTruncated"
+      <div className="gap-2">
+        <Label>Address</Label>
+        <div className="gap-2">
+          <div
+            className="text-md font-semibold text-sky-400"
+            data-testid="dashboard__addressTruncated"
           >
             {truncateString({
               value: walletAddress,
               firstCharCount: 8,
               endCharCount: 8
             })}
-          </Text>
-          <Pressable onPress={() => Clipboard.setString(walletAddress)}>
-            <Image source={icons.iconCopy} css={{ width: 20, height: 20 }} />
-          </Pressable>
-        </Box>
-      </Box>
-      <Box css={{ flexDirection: 'row', gap: 8 }}>
+          </div>
+          <div onClick={() => console.log('copy')}>
+            <CopyIcon />
+          </div>
+        </div>
+      </div>
+      <div className="gap-2">
         <Button
           variant="secondary"
-          css={{ flex: 1 }}
-          onPress={() => navigate('/send')}
+          className="flex-1"
+          onClick={() => navigate('/send')}
         >
           Send
         </Button>
         <Button
           variant="outline"
-          css={{ flex: 1 }}
-          onPress={() => navigate('/receive')}
+          className="flex-1"
+          onClick={() => navigate('/receive')}
         >
           Receive
         </Button>
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }

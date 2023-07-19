@@ -1,3 +1,4 @@
+import { polyfillNode } from 'esbuild-plugin-polyfill-node'
 import { defineConfig } from 'tsup'
 
 export default defineConfig([
@@ -15,6 +16,11 @@ export default defineConfig([
         allowSyntheticDefaultImports: true,
         esModuleInterop: true
       }
-    }
+    },
+    esbuildPlugins: [
+      polyfillNode({
+        polyfills: { punycode: true }
+      })
+    ]
   }
 ])

@@ -1,28 +1,26 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Button, Input, RadioGroup } from '@palladxyz/ui'
+import { Button, Input, Label, RadioGroup, RadioGroupItem } from '@palladxyz/ui'
 import { useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useLocation, useNavigate } from 'react-router-native'
+import { useForm } from 'react-hook-form'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { FormError } from '../../common/components/FormError'
-import { FormLabel } from '../../common/components/FormLabel'
-import { TransactionFee } from '../../common/lib/const'
-import { useAccount } from '../../common/lib/hooks'
-import { useTransactionStore } from '../../common/store/transaction'
 import { OutgoingTransaction } from '../../common/types'
+import { TransactionFee } from '../../wallet/lib/const'
+import { useTransactionStore } from '../../wallet/store/transaction'
 import { SendFormSchema } from './SendForm.schema'
 
 export const SendForm = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const setTransactionDetails = useTransactionStore((state) => state.set)
-  const { data: accountQuery, isLoading: accountLoading } = useAccount()
-  if (accountLoading) return null
-  const account = accountQuery?.result?.data?.account
-  const totalBalance =
-    account?.balance?.total && parseFloat(account?.balance?.total)
+  // const { data: accountQuery, isLoading: accountLoading } = useAccount()
+  // if (accountLoading) return null
+  // const account = accountQuery?.result?.data?.account
+  // const totalBalance =
+  //   account?.balance?.total && parseFloat(account?.balance?.total)
   const {
-    control,
+    register,
     handleSubmit,
     setValue,
     getValues,
@@ -36,11 +34,11 @@ export const SendForm = () => {
       memo: ''
     }
   })
-  const setMaxAmount = () => {
-    const { fee } = getValues()
-    const currentFee = TransactionFee[fee]
-    totalBalance && setValue('amount', totalBalance - currentFee)
-  }
+  // const setMaxAmount = () => {
+  //   // const { fee } = getValues()
+  //   // const currentFee = TransactionFee[fee]
+  //   // totalBalance && setValue('amount', totalBalance - currentFee)
+  // }
   const onSubmit = (payload: OutgoingTransaction) => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
@@ -57,96 +55,53 @@ export const SendForm = () => {
     setValue('to', location.state?.address || '')
   }, [])
   return (
-    <Box css={{ gap: 16, flex: 1 }}>
-      <Box css={{ gap: 8 }}>
-        <FormLabel
-          button={{
-            label: 'Address Book',
-            onPress: () => navigate('/contacts')
-          }}
-          required
-        >
-          Receiver
-        </FormLabel>
-        <Controller
-          control={control}
-          name="to"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChange={onChange}
-              onBlur={onBlur}
-              value={value}
-              placeholder="Receiver Address"
-              onSubmitEditing={handleSubmit(onSubmit)}
-              autoFocus
-            />
-          )}
+    <form
+      className="flex flex-col gap-4 flex-1"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="receiverAddress">Receiver</Label>
+        <Input
+          id="receiverAddress"
+          placeholder="Receiver Address"
+          autoFocus
+          {...register('to')}
         />
         <FormError>{errors.to?.message}</FormError>
-      </Box>
-      <Box css={{ gap: 8 }}>
-        <FormLabel
-          button={{
-            label: 'Max Amount',
-            onPress: setMaxAmount
-          }}
-          required
-        >
-          Amount
-        </FormLabel>
-        <Controller
-          control={control}
-          name="amount"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChange={onChange}
-              onBlur={onBlur}
-              value={value}
-              keyboardType="numeric"
-              placeholder="Transaction Amount"
-              onSubmitEditing={handleSubmit(onSubmit)}
-            />
-          )}
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="amount">Amount</Label>
+        <Input
+          id="amount"
+          placeholder="Transaction Amount"
+          {...register('amount')}
         />
-        <FormError>{errors.amount?.message}</FormError>
-      </Box>
-      <Box css={{ gap: 8 }}>
-        <FormLabel>Memo</FormLabel>
-        <Controller
-          control={control}
-          name="memo"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Memo"
-              onChange={onChange}
-              onBlur={onBlur}
-              value={value}
-              onSubmitEditing={handleSubmit(onSubmit)}
-            />
-          )}
-        />
-        <FormError>{errors.memo?.message}</FormError>
-      </Box>
-      <Box css={{ gap: 8, flex: 1 }}>
-        <FormLabel>Fee</FormLabel>
-        <RadioGroup
-          options={[
-            { value: 'slow', label: `Slow (${TransactionFee.slow} MINA)` },
-            {
-              value: 'default',
-              label: `Default (${TransactionFee.default} MINA)`,
-              defaultSelected: true
-            },
-            { value: 'fast', label: `Fast (${TransactionFee.fast} MINA)` }
-          ]}
-          onChange={(value: string) => setValue('fee', value)}
-        />
-        <FormError>{errors.fee?.message}</FormError>
-      </Box>
-      <Button onPress={handleSubmit(onSubmit)}>Next</Button>
-    </Box>
+        <p>{errors.amount?.message}</p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="memo">Memo</Label>
+        <Input id="memo" placeholder="Memo" {...register('memo')} />
+        <p>{errors.memo?.message}</p>
+      </div>
+      <div className="flex flex-col gap-2 flex-1">
+        <Label>Fee</Label>
+        <RadioGroup defaultValue="comfortable">
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="flow" id="feeSlow" />
+            <Label htmlFor="feeSlow">Slow</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="default" id="feeDefault" defaultChecked />
+            <Label htmlFor="feeDefault">Default</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="fast" id="feeFast" />
+            <Label htmlFor="feeFast">Fast</Label>
+          </div>
+        </RadioGroup>
+        <p>{errors.fee?.message}</p>
+      </div>
+      <Button type="submit">Next</Button>
+    </form>
   )
 }

@@ -1,29 +1,27 @@
-import { Network } from '@palladxyz/key-generator'
-import { useNavigate } from 'react-router-native'
+import { generateMnemonicWords } from '@palladxyz/key-management'
+import { useNavigate } from 'react-router-dom'
+import { shallow } from 'zustand/shallow'
 
-import { getSessionPersistence } from '../../common/lib/storage'
-import { useOnboardingStore } from '../../common/store/onboarding'
-import { useVaultStore } from '../../common/store/vault'
+import { useOnboardingStore } from '../../wallet/store/onboarding'
 import { WalletInfoForm } from '../components/WalletInfoForm'
 
 export const CreateWalletView = () => {
   const navigate = useNavigate()
-  const createWallet = useVaultStore((state) => state.createWallet)
-  const setMnemonic = useOnboardingStore((state) => state.setMnemonic)
+  const { setMnemonic, setSpendingPassword } = useOnboardingStore(
+    (state) => ({
+      setSpendingPassword: state.setSpendingPassword,
+      setMnemonic: state.setMnemonic
+    }),
+    shallow
+  )
   const onSubmit = async ({
-    spendingPassword,
-    walletName
+    spendingPassword
   }: {
     spendingPassword: string
     walletName: string
   }) => {
-    await getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    const wallet = await createWallet({
-      walletName,
-      network: Network.Mina,
-      accountNumber: 0
-    })
-    setMnemonic(wallet.mnemonic)
+    setSpendingPassword(spendingPassword)
+    setMnemonic(generateMnemonicWords(128).join(' '))
     return navigate('/onboarding/writedown')
   }
   return <WalletInfoForm title="Create Wallet" onSubmit={onSubmit} />

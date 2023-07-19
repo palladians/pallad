@@ -1,10 +1,12 @@
 import './assets/app.css'
+import '@palladxyz/ui/dist/index.css'
 
-import { Router, theme, ThemeProvider } from '@palladxyz/features'
+import { Router } from '@palladxyz/features'
+import { ThemeProvider } from 'next-themes'
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <Router />
     </ThemeProvider>
   )
