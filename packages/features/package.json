@@ -21,11 +21,13 @@
     "cleanup": "rimraf node_modules dist .turbo build"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.1.1",
     "@palladxyz/key-generator": "*",
     "@palladxyz/offchain-data": "*",
     "@palladxyz/persistence": "*",
     "@palladxyz/ui": "*",
+    "@palladxyz/mina-graphql": "*",
+    "@palladxyz/mina-wallet": "*",
+    "@hookform/resolvers": "^3.1.1",
     "@total-typescript/ts-reset": "^0.4.2",
     "dayjs": "^1.11.8",
     "easy-mesh-gradient": "^0.0.5",
@@ -44,6 +46,7 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
+    "@palladxyz/common": "*",
     "@chialab/esbuild-plugin-commonjs": "^0.17.2",
     "@hyrious/esbuild-plugin-commonjs": "^0.2.2",
     "@ladle/react": "^2.15.0",
@@ -62,13 +65,11 @@
     "graphql-request": "^6.1.0",
     "swr": "^2.1.5",
     "vite-plugin-svgr": "^3.2.0",
-    "vite-plugin-top-level-await": "^1.3.1",
-    "vitest": "^0.32.0"
+    "vite-plugin-top-level-await": "^1.3.1"
   },
   "peerDependencies": {
     "@palladxyz/ui": "*",
     "@types/mocha": "^10.0.1",
-    "happy-dom": "^9.20.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

@@ -1,6 +1,5 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import { AboutView } from './about/views/About'

@@ -28,9 +28,9 @@
     "sinon": "^10.0.0"
   },
   "devDependencies": {
+    "@palladxyz/common": "*",
     "@types/mocha": "^10.0.1",
     "@types/secp256k1": "^4.0.3",
-    "@types/sinon": "^10.0.15",
-    "happy-dom": "^9.20.3"
+    "@types/sinon": "^10.0.15"
   }
 }

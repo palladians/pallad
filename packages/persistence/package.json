@@ -21,6 +21,7 @@
     "capacitor-secure-storage-plugin": "^0.9.0"
   },
   "devDependencies": {
+    "@palladxyz/common": "*",
     "@capacitor/core": "^5.2.0"
   }
 }
