@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@palladxyz/key-generator": "*",
+    "@palladxyz/key-management": "*",
     "@palladxyz/offchain-data": "*",
     "@palladxyz/persistence": "*",
     "@palladxyz/ui": "*",
