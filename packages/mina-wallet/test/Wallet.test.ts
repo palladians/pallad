@@ -1,5 +1,8 @@
 import { Network } from '@palladxyz/key-generator'
-import { GetPassphrase, FromBip39MnemonicWordsProps } from '@palladxyz/key-management'
+import {
+  FromBip39MnemonicWordsProps,
+  GetPassphrase
+} from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import {
@@ -199,7 +202,6 @@ describe('MinaWalletImpl', () => {
     const knownCredentials = serializedKeyAgentData.knownCredentials
     console.log('knownCredentials at restoration', knownCredentials)
     expect(knownCredentials).toHaveLength(1)
-
   })
   /*
   test('wallet gets the current wallet', async () => {

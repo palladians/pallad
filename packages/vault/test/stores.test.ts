@@ -78,13 +78,15 @@ describe('store', () => {
     const storeRootPrivateKey = await keyAgentStore
       .getState()
       .keyAgent?.exportRootPrivateKey()
-    const storeEncryptedSeedBytes = keyAgentStore.getState().keyAgent?.serializableData.encryptedSeedBytes
+    const storeEncryptedSeedBytes =
+      keyAgentStore.getState().keyAgent?.serializableData.encryptedSeedBytes
     expect(storeRootPrivateKey).toEqual(rootPrivateKey)
     // The encryptedSeedBytes should be different
     expect(storeEncryptedSeedBytes).not.toBe(encryptedSeedBytes)
 
     // check there exists the first account and address in the keyAgent not in the .serializableKeyAgentData knownCredentials
-    const storeKeyAgentCredentials = keyAgentStore.getState().keyAgent?.serializableData.knownCredentials
+    const storeKeyAgentCredentials =
+      keyAgentStore.getState().keyAgent?.serializableData.knownCredentials
     console.log('knownCredentials', storeKeyAgentCredentials)
     expect(storeKeyAgentCredentials).toHaveLength(1)
   })
@@ -128,7 +130,8 @@ describe('store', () => {
       .addCredentials(credentialsData)
     console.log('credentials', credentials)
     // after adding credentials, the keyAgent should have the new credentials
-    const storeKeyAgentCredentials = keyAgentStore.getState().keyAgent?.serializableData.knownCredentials
+    const storeKeyAgentCredentials =
+      keyAgentStore.getState().keyAgent?.serializableData.knownCredentials
     console.log('knownCredentials', storeKeyAgentCredentials)
 
     expect(storeKeyAgentCredentials).toHaveLength(2)

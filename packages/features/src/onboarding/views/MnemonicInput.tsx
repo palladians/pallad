@@ -40,7 +40,7 @@ export const MnemonicInputView = () => {
   const onSubmit = async ({ mnemonic }: { mnemonic: string }) => {
     if (!walletName) return
     if (!spendingPassword) return
-    let restoredWallet = await wallet.restoreWallet(
+    const restoredWallet = await wallet.restoreWallet(
       {
         mnemonicWords: mnemonic.split(' '),
         getPassphrase: async () => Buffer.from('passphrase')
@@ -48,10 +48,10 @@ export const MnemonicInputView = () => {
       {
         network: Network.Mina,
         networkType: 'mainnet'
-      },
+      }
     )
-    console.log("original initialised wallet", wallet)
-    console.log("newly restored wallet", restoredWallet)
+    console.log('original initialised wallet', wallet)
+    console.log('newly restored wallet', restoredWallet)
     await setVaultStateInitialized()
     return navigate('/onboarding/finish')
   }

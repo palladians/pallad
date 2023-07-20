@@ -77,26 +77,30 @@ export const keyAgentStore = createStore<VaultStore>()(
         networkType,
         pure
       }): Promise<GroupedCredentials | null> => {
-        const keyAgent = get().keyAgent? get().keyAgent : null
-        
+        const keyAgent = get().keyAgent ? get().keyAgent : null
+
         if (keyAgent) {
-        const { knownCredentials } = keyAgent.serializableData
+          const { knownCredentials } = keyAgent.serializableData
 
-        // Find if the credentials already exist in knownCredentials based on the function's arguments
-        const existingCredential = knownCredentials.find(
-          (knownCredential) =>
-            knownCredential.accountIndex === account_ix &&
-            knownCredential.addressIndex === address_ix &&
-            knownCredential.chain === network
-        )
+          // Find if the credentials already exist in knownCredentials based on the function's arguments
+          const existingCredential = knownCredentials.find(
+            (knownCredential) =>
+              knownCredential.accountIndex === account_ix &&
+              knownCredential.addressIndex === address_ix &&
+              knownCredential.chain === network
+          )
 
-        // If credentials already exist, return the existing credential
-        if (existingCredential) {
-          return existingCredential
-        }
+          // If credentials already exist, return the existing credential
+          if (existingCredential) {
+            return existingCredential
+          }
 
-        
-          console.log("deriving credentials for account_ix", account_ix, "address_ix", address_ix)
+          console.log(
+            'deriving credentials for account_ix',
+            account_ix,
+            'address_ix',
+            address_ix
+          )
           const credential = await keyAgent.deriveCredentials(
             { account_ix },
             { address_ix },
@@ -105,11 +109,11 @@ export const keyAgentStore = createStore<VaultStore>()(
             pure
           )
           console.log(
-            "derived credentials for account_ix",
+            'derived credentials for account_ix',
             account_ix,
-            "address_ix",
+            'address_ix',
             address_ix,
-            "credential",
+            'credential',
             credential
           )
 
