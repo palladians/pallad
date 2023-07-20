@@ -74,11 +74,13 @@ describe('MinaWalletImpl', () => {
       }
     )
   })
-
   test('wallet fetches getAccountInfo', async () => {
     const publicKey = minaAddresses[0] as string
+    // get the account info from the provider
     const accountInfo = await wallet.getAccountInfo(publicKey)
     console.log('Account Info:', accountInfo)
+    // set the account info in the store
+    wallet.setAccountInfo(accountInfo)
 
     if (accountInfo === null) {
       throw new Error('Account info is undefined')

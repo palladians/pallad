@@ -6,6 +6,7 @@ import {
 } from '@palladxyz/key-management'
 import {
   AccountInfo,
+  AccountInfoArgs,
   Mina,
   //SubmitTxArgs,
   //SubmitTxResult,
@@ -77,11 +78,22 @@ export class MinaWalletImpl implements MinaWallet {
   //}
 
   async getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo> {
-    const accountInfo = await this.accountInfoProvider.getAccountInfo({
-      publicKey
-    })
-    accountStore.getState().setAccountInfo(accountInfo)
+    // perform a health check
+    const health = await this.accountInfoProvider.healthCheck()
+    console.log('Health check:', health)
+    if (!health) {
+      throw new Error('Health check failed')
+    }
+
+    const accountInfoArgs: AccountInfoArgs = { publicKey: publicKey }
+    const accountInfo = await this.accountInfoProvider.getAccountInfo(
+      accountInfoArgs
+    )
     return accountInfo
+  }
+
+  setAccountInfo(accountInfo: AccountInfo): void {
+    accountStore.getState().setAccountInfo(accountInfo)
   }
 
   async getTransactions(

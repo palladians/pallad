@@ -1,6 +1,9 @@
-import { baseVitestConfig } from '@palladxyz/common'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  ...baseVitestConfig
+  test: {
+    environment: 'happy-dom',
+    testTimeout: 10000,
+    globals: true
+  }
 })
