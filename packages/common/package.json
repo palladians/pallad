@@ -8,6 +8,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
       "default": "./dist/index.js"
     },
     "./tsconfig.json": {
@@ -16,7 +17,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --dts --format esm",
+    "build": "tsup src/index.ts --dts --format esm,cjs",
     "cleanup": "rimraf node_modules dist .turbo"
   }
 }
