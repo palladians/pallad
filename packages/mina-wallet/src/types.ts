@@ -34,6 +34,7 @@ export interface MinaWallet {
   //getAccounts(): string[]
 
   getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo>
+  setAccountInfo(accountInfo: AccountInfo): void
 
   getTransactions(publicKey: Mina.PublicKey): Promise<Mina.TransactionBody[]>
 

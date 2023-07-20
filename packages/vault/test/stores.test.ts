@@ -84,12 +84,11 @@ describe('store', () => {
     // The encryptedSeedBytes should be different
     expect(storeEncryptedSeedBytes).not.toBe(encryptedSeedBytes)
 
-    // check there exists the first account and address in knownCredentials
-    const serializedKeyAgentData =
-      keyAgentStore.getState().serializableKeyAgentData
-    const knownCredentials = serializedKeyAgentData.knownCredentials
-    console.log('knownCredentials', knownCredentials)
-    expect(knownCredentials).toHaveLength(1)
+    // check there exists the first account and address in the keyAgent not in the .serializableKeyAgentData knownCredentials
+    const storeKeyAgentCredentials =
+      keyAgentStore.getState().keyAgent?.serializableData.knownCredentials
+    console.log('knownCredentials', storeKeyAgentCredentials)
+    expect(storeKeyAgentCredentials).toHaveLength(1)
   })
 
   test('addCredentials', async () => {
@@ -131,9 +130,10 @@ describe('store', () => {
       .addCredentials(credentialsData)
     console.log('credentials', credentials)
     // after adding credentials, the keyAgent should have the new credentials
-    const keyAgentCredentials = await keyAgentStore.getState()
-      .serializableKeyAgentData
+    const storeKeyAgentCredentials =
+      keyAgentStore.getState().keyAgent?.serializableData.knownCredentials
+    console.log('knownCredentials', storeKeyAgentCredentials)
 
-    expect(keyAgentCredentials.knownCredentials).toHaveLength(2)
+    expect(storeKeyAgentCredentials).toHaveLength(2)
   })
 })

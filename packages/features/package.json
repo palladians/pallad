@@ -28,6 +28,7 @@
     "@palladxyz/mina-wallet": "*",
     "@palladxyz/offchain-data": "*",
     "@palladxyz/persistence": "*",
+    "@palladxyz/vault": "*",
     "@palladxyz/ui": "*",
     "@total-typescript/ts-reset": "^0.4.2",
     "dayjs": "^1.11.8",

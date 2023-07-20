@@ -77,24 +77,30 @@ export const keyAgentStore = createStore<VaultStore>()(
         networkType,
         pure
       }): Promise<GroupedCredentials | null> => {
-        const serializableKeyAgentData = get().serializableKeyAgentData
-        const { knownCredentials } = serializableKeyAgentData
+        const keyAgent = get().keyAgent ? get().keyAgent : null
 
-        // Find if the credentials already exist in knownCredentials based on the function's arguments
-        const existingCredential = knownCredentials.find(
-          (knownCredential) =>
-            knownCredential.accountIndex === account_ix &&
-            knownCredential.addressIndex === address_ix &&
-            knownCredential.chain === network
-        )
-
-        // If credentials already exist, return the existing credential
-        if (existingCredential) {
-          return existingCredential
-        }
-
-        const keyAgent = get().keyAgent
         if (keyAgent) {
+          const { knownCredentials } = keyAgent.serializableData
+
+          // Find if the credentials already exist in knownCredentials based on the function's arguments
+          const existingCredential = knownCredentials.find(
+            (knownCredential) =>
+              knownCredential.accountIndex === account_ix &&
+              knownCredential.addressIndex === address_ix &&
+              knownCredential.chain === network
+          )
+
+          // If credentials already exist, return the existing credential
+          if (existingCredential) {
+            return existingCredential
+          }
+
+          console.log(
+            'deriving credentials for account_ix',
+            account_ix,
+            'address_ix',
+            address_ix
+          )
           const credential = await keyAgent.deriveCredentials(
             { account_ix },
             { address_ix },
@@ -102,14 +108,18 @@ export const keyAgentStore = createStore<VaultStore>()(
             networkType,
             pure
           )
+          console.log(
+            'derived credentials for account_ix',
+            account_ix,
+            'address_ix',
+            address_ix,
+            'credential',
+            credential
+          )
 
           // Add new credential to knownCredentials
-          set({
-            serializableKeyAgentData: {
-              ...serializableKeyAgentData,
-              knownCredentials: [...knownCredentials, credential]
-            }
-          })
+          keyAgent.knownCredentials = [...knownCredentials, credential]
+          set({ keyAgent })
           return credential
         }
         return null

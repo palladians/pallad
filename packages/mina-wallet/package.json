@@ -20,6 +20,7 @@
     "@palladxyz/util": "*",
     "@palladxyz/mina-core": "*",
     "@palladxyz/key-management": "*",
+    "@palladxyz/key-generator": "*",
     "@palladxyz/mina-graphql": "*",
     "@palladxyz/vault": "*",
     "bs58check": "^3.0.1",
