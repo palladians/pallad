@@ -1,7 +1,7 @@
 import { Mina } from '@palladxyz/mina-core'
 import * as bip32 from '@scure/bip32'
 import sinon from 'sinon'
-import { expect } from 'vitest'
+import { expect } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
 import { emip3encrypt } from '../src/emip3'
 import * as errors from '../src/errors'

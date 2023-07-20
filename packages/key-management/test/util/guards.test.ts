@@ -1,5 +1,5 @@
 import { Mina } from '@palladxyz/mina-core'
-import { test } from 'vitest'
+import { test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
 import {
   isConstructedTransaction,

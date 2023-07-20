@@ -2,7 +2,7 @@ import { Mina } from '@palladxyz/mina-core'
 import * as bip32 from '@scure/bip32'
 import Client from 'mina-signer'
 import sinon from 'sinon'
-import { expect } from 'vitest'
+import { expect } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
 import { emip3encrypt } from '../src/emip3'
 import { getPassphraseRethrowTypedError } from '../src/InMemoryKeyAgent'

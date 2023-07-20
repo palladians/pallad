@@ -1,4 +1,4 @@
-import { test } from 'vitest'
+import { test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
 test('concatenation', () => {
   const str1 = 'Hello'

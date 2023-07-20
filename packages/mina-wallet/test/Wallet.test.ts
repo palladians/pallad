@@ -8,7 +8,7 @@ import {
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
 import { accountStore, keyAgentStore } from '@palladxyz/vault'
-import { expect, test } from 'vitest'
+import { expect, test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
 import { MinaWalletImpl } from '../src/Wallet'
 

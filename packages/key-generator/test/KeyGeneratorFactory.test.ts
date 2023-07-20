@@ -1,9 +1,11 @@
-import { expect } from 'vitest'
+import { expect } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
-import { EVMKeyGenerator } from '../src/evm'
-import { KeyGeneratorFactory } from '../src/KeyGeneratorFactory'
-import { MinaKeyGenerator } from '../src/mina'
-import { Network } from '../src/types'
+import {
+  EVMKeyGenerator,
+  KeyGeneratorFactory,
+  MinaKeyGenerator,
+  Network
+} from '../src'
 
 describe('KeyGeneratorFactory', () => {
   it('should create an EVMKeyGenerator instance for Ethereum network', () => {

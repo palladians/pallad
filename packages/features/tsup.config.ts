@@ -2,7 +2,7 @@ import { baseTsupConfig } from '@palladxyz/common'
 import svgJsx from '@svgr/plugin-jsx'
 import { polyfillNode } from 'esbuild-plugin-polyfill-node'
 import svgr from 'esbuild-plugin-svgr'
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsup' // eslint-disable-line import/no-extraneous-dependencies
 
 import packageJson from './package.json'
 

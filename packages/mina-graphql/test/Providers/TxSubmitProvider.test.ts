@@ -5,7 +5,7 @@ import {
 } from '@palladxyz/key-generator'
 //import { Mina } from '@palladxyz/mina-core' // SubmitTxArgs, AccountInfoArgs when local testnet ready
 //import Client from 'mina-signer'
-import { expect } from 'vitest'
+import { expect } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
 //import { AccountInfoGraphQLProvider } from '../../src/Providers/AccountInfo'
 import { TxSubmitGraphQLProvider } from '../../src/Providers/TxSubmit/TxSubmitProvider'
