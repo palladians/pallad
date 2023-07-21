@@ -1,21 +1,18 @@
-//import { produce } from 'immer'
-//import { persist } from 'zustand/middleware'
-//import { createJSONStorage } from 'zustand/vanilla'
-
 import {
+  ChainSpecificArgs,
+  ChainSpecificPayload_,
   FromBip39MnemonicWordsProps,
-  GroupedCredentials,
-  InMemoryKeyAgent,
-  KeyAgentType
-} from '@palladxyz/key-management'
+  InMemoryKeyAgent
+} from '@palladxyz/key-management-agnostic'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
 import { Store } from './types'
-import { NetworkArgs, VaultStore } from './vault'
+import { VaultStore } from './vault'
 
+// this is a Mina specific store, we will need to refactor this to be agnostic
 export const accountStore = createStore<Store>((set) => ({
   accountInfo: {
     balance: { total: 0 },
@@ -34,12 +31,7 @@ export const accountStore = createStore<Store>((set) => ({
 const initialState: VaultStore = {
   keyAgent: null,
   restoreWallet: async () => null,
-  addCredentials: async () => null,
-  serializableKeyAgentData: {
-    __typename: KeyAgentType.InMemory,
-    encryptedSeedBytes: new Uint8Array([]),
-    knownCredentials: []
-  }
+  addCredentials: async () => void 0
 }
 
 // Zustand store using immer for immutable updates and persist middleware
@@ -47,7 +39,54 @@ export const keyAgentStore = createStore<VaultStore>()(
   persist(
     (set, get) => ({
       keyAgent: initialState.keyAgent,
-      serializableKeyAgentData: initialState.serializableKeyAgentData,
+      restoreWallet: async <T extends ChainSpecificPayload_>(
+        payload: T,
+        args: ChainSpecificArgs,
+        { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+      ) => {
+        const agentArgs: FromBip39MnemonicWordsProps = {
+          getPassphrase: getPassphrase,
+          mnemonicWords: mnemonicWords,
+          mnemonic2ndFactorPassphrase: ''
+        }
+        const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
+
+        // set both the keyAgent and the serializableKeyAgentData
+        set({ keyAgent })
+
+        // derive the credentials for the first account and address & mutate the serializableKeyAgentData state
+        await get().addCredentials(payload, args, false)
+
+        return keyAgent
+      },
+      addCredentials: async <T extends ChainSpecificPayload_>(
+        payload: T,
+        args: ChainSpecificArgs,
+        pure?: boolean
+      ): Promise<void> => {
+        const keyAgent = get().keyAgent ? get().keyAgent : null
+
+        if (keyAgent) {
+          await keyAgent.deriveCredentials(payload, args, pure)
+          // Add new credential to knownCredentials
+          set({ keyAgent })
+        } else {
+          console.log('keyAgent is null')
+        }
+      }
+    }),
+    {
+      name: 'PalladVault',
+      storage: createJSONStorage(getSecurePersistence)
+    }
+  )
+)
+
+/* // old keyAgentStore
+export const keyAgentStore = createStore<VaultStore>()(
+  persist(
+    (set, get) => ({
+      keyAgent: initialState.keyAgent,
       restoreWallet: async (
         { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
         { network, networkType }: NetworkArgs
@@ -57,7 +96,7 @@ export const keyAgentStore = createStore<VaultStore>()(
           mnemonicWords: mnemonicWords
         })
         // set both the keyAgent and the serializableKeyAgentData
-        set({ keyAgent, serializableKeyAgentData: keyAgent.serializableData })
+        set({ keyAgent })
 
         // derive the credentials for the first account and address & mutate the serializableKeyAgentData state
         await get().addCredentials({
@@ -130,51 +169,6 @@ export const keyAgentStore = createStore<VaultStore>()(
       storage: createJSONStorage(getSecurePersistence)
     }
   )
-)
-
-/*
-export const useStore = create<KeyAgentStore>(persist(
-  (set) => ({
-    // Initial values for required properties
-    serializableKeyAgentData: initialState.serializableKeyAgentData,
-    // Mutators
-    setAccountInfo: (accountInfo) => set((state) => {
-      state.accountInfo = accountInfo;
-    }),
-    setTransactions: (transactions) => set((state) => {
-      state.transactions = transactions;
-    }),
-    restoreWallet: async ({
-      walletName,
-      mnemonic,
-      network,
-      accountNumber,
-      accountIndex
-    }: {
-      walletName: string
-      mnemonic: string
-      network: Network
-      accountNumber: number
-      accountIndex: number
-    }): Promise<SerializableKeyAgentData | null> => {
-      const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords({
-        getPassphrase: async () => new Uint8Array(), // TODO: Add your getPassphrase logic
-        mnemonicWords: mnemonic.split(' ')
-      } as FromBip39MnemonicWordsProps);
-
-      if (!keyAgent) {
-        return null;
-      }
-
-      // Logic to restore wallet
-      return keyAgent.serializableData;
-    },
-    reset: () => set(() => ({ ...initialState })),
-  }),
-  {
-    name: 'PalladVault',
-    getStorage: () => createJSONStorage(), // custom storage (optional)
-  },
-));*/
+)*/
 
 // dont forget the hook!

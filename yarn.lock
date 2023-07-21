@@ -1472,7 +1472,7 @@
 
 "@ethereumjs/util@^8.1.0":
   version "8.1.0"
-  resolved "https://registry.npmjs.org/@ethereumjs/util/-/util-8.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@ethereumjs/util/-/util-8.1.0.tgz#299df97fb6b034e0577ce9f94c7d9d1004409ed4"
   integrity sha512-zQ0IqbdX8FZ9aw11vP+dZkKDkS+kgIvQPHnSAXzP9pLu+Rfu3D3XEeLbicvoXJTYnhZiPmsZUxgdzXwNKxRPbA==
   dependencies:
     "@ethereumjs/rlp" "^4.0.1"

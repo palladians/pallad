@@ -36,12 +36,12 @@ export abstract class KeyAgentBase implements KeyAgent {
     getPassphrase: GetPassphrase
   ) {
     this.serializableData = serializableData
-    this.keyDecryptor = new KeyDecryptor(serializableData, getPassphrase)
+    this.keyDecryptor = new KeyDecryptor(getPassphrase)
   }
 
   async decryptSeed(): Promise<Uint8Array> {
     try {
-      return await this.keyDecryptor.decryptSeedBytes()
+      return await this.keyDecryptor.decryptSeedBytes(this.serializableData)
     } catch (error) {
       throw new Error(`Failed to decrypt root private key: ${error}`)
     }

@@ -1,15 +1,48 @@
 import {
   FromBip39MnemonicWordsProps,
-  GetPassphrase,
   InMemoryKeyAgent,
+  MinaPayload,
+  MinaSpecificArgs,
   Network
-} from '@palladxyz/key-management'
+} from '@palladxyz/key-management-agnostic'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 
 import { accountStore, keyAgentStore } from '../src/stores'
-import { NetworkArgs } from '../src/vault'
+
+// Provide the passphrase for testing purposes
+const params = {
+  passphrase: 'passphrase'
+}
+const getPassphrase = async () => Buffer.from(params.passphrase)
 
 describe('store', () => {
+  let keyAgent: InMemoryKeyAgent
+  let agentArgs: FromBip39MnemonicWordsProps
+  let mnemonic: string[]
+  beforeEach(async () => {
+    // Create keys for testing purposes
+    mnemonic = [
+      'habit',
+      'hope',
+      'tip',
+      'crystal',
+      'because',
+      'grunt',
+      'nation',
+      'idea',
+      'electric',
+      'witness',
+      'alert',
+      'like'
+    ]
+    agentArgs = {
+      getPassphrase: getPassphrase,
+      mnemonicWords: mnemonic,
+      mnemonic2ndFactorPassphrase: ''
+    }
+    keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
+  })
+
   test('setAccountInfo', async () => {
     const accountInfo: AccountInfo = {
       balance: { total: 1000 },
@@ -44,37 +77,20 @@ describe('store', () => {
   })
 
   test('restoreWallet', async () => {
-    const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
-    const mnemonic = [
-      'climb',
-      'acquire',
-      'robot',
-      'select',
-      'shaft',
-      'zebra',
-      'blush',
-      'extend',
-      'evolve',
-      'host',
-      'misery',
-      'busy'
-    ]
-    const agentProps: FromBip39MnemonicWordsProps = {
-      getPassphrase: getPassword,
-      mnemonicWords: mnemonic
-    }
-    const networkProps: NetworkArgs = {
+    const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
       networkType: 'testnet'
     }
-    const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords(agentProps)
+    const payload = new MinaPayload()
+    await keyAgent.restoreKeyAgent(payload, restoreArgs, agentArgs)
     const rootPrivateKey = await keyAgent.exportRootPrivateKey()
     const encryptedSeedBytes = keyAgent.serializableData.encryptedSeedBytes
 
-    const storeKeyAgent = await keyAgentStore
+    await keyAgentStore
       .getState()
-      .restoreWallet(agentProps, networkProps)
-    console.log('storeKeyAgent', storeKeyAgent)
+      .restoreWallet(payload, restoreArgs, agentArgs)
     const storeRootPrivateKey = await keyAgentStore
       .getState()
       .keyAgent?.exportRootPrivateKey()
@@ -86,52 +102,39 @@ describe('store', () => {
 
     // check there exists the first account and address in the keyAgent not in the .serializableKeyAgentData knownCredentials
     const storeKeyAgentCredentials =
-      keyAgentStore.getState().keyAgent?.serializableData.knownCredentials
+      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
+        .contents
     console.log('knownCredentials', storeKeyAgentCredentials)
     expect(storeKeyAgentCredentials).toHaveLength(1)
   })
 
-  test('addCredentials', async () => {
-    const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
-    const mnemonic = [
-      'climb',
-      'acquire',
-      'robot',
-      'select',
-      'shaft',
-      'zebra',
-      'blush',
-      'extend',
-      'evolve',
-      'host',
-      'misery',
-      'busy'
-    ]
-    const agentProps: FromBip39MnemonicWordsProps = {
-      getPassphrase: getPassword,
-      mnemonicWords: mnemonic
-    }
-    const networkProps: NetworkArgs = {
+  test('restoreWallet and second addCredentials', async () => {
+    const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
       networkType: 'testnet'
     }
-    await keyAgentStore.getState().restoreWallet(agentProps, networkProps)
+    const payload = new MinaPayload()
+    // restore the keyAgent
+    await keyAgentStore
+      .getState()
+      .restoreWallet(payload, restoreArgs, agentArgs)
 
-    const credentialsData = {
-      account_ix: 1,
-      address_ix: 0,
+    const argsNewCredential: MinaSpecificArgs = {
       network: Network.Mina,
-      networkType: 'testnet' as Mina.NetworkType,
-      pure: true
+      accountIndex: 1,
+      addressIndex: 0,
+      networkType: 'testnet'
     }
     // derive next credentials
-    const credentials = await keyAgentStore
+    await keyAgentStore
       .getState()
-      .addCredentials(credentialsData)
-    console.log('credentials', credentials)
+      .addCredentials(payload, argsNewCredential, false)
     // after adding credentials, the keyAgent should have the new credentials
     const storeKeyAgentCredentials =
-      keyAgentStore.getState().keyAgent?.serializableData.knownCredentials
+      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
+        .contents
     console.log('knownCredentials', storeKeyAgentCredentials)
 
     expect(storeKeyAgentCredentials).toHaveLength(2)

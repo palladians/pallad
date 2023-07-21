@@ -51,7 +51,6 @@ export class MinaPayload implements ChainSpecificPayload_ {
     privateKey: string,
     args: MinaSpecificArgs
   ): Promise<ChainPublicKey> {
-    console.log('Mina Args', args)
     return deriveMinaPublicKey(args, privateKey)
   }
   async derivePrivateKey(

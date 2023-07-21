@@ -1,20 +1,18 @@
 import {
-  FromBip39MnemonicWordsProps,
-  GroupedCredentials,
-  InMemoryKeyAgent
-} from '@palladxyz/key-management'
+  ChainSpecificArgs,
+  ChainSpecificPayload_,
+  FromBip39MnemonicWordsProps
+} from '@palladxyz/key-management-agnostic'
 import {
   AccountInfo,
   Mina
   // SubmitTxArgs,
   // SubmitTxResult
 } from '@palladxyz/mina-core'
-import { NetworkArgs } from '@palladxyz/vault'
 
 //import { PublicCredential } from '@palladxyz/vault'
 
 export interface MinaWallet {
-  readonly credentials: GroupedCredentials[]
   readonly balance: number
 
   /*getName(): Promise<string>
@@ -24,10 +22,17 @@ export interface MinaWallet {
     accountNumber: number
   ): Promise<{ publicKey: string; mnemonic: string } | null>*/
 
-  restoreWallet(
-    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
-    { network, networkType }: NetworkArgs
-  ): Promise<InMemoryKeyAgent | null>
+  /**
+   *
+   * @param payload Chain specific payload is a class object that methods capable of performing various operations (like deriving credentials) can use to derive credentials
+   * @param args Chain specific args defining which credentials to derive
+   * @param param2 mnemonic words and getPassphrase function
+   */
+  restoreWallet<T extends ChainSpecificPayload_>(
+    payload: T,
+    args: ChainSpecificArgs,
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+  ): Promise<void>
 
   //getCurrentWallet(): PublicCredential | null
 

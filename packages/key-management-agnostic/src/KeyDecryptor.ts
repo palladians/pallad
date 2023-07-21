@@ -6,20 +6,19 @@ import { getPassphraseRethrowTypedError } from './InMemoryKeyAgent'
 import { EncryptedKeyPropertyName, SerializableKeyAgentData } from './types'
 
 export class KeyDecryptor {
-  private serializableData: SerializableKeyAgentData
   private getPassphrase: (noCache?: true) => Promise<Uint8Array>
 
-  constructor(
-    serializableData: SerializableKeyAgentData,
-    getPassphrase: () => Promise<Uint8Array>
-  ) {
-    this.serializableData = serializableData
+  constructor(getPassphrase: () => Promise<Uint8Array>) {
     this.getPassphrase = getPassphrase
   }
 
-  async decryptSeedBytes(noCache?: true) {
+  async decryptSeedBytes(
+    serializableData: SerializableKeyAgentData,
+    noCache?: true
+  ) {
     return this.decryptSeed(
       'encryptedSeedBytes',
+      serializableData,
       'Failed to decrypt seed bytes',
       noCache
     )
@@ -27,6 +26,7 @@ export class KeyDecryptor {
 
   private async decryptSeed(
     keyPropertyName: EncryptedKeyPropertyName,
+    serializableData: SerializableKeyAgentData,
     errorMessage: string,
     noCache?: true
   ) {
@@ -36,7 +36,7 @@ export class KeyDecryptor {
     let decryptedKeyBytes: Uint8Array
     try {
       decryptedKeyBytes = await emip3decrypt(
-        new Uint8Array(this.serializableData[keyPropertyName]),
+        new Uint8Array(serializableData[keyPropertyName]),
         passphrase
       )
     } catch (error) {

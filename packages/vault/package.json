@@ -19,7 +19,7 @@
   "dependencies": {
     "@palladxyz/util": "*",
     "@palladxyz/mina-core": "*",
-    "@palladxyz/key-management": "*",
+    "@palladxyz/key-management-agnostic": "*",
     "@palladxyz/persistence": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",

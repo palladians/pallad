@@ -19,7 +19,7 @@
   "dependencies": {
     "@palladxyz/util": "*",
     "@palladxyz/mina-core": "*",
-    "@palladxyz/key-management": "*",
+    "@palladxyz/key-management-agnostic": "*",
     "@palladxyz/key-generator": "*",
     "@palladxyz/mina-graphql": "*",
     "@palladxyz/vault": "*",

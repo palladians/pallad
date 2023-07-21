@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup'
 
 export default defineConfig([
   {
-    name: 'pallad/key-managemen-agnostic',
+    name: 'pallad/key-management-agnostic',
     entry: ['./src/index.ts'],
     outDir: './dist',
     format: 'esm',

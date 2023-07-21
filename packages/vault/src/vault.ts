@@ -4,12 +4,13 @@
  */
 
 import {
+  ChainSpecificArgs,
+  ChainSpecificPayload_,
   FromBip39MnemonicWordsProps,
-  GroupedCredentials,
   InMemoryKeyAgent,
   Network,
   SerializableKeyAgentData
-} from '@palladxyz/key-management'
+} from '@palladxyz/key-management-agnostic'
 import { Mina } from '@palladxyz/mina-core'
 
 export type NetworkArgs = {
@@ -31,11 +32,9 @@ export type PublicCredential = {
 /**
  * Type representing the state of the vault.
  * @typedef {Object} VaultState
- * @property {SerializableKeyAgentData} serializableKeyAgentData - Serializable KeyAgent data of the vault
  */
 export type VaultState = {
   keyAgent: InMemoryKeyAgent | null
-  serializableKeyAgentData: SerializableKeyAgentData
 }
 
 /**
@@ -44,6 +43,19 @@ export type VaultState = {
  * @property {(walletName: string, mnemonic: string, network: Network, accountNumber: number, accountIndex: number) => Promise<InMemoryKeyAgent | null>} restoreWallet - Function to restore a wallet
  * @property {() => void} reset - Function to reset the state
  */
+type VaultMutators = {
+  restoreWallet<T extends ChainSpecificPayload_>(
+    payload: T,
+    args: ChainSpecificArgs,
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+  ): Promise<InMemoryKeyAgent | null>
+  addCredentials: <T extends ChainSpecificPayload_>(
+    payload: T,
+    args: ChainSpecificArgs,
+    pure?: boolean
+  ) => Promise<void>
+}
+/*
 type VaultMutators = {
   restoreWallet: (
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
@@ -62,7 +74,7 @@ type VaultMutators = {
     networkType: Mina.NetworkType
     pure: boolean
   }) => Promise<GroupedCredentials | null>
-}
+}*/
 
 /**
  * Type representing the vault store.

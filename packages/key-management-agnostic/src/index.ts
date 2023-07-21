@@ -1,3 +1,4 @@
+export * from './chains'
 export * from './errors'
 export * from './InMemoryKeyAgent'
 export * from './KeyAgentBase'

@@ -1,9 +1,10 @@
 import {
+  ChainSpecificArgs,
+  ChainSpecificPayload_,
   FromBip39MnemonicWordsProps,
-  GroupedCredentials,
   InMemoryKeyAgent,
   Network
-} from '@palladxyz/key-management'
+} from '@palladxyz/key-management-agnostic'
 import {
   AccountInfo,
   AccountInfoArgs,
@@ -17,7 +18,7 @@ import {
   ChainHistoryGraphQLProvider,
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
-import { accountStore, keyAgentStore, NetworkArgs } from '@palladxyz/vault'
+import { accountStore, keyAgentStore } from '@palladxyz/vault'
 
 import { MinaWallet } from '../types'
 /*
@@ -43,13 +44,10 @@ export interface MinaWalletProps {
 export class MinaWalletImpl implements MinaWallet {
   readonly keyAgent: InMemoryKeyAgent | null
   readonly balance: number
-  readonly credentials: GroupedCredentials[]
   readonly accountInfoProvider: AccountInfoGraphQLProvider
   readonly chainHistoryProvider: ChainHistoryGraphQLProvider
   readonly txSubmitProvider: TxSubmitGraphQLProvider
   readonly name: string
-  //readonly networkType: NetworkType
-  readonly network: Network
   // Storage for the current wallet
 
   constructor(
@@ -58,18 +56,15 @@ export class MinaWalletImpl implements MinaWallet {
       keyAgent,
       txSubmitProvider,
       chainHistoryProvider,
-      accountInfoProvider,
-      network
-    }: //stores = createInMemoryWalletStores()
+      accountInfoProvider
+    }: //stores = createInMemoryWalletStores() // persistence layer?
     MinaWalletDependencies
   ) {
-    this.accountInfoProvider = accountInfoProvider //new AccountInfoGraphQLProvider(providerURLs.accountInfoURL)
-    this.chainHistoryProvider = chainHistoryProvider //new ChainHistoryGraphQLProvider(providerURLs.chainHistoryURL)
-    this.txSubmitProvider = txSubmitProvider //new TxSubmitGraphQLProvider(providerURLs.txSubmitURL)
+    this.accountInfoProvider = accountInfoProvider
+    this.chainHistoryProvider = chainHistoryProvider
+    this.txSubmitProvider = txSubmitProvider
     this.keyAgent = keyAgent
     this.name = name
-    this.network = network
-    this.credentials = []
     this.balance = 0
   }
 
@@ -183,20 +178,21 @@ export class MinaWalletImpl implements MinaWallet {
       : null
   }*/
 
-  async restoreWallet(
-    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
-    { network, networkType }: NetworkArgs
-  ): Promise<InMemoryKeyAgent | null> {
+  async restoreWallet<T extends ChainSpecificPayload_>(
+    payload: T,
+    args: ChainSpecificArgs,
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+  ): Promise<void> {
     // Restore a wallet from a mnemonic
-    const keyAgent = await keyAgentStore.getState().restoreWallet(
-      {
-        mnemonicWords,
-        getPassphrase
-      },
-      { network, networkType }
-    )
-    return keyAgent ? keyAgent : null
+    const agentArgs: FromBip39MnemonicWordsProps = {
+      getPassphrase: getPassphrase,
+      mnemonicWords: mnemonicWords,
+      mnemonic2ndFactorPassphrase: ''
+    }
+    // restore the agent state
+    await keyAgentStore.getState().restoreWallet(payload, args, agentArgs)
   }
+
   /*
   getCurrentWallet(): PublicCredential | null {
     // Get the current wallet
