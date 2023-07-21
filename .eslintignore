@@ -1,7 +1,7 @@
 node_modules
 dist
 .turbo
-minaexplorer.ts
 build
-apps/api/netlify
-apps/api/src/functions
+test-results
+playwright-report
+coverage

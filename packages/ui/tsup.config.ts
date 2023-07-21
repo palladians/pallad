@@ -1,25 +1,11 @@
-import { commonjs } from '@hyrious/esbuild-plugin-commonjs'
-import { defineConfig } from 'tsup'
+import { baseTsupConfig } from '@palladxyz/common'
+import { defineConfig } from 'tsup' // eslint-disable-line import/no-extraneous-dependencies
+
+import packageJson from './package.json'
 
 export default defineConfig([
   {
-    name: 'pallad/ui',
-    entry: ['./src/index.ts'],
-    outDir: './dist',
-    format: 'esm',
-    sourcemap: true,
-    clean: true,
-    bundle: true,
-    dts: {
-      compilerOptions: {
-        moduleResolution: 'Node',
-        allowSyntheticDefaultImports: true,
-        jsx: 'react',
-        module: 'esm',
-        target: 'esnext'
-      }
-    },
-    esbuildPlugins: [commonjs()],
-    external: ['react-native', 'react-native-web']
+    ...baseTsupConfig,
+    name: packageJson.name
   }
 ])

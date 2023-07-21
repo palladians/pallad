@@ -1,7 +1,7 @@
 import { StoryDefault } from '@ladle/react'
 import { useEffect } from 'react'
 
-import { useOnboardingStore } from '../../common/store/onboarding'
+import { useOnboardingStore } from '../../wallet/store/onboarding'
 import { MnemonicWritedownView } from './MnemonicWritedown'
 
 export const View = () => {

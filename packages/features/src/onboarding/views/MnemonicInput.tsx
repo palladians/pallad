@@ -1,24 +1,33 @@
-import { Network, validateMnemonic, wordlist } from '@palladxyz/key-generator'
-import { Box, Button, Textarea } from '@palladxyz/ui'
+import { validateMnemonic, wordlist } from '@palladxyz/key-generator'
+import { Network } from '@palladxyz/key-management'
+import { Button, cn, Label, Textarea } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-native'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { shallow } from 'zustand/shallow'
 
 import { WizardLayout } from '../../common/components'
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { VaultState } from '../../common/lib/const'
-import { useAppStore } from '../../common/store/app'
-import { useOnboardingStore } from '../../common/store/onboarding'
-import { useVaultStore } from '../../common/store/vault'
+import { useWallet } from '../../wallet/hooks/useWallet'
+import { useAppStore } from '../../wallet/store/app'
+import { useOnboardingStore } from '../../wallet/store/onboarding'
 
 export const MnemonicInputView = () => {
+  const { wallet } = useWallet()
+  console.log(wallet)
   const navigate = useNavigate()
-  const walletName = useOnboardingStore((state) => state.walletName)
-  const restoreWallet = useVaultStore((state) => state.restoreWallet)
-  const setVaultState = useAppStore((state) => state.setVaultState)
+  const { walletName, spendingPassword } = useOnboardingStore(
+    (state) => ({
+      spendingPassword: state.spendingPassword,
+      walletName: state.walletName
+    }),
+    shallow
+  )
+  const setVaultStateInitialized = useAppStore(
+    (state) => state.setVaultStateInitialized
+  )
   const [noOneIsLooking, setNoOneIsLooking] = useState(false)
-  const { control, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch } = useForm({
     defaultValues: {
       mnemonic: ''
     }
@@ -30,84 +39,66 @@ export const MnemonicInputView = () => {
   )
   const onSubmit = async ({ mnemonic }: { mnemonic: string }) => {
     if (!walletName) return
-    await restoreWallet({
-      mnemonic,
-      walletName,
-      network: Network.Mina,
-      accountNumber: 0
-    })
-    await setVaultState(VaultState[VaultState.INITIALIZED])
+    if (!spendingPassword) return
+    const restoredWallet = await wallet.restoreWallet(
+      {
+        mnemonicWords: mnemonic.split(' '),
+        getPassphrase: async () => Buffer.from('passphrase')
+      },
+      {
+        network: Network.Mina,
+        networkType: 'mainnet'
+      }
+    )
+    console.log('original initialised wallet', wallet)
+    console.log('newly restored wallet', restoredWallet)
+    await setVaultStateInitialized()
     return navigate('/onboarding/finish')
   }
   return (
     <WizardLayout
       footer={
-        <>
-          <Button
-            onPress={() => navigate(-1)}
-            css={{ flex: 1, width: 'auto' }}
-            testID="onboarding__backButton"
-          >
-            Back
-          </Button>
-          <Button
-            variant="secondary"
-            css={{
-              flex: 1,
-              width: 'auto',
-              opacity: mnemonicValid ? 1 : 0.5,
-              transition: 'opacity 0.3s'
-            }}
-            disabled={!mnemonicValid}
-            onPress={handleSubmit(onSubmit)}
-            testID="onboarding__nextButton"
-          >
-            Next
-          </Button>
-        </>
+        <Button
+          variant="secondary"
+          className={cn([
+            'flex-1 transition-opacity opacity-50',
+            mnemonicValid && 'opacity-100'
+          ])}
+          disabled={!mnemonicValid}
+          onClick={handleSubmit(onSubmit)}
+          data-testid="onboarding__nextButton"
+        >
+          Next
+        </Button>
       }
     >
-      <Box css={{ gap: 24 }}>
+      <div className="flex flex-1 flex-col gap-4">
         <ViewHeading
           title="Type In Your Mnemonic"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
         {noOneIsLooking ? (
-          <Box css={{ gap: 16 }}>
-            <FormLabel>Your Mnemonic</FormLabel>
-            <Controller
-              control={control}
-              name="mnemonic"
-              rules={{ required: true }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Textarea
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  onSubmitEditing={handleSubmit(onSubmit)}
-                  css={{
-                    color: '$white',
-                    borderColor: '$gray600',
-                    backgroundColor: '$gray800',
-                    lineHeight: '175%'
-                  }}
-                  testID="onboarding__yourMnemonicTextarea"
-                />
-              )}
+          <div className="flex flex-1 flex-col gap-4">
+            <Label htmlFor="mnemonicTextarea">Your Mnemonic</Label>
+            <Textarea
+              id="mnemonicTextarea"
+              data-testid="onboarding__yourMnemonicTextarea"
+              {...register('mnemonic')}
             />
-          </Box>
+          </div>
         ) : (
-          <Box css={{ gap: 8 }}>
-            <FormLabel>Confirm No One Is Behind You</FormLabel>
+          <div className="flex flex-1 flex-col gap-2">
+            <Label htmlFor="confirmAlone">Confirm No One Is Behind You</Label>
             <Button
-              onPress={() => setNoOneIsLooking(true)}
-              testID="onboarding__confirmAlone"
+              id="confirmAlone"
+              onClick={() => setNoOneIsLooking(true)}
+              data-testid="onboarding__confirmAlone"
             >
               I am alone
             </Button>
-          </Box>
+          </div>
         )}
-      </Box>
+      </div>
     </WizardLayout>
   )
 }

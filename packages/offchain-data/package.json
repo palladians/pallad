@@ -17,5 +17,8 @@
   },
   "dependencies": {
     "swr": "^2.2.0"
+  },
+  "devDependencies": {
+    "@palladxyz/common": "*"
   }
 }

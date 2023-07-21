@@ -1,86 +1,66 @@
-import { Box, composeBox, Icons, Text } from '@palladxyz/ui'
+import { getSessionPersistence } from '@palladxyz/persistence'
+import { Button } from '@palladxyz/ui'
+import {
+  ArrowRightIcon,
+  InfoIcon,
+  ListIcon,
+  LockIcon,
+  SettingsIcon
+} from 'lucide-react'
 import React from 'react'
-import { Pressable } from 'react-native'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useViewAnimation } from '../../common/lib/animation'
-import { getSessionPersistence } from '../../common/lib/storage'
-import { vaultStore } from '../../common/store/vault'
-
-const StyledPressable = composeBox({ baseComponent: Pressable })
-
-const MenuItem = ({ item }) => {
-  return (
-    <StyledPressable
-      onPress={item.onPress}
-      css={{
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        flexDirection: 'row',
-        paddingVertical: '$sm',
-        paddingHorizontal: '$md',
-        gap: 16
-      }}
-    >
-      <Box
-        css={{
-          padding: '$sm',
-          backgroundColor: '$gray800',
-          borderRadius: '50%'
-        }}
-      >
-        <item.Icon />
-      </Box>
-      <Text css={{ width: 'auto', flex: 1 }}>{item.label}</Text>
-      <Icons.ArrowRight />
-    </StyledPressable>
-  )
-}
 
 export const MenuView = () => {
   const navigate = useNavigate()
-  const { shift, opacity, scale } = useViewAnimation()
   const MENU_ITEMS = [
     {
       label: 'Transaction',
-      onPress: () => navigate('/transactions'),
-      Icon: Icons.List
+      onClick: () => navigate('/transactions'),
+      Icon: ListIcon
     },
     {
       label: 'Settings',
-      onPress: () => navigate('/settings'),
-      Icon: Icons.Settings
+      onClick: () => navigate('/settings'),
+      Icon: SettingsIcon
     },
     {
       label: 'About',
-      onPress: () => navigate('/about'),
-      Icon: Icons.Info
+      onClick: () => navigate('/about'),
+      Icon: InfoIcon
     },
     {
       label: 'Lock',
-      onPress: async () => {
+      onClick: async () => {
         await getSessionPersistence().setItem('spendingPassword', '')
-        await vaultStore.persist.rehydrate()
+        // await vaultStore.persist.rehydrate()
         return navigate('/unlock')
       },
-      Icon: Icons.Lock
+      Icon: LockIcon
     }
   ]
   return (
     <AppLayout>
-      <Box style={{ opacity, marginTop: shift, transform: [{ scale }] }}>
-        <Box css={{ padding: '$md' }}>
-          <ViewHeading title="Menu" />
-        </Box>
-        <Box css={{ gap: 4 }}>
+      <div className="flex flex-1 flex-col gap-4">
+        <ViewHeading title="Menu" />
+        <div className="flex flex-col gap-2">
           {MENU_ITEMS.map((item, i) => (
-            <MenuItem item={item} key={i} />
+            <Button
+              key={i}
+              variant="outline"
+              className="flex-1 justify-between items-center"
+            >
+              <div className="flex items-center gap-6">
+                <item.Icon />
+                {item.label}
+              </div>
+              <ArrowRightIcon />
+            </Button>
           ))}
-        </Box>
-      </Box>
+        </div>
+      </div>
     </AppLayout>
   )
 }

@@ -1,0 +1,23 @@
+{
+  "name": "@palladxyz/common",
+  "description": "The proto package for shareable common configuration.",
+  "version": "1.0.0",
+  "type": "module",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    },
+    "./tsconfig.json": {
+      "import": "./tsconfig.json",
+      "require": "./tsconfig.json"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "cleanup": "rimraf node_modules dist .turbo"
+  }
+}

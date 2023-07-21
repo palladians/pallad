@@ -1,5 +1,8 @@
 import { Network } from '@palladxyz/key-generator'
-import { GetPassphrase } from '@palladxyz/key-management'
+import {
+  FromBip39MnemonicWordsProps,
+  GetPassphrase
+} from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import {
@@ -7,8 +10,8 @@ import {
   ChainHistoryGraphQLProvider,
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
-import { accountStore, keyAgentStore } from '@palladxyz/vault'
-import { expect, test } from 'vitest'
+import { accountStore, keyAgentStore, NetworkArgs } from '@palladxyz/vault'
+import { expect, test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
 import { MinaWalletImpl } from '../src/Wallet'
 
@@ -71,11 +74,13 @@ describe('MinaWalletImpl', () => {
       }
     )
   })
-
   test('wallet fetches getAccountInfo', async () => {
     const publicKey = minaAddresses[0] as string
+    // get the account info from the provider
     const accountInfo = await wallet.getAccountInfo(publicKey)
     console.log('Account Info:', accountInfo)
+    // set the account info in the store
+    wallet.setAccountInfo(accountInfo)
 
     if (accountInfo === null) {
       throw new Error('Account info is undefined')
@@ -178,6 +183,27 @@ describe('MinaWalletImpl', () => {
     expect(credentials).toEqual(expectedGroupedCredentials)
 
     // TODO: Check if the restored wallet is correctly stored in the vault
+  })
+  test('restores a wallet and automatically derives 1 credential', async () => {
+    const agentProps: FromBip39MnemonicWordsProps = {
+      getPassphrase: getPassword,
+      mnemonicWords: mnemonic
+    }
+    const networkProps: NetworkArgs = {
+      network: Network.Mina,
+      networkType: 'testnet'
+    }
+    const storeKeyAgent = await keyAgentStore
+      .getState()
+      .restoreWallet(agentProps, networkProps)
+    console.log('storeKeyAgent', storeKeyAgent)
+
+    // check there exists the first account and address in knownCredentials
+    const serializedKeyAgentData =
+      keyAgentStore.getState().serializableKeyAgentData
+    const knownCredentials = serializedKeyAgentData.knownCredentials
+    console.log('knownCredentials at restoration', knownCredentials)
+    expect(knownCredentials).toHaveLength(1)
   })
   /*
   test('wallet gets the current wallet', async () => {

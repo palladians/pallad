@@ -43,6 +43,7 @@ export const throwIfInvalidRange = <T>({
     throw new InvalidRangeError(
       `Lower bound: ${lowerBound}, cannot equal upper bound ${upperBound}`
     )
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   } else if (lowerBound && lowerBound > upperBound!) {
     throw new InvalidRangeError(
       `Lower bound: ${lowerBound}, cannot be larger than upper bound: ${upperBound}`
@@ -58,6 +59,7 @@ export const inRange = <T>(value: T, range: Range<T>): boolean => {
   } else if (lowerBound && !upperBound) {
     return value >= lowerBound
   }
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return value >= lowerBound! && value <= upperBound!
 }
 

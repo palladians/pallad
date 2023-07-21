@@ -1,10 +1,9 @@
-import { Box } from '@palladxyz/ui'
-import { useNavigate } from 'react-router-native'
+import { PlusIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useViewAnimation } from '../../common/lib/animation'
-import { useAddressBookStore } from '../../common/store/addressBook'
+import { useAddressBookStore } from '../../wallet/store/addressBook'
 import { ContactTile } from '../components/ContactTile'
 
 const DonatePallad = {
@@ -14,22 +13,23 @@ const DonatePallad = {
 
 export const AddressBookView = () => {
   const navigate = useNavigate()
-  const { shift, opacity, scale } = useViewAnimation()
   const contacts = useAddressBookStore((state) => state.contacts)
   return (
     <AppLayout>
-      <Box
-        css={{ padding: '$md', flex: 1, gap: 16 }}
-        style={{ opacity, marginTop: shift, transform: [{ scale }] }}
-      >
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Address Book"
           button={{
-            label: 'Add Address',
-            onPress: () => navigate('/contacts/new')
+            label: (
+              <div className="flex justify-center items-center gap-2">
+                <PlusIcon size={14} />
+                Add Address
+              </div>
+            ),
+            onClick: () => navigate('/contacts/new')
           }}
         />
-        <Box css={{ gap: 8 }}>
+        <div className="gap-2">
           <ContactTile
             contact={{
               name: DonatePallad.name,
@@ -39,8 +39,8 @@ export const AddressBookView = () => {
           {contacts.map((contact, i) => (
             <ContactTile key={i} contact={contact} index={i} />
           ))}
-        </Box>
-      </Box>
+        </div>
+      </div>
     </AppLayout>
   )
 }

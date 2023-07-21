@@ -7,7 +7,7 @@ const minaExplorerGql = 'https://proxy.devnet.minaexplorer.com/'
 describe('AccountInfoGraphQLProvider', () => {
   test('getAccountInfo', async () => {
     const args: AccountInfoArgs = {
-      publicKey: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+      publicKey: 'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
     }
 
     const provider = new AccountInfoGraphQLProvider(minaExplorerGql)
@@ -17,6 +17,7 @@ describe('AccountInfoGraphQLProvider', () => {
       throw new Error('Health check failed')
     }
     const response = await provider.getAccountInfo(args)
+    console.log('Response:', response)
 
     expect(response.balance).toBeDefined()
     expect(response.nonce).toBeDefined()

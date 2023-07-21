@@ -1,0 +1,8 @@
+{
+  "extends": "@palladxyz/common/tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "types": ["vite/client"]
+  }
+}

@@ -1,88 +1,76 @@
-import { MinaNetwork } from '@palladxyz/key-generator'
-import {
-  Box,
-  Card,
-  composeBox,
-  Heading,
-  Icons,
-  RadioGroup,
-  Text,
-  theme
-} from '@palladxyz/ui'
-import { Pressable } from 'react-native'
-import { useNavigate } from 'react-router-native'
-import { useSWRConfig } from 'swr'
+import { Card, Label, RadioGroup, RadioGroupItem } from '@palladxyz/ui'
+import { TrashIcon } from 'lucide-react'
 
 import { AppLayout } from '../../common/components/AppLayout'
-import { FormLabel } from '../../common/components/FormLabel'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useAppStore } from '../../common/store/app'
-
-const StyledPressable = composeBox({ baseComponent: Pressable })
 
 export const SettingsView = () => {
   const navigate = useNavigate()
-  const { mutate } = useSWRConfig()
-  const { setNetwork, network } = useAppStore((state) => ({
-    setNetwork: state.setNetwork,
-    network: state.network
-  }))
-  const handleNetworkSwitch = (value: MinaNetwork) => {
-    setNetwork(value)
-    mutate(() => true, undefined, { revalidate: false })
-  }
+  // const { mutate } = useSWRConfig()
+  // const { setNetwork, network } = useAppStore((state) => ({
+  //   setNetwork: state.setNetwork,
+  //   network: state.network
+  // }))
+  // const handleNetworkSwitch = (value: MinaNetwork) => {
+  //   setNetwork(value)
+  //   mutate(() => true, undefined, { revalidate: false })
+  // }
   return (
     <AppLayout>
-      <Box css={{ padding: 16, gap: 24 }}>
+      <div className="flex flex-col flex-1 gap-6">
         <ViewHeading
           title="Settings"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
-        <Box css={{ gap: 8 }}>
-          <FormLabel>Network</FormLabel>
-          <RadioGroup
-            onChange={(value) => handleNetworkSwitch(value as MinaNetwork)}
-            options={[
-              {
-                value: MinaNetwork[MinaNetwork.Mainnet],
-                label: 'Mainnet',
-                defaultSelected: network === MinaNetwork[MinaNetwork.Mainnet]
-              },
-              {
-                value: MinaNetwork[MinaNetwork.Devnet],
-                label: 'Devnet',
-                defaultSelected: network === MinaNetwork[MinaNetwork.Devnet]
-              },
-              {
-                value: MinaNetwork[MinaNetwork.Berkeley],
-                label: 'Berkeley',
-                defaultSelected: network === MinaNetwork[MinaNetwork.Berkeley]
-              }
-            ]}
-          />
-        </Box>
-        <Box css={{ gap: 16 }}>
-          <Heading size="md">Authorized Domains</Heading>
-          <Box css={{ gap: 16 }}>
-            <Card
-              css={{
-                padding: '$md',
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}
-            >
-              <Text>Pallad</Text>
-              <Box css={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
-                <Text>pallad.xyz</Text>
-                <StyledPressable>
-                  <Icons.Trash color={theme.colors.primary500.value} />
-                </StyledPressable>
-              </Box>
+        <div className="flex flex-col gap-2">
+          <Label>Network</Label>
+          <RadioGroup defaultValue="comfortable">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="default" id="r1" />
+              <Label htmlFor="r1">Mainnet</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="comfortable" id="r2" />
+              <Label htmlFor="r2">Devnet</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="compact" id="r3" />
+              <Label htmlFor="r3">Berkeley</Label>
+            </div>
+          </RadioGroup>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label>Theme</Label>
+          <RadioGroup defaultValue="comfortable">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="default" id="r1" />
+              <Label htmlFor="r1">Light</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="comfortable" id="r2" />
+              <Label htmlFor="r2">Dark</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="compact" id="r3" />
+              <Label htmlFor="r3">System</Label>
+            </div>
+          </RadioGroup>
+        </div>
+        <div className="flex flex-col gap-4">
+          <h2>Authorized Domains</h2>
+          <div className="flex flex-col gap-2">
+            <Card className="flex p-2 justify-between">
+              <div>Pallad</div>
+              <div className="flex gap-2 items-center">
+                <div>pallad.xyz</div>
+                <a>
+                  <TrashIcon size={16} />
+                </a>
+              </div>
             </Card>
-          </Box>
-        </Box>
-      </Box>
+          </div>
+        </div>
+      </div>
     </AppLayout>
   )
 }

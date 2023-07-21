@@ -74,7 +74,7 @@ export type Account = {
     totalBlocks: number
     totalSnarks: number
     countPendingTransactions: number
-    firstPendingTransaction: any[]
+    firstPendingTransaction: unknown[]
     username: string
     epochStakingAccount: StakingAccount[]
     nextEpochStakingAccount: StakingAccount[]

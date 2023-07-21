@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import {
   ActionType,
   GlobalProvider,
   ThemeState,
   useLadleContext
 } from '@ladle/react'
-import { Box } from '@palladxyz/ui'
-import { theme, ThemeProvider } from '../src'
-import { NativeRouter } from 'react-router-native'
+import { MemoryRouter } from 'react-router-dom'
+import { ThemeProvider } from 'next-themes'
+import '@palladxyz/ui/dist/index.css'
 
 export const Provider: GlobalProvider = ({ children }) => {
   const { dispatch } = useLadleContext()
@@ -15,12 +15,22 @@ export const Provider: GlobalProvider = ({ children }) => {
     dispatch({ type: ActionType.UpdateTheme, value: ThemeState.Dark })
   }, [])
   return (
-    <ThemeProvider theme={theme}>
-      <NativeRouter>
-        <Box css={{ width: 400, height: 600, backgroundColor: '$gray900' }}>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <MemoryRouter>
+        <div
+          style={{
+            maxWidth: 400,
+            width: '100%',
+            maxHeight: 600,
+            height: '100%',
+            display: 'flex',
+            overflowX: 'hidden',
+            overflowY: 'scroll'
+          }}
+        >
           {children}
-        </Box>
-      </NativeRouter>
+        </div>
+      </MemoryRouter>
     </ThemeProvider>
   )
 }

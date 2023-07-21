@@ -1,5 +1,5 @@
 import { HDKey } from '@scure/bip32'
-import { expect } from 'vitest'
+import { expect } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
 import { MinaKeyGenerator } from '../src/mina'
 import { KeyConst } from '../src/types'

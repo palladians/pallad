@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
-    "resolveJsonModule": true,
+    "jsx": "react-jsx"
   }
 }
+

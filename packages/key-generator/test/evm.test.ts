@@ -1,8 +1,7 @@
 import { HDKey } from '@scure/bip32'
-import { expect } from 'vitest'
+import { expect } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
-import { EVMKeyGenerator } from '../src/evm'
-import { KeyConst } from '../src/types'
+import { EVMKeyGenerator, KeyConst } from '../src'
 
 describe('EVMKeyGenerator', () => {
   let evm: EVMKeyGenerator

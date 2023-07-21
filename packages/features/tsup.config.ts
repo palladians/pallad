@@ -1,25 +1,22 @@
-import { commonjs } from '@hyrious/esbuild-plugin-commonjs'
+import { baseTsupConfig } from '@palladxyz/common'
 import svgJsx from '@svgr/plugin-jsx'
+import { polyfillNode } from 'esbuild-plugin-polyfill-node'
 import svgr from 'esbuild-plugin-svgr'
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsup' // eslint-disable-line import/no-extraneous-dependencies
+
+import packageJson from './package.json'
 
 export default defineConfig([
   {
-    name: 'pallad/features',
-    entry: ['./src/index.ts'],
-    outDir: './dist',
-    format: 'esm',
-    sourcemap: true,
-    clean: true,
-    bundle: true,
-    dts: {
-      compilerOptions: {
-        moduleResolution: 'Node',
-        allowSyntheticDefaultImports: true,
-        jsx: 'react'
-      }
-    },
-    esbuildPlugins: [commonjs(), svgr({ plugins: [svgJsx] })],
-    external: ['react-native', 'react-native-web']
+    ...baseTsupConfig,
+    name: packageJson.name,
+    esbuildPlugins: [
+      polyfillNode({
+        polyfills: { crypto: true },
+        globals: { process: true }
+      }),
+      svgr({ plugins: [svgJsx] })
+    ],
+    external: ['swr']
   }
 ])

@@ -19,7 +19,7 @@ describe('ChainHistoryGraphQLProvider', () => {
 
   test('transactionsByAddresses', async () => {
     const args: TransactionsByAddressesArgs = {
-      addresses: ['B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'],
+      addresses: ['B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'],
       pagination: { startAt: 0, limit: 10 }
     }
 

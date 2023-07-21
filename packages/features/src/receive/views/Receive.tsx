@@ -1,58 +1,35 @@
-import { Box, Text, theme } from '@palladxyz/ui'
-import { Clipboard, Pressable } from 'react-native'
+import { Card } from '@palladxyz/ui'
 import QRCode from 'react-qr-code'
-import { useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useVaultStore } from '../../common/store/vault'
 
 export const ReceiveView = () => {
   const navigate = useNavigate()
-  const currentWallet = useVaultStore((state) => state.getCurrentWallet())
-  const walletAddress = currentWallet?.walletPublicKey
+  // const currentWallet = useVaultStore((state) => state.getCurrentWallet())
+  // const walletAddress = currentWallet?.walletPublicKey
+  const walletAddress = 'B62XXX'
   return (
     <AppLayout>
-      <Box css={{ padding: 16, flex: 1 }}>
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Receive"
-          backButton={{ onPress: () => navigate(-1) }}
+          backButton={{ onClick: () => navigate(-1) }}
         />
-        <Box
-          css={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            flex: 1,
-            gap: 24
-          }}
-        >
-          {walletAddress && (
-            <QRCode
-              value={walletAddress}
-              bgColor={theme.colors.gray900.value}
-              fgColor={theme.colors.primary500.value}
-            />
-          )}
-          <Pressable onPress={() => Clipboard.setString(walletAddress)}>
-            <Text
-              css={{
-                maxWidth: 320,
-                textAlign: 'center',
-                borderRadius: 64,
-                paddingVertical: '$sm',
-                paddingHorizontal: '$md',
-                lineHeight: '175%',
-                backgroundColor: '$primary800',
-                color: '$primary400',
-                fontSize: 14
-              }}
-              numberOfLines={2}
-            >
-              {walletAddress}
-            </Text>
-          </Pressable>
-        </Box>
-      </Box>
+        <div className="flex flex-col flex-1 gap-6">
+          <Card className="flex justify-center items-center p-4">
+            {walletAddress && (
+              <QRCode
+                value={walletAddress}
+                bgColor="#020617"
+                fgColor="#0ea5e9"
+              />
+            )}
+          </Card>
+          <Card className="p-2">{walletAddress}</Card>
+        </div>
+      </div>
     </AppLayout>
   )
 }
