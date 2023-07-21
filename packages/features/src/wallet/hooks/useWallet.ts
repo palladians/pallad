@@ -1,4 +1,4 @@
-import { MinaNetwork, Network } from '@palladxyz/key-management'
+import { MinaNetwork } from '@palladxyz/key-management-agnostic'
 import {
   AccountInfoGraphQLProvider,
   ChainHistoryGraphQLProvider,
@@ -47,8 +47,7 @@ export const useWallet = () => {
       keyAgent: keyAgentStore.getState().keyAgent,
       txSubmitProvider,
       chainHistoryProvider,
-      accountInfoProvider,
-      network: Network.Mina
+      accountInfoProvider
     }
   )
   return {
