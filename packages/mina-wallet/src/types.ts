@@ -34,7 +34,9 @@ export interface MinaWallet {
 
   getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo | null>
 
-  getTransactions(publicKey: Mina.PublicKey): Promise<Mina.TransactionBody[] | null>
+  getTransactions(
+    publicKey: Mina.PublicKey
+  ): Promise<Mina.TransactionBody[] | null>
 
   constructTx(
     transaction: Mina.TransactionBody,

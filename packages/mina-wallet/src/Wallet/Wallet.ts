@@ -13,7 +13,7 @@ import {
   AccountInfo,
   Mina,
   SubmitTxArgs,
-  SubmitTxResult,
+  SubmitTxResult
 } from '@palladxyz/mina-core'
 import { MinaProvider } from '@palladxyz/mina-graphql'
 import { keyAgentStore } from '@palladxyz/vault'
@@ -60,28 +60,31 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   async getAccountInfo(): Promise<AccountInfo | null> {
-    const currentWallet = this.getCurrentWallet();
-    if (currentWallet === null ) {
-      throw new Error('Current wallet is null, empty or undefined');
-    }
-    const walletAddress = currentWallet.address;
-
-    const accountInformation = keyAgentStore.getState().getAccountStore(walletAddress)?.accountInfo || null;
-
-    return accountInformation;
-}
-
-
-async getTransactions(): Promise<Mina.TransactionBody[] | null> {
-    const currentWallet = this.getCurrentWallet();
+    const currentWallet = this.getCurrentWallet()
     if (currentWallet === null) {
-      throw new Error('Current wallet is null, empty or undefined');
+      throw new Error('Current wallet is null, empty or undefined')
     }
-    const walletAddress = currentWallet.address;
-    const transactions = keyAgentStore.getState().getAccountStore(walletAddress)?.transactions || null;
+    const walletAddress = currentWallet.address
 
-    return transactions;
-}
+    const accountInformation =
+      keyAgentStore.getState().getAccountStore(walletAddress)?.accountInfo ||
+      null
+
+    return accountInformation
+  }
+
+  async getTransactions(): Promise<Mina.TransactionBody[] | null> {
+    const currentWallet = this.getCurrentWallet()
+    if (currentWallet === null) {
+      throw new Error('Current wallet is null, empty or undefined')
+    }
+    const walletAddress = currentWallet.address
+    const transactions =
+      keyAgentStore.getState().getAccountStore(walletAddress)?.transactions ||
+      null
+
+    return transactions
+  }
 
   async sign<T extends ChainSpecificPayload_>(
     payload: T,
@@ -144,7 +147,9 @@ async getTransactions(): Promise<Mina.TransactionBody[] | null> {
       mnemonic2ndFactorPassphrase: ''
     }
     // restore the agent state
-    await keyAgentStore.getState().restoreWallet(payload, args, this.minaProvider, agentArgs)
+    await keyAgentStore
+      .getState()
+      .restoreWallet(payload, args, this.minaProvider, agentArgs)
   }
 
   getCurrentWallet(): GroupedCredentials | null {

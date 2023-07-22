@@ -6,13 +6,8 @@ import {
 } from '@palladxyz/key-management-agnostic'
 import { Mina } from '@palladxyz/mina-core'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
-import {
-  AccountInfoGraphQLProvider,
-  ChainHistoryGraphQLProvider,
-  MinaProvider,
-  TxSubmitGraphQLProvider
-} from '@palladxyz/mina-graphql'
-import { accountStore, keyAgentStore } from '@palladxyz/vault'
+import { MinaProvider } from '@palladxyz/mina-graphql'
+import { keyAgentStore } from '@palladxyz/vault'
 import Client from 'mina-signer'
 import { expect, test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
@@ -23,8 +18,6 @@ describe('MinaWalletImpl', () => {
   let wallet: MinaWalletImpl
   let walletDependencies: MinaWalletDependencies
   let provider: MinaProvider
-
-
 
   const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
   const mnemonic = [
@@ -42,17 +35,12 @@ describe('MinaWalletImpl', () => {
     'like'
   ]
 
-  const minaAddresses = [
-    'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-    'B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB'
-  ]
-
   beforeEach(() => {
     provider = new MinaProvider(nodeUrl, explorerUrl)
 
     walletDependencies = {
       keyAgent: keyAgentStore.getState().keyAgent,
-      minaProvider: provider,
+      minaProvider: provider
     }
     wallet = new MinaWalletImpl({ name: 'Test Wallet' }, walletDependencies)
   })
