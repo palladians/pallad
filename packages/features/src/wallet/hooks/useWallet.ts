@@ -1,8 +1,6 @@
 import { MinaNetwork } from '@palladxyz/key-management-agnostic'
 import {
-  AccountInfoGraphQLProvider,
-  ChainHistoryGraphQLProvider,
-  TxSubmitGraphQLProvider
+  MinaProvider,
 } from '@palladxyz/mina-graphql'
 import { MinaWalletImpl } from '@palladxyz/mina-wallet'
 import { keyAgentStore } from '@palladxyz/vault'
@@ -38,16 +36,12 @@ export const useWallet = () => {
     () => MinaExplorerUrl[currentNetwork],
     [currentNetwork]
   )
-  const txSubmitProvider = new TxSubmitGraphQLProvider(minaProxyUrl)
-  const chainHistoryProvider = new ChainHistoryGraphQLProvider(minaExplorerUrl)
-  const accountInfoProvider = new AccountInfoGraphQLProvider(minaProxyUrl)
+  const provider = new MinaProvider(minaProxyUrl, minaExplorerUrl)
   const wallet = new MinaWalletImpl(
     { name: 'Pallad' },
     {
       keyAgent: keyAgentStore.getState().keyAgent,
-      txSubmitProvider,
-      chainHistoryProvider,
-      accountInfoProvider
+      provider
     }
   )
   return {

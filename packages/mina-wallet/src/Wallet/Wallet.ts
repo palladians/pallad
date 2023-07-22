@@ -11,14 +11,12 @@ import {
 } from '@palladxyz/key-management-agnostic'
 import {
   AccountInfo,
-  AccountInfoArgs,
   Mina,
   SubmitTxArgs,
   SubmitTxResult,
-  TransactionsByAddressesArgs
 } from '@palladxyz/mina-core'
 import { MinaProvider } from '@palladxyz/mina-graphql'
-import { accountStore, keyAgentStore } from '@palladxyz/vault'
+import { keyAgentStore } from '@palladxyz/vault'
 
 /**
  * This wallet is in the process of becoming chain agnostic
@@ -61,49 +59,29 @@ export class MinaWalletImpl implements MinaWallet {
     throw new Error('Method not implemented.')
   }
 
-  async getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo> {
-    const accountInfoArgs: AccountInfoArgs = { publicKey: publicKey }
-    const accountInfo = await this.minaProvider.getAccountInfo(accountInfoArgs)
-    return accountInfo
-  }
-
-  setAccountInfo(accountInfo: AccountInfo): void {
-    accountStore.getState().setAccountInfo(accountInfo)
-  }
-
-  async getTransactions(
-    publicKey: Mina.PublicKey
-  ): Promise<Mina.TransactionBody[]> {
-    const limit = 10
-    let startAt = 0
-    let transactions: Mina.TransactionBody[] = []
-
-    while (transactions.length < 20) {
-      const args: TransactionsByAddressesArgs = {
-        addresses: [publicKey],
-        pagination: { startAt, limit }
-      }
-
-      const transactionPage = await this.minaProvider.getTransactions(args)
-
-      transactions = [...transactions, ...transactionPage.pageResults]
-
-      if (
-        transactionPage.pageResults.length < limit ||
-        transactions.length >= 20
-      ) {
-        break
-      }
-
-      startAt += limit
+  async getAccountInfo(): Promise<AccountInfo | null> {
+    const currentWallet = this.getCurrentWallet();
+    if (currentWallet === null ) {
+      throw new Error('Current wallet is null, empty or undefined');
     }
+    const walletAddress = currentWallet.address;
 
-    transactions = transactions.slice(0, 20)
+    const accountInformation = keyAgentStore.getState().getAccountStore(walletAddress)?.accountInfo || null;
 
-    accountStore.getState().setTransactions(transactions)
+    return accountInformation;
+}
 
-    return transactions
-  }
+
+async getTransactions(): Promise<Mina.TransactionBody[] | null> {
+    const currentWallet = this.getCurrentWallet();
+    if (currentWallet === null) {
+      throw new Error('Current wallet is null, empty or undefined');
+    }
+    const walletAddress = currentWallet.address;
+    const transactions = keyAgentStore.getState().getAccountStore(walletAddress)?.transactions || null;
+
+    return transactions;
+}
 
   async sign<T extends ChainSpecificPayload_>(
     payload: T,
@@ -166,7 +144,7 @@ export class MinaWalletImpl implements MinaWallet {
       mnemonic2ndFactorPassphrase: ''
     }
     // restore the agent state
-    await keyAgentStore.getState().restoreWallet(payload, args, agentArgs)
+    await keyAgentStore.getState().restoreWallet(payload, args, this.minaProvider, agentArgs)
   }
 
   getCurrentWallet(): GroupedCredentials | null {
@@ -177,7 +155,7 @@ export class MinaWalletImpl implements MinaWallet {
     return result ? result : null
   }
 
-  getCredentials(): string[] {
+  getCredentials(): GroupedCredentials[] | null {
     // Get the list of accounts for the current wallet
     const result = keyAgentStore.getState().getCredentials()
 
