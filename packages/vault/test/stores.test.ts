@@ -5,20 +5,24 @@ import {
   MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management-agnostic'
-import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import { MinaProvider } from '@palladxyz/mina-graphql'
 
-import { accountStore, keyAgentStore } from '../src/stores'
+import { keyAgentStore } from '../src/stores'
 
 // Provide the passphrase for testing purposes
 const params = {
   passphrase: 'passphrase'
 }
 const getPassphrase = async () => Buffer.from(params.passphrase)
+const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
+const explorerUrl = 'https://devnet.graphql.minaexplorer.com'
 
 describe('store', () => {
   let keyAgent: InMemoryKeyAgent
   let agentArgs: FromBip39MnemonicWordsProps
   let mnemonic: string[]
+  let provider: MinaProvider
+
   beforeEach(async () => {
     // Create keys for testing purposes
     mnemonic = [
@@ -41,41 +45,8 @@ describe('store', () => {
       mnemonic2ndFactorPassphrase: ''
     }
     keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
+    provider = new MinaProvider(nodeUrl, explorerUrl)
   })
-
-  test('setAccountInfo', async () => {
-    const accountInfo: AccountInfo = {
-      balance: { total: 1000 },
-      nonce: 1,
-      inferredNonce: 1,
-      delegate: 'delegate',
-      publicKey: 'publicKey'
-    }
-
-    accountStore.getState().setAccountInfo(accountInfo)
-
-    expect(accountStore.getState().accountInfo).toEqual(accountInfo)
-  })
-
-  test('setTransactions', async () => {
-    const transactions: Mina.TransactionBody[] = [
-      {
-        type: 'payment',
-        to: 'address1',
-        from: 'address2',
-        fee: '1',
-        amount: '100',
-        nonce: '1',
-        memo: 'test memo',
-        hash: 'hash1'
-      }
-    ]
-
-    accountStore.getState().setTransactions(transactions)
-
-    expect(accountStore.getState().transactions).toEqual(transactions)
-  })
-
   test('restoreWallet', async () => {
     const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,
@@ -84,13 +55,13 @@ describe('store', () => {
       networkType: 'testnet'
     }
     const payload = new MinaPayload()
-    await keyAgent.restoreKeyAgent(payload, restoreArgs, agentArgs)
+    await keyAgent.restoreKeyAgent(payload, restoreArgs)
     const rootPrivateKey = await keyAgent.exportRootPrivateKey()
     const encryptedSeedBytes = keyAgent.serializableData.encryptedSeedBytes
 
     await keyAgentStore
       .getState()
-      .restoreWallet(payload, restoreArgs, agentArgs)
+      .restoreWallet(payload, restoreArgs, provider, agentArgs)
     const storeRootPrivateKey = await keyAgentStore
       .getState()
       .keyAgent?.exportRootPrivateKey()
@@ -106,6 +77,13 @@ describe('store', () => {
         .contents
     console.log('knownCredentials', storeKeyAgentCredentials)
     expect(storeKeyAgentCredentials).toHaveLength(1)
+
+    // check the store has account info
+    const accountInformation = keyAgentStore
+      .getState()
+      .getAccountStore(storeKeyAgentCredentials[0]?.address)
+    console.log('Account Information!')
+    console.log('accountStore', accountInformation)
   })
 
   test('restoreWallet and second addCredentials', async () => {
@@ -119,7 +97,7 @@ describe('store', () => {
     // restore the keyAgent
     await keyAgentStore
       .getState()
-      .restoreWallet(payload, restoreArgs, agentArgs)
+      .restoreWallet(payload, restoreArgs, provider, agentArgs)
 
     const argsNewCredential: MinaSpecificArgs = {
       network: Network.Mina,
@@ -130,7 +108,7 @@ describe('store', () => {
     // derive next credentials
     await keyAgentStore
       .getState()
-      .addCredentials(payload, argsNewCredential, false)
+      .addCredentials(payload, argsNewCredential, provider, false)
     // after adding credentials, the keyAgent should have the new credentials
     const storeKeyAgentCredentials =
       keyAgentStore.getState().keyAgent?.serializableData.credentialSubject

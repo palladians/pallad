@@ -4,6 +4,7 @@ import {
   MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management-agnostic'
+import { Mina } from '@palladxyz/mina-core'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import {
   AccountInfoGraphQLProvider,
@@ -11,6 +12,7 @@ import {
   TxSubmitGraphQLProvider
 } from '@palladxyz/mina-graphql'
 import { accountStore, keyAgentStore } from '@palladxyz/vault'
+import Client from 'mina-signer'
 import { expect, test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
 import { MinaWalletDependencies, MinaWalletImpl } from '../src/Wallet'
@@ -132,5 +134,78 @@ describe('MinaWalletImpl', () => {
     console.log('knownCredentials', storeKeyAgentCredentials)
     expect(storeKeyAgentCredentials).toHaveLength(1)
     console.log('Derived Credentials:', storeKeyAgentCredentials)
+  })
+  test('restores wallet and signs message', async () => {
+    // restore wallet
+    const args: MinaSpecificArgs = {
+      network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      networkType: 'testnet'
+    }
+    const payload = new MinaPayload()
+    await wallet.restoreWallet(payload, args, {
+      mnemonicWords: mnemonic,
+      getPassphrase: getPassword
+    })
+    // sign message
+    const message: Mina.MessageBody = {
+      message: 'Hello, Bob!'
+    }
+    const signedMessage = await wallet.sign(payload, message, args)
+    const minaClient = new Client({ network: args.networkType })
+    const isVerified = await minaClient.verifyMessage(
+      signedMessage as Mina.SignedMessage
+    )
+    expect(isVerified).toBeTruthy()
+  })
+  test('signs and verifies attestation signature', async () => {
+    /*
+    This is a draft test for some kind of attestation method
+    */
+    // restore wallet
+    const args: MinaSpecificArgs = {
+      network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      networkType: 'testnet'
+    }
+    const restorePayload = new MinaPayload()
+    await wallet.restoreWallet(restorePayload, args, {
+      mnemonicWords: mnemonic,
+      getPassphrase: getPassword
+    })
+    // get derived credentials
+    const derivedCredentials =
+      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
+        .contents
+    if (derivedCredentials === undefined) {
+      throw new Error('Derived credentials are undefined')
+    }
+    // attestation payload
+    const attestationPayload = {
+      context: derivedCredentials[0]['@context'],
+      type: 'Attestation',
+      issuer: derivedCredentials[0].id,
+      issuanceDate: new Date().toISOString(),
+      credentialSubject: derivedCredentials[0]
+    }
+
+    // convert the attestationPayload object to a string
+    const attestationPayloadString: Mina.MessageBody = {
+      message: JSON.stringify(attestationPayload)
+    }
+
+    // sign attestation
+    const signedAttestation = await wallet.sign(
+      restorePayload,
+      attestationPayloadString,
+      args
+    )
+    const minaClient = new Client({ network: args.networkType })
+    const isVerified = await minaClient.verifyMessage(
+      signedAttestation as Mina.SignedMessage
+    )
+    expect(isVerified).toBeTruthy()
   })
 })

@@ -1,30 +1,43 @@
 import {
+  AccountInfoArgs,
   Transaction,
   TransactionId,
   TransactionsByAddressesArgs,
-  TransactionsByIdsArgs
+  TransactionsByIdsArgs,
+  TxStatusArgs
 } from '@palladxyz/mina-core'
 
-import { ChainHistoryGraphQLProvider } from '../../src/Providers/ChainHistory/ChainHistoryProvider'
-// TO DO: create end-to-end suite with a local-network
-const minaExplorerGql = 'https://devnet.graphql.minaexplorer.com'
+import { MinaProvider } from '../src'
 
-describe('ChainHistoryGraphQLProvider', () => {
-  test('healthCheck', async () => {
-    const provider = new ChainHistoryGraphQLProvider(minaExplorerGql)
-    const response = await provider.healthCheck()
+const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
+const explorerUrl = 'https://devnet.graphql.minaexplorer.com'
 
-    expect(response).toEqual({ ok: true })
+describe('Provider', () => {
+  let provider: MinaProvider
+  beforeEach(() => {
+    provider = new MinaProvider(nodeUrl, explorerUrl)
   })
+  test('getAccountInfo', async () => {
+    const args: AccountInfoArgs = {
+      publicKey: 'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
+    }
 
-  test('transactionsByAddresses', async () => {
+    const response = await provider.getAccountInfo(args)
+    console.log('Response:', response)
+
+    expect(response.balance).toBeDefined()
+    expect(response.nonce).toBeDefined()
+    expect(response.inferredNonce).toBeDefined()
+    expect(response.delegate).toBeDefined()
+    expect(response.publicKey).toBeDefined()
+  })
+  test('getTransactions', async () => {
     const args: TransactionsByAddressesArgs = {
       addresses: ['B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'],
       pagination: { startAt: 0, limit: 10 }
     }
 
-    const provider = new ChainHistoryGraphQLProvider(minaExplorerGql)
-    const response = await provider.transactionsByAddresses(args)
+    const response = await provider.getTransactions(args)
 
     expect(response.pageResults.length).toBeGreaterThan(0)
 
@@ -42,16 +55,13 @@ describe('ChainHistoryGraphQLProvider', () => {
     expect(transaction).toHaveProperty('to')
     expect(transaction).toHaveProperty('token')
   })
-
-  test('transactionsByHashes', async () => {
+  test('getTransaction', async () => {
     const args: TransactionsByIdsArgs = {
       ids: [
         'CkpZwt2TjukbsTkGi72vB2acPtZsNFF8shMm4A9cR1eaRQFWfMwUJ' as TransactionId
       ]
     }
-
-    const provider = new ChainHistoryGraphQLProvider(minaExplorerGql)
-    const response = await provider.transactionsByHashes(args)
+    const response = await provider.getTransaction(args)
 
     expect(response.length).toBeGreaterThan(0)
     const expectedTransaction: Transaction = {
@@ -72,4 +82,15 @@ describe('ChainHistoryGraphQLProvider', () => {
     }
     expect(response[0]).toEqual(expectedTransaction)
   })
+  test('getTransactionStatus', async () => {
+    const args: TxStatusArgs = {
+      ID: '3XpDTU4nx8aYjtRooxkf6eqLSVdzhEE4EEDQFTGkRYZZ9uRebxCTPYfC3731PKq5zK8nAqwQE7TUtGGveMGNhBhDrycFvnXEcWA6gtStmu4h9iiXG3CkFapgu9AZAKetNVjsx5ekVyRU8W5RHkBA9r5ntL36ddtodk9SCymkZ2qLhCGjpCaxuqih3kqWq3aVFwbNL5eQVrdgnYwZwuTTBdAVnYuqxkYKEKZuGGL12eZGBdnD1W9DMicXCkryzJx4dXJRas6ZrZGFEC8mTvtHZJ6ResVANXPfWuWKQu1xr8SPecfTuyKBC1VdeUqghpuHeznjTwdpNH6KBjvYkCzAuuaDrL8XgFHNC8Ka7bLBe9UXzemmtBxzQQs9uL3dZunhPudKn5aR42a4Z9rqtHC'
+    }
+
+    const response = await provider.getTransactionStatus(args)
+
+    expect(response).toBeDefined()
+  })
+  // TODO: add test for submitTransaction
+  // this should be done with a local network
 })

@@ -1,19 +1,23 @@
 import {
+  ChainAddress,
   ChainSpecificArgs,
   ChainSpecificPayload_,
   FromBip39MnemonicWordsProps,
-  InMemoryKeyAgent
+  GroupedCredentials,
+  InMemoryKeyAgent,
+  MinaGroupedCredentials
 } from '@palladxyz/key-management-agnostic'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import { MinaProvider } from '@palladxyz/mina-graphql'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
-import { Store } from './types'
-import { VaultStore } from './vault'
+//import { Store } from './types'
+import { AccountStore, VaultStore } from './vault'
 
 // this is a Mina specific store, we will need to refactor this to be agnostic
-export const accountStore = createStore<Store>((set) => ({
+/*export const accountStore = createStore<Store>((set) => ({
   accountInfo: {
     balance: { total: 0 },
     nonce: 0,
@@ -25,13 +29,28 @@ export const accountStore = createStore<Store>((set) => ({
   setAccountInfo: (accountInfo: AccountInfo) => set({ accountInfo }),
   setTransactions: (transactions: Mina.TransactionBody[]) =>
     set({ transactions })
-}))
+}))*/
+const createEmptyAccountStore = (): AccountStore => ({
+  accountInfo: {} as AccountInfo,
+  transactions: {} as Mina.TransactionBody[],
+  setAccountInfo: () => void 0,
+  setTransactions: () => void 0,
+  getAccountInfo: () => ({} as AccountInfo),
+  getTransactions: () => ({} as Mina.TransactionBody[])
+})
 
 // define the initial state
 const initialState: VaultStore = {
   keyAgent: null,
+  currentWallet: null,
+  accountStores: {},
   restoreWallet: async () => null,
-  addCredentials: async () => void 0
+  addCredentials: async () => void 0,
+  setCurrentWallet: async () => void 0,
+  getCurrentWallet: () => null,
+  getCredentials: () => [],
+  getAccountStore: () => null,
+  setAccountStore: () => void 0
 }
 
 // Zustand store using immer for immutable updates and persist middleware
@@ -39,9 +58,12 @@ export const keyAgentStore = createStore<VaultStore>()(
   persist(
     (set, get) => ({
       keyAgent: initialState.keyAgent,
+      currentWallet: initialState.currentWallet,
+      accountStores: initialState.accountStores,
       restoreWallet: async <T extends ChainSpecificPayload_>(
         payload: T,
         args: ChainSpecificArgs,
+        provider: MinaProvider, // TODO: make chain agnostic
         { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
       ) => {
         const agentArgs: FromBip39MnemonicWordsProps = {
@@ -55,24 +77,131 @@ export const keyAgentStore = createStore<VaultStore>()(
         set({ keyAgent })
 
         // derive the credentials for the first account and address & mutate the serializableKeyAgentData state
-        await get().addCredentials(payload, args, false)
+        await get().addCredentials(payload, args, provider, false)
 
         return keyAgent
       },
       addCredentials: async <T extends ChainSpecificPayload_>(
         payload: T,
         args: ChainSpecificArgs,
+        provider: MinaProvider, // TODO: make chain agnostic
         pure?: boolean
       ): Promise<void> => {
         const keyAgent = get().keyAgent ? get().keyAgent : null
 
+        if (!keyAgent) {
+          throw new Error('keyAgent is null')
+        }
+
+        const credentials = (await keyAgent.deriveCredentials(
+          payload,
+          args,
+          pure
+        )) as MinaGroupedCredentials
+        set({ keyAgent })
+
+        if (credentials.type === 'MinaAddress') {
+          try {
+            const accountInfoPromise = provider.getAccountInfo({
+              publicKey: credentials.address
+            })
+            const transactionsPromise = provider.getTransactions({
+              addresses: [credentials.address],
+              pagination: { startAt: 0, limit: 10 }
+            })
+
+            const result = await Promise.all([
+              accountInfoPromise,
+              transactionsPromise
+            ]).catch((error) => {
+              console.error(
+                'Error fetching account info or transactions:',
+                error
+              )
+            })
+
+            if (result) {
+              const [accountInfo, paginatedTransactions] = result
+              const transactions = paginatedTransactions.pageResults //pageResults because we are using the MinaProvider and it has its own pagination type
+              // Create a new AccountStore
+              const newAccountStore: AccountStore = {
+                ...createEmptyAccountStore(),
+                accountInfo,
+                transactions,
+                setAccountInfo: (info: AccountInfo) => {
+                  newAccountStore.accountInfo = info
+                },
+                setTransactions: (txs: Mina.TransactionBody[]) => {
+                  newAccountStore.transactions = txs
+                },
+                getAccountInfo: () => newAccountStore.accountInfo,
+                getTransactions: () => newAccountStore.transactions
+              }
+
+              const updatedAccountStores: Record<ChainAddress, AccountStore> = {
+                ...get().accountStores,
+                [credentials.address as ChainAddress]: newAccountStore // 'credentials.address' should be of type ChainAddress
+              }
+
+              set({ accountStores: updatedAccountStores })
+            } else {
+              console.log('Failed to fetch account info or transactions')
+            }
+          } catch (error) {
+            console.log('Error fetching account info or transactions:', error)
+          }
+        } else {
+          console.log('not a wallet!')
+        }
+      },
+      setCurrentWallet: (address: ChainAddress) => {
+        const keyAgent = get().keyAgent ? get().keyAgent : null
         if (keyAgent) {
-          await keyAgent.deriveCredentials(payload, args, pure)
-          // Add new credential to knownCredentials
-          set({ keyAgent })
+          const { contents } = keyAgent.serializableData.credentialSubject
+          const currentWalletCredentials = contents.find(
+            (credential) => credential.address === address
+          )
+          if (currentWalletCredentials) {
+            set({ currentWallet: currentWalletCredentials })
+          } else {
+            console.log('currentWalletCredentials is null')
+          }
         } else {
           console.log('keyAgent is null')
         }
+      },
+      getCurrentWallet: (): GroupedCredentials | null => {
+        const currentWallet = get().currentWallet
+        return currentWallet
+      },
+      getCredentials: (): GroupedCredentials[] | null => {
+        const keyAgent = get().keyAgent ? get().keyAgent : null
+        if (keyAgent) {
+          const { contents } = keyAgent.serializableData.credentialSubject
+          return contents
+        }
+        return null
+      },
+      getAccountStore: (address: ChainAddress): AccountStore | null => {
+        const accountStores = get().accountStores
+        return accountStores[address] || null
+      },
+      setAccountStore: (
+        address: ChainAddress,
+        accountStore: Partial<AccountStore>
+      ) => {
+        if (!accountStore || typeof accountStore !== 'object') {
+          throw new Error('Invalid accountStore argument')
+        }
+
+        const currentAccountStore =
+          get().accountStores[address] || createEmptyAccountStore()
+        const updatedAccountStore = { ...currentAccountStore, ...accountStore }
+        const updatedAccountStores = {
+          ...get().accountStores,
+          [address]: updatedAccountStore
+        }
+        set({ accountStores: updatedAccountStores })
       }
     }),
     {
@@ -81,94 +210,3 @@ export const keyAgentStore = createStore<VaultStore>()(
     }
   )
 )
-
-/* // old keyAgentStore
-export const keyAgentStore = createStore<VaultStore>()(
-  persist(
-    (set, get) => ({
-      keyAgent: initialState.keyAgent,
-      restoreWallet: async (
-        { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
-        { network, networkType }: NetworkArgs
-      ) => {
-        const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords({
-          getPassphrase: getPassphrase,
-          mnemonicWords: mnemonicWords
-        })
-        // set both the keyAgent and the serializableKeyAgentData
-        set({ keyAgent })
-
-        // derive the credentials for the first account and address & mutate the serializableKeyAgentData state
-        await get().addCredentials({
-          account_ix: 0,
-          address_ix: 0,
-          network: network,
-          networkType: networkType,
-          pure: false
-        })
-
-        return keyAgent
-      },
-      addCredentials: async ({
-        account_ix,
-        address_ix,
-        network,
-        networkType,
-        pure
-      }): Promise<GroupedCredentials | null> => {
-        const keyAgent = get().keyAgent ? get().keyAgent : null
-
-        if (keyAgent) {
-          const { knownCredentials } = keyAgent.serializableData
-
-          // Find if the credentials already exist in knownCredentials based on the function's arguments
-          const existingCredential = knownCredentials.find(
-            (knownCredential) =>
-              knownCredential.accountIndex === account_ix &&
-              knownCredential.addressIndex === address_ix &&
-              knownCredential.chain === network
-          )
-
-          // If credentials already exist, return the existing credential
-          if (existingCredential) {
-            return existingCredential
-          }
-
-          console.log(
-            'deriving credentials for account_ix',
-            account_ix,
-            'address_ix',
-            address_ix
-          )
-          const credential = await keyAgent.deriveCredentials(
-            { account_ix },
-            { address_ix },
-            network,
-            networkType,
-            pure
-          )
-          console.log(
-            'derived credentials for account_ix',
-            account_ix,
-            'address_ix',
-            address_ix,
-            'credential',
-            credential
-          )
-
-          // Add new credential to knownCredentials
-          keyAgent.knownCredentials = [...knownCredentials, credential]
-          set({ keyAgent })
-          return credential
-        }
-        return null
-      }
-    }),
-    {
-      name: 'PalladVault',
-      storage: createJSONStorage(getSecurePersistence)
-    }
-  )
-)*/
-
-// dont forget the hook!

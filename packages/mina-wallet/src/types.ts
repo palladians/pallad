@@ -5,7 +5,9 @@ import {
 } from '@palladxyz/key-management-agnostic'
 import {
   AccountInfo,
-  Mina
+  Mina,
+  SubmitTxArgs,
+  SubmitTxResult
   // SubmitTxArgs,
   // SubmitTxResult
 } from '@palladxyz/mina-core'
@@ -43,14 +45,12 @@ export interface MinaWallet {
 
   getTransactions(publicKey: Mina.PublicKey): Promise<Mina.TransactionBody[]>
 
-  /*constructTx(
+  constructTx(
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
-  ): Promise<ConstructedTransaction>
+  ): Promise<Mina.ConstructedTransaction>
 
-  signTx(transaction: ConstructedTransaction): Promise<SignedTransaction>
-
-  submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>*/
+  submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>
 
   shutdown(): void
 }

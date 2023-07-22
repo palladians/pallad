@@ -12,4 +12,7 @@ export type KeyAgentStore = {
   walletName: string
   restoreWallet: (walletName: string) => Promise<void>
   addCredentials: (walletName: string) => Promise<GroupedCredentials | null>
+  setCurrentWallet: (walletName: string) => void
+  getCurrentWallet: () => GroupedCredentials | null
+  getCredentials: () => GroupedCredentials[] | null
 }
