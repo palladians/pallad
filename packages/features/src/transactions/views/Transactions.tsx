@@ -7,7 +7,7 @@ export const TransactionsView = () => {
   const navigate = useNavigate()
   return (
     <AppLayout>
-      <div className="p-4 gap-4">
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Transactions"
           button={{ label: 'Send', onClick: () => navigate('/send') }}
