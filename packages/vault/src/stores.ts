@@ -13,23 +13,8 @@ import { getSecurePersistence } from '@palladxyz/persistence'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
-//import { Store } from './types'
 import { AccountStore, VaultStore } from './vault'
 
-// this is a Mina specific store, we will need to refactor this to be agnostic
-/*export const accountStore = createStore<Store>((set) => ({
-  accountInfo: {
-    balance: { total: 0 },
-    nonce: 0,
-    inferredNonce: 0,
-    delegate: '',
-    publicKey: ''
-  },
-  transactions: [],
-  setAccountInfo: (accountInfo: AccountInfo) => set({ accountInfo }),
-  setTransactions: (transactions: Mina.TransactionBody[]) =>
-    set({ transactions })
-}))*/
 const createEmptyAccountStore = (): AccountStore => ({
   accountInfo: {} as AccountInfo,
   transactions: {} as Mina.TransactionBody[],
