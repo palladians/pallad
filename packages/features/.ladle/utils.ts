@@ -1,6 +1,6 @@
 import { useAppStore } from '../src/wallet/store/app'
 import { useEffect } from 'react'
-import { MinaNetwork, Network } from '@palladxyz/key-generator'
+import { MinaNetwork, Network } from '@palladxyz/key-management-agnostic'
 
 const WALLET_NAME = 'Demo Wallet'
 const MNEMONIC =

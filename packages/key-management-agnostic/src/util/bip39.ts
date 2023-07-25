@@ -33,3 +33,5 @@ export const entropyToSeed = (entropy: Uint8Array, passphrase?: string) => {
   // Return unencrypted root key bytes
   return seed //root.privateKey ? root.privateKey : Buffer.from([])
 }
+
+export {wordlist}
