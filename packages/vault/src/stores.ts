@@ -107,7 +107,7 @@ export const keyAgentStore = createStore<VaultStore>()(
 
             if (result) {
               const [accountInfo, paginatedTransactions] = result
-              const transactions = paginatedTransactions.pageResults //pageResults because we are using the MinaProvider and it has its own pagination type
+              const transactions = paginatedTransactions.pageResults //`pageResults` because we are using the MinaProvider and it has its own pagination type
               // Create a new AccountStore
               const newAccountStore: AccountStore = {
                 ...createEmptyAccountStore(),
