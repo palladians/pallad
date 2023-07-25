@@ -1,4 +1,9 @@
-import { MinaPayload, Network, validateMnemonic, wordlist } from '@palladxyz/key-management-agnostic'
+import {
+  MinaPayload,
+  Network,
+  validateMnemonic,
+  wordlist
+} from '@palladxyz/key-management-agnostic'
 import { Button, cn, Label, Textarea } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
