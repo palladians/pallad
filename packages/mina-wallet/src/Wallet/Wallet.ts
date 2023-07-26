@@ -7,6 +7,7 @@ import {
   FromBip39MnemonicWordsProps,
   GroupedCredentials,
   InMemoryKeyAgent,
+  MinaPayload,
   Network
 } from '@palladxyz/key-management-agnostic'
 import {
@@ -86,11 +87,23 @@ export class MinaWalletImpl implements MinaWallet {
     return transactions
   }
 
-  async sign<T extends ChainSpecificPayload_>(
-    payload: T,
-    signable: ChainSignablePayload,
-    args: ChainSpecificArgs
+  async sign(
+    signable: ChainSignablePayload
   ): Promise<ChainSignatureResult | undefined> {
+    // use current wallet to sign
+    const currentWallet = this.getCurrentWallet()
+    if (currentWallet === null) {
+      throw new Error('Current wallet is null, empty or undefined')
+    }
+    // currently only Mina specific
+    const args: ChainSpecificArgs = {
+      network: currentWallet?.chain as Network.Mina,
+      accountIndex: currentWallet?.accountIndex,
+      addressIndex: currentWallet?.addressIndex,
+      networkType: 'testnet'
+    }
+    const payload: ChainSpecificPayload_ = new MinaPayload()
+
     if (keyAgentStore.getState().keyAgent === undefined) {
       throw new Error('Key agent is undefined')
     }

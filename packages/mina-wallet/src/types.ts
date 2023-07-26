@@ -1,4 +1,6 @@
 import {
+  ChainSignablePayload,
+  ChainSignatureResult,
   ChainSpecificArgs,
   ChainSpecificPayload_,
   FromBip39MnemonicWordsProps,
@@ -42,6 +44,10 @@ export interface MinaWallet {
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
   ): Promise<Mina.ConstructedTransaction>
+
+  sign(
+    signable: ChainSignablePayload,
+  ): Promise<ChainSignatureResult | undefined>
 
   submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>
 
