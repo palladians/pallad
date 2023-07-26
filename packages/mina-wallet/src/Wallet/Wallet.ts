@@ -5,6 +5,7 @@ import {
   ChainSpecificPayload_,
   constructTransaction,
   FromBip39MnemonicWordsProps,
+  generateMnemonicWords,
   GroupedCredentials,
   InMemoryKeyAgent,
   MinaPayload,
@@ -129,24 +130,9 @@ export class MinaWalletImpl implements MinaWallet {
     return result
   }
 
-  /*
-  async createWallet(
-    walletName: string,
-    accountNumber: number
-  ): Promise<{ publicKey: string; mnemonic: string } | null> {
-    // Create a new wallet
-    const result = await keyAgentStore.getState().createWallet({
-      walletName,
-      network: this.network,
-      accountNumber
-    })
-
-    // Return the public key and mnemonic or null
-    return result
-      ? { publicKey: result.publicKey, mnemonic: result.mnemonic }
-      : null
-  }*/
-
+  async createWallet(strength = 128): Promise<{ mnemonic: string[] } | null> {
+    return { mnemonic: generateMnemonicWords(strength) }
+  }
   async restoreWallet<T extends ChainSpecificPayload_>(
     payload: T,
     args: ChainSpecificArgs,
@@ -162,6 +148,14 @@ export class MinaWalletImpl implements MinaWallet {
     await keyAgentStore
       .getState()
       .restoreWallet(payload, args, this.minaProvider, agentArgs)
+    // set the current wallet
+    const derivedAddress = keyAgentStore
+      .getState()
+      .getCredentials()?.[0]?.address
+    if (derivedAddress === undefined) {
+      throw new Error('Derived address is undefined')
+    }
+    keyAgentStore.getState().setCurrentWallet(derivedAddress)
   }
 
   getCurrentWallet(): GroupedCredentials | null {

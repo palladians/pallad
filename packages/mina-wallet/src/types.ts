@@ -18,12 +18,8 @@ import {
 export interface MinaWallet {
   readonly balance: number
 
-  /*getName(): Promise<string>
-
-  createWallet(
-    walletName: string,
-    accountNumber: number
-  ): Promise<{ publicKey: string; mnemonic: string } | null>*/
+  //getName(): Promise<string>
+  createWallet(strength: number): Promise<{ mnemonic: string[] } | null>
 
   restoreWallet<T extends ChainSpecificPayload_>(
     payload: T,

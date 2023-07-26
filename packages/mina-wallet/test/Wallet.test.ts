@@ -81,16 +81,38 @@ describe('MinaWalletImpl', () => {
     const message: Mina.MessageBody = {
       message: 'Hello, Bob!'
     }
-    const signedMessage = await wallet.sign(payload, message, args)
+    const signedMessage = await wallet.sign(message)
     const minaClient = new Client({ network: args.networkType })
     const isVerified = await minaClient.verifyMessage(
       signedMessage as Mina.SignedMessage
     )
     expect(isVerified).toBeTruthy()
   })
+  test('create wallet of strength 128', async () => {
+    const wallet = new MinaWalletImpl(
+      { name: 'Test Wallet' },
+      walletDependencies
+    )
+    const mnemonicStrength = 128
+    const walletMnemonic = await wallet.createWallet(mnemonicStrength)
+    expect(walletMnemonic).toHaveProperty('mnemonic')
+    expect(walletMnemonic?.mnemonic).toHaveLength(12)
+  })
+  test('create wallet of strength 256', async () => {
+    const wallet = new MinaWalletImpl(
+      { name: 'Test Wallet' },
+      walletDependencies
+    )
+    const mnemonicStrength = 256
+    const walletMnemonic = await wallet.createWallet(mnemonicStrength)
+    expect(walletMnemonic).toHaveProperty('mnemonic')
+    expect(walletMnemonic?.mnemonic).toHaveLength(24)
+  })
   test('signs and verifies attestation signature', async () => {
     /*
     This is a draft test for some kind of attestation method
+    See this example for a way to do attestation with snarkyjs: 
+    https://github.com/teddyjfpender/awesome-snarkyjs-learnings/tree/master/starter-contracts/5-zk-program-credential-proof
     */
     // restore wallet
     const args: MinaSpecificArgs = {
@@ -126,11 +148,7 @@ describe('MinaWalletImpl', () => {
     }
 
     // sign attestation
-    const signedAttestation = await wallet.sign(
-      restorePayload,
-      attestationPayloadString,
-      args
-    )
+    const signedAttestation = await wallet.sign(attestationPayloadString)
     const minaClient = new Client({ network: args.networkType })
     const isVerified = await minaClient.verifyMessage(
       signedAttestation as Mina.SignedMessage
