@@ -45,5 +45,8 @@ export interface MinaWallet {
 
   submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>
 
+  // The wallet might need APIs for receiving challenges and completing them!
+  // Challenge(challenge: VerifiableCredentialChallenge): Promise<VerifiableCredentialChallengeResponse>
+
   shutdown(): void
 }

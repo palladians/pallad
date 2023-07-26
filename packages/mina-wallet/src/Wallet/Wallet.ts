@@ -117,7 +117,6 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   /*
-
   async createWallet(
     walletName: string,
     accountNumber: number
