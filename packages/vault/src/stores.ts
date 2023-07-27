@@ -1,7 +1,7 @@
 import {
   ChainAddress,
   ChainSpecificArgs,
-  ChainSpecificPayload_,
+  ChainSpecificPayload,
   FromBip39MnemonicWordsProps,
   GroupedCredentials,
   InMemoryKeyAgent,
@@ -45,7 +45,7 @@ export const keyAgentStore = createStore<VaultStore>()(
       keyAgent: initialState.keyAgent,
       currentWallet: initialState.currentWallet,
       accountStores: initialState.accountStores,
-      restoreWallet: async <T extends ChainSpecificPayload_>(
+      restoreWallet: async <T extends ChainSpecificPayload>(
         payload: T,
         args: ChainSpecificArgs,
         provider: MinaProvider, // TODO: make chain agnostic
@@ -66,7 +66,7 @@ export const keyAgentStore = createStore<VaultStore>()(
 
         return keyAgent
       },
-      addCredentials: async <T extends ChainSpecificPayload_>(
+      addCredentials: async <T extends ChainSpecificPayload>(
         payload: T,
         args: ChainSpecificArgs,
         provider: MinaProvider, // TODO: make chain agnostic

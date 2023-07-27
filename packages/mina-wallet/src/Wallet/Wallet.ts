@@ -2,7 +2,7 @@ import {
   ChainSignablePayload,
   ChainSignatureResult,
   ChainSpecificArgs,
-  ChainSpecificPayload_,
+  ChainSpecificPayload,
   constructTransaction,
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
@@ -103,7 +103,7 @@ export class MinaWalletImpl implements MinaWallet {
       addressIndex: currentWallet?.addressIndex,
       networkType: 'testnet'
     }
-    const payload: ChainSpecificPayload_ = new MinaPayload()
+    const payload: ChainSpecificPayload = new MinaPayload()
 
     if (keyAgentStore.getState().keyAgent === undefined) {
       throw new Error('Key agent is undefined')
@@ -133,7 +133,7 @@ export class MinaWalletImpl implements MinaWallet {
   async createWallet(strength = 128): Promise<{ mnemonic: string[] } | null> {
     return { mnemonic: generateMnemonicWords(strength) }
   }
-  async restoreWallet<T extends ChainSpecificPayload_>(
+  async restoreWallet<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps

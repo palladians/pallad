@@ -1,4 +1,4 @@
-import { ChainPublicKey, ChainSpecificPayload_, Network } from '../../types'
+import { ChainPublicKey, ChainSpecificPayload, Network } from '../../types'
 
 export type StarknetSpecificPayload = {
   network: Network.Starknet
@@ -19,7 +19,7 @@ export type StarknetGroupedCredentials = {
   address: string
 }
 
-export class StarknetPayload implements ChainSpecificPayload_ {
+export class StarknetPayload implements ChainSpecificPayload {
   network = Network.Starknet
 
   async derivePublicKey(): Promise<ChainPublicKey> {

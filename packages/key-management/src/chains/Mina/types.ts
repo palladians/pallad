@@ -1,6 +1,6 @@
 import { Mina } from '@palladxyz/mina-core'
 
-import { ChainSpecificPayload_, Network } from '../../types'
+import { ChainSpecificPayload, Network } from '../../types'
 import { ChainPublicKey } from '../../types'
 import { deriveMinaPublicKey } from './credentialDerivation'
 import { deriveMinaPrivateKey } from './keyDerivation'
@@ -44,7 +44,7 @@ export type MinaSignablePayload =
   | Mina.SignableFields
   | Mina.SignableZkAppCommand
 
-export class MinaPayload implements ChainSpecificPayload_ {
+export class MinaPayload implements ChainSpecificPayload {
   network = Network.Mina
 
   async derivePublicKey(
