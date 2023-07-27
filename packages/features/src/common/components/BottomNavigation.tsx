@@ -17,13 +17,13 @@ const NAV_ITEMS = [
 export const BottomNavigation = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  console.log(pathname)
   return (
     <Card className="flex justify-around p-1">
       {NAV_ITEMS.map((navItem) => {
         const active = pathname === navItem.url
         return (
           <Button
+            key={navItem.url}
             variant={active ? '' : 'ghost'}
             onClick={() => navigate(navItem.url)}
           >
