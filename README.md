@@ -40,14 +40,18 @@ This is a monorepo for all the Pallad-related code.
   - `extension` - Browser extension app.
   - `website` - pallad.xyz website.
 - `packages`
-  - `features` - Common codebase for the extension and mobile app.
-  - `key-generator` - Key Generator SDK.
+  - `_template` - Template to follow for new packages in this repo.
+  - `common` - Common configuration for packages (tsup and vitest).
+  - `features` - Common codebase for the extension.
+  - `key-management-agnostic` - Blockchain agnostic key management.
   - `mina-core` - Core Mina Package SDK.
   - `mina-graphql` - GraphQL API client for the Mina Protocol.
+  - `mina-wallet` - Wrapper package for Mina Protocol wallets.
   - `offchain-data` - Client for fetching off-chain data like fiat price.
-  - `tx-construction` - creating and signing transactions for Mina Protocol.
-  - `ui` - UI framework based on CSS-in-JS and React Native Web.
-  - `util` - Pallad SDK utils.
+  - `persistence` - Persistence logic for wallet related data.
+  - `ui` - UI framework based on shadcn/ui and Tailwind.
+  - `util` - Shared util functions for other packages.
+  - `vault` - Credentials storage.
 
 ## Development
 
@@ -77,6 +81,14 @@ Running E2E tests for browser extension (Playwright):
 $ npx playwright install chromium # make sure you have Chromium driver
 $ yarn test:e2e:extension
 ```
+
+## Contributors
+
+<a href="https://github.com/palladians/pallad/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=palladians/pallad" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## Links
 
