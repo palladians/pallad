@@ -1,5 +1,9 @@
-import { validateMnemonic, wordlist } from '@palladxyz/key-generator'
-import { Network } from '@palladxyz/key-management'
+import {
+  MinaPayload,
+  Network,
+  validateMnemonic,
+  wordlist
+} from '@palladxyz/key-management-agnostic'
 import { Button, cn, Label, Textarea } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -41,13 +45,16 @@ export const MnemonicInputView = () => {
     if (!walletName) return
     if (!spendingPassword) return
     const restoredWallet = await wallet.restoreWallet(
+      new MinaPayload(),
+      {
+        network: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        networkType: 'testnet'
+      },
       {
         mnemonicWords: mnemonic.split(' '),
         getPassphrase: async () => Buffer.from('passphrase')
-      },
-      {
-        network: Network.Mina,
-        networkType: 'mainnet'
       }
     )
     console.log('original initialised wallet', wallet)

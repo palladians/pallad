@@ -1,4 +1,4 @@
-import { Network } from '@palladxyz/key-management'
+import { MinaPayload, Network } from '@palladxyz/key-management-agnostic'
 import { Button, cn, Input, Label } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -42,14 +42,18 @@ export const MnemonicConfirmationView = () => {
   const onSubmit = async () => {
     if (!walletName) return
     if (!spendingPassword) return
+    if (!mnemonic) return
     await wallet.restoreWallet(
+      new MinaPayload(),
+      {
+        network: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        networkType: 'testnet'
+      },
       {
         mnemonicWords: mnemonic.split(' '),
         getPassphrase: async () => Buffer.from('passphrase')
-      },
-      {
-        network: Network.Mina,
-        networkType: 'mainnet'
       }
     )
     console.log(wallet)

@@ -1,4 +1,6 @@
 export * from './AccountInfo'
 export * from './ChainHistory'
+export * from './provider'
 export * from './TxStatus'
 export * from './TxSubmit'
+export * from './types'

@@ -1,37 +1,33 @@
 import {
+  ChainSignablePayload,
+  ChainSignatureResult,
+  ChainSpecificArgs,
+  ChainSpecificPayload_,
+  constructTransaction,
   FromBip39MnemonicWordsProps,
+  generateMnemonicWords,
   GroupedCredentials,
   InMemoryKeyAgent,
+  MinaPayload,
   Network
-} from '@palladxyz/key-management'
+} from '@palladxyz/key-management-agnostic'
 import {
   AccountInfo,
-  AccountInfoArgs,
   Mina,
-  //SubmitTxArgs,
-  //SubmitTxResult,
-  TransactionsByAddressesArgs
+  SubmitTxArgs,
+  SubmitTxResult
 } from '@palladxyz/mina-core'
-import {
-  AccountInfoGraphQLProvider,
-  ChainHistoryGraphQLProvider,
-  TxSubmitGraphQLProvider
-} from '@palladxyz/mina-graphql'
-import { accountStore, keyAgentStore, NetworkArgs } from '@palladxyz/vault'
+import { MinaProvider } from '@palladxyz/mina-graphql'
+import { keyAgentStore } from '@palladxyz/vault'
 
+/**
+ * This wallet is in the process of becoming chain agnostic
+ */
 import { MinaWallet } from '../types'
-/*
-enum providerURLs {
-  txSubmitURL = 'https://proxy.devnet.minaexplorer.com/',
-  chainHistoryURL = 'https://devnet.graphql.minaexplorer.com',
-  accountInfoURL = 'https://proxy.devnet.minaexplorer.com/'
-}*/
 
 export interface MinaWalletDependencies {
   readonly keyAgent: InMemoryKeyAgent | null
-  readonly txSubmitProvider: TxSubmitGraphQLProvider
-  readonly chainHistoryProvider: ChainHistoryGraphQLProvider
-  readonly accountInfoProvider: AccountInfoGraphQLProvider
+  readonly minaProvider: MinaProvider
   readonly network: Network
   //readonly stores?: WalletStores;
 }
@@ -43,162 +39,126 @@ export interface MinaWalletProps {
 export class MinaWalletImpl implements MinaWallet {
   readonly keyAgent: InMemoryKeyAgent | null
   readonly balance: number
-  readonly credentials: GroupedCredentials[]
-  readonly accountInfoProvider: AccountInfoGraphQLProvider
-  readonly chainHistoryProvider: ChainHistoryGraphQLProvider
-  readonly txSubmitProvider: TxSubmitGraphQLProvider
+  readonly minaProvider: MinaProvider
   readonly name: string
-  //readonly networkType: NetworkType
-  readonly network: Network
   // Storage for the current wallet
 
   constructor(
     { name }: MinaWalletProps,
     {
       keyAgent,
-      txSubmitProvider,
-      chainHistoryProvider,
-      accountInfoProvider,
-      network
-    }: //stores = createInMemoryWalletStores()
+      minaProvider
+    }: //stores = createInMemoryWalletStores() // persistence layer?
     MinaWalletDependencies
   ) {
-    this.accountInfoProvider = accountInfoProvider //new AccountInfoGraphQLProvider(providerURLs.accountInfoURL)
-    this.chainHistoryProvider = chainHistoryProvider //new ChainHistoryGraphQLProvider(providerURLs.chainHistoryURL)
-    this.txSubmitProvider = txSubmitProvider //new TxSubmitGraphQLProvider(providerURLs.txSubmitURL)
     this.keyAgent = keyAgent
+    this.minaProvider = minaProvider
     this.name = name
-    this.network = network
-    this.credentials = []
     this.balance = 0
   }
 
-  //getName(): Promise<string> {
-  //  throw new Error('Method not implemented.')
-  //}
-
-  async getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo> {
-    // perform a health check
-    const health = await this.accountInfoProvider.healthCheck()
-    console.log('Health check:', health)
-    if (!health) {
-      throw new Error('Health check failed')
-    }
-
-    const accountInfoArgs: AccountInfoArgs = { publicKey: publicKey }
-    const accountInfo = await this.accountInfoProvider.getAccountInfo(
-      accountInfoArgs
-    )
-    return accountInfo
+  getName(): Promise<string> {
+    throw new Error('Method not implemented.')
   }
 
-  setAccountInfo(accountInfo: AccountInfo): void {
-    accountStore.getState().setAccountInfo(accountInfo)
+  async getAccountInfo(): Promise<AccountInfo | null> {
+    const currentWallet = this.getCurrentWallet()
+    if (currentWallet === null) {
+      throw new Error('Current wallet is null, empty or undefined')
+    }
+    const walletAddress = currentWallet.address
+
+    const accountInformation =
+      keyAgentStore.getState().getAccountStore(walletAddress)?.accountInfo ||
+      null
+
+    return accountInformation
   }
 
-  async getTransactions(
-    publicKey: Mina.PublicKey
-  ): Promise<Mina.TransactionBody[]> {
-    const limit = 10
-    let startAt = 0
-    let transactions: Mina.TransactionBody[] = []
-
-    while (transactions.length < 20) {
-      const args: TransactionsByAddressesArgs = {
-        addresses: [publicKey],
-        pagination: { startAt, limit }
-      }
-
-      const transactionPage =
-        await this.chainHistoryProvider.transactionsByAddresses(args)
-
-      transactions = [...transactions, ...transactionPage.pageResults]
-
-      if (
-        transactionPage.pageResults.length < limit ||
-        transactions.length >= 20
-      ) {
-        break
-      }
-
-      startAt += limit
+  async getTransactions(): Promise<Mina.TransactionBody[] | null> {
+    const currentWallet = this.getCurrentWallet()
+    if (currentWallet === null) {
+      throw new Error('Current wallet is null, empty or undefined')
     }
-
-    transactions = transactions.slice(0, 20)
-
-    accountStore.getState().setTransactions(transactions)
+    const walletAddress = currentWallet.address
+    const transactions =
+      keyAgentStore.getState().getAccountStore(walletAddress)?.transactions ||
+      null
 
     return transactions
   }
-  /*
+
+  async sign(
+    signable: ChainSignablePayload
+  ): Promise<ChainSignatureResult | undefined> {
+    // use current wallet to sign
+    const currentWallet = this.getCurrentWallet()
+    if (currentWallet === null) {
+      throw new Error('Current wallet is null, empty or undefined')
+    }
+    // currently only Mina specific
+    const args: ChainSpecificArgs = {
+      network: currentWallet?.chain as Network.Mina,
+      accountIndex: currentWallet?.accountIndex,
+      addressIndex: currentWallet?.addressIndex,
+      networkType: 'testnet'
+    }
+    const payload: ChainSpecificPayload_ = new MinaPayload()
+
+    if (keyAgentStore.getState().keyAgent === undefined) {
+      throw new Error('Key agent is undefined')
+    }
+    return await keyAgentStore
+      .getState()
+      .keyAgent?.sign(payload, signable, args)
+  }
+
+  // This is Mina Specific
+  // TODO: Make this chain agnostic
   async constructTx(
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
-  ): Promise<ConstructedTransaction> {
-    const constructedTransaction: ConstructedTransaction = constructTransaction(
-      transaction,
-      kind
-    )
+  ): Promise<Mina.ConstructedTransaction> {
+    const constructedTransaction: Mina.ConstructedTransaction =
+      constructTransaction(transaction, kind)
     return constructedTransaction
   }
-
-  async signTx(
-    transaction: ConstructedTransaction
-  ): Promise<SignedTransaction> {
-    const credential = keyAgentStore.getState().credentials[0]
-    const privateKey = credential?.walletPrivateKey
-    if (privateKey === undefined) {
-      throw new Error('Private key is undefined')
-    }
-
-    const signedTransaction: SignedTransaction = await signTransaction(
-      privateKey,
-      transaction,
-      'testnet' // TODO: Define Mina NetworkType which is either 'testnet' or 'mainnet' and include in the vault
-    )
-
-    // TODO: Verify that the transaction is valid before returning it
-    return signedTransaction
-  }
-
+  // This is Mina Specific
+  // TODO: Make this chain agnostic
   async submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult> {
-    const result = await this.txSubmitProvider.submitTx(submitTxArgs)
+    const result = await this.minaProvider.submitTransaction(submitTxArgs)
     return result
   }
 
-  async createWallet(
-    walletName: string,
-    accountNumber: number
-  ): Promise<{ publicKey: string; mnemonic: string } | null> {
-    // Create a new wallet
-    const result = await keyAgentStore.getState().createWallet({
-      walletName,
-      network: this.network,
-      accountNumber
-    })
-
-    // Return the public key and mnemonic or null
-    return result
-      ? { publicKey: result.publicKey, mnemonic: result.mnemonic }
-      : null
-  }*/
-
-  async restoreWallet(
-    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
-    { network, networkType }: NetworkArgs
-  ): Promise<InMemoryKeyAgent | null> {
+  async createWallet(strength = 128): Promise<{ mnemonic: string[] } | null> {
+    return { mnemonic: generateMnemonicWords(strength) }
+  }
+  async restoreWallet<T extends ChainSpecificPayload_>(
+    payload: T,
+    args: ChainSpecificArgs,
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+  ): Promise<void> {
     // Restore a wallet from a mnemonic
-    const keyAgent = await keyAgentStore.getState().restoreWallet(
-      {
-        mnemonicWords,
-        getPassphrase
-      },
-      { network, networkType }
-    )
-    return keyAgent ? keyAgent : null
+    const agentArgs: FromBip39MnemonicWordsProps = {
+      getPassphrase: getPassphrase,
+      mnemonicWords: mnemonicWords,
+      mnemonic2ndFactorPassphrase: ''
+    }
+    // restore the agent state
+    await keyAgentStore
+      .getState()
+      .restoreWallet(payload, args, this.minaProvider, agentArgs)
+    // set the current wallet
+    const derivedAddress = keyAgentStore
+      .getState()
+      .getCredentials()?.[0]?.address
+    if (derivedAddress === undefined) {
+      throw new Error('Derived address is undefined')
+    }
+    keyAgentStore.getState().setCurrentWallet(derivedAddress)
   }
-  /*
-  getCurrentWallet(): PublicCredential | null {
+
+  getCurrentWallet(): GroupedCredentials | null {
     // Get the current wallet
     const result = keyAgentStore.getState().getCurrentWallet()
 
@@ -206,13 +166,13 @@ export class MinaWalletImpl implements MinaWallet {
     return result ? result : null
   }
 
-  getAccounts(): string[] {
+  getCredentials(): GroupedCredentials[] | null {
     // Get the list of accounts for the current wallet
-    const result = keyAgentStore.getState().getAccounts()
+    const result = keyAgentStore.getState().getCredentials()
 
     // Return the list of accounts
     return result
-  }*/
+  }
 
   shutdown(): void {
     // Implement the logic to shut down the wallet

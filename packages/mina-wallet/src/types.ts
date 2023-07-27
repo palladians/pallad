@@ -1,51 +1,54 @@
 import {
+  ChainSignablePayload,
+  ChainSignatureResult,
+  ChainSpecificArgs,
+  ChainSpecificPayload_,
   FromBip39MnemonicWordsProps,
-  GroupedCredentials,
-  InMemoryKeyAgent
-} from '@palladxyz/key-management'
+  GroupedCredentials
+} from '@palladxyz/key-management-agnostic'
 import {
   AccountInfo,
-  Mina
-  // SubmitTxArgs,
-  // SubmitTxResult
+  Mina,
+  SubmitTxArgs,
+  SubmitTxResult
 } from '@palladxyz/mina-core'
-import { NetworkArgs } from '@palladxyz/vault'
 
 //import { PublicCredential } from '@palladxyz/vault'
 
 export interface MinaWallet {
-  readonly credentials: GroupedCredentials[]
   readonly balance: number
 
-  /*getName(): Promise<string>
+  //getName(): Promise<string>
+  createWallet(strength: number): Promise<{ mnemonic: string[] } | null>
 
-  createWallet(
-    walletName: string,
-    accountNumber: number
-  ): Promise<{ publicKey: string; mnemonic: string } | null>*/
+  restoreWallet<T extends ChainSpecificPayload_>(
+    payload: T,
+    args: ChainSpecificArgs,
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+  ): Promise<void>
 
-  restoreWallet(
-    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
-    { network, networkType }: NetworkArgs
-  ): Promise<InMemoryKeyAgent | null>
+  getCurrentWallet(): GroupedCredentials | null
+  getCredentials(): GroupedCredentials[] | null
 
-  //getCurrentWallet(): PublicCredential | null
+  getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo | null>
 
-  //getAccounts(): string[]
+  getTransactions(
+    publicKey: Mina.PublicKey
+  ): Promise<Mina.TransactionBody[] | null>
 
-  getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo>
-  setAccountInfo(accountInfo: AccountInfo): void
-
-  getTransactions(publicKey: Mina.PublicKey): Promise<Mina.TransactionBody[]>
-
-  /*constructTx(
+  constructTx(
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
-  ): Promise<ConstructedTransaction>
+  ): Promise<Mina.ConstructedTransaction>
 
-  signTx(transaction: ConstructedTransaction): Promise<SignedTransaction>
+  sign(
+    signable: ChainSignablePayload
+  ): Promise<ChainSignatureResult | undefined>
 
-  submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>*/
+  submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>
+
+  // The wallet might need APIs for receiving challenges and completing them!
+  // Challenge(challenge: VerifiableCredentialChallenge): Promise<VerifiableCredentialChallengeResponse>
 
   shutdown(): void
 }
