@@ -85,7 +85,10 @@ $ npx playwright install chromium # make sure you have Chromium driver
 $ yarn test:e2e:extension
 ```
 
-## Contributors
+## Contributors ✨
+
+Thanks goes to these wonderful people
+([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <a href="https://github.com/palladians/pallad/graphs/contributors">
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -104,10 +107,7 @@ $ yarn test:e2e:extension
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-  <img src="https://contrib.rocks/image?repo=palladians/pallad" />
 </a>
-
-Made with [contrib.rocks](https://contrib.rocks).
 
 ## Links
 
