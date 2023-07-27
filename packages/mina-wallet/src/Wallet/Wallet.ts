@@ -10,7 +10,7 @@ import {
   InMemoryKeyAgent,
   MinaPayload,
   Network
-} from '@palladxyz/key-management-agnostic'
+} from '@palladxyz/key-management'
 import {
   AccountInfo,
   Mina,

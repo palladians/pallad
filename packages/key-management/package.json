@@ -1,5 +1,5 @@
 {
-  "name": "@palladxyz/key-management-agnostic",
+  "name": "@palladxyz/key-management",
   "description": "An agnostic key management package for Pallad",
   "version": "0.0.1",
   "type": "module",

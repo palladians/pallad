@@ -1,4 +1,4 @@
-import { generateMnemonicWords } from '@palladxyz/key-management-agnostic'
+import { generateMnemonicWords } from '@palladxyz/key-management'
 import { useNavigate } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 

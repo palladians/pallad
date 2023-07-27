@@ -1,4 +1,4 @@
-import { MinaNetwork } from '@palladxyz/key-management-agnostic'
+import { MinaNetwork } from '@palladxyz/key-management'
 import { getLocalPersistence } from '@palladxyz/persistence'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'

@@ -1,4 +1,4 @@
-import { MinaNetwork, Network } from '@palladxyz/key-management-agnostic'
+import { MinaNetwork, Network } from '@palladxyz/key-management'
 import { MinaProvider } from '@palladxyz/mina-graphql'
 import { MinaWalletImpl } from '@palladxyz/mina-wallet'
 import { keyAgentStore } from '@palladxyz/vault'

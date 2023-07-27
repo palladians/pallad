@@ -1,4 +1,4 @@
-import { MinaPayload, Network } from '@palladxyz/key-management-agnostic'
+import { MinaPayload, Network } from '@palladxyz/key-management'
 import { Button, cn, Input, Label } from '@palladxyz/ui'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'

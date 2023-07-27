@@ -17,7 +17,7 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/key-management-agnostic": "*",
+    "@palladxyz/key-management": "*",
     "@palladxyz/mina-core": "*",
     "@palladxyz/mina-graphql": "*",
     "@palladxyz/persistence": "*",
