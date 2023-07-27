@@ -17,7 +17,6 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/key-generator": "*",
     "@palladxyz/mina-core": "*",
     "@palladxyz/util": "*",
     "bs58check": "^3.0.1",

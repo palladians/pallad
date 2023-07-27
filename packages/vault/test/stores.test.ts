@@ -1,80 +1,67 @@
 import {
   FromBip39MnemonicWordsProps,
-  GetPassphrase,
   InMemoryKeyAgent,
+  MinaPayload,
+  MinaSpecificArgs,
   Network
-} from '@palladxyz/key-management'
-import { AccountInfo, Mina } from '@palladxyz/mina-core'
+} from '@palladxyz/key-management-agnostic'
+import { MinaProvider } from '@palladxyz/mina-graphql'
 
-import { accountStore, keyAgentStore } from '../src/stores'
-import { NetworkArgs } from '../src/vault'
+import { keyAgentStore } from '../src/stores'
+
+// Provide the passphrase for testing purposes
+const params = {
+  passphrase: 'passphrase'
+}
+const getPassphrase = async () => Buffer.from(params.passphrase)
+const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
+const explorerUrl = 'https://devnet.graphql.minaexplorer.com'
 
 describe('store', () => {
-  test('setAccountInfo', async () => {
-    const accountInfo: AccountInfo = {
-      balance: { total: 1000 },
-      nonce: 1,
-      inferredNonce: 1,
-      delegate: 'delegate',
-      publicKey: 'publicKey'
-    }
+  let keyAgent: InMemoryKeyAgent
+  let agentArgs: FromBip39MnemonicWordsProps
+  let mnemonic: string[]
+  let provider: MinaProvider
 
-    accountStore.getState().setAccountInfo(accountInfo)
-
-    expect(accountStore.getState().accountInfo).toEqual(accountInfo)
-  })
-
-  test('setTransactions', async () => {
-    const transactions: Mina.TransactionBody[] = [
-      {
-        type: 'payment',
-        to: 'address1',
-        from: 'address2',
-        fee: '1',
-        amount: '100',
-        nonce: '1',
-        memo: 'test memo',
-        hash: 'hash1'
-      }
+  beforeEach(async () => {
+    // Create keys for testing purposes
+    mnemonic = [
+      'habit',
+      'hope',
+      'tip',
+      'crystal',
+      'because',
+      'grunt',
+      'nation',
+      'idea',
+      'electric',
+      'witness',
+      'alert',
+      'like'
     ]
-
-    accountStore.getState().setTransactions(transactions)
-
-    expect(accountStore.getState().transactions).toEqual(transactions)
+    agentArgs = {
+      getPassphrase: getPassphrase,
+      mnemonicWords: mnemonic,
+      mnemonic2ndFactorPassphrase: ''
+    }
+    keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
+    provider = new MinaProvider(nodeUrl, explorerUrl)
   })
-
   test('restoreWallet', async () => {
-    const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
-    const mnemonic = [
-      'climb',
-      'acquire',
-      'robot',
-      'select',
-      'shaft',
-      'zebra',
-      'blush',
-      'extend',
-      'evolve',
-      'host',
-      'misery',
-      'busy'
-    ]
-    const agentProps: FromBip39MnemonicWordsProps = {
-      getPassphrase: getPassword,
-      mnemonicWords: mnemonic
-    }
-    const networkProps: NetworkArgs = {
+    const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
       networkType: 'testnet'
     }
-    const keyAgent = await InMemoryKeyAgent.fromBip39MnemonicWords(agentProps)
+    const payload = new MinaPayload()
+    await keyAgent.restoreKeyAgent(payload, restoreArgs)
     const rootPrivateKey = await keyAgent.exportRootPrivateKey()
     const encryptedSeedBytes = keyAgent.serializableData.encryptedSeedBytes
 
-    const storeKeyAgent = await keyAgentStore
+    await keyAgentStore
       .getState()
-      .restoreWallet(agentProps, networkProps)
-    console.log('storeKeyAgent', storeKeyAgent)
+      .restoreWallet(payload, restoreArgs, provider, agentArgs)
     const storeRootPrivateKey = await keyAgentStore
       .getState()
       .keyAgent?.exportRootPrivateKey()
@@ -86,52 +73,46 @@ describe('store', () => {
 
     // check there exists the first account and address in the keyAgent not in the .serializableKeyAgentData knownCredentials
     const storeKeyAgentCredentials =
-      keyAgentStore.getState().keyAgent?.serializableData.knownCredentials
+      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
+        .contents
     console.log('knownCredentials', storeKeyAgentCredentials)
     expect(storeKeyAgentCredentials).toHaveLength(1)
+
+    // check the store has account info
+    const accountInformation = keyAgentStore
+      .getState()
+      .getAccountStore(storeKeyAgentCredentials[0]?.address)
+    console.log('Account Information!')
+    console.log('accountStore', accountInformation)
   })
 
-  test('addCredentials', async () => {
-    const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
-    const mnemonic = [
-      'climb',
-      'acquire',
-      'robot',
-      'select',
-      'shaft',
-      'zebra',
-      'blush',
-      'extend',
-      'evolve',
-      'host',
-      'misery',
-      'busy'
-    ]
-    const agentProps: FromBip39MnemonicWordsProps = {
-      getPassphrase: getPassword,
-      mnemonicWords: mnemonic
-    }
-    const networkProps: NetworkArgs = {
+  test('restoreWallet and second addCredentials', async () => {
+    const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
       networkType: 'testnet'
     }
-    await keyAgentStore.getState().restoreWallet(agentProps, networkProps)
+    const payload = new MinaPayload()
+    // restore the keyAgent
+    await keyAgentStore
+      .getState()
+      .restoreWallet(payload, restoreArgs, provider, agentArgs)
 
-    const credentialsData = {
-      account_ix: 1,
-      address_ix: 0,
+    const argsNewCredential: MinaSpecificArgs = {
       network: Network.Mina,
-      networkType: 'testnet' as Mina.NetworkType,
-      pure: true
+      accountIndex: 1,
+      addressIndex: 0,
+      networkType: 'testnet'
     }
     // derive next credentials
-    const credentials = await keyAgentStore
+    await keyAgentStore
       .getState()
-      .addCredentials(credentialsData)
-    console.log('credentials', credentials)
+      .addCredentials(payload, argsNewCredential, provider, false)
     // after adding credentials, the keyAgent should have the new credentials
     const storeKeyAgentCredentials =
-      keyAgentStore.getState().keyAgent?.serializableData.knownCredentials
+      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
+        .contents
     console.log('knownCredentials', storeKeyAgentCredentials)
 
     expect(storeKeyAgentCredentials).toHaveLength(2)

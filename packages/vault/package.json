@@ -17,10 +17,11 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/util": "*",
+    "@palladxyz/key-management-agnostic": "*",
     "@palladxyz/mina-core": "*",
-    "@palladxyz/key-management": "*",
+    "@palladxyz/mina-graphql": "*",
     "@palladxyz/persistence": "*",
+    "@palladxyz/util": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "mina-signer": "^2.0.3",

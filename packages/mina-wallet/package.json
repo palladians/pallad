@@ -19,8 +19,7 @@
   "dependencies": {
     "@palladxyz/util": "*",
     "@palladxyz/mina-core": "*",
-    "@palladxyz/key-management": "*",
-    "@palladxyz/key-generator": "*",
+    "@palladxyz/key-management-agnostic": "*",
     "@palladxyz/mina-graphql": "*",
     "@palladxyz/vault": "*",
     "bs58check": "^3.0.1",

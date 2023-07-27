@@ -4,13 +4,16 @@
  */
 
 import {
+  ChainAddress,
+  ChainSpecificArgs,
+  ChainSpecificPayload_,
   FromBip39MnemonicWordsProps,
   GroupedCredentials,
   InMemoryKeyAgent,
-  Network,
-  SerializableKeyAgentData
-} from '@palladxyz/key-management'
-import { Mina } from '@palladxyz/mina-core'
+  Network
+} from '@palladxyz/key-management-agnostic'
+import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import { MinaProvider } from '@palladxyz/mina-graphql'
 
 export type NetworkArgs = {
   network: Network
@@ -18,50 +21,68 @@ export type NetworkArgs = {
 }
 
 /**
- * Type representing a public credential.
- * @typedef {Object} PublicCredential
- * @property {string} walletName - Name of the wallet
- * @property {SerializableKeyAgentData} serializableKeyAgentData - Serializable KeyAgent data of the wallet
+ * Type representing the state of the account.
+ * @typedef {Object} AccountState
  */
-export type PublicCredential = {
-  walletName: string
-  serializableKeyAgentData: SerializableKeyAgentData
+export type AccountState = {
+  accountInfo: AccountInfo
+  transactions: Mina.TransactionBody[]
 }
+
+/**
+ * Type representing the mutators for the account state.
+ * @typedef {Object} AccountMutators
+ */
+type AccountMutators = {
+  setAccountInfo: (accountInfo: AccountInfo) => void
+  setTransactions: (transactions: Mina.TransactionBody[]) => void
+  getAccountInfo: () => AccountInfo
+  getTransactions: () => Mina.TransactionBody[]
+}
+
+/**
+ * Type representing the account store.
+ * @typedef {Object} AccountStore
+ * @property {AccountInfo} accountInfo - Account info of the store
+ * @property {Array<Mina.TransactionBody>} transactions - Transactions of the store
+ */
+export type AccountStore = AccountState & AccountMutators
 
 /**
  * Type representing the state of the vault.
  * @typedef {Object} VaultState
- * @property {SerializableKeyAgentData} serializableKeyAgentData - Serializable KeyAgent data of the vault
  */
 export type VaultState = {
   keyAgent: InMemoryKeyAgent | null
-  serializableKeyAgentData: SerializableKeyAgentData
+  currentWallet: GroupedCredentials | null
+  accountStores: Record<ChainAddress, AccountStore>
 }
 
 /**
  * Type representing the mutators for the vault state.
  * @typedef {Object} VaultMutators
- * @property {(walletName: string, mnemonic: string, network: Network, accountNumber: number, accountIndex: number) => Promise<InMemoryKeyAgent | null>} restoreWallet - Function to restore a wallet
- * @property {() => void} reset - Function to reset the state
  */
 type VaultMutators = {
-  restoreWallet: (
-    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
-    { network, networkType }: NetworkArgs
-  ) => Promise<InMemoryKeyAgent | null>
-  addCredentials: ({
-    account_ix,
-    address_ix,
-    network,
-    networkType,
-    pure
-  }: {
-    account_ix: number
-    address_ix: number
-    network: Network
-    networkType: Mina.NetworkType
-    pure: boolean
-  }) => Promise<GroupedCredentials | null>
+  restoreWallet<T extends ChainSpecificPayload_>(
+    payload: T,
+    args: ChainSpecificArgs,
+    provider: MinaProvider,
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+  ): Promise<InMemoryKeyAgent | null>
+  addCredentials: <T extends ChainSpecificPayload_>(
+    payload: T,
+    args: ChainSpecificArgs,
+    provider: MinaProvider,
+    pure?: boolean
+  ) => Promise<void>
+  setCurrentWallet: (address: ChainAddress) => void
+  getCurrentWallet: () => GroupedCredentials | null
+  getCredentials: () => GroupedCredentials[] | null
+  getAccountStore: (address: ChainAddress) => AccountStore | null
+  setAccountStore: (
+    address: ChainAddress,
+    accountStore: Partial<AccountStore>
+  ) => void
 }
 
 /**

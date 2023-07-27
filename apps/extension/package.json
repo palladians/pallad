@@ -13,8 +13,7 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@palladxyz/key-generator": "*",
-    "@palladxyz/key-management": "*",
+    "@palladxyz/key-management-agnostic": "*",
     "@palladxyz/features": "*",
     "@palladxyz/ui": "*",
     "@plasmohq/messaging": "^0.3.3",

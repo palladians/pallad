@@ -25,7 +25,6 @@ describe('ChainHistoryGraphQLProvider', () => {
 
     const provider = new ChainHistoryGraphQLProvider(minaExplorerGql)
     const response = await provider.transactionsByAddresses(args)
-    // note: this response is not ordered
 
     expect(response.pageResults.length).toBeGreaterThan(0)
 
