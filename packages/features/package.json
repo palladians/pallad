@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
-    "@palladxyz/key-management-agnostic": "*",
+    "@palladxyz/key-management": "*",
     "@palladxyz/mina-graphql": "*",
     "@palladxyz/mina-wallet": "*",
     "@palladxyz/offchain-data": "*",

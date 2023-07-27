@@ -6,7 +6,7 @@ import {
   GroupedCredentials,
   InMemoryKeyAgent,
   MinaGroupedCredentials
-} from '@palladxyz/key-management-agnostic'
+} from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { MinaProvider } from '@palladxyz/mina-graphql'
 import { getSecurePersistence } from '@palladxyz/persistence'

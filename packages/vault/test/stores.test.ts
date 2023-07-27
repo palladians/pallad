@@ -1,12 +1,12 @@
+import { MinaProvider } from '@palladxyz/mina-graphql'
+
 import {
   FromBip39MnemonicWordsProps,
   InMemoryKeyAgent,
   MinaPayload,
   MinaSpecificArgs,
   Network
-} from '@palladxyz/key-management-agnostic'
-import { MinaProvider } from '@palladxyz/mina-graphql'
-
+} from '../../key-management/dist'
 import { keyAgentStore } from '../src/stores'
 
 // Provide the passphrase for testing purposes

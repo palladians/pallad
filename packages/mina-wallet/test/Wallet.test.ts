@@ -3,7 +3,7 @@ import {
   MinaPayload,
   MinaSpecificArgs,
   Network
-} from '@palladxyz/key-management-agnostic'
+} from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import { MinaProvider } from '@palladxyz/mina-graphql'

@@ -5,7 +5,7 @@ import {
   ChainSpecificPayload_,
   FromBip39MnemonicWordsProps,
   GroupedCredentials
-} from '@palladxyz/key-management-agnostic'
+} from '@palladxyz/key-management'
 import {
   AccountInfo,
   Mina,

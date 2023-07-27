@@ -1,4 +1,4 @@
-import { GroupedCredentials } from '@palladxyz/key-management-agnostic'
+import { GroupedCredentials } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 
 export type Store = {
