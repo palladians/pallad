@@ -23,9 +23,6 @@ export async function deriveStarknetPrivateKey(
   if (!childNode?.privateKey) throw new Error('Unable to derive private key')
 
   const privateKey = childNode.privateKey
-  const starknetPrivateKey = starknet.grindKey(
-    Buffer.from(privateKey).toString('hex')
-  )
-
+  const starknetPrivateKey = starknet.grindKey(privateKey)
   return starknetPrivateKey
 }

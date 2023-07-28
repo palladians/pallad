@@ -2,13 +2,13 @@
 
 Acknowledgements: significant inspiration from [cardano-js-sdk](https://github.com/input-output-hk/cardano-js-sdk) helped build this package.
 
-This package provides comprehensive support for key management across multiple blockchain networks. It comes with support for Mina and Ethereum, and Starknet in progress. It can be extended to include more as needed. The requirements for adding more networks requires adding a directory to `./src/chains` and defining functionality to derive keys, build compliant credentials, and perform signing operations.
+This package provides comprehensive support for key management across multiple blockchain networks. It comes with support for Mina, Ethereum, and Starknet in progress. It can be extended to include more as needed. The requirements for adding more networks requires adding a directory to `./src/chains` and defining functionality to derive keys, build compliant credentials, and perform signing operations.
 
 The goal is to build a KMS that is compliant with the [W3C Universal Wallet Specification](https://w3c-ccg.github.io/universal-wallet-interop-spec/#Data%20Model).
 
 ## Features
 
-- Supports Mina and Ethereum networks
+- Supports Mina, Ethereum, and Starknet networks
 - Can derive credentials for each chain
 - Signing operations for each chain
 - Supports seed decryption and exporting of seeds using an implementation of [EMIP-003](https://github.com/Emurgo/EmIPs/blob/master/specs/emip-003.md)
