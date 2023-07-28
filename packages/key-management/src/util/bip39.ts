@@ -1,4 +1,3 @@
-//import * as bip32 from '@scure/bip32'
 import * as bip39 from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/english.js'
 
@@ -15,6 +14,8 @@ export const mnemonicWordsToEntropy = (mnenonic: string[]) =>
   bip39.mnemonicToEntropy(joinMnemonicWords(mnenonic), wordlist)
 export const mnemonicToSeed = (mnemonic: string[], passphrase?: string) =>
   bip39.mnemonicToSeedSync(joinMnemonicWords(mnemonic), passphrase)
+export const mnemonicToSeedSync = (mnemonic: string, passphrase?: string) =>
+  bip39.mnemonicToSeedSync(mnemonic, passphrase)
 /**
  * A wrapper around the bip39 package function
  */

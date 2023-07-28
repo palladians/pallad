@@ -1,4 +1,4 @@
-import { ChainPublicKey, ChainSpecificPayload_, Network } from '../../types'
+import { ChainPublicKey, ChainSpecificPayload, Network } from '../../types'
 import { deriveEthereumPublicAddress } from './credentialDerivation'
 import { deriveEthereumPrivateKey } from './keyDerivation'
 
@@ -27,7 +27,7 @@ export type EthereumGroupedCredentials = {
   address: string
 }
 
-export class EthereumPayload implements ChainSpecificPayload_ {
+export class EthereumPayload implements ChainSpecificPayload {
   network = Network.Ethereum
 
   async derivePublicKey(privateKey: Uint8Array): Promise<ChainPublicKey> {

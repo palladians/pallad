@@ -1,5 +1,8 @@
 import { Mina } from '@palladxyz/mina-core'
 import * as bip32 from '@scure/bip32'
+import { HDKey } from '@scure/bip32'
+import { deepStrictEqual } from 'assert'
+import * as starknet from 'micro-starknet'
 import Client from 'mina-signer'
 import sinon from 'sinon'
 import { expect } from 'vitest'
@@ -10,6 +13,10 @@ import {
 } from '../src/chains/Ethereum/types'
 import { MinaPayload, MinaSpecificArgs } from '../src/chains/Mina'
 import { reverseBytes } from '../src/chains/Mina/keyDerivationUtils'
+import {
+  StarknetPayload,
+  StarknetSpecificArgs
+} from '../src/chains/Starknet/types'
 import { emip3encrypt } from '../src/emip3'
 import { getPassphraseRethrowTypedError } from '../src/InMemoryKeyAgent'
 import { KeyAgentBase } from '../src/KeyAgentBase'
@@ -36,12 +43,16 @@ describe('KeyAgentBase', () => {
   }
 
   let instance: KeyAgentBaseInstance
+  let instanceStarknet: KeyAgentBaseInstance
   let serializableData: SerializableKeyAgentData
+  let serializableDataStarknet: SerializableKeyAgentData
   let networkType: Mina.NetworkType
   let passphrase: Uint8Array
   let rootKeyBytes: Uint8Array
   let encryptedSeedBytes: Uint8Array
   let mnemonic: string[]
+  let mnemonicStarknet: string[]
+  let encryptedSeedBytesStarknet: Uint8Array
 
   beforeEach(async () => {
     // Generate a mnemonic (24 words)
@@ -59,7 +70,7 @@ describe('KeyAgentBase', () => {
       'witness',
       'alert',
       'like'
-    ] //bip39.generateMnemonicWords(strength)
+    ]
     const seed = util.mnemonicToSeed(mnemonic)
     // Create root node from seed
     const root = bip32.HDKey.fromMasterSeed(seed)
@@ -72,6 +83,36 @@ describe('KeyAgentBase', () => {
     passphrase = await getPassphraseRethrowTypedError(getPassphrase)
     // Works with seed
     encryptedSeedBytes = await emip3encrypt(seed, passphrase)
+
+    mnemonicStarknet = [
+      'range',
+      'mountain',
+      'blast',
+      'problem',
+      'vibrant',
+      'void',
+      'vivid',
+      'doctor',
+      'cluster',
+      'enough',
+      'melody',
+      'salt',
+      'layer',
+      'language',
+      'laptop',
+      'boat',
+      'major',
+      'space',
+      'monkey',
+      'unit',
+      'glimpse',
+      'pause',
+      'change',
+      'vibrant'
+    ]
+    const seedStarknet = util.mnemonicToSeed(mnemonicStarknet)
+    // Works with seed
+    encryptedSeedBytesStarknet = await emip3encrypt(seedStarknet, passphrase)
   })
 
   afterEach(() => {
@@ -91,7 +132,7 @@ describe('KeyAgentBase', () => {
         issuanceDate: '2020-05-22T17:38:21.910Z',
         credentialSubject: {
           id: 'did:example:123',
-          contents: [] // contents is an array of credentials shoud refactor knownCredentials to contents
+          contents: []
         }
       }
       networkType = 'testnet'
@@ -467,7 +508,7 @@ describe('KeyAgentBase', () => {
         issuanceDate: '2020-05-22T17:38:21.910Z',
         credentialSubject: {
           id: 'did:example:123',
-          contents: [] // contents is an array of credentials shoud refactor knownCredentials to contents
+          contents: []
         }
       }
       networkType = 'testnet'
@@ -512,6 +553,90 @@ describe('KeyAgentBase', () => {
       )
 
       expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+    })
+  })
+  describe('Starknet KeyAgent', () => {
+    beforeEach(() => {
+      serializableDataStarknet = {
+        __typename: KeyAgentType.InMemory,
+        encryptedSeedBytes: encryptedSeedBytesStarknet,
+        id: 'http://example.gov/wallet/3732',
+        type: ['VerifiableCredential', 'EncryptedWallet'],
+        issuer: 'did:example:123',
+        issuanceDate: '2020-05-22T17:38:21.910Z',
+        credentialSubject: {
+          id: 'did:example:123',
+          contents: []
+        }
+      }
+      instanceStarknet = new KeyAgentBaseInstance(
+        serializableDataStarknet,
+        getPassphrase
+      )
+    })
+    it('should return the correct empty knownAddresses', () => {
+      expect(instanceStarknet.knownCredentials).to.deep.equal(
+        serializableDataStarknet.credentialSubject.contents
+      )
+    })
+    it('should derive correct Starknet address', async () => {
+      const expectedGroupedCredentials = {
+        '@context': ['https://w3id.org/wallet/v1'],
+        id: 'did:starknet:0x70676403d63dad9b4080044bd8ce4ea7fe0ad253f0c764d3bf7f0ca04d77cd0',
+        type: 'StarknetAddress',
+        controller:
+          'did:starknet:0x70676403d63dad9b4080044bd8ce4ea7fe0ad253f0c764d3bf7f0ca04d77cd0',
+        name: 'Starknet Account',
+        description: 'My Starknet account.',
+        chain: 'Starknet',
+        addressIndex: 0,
+        address:
+          '0x70676403d63dad9b4080044bd8ce4ea7fe0ad253f0c764d3bf7f0ca04d77cd0'
+      }
+      const args: StarknetSpecificArgs = {
+        network: Network.Starknet,
+        layer: 'starkex',
+        application: 'starkdeployement',
+        ethAddress: '0xa4864d977b944315389d1765ffa7e66F74ee8cd7',
+        addressIndex: 0
+      }
+      const payload = new StarknetPayload()
+
+      const groupedCredential = await instanceStarknet.deriveCredentials(
+        payload,
+        args,
+        true
+      )
+      console.log(
+        'Starknet groupedCredential address index 0',
+        groupedCredential
+      )
+      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+    })
+    it('should derive correct Starknet private key', async () => {
+      const layer = 'starkex'
+      const application = 'starkdeployement'
+      const mnemonic =
+        'range mountain blast problem vibrant void vivid doctor cluster enough melody ' +
+        'salt layer language laptop boat major space monkey unit glimpse pause change vibrant'
+      const ethAddress = '0xa4864d977b944315389d1765ffa7e66F74ee8cd7'
+
+      const seedStarknet = util.mnemonicToSeedSync(mnemonic)
+      const hdKey = HDKey.fromMasterSeed(seedStarknet)
+      const path = starknet.getAccountPath(layer, application, ethAddress, 0)
+      const childNode = hdKey.derive(path)
+      if (!childNode?.privateKey)
+        throw new Error('Unable to derive private key')
+      const privateKey = childNode.privateKey
+      const starknetPrivateKey = starknet.grindKey(privateKey)
+      console.log('seedStarknet', seedStarknet)
+      console.log('path', path) // m/2645'/579218131'/891216374'/1961790679'/2135936222'/0
+      console.log('privateKey', privateKey) // 25486417377744602430134038014327759826617030786832542130610103070956358065571n
+      console.log('starknetPrivateKey', starknetPrivateKey)
+      deepStrictEqual(
+        starknetPrivateKey,
+        '6cf0a8bf113352eb863157a45c5e5567abb34f8d32cddafd2c22aa803f4892c'
+      )
     })
   })
 })
