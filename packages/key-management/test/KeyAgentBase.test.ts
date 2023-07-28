@@ -468,7 +468,7 @@ describe('KeyAgentBase', () => {
         issuanceDate: '2020-05-22T17:38:21.910Z',
         credentialSubject: {
           id: 'did:example:123',
-          contents: [] 
+          contents: []
         }
       }
       networkType = 'testnet'
@@ -527,7 +527,7 @@ describe('KeyAgentBase', () => {
         issuanceDate: '2020-05-22T17:38:21.910Z',
         credentialSubject: {
           id: 'did:example:123',
-          contents: [] 
+          contents: []
         }
       }
       networkType = 'testnet'
