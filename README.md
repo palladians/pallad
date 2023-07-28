@@ -49,7 +49,7 @@ This is a monorepo for all the Pallad-related code.
   - `_template` - Template to follow for new packages in this repo.
   - `common` - Common configuration for packages (tsup and vitest).
   - `features` - Common codebase for the extension.
-  - `key-management-agnostic` - Blockchain agnostic key management.
+  - `key-management` - Blockchain agnostic key management.
   - `mina-core` - Core Mina Package SDK.
   - `mina-graphql` - GraphQL API client for the Mina Protocol.
   - `mina-wallet` - Wrapper package for Mina Protocol wallets.
