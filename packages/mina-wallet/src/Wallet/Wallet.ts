@@ -9,8 +9,8 @@ import {
   GroupedCredentials,
   InMemoryKeyAgent,
   MinaPayload,
-  Network,
-  MinaSpecificArgs
+  MinaSpecificArgs,
+  Network
 } from '@palladxyz/key-management'
 import {
   AccountInfo,
@@ -59,7 +59,7 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   getName(): string {
-    return this.name;
+    return this.name
   }
 
   async getAccountInfo(): Promise<AccountInfo | null> {
