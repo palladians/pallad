@@ -1,31 +1,45 @@
 import { ChainPublicKey, ChainSpecificPayload, Network } from '../../types'
+import { deriveStarknetPublicAddress } from './credentialDerivation'
+import { deriveStarknetPrivateKey } from './keyDerivation'
 
 export type StarknetSpecificPayload = {
   network: Network.Starknet
-  accountIx: number
-  addressIx: number
+  ethAddress: string
+  addressIndex: number
 }
 
 export type StarknetSpecificArgs = {
   network: Network.Starknet
-  accountIx: number
-  addressIx: number
+  layer: string
+  application: string
+  ethAddress: string
+  addressIndex: number
 }
 
 export type StarknetGroupedCredentials = {
+  '@context': ['https://w3id.org/wallet/v1']
+  id: string
+  type: 'StarknetAddress'
+  controller: string
+  name: string
+  description: string
   chain: Network.Starknet
   addressIndex: number
-  accountIndex: number
   address: string
 }
 
 export class StarknetPayload implements ChainSpecificPayload {
   network = Network.Starknet
 
-  async derivePublicKey(): Promise<ChainPublicKey> {
-    return 'Not implemented yet'
+  async derivePublicKey(privateKey: Uint8Array): Promise<ChainPublicKey> {
+    return deriveStarknetPublicAddress(privateKey)
   }
-  async derivePrivateKey(): Promise<string> {
-    return 'Not implemented yet'
+
+  async derivePrivateKey(
+    decryptedSeedBytes: Uint8Array,
+    args: StarknetSpecificArgs
+  ): Promise<Uint8Array> {
+    const privateKey = await deriveStarknetPrivateKey(args, decryptedSeedBytes)
+    return new Uint8Array(Buffer.from(privateKey, 'hex'))
   }
 }

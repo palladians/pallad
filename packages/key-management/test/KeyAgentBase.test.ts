@@ -21,6 +21,7 @@ import {
 } from '../src/types'
 import * as util from '../src/util/bip39'
 import { constructTransaction } from '../src/util/Transactions/buildMinaTx'
+//import { StarknetSpecificArgs, StarknetPayload } from '../src/chains/Starknet/types'
 
 // Provide the passphrase for testing purposes
 const params = {
@@ -91,7 +92,7 @@ describe('KeyAgentBase', () => {
         issuanceDate: '2020-05-22T17:38:21.910Z',
         credentialSubject: {
           id: 'did:example:123',
-          contents: [] // contents is an array of credentials shoud refactor knownCredentials to contents
+          contents: []
         }
       }
       networkType = 'testnet'
@@ -467,7 +468,7 @@ describe('KeyAgentBase', () => {
         issuanceDate: '2020-05-22T17:38:21.910Z',
         credentialSubject: {
           id: 'did:example:123',
-          contents: [] // contents is an array of credentials shoud refactor knownCredentials to contents
+          contents: [] 
         }
       }
       networkType = 'testnet'
@@ -513,5 +514,67 @@ describe('KeyAgentBase', () => {
 
       expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
     })
+  })
+  describe('Starknet KeyAgent', () => {
+    beforeEach(() => {
+      // Define your own appropriate initial data, network, accountKeyDerivationPath, and accountAddressDerivationPath
+      serializableData = {
+        __typename: KeyAgentType.InMemory,
+        encryptedSeedBytes: encryptedSeedBytes,
+        id: 'http://example.gov/wallet/3732',
+        type: ['VerifiableCredential', 'EncryptedWallet'],
+        issuer: 'did:example:123',
+        issuanceDate: '2020-05-22T17:38:21.910Z',
+        credentialSubject: {
+          id: 'did:example:123',
+          contents: [] 
+        }
+      }
+      networkType = 'testnet'
+      instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
+    })
+    it('should return the correct empty knownAddresses', () => {
+      expect(instance.knownCredentials).to.deep.equal(
+        serializableData.credentialSubject.contents
+      )
+    })
+    /*
+    // TODO: properly implement Starknet
+    it('should derive correct Starknet address', async () => {
+      // Define a mocked publicKey, which should be expected from the derivation
+      const expectedPublicKey = '0x04E1A9710eb59Ea676F9935a5d7683F1125C2B09a83fF4284665269cBCd0af31'
+      const expectedGroupedCredentials = {
+        '@context': ['https://w3id.org/wallet/v1'],
+        id: 'did:starknet:0x04E1A9710eb59Ea676F9935a5d7683F1125C2B09a83fF4284665269cBCd0af31',
+        type: 'StarknetAddress',
+        controller: 'did:starknet:0x04E1A9710eb59Ea676F9935a5d7683F1125C2B09a83fF4284665269cBCd0af31',
+        name: 'Starknet Account',
+        description: 'My Starknet account.',
+        chain: Network.Starknet,
+        addressIndex: 0,
+        address: expectedPublicKey
+      }
+
+      const args: StarknetSpecificArgs = {
+        network: Network.Starknet,
+        layer: '1195502025', //sha256("starknet")
+        application: '1148870696', //sha256("argentx")
+        ethAddress: "0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9",
+        addressIndex: 0
+      }
+      const payload = new StarknetPayload()
+
+      const groupedCredential = await instance.deriveCredentials(
+        payload,
+        args,
+        true
+      )
+      console.log(
+        'Starknet groupedCredential address index 0',
+        groupedCredential
+      )
+
+      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+    })*/
   })
 })

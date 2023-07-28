@@ -5,6 +5,10 @@ import { deriveEthereumCredentials } from './chains/Ethereum/credentialDerivatio
 import { MinaSignablePayload, MinaSpecificArgs } from './chains/Mina'
 import { deriveMinaCredentials } from './chains/Mina/credentialDerivation'
 import { MinaSigningOperations } from './chains/Mina/signingOperations'
+import {
+  deriveStarknetCredentials,
+  StarknetSpecificArgs
+} from './chains/Starknet'
 import * as errors from './errors'
 import { KeyDecryptor } from './KeyDecryptor'
 import {
@@ -95,6 +99,17 @@ export abstract class KeyAgentBase implements KeyAgent {
       } else if (payload.network === 'Ethereum') {
         const groupedCredential = deriveEthereumCredentials(
           args as EthereumSpecificArgs,
+          derivedPublicCredential
+        )
+        if (!pure)
+          this.serializableData.credentialSubject.contents = [
+            ...this.serializableData.credentialSubject.contents,
+            groupedCredential
+          ]
+        return groupedCredential
+      } else if (payload.network === 'Starknet') {
+        const groupedCredential = deriveStarknetCredentials(
+          args as StarknetSpecificArgs,
           derivedPublicCredential
         )
         if (!pure)

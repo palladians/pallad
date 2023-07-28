@@ -1,4 +1,35 @@
-import { StarknetGroupedCredentials, StarknetSpecificPayload } from './types'
+import * as starknet from 'micro-starknet'
+
+import {
+  StarknetGroupedCredentials,
+  StarknetSpecificArgs,
+  StarknetSpecificPayload
+} from './types'
+
+export async function deriveStarknetPublicAddress(
+  privateKey: Uint8Array
+): Promise<string> {
+  const hexPrivateKey = Buffer.from(privateKey).toString('hex')
+  const starkKey = starknet.getStarkKey(hexPrivateKey)
+  return starkKey
+}
+
+export function deriveStarknetCredentials(
+  args: StarknetSpecificArgs,
+  publicCredential: string
+): StarknetGroupedCredentials {
+  return {
+    '@context': ['https://w3id.org/wallet/v1'],
+    id: 'did:starknet:' + publicCredential,
+    type: 'StarknetAddress',
+    controller: 'did:starknet:' + publicCredential,
+    name: 'Starknet Account',
+    description: 'My Starknet account.',
+    chain: args.network,
+    addressIndex: args.addressIndex,
+    address: publicCredential
+  }
+}
 
 export function isStarknetCredential(
   credential: StarknetGroupedCredentials,
@@ -9,7 +40,6 @@ export function isStarknetCredential(
   // This is just a mock implementation, replace with your actual logic
   return (
     credential.chain === 'Starknet' &&
-    credential.accountIndex === payload.accountIx &&
-    credential.addressIndex === payload.addressIx
+    credential.addressIndex === payload.addressIndex
   )
 }
