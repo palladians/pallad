@@ -1,0 +1,35 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "mrcnk",
+      "name": "Tomek Marciniak",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16132011?v=4",
+      "profile": "https://github.com/mrcnk",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "teddyjfpender",
+      "name": "Teddy Pender",
+      "avatar_url": "https://avatars.githubusercontent.com/u/92999717?v=4",
+      "profile": "https://github.com/teddyjfpender",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "pallad",
+  "projectOwner": "palladians"
+}
