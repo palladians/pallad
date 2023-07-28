@@ -9,6 +9,7 @@ import {
   GroupedCredentials,
   InMemoryKeyAgent,
   MinaPayload,
+  MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
 import {
@@ -57,8 +58,8 @@ export class MinaWalletImpl implements MinaWallet {
     this.balance = 0
   }
 
-  getName(): Promise<string> {
-    throw new Error('Method not implemented.')
+  getName(): string {
+    return this.name
   }
 
   async getAccountInfo(): Promise<AccountInfo | null> {
@@ -97,7 +98,7 @@ export class MinaWalletImpl implements MinaWallet {
       throw new Error('Current wallet is null, empty or undefined')
     }
     // currently only Mina specific
-    const args: ChainSpecificArgs = {
+    const args: MinaSpecificArgs = {
       network: currentWallet?.chain as Network.Mina,
       accountIndex: currentWallet?.accountIndex,
       addressIndex: currentWallet?.addressIndex,
