@@ -47,8 +47,6 @@ export function isEthereumCredential(
   args: EthereumSpecificArgs
 ): boolean {
   // Check if the credential matches the payload
-  // This is just an example, replace with your actual logic
-  // This is just a mock implementation, replace with your actual logic
   return (
     credential.chain === 'Ethereum' &&
     credential.accountIndex === args.accountIndex &&

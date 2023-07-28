@@ -5,7 +5,7 @@ import * as errors from './errors'
 import { KeyAgentBase } from './KeyAgentBase'
 import {
   ChainSpecificArgs,
-  ChainSpecificPayload_,
+  ChainSpecificPayload,
   GetPassphrase,
   KeyAgent,
   KeyAgentType,
@@ -74,7 +74,7 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     )
   }
 
-  async restoreKeyAgent<T extends ChainSpecificPayload_>(
+  async restoreKeyAgent<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs
   ): Promise<InMemoryKeyAgent> {

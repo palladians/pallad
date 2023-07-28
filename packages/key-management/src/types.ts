@@ -28,7 +28,7 @@ export interface Result<T> {
   error?: string
 }
 
-export type EncryptedKeyPropertyName = 'encryptedSeedBytes' // TODO: Generalise
+export type EncryptedKeyPropertyName = 'encryptedSeedBytes'
 
 export enum KeyAgentType {
   InMemory = 'InMemory',
@@ -89,18 +89,18 @@ export interface KeyAgent {
   /**
    * generic sign
    */
-  sign<T extends ChainSpecificPayload_>(
+  sign<T extends ChainSpecificPayload>(
     payload: T,
     signable: ChainSignablePayload,
     args: ChainSpecificArgs
   ): Promise<ChainSignatureResult>
 
-  derivePublicCredential<T extends ChainSpecificPayload_>(
+  derivePublicCredential<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs
   ): Promise<ChainPublicKey>
 
-  deriveCredentials<T extends ChainSpecificPayload_>(
+  deriveCredentials<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
     pure?: boolean
@@ -134,7 +134,7 @@ export type ChainSpecificArgs =
   | StarknetSpecificArgs
   | EthereumSpecificArgs
 
-export interface ChainSpecificPayload_ {
+export interface ChainSpecificPayload {
   network: Network
   derivePublicKey(
     privateKey: ChainPrivateKey,

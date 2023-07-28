@@ -26,7 +26,6 @@ export interface Provider {
   // getBalance(address: AddressLike, blockTag?: BlockTag): Promise<bigint>;
   // getTransactionCount(address: AddressLike, blockTag?: BlockTag): Promise<number>;
   // getBlock(blockHashOrBlockTag: BlockTag | string, prefetchTxs?: boolean): Promise<null | Block>;
-  // getTransaction(hash: string): Promise<null | TransactionResponse>;
   // getTransactionResult(hash: string): Promise<null | string>;
 
   getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo>

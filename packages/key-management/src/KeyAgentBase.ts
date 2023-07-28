@@ -5,6 +5,10 @@ import { deriveEthereumCredentials } from './chains/Ethereum/credentialDerivatio
 import { MinaSignablePayload, MinaSpecificArgs } from './chains/Mina'
 import { deriveMinaCredentials } from './chains/Mina/credentialDerivation'
 import { MinaSigningOperations } from './chains/Mina/signingOperations'
+import {
+  deriveStarknetCredentials,
+  StarknetSpecificArgs
+} from './chains/Starknet'
 import * as errors from './errors'
 import { KeyDecryptor } from './KeyDecryptor'
 import {
@@ -13,7 +17,7 @@ import {
   ChainSignablePayload,
   ChainSignatureResult,
   ChainSpecificArgs,
-  ChainSpecificPayload_,
+  ChainSpecificPayload,
   credentialMatchers,
   GetPassphrase
 } from './types'
@@ -60,7 +64,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     }
   }
 
-  async deriveCredentials<T extends ChainSpecificPayload_>(
+  async deriveCredentials<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
     pure?: boolean
@@ -78,7 +82,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     if (knownCredential) return knownCredential
 
     const derivedPublicCredential =
-      await this.derivePublicCredential<ChainSpecificPayload_>(payload, args)
+      await this.derivePublicCredential<ChainSpecificPayload>(payload, args)
 
     try {
       if (payload.network === 'Mina') {
@@ -103,6 +107,17 @@ export abstract class KeyAgentBase implements KeyAgent {
             groupedCredential
           ]
         return groupedCredential
+      } else if (payload.network === 'Starknet') {
+        const groupedCredential = deriveStarknetCredentials(
+          args as StarknetSpecificArgs,
+          derivedPublicCredential
+        )
+        if (!pure)
+          this.serializableData.credentialSubject.contents = [
+            ...this.serializableData.credentialSubject.contents,
+            groupedCredential
+          ]
+        return groupedCredential
       } else {
         throw new Error('Unsupported network')
       }
@@ -112,7 +127,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     }
   }
 
-  async derivePublicCredential<T extends ChainSpecificPayload_>(
+  async derivePublicCredential<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs
   ): Promise<ChainPublicKey> {
@@ -126,7 +141,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     }
   }
 
-  async sign<T extends ChainSpecificPayload_>(
+  async sign<T extends ChainSpecificPayload>(
     payload: T,
     signable: ChainSignablePayload,
     args: ChainSpecificArgs
@@ -149,7 +164,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     }
   }
 
-  async #generatePrivateKeyFromSeed<T extends ChainSpecificPayload_>(
+  async #generatePrivateKeyFromSeed<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs
   ): Promise<ChainPrivateKey> {

@@ -6,7 +6,7 @@
 import {
   ChainAddress,
   ChainSpecificArgs,
-  ChainSpecificPayload_,
+  ChainSpecificPayload,
   FromBip39MnemonicWordsProps,
   GroupedCredentials,
   InMemoryKeyAgent,
@@ -63,13 +63,13 @@ export type VaultState = {
  * @typedef {Object} VaultMutators
  */
 type VaultMutators = {
-  restoreWallet<T extends ChainSpecificPayload_>(
+  restoreWallet<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
     provider: MinaProvider,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
   ): Promise<InMemoryKeyAgent | null>
-  addCredentials: <T extends ChainSpecificPayload_>(
+  addCredentials: <T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
     provider: MinaProvider,

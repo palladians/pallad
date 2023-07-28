@@ -2,7 +2,7 @@ import {
   ChainSignablePayload,
   ChainSignatureResult,
   ChainSpecificArgs,
-  ChainSpecificPayload_,
+  ChainSpecificPayload,
   FromBip39MnemonicWordsProps,
   GroupedCredentials
 } from '@palladxyz/key-management'
@@ -21,7 +21,7 @@ export interface MinaWallet {
   //getName(): Promise<string>
   createWallet(strength: number): Promise<{ mnemonic: string[] } | null>
 
-  restoreWallet<T extends ChainSpecificPayload_>(
+  restoreWallet<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
