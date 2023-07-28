@@ -26,6 +26,7 @@ export function deriveStarknetCredentials(
     name: 'Starknet Account',
     description: 'My Starknet account.',
     chain: args.network,
+    accountIndex: 0, // default to 0 TODO: remove this
     addressIndex: args.addressIndex,
     address: publicCredential
   }

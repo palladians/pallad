@@ -24,6 +24,7 @@ export type StarknetGroupedCredentials = {
   name: string
   description: string
   chain: Network.Starknet
+  accountIndex: number
   addressIndex: number
   address: string
 }
