@@ -65,8 +65,22 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       }
       return data.account
     } catch (error: unknown) {
-      console.error('Error in getAccountInfo:', error)
-      throw error
+      // this can fail if the account doesn't exist yet on the chain & if the node is not available
+      // perform health check to see if the node is available
+      const healthCheckResponse = await this.healthCheck()
+      if (!healthCheckResponse.ok) {
+        throw new Error('Node is not available')
+      }
+      // if the node is available, then the account doesn't exist yet
+      // return an empty account
+      console.log('Error in getAccountInfo, account does not exist yet!')
+      return {
+        balance: { total: 0 },
+        nonce: 0,
+        inferredNonce: 0,
+        delegate: '',
+        publicKey: args.publicKey
+      }
     }
   }
 }

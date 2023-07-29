@@ -11,6 +11,8 @@ import { MinaProvider } from '../src'
 
 const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
 const explorerUrl = 'https://devnet.graphql.minaexplorer.com'
+const nodeUrlMainnet = 'https://proxy.minaexplorer.com/'
+const explorerUrlMainnet = 'https://graphql.minaexplorer.com'
 
 describe('Provider', () => {
   let provider: MinaProvider
@@ -30,6 +32,21 @@ describe('Provider', () => {
     expect(response.inferredNonce).toBeDefined()
     expect(response.delegate).toBeDefined()
     expect(response.publicKey).toBeDefined()
+  })
+  test('getAccountInfo (mainnet)', async () => {
+    const args: AccountInfoArgs = {
+      publicKey: 'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq' // this must be a public key that doesn't exist yet on mainnet
+    }
+    const mainnetProvider = new MinaProvider(nodeUrlMainnet, explorerUrlMainnet)
+    const response = await mainnetProvider.getAccountInfo(args)
+    console.log('Response:', response)
+
+    // expect the account to not exist yet
+    expect(response.balance).toHaveProperty('total', 0)
+    expect(response.nonce).toBe(0)
+    expect(response.inferredNonce).toBe(0)
+    expect(response.delegate).toBe('')
+    expect(response.publicKey).toBe(args.publicKey)
   })
   test('getTransactions', async () => {
     const args: TransactionsByAddressesArgs = {
