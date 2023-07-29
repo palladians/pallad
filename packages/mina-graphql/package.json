@@ -21,8 +21,11 @@
     "@palladxyz/util": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
+    "graphql": "^16.6.0",
     "graphql-request": "^6.1.0",
-    "mina-signer": "^2.0.3"
+    "mina-signer": "^2.0.3",
+    "subscriptions-transport-ws": "^0.11.0",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@palladxyz/common": "*",

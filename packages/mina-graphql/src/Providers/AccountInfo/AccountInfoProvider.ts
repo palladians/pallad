@@ -9,7 +9,7 @@ import { gql, request } from 'graphql-request'
 
 import { getAccountBalance, healthCheckQuery } from './queries'
 
-interface AccountData {
+export interface AccountData {
   account: AccountInfo
 }
 
