@@ -110,7 +110,13 @@ describe('store', () => {
     // derive next credentials
     await keyAgentStore
       .getState()
-      .addCredentials(payload, argsNewCredential, provider, providerArchive, false)
+      .addCredentials(
+        payload,
+        argsNewCredential,
+        provider,
+        providerArchive,
+        false
+      )
     // after adding credentials, the keyAgent should have the new credentials
     const storeKeyAgentCredentials =
       keyAgentStore.getState().keyAgent?.serializableData.credentialSubject

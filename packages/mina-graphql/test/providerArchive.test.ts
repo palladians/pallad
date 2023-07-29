@@ -13,7 +13,6 @@ describe('Provider', () => {
   let providerArchive: MinaArchiveProvider
   beforeEach(() => {
     providerArchive = new MinaArchiveProvider(archiveUrl)
-    
   })
   test('getTransactions', async () => {
     const args: TransactionsByAddressesArgs = {

@@ -29,8 +29,8 @@ export interface ProviderNode {
   // getTransactionCount(address: AddressLike, blockTag?: BlockTag): Promise<number>;
   // getBlock(blockHashOrBlockTag: BlockTag | string, prefetchTxs?: boolean): Promise<null | Block>;
   // getTransactionResult(hash: string): Promise<null | string>;
-  
-  getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo> 
+
+  getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo>
 
   getTransactionStatus(args: TxStatusArgs): Promise<TxStatus>
 
@@ -57,5 +57,4 @@ export interface ProviderArchive {
   ): Promise<Mina.Paginated<Mina.TransactionBody>>
 
   getTransaction(args: TransactionsByIdsArgs): Promise<Mina.TransactionBody[]>
-
 }

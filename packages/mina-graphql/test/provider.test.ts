@@ -1,7 +1,4 @@
-import {
-  AccountInfoArgs,
-  TxStatusArgs
-} from '@palladxyz/mina-core'
+import { AccountInfoArgs, TxStatusArgs } from '@palladxyz/mina-core'
 
 import { MinaProvider } from '../src'
 
@@ -12,7 +9,6 @@ describe('Provider', () => {
   let provider: MinaProvider
   beforeEach(() => {
     provider = new MinaProvider(nodeUrl)
-    
   })
   test('getAccountInfo', async () => {
     const args: AccountInfoArgs = {

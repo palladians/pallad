@@ -8,7 +8,7 @@ import {
   MinaGroupedCredentials
 } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
-import { MinaProvider, MinaArchiveProvider } from '@palladxyz/mina-graphql'
+import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
@@ -48,7 +48,7 @@ export const keyAgentStore = createStore<VaultStore>()(
       restoreWallet: async <T extends ChainSpecificPayload>(
         payload: T,
         args: ChainSpecificArgs,
-        provider: MinaProvider, 
+        provider: MinaProvider,
         providerArchive: MinaArchiveProvider,
         { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
       ) => {
@@ -63,14 +63,20 @@ export const keyAgentStore = createStore<VaultStore>()(
         set({ keyAgent })
 
         // derive the credentials for the first account and address & mutate the serializableKeyAgentData state
-        await get().addCredentials(payload, args, provider, providerArchive, false)
+        await get().addCredentials(
+          payload,
+          args,
+          provider,
+          providerArchive,
+          false
+        )
 
         return keyAgent
       },
       addCredentials: async <T extends ChainSpecificPayload>(
         payload: T,
         args: ChainSpecificArgs,
-        provider: MinaProvider, 
+        provider: MinaProvider,
         providerArchive: MinaArchiveProvider,
         pure?: boolean
       ): Promise<void> => {

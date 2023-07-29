@@ -1,7 +1,7 @@
 import {
   Mina,
   TransactionsByAddressesArgs,
-  TransactionsByIdsArgs,
+  TransactionsByIdsArgs
 } from '@palladxyz/mina-core'
 
 import { ChainHistoryGraphQLProvider } from './ChainHistory'
@@ -11,8 +11,7 @@ export class MinaArchiveProvider implements ProviderArchive {
   private chainHistoryProvider: ChainHistoryGraphQLProvider
 
   constructor(archiveUrl: string) {
-    this.chainHistoryProvider = new ChainHistoryGraphQLProvider(archiveUrl);
-
+    this.chainHistoryProvider = new ChainHistoryGraphQLProvider(archiveUrl)
   }
 
   public get provider(): this {
@@ -27,12 +26,12 @@ export class MinaArchiveProvider implements ProviderArchive {
   public async getTransactions(
     args: TransactionsByAddressesArgs
   ): Promise<Mina.Paginated<Mina.TransactionBody>> {
-    return this.chainHistoryProvider.transactionsByAddresses(args);
+    return this.chainHistoryProvider.transactionsByAddresses(args)
   }
 
   public async getTransaction(
     args: TransactionsByIdsArgs
   ): Promise<Mina.TransactionBody[]> {
-    return this.chainHistoryProvider.transactionsByHashes(args);
+    return this.chainHistoryProvider.transactionsByHashes(args)
   }
 }

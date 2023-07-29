@@ -6,7 +6,7 @@ import {
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
-import { MinaProvider, MinaArchiveProvider } from '@palladxyz/mina-graphql'
+import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 import { keyAgentStore } from '@palladxyz/vault'
 import Client from 'mina-signer'
 import { expect, test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
