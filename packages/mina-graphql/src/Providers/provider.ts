@@ -1,30 +1,24 @@
 import {
   AccountInfo,
   AccountInfoArgs,
-  Mina,
   SubmitTxArgs,
   SubmitTxResult,
-  TransactionsByAddressesArgs,
-  TransactionsByIdsArgs,
   TxStatus,
   TxStatusArgs
 } from '@palladxyz/mina-core'
 
 import { AccountInfoGraphQLProvider } from './AccountInfo'
-import { ChainHistoryGraphQLProvider } from './ChainHistory'
 import { TxStatusGraphQLProvider } from './TxStatus'
 import { TxSubmitGraphQLProvider } from './TxSubmit'
-import { Provider } from './types'
+import { ProviderNode } from './types'
 
-export class MinaProvider implements Provider {
+export class MinaProvider implements ProviderNode {
   private accountInfoProvider: AccountInfoGraphQLProvider
-  private chainHistoryProvider: ChainHistoryGraphQLProvider
   private txSubmitProvider: TxSubmitGraphQLProvider
   private txStatusProvider: TxStatusGraphQLProvider
 
-  constructor(nodeUrl: string, explorerUrl: string) {
+  constructor(nodeUrl: string) {
     this.accountInfoProvider = new AccountInfoGraphQLProvider(nodeUrl)
-    this.chainHistoryProvider = new ChainHistoryGraphQLProvider(explorerUrl)
     this.txSubmitProvider = new TxSubmitGraphQLProvider(nodeUrl)
     this.txStatusProvider = new TxStatusGraphQLProvider(nodeUrl)
   }
@@ -40,18 +34,6 @@ export class MinaProvider implements Provider {
 
   public async getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo> {
     return this.accountInfoProvider.getAccountInfo(args)
-  }
-
-  public async getTransactions(
-    args: TransactionsByAddressesArgs
-  ): Promise<Mina.Paginated<Mina.TransactionBody>> {
-    return this.chainHistoryProvider.transactionsByAddresses(args)
-  }
-
-  public async getTransaction(
-    args: TransactionsByIdsArgs
-  ): Promise<Mina.TransactionBody[]> {
-    return this.chainHistoryProvider.transactionsByHashes(args)
   }
 
   public async getTransactionStatus(args: TxStatusArgs): Promise<TxStatus> {

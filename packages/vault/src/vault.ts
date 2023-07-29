@@ -13,7 +13,7 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
-import { MinaProvider } from '@palladxyz/mina-graphql'
+import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 
 export type NetworkArgs = {
   network: Network
@@ -67,12 +67,14 @@ type VaultMutators = {
     payload: T,
     args: ChainSpecificArgs,
     provider: MinaProvider,
+    providerArchive: MinaArchiveProvider,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
   ): Promise<InMemoryKeyAgent | null>
   addCredentials: <T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
     provider: MinaProvider,
+    providerArchive: MinaArchiveProvider,
     pure?: boolean
   ) => Promise<void>
   setCurrentWallet: (address: ChainAddress) => void

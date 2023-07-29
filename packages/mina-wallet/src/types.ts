@@ -13,8 +13,6 @@ import {
   SubmitTxResult
 } from '@palladxyz/mina-core'
 
-//import { PublicCredential } from '@palladxyz/vault'
-
 export interface MinaWallet {
   readonly balance: number
 

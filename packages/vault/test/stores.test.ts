@@ -1,4 +1,4 @@
-import { MinaProvider } from '@palladxyz/mina-graphql'
+import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 
 import {
   FromBip39MnemonicWordsProps,
@@ -15,13 +15,14 @@ const params = {
 }
 const getPassphrase = async () => Buffer.from(params.passphrase)
 const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
-const explorerUrl = 'https://devnet.graphql.minaexplorer.com'
+const archiverUrl = 'https://devnet.graphql.minaexplorer.com'
 
 describe('store', () => {
   let keyAgent: InMemoryKeyAgent
   let agentArgs: FromBip39MnemonicWordsProps
   let mnemonic: string[]
   let provider: MinaProvider
+  let providerArchive: MinaArchiveProvider
 
   beforeEach(async () => {
     // Create keys for testing purposes
@@ -45,7 +46,8 @@ describe('store', () => {
       mnemonic2ndFactorPassphrase: ''
     }
     keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
-    provider = new MinaProvider(nodeUrl, explorerUrl)
+    provider = new MinaProvider(nodeUrl)
+    providerArchive = new MinaArchiveProvider(archiverUrl)
   })
   test('restoreWallet', async () => {
     const restoreArgs: MinaSpecificArgs = {
@@ -61,7 +63,7 @@ describe('store', () => {
 
     await keyAgentStore
       .getState()
-      .restoreWallet(payload, restoreArgs, provider, agentArgs)
+      .restoreWallet(payload, restoreArgs, provider, providerArchive, agentArgs)
     const storeRootPrivateKey = await keyAgentStore
       .getState()
       .keyAgent?.exportRootPrivateKey()
@@ -97,7 +99,7 @@ describe('store', () => {
     // restore the keyAgent
     await keyAgentStore
       .getState()
-      .restoreWallet(payload, restoreArgs, provider, agentArgs)
+      .restoreWallet(payload, restoreArgs, provider, providerArchive, agentArgs)
 
     const argsNewCredential: MinaSpecificArgs = {
       network: Network.Mina,
@@ -108,7 +110,13 @@ describe('store', () => {
     // derive next credentials
     await keyAgentStore
       .getState()
-      .addCredentials(payload, argsNewCredential, provider, false)
+      .addCredentials(
+        payload,
+        argsNewCredential,
+        provider,
+        providerArchive,
+        false
+      )
     // after adding credentials, the keyAgent should have the new credentials
     const storeKeyAgentCredentials =
       keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
