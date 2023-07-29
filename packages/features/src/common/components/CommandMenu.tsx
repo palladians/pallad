@@ -1,3 +1,4 @@
+import { getSessionPersistence } from '@palladxyz/persistence'
 import {
   CommandDialog,
   CommandEmpty,
@@ -6,6 +7,7 @@ import {
   CommandItem,
   CommandList
 } from '@palladxyz/ui'
+import { keyAgentStore } from '@palladxyz/vault'
 import {
   ArrowRightLeftIcon,
   BookIcon,
@@ -13,23 +15,37 @@ import {
   InfoIcon,
   LayoutDashboardIcon,
   ListIcon,
+  LockIcon,
   ReplaceIcon,
   SettingsIcon
 } from 'lucide-react'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export const CommandMenu = () => {
-  const [open, setOpen] = React.useState(false)
+interface CommandMenuProps {
+  open: boolean
+  setOpen: (open: boolean) => void
+}
+
+export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && e.metaKey) {
-        setOpen((open) => !open)
+        setOpen(!open)
       }
     }
     document.addEventListener('keydown', down)
     return () => document.removeEventListener('keydown', down)
   }, [])
+
+  const lockWallet = () => {
+    getSessionPersistence().setItem('spendingPassword', '')
+    keyAgentStore.destroy()
+    keyAgentStore.persist.rehydrate()
+    return navigate('/')
+  }
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
@@ -37,11 +53,11 @@ export const CommandMenu = () => {
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="General">
-          <CommandItem>
+          <CommandItem onSelect={() => navigate('/dashboard')}>
             <LayoutDashboardIcon className="mr-2" />
             Dashboard
           </CommandItem>
-          <CommandItem>
+          <CommandItem onSelect={() => navigate('/contacts')}>
             <BookIcon className="mr-2" />
             Address Book
           </CommandItem>
@@ -51,13 +67,13 @@ export const CommandMenu = () => {
             <ArrowRightLeftIcon className="mr-2" />
             New Transaction
           </CommandItem>
-          <CommandItem>
+          <CommandItem onSelect={() => navigate('/transactions')}>
             <ListIcon className="mr-2" />
             Transactions
           </CommandItem>
         </CommandGroup>
         <CommandGroup heading="Staking">
-          <CommandItem>
+          <CommandItem onSelect={() => navigate('/staking')}>
             <CoinsIcon className="mr-2" />
             Staking
           </CommandItem>
@@ -67,13 +83,17 @@ export const CommandMenu = () => {
           </CommandItem>
         </CommandGroup>
         <CommandGroup heading="Menu">
-          <CommandItem>
+          <CommandItem onSelect={() => navigate('/settings')}>
             <SettingsIcon className="mr-2" />
             Settings
           </CommandItem>
-          <CommandItem>
+          <CommandItem onSelect={() => navigate('/about')}>
             <InfoIcon className="mr-2" />
             About
+          </CommandItem>
+          <CommandItem onSelect={lockWallet}>
+            <LockIcon className="mr-2" />
+            Lock Wallet
           </CommandItem>
         </CommandGroup>
       </CommandList>

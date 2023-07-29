@@ -36,7 +36,7 @@ export const useAppStore = create<AppStore>()(
       vaultState: VaultState[VaultState.UNINITIALIZED],
       isInitialized: () => {
         const { vaultState } = get()
-        return vaultState === VaultState[VaultState.UNINITIALIZED]
+        return vaultState === VaultState[VaultState.INITIALIZED]
       },
       setNetwork(network) {
         return set({ network: MinaNetwork[network] })
@@ -46,16 +46,12 @@ export const useAppStore = create<AppStore>()(
       },
       setVaultStateInitialized: () => {
         const { setVaultState } = get()
-        return setVaultState(VaultState.UNINITIALIZED)
+        return setVaultState(VaultState.INITIALIZED)
       }
     }),
     {
       name: 'PalladApp',
-      storage: createJSONStorage(getLocalPersistence),
-      partialize: (state) =>
-        Object.fromEntries(
-          Object.entries(state).filter(([key]) => !['menuOpen'].includes(key))
-        )
+      storage: createJSONStorage(getLocalPersistence)
     }
   )
 )

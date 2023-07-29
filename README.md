@@ -1,6 +1,6 @@
 # Pallad
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 ![Module type: ESM](https://img.shields.io/badge/module%20type-esm-brightgreen)
 [![Discord](https://img.shields.io/discord/1127906495409958953?label=Discord)](https://discord.gg/ExzzfTGUnB)
@@ -117,3 +117,5 @@ Thanks goes to these wonderful people
 [pallad.xyz - The official website of Pallad](https://pallad.xyz/)
 
 [Ladle](https://palladians.github.io/pallad/)
+
+[Discord](https://discord.gg/ExzzfTGUnB)
