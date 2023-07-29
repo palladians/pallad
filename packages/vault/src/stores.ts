@@ -94,7 +94,6 @@ export const keyAgentStore = createStore<VaultStore>()(
         set({ keyAgent })
 
         if (credentials.type === 'MinaAddress') {
-          console.log('archive provider', providerArchive)
           try {
             const accountInfoPromise = provider.getAccountInfo({
               publicKey: credentials.address
