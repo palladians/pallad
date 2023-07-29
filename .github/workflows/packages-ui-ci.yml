@@ -36,9 +36,9 @@ jobs:
           TURBO_API: 'http://127.0.0.1:9080'
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
-        run: VITE_APP_MODE=$VITE_APP_MODE yarn build:features
+        run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:features
       - name: Build features stories
-        run: yarn story:features
+        run: pnpm story:features
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v1
         with:

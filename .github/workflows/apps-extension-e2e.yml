@@ -26,11 +26,11 @@ jobs:
           TURBO_API: 'http://127.0.0.1:9080'
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
-        run: VITE_APP_MODE=$VITE_APP_MODE yarn build:extension
+        run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:extension
       - name: Install Chromium for Playwright
         run: npx playwright install chromium
       - name: Run E2E tests
-        run: yarn test:e2e:extension
+        run: pnpm test:e2e:extension
       - uses: actions/upload-artifact@v3
         with:
           name: pallad-extension-e2e

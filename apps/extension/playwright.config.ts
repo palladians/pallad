@@ -29,7 +29,7 @@ export default defineConfig({
     }
   ],
   webServer: {
-    command: 'yarn preview',
+    command: 'pnpm preview',
     url: BASE_URL,
     reuseExistingServer: !process.env.CI
   }
