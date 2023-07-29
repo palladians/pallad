@@ -589,6 +589,7 @@ describe('KeyAgentBase', () => {
         name: 'Starknet Account',
         description: 'My Starknet account.',
         chain: 'Starknet',
+        accountIndex: 0,
         addressIndex: 0,
         address:
           '0x70676403d63dad9b4080044bd8ce4ea7fe0ad253f0c764d3bf7f0ca04d77cd0'

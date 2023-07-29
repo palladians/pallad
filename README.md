@@ -13,21 +13,21 @@ An experimental and progressive Mina Protocol wallet.
 ## Prerequisite
 
 - [NVM](https://github.com/nvm-sh/nvm)
-- Yarn
+- pnpm
 
 ## Installation
 
-Make sure you're on the right Node.js version, and you got Yarn installed.
+Make sure you're on the right Node.js version, and you got pnpm installed.
 
 ```shell
 $ nvm use
-$ npm i -g yarn
+$ npm i -g pnpm
 ```
 
 Install the dependencies:
 
 ```shell
-$ yarn
+$ pnpm i
 ```
 
 From `apps/extension` copy the `.env.example` as `.env` and adjust the variables there.
@@ -35,7 +35,7 @@ From `apps/extension` copy the `.env.example` as `.env` and adjust the variables
 Build all the modules in repo:
 
 ```shell
-$ yarn build
+$ pnpm build
 ```
 
 ## Structure
@@ -64,7 +64,7 @@ This is a monorepo for all the Pallad-related code.
 Set up the dev server of extension:
 
 ```shell
-$ yarn dev:extension
+$ pnpm dev:extension
 ```
 
 ## Testing
@@ -72,20 +72,20 @@ $ yarn dev:extension
 Running linter:
 
 ```shell
-$ yarn lint
+$ pnpm lint
 ```
 
 Running unit tests (Vitest):
 
 ```shell
-$ yarn test:unit
+$ pnpm test:unit
 ```
 
 Running E2E tests for browser extension (Playwright):
 
 ```shell
 $ npx playwright install chromium # make sure you have Chromium driver
-$ yarn test:e2e:extension
+$ pnpm test:e2e:extension
 ```
 
 ## Contributors ✨

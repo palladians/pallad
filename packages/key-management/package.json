@@ -15,7 +15,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test:unit": "vitest run",
-    "cleanup": "rimraf node_modules .dist .turbo"
+    "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
     "@ethereumjs/util": "^8.1.0",

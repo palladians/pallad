@@ -23,6 +23,7 @@
   "devDependencies": {
     "@capacitor/core": "^5.2.0",
     "@palladxyz/common": "*",
+    "vite": "^4.3.9",
     "zustand": "^4.3.9"
   }
 }

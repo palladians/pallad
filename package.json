@@ -13,12 +13,13 @@
     "dev": "turbo run dev",
     "dev:extension": "turbo run dev --filter=@palladxyz/extension...",
     "lint": "eslint \"{apps,packages}/**/*.{ts,tsx,js,jsx,cjs,mjs}\"",
-    "lint:fix": "yarn lint --fix",
+    "lint:fix": "pnpm lint --fix",
     "test:unit": "turbo run test:unit",
     "test:e2e:extension": "turbo run test:e2e --filter=@palladxyz/extension",
     "format": "prettier --write \"**/*.{ts,tsx,md}\" && pnpm lint:fix",
     "cleanup": "turbo run cleanup",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.1",
@@ -40,14 +41,5 @@
     "vitest": "^0.31.4",
     "happy-dom": "^9.20.3"
   },
-  "packageManager": "yarn@1.22.19",
-  "workspaces": {
-    "packages": [
-      "apps/*",
-      "packages/*"
-    ],
-    "nohoist": [
-      "**/@capacitor/ios"
-    ]
-  }
+  "packageManager": "pnpm@8.6.10"
 }
