@@ -1,13 +1,13 @@
-import {
-  GraphQLClient,
-  request,
-  gql
-} from 'graphql-request'
+import { AccountInfo, AccountInfoArgs } from '@palladxyz/mina-core'
 import { ExecutionResult } from 'graphql'
+import { gql, GraphQLClient } from 'graphql-request'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
-import { AccountInfoArgs, AccountInfo } from '@palladxyz/mina-core'
+
+import {
+  AccountData,
+  AccountInfoGraphQLProvider
+} from '../AccountInfo/AccountInfoProvider'
 import { getAccountBalance } from '../AccountInfo/queries'
-import { AccountInfoGraphQLProvider, AccountData } from '../AccountInfo/AccountInfoProvider'
 
 interface BlockData {
   newBlock?: {
@@ -30,7 +30,7 @@ export class BlockListenerProvider {
   constructor(minaGql: string, wsEndpoint: string) {
     this.accountInfoProvider = new AccountInfoGraphQLProvider(minaGql)
     this.subscriptionClient = new SubscriptionClient(wsEndpoint, {
-      reconnect: true,
+      reconnect: true
     })
     this.gqlClient = new GraphQLClient(minaGql)
   }
@@ -50,26 +50,28 @@ export class BlockListenerProvider {
         }
       }
     `
-  
-    return this.subscriptionClient.request({
-      query: subscription,
-    }).subscribe({
-      next: async (result: ExecutionResult) => {
-        // Type guard
-        if ('data' in result && 'newBlock' in result.data) {
-          const data: BlockData = result.data
-          if (data.newBlock) {
-            console.log('Received block data:', data)
-            const accountInfo = await this.getAccountInfo({ publicKey })
-            console.log('Received updated account info:', accountInfo)
+
+    return this.subscriptionClient
+      .request({
+        query: subscription
+      })
+      .subscribe({
+        next: async (result: ExecutionResult) => {
+          // Type guard
+          if ('data' in result && 'newBlock' in result.data) {
+            const data: BlockData = result.data
+            if (data.newBlock) {
+              console.log('Received block data:', data)
+              const accountInfo = await this.getAccountInfo({ publicKey })
+              console.log('Received updated account info:', accountInfo)
+            } else {
+              console.error('No new block data in result:', result)
+            }
           } else {
-            console.error('No new block data in result:', result)
+            console.error('Unexpected result:', result)
           }
-        } else {
-          console.error('Unexpected result:', result)
         }
-      }
-    })
+      })
   }
 
   private async getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo> {
@@ -79,9 +81,9 @@ export class BlockListenerProvider {
     `
     try {
       console.log('Sending request for account info...')
-      const data = await this.gqlClient.request(query, {
+      const data = (await this.gqlClient.request(query, {
         publicKey: args.publicKey
-      }) as AccountData
+      })) as AccountData
       console.log('Received response for account info:', data)
 
       if (!data || !data.account) {
