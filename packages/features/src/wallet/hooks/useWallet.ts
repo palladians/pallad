@@ -1,5 +1,5 @@
 import { MinaNetwork, Network } from '@palladxyz/key-management'
-import { MinaProvider } from '@palladxyz/mina-graphql'
+import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 import { MinaWalletImpl } from '@palladxyz/mina-wallet'
 import { keyAgentStore } from '@palladxyz/vault'
 import { useMemo } from 'react'
@@ -34,12 +34,14 @@ export const useWallet = () => {
     () => MinaExplorerUrl[currentNetwork],
     [currentNetwork]
   )
-  const provider = new MinaProvider(minaProxyUrl, minaExplorerUrl)
+  const provider = new MinaProvider(minaProxyUrl)
+  const providerArchive = new MinaArchiveProvider(minaExplorerUrl)
   const wallet = new MinaWalletImpl(
     { name: 'Pallad' },
     {
       keyAgent: keyAgentStore.getState().keyAgent,
       minaProvider: provider,
+      minaArchiveProvider: providerArchive,
       network: Network.Mina
     }
   )

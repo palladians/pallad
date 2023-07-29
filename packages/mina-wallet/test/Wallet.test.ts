@@ -38,7 +38,7 @@ describe('MinaWalletImpl', () => {
 
   beforeEach(() => {
     provider = new MinaProvider(nodeUrl)
-    providerArchive = new MinaProvider(archiveUrl)
+    providerArchive = new MinaArchiveProvider(archiveUrl)
 
     walletDependencies = {
       keyAgent: keyAgentStore.getState().keyAgent,
