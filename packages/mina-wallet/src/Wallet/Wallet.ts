@@ -18,7 +18,7 @@ import {
   SubmitTxArgs,
   SubmitTxResult
 } from '@palladxyz/mina-core'
-import { MinaProvider } from '@palladxyz/mina-graphql'
+import { MinaProvider, MinaArchiveProvider } from '@palladxyz/mina-graphql'
 import { keyAgentStore } from '@palladxyz/vault'
 
 /**
@@ -29,6 +29,7 @@ import { MinaWallet } from '../types'
 export interface MinaWalletDependencies {
   readonly keyAgent: InMemoryKeyAgent | null
   readonly minaProvider: MinaProvider
+  readonly minaArchiveProvider: MinaArchiveProvider
   readonly network: Network
   //readonly stores?: WalletStores;
 }
@@ -41,6 +42,7 @@ export class MinaWalletImpl implements MinaWallet {
   readonly keyAgent: InMemoryKeyAgent | null
   readonly balance: number
   readonly minaProvider: MinaProvider
+  readonly minaArchiveProvider: MinaArchiveProvider
   readonly name: string
   // Storage for the current wallet
 
@@ -48,12 +50,14 @@ export class MinaWalletImpl implements MinaWallet {
     { name }: MinaWalletProps,
     {
       keyAgent,
-      minaProvider
-    }: //stores = createInMemoryWalletStores() // persistence layer?
+      minaProvider,
+      minaArchiveProvider
+    }:
     MinaWalletDependencies
   ) {
     this.keyAgent = keyAgent
     this.minaProvider = minaProvider
+    this.minaArchiveProvider = minaArchiveProvider
     this.name = name
     this.balance = 0
   }
@@ -148,7 +152,7 @@ export class MinaWalletImpl implements MinaWallet {
     // restore the agent state
     await keyAgentStore
       .getState()
-      .restoreWallet(payload, args, this.minaProvider, agentArgs)
+      .restoreWallet(payload, args, this.minaProvider, this.minaArchiveProvider, agentArgs)
     // set the current wallet
     const derivedAddress = keyAgentStore
       .getState()

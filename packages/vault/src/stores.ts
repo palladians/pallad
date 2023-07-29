@@ -8,7 +8,7 @@ import {
   MinaGroupedCredentials
 } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
-import { MinaProvider } from '@palladxyz/mina-graphql'
+import { MinaProvider, MinaArchiveProvider } from '@palladxyz/mina-graphql'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
@@ -48,7 +48,8 @@ export const keyAgentStore = createStore<VaultStore>()(
       restoreWallet: async <T extends ChainSpecificPayload>(
         payload: T,
         args: ChainSpecificArgs,
-        provider: MinaProvider, // TODO: make chain agnostic
+        provider: MinaProvider, 
+        providerArchive: MinaArchiveProvider,
         { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
       ) => {
         const agentArgs: FromBip39MnemonicWordsProps = {
@@ -62,14 +63,15 @@ export const keyAgentStore = createStore<VaultStore>()(
         set({ keyAgent })
 
         // derive the credentials for the first account and address & mutate the serializableKeyAgentData state
-        await get().addCredentials(payload, args, provider, false)
+        await get().addCredentials(payload, args, provider, providerArchive, false)
 
         return keyAgent
       },
       addCredentials: async <T extends ChainSpecificPayload>(
         payload: T,
         args: ChainSpecificArgs,
-        provider: MinaProvider, // TODO: make chain agnostic
+        provider: MinaProvider, 
+        providerArchive: MinaArchiveProvider,
         pure?: boolean
       ): Promise<void> => {
         const keyAgent = get().keyAgent ? get().keyAgent : null
@@ -90,7 +92,7 @@ export const keyAgentStore = createStore<VaultStore>()(
             const accountInfoPromise = provider.getAccountInfo({
               publicKey: credentials.address
             })
-            const transactionsPromise = provider.getTransactions({
+            const transactionsPromise = providerArchive.getTransactions({
               addresses: [credentials.address],
               pagination: { startAt: 0, limit: 10 }
             })
@@ -107,7 +109,7 @@ export const keyAgentStore = createStore<VaultStore>()(
 
             if (result) {
               const [accountInfo, paginatedTransactions] = result
-              const transactions = paginatedTransactions.pageResults //`pageResults` because we are using the MinaProvider and it has its own pagination type
+              const transactions = paginatedTransactions.pageResults //`pageResults` because we are using the MinaArchiveProvider and it has its own pagination type
               // Create a new AccountStore
               const newAccountStore: AccountStore = {
                 ...createEmptyAccountStore(),
