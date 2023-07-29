@@ -1,5 +1,7 @@
 import { MinaPayload, Network } from '@palladxyz/key-management'
+import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button, cn, Input, Label } from '@palladxyz/ui'
+import { keyAgentStore } from '@palladxyz/vault'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -43,6 +45,9 @@ export const MnemonicConfirmationView = () => {
     if (!walletName) return
     if (!spendingPassword) return
     if (!mnemonic) return
+    getSessionPersistence().setItem('spendingPassword', spendingPassword)
+    keyAgentStore.destroy()
+    keyAgentStore.persist.rehydrate()
     await wallet.restoreWallet(
       new MinaPayload(),
       {
@@ -53,11 +58,10 @@ export const MnemonicConfirmationView = () => {
       },
       {
         mnemonicWords: mnemonic.split(' '),
-        getPassphrase: async () => Buffer.from('passphrase')
+        getPassphrase: async () => Buffer.from(spendingPassword)
       }
     )
-    console.log(wallet)
-    await setVaultStateInitialized()
+    setVaultStateInitialized()
     return navigate('/onboarding/finish')
   }
   return (

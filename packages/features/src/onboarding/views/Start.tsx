@@ -1,6 +1,6 @@
-// import { getSessionPersistence } from '@palladxyz/persistence'
+import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button } from '@palladxyz/ui'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
@@ -10,22 +10,25 @@ import { useAppStore } from '../../wallet/store/app'
 export const StartView = () => {
   const { wallet } = useWallet()
   console.log('>W', wallet)
-  // const [appInitialized, setAppInitialized] = useState<boolean>(false)
+  console.log('>>PW', getSessionPersistence().getItem('spendingPassword'))
+  const [appInitialized, setAppInitialized] = useState<boolean>(false)
   const isInitialized = useAppStore((state) => state.isInitialized())
+  console.log('>isInitialized', isInitialized)
+  console.log('>cred', wallet.getCredentials())
   const navigate = useNavigate()
   useEffect(() => {
-    // const initialRedirect = async () => {
-    //   const spendingPassword =
-    //     (await getSessionPersistence().getItem('spendingPassword')) || ''
-    //   const spendingPasswordSet = spendingPassword.length > 0
-    //   setAppInitialized(true)
-    //   if (!isInitialized) return
-    //   if (isInitialized && !spendingPasswordSet) return navigate('/unlock')
-    //   return navigate('/dashboard')
-    // }
-    // initialRedirect()
+    const initialRedirect = async () => {
+      const spendingPassword =
+        (await getSessionPersistence().getItem('spendingPassword')) || ''
+      const spendingPasswordSet = spendingPassword.length > 0
+      setAppInitialized(true)
+      if (!isInitialized) return
+      if (isInitialized && !spendingPasswordSet) return navigate('/unlock')
+      return navigate('/dashboard')
+    }
+    initialRedirect()
   }, [isInitialized])
-  // if (!appInitialized) return null
+  if (!appInitialized) return null
   return (
     <WizardLayout
       footer={

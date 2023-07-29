@@ -7,16 +7,36 @@ import {
 } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-const NAV_ITEMS = [
-  { icon: LayoutDashboardIcon, label: 'Dashboard', url: '/dashboard' },
-  { icon: CoinsIcon, label: 'Staking', url: '/staking' },
-  { icon: BookIcon, label: 'Contacts', url: '/contacts' },
-  { icon: MenuIcon, label: 'Menu', url: '/menu' }
-]
+interface BottomNavigationProps {
+  openCommandMenu: () => void
+}
 
-export const BottomNavigation = () => {
+export const BottomNavigation = ({
+  openCommandMenu
+}: BottomNavigationProps) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const NAV_ITEMS = [
+    {
+      icon: LayoutDashboardIcon,
+      label: 'Dashboard',
+      url: '/dashboard',
+      onClick: () => navigate('/dashboard')
+    },
+    {
+      icon: CoinsIcon,
+      label: 'Staking',
+      url: '/staking',
+      onClick: () => navigate('/staking')
+    },
+    {
+      icon: BookIcon,
+      label: 'Contacts',
+      url: '/contacts',
+      onClick: () => navigate('/contacts')
+    },
+    { icon: MenuIcon, label: 'Menu', onClick: openCommandMenu }
+  ]
   return (
     <Card className="flex justify-around p-1">
       {NAV_ITEMS.map((navItem) => {
@@ -25,7 +45,7 @@ export const BottomNavigation = () => {
           <Button
             key={navItem.url}
             variant={active ? '' : 'ghost'}
-            onClick={() => navigate(navItem.url)}
+            onClick={navItem.onClick}
           >
             <navItem.icon />
           </Button>

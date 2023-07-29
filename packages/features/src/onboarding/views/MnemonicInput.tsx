@@ -4,7 +4,9 @@ import {
   validateMnemonic,
   wordlist
 } from '@palladxyz/key-management'
+import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button, cn, Label, Textarea } from '@palladxyz/ui'
+import { keyAgentStore } from '@palladxyz/vault'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -44,6 +46,9 @@ export const MnemonicInputView = () => {
   const onSubmit = async ({ mnemonic }: { mnemonic: string }) => {
     if (!walletName) return
     if (!spendingPassword) return
+    getSessionPersistence().setItem('spendingPassword', spendingPassword)
+    keyAgentStore.destroy()
+    keyAgentStore.persist.rehydrate()
     const restoredWallet = await wallet.restoreWallet(
       new MinaPayload(),
       {
@@ -54,12 +59,12 @@ export const MnemonicInputView = () => {
       },
       {
         mnemonicWords: mnemonic.split(' '),
-        getPassphrase: async () => Buffer.from('passphrase')
+        getPassphrase: async () => Buffer.from(spendingPassword)
       }
     )
     console.log('original initialised wallet', wallet)
     console.log('newly restored wallet', restoredWallet)
-    await setVaultStateInitialized()
+    setVaultStateInitialized()
     return navigate('/onboarding/finish')
   }
   return (

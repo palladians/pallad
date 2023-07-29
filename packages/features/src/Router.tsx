@@ -6,7 +6,6 @@ import { AboutView } from './about/views/About'
 import { AddressBookView } from './address-book/views/AddressBook'
 import { NewAddressView } from './address-book/views/NewAddress'
 import { UnlockWalletView } from './lock/views/UnlockWallet'
-import { MenuView } from './menu/views/Menu'
 import { NotFoundView } from './not-found/views/NotFound'
 import { CreateWalletView } from './onboarding/views/CreateWallet'
 import { MnemonicConfirmationView } from './onboarding/views/MnemonicConfirmation'
@@ -37,7 +36,6 @@ export const Router = () => {
         <Routes>
           <Route path="/" element={<StartView />} />
           <Route path="/dashboard" element={<OverviewView />} />
-          <Route path="/menu" element={<MenuView />} />
           <Route path="/send" element={<SendView />} />
           <Route path="/receive" element={<ReceiveView />} />
           <Route
