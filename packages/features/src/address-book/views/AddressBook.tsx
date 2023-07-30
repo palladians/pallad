@@ -29,7 +29,7 @@ export const AddressBookView = () => {
             onClick: () => navigate('/contacts/new')
           }}
         />
-        <div className="gap-2">
+        <div className="flex flex-col gap-2">
           <ContactTile
             contact={{
               name: DonatePallad.name,

@@ -20,7 +20,6 @@ import { useOnboardingStore } from '../../wallet/store/onboarding'
 
 export const MnemonicInputView = () => {
   const { wallet } = useWallet()
-  console.log(wallet)
   const navigate = useNavigate()
   const { walletName, spendingPassword } = useOnboardingStore(
     (state) => ({
@@ -49,7 +48,7 @@ export const MnemonicInputView = () => {
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
     keyAgentStore.destroy()
     keyAgentStore.persist.rehydrate()
-    const restoredWallet = await wallet.restoreWallet(
+    await wallet.restoreWallet(
       new MinaPayload(),
       {
         network: Network.Mina,
@@ -62,8 +61,6 @@ export const MnemonicInputView = () => {
         getPassphrase: async () => Buffer.from(spendingPassword)
       }
     )
-    console.log('original initialised wallet', wallet)
-    console.log('newly restored wallet', restoredWallet)
     setVaultStateInitialized()
     return navigate('/onboarding/finish')
   }

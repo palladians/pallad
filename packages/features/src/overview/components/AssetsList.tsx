@@ -1,14 +1,15 @@
+import { Avatar, AvatarFallback, Skeleton } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
 
+import MinaLogo from '../../common/assets/mina.svg'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useAccount } from '../../common/hooks/useAccount'
 
-export const AssetsList = () => {
+export const AssetList = () => {
   const navigate = useNavigate()
-  // const { data: accountQuery, isLoading } = useAccount()
-  // const rawMinaBalance = parseFloat(
-  //   accountQuery?.result?.data?.account?.balance?.total
-  // )
-  // const minaBalance = rawMinaBalance ? rawMinaBalance.toFixed(4) : '0'
+  const { data: accountData, isLoading: accountLoading } = useAccount()
+  const rawMinaBalance = accountData?.balance.total
+  const minaBalance = rawMinaBalance?.toFixed(4) || '0'
   return (
     <div className="flex flex-col flex-1 gap-3">
       <ViewHeading
@@ -18,28 +19,19 @@ export const AssetsList = () => {
           onClick: () => navigate('/transactions')
         }}
       />
-      {/*{isLoading ? (*/}
-      {/*  <Spinner />*/}
-      {/*) : (*/}
-      {/*  <Box css={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>*/}
-      {/*    <Box*/}
-      {/*      css={{*/}
-      {/*        padding: 12,*/}
-      {/*        borderRadius: '50%',*/}
-      {/*        backgroundColor: '$gray800',*/}
-      {/*        justifyContent: 'center',*/}
-      {/*        alignItems: 'center'*/}
-      {/*      }}*/}
-      {/*    >*/}
-      {/*      <Image source={icons.iconMina} css={{ width: 28, height: 28 }} />*/}
-      {/*    </Box>*/}
-      {/*    <Text css={{ flex: 1, fontWeight: 500, color: '$gray100' }}>*/}
-      {/*      MINA*/}
-      {/*    </Text>*/}
-
-      {/*    <Text css={{ width: 'auto', color: '$gray100' }}>{minaBalance}</Text>*/}
-      {/*  </Box>*/}
-      {/*)}*/}
+      {accountLoading ? (
+        <Skeleton className="w-full h-32" />
+      ) : (
+        <div className="flex items-center gap-4">
+          <Avatar>
+            <AvatarFallback className="p-2">
+              <MinaLogo />
+            </AvatarFallback>
+          </Avatar>
+          <p className="flex-1 font-semibold">MINA</p>
+          <p>{minaBalance}</p>
+        </div>
+      )}
     </div>
   )
 }
