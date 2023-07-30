@@ -1,20 +1,26 @@
+import { MinaNetwork } from '@palladxyz/key-management'
 import { Card, Label, RadioGroup, RadioGroupItem } from '@palladxyz/ui'
 import { TrashIcon } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { useNavigate } from 'react-router-dom'
+import { useSWRConfig } from 'swr'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useAppStore } from '../../wallet/store/app'
 
 export const SettingsView = () => {
   const navigate = useNavigate()
-  // const { mutate } = useSWRConfig()
-  // const { setNetwork, network } = useAppStore((state) => ({
-  //   setNetwork: state.setNetwork,
-  //   network: state.network
-  // }))
-  // const handleNetworkSwitch = (value: MinaNetwork) => {
-  //   setNetwork(value)
-  //   mutate(() => true, undefined, { revalidate: false })
-  // }
+  const { setTheme, theme } = useTheme()
+  const { mutate } = useSWRConfig()
+  const { setNetwork, network } = useAppStore((state) => ({
+    setNetwork: state.setNetwork,
+    network: state.network
+  }))
+  const handleNetworkSwitch = (value: MinaNetwork) => {
+    setNetwork(value)
+    mutate(() => true, undefined, { revalidate: false })
+  }
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-6">
@@ -24,42 +30,51 @@ export const SettingsView = () => {
         />
         <div className="flex flex-col gap-2">
           <Label>Network</Label>
-          <RadioGroup defaultValue="comfortable">
+          <RadioGroup value={network} onValueChange={handleNetworkSwitch}>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="default" id="r1" />
-              <Label htmlFor="r1">Mainnet</Label>
+              <RadioGroupItem
+                value={MinaNetwork[MinaNetwork.Mainnet]}
+                id="networkMainnet"
+              />
+              <Label htmlFor="networkMainnet">Mainnet</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="comfortable" id="r2" />
-              <Label htmlFor="r2">Devnet</Label>
+              <RadioGroupItem
+                value={MinaNetwork[MinaNetwork.Devnet]}
+                id="networkDevnet"
+              />
+              <Label htmlFor="networkDevnet">Devnet</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="compact" id="r3" />
-              <Label htmlFor="r3">Berkeley</Label>
+              <RadioGroupItem
+                value={MinaNetwork[MinaNetwork.Berkeley]}
+                id="networkBerkeley"
+              />
+              <Label htmlFor="networkBerkeley">Berkeley</Label>
             </div>
           </RadioGroup>
         </div>
         <div className="flex flex-col gap-2">
           <Label>Theme</Label>
-          <RadioGroup defaultValue="comfortable">
+          <RadioGroup value={theme} onValueChange={setTheme}>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="default" id="r1" />
-              <Label htmlFor="r1">Light</Label>
+              <RadioGroupItem value="light" id="themeLight" />
+              <Label htmlFor="themeLight">Light</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="comfortable" id="r2" />
-              <Label htmlFor="r2">Dark</Label>
+              <RadioGroupItem value="dark" id="themeDark" />
+              <Label htmlFor="themeDark">Dark</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="compact" id="r3" />
-              <Label htmlFor="r3">System</Label>
+              <RadioGroupItem value="system" id="themeSystem" />
+              <Label htmlFor="themeSystem">System</Label>
             </div>
           </RadioGroup>
         </div>
         <div className="flex flex-col gap-4">
           <h2>Authorized Domains</h2>
           <div className="flex flex-col gap-2">
-            <Card className="flex p-2 justify-between">
+            <Card className="flex py-2 px-4 justify-between">
               <div>Pallad</div>
               <div className="flex gap-2 items-center">
                 <div>pallad.xyz</div>

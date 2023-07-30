@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input, Label } from '@palladxyz/ui'
+import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
@@ -49,7 +50,10 @@ export const NewAddressForm = () => {
         />
         <p>{errors.address?.message}</p>
       </div>
-      <Button type="submit">Create Contact</Button>
+      <Button type="submit">
+        <PlusIcon size={16} />
+        Create Contact
+      </Button>
     </form>
   )
 }

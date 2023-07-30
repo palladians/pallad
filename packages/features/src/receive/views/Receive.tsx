@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useWallet } from '../../wallet/hooks/useWallet'
 
 export const ReceiveView = () => {
   const navigate = useNavigate()
-  // const currentWallet = useVaultStore((state) => state.getCurrentWallet())
-  // const walletAddress = currentWallet?.walletPublicKey
-  const walletAddress = 'B62XXX'
+  const { wallet } = useWallet()
+  const walletAddress = wallet.getCurrentWallet()?.address
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-4">
@@ -27,7 +27,9 @@ export const ReceiveView = () => {
               />
             )}
           </Card>
-          <Card className="p-2">{walletAddress}</Card>
+          <Card className="p-2 break-all text-center leading-8">
+            {walletAddress}
+          </Card>
         </div>
       </div>
     </AppLayout>
