@@ -41,8 +41,8 @@ export interface MinaWalletProps {
 export class MinaWalletImpl implements MinaWallet {
   readonly keyAgent: InMemoryKeyAgent | null
   readonly balance: number
-  readonly minaProvider: MinaProvider
-  readonly minaArchiveProvider: MinaArchiveProvider
+  private minaProvider: MinaProvider
+  private minaArchiveProvider: MinaArchiveProvider
   readonly name: string
   // Storage for the current wallet
 
@@ -67,10 +67,13 @@ export class MinaWalletImpl implements MinaWallet {
       throw new Error('Current wallet is null, empty or undefined')
     }
     const walletAddress = currentWallet.address
-
+    const currentNetwork = this.getCurrentNetwork()
+    if (currentNetwork === null) {
+      throw new Error('Current network is null, empty or undefined')
+    }
     const accountInformation =
-      keyAgentStore.getState().getAccountStore(walletAddress)?.accountInfo ||
-      null
+      keyAgentStore.getState().getAccountStore(currentNetwork, walletAddress)
+        ?.accountInfo || null
 
     return accountInformation
   }
@@ -81,9 +84,13 @@ export class MinaWalletImpl implements MinaWallet {
       throw new Error('Current wallet is null, empty or undefined')
     }
     const walletAddress = currentWallet.address
+    const currentNetwork = this.getCurrentNetwork()
+    if (currentNetwork === null) {
+      throw new Error('Current network is null, empty or undefined')
+    }
     const transactions =
-      keyAgentStore.getState().getAccountStore(walletAddress)?.transactions ||
-      null
+      keyAgentStore.getState().getAccountStore(currentNetwork, walletAddress)
+        ?.transactions || null
 
     return transactions
   }
@@ -136,6 +143,7 @@ export class MinaWalletImpl implements MinaWallet {
   async restoreWallet<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
+    network: Mina.Networks,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
   ): Promise<void> {
     // Restore a wallet from a mnemonic
@@ -152,6 +160,7 @@ export class MinaWalletImpl implements MinaWallet {
         args,
         this.minaProvider,
         this.minaArchiveProvider,
+        network,
         agentArgs
       )
     // set the current wallet
@@ -178,6 +187,35 @@ export class MinaWalletImpl implements MinaWallet {
 
     // Return the list of accounts
     return result
+  }
+
+  async switchNetwork(
+    network: Mina.Networks,
+    nodeUrl: string,
+    nodeArchiveUrl: string
+  ): Promise<void> {
+    // Switch the network
+    await this.setCurrentNetwork(network, nodeUrl, nodeArchiveUrl)
+  }
+
+  getCurrentNetwork(): Mina.Networks | null {
+    // Get the current network
+    const result = keyAgentStore.getState().getCurrentNetwork()
+    return result ? result : null
+  }
+
+  async setCurrentNetwork(
+    network: Mina.Networks,
+    nodeUrl: string,
+    nodeArchiveUrl: string
+  ): Promise<void> {
+    // Change the providers
+    this.minaProvider = new MinaProvider(nodeUrl)
+    this.minaArchiveProvider = new MinaArchiveProvider(nodeArchiveUrl)
+    // Set the current network
+    await keyAgentStore
+      .getState()
+      .setCurrentNetwork(network, this.minaProvider, this.minaArchiveProvider)
   }
 
   shutdown(): void {

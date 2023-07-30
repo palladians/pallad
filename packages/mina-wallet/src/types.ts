@@ -22,6 +22,7 @@ export interface MinaWallet {
   restoreWallet<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
+    network: Mina.Networks,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
   ): Promise<void>
 
@@ -44,6 +45,18 @@ export interface MinaWallet {
   ): Promise<ChainSignatureResult | undefined>
 
   submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>
+
+  switchNetwork(
+    network: Mina.Networks,
+    nodeUrl: string,
+    nodeArchiveUrl: string
+  ): Promise<void>
+  getCurrentNetwork(): Mina.Networks | null
+  setCurrentNetwork(
+    network: Mina.Networks,
+    nodeUrl: string,
+    nodeArchiveUrl: string
+  ): Promise<void>
 
   // The wallet might need APIs for receiving challenges and completing them!
   // Challenge(challenge: VerifiableCredentialChallenge): Promise<VerifiableCredentialChallengeResponse>

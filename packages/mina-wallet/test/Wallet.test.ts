@@ -19,6 +19,7 @@ describe('MinaWalletImpl', () => {
   let walletDependencies: MinaWalletDependencies
   let provider: MinaProvider
   let providerArchive: MinaArchiveProvider
+  let network: Mina.Networks
 
   const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
   const mnemonic = [
@@ -47,6 +48,7 @@ describe('MinaWalletImpl', () => {
       network: Network.Mina
     }
     wallet = new MinaWalletImpl({ name: 'Test Wallet' }, walletDependencies)
+    network = Mina.Networks.DEVNET // need to chang
   })
   test('wallet restores a wallet', async () => {
     const restoreArgs: MinaSpecificArgs = {
@@ -56,7 +58,7 @@ describe('MinaWalletImpl', () => {
       networkType: 'testnet'
     }
     const payload = new MinaPayload()
-    await wallet.restoreWallet(payload, restoreArgs, {
+    await wallet.restoreWallet(payload, restoreArgs, network, {
       mnemonicWords: mnemonic,
       getPassphrase: getPassword
     })
@@ -77,7 +79,7 @@ describe('MinaWalletImpl', () => {
       networkType: 'testnet'
     }
     const payload = new MinaPayload()
-    await wallet.restoreWallet(payload, args, {
+    await wallet.restoreWallet(payload, args, network, {
       mnemonicWords: mnemonic,
       getPassphrase: getPassword
     })
@@ -126,7 +128,7 @@ describe('MinaWalletImpl', () => {
       networkType: 'testnet'
     }
     const restorePayload = new MinaPayload()
-    await wallet.restoreWallet(restorePayload, args, {
+    await wallet.restoreWallet(restorePayload, args, network, {
       mnemonicWords: mnemonic,
       getPassphrase: getPassword
     })
@@ -158,5 +160,60 @@ describe('MinaWalletImpl', () => {
       signedAttestation as Mina.SignedMessage
     )
     expect(isVerified).toBeTruthy()
+  })
+  test('switches network', async () => {
+    /**
+     * Restore the wallet
+     */
+    const restoreArgs: MinaSpecificArgs = {
+      network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      networkType: 'testnet'
+    }
+    const payload = new MinaPayload()
+    await wallet.restoreWallet(payload, restoreArgs, network, {
+      mnemonicWords: mnemonic,
+      getPassphrase: getPassword
+    })
+    // check there exists the first account and address in the keyAgent not in the .serializableKeyAgentData knownCredentials
+    const storeKeyAgentCredentials =
+      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
+        .contents
+    expect(storeKeyAgentCredentials).toHaveLength(1)
+    // log out the current network
+    const currentNetwork = wallet.getCurrentNetwork()
+    console.log('Original Current Network:', currentNetwork)
+    expect(currentNetwork).toEqual(network)
+    // log out the current account info
+    const currentAccountInfo = await wallet.getAccountInfo()
+    console.log('Original Current Account Info:', currentAccountInfo)
+    expect(currentAccountInfo).toHaveProperty('balance')
+    // log out the current transactions
+    const currentTransactions = await wallet.getTransactions()
+    console.log('Original Current Transactions:', currentTransactions)
+
+    /**
+     * Switch the network from devnet to mainnet
+     */
+    const nodeUrlMainnet = 'https://proxy.minaexplorer.com/'
+    const archiveUrlMainnet = 'https://graphql.minaexplorer.com'
+    const networkMainnet = Mina.Networks.MAINNET
+    await wallet.switchNetwork(
+      networkMainnet,
+      nodeUrlMainnet,
+      archiveUrlMainnet
+    )
+    // log out the current network
+    const currentNetworkSwitch = wallet.getCurrentNetwork()
+    console.log('Switched Current Network:', currentNetworkSwitch)
+    expect(currentNetworkSwitch).toEqual(networkMainnet)
+    // log out the current account info
+    const currentAccountInfoSwitch = await wallet.getAccountInfo()
+    console.log('Switched Current Account Info:', currentAccountInfoSwitch)
+    //expect(currentAccountInfoSwitch).toHaveProperty('balance')
+    // log out the current transactions
+    const currentTransactionsSwitch = await wallet.getTransactions()
+    console.log('Switched Current Transactions:', currentTransactionsSwitch)
   })
 })
