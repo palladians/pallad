@@ -36,6 +36,7 @@ export type MinaGroupedCredentials = {
   addressIndex: number
   accountIndex: number
   address: Mina.PublicKey
+  // TODO: make these credentials unique per Mina network using Mina.Networks
 }
 
 export type MinaSignablePayload =

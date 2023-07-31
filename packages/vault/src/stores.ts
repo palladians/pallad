@@ -28,7 +28,15 @@ const createEmptyAccountStore = (): AccountStore => ({
 const initialState: VaultStore = {
   keyAgent: null,
   currentWallet: null,
-  accountStores: {},
+  accountStores: {
+    [Mina.Networks.MAINNET]: {},
+    [Mina.Networks.DEVNET]: {},
+    [Mina.Networks.BERKELEY]: {}
+  },
+  syncAccountStore: async () => void 0,
+  currentNetwork: null,
+  getCurrentNetwork: () => null,
+  setCurrentNetwork: () => void 0,
   restoreWallet: async () => null,
   addCredentials: async () => void 0,
   setCurrentWallet: async () => void 0,
@@ -45,11 +53,13 @@ export const keyAgentStore = createStore<VaultStore>()(
       keyAgent: initialState.keyAgent,
       currentWallet: initialState.currentWallet,
       accountStores: initialState.accountStores,
+      currentNetwork: initialState.currentNetwork,
       restoreWallet: async <T extends ChainSpecificPayload>(
         payload: T,
         args: ChainSpecificArgs,
         provider: MinaProvider,
         providerArchive: MinaArchiveProvider,
+        network: Mina.Networks,
         { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
       ) => {
         const agentArgs: FromBip39MnemonicWordsProps = {
@@ -68,6 +78,7 @@ export const keyAgentStore = createStore<VaultStore>()(
           args,
           provider,
           providerArchive,
+          network,
           false
         )
 
@@ -78,6 +89,7 @@ export const keyAgentStore = createStore<VaultStore>()(
         args: ChainSpecificArgs,
         provider: MinaProvider,
         providerArchive: MinaArchiveProvider,
+        network: Mina.Networks,
         pure?: boolean
       ): Promise<void> => {
         const keyAgent = get().keyAgent ? get().keyAgent : null
@@ -112,7 +124,7 @@ export const keyAgentStore = createStore<VaultStore>()(
                 error
               )
             })
-
+            console.log('network: ', network, 'query result: ', result)
             if (result) {
               const [accountInfo, paginatedTransactions] = result
               const transactions = paginatedTransactions.pageResults //`pageResults` because we are using the MinaArchiveProvider and it has its own pagination type
@@ -131,12 +143,18 @@ export const keyAgentStore = createStore<VaultStore>()(
                 getTransactions: () => newAccountStore.transactions
               }
 
-              const updatedAccountStores: Record<ChainAddress, AccountStore> = {
-                ...get().accountStores,
-                [credentials.address as ChainAddress]: newAccountStore // 'credentials.address' should be of type ChainAddress
-              }
+              const updatedAccountStores = get().accountStores[network] || {}
+              updatedAccountStores[credentials.address as ChainAddress] =
+                newAccountStore
 
-              set({ accountStores: updatedAccountStores })
+              set({
+                accountStores: {
+                  ...get().accountStores,
+                  [network]: updatedAccountStores
+                }
+              })
+              set({ currentWallet: credentials })
+              set({ currentNetwork: network })
             } else {
               console.log('Failed to fetch account info or transactions')
             }
@@ -175,11 +193,42 @@ export const keyAgentStore = createStore<VaultStore>()(
         }
         return null
       },
-      getAccountStore: (address: ChainAddress): AccountStore | null => {
-        const accountStores = get().accountStores
-        return accountStores[address] || null
+      setCurrentNetwork: async (
+        network: Mina.Networks,
+        provider: MinaProvider,
+        providerArchive: MinaArchiveProvider
+      ) => {
+        set({ currentNetwork: network })
+        // Here you would want to sync the account information for each wallet/address that exists
+        const credentials = get().getCredentials()
+        if (credentials) {
+          for (const credential of credentials) {
+            if (credential.type === 'MinaAddress') {
+              await get().syncAccountStore(
+                credential.address,
+                provider,
+                providerArchive,
+                network
+              )
+            }
+          }
+        } else {
+          console.log('No credentials available')
+        }
+      },
+      getCurrentNetwork: (): Mina.Networks | null => {
+        const currentNetwork = get().currentNetwork
+        return currentNetwork
+      },
+      getAccountStore: (
+        network: Mina.Networks,
+        address: ChainAddress
+      ): AccountStore | null => {
+        const networkAccountStores = get().accountStores[network] || {}
+        return networkAccountStores[address] || null
       },
       setAccountStore: (
+        network: Mina.Networks,
         address: ChainAddress,
         accountStore: Partial<AccountStore>
       ) => {
@@ -187,14 +236,74 @@ export const keyAgentStore = createStore<VaultStore>()(
           throw new Error('Invalid accountStore argument')
         }
 
+        const networkAccountStores = get().accountStores[network] || {}
         const currentAccountStore =
-          get().accountStores[address] || createEmptyAccountStore()
+          networkAccountStores[address] || createEmptyAccountStore()
+
         const updatedAccountStore = { ...currentAccountStore, ...accountStore }
-        const updatedAccountStores = {
-          ...get().accountStores,
-          [address]: updatedAccountStore
+        networkAccountStores[address] = updatedAccountStore
+
+        set({
+          accountStores: {
+            ...get().accountStores,
+            [network]: networkAccountStores
+          }
+        })
+      },
+      syncAccountStore: async (
+        address: ChainAddress,
+        provider: MinaProvider,
+        providerArchive: MinaArchiveProvider,
+        network: Mina.Networks
+      ) => {
+        try {
+          const accountInfoPromise = provider.getAccountInfo({
+            publicKey: address
+          })
+          const transactionsPromise = providerArchive.getTransactions({
+            addresses: [address],
+            pagination: { startAt: 0, limit: 10 }
+          })
+
+          const result = await Promise.all([
+            accountInfoPromise,
+            transactionsPromise
+          ]).catch((error) => {
+            console.error('Error fetching account info or transactions:', error)
+          })
+          if (result) {
+            const [accountInfo, paginatedTransactions] = result
+            const transactions = paginatedTransactions.pageResults //`pageResults` because we are using the MinaArchiveProvider and it has its own pagination type
+            // Create a new AccountStore
+            const newAccountStore: AccountStore = {
+              ...createEmptyAccountStore(),
+              accountInfo,
+              transactions,
+              setAccountInfo: (info: AccountInfo) => {
+                newAccountStore.accountInfo = info
+              },
+              setTransactions: (txs: Mina.TransactionBody[]) => {
+                newAccountStore.transactions = txs
+              },
+              getAccountInfo: () => newAccountStore.accountInfo,
+              getTransactions: () => newAccountStore.transactions
+            }
+
+            const updatedAccountStores = get().accountStores[network] || {}
+            updatedAccountStores[address as ChainAddress] = newAccountStore
+
+            set({
+              accountStores: {
+                ...get().accountStores,
+                [network]: updatedAccountStores
+              }
+            })
+          } else {
+            console.log('Failed to fetch account info or transactions')
+          }
+        } catch (error) {
+          console.log('Error fetching account info or transactions:', error)
         }
-        set({ accountStores: updatedAccountStores })
       }
     }),
     {

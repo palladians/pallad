@@ -55,7 +55,8 @@ export type AccountStore = AccountState & AccountMutators
 export type VaultState = {
   keyAgent: InMemoryKeyAgent | null
   currentWallet: GroupedCredentials | null
-  accountStores: Record<ChainAddress, AccountStore>
+  accountStores: Record<Mina.Networks, Record<ChainAddress, AccountStore>>
+  currentNetwork: Mina.Networks | null
 }
 
 /**
@@ -68,6 +69,7 @@ type VaultMutators = {
     args: ChainSpecificArgs,
     provider: MinaProvider,
     providerArchive: MinaArchiveProvider,
+    network: Mina.Networks,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
   ): Promise<InMemoryKeyAgent | null>
   addCredentials: <T extends ChainSpecificPayload>(
@@ -75,13 +77,30 @@ type VaultMutators = {
     args: ChainSpecificArgs,
     provider: MinaProvider,
     providerArchive: MinaArchiveProvider,
+    network: Mina.Networks,
     pure?: boolean
   ) => Promise<void>
+  syncAccountStore: (
+    address: ChainAddress,
+    provider: MinaProvider,
+    providerArchive: MinaArchiveProvider,
+    network: Mina.Networks
+  ) => Promise<void>
+  setCurrentNetwork: (
+    network: Mina.Networks,
+    provider: MinaProvider,
+    providerArchive: MinaArchiveProvider
+  ) => void
+  getCurrentNetwork: () => Mina.Networks | null
   setCurrentWallet: (address: ChainAddress) => void
   getCurrentWallet: () => GroupedCredentials | null
   getCredentials: () => GroupedCredentials[] | null
-  getAccountStore: (address: ChainAddress) => AccountStore | null
+  getAccountStore: (
+    network: Mina.Networks,
+    address: ChainAddress
+  ) => AccountStore | null
   setAccountStore: (
+    network: Mina.Networks,
     address: ChainAddress,
     accountStore: Partial<AccountStore>
   ) => void
