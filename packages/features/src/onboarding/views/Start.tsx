@@ -4,17 +4,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
-import { useWallet } from '../../wallet/hooks/useWallet'
 import { useAppStore } from '../../wallet/store/app'
 
 export const StartView = () => {
-  const { wallet } = useWallet()
-  console.log('>W', wallet)
-  console.log('>>PW', getSessionPersistence().getItem('spendingPassword'))
   const [appInitialized, setAppInitialized] = useState<boolean>(false)
   const isInitialized = useAppStore((state) => state.isInitialized())
-  console.log('>isInitialized', isInitialized)
-  console.log('>cred', wallet.getCredentials())
   const navigate = useNavigate()
   useEffect(() => {
     const initialRedirect = async () => {

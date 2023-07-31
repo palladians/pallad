@@ -44,7 +44,7 @@ export const BottomNavigation = ({
         return (
           <Button
             key={navItem.url}
-            variant={active ? '' : 'ghost'}
+            variant={active ? 'secondary' : 'ghost'}
             onClick={navItem.onClick}
           >
             <navItem.icon />

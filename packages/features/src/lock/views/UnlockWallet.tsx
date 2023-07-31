@@ -42,7 +42,12 @@ export const UnlockWalletView = () => {
   return (
     <WizardLayout
       footer={
-        <Button onClick={handleSubmit(onSubmit)} className="flex-1">
+        <Button
+          type="submit"
+          onClick={handleSubmit(onSubmit)}
+          className="flex-1"
+          form="unlockWalletForm"
+        >
           Unlock
         </Button>
       }
@@ -61,7 +66,7 @@ export const UnlockWalletView = () => {
             <AlertTitle>The password is wrong</AlertTitle>
           </Alert>
         )}
-        <div className="flex flex-col gap-2">
+        <form className="flex flex-col gap-2" id="unlockWalletForm">
           <Label htmlFor="spendingPassword" className="cursor-pointer">
             Spending Password
           </Label>
@@ -71,7 +76,7 @@ export const UnlockWalletView = () => {
             autoFocus
             {...register('spendingPassword')}
           />
-        </div>
+        </form>
       </div>
     </WizardLayout>
   )

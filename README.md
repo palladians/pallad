@@ -112,6 +112,12 @@ Thanks goes to these wonderful people
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 </a>
 
+## Contributing
+
+We specified contributing guidelines. Please refer to them before starting contributing to this repository.
+
+[Contributing Guidelines](https://github.com/palladians/pallad/blob/main/CONTRIBUTING.md)
+
 ## Links
 
 [pallad.xyz - The official website of Pallad](https://pallad.xyz/)

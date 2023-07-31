@@ -30,16 +30,6 @@ interface CommandMenuProps {
 export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
   const navigate = useNavigate()
 
-  React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && e.metaKey) {
-        setOpen(!open)
-      }
-    }
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
-  }, [])
-
   const lockWallet = () => {
     getSessionPersistence().setItem('spendingPassword', '')
     keyAgentStore.destroy()
@@ -47,55 +37,106 @@ export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
     return navigate('/')
   }
 
+  const COMMAND_GROUPS = [
+    {
+      name: 'General',
+      items: [
+        {
+          name: 'Dashboard',
+          icon: LayoutDashboardIcon,
+          onSelect: () => navigate('/dashboard')
+        },
+        {
+          name: 'Address Book',
+          icon: BookIcon,
+          onSelect: () => navigate('/contacts')
+        }
+      ]
+    },
+    {
+      name: 'Transactions',
+      items: [
+        {
+          name: 'Transactions',
+          icon: ListIcon,
+          onSelect: () => navigate('/transactions')
+        },
+        {
+          name: 'New Transaction',
+          icon: ArrowRightLeftIcon,
+          onSelect: () => navigate('/send')
+        }
+      ]
+    },
+    {
+      name: 'Staking',
+      items: [
+        {
+          name: 'Staking',
+          icon: CoinsIcon,
+          onSelect: () => navigate('/staking')
+        },
+        {
+          name: 'Change Delegation',
+          icon: ReplaceIcon,
+          onSelect: () => navigate('/staking/delegate')
+        }
+      ]
+    },
+    {
+      name: 'Wallet',
+      items: [
+        {
+          name: 'Settings',
+          icon: SettingsIcon,
+          onSelect: () => navigate('/settings')
+        },
+        {
+          name: 'About',
+          icon: InfoIcon,
+          onSelect: () => navigate('/about')
+        },
+        {
+          name: 'Lock Wallet',
+          icon: LockIcon,
+          onSelect: lockWallet
+        }
+      ]
+    }
+  ]
+
+  const down = (e: KeyboardEvent) => {
+    if (e.key === 'k' && e.metaKey) {
+      setOpen(!open)
+    }
+  }
+
+  React.useEffect(() => {
+    document.addEventListener('keydown', down)
+    return () => document.removeEventListener('keydown', down)
+  }, [])
+
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="General">
-          <CommandItem onSelect={() => navigate('/dashboard')}>
-            <LayoutDashboardIcon className="mr-2" />
-            Dashboard
-          </CommandItem>
-          <CommandItem onSelect={() => navigate('/contacts')}>
-            <BookIcon className="mr-2" />
-            Address Book
-          </CommandItem>
-        </CommandGroup>
-        <CommandGroup heading="Transactions">
-          <CommandItem>
-            <ArrowRightLeftIcon className="mr-2" />
-            New Transaction
-          </CommandItem>
-          <CommandItem onSelect={() => navigate('/transactions')}>
-            <ListIcon className="mr-2" />
-            Transactions
-          </CommandItem>
-        </CommandGroup>
-        <CommandGroup heading="Staking">
-          <CommandItem onSelect={() => navigate('/staking')}>
-            <CoinsIcon className="mr-2" />
-            Staking
-          </CommandItem>
-          <CommandItem>
-            <ReplaceIcon className="mr-2" />
-            Change delegation
-          </CommandItem>
-        </CommandGroup>
-        <CommandGroup heading="Menu">
-          <CommandItem onSelect={() => navigate('/settings')}>
-            <SettingsIcon className="mr-2" />
-            Settings
-          </CommandItem>
-          <CommandItem onSelect={() => navigate('/about')}>
-            <InfoIcon className="mr-2" />
-            About
-          </CommandItem>
-          <CommandItem onSelect={lockWallet}>
-            <LockIcon className="mr-2" />
-            Lock Wallet
-          </CommandItem>
-        </CommandGroup>
+        {COMMAND_GROUPS.map((group, i) => (
+          <CommandGroup key={i} heading={group.name}>
+            {group.items.map((item, j) => (
+              <CommandItem
+                key={j}
+                onSelect={() => {
+                  item.onSelect()
+                  setOpen(false)
+                }}
+              >
+                <item.icon className="mr-2" />
+                {item.name}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        ))}
       </CommandList>
     </CommandDialog>
   )

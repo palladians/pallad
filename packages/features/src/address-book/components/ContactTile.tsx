@@ -30,18 +30,22 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
           {contact.name}
         </Button>
       </div>
-      <div className="items-center gap-2">
-        <p className="text-sm">
+      <div className="flex items-center gap-2">
+        <p className="text-sm break-keep truncate">
           {contact?.address &&
             truncateString({
               value: contact.address,
-              firstCharCount: 8,
-              endCharCount: 8
+              firstCharCount: 4,
+              endCharCount: 4
             })}
         </p>
         {typeof index === 'number' && (
-          <Button onClick={() => removeContact({ index })}>
-            <TrashIcon size={20} className="text-sky-500" />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => removeContact({ index })}
+          >
+            <TrashIcon size={16} className="text-sky-500" />
           </Button>
         )}
       </div>
