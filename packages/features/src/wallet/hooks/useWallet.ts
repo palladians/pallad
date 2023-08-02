@@ -1,8 +1,10 @@
 import { MinaNetwork, Network } from '@palladxyz/key-management'
+import { Mina } from '@palladxyz/mina-core'
 import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 import { MinaWalletImpl } from '@palladxyz/mina-wallet'
 import { keyAgentStore } from '@palladxyz/vault'
 import { useMemo } from 'react'
+import { shallow } from 'zustand/shallow'
 
 import { useAppStore } from '../store/app'
 
@@ -24,16 +26,28 @@ const MinaExplorerUrl = {
     .VITE_APP_MINA_EXPLORER_BERKELEY_URL
 }
 
+// TODO: Remove mapping once network types are unified
+const getNetworkValue = (network: MinaNetwork) => {
+  switch (network) {
+    case MinaNetwork.Mainnet:
+      return Mina.Networks.MAINNET
+    case MinaNetwork.Devnet:
+      return Mina.Networks.DEVNET
+    case MinaNetwork.Berkeley:
+      return Mina.Networks.BERKELEY
+  }
+}
+
 export const useWallet = () => {
-  const currentNetwork = useAppStore((state) => state.network)
-  const minaProxyUrl = useMemo(
-    () => MinaProxyUrl[currentNetwork],
-    [currentNetwork]
+  const { network, setNetwork } = useAppStore(
+    (state) => ({
+      network: state.network,
+      setNetwork: state.setNetwork
+    }),
+    shallow
   )
-  const minaExplorerUrl = useMemo(
-    () => MinaExplorerUrl[currentNetwork],
-    [currentNetwork]
-  )
+  const minaProxyUrl = useMemo(() => MinaProxyUrl[network], [network])
+  const minaExplorerUrl = useMemo(() => MinaExplorerUrl[network], [network])
   const provider = new MinaProvider(minaProxyUrl)
   const providerArchive = new MinaArchiveProvider(minaExplorerUrl)
   const wallet = new MinaWalletImpl(
@@ -45,7 +59,17 @@ export const useWallet = () => {
       network: Network.Mina
     }
   )
+  console.log('>>>W', wallet)
+  const switchNetwork = async (network: MinaNetwork) => {
+    setNetwork(network)
+    await wallet.switchNetwork(
+      getNetworkValue(network),
+      minaProxyUrl,
+      minaExplorerUrl
+    )
+  }
   return {
-    wallet
+    wallet,
+    switchNetwork
   }
 }

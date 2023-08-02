@@ -1,7 +1,4 @@
 # Pallad
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 ![Module type: ESM](https://img.shields.io/badge/module%20type-esm-brightgreen)
 [![Discord](https://img.shields.io/discord/1127906495409958953?label=Discord)](https://discord.gg/ExzzfTGUnB)
 ![example workflow](https://github.com/palladians/pallad/actions/workflows/apps-extension-ci.yml/badge.svg)

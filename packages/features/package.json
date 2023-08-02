@@ -21,7 +21,6 @@
     "cleanup": "rimraf node_modules dist .turbo build"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.1.1",
     "@palladxyz/key-management": "*",
     "@palladxyz/mina-graphql": "*",
     "@palladxyz/mina-wallet": "*",
@@ -29,6 +28,8 @@
     "@palladxyz/persistence": "*",
     "@palladxyz/vault": "*",
     "@palladxyz/ui": "*",
+    "@palladxyz/mina-core": "*",
+    "@hookform/resolvers": "^3.1.1",
     "@total-typescript/ts-reset": "^0.4.2",
     "dayjs": "^1.11.8",
     "easy-mesh-gradient": "^0.0.5",

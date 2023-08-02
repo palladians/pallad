@@ -8,7 +8,7 @@ import { useAccount } from '../../common/hooks/useAccount'
 export const AssetList = () => {
   const navigate = useNavigate()
   const { data: accountData, isLoading: accountLoading } = useAccount()
-  const rawMinaBalance = accountData?.balance.total
+  const rawMinaBalance = accountData?.balance?.total
   const minaBalance = rawMinaBalance?.toFixed(4) || '0'
   return (
     <div className="flex flex-col flex-1 gap-3">

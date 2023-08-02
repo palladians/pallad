@@ -1,4 +1,5 @@
 import { MinaPayload, Network } from '@palladxyz/key-management'
+import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button, cn, Input, Label } from '@palladxyz/ui'
 import { keyAgentStore } from '@palladxyz/vault'
@@ -56,6 +57,7 @@ export const MnemonicConfirmationView = () => {
         addressIndex: 0,
         networkType: 'testnet'
       },
+      Mina.Networks.MAINNET,
       {
         mnemonicWords: mnemonic.split(' '),
         getPassphrase: async () => Buffer.from(spendingPassword)

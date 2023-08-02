@@ -7,18 +7,20 @@ import { useSWRConfig } from 'swr'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useWallet } from '../../wallet/hooks/useWallet'
 import { useAppStore } from '../../wallet/store/app'
 
 export const SettingsView = () => {
   const navigate = useNavigate()
+  const { switchNetwork } = useWallet()
   const { setTheme, theme } = useTheme()
   const { mutate } = useSWRConfig()
-  const { setNetwork, network } = useAppStore((state) => ({
+  const { network } = useAppStore((state) => ({
     setNetwork: state.setNetwork,
     network: state.network
   }))
-  const handleNetworkSwitch = (value: MinaNetwork) => {
-    setNetwork(value)
+  const handleNetworkSwitch = async (value: MinaNetwork) => {
+    await switchNetwork(value)
     mutate(() => true, undefined, { revalidate: false })
   }
   return (

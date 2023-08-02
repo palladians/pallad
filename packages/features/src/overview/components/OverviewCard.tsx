@@ -16,9 +16,9 @@ export const OverviewCard = () => {
   const { data: accountData, isLoading: accountLoading } = useAccount()
   const { data: fiatPriceData, isLoading: priceLoading } = useFiatPrice()
   const overviewLoading = accountLoading || priceLoading
-  const rawTotalBalance = accountData?.balance.total
+  const rawTotalBalance = accountData?.balance?.total
   const totalBalance = rawTotalBalance
-    ? accountData?.balance.total.toFixed(4)
+    ? accountData?.balance?.total?.toFixed(4)
     : '0'
   const rawFiatPrice = fiatPriceData?.['mina-protocol']?.usd
   const rawFiatBalance = useMemo(

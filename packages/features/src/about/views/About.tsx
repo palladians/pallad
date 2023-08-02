@@ -42,6 +42,15 @@ export const AboutView = () => {
           ))}
         </Card>
         <Card className="flex flex-col items-start">
+          <Button variant="link">
+            <a
+              href="https://pallad.xyz"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              pallad.xyz
+            </a>
+          </Button>
           <Button variant="link">Terms of Service</Button>
           <Button variant="link">Privacy Policy</Button>
         </Card>
