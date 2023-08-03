@@ -232,34 +232,37 @@ export class MinaWalletImpl implements MinaWallet {
     nodeArchiveUrl: string
   ): Promise<void> {
     // Listen for network change events
-    const onMinaProviderNetworkChanged = new Promise(resolve =>
+    const onMinaProviderNetworkChanged = new Promise((resolve) =>
       this.minaProvider.onNetworkChanged(resolve)
-    );
-    const onMinaArchiveProviderNetworkChanged = new Promise(resolve =>
+    )
+    const onMinaArchiveProviderNetworkChanged = new Promise((resolve) =>
       this.minaArchiveProvider.onNetworkChanged(resolve)
-    );
-  
+    )
+
     // Initiate network change
-    this.minaProvider.changeNetwork(nodeUrl);
-    this.minaArchiveProvider.changeNetwork(nodeArchiveUrl);
-  
+    this.minaProvider.changeNetwork(nodeUrl)
+    this.minaArchiveProvider.changeNetwork(nodeArchiveUrl)
+
     // Wait for both network change events to be emitted
-    await Promise.all([onMinaProviderNetworkChanged, onMinaArchiveProviderNetworkChanged]);
-  
+    await Promise.all([
+      onMinaProviderNetworkChanged,
+      onMinaArchiveProviderNetworkChanged
+    ])
+
     // Check if network change has been successful
-    const newNetworkURL = this.minaProvider.providerUrl;
+    const newNetworkURL = this.minaProvider.providerUrl
     if (nodeUrl !== newNetworkURL) {
-      throw new Error('Network URL did not change');
+      throw new Error('Network URL did not change')
     }
-  
+
     // Set the current network
     await this.getStoreState().setCurrentNetwork(
       network,
       this.minaProvider,
       this.minaArchiveProvider
-    );
-  
-    const wallet = this.getCurrentWallet();
+    )
+
+    const wallet = this.getCurrentWallet()
     if (wallet) {
       // Now, call syncAccountStore for the current wallet address
       await this.getStoreState().syncAccountStore(
@@ -267,9 +270,9 @@ export class MinaWalletImpl implements MinaWallet {
         this.minaProvider,
         this.minaArchiveProvider,
         network
-      );
+      )
     } else {
-      console.log('No current wallet available');
+      console.log('No current wallet available')
     }
   }
 

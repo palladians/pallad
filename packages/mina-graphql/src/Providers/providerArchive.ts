@@ -3,10 +3,10 @@ import {
   TransactionsByAddressesArgs,
   TransactionsByIdsArgs
 } from '@palladxyz/mina-core'
+import { EventEmitter } from 'events'
 
 import { ChainHistoryGraphQLProvider } from './ChainHistory'
 import { ProviderArchive } from './types'
-import { EventEmitter } from 'events'
 
 export class MinaArchiveProvider implements ProviderArchive {
   private chainHistoryProvider: ChainHistoryGraphQLProvider
@@ -20,7 +20,7 @@ export class MinaArchiveProvider implements ProviderArchive {
   }
 
   public onNetworkChanged(listener: (nodeUrl: string) => void) {
-    this.emitter.removeAllListeners('networkChanged');
+    this.emitter.removeAllListeners('networkChanged')
     this.emitter.on('networkChanged', listener)
   }
 

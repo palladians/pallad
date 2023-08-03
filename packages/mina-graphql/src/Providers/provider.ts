@@ -6,12 +6,12 @@ import {
   TxStatus,
   TxStatusArgs
 } from '@palladxyz/mina-core'
+import { EventEmitter } from 'events'
 
 import { AccountInfoGraphQLProvider } from './AccountInfo'
 import { TxStatusGraphQLProvider } from './TxStatus'
 import { TxSubmitGraphQLProvider } from './TxSubmit'
 import { ProviderNode } from './types'
-import { EventEmitter } from 'events'
 
 export class MinaProvider implements ProviderNode {
   private accountInfoProvider: AccountInfoGraphQLProvider
@@ -29,7 +29,7 @@ export class MinaProvider implements ProviderNode {
   }
 
   public onNetworkChanged(listener: (nodeUrl: string) => void) {
-    this.emitter.removeAllListeners('networkChanged');
+    this.emitter.removeAllListeners('networkChanged')
     this.emitter.on('networkChanged', listener)
   }
 
