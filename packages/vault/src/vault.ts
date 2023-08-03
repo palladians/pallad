@@ -80,6 +80,11 @@ type VaultMutators = {
     network: Mina.Networks,
     pure?: boolean
   ) => Promise<void>
+  deriveAndSetCredentials: <T extends ChainSpecificPayload>(
+    payload: T,
+    args: ChainSpecificArgs,
+    pure?: boolean
+  ) => Promise<GroupedCredentials>
   syncAccountStore: (
     address: ChainAddress,
     provider: MinaProvider,

@@ -5,7 +5,8 @@ import {
   FromBip39MnemonicWordsProps,
   GroupedCredentials,
   InMemoryKeyAgent,
-  MinaGroupedCredentials
+  MinaGroupedCredentials,
+  Network
 } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
@@ -24,6 +25,19 @@ const createEmptyAccountStore = (): AccountStore => ({
   getTransactions: () => ({} as Mina.TransactionBody[])
 })
 
+const dummyGroupedCredentials: GroupedCredentials = {
+  '@context': ['https://w3id.org/wallet/v1'],
+  id: '',
+  type: 'MinaAddress',
+  controller: '',
+  name: '',
+  description: '',
+  chain: Network.Mina,
+  addressIndex: 0,
+  accountIndex: 0,
+  address: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+}
+
 // define the initial state
 const initialState: VaultStore = {
   keyAgent: null,
@@ -39,6 +53,7 @@ const initialState: VaultStore = {
   setCurrentNetwork: () => void 0,
   restoreWallet: async () => null,
   addCredentials: async () => void 0,
+  deriveAndSetCredentials: async () => dummyGroupedCredentials,
   setCurrentWallet: async () => void 0,
   getCurrentWallet: () => null,
   getCredentials: () => [],
@@ -84,14 +99,11 @@ export const keyAgentStore = createStore<VaultStore>()(
 
         return keyAgent
       },
-      addCredentials: async <T extends ChainSpecificPayload>(
+      deriveAndSetCredentials: async <T extends ChainSpecificPayload>(
         payload: T,
         args: ChainSpecificArgs,
-        provider: MinaProvider,
-        providerArchive: MinaArchiveProvider,
-        network: Mina.Networks,
         pure?: boolean
-      ): Promise<void> => {
+      ): Promise<MinaGroupedCredentials> => {
         const keyAgent = get().keyAgent ? get().keyAgent : null
 
         if (!keyAgent) {
@@ -105,59 +117,36 @@ export const keyAgentStore = createStore<VaultStore>()(
         )) as MinaGroupedCredentials
         set({ keyAgent })
 
+        return credentials
+      },
+      addCredentials: async <T extends ChainSpecificPayload>(
+        payload: T,
+        args: ChainSpecificArgs,
+        provider: MinaProvider,
+        providerArchive: MinaArchiveProvider,
+        network: Mina.Networks,
+        pure?: boolean
+      ): Promise<void> => {
+        // First derive credentials from the provided payload and arguments
+        const credentials = await get().deriveAndSetCredentials(
+          payload,
+          args,
+          pure
+        )
+
         if (credentials.type === 'MinaAddress') {
           try {
-            const accountInfoPromise = provider.getAccountInfo({
-              publicKey: credentials.address
-            })
-            const transactionsPromise = providerArchive.getTransactions({
-              addresses: [credentials.address],
-              pagination: { startAt: 0, limit: 10 }
-            })
+            // Use syncAccountStore to fetch account info and transactions
+            await get().syncAccountStore(
+              credentials.address,
+              provider,
+              providerArchive,
+              network
+            )
 
-            const result = await Promise.all([
-              accountInfoPromise,
-              transactionsPromise
-            ]).catch((error) => {
-              console.error(
-                'Error fetching account info or transactions:',
-                error
-              )
-            })
-            console.log('network: ', network, 'query result: ', result)
-            if (result) {
-              const [accountInfo, paginatedTransactions] = result
-              const transactions = paginatedTransactions.pageResults //`pageResults` because we are using the MinaArchiveProvider and it has its own pagination type
-              // Create a new AccountStore
-              const newAccountStore: AccountStore = {
-                ...createEmptyAccountStore(),
-                accountInfo,
-                transactions,
-                setAccountInfo: (info: AccountInfo) => {
-                  newAccountStore.accountInfo = info
-                },
-                setTransactions: (txs: Mina.TransactionBody[]) => {
-                  newAccountStore.transactions = txs
-                },
-                getAccountInfo: () => newAccountStore.accountInfo,
-                getTransactions: () => newAccountStore.transactions
-              }
-
-              const updatedAccountStores = get().accountStores[network] || {}
-              updatedAccountStores[credentials.address as ChainAddress] =
-                newAccountStore
-
-              set({
-                accountStores: {
-                  ...get().accountStores,
-                  [network]: updatedAccountStores
-                }
-              })
-              set({ currentWallet: credentials })
-              set({ currentNetwork: network })
-            } else {
-              console.log('Failed to fetch account info or transactions')
-            }
+            // Set the current wallet and current network
+            set({ currentWallet: credentials })
+            set({ currentNetwork: network })
           } catch (error) {
             console.log('Error fetching account info or transactions:', error)
           }
@@ -198,23 +187,25 @@ export const keyAgentStore = createStore<VaultStore>()(
         provider: MinaProvider,
         providerArchive: MinaArchiveProvider
       ) => {
+        // First, set the current network
         set({ currentNetwork: network })
-        // Here you would want to sync the account information for each wallet/address that exists
-        const credentials = get().getCredentials()
-        if (credentials) {
-          for (const credential of credentials) {
-            if (credential.type === 'MinaAddress') {
-              await get().syncAccountStore(
-                credential.address,
-                provider,
-                providerArchive,
-                network
-              )
-            }
-          }
+        console.log('logging provider: ', provider)
+        console.log('logging providerArchive: ', providerArchive)
+
+        // Fetch the current wallet
+        /*const wallet = get().getCurrentWallet()
+
+        if (wallet) {
+          // Now, call syncAccountStore for the current wallet address
+          await get().syncAccountStore(
+            wallet.address,
+            provider,
+            providerArchive,
+            network
+          )
         } else {
-          console.log('No credentials available')
-        }
+          console.log('No current wallet available')
+        }*/
       },
       getCurrentNetwork: (): Mina.Networks | null => {
         const currentNetwork = get().currentNetwork
@@ -228,6 +219,7 @@ export const keyAgentStore = createStore<VaultStore>()(
         return networkAccountStores[address] || null
       },
       setAccountStore: (
+        // may not need this method
         network: Mina.Networks,
         address: ChainAddress,
         accountStore: Partial<AccountStore>
@@ -256,6 +248,8 @@ export const keyAgentStore = createStore<VaultStore>()(
         providerArchive: MinaArchiveProvider,
         network: Mina.Networks
       ) => {
+        console.log('provider', provider)
+        console.log('providerArchive', providerArchive)
         try {
           const accountInfoPromise = provider.getAccountInfo({
             publicKey: address
@@ -271,6 +265,7 @@ export const keyAgentStore = createStore<VaultStore>()(
           ]).catch((error) => {
             console.error('Error fetching account info or transactions:', error)
           })
+          console.log('network: ', network, 'query result: ', result)
           if (result) {
             const [accountInfo, paginatedTransactions] = result
             const transactions = paginatedTransactions.pageResults //`pageResults` because we are using the MinaArchiveProvider and it has its own pagination type

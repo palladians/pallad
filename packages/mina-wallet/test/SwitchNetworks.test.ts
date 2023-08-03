@@ -11,8 +11,8 @@ import { keyAgentStore } from '@palladxyz/vault'
 import { expect, test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
 import { MinaWalletDependencies, MinaWalletImpl } from '../src/Wallet'
-const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
-const archiveUrl = 'https://devnet.graphql.minaexplorer.com'
+const nodeUrl = 'https://proxy.minaexplorer.com/'
+const archiveUrl = 'https://graphql.minaexplorer.com'
 describe('MinaWalletImpl', () => {
   let wallet: MinaWalletImpl
   let walletDependencies: MinaWalletDependencies
@@ -47,9 +47,9 @@ describe('MinaWalletImpl', () => {
       network: Network.Mina
     }
     wallet = new MinaWalletImpl({ name: 'Test Wallet' }, walletDependencies)
-    network = Mina.Networks.DEVNET // need to chang
+    network = Mina.Networks.MAINNET
   })
-  test('switches network', async () => {
+  test('switches network mainnet -> devnet', async () => {
     /**
      * Restore the wallet
      */
@@ -76,16 +76,12 @@ describe('MinaWalletImpl', () => {
     // log out the current account info
     const currentAccountInfo = await wallet.getAccountInfo()
     expect(currentAccountInfo).toHaveProperty('balance')
-    // log out the account store
-    const accountStore = keyAgentStore
-      .getState()
-      .getAccountStore(network, storeKeyAgentCredentials[0].address)
-    console.log('Original Account Store:', accountStore)
+
     /**
      * Switch the network from devnet to mainnet
      */
-    const nodeUrlMainnet = 'https://proxy.minaexplorer.com/'
-    const archiveUrlMainnet = 'https://graphql.minaexplorer.com'
+    const nodeUrlMainnet = 'https://proxy.devnet.minaexplorer.com/'
+    const archiveUrlMainnet = 'https://devnet.graphql.minaexplorer.com'
     const networkMainnet = Mina.Networks.MAINNET
     await wallet.switchNetwork(
       networkMainnet,
@@ -99,11 +95,11 @@ describe('MinaWalletImpl', () => {
     // log out the current account info
     const currentAccountInfoSwitch = await wallet.getAccountInfo()
     console.log('Switched Current Account Info:', currentAccountInfoSwitch)
-    //expect(currentAccountInfoSwitch).toHaveProperty('balance')
-    // log the switched account store
-    const accountStoreSwitch = keyAgentStore
-      .getState()
-      .getAccountStore(networkMainnet, storeKeyAgentCredentials[0].address)
-    console.log('Switched Account Store:', accountStoreSwitch)
+    expect(currentAccountInfoSwitch).toHaveProperty('balance')
+
+    // expect currentAccountInfoSwitch balance.total to be different from currentAccountInfo balance.total
+    expect(currentAccountInfoSwitch?.balance.total).not.toEqual(
+      currentAccountInfo?.balance.total
+    )
   })
 })

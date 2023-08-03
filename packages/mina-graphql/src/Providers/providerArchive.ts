@@ -6,16 +6,33 @@ import {
 
 import { ChainHistoryGraphQLProvider } from './ChainHistory'
 import { ProviderArchive } from './types'
+import { EventEmitter } from 'events'
 
 export class MinaArchiveProvider implements ProviderArchive {
   private chainHistoryProvider: ChainHistoryGraphQLProvider
+  public providerUrl: string
+  private emitter: EventEmitter
 
   constructor(archiveUrl: string) {
     this.chainHistoryProvider = new ChainHistoryGraphQLProvider(archiveUrl)
+    this.providerUrl = archiveUrl
+    this.emitter = new EventEmitter()
+  }
+
+  public onNetworkChanged(listener: (nodeUrl: string) => void) {
+    this.emitter.removeAllListeners('networkChanged');
+    this.emitter.on('networkChanged', listener)
   }
 
   public get provider(): this {
     return this
+  }
+
+  public async changeNetwork(nodeUrl: string): Promise<void> {
+    await this.chainHistoryProvider.changeNetwork(nodeUrl)
+    this.providerUrl = nodeUrl
+
+    this.emitter.emit('networkChanged', nodeUrl)
   }
 
   public async destroy(): Promise<void> {

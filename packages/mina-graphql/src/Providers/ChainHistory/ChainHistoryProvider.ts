@@ -29,6 +29,10 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
     this.minaGql = minaGql
   }
 
+  async changeNetwork(minaGql: string): Promise<void> {
+    this.minaGql = minaGql
+  }
+
   async healthCheck(): Promise<HealthCheckResponse> {
     const query = gql`
       ${healthCheckQuery}

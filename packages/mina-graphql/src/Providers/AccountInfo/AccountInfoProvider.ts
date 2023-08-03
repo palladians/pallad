@@ -20,6 +20,10 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     this.minaGql = minaGql
   }
 
+  async changeNetwork(minaGql: string): Promise<void> {
+    this.minaGql = minaGql
+  }
+
   async healthCheck(): Promise<HealthCheckResponse> {
     console.log('Initiating health check...')
     const query = gql`
