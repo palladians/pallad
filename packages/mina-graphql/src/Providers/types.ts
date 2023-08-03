@@ -30,11 +30,11 @@ export interface ProviderNode {
   // getBlock(blockHashOrBlockTag: BlockTag | string, prefetchTxs?: boolean): Promise<null | Block>;
   // getTransactionResult(hash: string): Promise<null | string>;
 
-  getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo | undefined >
+  getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo | undefined>
 
-  getTransactionStatus(args: TxStatusArgs): Promise<TxStatus | undefined >
+  getTransactionStatus(args: TxStatusArgs): Promise<TxStatus | undefined>
 
-  submitTransaction(args: SubmitTxArgs): Promise<SubmitTxResult | undefined >
+  submitTransaction(args: SubmitTxArgs): Promise<SubmitTxResult | undefined>
 }
 
 /**
@@ -56,5 +56,7 @@ export interface ProviderArchive {
     args: TransactionsByAddressesArgs
   ): Promise<Mina.Paginated<Mina.TransactionBody> | undefined>
 
-  getTransaction(args: TransactionsByIdsArgs): Promise<Mina.TransactionBody[] | undefined >
+  getTransaction(
+    args: TransactionsByIdsArgs
+  ): Promise<Mina.TransactionBody[] | undefined>
 }

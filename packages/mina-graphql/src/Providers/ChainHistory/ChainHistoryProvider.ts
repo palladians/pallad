@@ -30,8 +30,8 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
   }
 
   public async destroy(): Promise<void> {
-    console.log('Destroying ChainHistoryGraphQLProvider...');
-    this.minaGql = null;
+    console.log('Destroying ChainHistoryGraphQLProvider...')
+    this.minaGql = null
   }
 
   async changeNetwork(minaGql: string): Promise<void> {

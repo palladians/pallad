@@ -14,8 +14,8 @@ import { getSecurePersistence } from '@palladxyz/persistence'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
-import { AccountStore, VaultStore } from './vault'
 import { checkNetwork } from './util'
+import { AccountStore, VaultStore } from './vault'
 
 const createEmptyAccountStore = (): AccountStore => ({
   accountInfo: {} as AccountInfo,
@@ -254,10 +254,11 @@ export const keyAgentStore = createStore<VaultStore>()(
           const accountInfoPromise = providers.minaProvider.getAccountInfo({
             publicKey: address
           })
-          const transactionsPromise = providers.minaArchiveProvider.getTransactions({
-            addresses: [address],
-            pagination: { startAt: 0, limit: 10 }
-          })
+          const transactionsPromise =
+            providers.minaArchiveProvider.getTransactions({
+              addresses: [address],
+              pagination: { startAt: 0, limit: 10 }
+            })
 
           const result = await Promise.all([
             accountInfoPromise,

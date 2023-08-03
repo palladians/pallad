@@ -151,7 +151,9 @@ export class MinaWalletImpl implements MinaWallet {
   }
   // This is Mina Specific
   // TODO: Make this chain agnostic
-  async submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult | undefined > {
+  async submitTx(
+    submitTxArgs: SubmitTxArgs
+  ): Promise<SubmitTxResult | undefined> {
     const result = await this.minaProvider?.submitTransaction(submitTxArgs)
     return result
   }
@@ -245,17 +247,17 @@ export class MinaWalletImpl implements MinaWallet {
   ): Promise<void> {
     // First destroy the existing providers
     if (this.minaProvider) {
-      await this.minaProvider.destroy();
-      this.minaProvider = null;
+      await this.minaProvider.destroy()
+      this.minaProvider = null
     }
     if (this.minaArchiveProvider) {
-      await this.minaArchiveProvider.destroy();
-      this.minaArchiveProvider = null;
+      await this.minaArchiveProvider.destroy()
+      this.minaArchiveProvider = null
     }
 
     // Create new providers with the new URLs
-    this.minaProvider = new MinaProvider(nodeUrl);
-    this.minaArchiveProvider = new MinaArchiveProvider(nodeArchiveUrl);
+    this.minaProvider = new MinaProvider(nodeUrl)
+    this.minaArchiveProvider = new MinaArchiveProvider(nodeArchiveUrl)
 
     // Set the current network
     await this.getStoreState().setCurrentNetwork(
@@ -264,7 +266,7 @@ export class MinaWalletImpl implements MinaWallet {
       this.minaArchiveProvider
     )
 
-    const wallet = this.getCurrentWallet();
+    const wallet = this.getCurrentWallet()
     if (wallet) {
       // Now, call syncAccountStore for the current wallet address
       await this.getStoreState().syncAccountStore(

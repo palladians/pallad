@@ -1,37 +1,76 @@
-import { Mina } from "@palladxyz/mina-core";
-import { MinaArchiveProvider, MinaProvider } from "@palladxyz/mina-graphql";
+import { Mina } from '@palladxyz/mina-core'
+import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 
 export type NewProvider = {
-    minaProvider: MinaProvider,
-    minaArchiveProvider: MinaArchiveProvider
+  minaProvider: MinaProvider
+  minaArchiveProvider: MinaArchiveProvider
 }
 
-export function checkNetwork(network: Mina.Networks, minaProvider: MinaProvider, minaArchiveProvider: MinaArchiveProvider): NewProvider {
-    if (network === Mina.Networks.MAINNET){
-        if (minaProvider.providerUrl != 'https://proxy.minaexplorer.com/' || minaArchiveProvider.providerUrl != 'https://graphql.minaexplorer.com'){
-            console.log('MinaProvider Network is not MAINNET')
-            const newMinaProvider = new MinaProvider('https://proxy.minaexplorer.com/')
-            const newMinaArchiveProvider = new MinaArchiveProvider('https://graphql.minaexplorer.com')
-            return {minaProvider: newMinaProvider, minaArchiveProvider: newMinaArchiveProvider}
-        } 
-    } else if (network === Mina.Networks.DEVNET){
-        if (minaProvider.providerUrl != 'https://proxy.devnet.minaexplorer.com/' || minaArchiveProvider.providerUrl != 'https://devnet.graphql.minaexplorer.com'){
-            console.log('MinaProvider Network is not DEVNET')
-            const newMinaProvider = new MinaProvider('https://proxy.devnet.minaexplorer.com/')
-            const newMinaArchiveProvider = new MinaArchiveProvider('https://devnet.graphql.minaexplorer.com')
-            return {minaProvider: newMinaProvider, minaArchiveProvider: newMinaArchiveProvider}
-        }
-    } else if (network === Mina.Networks.BERKELEY){
-        if (minaProvider.providerUrl != 'https://proxy.berkeley.minaexplorer.com/' || minaArchiveProvider.providerUrl != 'https://berkeley.graphql.minaexplorer.com'){
-            console.log('MinaProvider Network is not BERKELEY')
-            const newMinaProvider = new MinaProvider('https://proxy.berkeley.minaexplorer.com/')
-            const newMinaArchiveProvider = new MinaArchiveProvider('https://berkeley.graphql.minaexplorer.com')
-            return {minaProvider: newMinaProvider, minaArchiveProvider: newMinaArchiveProvider}
-        }
-    } else {
-        console.log('Network is not MAINNET, DEVNET or BERKELEY')
+export function checkNetwork(
+  network: Mina.Networks,
+  minaProvider: MinaProvider,
+  minaArchiveProvider: MinaArchiveProvider
+): NewProvider {
+  if (network === Mina.Networks.MAINNET) {
+    if (
+      minaProvider.providerUrl != 'https://proxy.minaexplorer.com/' ||
+      minaArchiveProvider.providerUrl != 'https://graphql.minaexplorer.com'
+    ) {
+      console.log('MinaProvider Network is not MAINNET')
+      const newMinaProvider = new MinaProvider(
+        'https://proxy.minaexplorer.com/'
+      )
+      const newMinaArchiveProvider = new MinaArchiveProvider(
+        'https://graphql.minaexplorer.com'
+      )
+      return {
+        minaProvider: newMinaProvider,
+        minaArchiveProvider: newMinaArchiveProvider
+      }
     }
-    return {minaProvider: minaProvider, minaArchiveProvider: minaArchiveProvider}
+  } else if (network === Mina.Networks.DEVNET) {
+    if (
+      minaProvider.providerUrl != 'https://proxy.devnet.minaexplorer.com/' ||
+      minaArchiveProvider.providerUrl !=
+        'https://devnet.graphql.minaexplorer.com'
+    ) {
+      console.log('MinaProvider Network is not DEVNET')
+      const newMinaProvider = new MinaProvider(
+        'https://proxy.devnet.minaexplorer.com/'
+      )
+      const newMinaArchiveProvider = new MinaArchiveProvider(
+        'https://devnet.graphql.minaexplorer.com'
+      )
+      return {
+        minaProvider: newMinaProvider,
+        minaArchiveProvider: newMinaArchiveProvider
+      }
+    }
+  } else if (network === Mina.Networks.BERKELEY) {
+    if (
+      minaProvider.providerUrl != 'https://proxy.berkeley.minaexplorer.com/' ||
+      minaArchiveProvider.providerUrl !=
+        'https://berkeley.graphql.minaexplorer.com'
+    ) {
+      console.log('MinaProvider Network is not BERKELEY')
+      const newMinaProvider = new MinaProvider(
+        'https://proxy.berkeley.minaexplorer.com/'
+      )
+      const newMinaArchiveProvider = new MinaArchiveProvider(
+        'https://berkeley.graphql.minaexplorer.com'
+      )
+      return {
+        minaProvider: newMinaProvider,
+        minaArchiveProvider: newMinaArchiveProvider
+      }
+    }
+  } else {
+    console.log('Network is not MAINNET, DEVNET or BERKELEY')
+  }
+  return {
+    minaProvider: minaProvider,
+    minaArchiveProvider: minaArchiveProvider
+  }
 }
 
 /*

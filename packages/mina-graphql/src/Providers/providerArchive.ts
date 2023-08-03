@@ -36,15 +36,15 @@ export class MinaArchiveProvider implements ProviderArchive {
   }
 
   public async destroy(): Promise<void> {
-    await this.chainHistoryProvider?.destroy();
-  
+    await this.chainHistoryProvider?.destroy()
+
     // Remove all listeners to avoid memory leaks
-    this.emitter.removeAllListeners();
-  
+    this.emitter.removeAllListeners()
+
     // Nullify or reinitialize the properties, as per the requirements of your application
-    this.chainHistoryProvider = null;
-    this.emitter = new EventEmitter();
-    this.providerUrl = "";
+    this.chainHistoryProvider = null
+    this.emitter = new EventEmitter()
+    this.providerUrl = ''
   }
 
   public async getTransactions(

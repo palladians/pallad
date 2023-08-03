@@ -17,8 +17,8 @@ export class TxStatusGraphQLProvider implements TxStatusProvider {
   }
 
   public async destroy(): Promise<void> {
-    console.log('Destroying TxStatusGraphQLProvider...');
-    this.minaGql = null;
+    console.log('Destroying TxStatusGraphQLProvider...')
+    this.minaGql = null
   }
 
   async changeNetwork(minaGql: string): Promise<void> {
@@ -62,7 +62,11 @@ export class TxStatusGraphQLProvider implements TxStatusProvider {
     }
 
     try {
-      const data = (await request(this.minaGql as string, query, variables)) as {
+      const data = (await request(
+        this.minaGql as string,
+        query,
+        variables
+      )) as {
         transactionStatus: 'PENDING' | 'INCLUDED' | 'UNKNOWN' | 'FAILED'
       }
 

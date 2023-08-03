@@ -21,8 +21,8 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
   }
 
   public async destroy(): Promise<void> {
-    console.log('Destroying AccountInfoGraphQLProvider...');
-    this.minaGql = null;
+    console.log('Destroying AccountInfoGraphQLProvider...')
+    this.minaGql = null
   }
 
   async changeNetwork(minaGql: string): Promise<void> {

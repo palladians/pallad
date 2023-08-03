@@ -18,8 +18,8 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
   }
 
   public async destroy(): Promise<void> {
-    console.log('Destroying TxSubmitGraphQLProvider...');
-    this.minaGql = null;
+    console.log('Destroying TxSubmitGraphQLProvider...')
+    this.minaGql = null
   }
 
   async changeNetwork(minaGql: string): Promise<void> {
