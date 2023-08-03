@@ -28,33 +28,59 @@ import { MinaWallet } from '../types'
 
 export interface MinaWalletDependencies {
   readonly keyAgent: InMemoryKeyAgent | null
-  readonly minaProvider: MinaProvider | null
-  readonly minaArchiveProvider: MinaArchiveProvider | null
-  readonly network: Network
-  //readonly stores?: WalletStores;
 }
 
 export interface MinaWalletProps {
+  readonly network: Mina.Networks
   readonly name: string
+  readonly providers: {
+    [network in Mina.Networks]?: {
+      provider: string
+      archive: string
+    }
+  }
 }
 
 export class MinaWalletImpl implements MinaWallet {
+  public network: Mina.Networks
   readonly keyAgent: InMemoryKeyAgent | null
   readonly balance: number
-  private minaProvider: MinaProvider | null
-  private minaArchiveProvider: MinaArchiveProvider | null
+  private minaProviders: Record<Mina.Networks, MinaProvider | null> = {
+    [Mina.Networks.MAINNET]: null,
+    [Mina.Networks.DEVNET]: null,
+    [Mina.Networks.BERKELEY]: null
+  }
+  private minaArchiveProviders: Record<
+    Mina.Networks,
+    MinaArchiveProvider | null
+  > = {
+    [Mina.Networks.MAINNET]: null,
+    [Mina.Networks.DEVNET]: null,
+    [Mina.Networks.BERKELEY]: null
+  }
   readonly name: string
-  // Storage for the current wallet
 
   constructor(
-    { name }: MinaWalletProps,
-    { keyAgent, minaProvider, minaArchiveProvider }: MinaWalletDependencies
+    { network, name, providers }: MinaWalletProps,
+    { keyAgent }: MinaWalletDependencies
   ) {
+    this.network = network
     this.keyAgent = keyAgent
-    this.minaProvider = minaProvider
-    this.minaArchiveProvider = minaArchiveProvider
     this.name = name
     this.balance = 0
+
+    // Create providers for each network
+    for (const networkKey of Object.keys(providers)) {
+      const network = networkKey as Mina.Networks
+      if (providers[network]) {
+        this.minaProviders[network] = new MinaProvider(
+          providers[network]?.provider as string
+        )
+        this.minaArchiveProviders[network] = new MinaArchiveProvider(
+          providers[network]?.archive as string
+        )
+      }
+    }
   }
 
   private getStoreState() {
@@ -154,7 +180,10 @@ export class MinaWalletImpl implements MinaWallet {
   async submitTx(
     submitTxArgs: SubmitTxArgs
   ): Promise<SubmitTxResult | undefined> {
-    const result = await this.minaProvider?.submitTransaction(submitTxArgs)
+    const network = this.getCurrentNetwork()
+    const result = await this.minaProviders[network]?.submitTransaction(
+      submitTxArgs
+    )
     return result
   }
 
@@ -173,10 +202,10 @@ export class MinaWalletImpl implements MinaWallet {
       mnemonicWords: mnemonicWords,
       mnemonic2ndFactorPassphrase: ''
     }
-    if (this.minaProvider === null) {
+    if (this.minaProviders[network] === null) {
       throw new Error('Mina provider is undefined')
     }
-    if (this.minaArchiveProvider === null) {
+    if (this.minaArchiveProviders[network] === null) {
       throw new Error('Mina archive provider is undefined')
     }
     // restore the agent state
@@ -185,8 +214,8 @@ export class MinaWalletImpl implements MinaWallet {
       .restoreWallet(
         payload,
         args,
-        this.minaProvider,
-        this.minaArchiveProvider,
+        this.minaProviders[network] as MinaProvider,
+        this.minaArchiveProviders[network] as MinaArchiveProvider,
         network,
         agentArgs
       )
@@ -214,56 +243,37 @@ export class MinaWalletImpl implements MinaWallet {
     return result
   }
 
-  async switchNetwork(
-    network: Mina.Networks,
-    nodeUrl: string,
-    nodeArchiveUrl: string
-  ): Promise<void> {
-    if (this.minaProvider === null) {
+  async switchNetwork(network: Mina.Networks): Promise<void> {
+    if (this.minaProviders[network] === null) {
       throw new Error('Mina provider is undefined')
     }
-    if (this.minaArchiveProvider === null) {
+    if (this.minaArchiveProviders[network] === null) {
       throw new Error('Mina archive provider is undefined')
     }
     // Switch the network
-    await this.setCurrentNetwork(network, nodeUrl, nodeArchiveUrl)
+    await this.setCurrentNetwork(network)
     this.setCurrentNetworkInStore(
       network,
-      this.minaProvider,
-      this.minaArchiveProvider
+      this.minaProviders[network] as MinaProvider,
+      this.minaArchiveProviders[network] as MinaArchiveProvider
     )
   }
 
-  getCurrentNetwork(): Mina.Networks | null {
+  getCurrentNetwork(): Mina.Networks {
     // Get the current network
-    const result = this.getStoreState().getCurrentNetwork()
-    return result ? result : null
+    const result = this.network
+    return result
   }
 
-  async setCurrentNetwork(
-    network: Mina.Networks,
-    nodeUrl: string,
-    nodeArchiveUrl: string
-  ): Promise<void> {
-    // First destroy the existing providers
-    if (this.minaProvider) {
-      await this.minaProvider.destroy()
-      this.minaProvider = null
-    }
-    if (this.minaArchiveProvider) {
-      await this.minaArchiveProvider.destroy()
-      this.minaArchiveProvider = null
-    }
+  async setCurrentNetwork(network: Mina.Networks): Promise<void> {
+    // set the current network property
+    this.network = network
 
-    // Create new providers with the new URLs
-    this.minaProvider = new MinaProvider(nodeUrl)
-    this.minaArchiveProvider = new MinaArchiveProvider(nodeArchiveUrl)
-
-    // Set the current network
+    // Set the current network in store
     await this.getStoreState().setCurrentNetwork(
       network,
-      this.minaProvider,
-      this.minaArchiveProvider
+      this.minaProviders[network] as MinaProvider,
+      this.minaArchiveProviders[network] as MinaArchiveProvider
     )
 
     const wallet = this.getCurrentWallet()
@@ -271,8 +281,8 @@ export class MinaWalletImpl implements MinaWallet {
       // Now, call syncAccountStore for the current wallet address
       await this.getStoreState().syncAccountStore(
         wallet.address,
-        this.minaProvider,
-        this.minaArchiveProvider,
+        this.minaProviders[network] as MinaProvider,
+        this.minaArchiveProviders[network] as MinaArchiveProvider,
         network
       )
     } else {

@@ -46,17 +46,9 @@ export interface MinaWallet {
 
   submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult | undefined>
 
-  switchNetwork(
-    network: Mina.Networks,
-    nodeUrl: string,
-    nodeArchiveUrl: string
-  ): Promise<void>
+  switchNetwork(network: Mina.Networks): Promise<void>
   getCurrentNetwork(): Mina.Networks | null
-  setCurrentNetwork(
-    network: Mina.Networks,
-    nodeUrl: string,
-    nodeArchiveUrl: string
-  ): Promise<void>
+  setCurrentNetwork(network: Mina.Networks): Promise<void>
 
   // The wallet might need APIs for receiving challenges and completing them!
   // Challenge(challenge: VerifiableCredentialChallenge): Promise<VerifiableCredentialChallengeResponse>

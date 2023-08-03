@@ -1,30 +1,11 @@
-import { MinaNetwork, Network } from '@palladxyz/key-management'
+import { MinaNetwork } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
-import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 import { MinaWalletImpl } from '@palladxyz/mina-wallet'
 import { keyAgentStore } from '@palladxyz/vault'
 import { useMemo } from 'react'
 import { shallow } from 'zustand/shallow'
 
 import { useAppStore } from '../store/app'
-
-const MinaProxyUrl = {
-  [MinaNetwork[MinaNetwork.Mainnet]]: import.meta.env
-    .VITE_APP_MINA_PROXY_MAINNET_URL,
-  [MinaNetwork[MinaNetwork.Devnet]]: import.meta.env
-    .VITE_APP_MINA_PROXY_DEVNET_URL,
-  [MinaNetwork[MinaNetwork.Berkeley]]: import.meta.env
-    .VITE_APP_MINA_PROXY_BERKELEY_URL
-}
-
-const MinaExplorerUrl = {
-  [MinaNetwork[MinaNetwork.Mainnet]]: import.meta.env
-    .VITE_APP_MINA_EXPLORER_MAINNET_URL,
-  [MinaNetwork[MinaNetwork.Devnet]]: import.meta.env
-    .VITE_APP_MINA_EXPLORER_DEVNET_URL,
-  [MinaNetwork[MinaNetwork.Berkeley]]: import.meta.env
-    .VITE_APP_MINA_EXPLORER_BERKELEY_URL
-}
 
 // TODO: Remove mapping once network types are unified
 const getNetworkValue = (network: MinaNetwork) => {
@@ -38,36 +19,56 @@ const getNetworkValue = (network: MinaNetwork) => {
   }
 }
 
+// Load environment variables
+const providers = {
+  [Mina.Networks.MAINNET]: {
+    provider: import.meta.env.VITE_APP_MINA_PROXY_MAINNET_URL,
+    archive: import.meta.env.VITE_APP_MINA_EXPLORER_MAINNET_URL
+  },
+  [Mina.Networks.DEVNET]: {
+    provider: import.meta.env.VITE_APP_MINA_PROXY_DEVNET_URL,
+    archive: import.meta.env.VITE_APP_MINA_EXPLORER_DEVNET_URL
+  },
+  [Mina.Networks.BERKELEY]: {
+    provider: import.meta.env.VITE_APP_MINA_PROXY_BERKELEY_URL,
+    archive: import.meta.env.VITE_APP_MINA_EXPLORER_BERKELEY_URL
+  }
+}
+
 export const useWallet = () => {
-  const { network, setNetwork } = useAppStore(
+  const { network: networkEnum, setNetwork } = useAppStore(
     (state) => ({
       network: state.network,
       setNetwork: state.setNetwork
     }),
     shallow
   )
-  const minaProxyUrl = useMemo(() => MinaProxyUrl[network], [network])
-  const minaExplorerUrl = useMemo(() => MinaExplorerUrl[network], [network])
-  const provider = new MinaProvider(minaProxyUrl)
-  const providerArchive = new MinaArchiveProvider(minaExplorerUrl)
-  const wallet = new MinaWalletImpl(
-    { name: 'Pallad' },
-    {
-      keyAgent: keyAgentStore.getState().keyAgent,
-      minaProvider: provider,
-      minaArchiveProvider: providerArchive,
-      network: Network.Mina
-    }
+  const network = getNetworkValue(networkEnum)
+  const walletProperties = useMemo(
+    () => ({
+      network,
+      name: 'Pallad',
+      providers
+    }),
+    [network]
+  )
+  const walletDependencies = useMemo(
+    () => ({
+      keyAgent: keyAgentStore.getState().keyAgent
+    }),
+    []
+  )
+  const wallet = useMemo(
+    () => new MinaWalletImpl(walletProperties, walletDependencies),
+    [walletProperties, walletDependencies]
   )
   console.log('>>>W', wallet)
+
   const switchNetwork = async (network: MinaNetwork) => {
     setNetwork(network)
-    await wallet.switchNetwork(
-      getNetworkValue(network),
-      minaProxyUrl,
-      minaExplorerUrl
-    )
+    await wallet.switchNetwork(getNetworkValue(network))
   }
+
   return {
     wallet,
     switchNetwork
