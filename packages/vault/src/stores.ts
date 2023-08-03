@@ -15,6 +15,7 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
 import { AccountStore, VaultStore } from './vault'
+import { checkNetwork } from './util'
 
 const createEmptyAccountStore = (): AccountStore => ({
   accountInfo: {} as AccountInfo,
@@ -248,13 +249,12 @@ export const keyAgentStore = createStore<VaultStore>()(
         providerArchive: MinaArchiveProvider,
         network: Mina.Networks
       ) => {
-        console.log('provider', provider)
-        console.log('providerArchive', providerArchive)
+        const providers = await checkNetwork(network, provider, providerArchive)
         try {
-          const accountInfoPromise = provider.getAccountInfo({
+          const accountInfoPromise = providers.minaProvider.getAccountInfo({
             publicKey: address
           })
-          const transactionsPromise = providerArchive.getTransactions({
+          const transactionsPromise = providers.minaArchiveProvider.getTransactions({
             addresses: [address],
             pagination: { startAt: 0, limit: 10 }
           })
@@ -268,6 +268,9 @@ export const keyAgentStore = createStore<VaultStore>()(
           console.log('network: ', network, 'query result: ', result)
           if (result) {
             const [accountInfo, paginatedTransactions] = result
+            if (!accountInfo || !paginatedTransactions) {
+              throw new Error('Invalid account info or transactions')
+            }
             const transactions = paginatedTransactions.pageResults //`pageResults` because we are using the MinaArchiveProvider and it has its own pagination type
             // Create a new AccountStore
             const newAccountStore: AccountStore = {

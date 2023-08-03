@@ -14,10 +14,15 @@ export interface AccountData {
 }
 
 export class AccountInfoGraphQLProvider implements AccountInfoProvider {
-  private minaGql: string
+  private minaGql: string | null
 
   constructor(minaGql: string) {
     this.minaGql = minaGql
+  }
+
+  public async destroy(): Promise<void> {
+    console.log('Destroying AccountInfoGraphQLProvider...');
+    this.minaGql = null;
   }
 
   async changeNetwork(minaGql: string): Promise<void> {
@@ -32,7 +37,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     try {
       console.log('Sending request for health check...')
       const data = (await request(
-        this.minaGql,
+        this.minaGql as string,
         query
       )) as HealthCheckResponseData
       console.log('Received response for health check:', data)
@@ -59,7 +64,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     `
     try {
       console.log('Sending request for account info...')
-      const data = (await request(this.minaGql, query, {
+      const data = (await request(this.minaGql as string, query, {
         publicKey: args.publicKey
       })) as AccountData
       console.log('Received response for account info:', data)

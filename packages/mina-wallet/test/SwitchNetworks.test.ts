@@ -82,7 +82,7 @@ describe('MinaWalletImpl', () => {
      */
     const nodeUrlMainnet = 'https://proxy.devnet.minaexplorer.com/'
     const archiveUrlMainnet = 'https://devnet.graphql.minaexplorer.com'
-    const networkMainnet = Mina.Networks.MAINNET
+    const networkMainnet = Mina.Networks.DEVNET
     await wallet.switchNetwork(
       networkMainnet,
       nodeUrlMainnet,

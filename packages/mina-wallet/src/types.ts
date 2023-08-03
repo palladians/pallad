@@ -44,7 +44,7 @@ export interface MinaWallet {
     signable: ChainSignablePayload
   ): Promise<ChainSignatureResult | undefined>
 
-  submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult>
+  submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult | undefined>
 
   switchNetwork(
     network: Mina.Networks,

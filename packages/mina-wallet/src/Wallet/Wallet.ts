@@ -28,8 +28,8 @@ import { MinaWallet } from '../types'
 
 export interface MinaWalletDependencies {
   readonly keyAgent: InMemoryKeyAgent | null
-  readonly minaProvider: MinaProvider
-  readonly minaArchiveProvider: MinaArchiveProvider
+  readonly minaProvider: MinaProvider | null
+  readonly minaArchiveProvider: MinaArchiveProvider | null
   readonly network: Network
   //readonly stores?: WalletStores;
 }
@@ -41,8 +41,8 @@ export interface MinaWalletProps {
 export class MinaWalletImpl implements MinaWallet {
   readonly keyAgent: InMemoryKeyAgent | null
   readonly balance: number
-  private minaProvider: MinaProvider
-  private minaArchiveProvider: MinaArchiveProvider
+  private minaProvider: MinaProvider | null
+  private minaArchiveProvider: MinaArchiveProvider | null
   readonly name: string
   // Storage for the current wallet
 
@@ -151,8 +151,8 @@ export class MinaWalletImpl implements MinaWallet {
   }
   // This is Mina Specific
   // TODO: Make this chain agnostic
-  async submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult> {
-    const result = await this.minaProvider.submitTransaction(submitTxArgs)
+  async submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult | undefined > {
+    const result = await this.minaProvider?.submitTransaction(submitTxArgs)
     return result
   }
 
@@ -170,6 +170,12 @@ export class MinaWalletImpl implements MinaWallet {
       getPassphrase: getPassphrase,
       mnemonicWords: mnemonicWords,
       mnemonic2ndFactorPassphrase: ''
+    }
+    if (this.minaProvider === null) {
+      throw new Error('Mina provider is undefined')
+    }
+    if (this.minaArchiveProvider === null) {
+      throw new Error('Mina archive provider is undefined')
     }
     // restore the agent state
     await keyAgentStore
@@ -211,6 +217,12 @@ export class MinaWalletImpl implements MinaWallet {
     nodeUrl: string,
     nodeArchiveUrl: string
   ): Promise<void> {
+    if (this.minaProvider === null) {
+      throw new Error('Mina provider is undefined')
+    }
+    if (this.minaArchiveProvider === null) {
+      throw new Error('Mina archive provider is undefined')
+    }
     // Switch the network
     await this.setCurrentNetwork(network, nodeUrl, nodeArchiveUrl)
     this.setCurrentNetworkInStore(
@@ -231,29 +243,19 @@ export class MinaWalletImpl implements MinaWallet {
     nodeUrl: string,
     nodeArchiveUrl: string
   ): Promise<void> {
-    // Listen for network change events
-    const onMinaProviderNetworkChanged = new Promise((resolve) =>
-      this.minaProvider.onNetworkChanged(resolve)
-    )
-    const onMinaArchiveProviderNetworkChanged = new Promise((resolve) =>
-      this.minaArchiveProvider.onNetworkChanged(resolve)
-    )
-
-    // Initiate network change
-    this.minaProvider.changeNetwork(nodeUrl)
-    this.minaArchiveProvider.changeNetwork(nodeArchiveUrl)
-
-    // Wait for both network change events to be emitted
-    await Promise.all([
-      onMinaProviderNetworkChanged,
-      onMinaArchiveProviderNetworkChanged
-    ])
-
-    // Check if network change has been successful
-    const newNetworkURL = this.minaProvider.providerUrl
-    if (nodeUrl !== newNetworkURL) {
-      throw new Error('Network URL did not change')
+    // First destroy the existing providers
+    if (this.minaProvider) {
+      await this.minaProvider.destroy();
+      this.minaProvider = null;
     }
+    if (this.minaArchiveProvider) {
+      await this.minaArchiveProvider.destroy();
+      this.minaArchiveProvider = null;
+    }
+
+    // Create new providers with the new URLs
+    this.minaProvider = new MinaProvider(nodeUrl);
+    this.minaArchiveProvider = new MinaArchiveProvider(nodeArchiveUrl);
 
     // Set the current network
     await this.getStoreState().setCurrentNetwork(
@@ -262,7 +264,7 @@ export class MinaWalletImpl implements MinaWallet {
       this.minaArchiveProvider
     )
 
-    const wallet = this.getCurrentWallet()
+    const wallet = this.getCurrentWallet();
     if (wallet) {
       // Now, call syncAccountStore for the current wallet address
       await this.getStoreState().syncAccountStore(
