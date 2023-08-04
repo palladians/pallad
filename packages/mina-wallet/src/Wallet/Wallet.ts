@@ -20,6 +20,7 @@ import {
 } from '@palladxyz/mina-core'
 import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 import { keyAgentStore } from '@palladxyz/vault'
+import { EventEmitter } from 'events'
 
 /**
  * This wallet is in the process of becoming chain agnostic
@@ -45,6 +46,8 @@ export class MinaWalletImpl implements MinaWallet {
   public network: Mina.Networks
   readonly keyAgent: InMemoryKeyAgent | null
   readonly balance: number
+  private networkSwitch: EventEmitter
+
   private minaProviders: Record<Mina.Networks, MinaProvider | null> = {
     [Mina.Networks.MAINNET]: null,
     [Mina.Networks.DEVNET]: null,
@@ -68,6 +71,7 @@ export class MinaWalletImpl implements MinaWallet {
     this.keyAgent = keyAgent
     this.name = name
     this.balance = 0
+    this.networkSwitch = new EventEmitter()
 
     // Create providers for each network
     for (const networkKey of Object.keys(providers)) {
@@ -81,6 +85,11 @@ export class MinaWalletImpl implements MinaWallet {
         )
       }
     }
+  }
+
+  public onNetworkChanged(listener: (nodeUrl: string) => void) {
+    this.networkSwitch.removeAllListeners('networkChanged')
+    this.networkSwitch.on('networkChanged', listener)
   }
 
   private getStoreState() {
@@ -257,6 +266,7 @@ export class MinaWalletImpl implements MinaWallet {
       this.minaProviders[network] as MinaProvider,
       this.minaArchiveProviders[network] as MinaArchiveProvider
     )
+    this.networkSwitch.emit('networkChanged', network)
   }
 
   getCurrentNetwork(): Mina.Networks {
