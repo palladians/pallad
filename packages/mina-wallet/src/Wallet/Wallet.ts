@@ -87,7 +87,7 @@ export class MinaWalletImpl implements MinaWallet {
     }
   }
 
-  public onNetworkChanged(listener: (nodeUrl: string) => void) {
+  public onNetworkChanged(listener: (network: Mina.Networks) => void) {
     this.networkSwitch.removeAllListeners('networkChanged')
     this.networkSwitch.on('networkChanged', listener)
   }
