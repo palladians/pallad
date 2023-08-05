@@ -6,19 +6,21 @@ import {
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
-import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 import { keyAgentStore } from '@palladxyz/vault'
 import Client from 'mina-signer'
 import { expect, test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
-import { MinaWalletDependencies, MinaWalletImpl } from '../src/Wallet'
+import {
+  MinaWalletDependencies,
+  MinaWalletImpl,
+  MinaWalletProps
+} from '../src/Wallet'
 const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
 const archiveUrl = 'https://devnet.graphql.minaexplorer.com'
 describe('MinaWalletImpl', () => {
   let wallet: MinaWalletImpl
   let walletDependencies: MinaWalletDependencies
-  let provider: MinaProvider
-  let providerArchive: MinaArchiveProvider
+  let walletProperties: MinaWalletProps
   let network: Mina.Networks
 
   const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
@@ -38,17 +40,30 @@ describe('MinaWalletImpl', () => {
   ]
 
   beforeEach(() => {
-    provider = new MinaProvider(nodeUrl)
-    providerArchive = new MinaArchiveProvider(archiveUrl)
-
     walletDependencies = {
-      keyAgent: keyAgentStore.getState().keyAgent,
-      minaProvider: provider,
-      minaArchiveProvider: providerArchive,
-      network: Network.Mina
+      keyAgent: keyAgentStore.getState().keyAgent
     }
-    wallet = new MinaWalletImpl({ name: 'Test Wallet' }, walletDependencies)
-    network = Mina.Networks.DEVNET // need to chang
+    walletProperties = {
+      network: Mina.Networks.MAINNET,
+      name: 'Test Wallet',
+      providers: {
+        [Mina.Networks.MAINNET]: {
+          provider: nodeUrl,
+          archive: archiveUrl
+        },
+        [Mina.Networks.DEVNET]: {
+          provider: 'https://proxy.devnet.minaexplorer.com/',
+          archive: 'https://devnet.graphql.minaexplorer.com'
+        },
+        [Mina.Networks.BERKELEY]: {
+          provider: 'https://proxy.berkeley.minaexplorer.com/',
+          archive: 'https://berkeley.graphql.minaexplorer.com'
+        }
+      }
+    }
+
+    wallet = new MinaWalletImpl(walletProperties, walletDependencies)
+    network = Mina.Networks.MAINNET
   })
   test('wallet restores a wallet', async () => {
     const restoreArgs: MinaSpecificArgs = {
@@ -95,20 +110,14 @@ describe('MinaWalletImpl', () => {
     expect(isVerified).toBeTruthy()
   })
   test('create wallet of strength 128', async () => {
-    const wallet = new MinaWalletImpl(
-      { name: 'Test Wallet' },
-      walletDependencies
-    )
+    const wallet = new MinaWalletImpl(walletProperties, walletDependencies)
     const mnemonicStrength = 128
     const walletMnemonic = await wallet.createWallet(mnemonicStrength)
     expect(walletMnemonic).toHaveProperty('mnemonic')
     expect(walletMnemonic?.mnemonic).toHaveLength(12)
   })
   test('create wallet of strength 256', async () => {
-    const wallet = new MinaWalletImpl(
-      { name: 'Test Wallet' },
-      walletDependencies
-    )
+    const wallet = new MinaWalletImpl(walletProperties, walletDependencies)
     const mnemonicStrength = 256
     const walletMnemonic = await wallet.createWallet(mnemonicStrength)
     expect(walletMnemonic).toHaveProperty('mnemonic')
@@ -160,60 +169,5 @@ describe('MinaWalletImpl', () => {
       signedAttestation as Mina.SignedMessage
     )
     expect(isVerified).toBeTruthy()
-  })
-  test('switches network', async () => {
-    /**
-     * Restore the wallet
-     */
-    const restoreArgs: MinaSpecificArgs = {
-      network: Network.Mina,
-      accountIndex: 0,
-      addressIndex: 0,
-      networkType: 'testnet'
-    }
-    const payload = new MinaPayload()
-    await wallet.restoreWallet(payload, restoreArgs, network, {
-      mnemonicWords: mnemonic,
-      getPassphrase: getPassword
-    })
-    // check there exists the first account and address in the keyAgent not in the .serializableKeyAgentData knownCredentials
-    const storeKeyAgentCredentials =
-      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
-        .contents
-    expect(storeKeyAgentCredentials).toHaveLength(1)
-    // log out the current network
-    const currentNetwork = wallet.getCurrentNetwork()
-    console.log('Original Current Network:', currentNetwork)
-    expect(currentNetwork).toEqual(network)
-    // log out the current account info
-    const currentAccountInfo = await wallet.getAccountInfo()
-    console.log('Original Current Account Info:', currentAccountInfo)
-    expect(currentAccountInfo).toHaveProperty('balance')
-    // log out the current transactions
-    const currentTransactions = await wallet.getTransactions()
-    console.log('Original Current Transactions:', currentTransactions)
-
-    /**
-     * Switch the network from devnet to mainnet
-     */
-    const nodeUrlMainnet = 'https://proxy.minaexplorer.com/'
-    const archiveUrlMainnet = 'https://graphql.minaexplorer.com'
-    const networkMainnet = Mina.Networks.MAINNET
-    await wallet.switchNetwork(
-      networkMainnet,
-      nodeUrlMainnet,
-      archiveUrlMainnet
-    )
-    // log out the current network
-    const currentNetworkSwitch = wallet.getCurrentNetwork()
-    console.log('Switched Current Network:', currentNetworkSwitch)
-    expect(currentNetworkSwitch).toEqual(networkMainnet)
-    // log out the current account info
-    const currentAccountInfoSwitch = await wallet.getAccountInfo()
-    console.log('Switched Current Account Info:', currentAccountInfoSwitch)
-    //expect(currentAccountInfoSwitch).toHaveProperty('balance')
-    // log out the current transactions
-    const currentTransactionsSwitch = await wallet.getTransactions()
-    console.log('Switched Current Transactions:', currentTransactionsSwitch)
   })
 })

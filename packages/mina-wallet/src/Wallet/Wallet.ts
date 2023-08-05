@@ -20,6 +20,7 @@ import {
 } from '@palladxyz/mina-core'
 import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 import { keyAgentStore } from '@palladxyz/vault'
+import { EventEmitter } from 'events'
 
 /**
  * This wallet is in the process of becoming chain agnostic
@@ -28,33 +29,83 @@ import { MinaWallet } from '../types'
 
 export interface MinaWalletDependencies {
   readonly keyAgent: InMemoryKeyAgent | null
-  readonly minaProvider: MinaProvider
-  readonly minaArchiveProvider: MinaArchiveProvider
-  readonly network: Network
-  //readonly stores?: WalletStores;
 }
 
 export interface MinaWalletProps {
+  readonly network: Mina.Networks
   readonly name: string
+  readonly providers: {
+    [network in Mina.Networks]?: {
+      provider: string
+      archive: string
+    }
+  }
 }
 
 export class MinaWalletImpl implements MinaWallet {
+  public network: Mina.Networks
   readonly keyAgent: InMemoryKeyAgent | null
   readonly balance: number
-  private minaProvider: MinaProvider
-  private minaArchiveProvider: MinaArchiveProvider
+  private networkSwitch: EventEmitter
+
+  private minaProviders: Record<Mina.Networks, MinaProvider | null> = {
+    [Mina.Networks.MAINNET]: null,
+    [Mina.Networks.DEVNET]: null,
+    [Mina.Networks.BERKELEY]: null
+  }
+  private minaArchiveProviders: Record<
+    Mina.Networks,
+    MinaArchiveProvider | null
+  > = {
+    [Mina.Networks.MAINNET]: null,
+    [Mina.Networks.DEVNET]: null,
+    [Mina.Networks.BERKELEY]: null
+  }
   readonly name: string
-  // Storage for the current wallet
 
   constructor(
-    { name }: MinaWalletProps,
-    { keyAgent, minaProvider, minaArchiveProvider }: MinaWalletDependencies
+    { network, name, providers }: MinaWalletProps,
+    { keyAgent }: MinaWalletDependencies
   ) {
+    this.network = network
     this.keyAgent = keyAgent
-    this.minaProvider = minaProvider
-    this.minaArchiveProvider = minaArchiveProvider
     this.name = name
     this.balance = 0
+    this.networkSwitch = new EventEmitter()
+
+    // Create providers for each network
+    for (const networkKey of Object.keys(providers)) {
+      const network = networkKey as Mina.Networks
+      if (providers[network]) {
+        this.minaProviders[network] = new MinaProvider(
+          providers[network]?.provider as string
+        )
+        this.minaArchiveProviders[network] = new MinaArchiveProvider(
+          providers[network]?.archive as string
+        )
+      }
+    }
+  }
+
+  public onNetworkChanged(listener: (network: Mina.Networks) => void) {
+    this.networkSwitch.removeAllListeners('networkChanged')
+    this.networkSwitch.on('networkChanged', listener)
+  }
+
+  private getStoreState() {
+    return keyAgentStore.getState()
+  }
+
+  private setCurrentNetworkInStore(
+    network: Mina.Networks,
+    minaProvider: MinaProvider,
+    minaArchiveProvider: MinaArchiveProvider
+  ): void {
+    this.getStoreState().setCurrentNetwork(
+      network,
+      minaProvider,
+      minaArchiveProvider
+    )
   }
 
   getName(): string {
@@ -72,7 +123,7 @@ export class MinaWalletImpl implements MinaWallet {
       throw new Error('Current network is null, empty or undefined')
     }
     const accountInformation =
-      keyAgentStore.getState().getAccountStore(currentNetwork, walletAddress)
+      this.getStoreState().getAccountStore(currentNetwork, walletAddress)
         ?.accountInfo || null
 
     return accountInformation
@@ -89,10 +140,14 @@ export class MinaWalletImpl implements MinaWallet {
       throw new Error('Current network is null, empty or undefined')
     }
     const transactions =
-      keyAgentStore.getState().getAccountStore(currentNetwork, walletAddress)
+      this.getStoreState().getAccountStore(currentNetwork, walletAddress)
         ?.transactions || null
 
     return transactions
+  }
+
+  getKeyAgentFromStore(): InMemoryKeyAgent | null {
+    return this.getStoreState().keyAgent
   }
 
   async sign(
@@ -112,12 +167,11 @@ export class MinaWalletImpl implements MinaWallet {
     }
     const payload: ChainSpecificPayload = new MinaPayload()
 
-    if (keyAgentStore.getState().keyAgent === undefined) {
+    const keyAgent = this.getKeyAgentFromStore()
+    if (keyAgent === null) {
       throw new Error('Key agent is undefined')
     }
-    return await keyAgentStore
-      .getState()
-      .keyAgent?.sign(payload, signable, args)
+    return await keyAgent.sign(payload, signable, args)
   }
 
   // This is Mina Specific
@@ -132,8 +186,13 @@ export class MinaWalletImpl implements MinaWallet {
   }
   // This is Mina Specific
   // TODO: Make this chain agnostic
-  async submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult> {
-    const result = await this.minaProvider.submitTransaction(submitTxArgs)
+  async submitTx(
+    submitTxArgs: SubmitTxArgs
+  ): Promise<SubmitTxResult | undefined> {
+    const network = this.getCurrentNetwork()
+    const result = await this.minaProviders[network]?.submitTransaction(
+      submitTxArgs
+    )
     return result
   }
 
@@ -152,30 +211,34 @@ export class MinaWalletImpl implements MinaWallet {
       mnemonicWords: mnemonicWords,
       mnemonic2ndFactorPassphrase: ''
     }
+    if (this.minaProviders[network] === null) {
+      throw new Error('Mina provider is undefined')
+    }
+    if (this.minaArchiveProviders[network] === null) {
+      throw new Error('Mina archive provider is undefined')
+    }
     // restore the agent state
     await keyAgentStore
       .getState()
       .restoreWallet(
         payload,
         args,
-        this.minaProvider,
-        this.minaArchiveProvider,
+        this.minaProviders[network] as MinaProvider,
+        this.minaArchiveProviders[network] as MinaArchiveProvider,
         network,
         agentArgs
       )
     // set the current wallet
-    const derivedAddress = keyAgentStore
-      .getState()
-      .getCredentials()?.[0]?.address
+    const derivedAddress = this.getStoreState().getCredentials()?.[0]?.address
     if (derivedAddress === undefined) {
       throw new Error('Derived address is undefined')
     }
-    keyAgentStore.getState().setCurrentWallet(derivedAddress)
+    this.getStoreState().setCurrentWallet(derivedAddress)
   }
 
   getCurrentWallet(): GroupedCredentials | null {
     // Get the current wallet
-    const result = keyAgentStore.getState().getCurrentWallet()
+    const result = this.getStoreState().getCurrentWallet()
 
     // Return the public credential or null
     return result ? result : null
@@ -183,39 +246,58 @@ export class MinaWalletImpl implements MinaWallet {
 
   getCredentials(): GroupedCredentials[] | null {
     // Get the list of accounts for the current wallet
-    const result = keyAgentStore.getState().getCredentials()
+    const result = this.getStoreState().getCredentials()
 
     // Return the list of accounts
     return result
   }
 
-  async switchNetwork(
-    network: Mina.Networks,
-    nodeUrl: string,
-    nodeArchiveUrl: string
-  ): Promise<void> {
+  async switchNetwork(network: Mina.Networks): Promise<void> {
+    if (this.minaProviders[network] === null) {
+      throw new Error('Mina provider is undefined')
+    }
+    if (this.minaArchiveProviders[network] === null) {
+      throw new Error('Mina archive provider is undefined')
+    }
     // Switch the network
-    await this.setCurrentNetwork(network, nodeUrl, nodeArchiveUrl)
+    await this.setCurrentNetwork(network)
+    this.setCurrentNetworkInStore(
+      network,
+      this.minaProviders[network] as MinaProvider,
+      this.minaArchiveProviders[network] as MinaArchiveProvider
+    )
+    this.networkSwitch.emit('networkChanged', network)
   }
 
-  getCurrentNetwork(): Mina.Networks | null {
+  getCurrentNetwork(): Mina.Networks {
     // Get the current network
-    const result = keyAgentStore.getState().getCurrentNetwork()
-    return result ? result : null
+    const result = this.network
+    return result
   }
 
-  async setCurrentNetwork(
-    network: Mina.Networks,
-    nodeUrl: string,
-    nodeArchiveUrl: string
-  ): Promise<void> {
-    // Change the providers
-    this.minaProvider = new MinaProvider(nodeUrl)
-    this.minaArchiveProvider = new MinaArchiveProvider(nodeArchiveUrl)
-    // Set the current network
-    await keyAgentStore
-      .getState()
-      .setCurrentNetwork(network, this.minaProvider, this.minaArchiveProvider)
+  async setCurrentNetwork(network: Mina.Networks): Promise<void> {
+    // set the current network property
+    this.network = network
+
+    // Set the current network in store
+    await this.getStoreState().setCurrentNetwork(
+      network,
+      this.minaProviders[network] as MinaProvider,
+      this.minaArchiveProviders[network] as MinaArchiveProvider
+    )
+
+    const wallet = this.getCurrentWallet()
+    if (wallet) {
+      // Now, call syncAccountStore for the current wallet address
+      await this.getStoreState().syncAccountStore(
+        wallet.address,
+        this.minaProviders[network] as MinaProvider,
+        this.minaArchiveProviders[network] as MinaArchiveProvider,
+        network
+      )
+    } else {
+      console.log('No current wallet available')
+    }
   }
 
   shutdown(): void {

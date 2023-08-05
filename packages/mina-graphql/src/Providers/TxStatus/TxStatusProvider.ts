@@ -10,9 +10,18 @@ import { gql, request } from 'graphql-request'
 import { healthCheckQuery, transactionStatus } from './queries'
 
 export class TxStatusGraphQLProvider implements TxStatusProvider {
-  private minaGql: string
+  private minaGql: string | null
 
   constructor(minaGql: string) {
+    this.minaGql = minaGql
+  }
+
+  public async destroy(): Promise<void> {
+    console.log('Destroying TxStatusGraphQLProvider...')
+    this.minaGql = null
+  }
+
+  async changeNetwork(minaGql: string): Promise<void> {
     this.minaGql = minaGql
   }
   async healthCheck(): Promise<HealthCheckResponse> {
@@ -22,7 +31,7 @@ export class TxStatusGraphQLProvider implements TxStatusProvider {
 
     try {
       const data = (await request(
-        this.minaGql,
+        this.minaGql as string,
         query
       )) as HealthCheckResponseData
 
@@ -53,7 +62,11 @@ export class TxStatusGraphQLProvider implements TxStatusProvider {
     }
 
     try {
-      const data = (await request(this.minaGql, query, variables)) as {
+      const data = (await request(
+        this.minaGql as string,
+        query,
+        variables
+      )) as {
         transactionStatus: 'PENDING' | 'INCLUDED' | 'UNKNOWN' | 'FAILED'
       }
 

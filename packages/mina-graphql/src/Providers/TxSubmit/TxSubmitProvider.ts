@@ -11,11 +11,21 @@ import { getStakeTxSend, getTxSend } from './mutations'
 import { healthCheckQuery } from './queries'
 
 export class TxSubmitGraphQLProvider implements TxSubmitProvider {
-  private minaGql: string
+  private minaGql: string | null
 
   constructor(minaGql: string) {
     this.minaGql = minaGql
   }
+
+  public async destroy(): Promise<void> {
+    console.log('Destroying TxSubmitGraphQLProvider...')
+    this.minaGql = null
+  }
+
+  async changeNetwork(minaGql: string): Promise<void> {
+    this.minaGql = minaGql
+  }
+
   async healthCheck(): Promise<HealthCheckResponse> {
     const query = gql`
       ${healthCheckQuery}
@@ -23,7 +33,7 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
 
     try {
       const data = (await request(
-        this.minaGql,
+        this.minaGql as string,
         query
       )) as HealthCheckResponseData
 
@@ -66,7 +76,7 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
 
     try {
       const result = (await request(
-        this.minaGql,
+        this.minaGql as string,
         mutation,
         variables
       )) as SubmitTxResult

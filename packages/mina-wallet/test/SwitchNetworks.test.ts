@@ -6,18 +6,20 @@ import {
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 //import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
-import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
 import { keyAgentStore } from '@palladxyz/vault'
 import { expect, test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
-import { MinaWalletDependencies, MinaWalletImpl } from '../src/Wallet'
-const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
-const archiveUrl = 'https://devnet.graphql.minaexplorer.com'
+import {
+  MinaWalletDependencies,
+  MinaWalletImpl,
+  MinaWalletProps
+} from '../src/Wallet'
+const nodeUrl = 'https://proxy.minaexplorer.com/'
+const archiveUrl = 'https://graphql.minaexplorer.com'
 describe('MinaWalletImpl', () => {
   let wallet: MinaWalletImpl
   let walletDependencies: MinaWalletDependencies
-  let provider: MinaProvider
-  let providerArchive: MinaArchiveProvider
+  let walletProperties: MinaWalletProps
   let network: Mina.Networks
 
   const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
@@ -37,19 +39,32 @@ describe('MinaWalletImpl', () => {
   ]
 
   beforeEach(() => {
-    provider = new MinaProvider(nodeUrl)
-    providerArchive = new MinaArchiveProvider(archiveUrl)
-
     walletDependencies = {
-      keyAgent: keyAgentStore.getState().keyAgent,
-      minaProvider: provider,
-      minaArchiveProvider: providerArchive,
-      network: Network.Mina
+      keyAgent: keyAgentStore.getState().keyAgent
     }
-    wallet = new MinaWalletImpl({ name: 'Test Wallet' }, walletDependencies)
-    network = Mina.Networks.DEVNET // need to chang
+    walletProperties = {
+      network: Mina.Networks.MAINNET,
+      name: 'Test Wallet',
+      providers: {
+        [Mina.Networks.MAINNET]: {
+          provider: nodeUrl,
+          archive: archiveUrl
+        },
+        [Mina.Networks.DEVNET]: {
+          provider: 'https://proxy.devnet.minaexplorer.com/',
+          archive: 'https://devnet.graphql.minaexplorer.com'
+        },
+        [Mina.Networks.BERKELEY]: {
+          provider: 'https://proxy.berkeley.minaexplorer.com/',
+          archive: 'https://berkeley.graphql.minaexplorer.com'
+        }
+      }
+    }
+
+    wallet = new MinaWalletImpl(walletProperties, walletDependencies)
+    network = Mina.Networks.MAINNET
   })
-  test('switches network', async () => {
+  test('switches network mainnet -> devnet', async () => {
     /**
      * Restore the wallet
      */
@@ -76,22 +91,12 @@ describe('MinaWalletImpl', () => {
     // log out the current account info
     const currentAccountInfo = await wallet.getAccountInfo()
     expect(currentAccountInfo).toHaveProperty('balance')
-    // log out the account store
-    const accountStore = keyAgentStore
-      .getState()
-      .getAccountStore(network, storeKeyAgentCredentials[0].address)
-    console.log('Original Account Store:', accountStore)
+
     /**
      * Switch the network from devnet to mainnet
      */
-    const nodeUrlMainnet = 'https://proxy.minaexplorer.com/'
-    const archiveUrlMainnet = 'https://graphql.minaexplorer.com'
-    const networkMainnet = Mina.Networks.MAINNET
-    await wallet.switchNetwork(
-      networkMainnet,
-      nodeUrlMainnet,
-      archiveUrlMainnet
-    )
+    const networkMainnet = Mina.Networks.DEVNET
+    await wallet.switchNetwork(networkMainnet)
     // log out the current network
     const currentNetworkSwitch = wallet.getCurrentNetwork()
     console.log('Switched Current Network:', currentNetworkSwitch)
@@ -99,11 +104,11 @@ describe('MinaWalletImpl', () => {
     // log out the current account info
     const currentAccountInfoSwitch = await wallet.getAccountInfo()
     console.log('Switched Current Account Info:', currentAccountInfoSwitch)
-    //expect(currentAccountInfoSwitch).toHaveProperty('balance')
-    // log the switched account store
-    const accountStoreSwitch = keyAgentStore
-      .getState()
-      .getAccountStore(networkMainnet, storeKeyAgentCredentials[0].address)
-    console.log('Switched Account Store:', accountStoreSwitch)
+    expect(currentAccountInfoSwitch).toHaveProperty('balance')
+
+    // expect currentAccountInfoSwitch balance.total to be different from currentAccountInfo balance.total
+    expect(currentAccountInfoSwitch?.balance.total).not.toEqual(
+      currentAccountInfo?.balance.total
+    )
   })
 })
