@@ -12,7 +12,7 @@ export default defineConfig({
     react(),
     crx({ manifest }),
     topLevelAwait(),
-    nodePolyfills({ protocolImports: true }),
+    nodePolyfills({ protocolImports: true, globals: { Buffer: true } }),
     svgr({ exportAsDefault: true })
   ],
   define: {

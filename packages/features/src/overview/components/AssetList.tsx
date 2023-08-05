@@ -7,9 +7,7 @@ import { useAccount } from '../../common/hooks/useAccount'
 
 export const AssetList = () => {
   const navigate = useNavigate()
-  const { data: accountData, isLoading: accountLoading } = useAccount()
-  const rawMinaBalance = accountData?.balance?.total
-  const minaBalance = rawMinaBalance?.toFixed(4) || '0'
+  const { isLoading: accountLoading, minaBalance } = useAccount()
   return (
     <div className="flex flex-col flex-1 gap-3">
       <ViewHeading
@@ -29,7 +27,7 @@ export const AssetList = () => {
             </AvatarFallback>
           </Avatar>
           <p className="flex-1 font-semibold">MINA</p>
-          <p>{minaBalance}</p>
+          <p>{minaBalance?.toString()}</p>
         </div>
       )}
     </div>
