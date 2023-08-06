@@ -1,6 +1,3 @@
-import { Mina } from '@palladxyz/mina-core'
-import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
-
 import {
   FromBip39MnemonicWordsProps,
   GroupedCredentials,
@@ -9,6 +6,9 @@ import {
   MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
+import { Mina } from '@palladxyz/mina-core'
+import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
+
 import { keyAgentStore } from '../src/stores'
 
 // Provide the passphrase for testing purposes
@@ -85,9 +85,8 @@ describe('store', () => {
     expect(storeEncryptedSeedBytes).not.toBe(encryptedSeedBytes)
 
     // check there exists the first account and address in the keyAgent not in the .serializableKeyAgentData knownCredentials
-    const storeKeyAgentCredentials =
-      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
-        .contents as GroupedCredentials[]
+    const storeKeyAgentCredentials = keyAgentStore.getState().keyAgent
+      ?.serializableData.credentialSubject.contents as GroupedCredentials[]
     console.log('knownCredentials', storeKeyAgentCredentials)
     expect(storeKeyAgentCredentials).toHaveLength(1)
 
@@ -169,7 +168,8 @@ describe('store', () => {
       .getState()
       .getAccountStore(
         network,
-        keyAgentStore.getState().keyAgent?.serializableData.credentialSubject.contents[0]?.address as string
+        keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
+          .contents[0]?.address as string
       )
     console.log('Account Information!')
     console.log('accountStore', devnetAccountInformation)
@@ -184,12 +184,15 @@ describe('store', () => {
       .setCurrentNetwork(newNetwork, providerMainnet, providerArchiveMainnet)
     expect(keyAgentStore.getState().currentNetwork).toEqual(newNetwork)
     // sync the account information
-    await keyAgentStore.getState().syncAccountStore(
-      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject.contents[0]?.address as string,
-      providerMainnet,
-      providerArchiveMainnet,
-      newNetwork
-    )
+    await keyAgentStore
+      .getState()
+      .syncAccountStore(
+        keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
+          .contents[0]?.address as string,
+        providerMainnet,
+        providerArchiveMainnet,
+        newNetwork
+      )
     // check the store has account info
     const mainnetAccountInformation = keyAgentStore
       .getState()
