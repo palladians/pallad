@@ -1,5 +1,5 @@
 import { Pie, PieChart, ResponsiveContainer } from 'recharts'
-import colors from 'tailwindcss/colors'
+import colors from 'tailwindcss/colors' // eslint-disable-line
 
 interface EpochProgressChartProps {
   progress: number

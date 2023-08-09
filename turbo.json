@@ -9,7 +9,9 @@
         "^build"
       ],
       "outputs": [
-        "dist/**"
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**"
       ]
     },
     "lint": {},
@@ -21,10 +23,8 @@
     "story:build": {},
     "cleanup": {},
     "dev": {
-      "persistent": true,
-      "outputs": [
-        "dist/**"
-      ]
+      "cache": false,
+      "persistent": true
     }
   }
 }

@@ -2,8 +2,11 @@
   "extends": "@palladxyz/common/tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   }
 }

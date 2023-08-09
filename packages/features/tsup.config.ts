@@ -17,6 +17,7 @@ export default defineConfig([
       }),
       svgr({ plugins: [svgJsx] })
     ],
-    external: ['swr']
+    external: ['swr'],
+    treeshake: true
   }
 ])

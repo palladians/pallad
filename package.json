@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "turbo run build",
+    "b": "pnpm build",
     "build:extension": "turbo run build --filter=@palladxyz/extension...",
     "build:website": "turbo run build --filter=@palladxyz/website...",
     "build:features": "turbo run build --filter=@palladxyz/features...",
@@ -17,7 +18,7 @@
     "test:unit": "turbo run test:unit",
     "test:e2e:extension": "turbo run test:e2e --filter=@palladxyz/extension",
     "format": "prettier --write \"**/*.{ts,tsx,md}\" && pnpm lint:fix",
-    "cleanup": "turbo run cleanup",
+    "cleanup": "turbo run cleanup && rimraf node_modules",
     "prepare": "husky install",
     "preinstall": "npx only-allow pnpm"
   },
@@ -27,19 +28,24 @@
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "@vitest/coverage-c8": "^0.33.0",
+    "autoprefixer": "^10.4.14",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
+    "happy-dom": "^9.20.3",
     "husky": "^8.0.3",
+    "postcss": "^8.4.27",
     "prettier": "^2.8.8",
     "rimraf": "^5.0.1",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss": "^3.3.3",
+    "tailwindcss-animate": "^1.0.6",
     "tsup": "^6.7.0",
     "turbo": "^1.10.1",
     "typescript": "^5.0.4",
-    "vitest": "^0.31.4",
-    "happy-dom": "^9.20.3"
+    "vitest": "^0.31.4"
   },
   "packageManager": "pnpm@8.6.10"
 }

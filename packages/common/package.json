@@ -5,19 +5,23 @@
   "type": "module",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "tsconfig.json",
+    "dist/index.js",
+    "dist/index.d.ts"
+  ],
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "default": "./dist/index.js"
-    },
     "./tsconfig.json": {
       "import": "./tsconfig.json",
       "require": "./tsconfig.json"
+    },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "build": "tsup src/index.ts --dts --format esm",
     "cleanup": "rimraf node_modules dist .turbo"
   }
 }
