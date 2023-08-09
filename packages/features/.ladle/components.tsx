@@ -1,3 +1,4 @@
+import '@palladxyz/ui/dist/index.css'
 import { useEffect } from 'react'
 import {
   ActionType,
@@ -7,7 +8,6 @@ import {
 } from '@ladle/react'
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from 'next-themes'
-import '@palladxyz/ui/dist/index.css'
 
 export const Provider: GlobalProvider = ({ children }) => {
   const { dispatch } = useLadleContext()

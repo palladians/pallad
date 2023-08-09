@@ -13,6 +13,7 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "@palladxyz/common": "*",
     "@palladxyz/key-management": "*",
     "@palladxyz/features": "*",
     "@palladxyz/ui": "*",
@@ -43,12 +44,9 @@
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "@vitejs/plugin-react-swc": "^3.3.2",
-    "autoprefixer": "^10.4.14",
     "path": "^0.12.7",
-    "postcss": "^8.4.26",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "rollup-plugin-polyfill-node": "^0.12.0",
-    "tailwindcss": "^3.3.3",
     "vite": "^4.3.9",
     "vite-plugin-commonjs": "^0.7.1",
     "vite-plugin-node-polyfills": "^0.9.0",

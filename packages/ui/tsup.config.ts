@@ -6,6 +6,7 @@ import packageJson from './package.json'
 export default defineConfig([
   {
     ...baseTsupConfig,
-    name: packageJson.name
+    name: packageJson.name,
+    treeshake: true
   }
 ])

@@ -1,6 +1,6 @@
 import { ClockIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import colors from 'tailwindcss/colors'
+import colors from 'tailwindcss/colors' // eslint-disable-line
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { TransactionResult } from '../components/TransactionResult'

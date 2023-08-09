@@ -1,5 +1,5 @@
 import { AlertOctagonIcon } from 'lucide-react'
-import colors from 'tailwindcss/colors'
+import colors from 'tailwindcss/colors' // eslint-disable-line
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { TransactionResult } from '../components/TransactionResult'

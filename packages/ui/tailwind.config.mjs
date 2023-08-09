@@ -1,14 +1,9 @@
-import tailwindcssAnimate from 'tailwindcss-animate'
+import tailwindcssAnimate from 'tailwindcss-animate' // eslint-disable-line
 
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ['class'],
-  content: [
-    '../../packages/features/src/**/*.{ts,tsx}',
-    '../../packages/ui/src/**/*.{ts,tsx}',
-    '../../apps/extension/src/**/*.{ts,tsx}',
-    '../../packages/features/.ladle/**/*.{ts,tsx}'
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     container: {
       center: true,
