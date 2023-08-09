@@ -13,20 +13,15 @@ export const OverviewCard = () => {
   const { wallet } = useWallet()
   const walletAddress = wallet.getCurrentWallet()?.address
   const navigate = useNavigate()
-  const { data: accountData, isLoading: accountLoading } = useAccount()
+  const { isLoading: accountLoading, minaBalance } = useAccount()
   const { data: fiatPriceData, isLoading: priceLoading } = useFiatPrice()
   const overviewLoading = accountLoading || priceLoading
-  const rawTotalBalance = accountData?.balance?.total
-  const totalBalance = rawTotalBalance
-    ? accountData?.balance?.total?.toFixed(4)
-    : '0'
-  const rawFiatPrice = fiatPriceData?.['mina-protocol']?.usd
-  const rawFiatBalance = useMemo(
-    () =>
-      (rawTotalBalance && rawFiatPrice && rawTotalBalance * rawFiatPrice) || 0,
-    [rawTotalBalance, rawFiatPrice]
-  )
-  const fiatBalance = rawFiatBalance ? rawFiatBalance.toFixed(2) : '0'
+  const fiatBalance = useMemo(() => {
+    if (!minaBalance) return
+    const rawFiatPrice = fiatPriceData?.['mina-protocol']?.usd || 0
+    if (!rawFiatPrice) return
+    return Number(minaBalance) * rawFiatPrice
+  }, [minaBalance, fiatPriceData])
   const meshGradientBright = easyMeshGradient({
     seed: walletAddress,
     hueRange: [180, 240]
@@ -52,9 +47,11 @@ export const OverviewCard = () => {
                 className="text-lg font-semibold"
                 data-testid="dashboard__minaBalance"
               >
-                {totalBalance} MINA
+                {minaBalance?.toString()} MINA
               </div>
-              <div className="text-sm font-semibold">~{fiatBalance} USD</div>
+              <div className="text-sm font-semibold">
+                ~{fiatBalance?.toFixed(4)} USD
+              </div>
             </div>
             <Avatar>
               <AvatarFallback>T</AvatarFallback>

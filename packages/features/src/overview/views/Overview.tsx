@@ -1,5 +1,5 @@
 import { AppLayout } from '../../common/components/AppLayout'
-import { AssetList } from '../components/AssetsList'
+import { AssetList } from '../components/AssetList'
 import { OverviewCard } from '../components/OverviewCard'
 
 export const OverviewView = () => {

@@ -12,7 +12,7 @@
     "build:features": "turbo run build --filter=@palladxyz/features...",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
     "dev": "turbo run dev",
-    "dev:extension": "turbo run dev --filter=@palladxyz/extension...",
+    "dev:extension": "turbo run dev --filter=@palladxyz/extension... --concurrency 20",
     "lint": "eslint \"{apps,packages}/**/*.{ts,tsx,js,jsx,cjs,mjs}\"",
     "lint:fix": "pnpm lint --fix",
     "test:unit": "turbo run test:unit",

@@ -62,7 +62,6 @@ export const useWallet = () => {
     () => new MinaWalletImpl(walletProperties, walletDependencies),
     [walletProperties, walletDependencies]
   )
-  console.log('>>>W', wallet)
 
   const switchNetwork = async (network: MinaNetwork) => {
     setNetwork(network)
