@@ -2,6 +2,7 @@
 ![Module type: ESM](https://img.shields.io/badge/module%20type-esm-brightgreen)
 [![Discord](https://img.shields.io/discord/1127906495409958953?label=Discord)](https://discord.gg/ExzzfTGUnB)
 ![example workflow](https://github.com/palladians/pallad/actions/workflows/apps-extension-ci.yml/badge.svg)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6d459ab7-81f7-44f9-86ee-05ae72b451eb/deploy-status)](https://app.netlify.com/sites/pallad/deploys)
 
 ⚠️ Work in progress ⚠️
 

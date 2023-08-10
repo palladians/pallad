@@ -17,6 +17,7 @@
     "@palladxyz/key-management": "*",
     "@palladxyz/features": "*",
     "@palladxyz/ui": "*",
+    "@palladxyz/persistence": "*",
     "@plasmohq/messaging": "^0.3.3",
     "buffer": "^6.0.3",
     "dotenv": "^16.1.4",

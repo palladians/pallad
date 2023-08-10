@@ -1,13 +1,14 @@
 {
   "name": "@palladxyz/util",
   "version": "0.0.1",
+  "type": "module",
   "description": "Util Package SDK for Pallad",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.mjs"
+      "default": "./dist/index.js"
     }
   },
   "scripts": {

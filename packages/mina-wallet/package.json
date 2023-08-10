@@ -2,12 +2,13 @@
   "name": "@palladxyz/mina-wallet",
   "version": "0.0.1",
   "description": "Mina Wallet Package SDK for Pallad",
-  "module": "dist/index.mjs",
+  "type": "module",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.mjs"
+      "default": "./dist/index.js"
     }
   },
   "scripts": {

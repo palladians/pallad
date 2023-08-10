@@ -1,13 +1,14 @@
 {
   "name": "@palladxyz/offchain-data",
   "description": "Off-chain data fetching services.",
+  "type": "module",
   "version": "1.0.0",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.mjs"
+      "default": "./dist/index.js"
     }
   },
   "scripts": {

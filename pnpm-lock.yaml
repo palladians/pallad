@@ -89,6 +89,9 @@ importers:
       '@palladxyz/key-management':
         specifier: '*'
         version: link:../../packages/key-management
+      '@palladxyz/persistence':
+        specifier: '*'
+        version: link:../../packages/persistence
       '@palladxyz/ui':
         specifier: '*'
         version: link:../../packages/ui
