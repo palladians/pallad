@@ -24,55 +24,51 @@ export class OnboardingPom extends BasePom {
     return this.page.goto(`chrome-extension://${this.extensionId}/index.html`)
   }
   async startRestoring() {
-    const restoreWalletButton = await this.page.getByTestId(
+    const restoreWalletButton = this.page.getByTestId(
       TestId.RESTORE_WALLET_BUTTON
     )
     return restoreWalletButton.click()
   }
   async startCreating() {
-    const createWalletButton = await this.page.getByTestId(
+    const createWalletButton = this.page.getByTestId(
       TestId.CREATE_WALLET_BUTTON
     )
     return createWalletButton.click()
   }
   async fillWalletName(walletName: string) {
-    const walletNameInput = await this.page.getByTestId(
-      TestId.WALLET_NAME_INPUT
-    )
+    const walletNameInput = this.page.getByTestId(TestId.WALLET_NAME_INPUT)
     return walletNameInput.fill(walletName)
   }
   async fillSpendingPassword(spendingPassword: string) {
-    const spendingPasswordInput = await this.page.getByTestId(
+    const spendingPasswordInput = this.page.getByTestId(
       TestId.SPENDING_PASSWORD_INPUT
     )
     return spendingPasswordInput.fill(spendingPassword)
   }
   async toggleTos() {
-    const tosCheckbox = await this.page.getByTestId(TestId.TOS_CHECKBOX)
+    const tosCheckbox = this.page.getByTestId(TestId.TOS_CHECKBOX)
     return tosCheckbox.click()
   }
   async goNext() {
-    const nextButton = await this.page.getByTestId(TestId.NEXT_BUTTON)
+    const nextButton = this.page.getByTestId(TestId.NEXT_BUTTON)
     return nextButton.click()
   }
   async goBack() {
-    const backButton = await this.page.getByTestId(TestId.BACK_BUTTON)
+    const backButton = this.page.getByTestId(TestId.BACK_BUTTON)
     return backButton.click()
   }
   async confirmAlone() {
-    const confirmAloneButton = await this.page.getByTestId(TestId.CONFIRM_ALONE)
+    const confirmAloneButton = this.page.getByTestId(TestId.CONFIRM_ALONE)
     return confirmAloneButton.click()
   }
   async fillMnemonic(mnemonic: string) {
-    const mnemonicTextarea = await this.page.getByTestId(
+    const mnemonicTextarea = this.page.getByTestId(
       TestId.YOUR_MNEMONIC_TEXTAREA
     )
     return mnemonicTextarea.fill(mnemonic)
   }
   async getAddressTruncated() {
-    const addressTruncated = await this.page.getByTestId(
-      TestId.ADDRESS_TRUNCATED
-    )
+    const addressTruncated = this.page.getByTestId(TestId.ADDRESS_TRUNCATED)
     return addressTruncated.textContent()
   }
   async getMnemonicWords() {
@@ -82,7 +78,7 @@ export class OnboardingPom extends BasePom {
     return await Promise.all(mnemonicWords.map((word) => word.innerText()))
   }
   async toggleMnemonicWritten() {
-    const mnemonicWritten = await this.page.getByTestId(
+    const mnemonicWritten = this.page.getByTestId(
       TestId.MNEMONIC_WRITTEN_CHECKBOX
     )
     return mnemonicWritten.click()
@@ -91,17 +87,17 @@ export class OnboardingPom extends BasePom {
     const inputLabel = await this.page
       .getByTestId(TestId.MNEMONIC_WRITEDOWN_INDEX)
       .innerText()
-    const [, confirmationIndex] = await inputLabel.split('#')
+    const [, confirmationIndex] = inputLabel.split('#')
     return parseInt(confirmationIndex) - 1
   }
   async fillMnemonicConfirmation(specificWord: string) {
-    const mnemonicConfirmationInput = await this.page.getByTestId(
+    const mnemonicConfirmationInput = this.page.getByTestId(
       TestId.MNEMONIC_CONFIRMATION_INPUT
     )
     return mnemonicConfirmationInput.fill(specificWord)
   }
   async getMinaBalance() {
-    const minaBalance = await this.page.getByTestId(TestId.MINA_BALANCE)
+    const minaBalance = this.page.getByTestId(TestId.MINA_BALANCE)
     return minaBalance.innerText()
   }
 
@@ -114,6 +110,9 @@ export class OnboardingPom extends BasePom {
     await this.goNext()
     await this.confirmAlone()
     await this.fillMnemonic(devnetWallet.mnemonic)
+    await this.goNext()
+    const pageTitle = this.page.getByText('Stay Connected')
+    await pageTitle.waitFor()
     await this.goNext()
   }
 }

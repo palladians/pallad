@@ -34,7 +34,7 @@
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
-    "@playwright/test": "^1.35.1",
+    "@playwright/test": "^1.36.2",
     "@testing-library/react": "^14.0.0",
     "@total-typescript/ts-reset": "^0.4.2",
     "@types/mocha": "^10.0.1",

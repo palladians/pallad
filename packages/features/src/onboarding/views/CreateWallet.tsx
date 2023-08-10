@@ -7,21 +7,25 @@ import { WalletInfoForm } from '../components/WalletInfoForm'
 
 export const CreateWalletView = () => {
   const navigate = useNavigate()
-  const { setMnemonic, setSpendingPassword } = useOnboardingStore(
-    (state) => ({
-      setSpendingPassword: state.setSpendingPassword,
-      setMnemonic: state.setMnemonic
-    }),
-    shallow
-  )
+  const { setMnemonic, setWalletName, setSpendingPassword } =
+    useOnboardingStore(
+      (state) => ({
+        setSpendingPassword: state.setSpendingPassword,
+        setMnemonic: state.setMnemonic,
+        setWalletName: state.setWalletName
+      }),
+      shallow
+    )
   const onSubmit = async ({
-    spendingPassword
+    spendingPassword,
+    walletName
   }: {
     spendingPassword: string
     walletName: string
   }) => {
     setSpendingPassword(spendingPassword)
     setMnemonic(generateMnemonicWords(128).join(' '))
+    setWalletName(walletName)
     return navigate('/onboarding/writedown')
   }
   return <WalletInfoForm title="Create Wallet" onSubmit={onSubmit} />

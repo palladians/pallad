@@ -8,7 +8,7 @@ export const test = base.extend<{
   context: BrowserContext
   extensionId: string
 }>({
-  context: async (_, use) => {
+  context: async ({ }, use) => { // eslint-disable-line
     const pathToExtension = path.join(__dirname, '../dist')
     const context = await chromium.launchPersistentContext('', {
       headless: false,

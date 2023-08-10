@@ -28,7 +28,9 @@ export const ViewHeading = ({
           <ArrowLeftIcon className="text-sky-500" size={20} />
         </Button>
       )}
-      <h2 className="flex-1 text-lg">{title}</h2>
+      <h2 className="flex-1 text-lg" data-testid="extension__pageTitle">
+        {title}
+      </h2>
       {button && (
         <Button variant="outline" size="sm" onClick={button.onClick}>
           {button.label}
