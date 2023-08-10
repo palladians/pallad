@@ -18,18 +18,20 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/util": "*",
-    "@palladxyz/mina-core": "*",
     "@palladxyz/key-management": "*",
+    "@palladxyz/mina-core": "*",
     "@palladxyz/mina-graphql": "*",
+    "@palladxyz/util": "*",
     "@palladxyz/vault": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
+    "events": "^3.3.0",
     "mina-signer": "^2.0.3",
     "zustand": "^4.3.8"
   },
   "devDependencies": {
     "@palladxyz/common": "*",
+    "@types/events": "^3.0.0",
     "@types/mocha": "^10.0.1",
     "@types/secp256k1": "^4.0.3",
     "msw": "^1.2.2"

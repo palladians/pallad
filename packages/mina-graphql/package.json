@@ -22,6 +22,7 @@
     "@palladxyz/util": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
+    "events": "^3.3.0",
     "graphql": "^16.6.0",
     "graphql-request": "^6.1.0",
     "mina-signer": "^2.0.3",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@palladxyz/common": "*",
+    "@types/events": "^3.0.0",
     "@types/mocha": "^10.0.1",
     "@types/secp256k1": "^4.0.3",
     "esbuild-plugin-polyfill-node": "^0.3.0",
