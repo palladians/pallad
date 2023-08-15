@@ -16,7 +16,7 @@ jobs:
     name: 'Build and test'
     env:
       VITE_APP_MODE: web
-      VITE_APP_API_URL: https://api.pallad.xyz
+      VITE_APP_DEFAULT_NETWORK: Devnet
       NODE_OPTIONS: "--max_old_space_size=4096"
     runs-on: ubuntu-latest
     steps:
