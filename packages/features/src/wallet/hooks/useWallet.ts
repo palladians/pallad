@@ -1,12 +1,12 @@
 import { MinaNetwork } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { MinaWalletImpl } from '@palladxyz/mina-wallet'
+import { toast } from '@palladxyz/ui'
 import { keyAgentStore } from '@palladxyz/vault'
 import { useMemo } from 'react'
 import { shallow } from 'zustand/shallow'
 
 import { useAppStore } from '../store/app'
-import { toast } from '@palladxyz/ui'
 
 // TODO: Remove mapping once network types are unified
 const getNetworkValue = (network: MinaNetwork) => {

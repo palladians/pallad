@@ -1,10 +1,4 @@
-import {
-  Card,
-  toast,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@palladxyz/ui'
+import { Card, Tooltip, TooltipContent, TooltipTrigger } from '@palladxyz/ui'
 import QRCode from 'react-qr-code'
 import { useNavigate } from 'react-router-dom'
 

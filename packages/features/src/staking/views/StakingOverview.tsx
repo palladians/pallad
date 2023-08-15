@@ -2,10 +2,10 @@ import { Card } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
+import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { formatCompact } from '../../common/lib/numbers'
 import { EpochProgressChart } from '../components/EpochProgressChart'
-import { MetaField } from '../../common/components/MetaField'
 
 export const StakingOverviewView = () => {
   const navigate = useNavigate()
