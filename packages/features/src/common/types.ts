@@ -1,6 +1,6 @@
+import { Mina } from '@palladxyz/mina-core'
+
 type TokenId = number
-type AccountAddress = string
-type DateTime = string
 type Nonce = number
 type Epoch = number
 type ChainId = string
@@ -16,31 +16,11 @@ export enum TxSide {
   OUTGOING = 'OUTGOING'
 }
 
-export type Transaction = {
-  amount: number
-  blockHeight: number
-  dateTime: DateTime
-  failureReason: string | null
-  fee: number
-  from: AccountAddress
-  to: AccountAddress
-  hash: string
-  isDelegation: boolean
-  token: TokenId
-  kind: TxKind
-}
-
-export type StructurizedTransaction = Transaction & {
+export type StructurizedTransaction = Mina.TransactionBody & {
   side: TxSide
   date: string
   time: string
   minaAmount: number
-}
-
-export type TrpcResponse<T> = {
-  result: {
-    data: T
-  }
 }
 
 type StakingAccount = {

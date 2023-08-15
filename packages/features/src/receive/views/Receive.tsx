@@ -1,4 +1,10 @@
-import { Card } from '@palladxyz/ui'
+import {
+  Card,
+  toast,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@palladxyz/ui'
 import QRCode from 'react-qr-code'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,7 +14,7 @@ import { useWallet } from '../../wallet/hooks/useWallet'
 
 export const ReceiveView = () => {
   const navigate = useNavigate()
-  const { wallet } = useWallet()
+  const { wallet, copyWalletAddress } = useWallet()
   const walletAddress = wallet.getCurrentWallet()?.address
   return (
     <AppLayout>
@@ -27,9 +33,19 @@ export const ReceiveView = () => {
               />
             )}
           </Card>
-          <Card className="p-2 break-all text-center leading-8">
-            {walletAddress}
-          </Card>
+          <Tooltip>
+            <TooltipTrigger>
+              <Card
+                className="p-2 break-all text-center leading-8 cursor-pointer"
+                onClick={copyWalletAddress}
+              >
+                {walletAddress}
+              </Card>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Copy Address</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </AppLayout>

@@ -139,11 +139,22 @@ export class MinaWalletImpl implements MinaWallet {
     if (currentNetwork === null) {
       throw new Error('Current network is null, empty or undefined')
     }
-    const transactions =
+    return (
       this.getStoreState().getAccountStore(currentNetwork, walletAddress)
         ?.transactions || null
+    )
+  }
 
-    return transactions
+  async getTransaction({
+    hash
+  }: {
+    hash: string
+  }): Promise<Mina.TransactionBody | null> {
+    const transactions = await this.getTransactions()
+    return (
+      transactions?.filter((transaction) => transaction?.hash === hash)?.[0] ||
+      null
+    )
   }
 
   getKeyAgentFromStore(): InMemoryKeyAgent | null {

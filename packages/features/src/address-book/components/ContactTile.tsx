@@ -1,4 +1,12 @@
-import { Avatar, AvatarFallback, Button, Card } from '@palladxyz/ui'
+import {
+  Avatar,
+  AvatarFallback,
+  Button,
+  Card,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@palladxyz/ui'
 import { TrashIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,7 +23,10 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
   const navigate = useNavigate()
   const removeContact = useAddressBookStore((state) => state.removeContact)
   return (
-    <Card className="flex items-center justify-between p-2">
+    <Card
+      className="flex items-center justify-between p-2"
+      data-testid="addressBook__contact"
+    >
       <div className="flex items-center justify-center">
         <Avatar>
           <AvatarFallback>{contact.name?.[0]}</AvatarFallback>
@@ -26,6 +37,7 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
           onClick={() =>
             navigate('/send', { state: { address: contact.address } })
           }
+          data-testid="addressBook__contactName"
         >
           {contact.name}
         </Button>
@@ -40,13 +52,21 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
             })}
         </p>
         {typeof index === 'number' && (
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => removeContact({ index })}
-          >
-            <TrashIcon size={16} className="text-sky-500" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => removeContact({ index })}
+                data-testid="addressBook__removeAddress"
+              >
+                <TrashIcon size={16} className="text-sky-500" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Remove Contact</p>
+            </TooltipContent>
+          </Tooltip>
         )}
       </div>
     </Card>

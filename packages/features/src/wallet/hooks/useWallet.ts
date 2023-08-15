@@ -6,6 +6,7 @@ import { useMemo } from 'react'
 import { shallow } from 'zustand/shallow'
 
 import { useAppStore } from '../store/app'
+import { toast } from '@palladxyz/ui'
 
 // TODO: Remove mapping once network types are unified
 const getNetworkValue = (network: MinaNetwork) => {
@@ -68,8 +69,17 @@ export const useWallet = () => {
     await wallet.switchNetwork(getNetworkValue(network))
   }
 
+  const copyWalletAddress = async () => {
+    const address = wallet.getCurrentWallet()?.address
+    await navigator.clipboard.writeText(address || '')
+    toast({
+      title: 'Wallet address was copied.'
+    })
+  }
+
   return {
     wallet,
-    switchNetwork
+    switchNetwork,
+    copyWalletAddress
   }
 }

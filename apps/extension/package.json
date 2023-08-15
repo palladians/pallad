@@ -14,10 +14,10 @@
   },
   "dependencies": {
     "@palladxyz/common": "*",
-    "@palladxyz/key-management": "*",
     "@palladxyz/features": "*",
-    "@palladxyz/ui": "*",
+    "@palladxyz/key-management": "*",
     "@palladxyz/persistence": "*",
+    "@palladxyz/ui": "*",
     "@plasmohq/messaging": "^0.3.3",
     "buffer": "^6.0.3",
     "dotenv": "^16.1.4",

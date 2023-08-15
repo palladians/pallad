@@ -1,5 +1,3 @@
-import { Label } from '@palladxyz/ui'
-
 interface MetaFieldProps {
   label: string
   value: string
@@ -7,9 +5,9 @@ interface MetaFieldProps {
 
 export const MetaField = ({ label, value }: MetaFieldProps) => {
   return (
-    <div className="gap-2">
-      <Label>{label}</Label>
-      <div className="leading-6">{value}</div>
+    <div className="flex flex-col gap-2">
+      <p className="text-sm">{label}</p>
+      <p className="leading-6 break-all">{value}</p>
     </div>
   )
 }

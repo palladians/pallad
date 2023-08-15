@@ -1,10 +1,11 @@
-import { Card, Label } from '@palladxyz/ui'
+import { Card } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { formatCompact } from '../../common/lib/numbers'
 import { EpochProgressChart } from '../components/EpochProgressChart'
+import { MetaField } from '../../common/components/MetaField'
 
 export const StakingOverviewView = () => {
   const navigate = useNavigate()
@@ -19,36 +20,21 @@ export const StakingOverviewView = () => {
           }}
         />
         <Card className="grid grid-cols-2 p-4 gap-2">
-          <div className="flex-1, gap-2">
-            <Label>Epoch</Label>
-            <div>55</div>
-          </div>
-          <div className="flex-1 gap-2">
-            <Label>Slot</Label>
-            <div>6894/7140</div>
-          </div>
-          <div className="flex-1 gap-2">
-            <Label>Epoch ends in</Label>
-            <div>01d : 3h : 7m</div>
-          </div>
+          <MetaField label="Epoch" value="55" />
+          <MetaField label="Slot" value="6894/7140" />
+          <MetaField label="Epoch ends in" value="01d : 3h : 7m" />
           <div className="flex-1 gap-2">
             <EpochProgressChart progress={0.75} />
           </div>
         </Card>
         <ViewHeading title="Delegation Info" />
         <div className="flex flex-col gap-4">
-          <div className="gap-2">
-            <Label>Block Producer</Label>
-            <div>B62qm...iQvm</div>
-          </div>
-          <div className="gap-2">
-            <Label>Total Stake</Label>
-            <div>{formatCompact({ value: 208000 })} MINA</div>
-          </div>
-          <div className="gap-2">
-            <Label>Total Delegators</Label>
-            <div>56</div>
-          </div>
+          <MetaField label="Block Producer" value="B62qm...iQvm" />
+          <MetaField
+            label="Total Stake"
+            value={`${formatCompact({ value: 208000 })} MINA`}
+          />
+          <MetaField label="Total Delegators" value="56" />
         </div>
       </div>
     </AppLayout>
