@@ -18,7 +18,7 @@ export const useStoriesWallet = () => {
           addressIndex: 0,
           networkType: 'testnet'
         },
-        Mina.Networks.MAINNET,
+        Mina.Networks.DEVNET,
         {
           mnemonicWords: MNEMONIC.split(' '),
           getPassphrase: async () => Buffer.from('passphrase')

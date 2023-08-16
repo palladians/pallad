@@ -44,12 +44,14 @@ export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
         {
           name: 'Dashboard',
           icon: LayoutDashboardIcon,
-          onSelect: () => navigate('/dashboard')
+          onSelect: () => navigate('/dashboard'),
+          testId: 'commandMenu__dashboard'
         },
         {
           name: 'Address Book',
           icon: BookIcon,
-          onSelect: () => navigate('/contacts')
+          onSelect: () => navigate('/contacts'),
+          testId: 'commandMenu__addressBook'
         }
       ]
     },
@@ -59,12 +61,14 @@ export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
         {
           name: 'Transactions',
           icon: ListIcon,
-          onSelect: () => navigate('/transactions')
+          onSelect: () => navigate('/transactions'),
+          testId: 'commandMenu__transactions'
         },
         {
           name: 'New Transaction',
           icon: ArrowRightLeftIcon,
-          onSelect: () => navigate('/send')
+          onSelect: () => navigate('/send'),
+          testId: 'commandMenu__send'
         }
       ]
     },
@@ -74,12 +78,14 @@ export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
         {
           name: 'Staking',
           icon: CoinsIcon,
-          onSelect: () => navigate('/staking')
+          onSelect: () => navigate('/staking'),
+          testId: 'commandMenu__staking'
         },
         {
           name: 'Change Delegation',
           icon: ReplaceIcon,
-          onSelect: () => navigate('/staking/delegate')
+          onSelect: () => navigate('/staking/delegate'),
+          testId: 'commandMenu__delegate'
         }
       ]
     },
@@ -89,17 +95,20 @@ export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
         {
           name: 'Settings',
           icon: SettingsIcon,
-          onSelect: () => navigate('/settings')
+          onSelect: () => navigate('/settings'),
+          testId: 'commandMenu__settings'
         },
         {
           name: 'About',
           icon: InfoIcon,
-          onSelect: () => navigate('/about')
+          onSelect: () => navigate('/about'),
+          testId: 'commandMenu__about'
         },
         {
           name: 'Lock Wallet',
           icon: LockIcon,
-          onSelect: lockWallet
+          onSelect: lockWallet,
+          testId: 'commandMenu__lockWallet'
         }
       ]
     }
@@ -130,6 +139,7 @@ export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
                   item.onSelect()
                   setOpen(false)
                 }}
+                data-testid={item.testId}
               >
                 <item.icon className="mr-2" />
                 {item.name}

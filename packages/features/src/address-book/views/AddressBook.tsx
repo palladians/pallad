@@ -26,7 +26,8 @@ export const AddressBookView = () => {
                 Add Address
               </div>
             ),
-            onClick: () => navigate('/contacts/new')
+            onClick: () => navigate('/contacts/new'),
+            testId: 'addressBook__addAddressButton'
           }}
         />
         <div className="flex flex-col gap-2">

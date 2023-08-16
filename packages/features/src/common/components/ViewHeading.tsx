@@ -4,6 +4,7 @@ import { ArrowLeftIcon } from 'lucide-react'
 type ButtonProps = {
   label: React.ReactNode
   onClick: () => void
+  testId?: string
 }
 
 type BackButtonProps = {
@@ -32,7 +33,12 @@ export const ViewHeading = ({
         {title}
       </h2>
       {button && (
-        <Button variant="outline" size="sm" onClick={button.onClick}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={button.onClick}
+          data-testid={button.testId}
+        >
           {button.label}
         </Button>
       )}
