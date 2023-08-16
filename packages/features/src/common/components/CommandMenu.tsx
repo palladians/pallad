@@ -1,4 +1,3 @@
-import { getSessionPersistence } from '@palladxyz/persistence'
 import {
   CommandDialog,
   CommandEmpty,
@@ -7,7 +6,6 @@ import {
   CommandItem,
   CommandList
 } from '@palladxyz/ui'
-import { keyAgentStore } from '@palladxyz/vault'
 import {
   ArrowRightLeftIcon,
   BookIcon,
@@ -22,20 +20,16 @@ import {
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { useWallet } from '../../wallet/hooks/useWallet'
+
 interface CommandMenuProps {
   open: boolean
   setOpen: (open: boolean) => void
 }
 
 export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
+  const { lockWallet } = useWallet()
   const navigate = useNavigate()
-
-  const lockWallet = () => {
-    getSessionPersistence().setItem('spendingPassword', '')
-    keyAgentStore.destroy()
-    keyAgentStore.persist.rehydrate()
-    return navigate('/')
-  }
 
   const COMMAND_GROUPS = [
     {

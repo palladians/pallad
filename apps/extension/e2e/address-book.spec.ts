@@ -12,7 +12,15 @@ test('creates and deletes contact', async ({ page, extensionId }) => {
   await page.getByTestId('newAddress__addressInput').fill(PUBLIC_KEY)
   await page.getByTestId('newAddress__createButton').click()
   await page.getByTestId('bottomNavigation__addressBook').click()
-  const contacts = await page.getByTestId('addressBook__contact').all()
+  const contactsAfterCreation = await page
+    .getByTestId('addressBook__contact')
+    .all()
   // 2 including donate Pallad option.
-  expect(contacts.length).toEqual(2)
+  expect(contactsAfterCreation.length).toEqual(2)
+  await page.getByTestId('addressBook__removeAddress').click()
+  const contactsAfterDeletion = await page
+    .getByTestId('addressBook__contact')
+    .all()
+  // Just donate Pallad.
+  expect(contactsAfterDeletion.length).toEqual(1)
 })

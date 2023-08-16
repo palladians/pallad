@@ -11,6 +11,7 @@ import {
   LayoutDashboardIcon,
   MenuIcon
 } from 'lucide-react'
+import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 interface BottomNavigationProps {
@@ -57,7 +58,7 @@ export const BottomNavigation = ({
         const active = pathname === navItem.url
         return (
           <Tooltip key={navItem.url}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button
                 variant={active ? 'secondary' : 'ghost'}
                 onClick={navItem.onClick}

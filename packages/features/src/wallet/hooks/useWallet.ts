@@ -1,9 +1,12 @@
 import { MinaNetwork } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { MinaWalletImpl } from '@palladxyz/mina-wallet'
+import { getSessionPersistence } from '@palladxyz/persistence'
 import { toast } from '@palladxyz/ui'
 import { keyAgentStore } from '@palladxyz/vault'
+import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
 import { useAppStore } from '../store/app'
@@ -37,6 +40,7 @@ const providers = {
 }
 
 export const useWallet = () => {
+  const navigate = useNavigate()
   const { network: networkEnum, setNetwork } = useAppStore(
     (state) => ({
       network: state.network,
@@ -64,6 +68,16 @@ export const useWallet = () => {
     [walletProperties, walletDependencies]
   )
 
+  const address = useMemo(() => wallet.getCurrentWallet()?.address, [wallet])
+  const gradientBackground = useMemo(
+    () =>
+      easyMeshGradient({
+        seed: address,
+        hueRange: [180, 240]
+      }),
+    [address]
+  )
+
   const switchNetwork = async (network: MinaNetwork) => {
     setNetwork(network)
     await wallet.switchNetwork(getNetworkValue(network))
@@ -77,9 +91,19 @@ export const useWallet = () => {
     })
   }
 
+  const lockWallet = () => {
+    getSessionPersistence().setItem('spendingPassword', '')
+    keyAgentStore.destroy()
+    keyAgentStore.persist.rehydrate()
+    return navigate('/')
+  }
+
   return {
     wallet,
     switchNetwork,
-    copyWalletAddress
+    copyWalletAddress,
+    address,
+    gradientBackground,
+    lockWallet
   }
 }
