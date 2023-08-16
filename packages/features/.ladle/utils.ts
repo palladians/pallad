@@ -1,20 +1,31 @@
-import { useAppStore } from '../src/wallet/store/app'
 import { useEffect } from 'react'
-import { MinaNetwork, Network } from '@palladxyz/key-management'
+import { MinaNetwork, MinaPayload, Network } from '@palladxyz/key-management'
+import { useWallet } from '../src/wallet/hooks/useWallet'
+import { Mina } from '@palladxyz/mina-core'
 
-const WALLET_NAME = 'Demo Wallet'
 const MNEMONIC =
   'habit hope tip crystal because grunt nation idea electric witness alert like'
 
 export const useStoriesWallet = () => {
-  const setNetwork = useAppStore((state) => state.setNetwork)
+  const { wallet } = useWallet()
   useEffect(() => {
-    setNetwork(MinaNetwork[MinaNetwork.Devnet])
-    // restoreWallet({
-    //   walletName: WALLET_NAME,
-    //   mnemonic: MNEMONIC,
-    //   network: Network.Mina,
-    //   accountNumber: 0
-    // })
+    const restore = async () => {
+      await wallet.restoreWallet(
+        new MinaPayload(),
+        {
+          network: Network.Mina,
+          accountIndex: 0,
+          addressIndex: 0,
+          networkType: 'testnet'
+        },
+        Mina.Networks.MAINNET,
+        {
+          mnemonicWords: MNEMONIC.split(' '),
+          getPassphrase: async () => Buffer.from('passphrase')
+        }
+      )
+      await wallet.switchNetwork(Mina.Networks.DEVNET)
+      restore()
+    }
   }, [])
 }
