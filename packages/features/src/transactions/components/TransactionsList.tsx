@@ -1,27 +1,32 @@
-import { StructurizedTransaction, Transaction } from '../../common/types'
+import { Mina } from '@palladxyz/mina-core'
+
+import { useWallet } from '../../wallet/hooks/useWallet'
 import { structurizeTransactions } from '../utils/structurizeTransactions'
 import { TxTile } from './TxTile'
 
-type TxDate = [string, StructurizedTransaction[]]
-
 interface TransactionsListProps {
-  transactions: Transaction[]
+  transactions: Mina.TransactionBody[]
 }
 
 export const TransactionsList = ({ transactions }: TransactionsListProps) => {
-  // const walletPublicKey = useVaultStore(
-  //   (state) => state.getCurrentWallet()?.walletPublicKey
-  // ) as string
-  const walletPublicKey = 'B62XXX'
-  const txDates: TxDate[] =
+  const { wallet } = useWallet()
+  const address = wallet.getCurrentWallet()?.address
+  if (!address) return null
+  const txDates =
     transactions &&
-    Object.entries(structurizeTransactions([transactions, walletPublicKey]))
-  return txDates?.map(([date, txs]) => (
-    <div className="gap-4" key={date}>
-      <div className="font-semibold">{date}</div>
-      {txs.map((tx) => (
-        <TxTile key={tx.hash} tx={tx} />
+    Object.entries(structurizeTransactions([transactions, address]))
+  return (
+    <div className="flex flex-col gap-4">
+      {txDates?.map(([date, txs]) => (
+        <div className="flex flex-col gap-2" key={date}>
+          <div className="font-semibold">{date}</div>
+          <div className="flex flex-col gap-2">
+            {txs.map((tx) => (
+              <TxTile key={tx.hash} tx={tx} />
+            ))}
+          </div>
+        </div>
       ))}
     </div>
-  ))
+  )
 }

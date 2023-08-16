@@ -1,5 +1,11 @@
 import { MinaNetwork } from '@palladxyz/key-management'
-import { Card, Label, RadioGroup, RadioGroupItem } from '@palladxyz/ui'
+import {
+  Card,
+  Label,
+  RadioGroup,
+  RadioGroupItem,
+  useToast
+} from '@palladxyz/ui'
 import { TrashIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useNavigate } from 'react-router-dom'
@@ -11,6 +17,7 @@ import { useWallet } from '../../wallet/hooks/useWallet'
 import { useAppStore } from '../../wallet/store/app'
 
 export const SettingsView = () => {
+  const { toast } = useToast()
   const navigate = useNavigate()
   const { switchNetwork } = useWallet()
   const { setTheme, theme } = useTheme()
@@ -21,7 +28,16 @@ export const SettingsView = () => {
   }))
   const handleNetworkSwitch = async (value: MinaNetwork) => {
     await switchNetwork(value)
-    mutate(() => true, undefined, { revalidate: false })
+    await mutate(() => true, undefined, { revalidate: false })
+    toast({
+      title: `Network has been changed to ${MinaNetwork[value]}`
+    })
+  }
+  const handleThemeSwitch = async (value: string) => {
+    setTheme(value)
+    toast({
+      title: `Theme has been changed.`
+    })
   }
   return (
     <AppLayout>
@@ -58,7 +74,7 @@ export const SettingsView = () => {
         </div>
         <div className="flex flex-col gap-2">
           <Label>Theme</Label>
-          <RadioGroup value={theme} onValueChange={setTheme}>
+          <RadioGroup value={theme} onValueChange={handleThemeSwitch}>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="light" id="themeLight" />
               <Label htmlFor="themeLight">Light</Label>

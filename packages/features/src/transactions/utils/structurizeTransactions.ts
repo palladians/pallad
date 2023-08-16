@@ -1,7 +1,8 @@
+import { Mina } from '@palladxyz/mina-core'
 import dayjs from 'dayjs'
 import { groupBy, map, pipe } from 'rambda'
 
-import { Transaction, TxSide } from '../../common/types'
+import { TxSide } from '../../common/types'
 
 const dateFromNow = ({ dateTime }: { dateTime: string }) =>
   dayjs().diff(dateTime, 'days') < 2
@@ -12,21 +13,23 @@ export const structurizeTransaction = ({
   tx,
   walletPublicKey
 }: {
-  tx: Transaction
+  tx: Mina.TransactionBody
   walletPublicKey: string
 }) => ({
   ...tx,
-  date: dateFromNow({ dateTime: tx.dateTime }),
+  date: dateFromNow({ dateTime: tx.dateTime! }),
   time: dayjs(tx.dateTime).format('HH:mm'),
   minaAmount: tx.amount / 1_000_000_000,
   side: tx.from === walletPublicKey ? TxSide.OUTGOING : TxSide.INCOMING
 })
 
 export const structurizeTransactions = ([txs, walletPublicKey]: [
-  Transaction[],
+  Mina.TransactionBody[],
   string
 ]) =>
   pipe(
-    map((tx: Transaction) => structurizeTransaction({ tx, walletPublicKey })),
+    map((tx: Mina.TransactionBody) =>
+      structurizeTransaction({ tx, walletPublicKey })
+    ),
     groupBy((tx) => tx.date)
   )(txs)

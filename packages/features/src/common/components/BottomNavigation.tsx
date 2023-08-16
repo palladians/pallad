@@ -1,4 +1,10 @@
-import { Button, Card } from '@palladxyz/ui'
+import {
+  Button,
+  Card,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@palladxyz/ui'
 import {
   BookIcon,
   CoinsIcon,
@@ -35,20 +41,26 @@ export const BottomNavigation = ({
       url: '/contacts',
       onClick: () => navigate('/contacts')
     },
-    { icon: MenuIcon, label: 'Menu', onClick: openCommandMenu }
+    { icon: MenuIcon, label: 'Menu ⌘K', onClick: openCommandMenu }
   ]
   return (
     <Card className="flex justify-around p-1">
       {NAV_ITEMS.map((navItem) => {
         const active = pathname === navItem.url
         return (
-          <Button
-            key={navItem.url}
-            variant={active ? 'secondary' : 'ghost'}
-            onClick={navItem.onClick}
-          >
-            <navItem.icon />
-          </Button>
+          <Tooltip key={navItem.url}>
+            <TooltipTrigger>
+              <Button
+                variant={active ? 'secondary' : 'ghost'}
+                onClick={navItem.onClick}
+              >
+                <navItem.icon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{navItem.label}</p>
+            </TooltipContent>
+          </Tooltip>
         )
       })}
     </Card>

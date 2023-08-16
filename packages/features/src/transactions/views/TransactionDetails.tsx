@@ -1,57 +1,65 @@
+import { Skeleton } from '@palladxyz/ui'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
+import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useTransaction } from '../../common/hooks/useTransaction'
+import { useWallet } from '../../wallet/hooks/useWallet'
+import { TxIndicator } from '../components/TxIndicator'
+import { structurizeTransaction } from '../utils/structurizeTransactions'
 
 export const TransactionDetailsView = () => {
+  const { wallet } = useWallet()
   const navigate = useNavigate()
   const { hash } = useParams()
-  // const walletPublicKey = useVaultStore(
-  //   (state) => state.getCurrentWallet()?.walletPublicKey
-  // ) as string
-  // const walletPublicKey = 'B62XXX'
   if (!hash) return null
-  // const { data: transactionData, isLoading: transactionLoading } =
-  //   useTransaction({ hash })
-  // const transaction =
-  //   transactionData?.result.data &&
-  //   structurizeTransaction({
-  //     tx: transactionData?.result.data,
-  //     walletPublicKey
-  //   })
-  // const transactionMetaFields = transaction && [
-  //   { label: 'Hash', value: transaction.hash },
-  //   { label: 'Amount', value: `${transaction.minaAmount} MINA` },
-  //   { label: 'Sender', value: transaction.from },
-  //   { label: 'Receiver', value: transaction.to }
-  // ]
+  const walletPublicKey = wallet.getCurrentWallet()?.address
+  if (!walletPublicKey) return null
+  const { data: transactionData, isLoading: transactionLoading } =
+    useTransaction({ hash })
+  const transaction =
+    transactionData &&
+    structurizeTransaction({
+      tx: transactionData,
+      walletPublicKey
+    })
+  const transactionMetaFields = transaction && [
+    { label: 'Hash', value: transaction.hash },
+    { label: 'Amount', value: `${transaction.minaAmount} MINA` },
+    { label: 'Sender', value: transaction.from },
+    { label: 'Receiver', value: transaction.to }
+  ]
   return (
     <AppLayout>
-      <div className="p-4 flex-1 gap-4">
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Transaction Details"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        {/*{transactionLoading ? (*/}
-        {/*  <Spinner />*/}
-        {/*) : (*/}
-        {/*  <Box css={{ gap: 20 }}>*/}
-        {/*    {transaction && (*/}
-        {/*      <Box*/}
-        {/*        css={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}*/}
-        {/*      >*/}
-        {/*        <TxIndicator side={transaction.side} kind={transaction.kind} />*/}
-        {/*        <Box css={{ gap: 4 }}>*/}
-        {/*          <Text css={{ fontSize: 14 }}>{transaction.dateTime}</Text>*/}
-        {/*          <Heading size="md">Incoming</Heading>*/}
-        {/*        </Box>*/}
-        {/*      </Box>*/}
-        {/*    )}*/}
-        {/*    {transactionMetaFields?.map(({ label, value }) => (*/}
-        {/*      <MetaField key={label} label={label} value={value} />*/}
-        {/*    ))}*/}
-        {/*  </Box>*/}
-        {/*)}*/}
+        {transactionLoading ? (
+          <Skeleton className="w-full h-8" />
+        ) : (
+          <div className="flex flex-col gap-4">
+            {transaction && (
+              <div className="flex items-center gap-4">
+                {transaction.kind && (
+                  <TxIndicator
+                    side={transaction.side}
+                    kind={transaction.kind}
+                  />
+                )}
+                <div className="flex flex-col gap-2">
+                  <p>{transaction.dateTime}</p>
+                  <p>Incoming</p>
+                </div>
+              </div>
+            )}
+            {transactionMetaFields?.map(({ label, value }) => (
+              <MetaField key={label} label={label} value={value} />
+            ))}
+          </div>
+        )}
       </div>
     </AppLayout>
   )

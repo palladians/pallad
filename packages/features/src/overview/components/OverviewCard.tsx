@@ -1,5 +1,14 @@
 import { useFiatPrice } from '@palladxyz/offchain-data'
-import { Avatar, AvatarFallback, Button, Label, Skeleton } from '@palladxyz/ui'
+import {
+  Avatar,
+  AvatarFallback,
+  Button,
+  Label,
+  Skeleton,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@palladxyz/ui'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { CopyIcon } from 'lucide-react'
 import { useMemo } from 'react'
@@ -10,7 +19,7 @@ import { truncateString } from '../../common/lib/string'
 import { useWallet } from '../../wallet/hooks/useWallet'
 
 export const OverviewCard = () => {
-  const { wallet } = useWallet()
+  const { wallet, copyWalletAddress } = useWallet()
   const walletAddress = wallet.getCurrentWallet()?.address
   const navigate = useNavigate()
   const { isLoading: accountLoading, minaBalance } = useAccount()
@@ -35,7 +44,7 @@ export const OverviewCard = () => {
         className="absolute h-full w-full opacity-25 rounded-[14px] pointer-events-none"
         style={{ backgroundImage: meshGradientBright }}
       />
-      <div className="flex flex-col flex-1 w-full gap-4 bg-slate-900 rounded-[14px] py-4 px-4 backdrop-blur-2xl">
+      <div className="flex flex-col flex-1 w-full gap-4 bg-background rounded-[14px] py-4 px-4 backdrop-blur-2xl">
         {overviewLoading ? (
           <div className="flex flex-1 justify-center items-center">
             <Skeleton className="h-4" />
@@ -72,9 +81,16 @@ export const OverviewCard = () => {
                   endCharCount: 8
                 })}
             </div>
-            <div onClick={() => console.log('copy')}>
-              <CopyIcon size={16} />
-            </div>
+            <Tooltip>
+              <TooltipTrigger>
+                <a onClick={copyWalletAddress} className="cursor-pointer">
+                  <CopyIcon size={16} />
+                </a>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Copy Address</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
         <div className="flex gap-2">

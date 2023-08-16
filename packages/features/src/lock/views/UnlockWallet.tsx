@@ -1,7 +1,7 @@
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { Alert, AlertTitle, Button, Input, Label } from '@palladxyz/ui'
 import { keyAgentStore } from '@palladxyz/vault'
-import { AlertCircleIcon } from 'lucide-react'
+import { AlertCircleIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -11,6 +11,7 @@ import { ViewHeading } from '../../common/components/ViewHeading'
 import { useWallet } from '../../wallet/hooks/useWallet'
 
 export const UnlockWalletView = () => {
+  const [showPassword, setShowPassword] = useState(false)
   const { wallet } = useWallet()
   const [passwordError, setPasswordError] = useState(false)
   const navigate = useNavigate()
@@ -42,12 +43,7 @@ export const UnlockWalletView = () => {
   return (
     <WizardLayout
       footer={
-        <Button
-          type="submit"
-          onClick={handleSubmit(onSubmit)}
-          className="flex-1"
-          form="unlockWalletForm"
-        >
+        <Button type="submit" className="flex-1" form="unlockWalletForm">
           Unlock
         </Button>
       }
@@ -66,16 +62,30 @@ export const UnlockWalletView = () => {
             <AlertTitle>The password is wrong</AlertTitle>
           </Alert>
         )}
-        <form className="flex flex-col gap-2" id="unlockWalletForm">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-2"
+          id="unlockWalletForm"
+        >
           <Label htmlFor="spendingPassword" className="cursor-pointer">
             Spending Password
           </Label>
-          <Input
-            id="spendingPassword"
-            type="password"
-            autoFocus
-            {...register('spendingPassword')}
-          />
+          <div className="flex gap-2">
+            <Input
+              id="spendingPassword"
+              type={showPassword ? 'text' : 'password'}
+              autoFocus
+              {...register('spendingPassword')}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+            </Button>
+          </div>
         </form>
       </div>
     </WizardLayout>

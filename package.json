@@ -2,7 +2,7 @@
   "name": "pallad",
   "private": true,
   "description": "A progressive Mina Protocol wallet.",
-  "homepage": "https://github.com/mvr-studio/pallad",
+  "homepage": "https://github.com/palladians/pallad",
   "license": "Apache-2.0",
   "scripts": {
     "build": "turbo run build",
@@ -12,6 +12,7 @@
     "build:features": "turbo run build --filter=@palladxyz/features...",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
     "dev": "turbo run dev",
+    "d": "pnpm dev",
     "dev:extension": "turbo run dev --filter=@palladxyz/extension... --concurrency 20",
     "lint": "eslint \"{apps,packages}/**/*.{ts,tsx,js,jsx,cjs,mjs}\"",
     "lint:fix": "pnpm lint --fix",

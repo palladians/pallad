@@ -1,6 +1,7 @@
 import { MinaNetwork } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { MinaWalletImpl } from '@palladxyz/mina-wallet'
+import { toast } from '@palladxyz/ui'
 import { keyAgentStore } from '@palladxyz/vault'
 import { useMemo } from 'react'
 import { shallow } from 'zustand/shallow'
@@ -68,8 +69,17 @@ export const useWallet = () => {
     await wallet.switchNetwork(getNetworkValue(network))
   }
 
+  const copyWalletAddress = async () => {
+    const address = wallet.getCurrentWallet()?.address
+    await navigator.clipboard.writeText(address || '')
+    toast({
+      title: 'Wallet address was copied.'
+    })
+  }
+
   return {
     wallet,
-    switchNetwork
+    switchNetwork,
+    copyWalletAddress
   }
 }

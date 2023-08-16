@@ -1,3 +1,4 @@
+import { Toaster, TooltipProvider } from '@palladxyz/ui'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
@@ -31,53 +32,59 @@ dayjs.extend(relativeTime)
 
 export const Router = () => {
   return (
-    <div className="flex flex-1 h-100vh">
-      <MemoryRouter>
-        <Routes>
-          <Route path="/" element={<StartView />} />
-          <Route path="/dashboard" element={<OverviewView />} />
-          <Route path="/send" element={<SendView />} />
-          <Route path="/receive" element={<ReceiveView />} />
-          <Route
-            path="/transactions/summary"
-            element={<TransactionSummaryView />}
-          />
-          <Route
-            path="/transactions/success"
-            element={<TransactionSuccessView />}
-          />
-          <Route
-            path="/transactions/error"
-            element={<TransactionErrorView />}
-          />
-          <Route
-            path="/transactions/:hash"
-            element={<TransactionDetailsView />}
-          />
-          <Route path="/transactions" element={<TransactionsView />} />
-          <Route path="/staking" element={<StakingOverviewView />} />
-          <Route path="/staking/delegate" element={<DelegateView />} />
-          <Route path="/staking/producers" element={<BlockProducersView />} />
-          <Route path="/contacts" element={<AddressBookView />} />
-          <Route path="/contacts/new" element={<NewAddressView />} />
-          <Route path="/onboarding/create" element={<CreateWalletView />} />
-          <Route path="/onboarding/restore" element={<RestoreWalletView />} />
-          <Route path="/unlock" element={<UnlockWalletView />} />
-          <Route
-            path="/onboarding/writedown"
-            element={<MnemonicWritedownView />}
-          />
-          <Route
-            path="/onboarding/confirmation"
-            element={<MnemonicConfirmationView />}
-          />
-          <Route path="/onboarding/mnemonic" element={<MnemonicInputView />} />
-          <Route path="/onboarding/finish" element={<StayConnectedView />} />
-          <Route path="/settings" element={<SettingsView />} />
-          <Route path="/about" element={<AboutView />} />
-          <Route path="/*" element={<NotFoundView />} />
-        </Routes>
-      </MemoryRouter>
-    </div>
+    <TooltipProvider>
+      <div className="flex flex-1 h-100vh">
+        <MemoryRouter>
+          <Routes>
+            <Route path="/" element={<StartView />} />
+            <Route path="/dashboard" element={<OverviewView />} />
+            <Route path="/send" element={<SendView />} />
+            <Route path="/receive" element={<ReceiveView />} />
+            <Route
+              path="/transactions/summary"
+              element={<TransactionSummaryView />}
+            />
+            <Route
+              path="/transactions/success"
+              element={<TransactionSuccessView />}
+            />
+            <Route
+              path="/transactions/error"
+              element={<TransactionErrorView />}
+            />
+            <Route
+              path="/transactions/:hash"
+              element={<TransactionDetailsView />}
+            />
+            <Route path="/transactions" element={<TransactionsView />} />
+            <Route path="/staking" element={<StakingOverviewView />} />
+            <Route path="/staking/delegate" element={<DelegateView />} />
+            <Route path="/staking/producers" element={<BlockProducersView />} />
+            <Route path="/contacts" element={<AddressBookView />} />
+            <Route path="/contacts/new" element={<NewAddressView />} />
+            <Route path="/onboarding/create" element={<CreateWalletView />} />
+            <Route path="/onboarding/restore" element={<RestoreWalletView />} />
+            <Route path="/unlock" element={<UnlockWalletView />} />
+            <Route
+              path="/onboarding/writedown"
+              element={<MnemonicWritedownView />}
+            />
+            <Route
+              path="/onboarding/confirmation"
+              element={<MnemonicConfirmationView />}
+            />
+            <Route
+              path="/onboarding/mnemonic"
+              element={<MnemonicInputView />}
+            />
+            <Route path="/onboarding/finish" element={<StayConnectedView />} />
+            <Route path="/settings" element={<SettingsView />} />
+            <Route path="/about" element={<AboutView />} />
+            <Route path="/*" element={<NotFoundView />} />
+          </Routes>
+        </MemoryRouter>
+        <Toaster />
+      </div>
+    </TooltipProvider>
   )
 }
