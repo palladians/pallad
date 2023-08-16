@@ -35,7 +35,7 @@ export const NewAddressForm = () => {
         <Input
           id="contactName"
           placeholder="Name"
-          data-testid="send__contactName"
+          data-testid="newAddress__nameInput"
           {...register('name')}
         />
         <p>{errors.name?.message}</p>
@@ -45,12 +45,12 @@ export const NewAddressForm = () => {
         <Input
           id="contactAddress"
           placeholder="B62XXXXXXXXXXXX"
-          data-testid="send__contactAddress"
+          data-testid="newAddress__addressInput"
           {...register('address')}
         />
         <p>{errors.address?.message}</p>
       </div>
-      <Button type="submit">
+      <Button type="submit" data-testid="newAddress__createButton">
         <PlusIcon size={16} />
         Create Contact
       </Button>

@@ -47,7 +47,7 @@ export const OverviewCard = () => {
       <div className="flex flex-col flex-1 w-full gap-4 bg-background rounded-[14px] py-4 px-4 backdrop-blur-2xl">
         {overviewLoading ? (
           <div className="flex flex-1 justify-center items-center">
-            <Skeleton className="h-4" />
+            <Skeleton className="h-8" />
           </div>
         ) : (
           <div className="flex flex-1">

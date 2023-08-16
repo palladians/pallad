@@ -36,14 +36,15 @@ export const UnlockWalletView = () => {
     if (!currentWallet) return await onError()
     return navigate('/dashboard')
   }
-  // const restartWallet = () => {
-  // resetWallet()
-  // navigate('/')
-  // }
   return (
     <WizardLayout
       footer={
-        <Button type="submit" className="flex-1" form="unlockWalletForm">
+        <Button
+          type="submit"
+          className="flex-1"
+          form="unlockWalletForm"
+          data-testid="unlockWallet__unlockButton"
+        >
           Unlock
         </Button>
       }
@@ -57,7 +58,11 @@ export const UnlockWalletView = () => {
           }}
         />
         {passwordError && (
-          <Alert variant="destructive" className="flex items-center">
+          <Alert
+            variant="destructive"
+            className="flex items-center"
+            data-testid="unlockWallet__error"
+          >
             <AlertCircleIcon />
             <AlertTitle>The password is wrong</AlertTitle>
           </Alert>
@@ -74,6 +79,7 @@ export const UnlockWalletView = () => {
             <Input
               id="spendingPassword"
               type={showPassword ? 'text' : 'password'}
+              data-testid="unlockWallet__password"
               autoFocus
               {...register('spendingPassword')}
             />
@@ -81,6 +87,7 @@ export const UnlockWalletView = () => {
               type="button"
               variant="outline"
               size="icon"
+              data-testid="unlockWallet__togglePasswordVisible"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? <EyeOffIcon /> : <EyeIcon />}

@@ -27,21 +27,29 @@ export const BottomNavigation = ({
       icon: LayoutDashboardIcon,
       label: 'Dashboard',
       url: '/dashboard',
+      testId: 'bottomNavigation__dashboard',
       onClick: () => navigate('/dashboard')
     },
     {
       icon: CoinsIcon,
       label: 'Staking',
       url: '/staking',
+      testId: 'bottomNavigation__staking',
       onClick: () => navigate('/staking')
     },
     {
       icon: BookIcon,
       label: 'Contacts',
       url: '/contacts',
+      testId: 'bottomNavigation__addressBook',
       onClick: () => navigate('/contacts')
     },
-    { icon: MenuIcon, label: 'Menu ⌘K', onClick: openCommandMenu }
+    {
+      icon: MenuIcon,
+      label: 'Menu ⌘K',
+      testId: 'bottomNavigation__menu',
+      onClick: openCommandMenu
+    }
   ]
   return (
     <Card className="flex justify-around p-1">
@@ -53,6 +61,7 @@ export const BottomNavigation = ({
               <Button
                 variant={active ? 'secondary' : 'ghost'}
                 onClick={navItem.onClick}
+                data-testid={navItem.testId}
               >
                 <navItem.icon />
               </Button>
