@@ -27,7 +27,7 @@ export const ReceiveView = () => {
                   value={walletAddress}
                   bgColor={theme === 'dark' ? '#020617' : '#ffffff'}
                   fgColor={theme === 'dark' ? '#ffffff' : '#000000'}
-                  className="relative w-full h-full"
+                  className="relative w-full h-full rounded-lg"
                 />
                 <div
                   className="absolute w-full h-full inset-0 dark:mix-blend-darken mix-blend-lighten"

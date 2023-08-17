@@ -14,6 +14,7 @@ import {
   LayoutDashboardIcon,
   ListIcon,
   LockIcon,
+  QrCodeIcon,
   ReplaceIcon,
   SettingsIcon
 } from 'lucide-react'
@@ -40,6 +41,12 @@ export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
           icon: LayoutDashboardIcon,
           onSelect: () => navigate('/dashboard'),
           testId: 'commandMenu__dashboard'
+        },
+        {
+          name: 'Receive',
+          icon: QrCodeIcon,
+          onSelect: () => navigate('/receive'),
+          testId: 'commandMenu__receive'
         },
         {
           name: 'Address Book',

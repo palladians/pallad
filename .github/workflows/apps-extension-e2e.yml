@@ -27,7 +27,8 @@ jobs:
           TURBO_TEAM: pallad
         run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:extension
       - name: Install Chromium for Playwright
-        run: npx playwright install chromium
+        working-directory: apps/extension
+        run: pnpm test:e2e:install
       - name: Run E2E tests
         run: pnpm test:e2e:extension
       - uses: actions/upload-artifact@v3

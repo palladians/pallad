@@ -1,5 +1,14 @@
 import { getSessionPersistence } from '@palladxyz/persistence'
-import { Alert, AlertTitle, Button, Input, Label } from '@palladxyz/ui'
+import {
+  Alert,
+  AlertTitle,
+  Button,
+  Input,
+  Label,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@palladxyz/ui'
 import { keyAgentStore } from '@palladxyz/vault'
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useState } from 'react'
@@ -83,15 +92,22 @@ export const UnlockWalletView = () => {
               autoFocus
               {...register('spendingPassword')}
             />
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              data-testid="unlockWallet__togglePasswordVisible"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  data-testid="unlockWallet__togglePasswordVisible"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{showPassword ? 'Hide password' : 'Show password'}</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </form>
       </div>

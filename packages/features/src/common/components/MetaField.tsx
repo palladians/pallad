@@ -5,9 +5,9 @@ interface MetaFieldProps {
 
 export const MetaField = ({ label, value }: MetaFieldProps) => {
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-sm">{label}</p>
-      <p className="leading-6 break-all">{value}</p>
+    <div className="flex flex-col">
+      <p className="text-sm font-semibold">{label}</p>
+      <p className="leading-8 break-all">{value}</p>
     </div>
   )
 }

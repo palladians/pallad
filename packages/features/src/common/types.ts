@@ -74,7 +74,7 @@ export type Contact = {
 
 export type OutgoingTransaction = {
   to: string
-  amount: number
-  fee: number
+  amount: string
+  fee: string
   memo: string
 }

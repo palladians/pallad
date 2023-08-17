@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "cleanup": "rimraf node_modules dist .turbo",
     "test:e2e": "playwright test",
+    "test:e2e:install": "npx playwright install chromium",
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {

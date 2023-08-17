@@ -63,7 +63,7 @@ export const OverviewCard = () => {
           <Label>Address</Label>
           <div className="flex items-center gap-2">
             <div
-              className="text-sm font-semibold text-sky-400"
+              className="text-sm font-semibold dark:text-blue-400 text-blue-600"
               data-testid="dashboard__addressTruncated"
             >
               {walletAddress &&

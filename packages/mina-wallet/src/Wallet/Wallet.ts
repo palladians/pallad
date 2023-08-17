@@ -191,9 +191,7 @@ export class MinaWalletImpl implements MinaWallet {
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
   ): Promise<Mina.ConstructedTransaction> {
-    const constructedTransaction: Mina.ConstructedTransaction =
-      constructTransaction(transaction, kind)
-    return constructedTransaction
+    return constructTransaction(transaction, kind)
   }
   // This is Mina Specific
   // TODO: Make this chain agnostic
@@ -201,10 +199,7 @@ export class MinaWalletImpl implements MinaWallet {
     submitTxArgs: SubmitTxArgs
   ): Promise<SubmitTxResult | undefined> {
     const network = this.getCurrentNetwork()
-    const result = await this.minaProviders[network]?.submitTransaction(
-      submitTxArgs
-    )
-    return result
+    return this.minaProviders[network]?.submitTransaction(submitTxArgs)
   }
 
   async createWallet(strength = 128): Promise<{ mnemonic: string[] } | null> {
@@ -248,19 +243,13 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   getCurrentWallet(): GroupedCredentials | null {
-    // Get the current wallet
-    const result = this.getStoreState().getCurrentWallet()
-
     // Return the public credential or null
-    return result ? result : null
+    return this.getStoreState().getCurrentWallet()
   }
 
   getCredentials(): GroupedCredentials[] | null {
-    // Get the list of accounts for the current wallet
-    const result = this.getStoreState().getCredentials()
-
-    // Return the list of accounts
-    return result
+    // Return the list of accounts for the current wallet
+    return this.getStoreState().getCredentials()
   }
 
   async switchNetwork(network: Mina.Networks): Promise<void> {
@@ -282,8 +271,7 @@ export class MinaWalletImpl implements MinaWallet {
 
   getCurrentNetwork(): Mina.Networks {
     // Get the current network
-    const result = this.network
-    return result
+    return this.network
   }
 
   async setCurrentNetwork(network: Mina.Networks): Promise<void> {
@@ -291,7 +279,7 @@ export class MinaWalletImpl implements MinaWallet {
     this.network = network
 
     // Set the current network in store
-    await this.getStoreState().setCurrentNetwork(
+    this.getStoreState().setCurrentNetwork(
       network,
       this.minaProviders[network] as MinaProvider,
       this.minaArchiveProviders[network] as MinaArchiveProvider
