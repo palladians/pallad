@@ -109,6 +109,63 @@ describe('MinaWalletImpl', () => {
     )
     expect(isVerified).toBeTruthy()
   })
+  it('restores wallet and signs transaction', async () => {
+    // restore wallet
+    const expectedPublicKey: Mina.PublicKey =
+      'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+
+    const expectedGroupedCredentials = {
+      '@context': ['https://w3id.org/wallet/v1'],
+      id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+      type: 'MinaAddress',
+      controller:
+        'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+      name: 'Mina Account',
+      description: 'My Mina account.',
+      chain: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      address: expectedPublicKey
+    }
+
+    const args: MinaSpecificArgs = {
+      network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      networkType: 'testnet'
+    }
+    const payload = new MinaPayload()
+    await wallet.restoreWallet(payload, args, network, {
+      mnemonicWords: mnemonic,
+      getPassphrase: getPassword
+    })
+    const groupedCredential = await wallet.getCurrentWallet()
+
+    expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+    if (groupedCredential === null) {
+      throw new Error('Grouped credential is null')
+    }
+    const transaction: Mina.TransactionBody = {
+      to: groupedCredential.address,
+      from: groupedCredential.address,
+      fee: 1,
+      amount: 100,
+      nonce: 0,
+      memo: 'hello Bob',
+      validUntil: 321,
+      type: 'payment'
+    }
+    const constructedTx: Mina.ConstructedTransaction = await wallet.constructTx(
+      transaction,
+      Mina.TransactionKind.PAYMENT
+    )
+    const signedTx = await wallet.sign(constructedTx)
+    const minaClient = new Client({ network: args.networkType })
+    const isVerified = minaClient.verifyTransaction(
+      signedTx as Mina.SignedTransaction
+    )
+    expect(isVerified).toBeTruthy()
+  })
   test('create wallet of strength 128', async () => {
     const wallet = new MinaWalletImpl(walletProperties, walletDependencies)
     const mnemonicStrength = 128
