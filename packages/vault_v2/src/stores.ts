@@ -183,9 +183,7 @@ export const keyAgentStore = createStore<VaultStore>()(
         }
         return null
       },
-      setCurrentNetwork: async (
-        network: Mina.Networks,
-      ) => {
+      setCurrentNetwork: async (network: Mina.Networks) => {
         // First, set the current network
         set({ currentNetwork: network })
       },
