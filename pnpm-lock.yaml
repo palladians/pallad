@@ -839,6 +839,49 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2(typescript@5.0.4)
 
+  packages/vault_v2:
+    dependencies:
+      '@palladxyz/key-management':
+        specifier: '*'
+        version: link:../key-management
+      '@palladxyz/mina-core':
+        specifier: '*'
+        version: link:../mina-core
+      '@palladxyz/mina-graphql':
+        specifier: '*'
+        version: link:../mina-graphql
+      '@palladxyz/persistence':
+        specifier: '*'
+        version: link:../persistence
+      '@palladxyz/util':
+        specifier: '*'
+        version: link:../util
+      bs58check:
+        specifier: ^3.0.1
+        version: 3.0.1
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
+      mina-signer:
+        specifier: ^2.0.3
+        version: 2.0.3
+      zustand:
+        specifier: ^4.3.8
+        version: 4.3.9(react@18.2.0)
+    devDependencies:
+      '@palladxyz/common':
+        specifier: '*'
+        version: link:../common
+      '@types/mocha':
+        specifier: ^10.0.1
+        version: 10.0.1
+      '@types/secp256k1':
+        specifier: ^4.0.3
+        version: 4.0.3
+      msw:
+        specifier: ^1.2.2
+        version: 1.2.2(typescript@5.0.4)
+
 packages:
 
   /@aashutoshrathi/word-wrap@1.2.6:

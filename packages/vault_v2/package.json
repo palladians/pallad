@@ -1,0 +1,37 @@
+{
+  "name": "@palladxyz/vaultv2",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "A Vault for the Mina Wallet Package for Pallad",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules dist .turbo"
+  },
+  "dependencies": {
+    "@palladxyz/key-management": "*",
+    "@palladxyz/mina-core": "*",
+    "@palladxyz/mina-graphql": "*",
+    "@palladxyz/persistence": "*",
+    "@palladxyz/util": "*",
+    "bs58check": "^3.0.1",
+    "buffer": "^6.0.3",
+    "mina-signer": "^2.0.3",
+    "zustand": "^4.3.8"
+  },
+  "devDependencies": {
+    "@palladxyz/common": "*",
+    "@types/mocha": "^10.0.1",
+    "@types/secp256k1": "^4.0.3",
+    "msw": "^1.2.2"
+  }
+}
