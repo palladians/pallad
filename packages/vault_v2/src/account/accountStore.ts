@@ -178,6 +178,11 @@ export class AccountStore {
   removeAccount(network: Mina.Networks, address: ChainAddress): void {
     this.store.getState().removeAccount(network, address)
   }
+  /**
+   * TODO:
+   * - Account Sync
+   * - Check for pending transactions & mutate if no longer pending
+   */
 }
 
 export default AccountStore

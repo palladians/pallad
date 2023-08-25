@@ -28,6 +28,7 @@ export const initialSingleAccountState: SingleAccountState = {
  * @typedef {Object} AccountStoreState
  */
 export type AccountStoreState = {
+  // could become accounts: Record<Network, Record<ChainAddress, SingleAccountState>> for network agnostic
   mainnet: Record<ChainAddress, SingleAccountState>
   devnet: Record<ChainAddress, SingleAccountState>
   berkeley: Record<ChainAddress, SingleAccountState>
