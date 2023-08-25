@@ -1,14 +1,16 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Input, useToast } from '@palladxyz/ui'
+import { Button, Input } from '@palladxyz/ui'
 import { clsx } from 'clsx'
 import { MailIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-const WAITLIST_URL = 'https://api.getwaitlist.com/api/v1/signup'
+const WAITLIST_URL =
+  'https://pocketbase.sh.palladians.xyz/api/collections/waitlist/records'
 
 const WaitlistSchema = z.object({
   email: z.string().email()
@@ -17,8 +19,8 @@ const WaitlistSchema = z.object({
 type WaitlistData = z.infer<typeof WaitlistSchema>
 
 export const Cta = () => {
-  const { toast } = useToast()
-  const [submitted, setSubmitted] = useState(false)
+  const router = useRouter()
+  const [submitted] = useState(false)
   const {
     register,
     handleSubmit,
@@ -41,10 +43,7 @@ export const Cta = () => {
         waitlist_id: 9604
       })
     })
-    toast({
-      description: 'Confirmation link has been sent.'
-    })
-    setSubmitted(true)
+    router.push('/success')
   }
 
   return (
