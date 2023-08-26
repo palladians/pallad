@@ -8,6 +8,7 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 
 import {
   initialKeyAgentState,
+  keyAgentName,
   keyAgents,
   KeyAgentStores
 } from './keyAgentState'
@@ -23,7 +24,7 @@ export class KeyAgentStore {
             keyAgents: {}
           },
 
-          ensureKeyAgent: (name) => {
+          ensureKeyAgent: (name: keyAgentName) => {
             set((current) => {
               if (!current.state.keyAgents[name]) {
                 return {
@@ -42,7 +43,7 @@ export class KeyAgentStore {
           },
 
           initialiseKeyAgent: async (
-            name,
+            name: keyAgentName,
             keyAgentType: keyAgents,
             { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps // for a ledger or trezor key agent this would be optional
           ) => {
@@ -69,11 +70,11 @@ export class KeyAgentStore {
             }))
           },
 
-          getKeyAgent: (name) => {
+          getKeyAgent: (name: keyAgentName) => {
             return get().state.keyAgents[name] || initialKeyAgentState
           },
 
-          removeKeyAgent: (name) => {
+          removeKeyAgent: (name: keyAgentName) => {
             set((current) => {
               const newKeyAgents = { ...current.state.keyAgents }
               delete newKeyAgents[name]
@@ -95,19 +96,23 @@ export class KeyAgentStore {
     )
   }
 
-  ensureKeyAgent(name) {
+  ensureKeyAgent(name: keyAgentName) {
     this.store.getState().ensureKeyAgent(name)
   }
 
-  async initialiseKeyAgent(name, keyAgentType, props) {
+  async initialiseKeyAgent(
+    name: keyAgentName,
+    keyAgentType: keyAgents,
+    props: FromBip39MnemonicWordsProps
+  ) {
     await this.store.getState().initialiseKeyAgent(name, keyAgentType, props)
   }
 
-  getKeyAgent(name) {
+  getKeyAgent(name: keyAgentName) {
     return this.store.getState().getKeyAgent(name)
   }
 
-  removeKeyAgent(name) {
+  removeKeyAgent(name: keyAgentName) {
     this.store.getState().removeKeyAgent(name)
   }
 }

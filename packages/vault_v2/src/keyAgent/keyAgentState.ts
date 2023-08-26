@@ -51,22 +51,10 @@ export type KeyAgentState = {
   ensureKeyAgent: (name: keyAgentName) => void
 
   /**
-   * 
+   *
    * @param name name of key agent to initialise
    * @param param1 mnemonic and passphrase
    * @returns void
-   * 
-   * implementation details: 
-   * 
-   const agentArgs: FromBip39MnemonicWordsProps = {
-          getPassphrase: getPassphrase,
-          mnemonicWords: mnemonicWords,
-          mnemonic2ndFactorPassphrase: ''
-        }
-        const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
-
-        // set both the keyAgent and the serializableKeyAgentData
-        set({ keyAgent })
    */
   initialiseKeyAgent: (
     name: keyAgentName,

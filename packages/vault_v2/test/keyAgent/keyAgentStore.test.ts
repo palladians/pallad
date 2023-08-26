@@ -1,7 +1,11 @@
 import {
   FromBip39MnemonicWordsProps,
-  generateMnemonicWords
+  generateMnemonicWords,
+  MinaPayload,
+  MinaSpecificArgs,
+  Network
 } from '@palladxyz/key-management'
+import { Mina } from '@palladxyz/mina-core'
 
 import { keyAgents } from '../../src/keyAgent/keyAgentState'
 import { KeyAgentStore } from '../../src/keyAgent/keyAgentStore'
@@ -93,5 +97,57 @@ describe('AccountStore', () => {
     // check that first key agent is removed
     const keyAgent1Removed = keyAgentStore.getKeyAgent(keyAgentName)
     expect(keyAgent1Removed.keyAgent).toBeUndefined()
+  })
+
+  it('should add two InMemoryKeyAgents and derive credentials for both at addresses index 0', async () => {
+    const keyAgentStore = new KeyAgentStore()
+    // add first key agent
+    await keyAgentStore.initialiseKeyAgent(
+      keyAgentName,
+      keyAgents.inMemory,
+      agentArgs
+    )
+    // add second key agent
+    await keyAgentStore.initialiseKeyAgent(
+      keyAgentName2,
+      keyAgents.inMemory,
+      agentArgs2
+    )
+    // check that both key agents are in the store
+    const keyAgent1 = keyAgentStore.getKeyAgent(keyAgentName)
+    const keyAgent2 = keyAgentStore.getKeyAgent(keyAgentName2)
+    expect(keyAgent1.keyAgent).toBeDefined()
+    expect(keyAgent2.keyAgent).toBeDefined()
+    // derive credentials for first key agent
+    const expectedPublicKey: Mina.PublicKey =
+      'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+
+    const expectedGroupedCredentials = {
+      '@context': ['https://w3id.org/wallet/v1'],
+      id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+      type: 'MinaAddress',
+      controller:
+        'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+      name: 'Mina Account',
+      description: 'My Mina account.',
+      chain: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      address: expectedPublicKey
+    }
+
+    const args: MinaSpecificArgs = {
+      network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      networkType: 'testnet'
+    }
+    const payload = new MinaPayload()
+    const derivedCredential = await keyAgent1.keyAgent.deriveCredentials(
+      payload,
+      args,
+      false
+    )
+    expect(derivedCredential).to.deep.equal(expectedGroupedCredentials)
   })
 })
