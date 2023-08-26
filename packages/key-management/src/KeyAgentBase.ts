@@ -9,11 +9,13 @@ import {
   deriveStarknetCredentials,
   StarknetSpecificArgs
 } from './chains/Starknet'
+import { emip3encrypt } from './emip3'
 import * as errors from './errors'
+import { getPassphraseRethrowTypedError } from './InMemoryKeyAgent'
 import { KeyDecryptor } from './KeyDecryptor'
 import {
+  ChainKeyPair,
   ChainPrivateKey,
-  ChainPublicKey,
   ChainSignablePayload,
   ChainSignatureResult,
   ChainSpecificArgs,
@@ -67,8 +69,10 @@ export abstract class KeyAgentBase implements KeyAgent {
   async deriveCredentials<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
+    getPassphrase: GetPassphrase,
     pure?: boolean
   ): Promise<GroupedCredentials> {
+    const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
     const matcher = credentialMatchers[payload.network]
     if (!matcher) {
       throw new Error(`Unsupported network: ${payload.network}`)
@@ -81,14 +85,19 @@ export abstract class KeyAgentBase implements KeyAgent {
 
     if (knownCredential) return knownCredential
 
-    const derivedPublicCredential =
-      await this.derivePublicCredential<ChainSpecificPayload>(payload, args)
+    const derivedKeyPair =
+      await this.derivePublicCredential<ChainSpecificPayload>(
+        payload,
+        args,
+        passphrase
+      )
 
     try {
       if (payload.network === 'Mina') {
         const groupedCredential = deriveMinaCredentials(
           args as MinaSpecificArgs,
-          derivedPublicCredential
+          derivedKeyPair.publicKey,
+          derivedKeyPair.encryptedPrivateKeyBytes
         )
         if (!pure)
           this.serializableData.credentialSubject.contents = [
@@ -99,7 +108,8 @@ export abstract class KeyAgentBase implements KeyAgent {
       } else if (payload.network === 'Ethereum') {
         const groupedCredential = deriveEthereumCredentials(
           args as EthereumSpecificArgs,
-          derivedPublicCredential
+          derivedKeyPair.publicKey,
+          derivedKeyPair.encryptedPrivateKeyBytes
         )
         if (!pure)
           this.serializableData.credentialSubject.contents = [
@@ -110,7 +120,8 @@ export abstract class KeyAgentBase implements KeyAgent {
       } else if (payload.network === 'Starknet') {
         const groupedCredential = deriveStarknetCredentials(
           args as StarknetSpecificArgs,
-          derivedPublicCredential
+          derivedKeyPair.publicKey,
+          derivedKeyPair.encryptedPrivateKeyBytes
         )
         if (!pure)
           this.serializableData.credentialSubject.contents = [
@@ -129,12 +140,21 @@ export abstract class KeyAgentBase implements KeyAgent {
 
   async derivePublicCredential<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs
-  ): Promise<ChainPublicKey> {
+    args: ChainSpecificArgs,
+    passphrase: Uint8Array
+  ): Promise<ChainKeyPair> {
     // Generate the private key
     const privateKey = await this.#generatePrivateKeyFromSeed(payload, args)
+    const encryptedPrivateKeyBytes = await emip3encrypt(
+      Buffer.from(privateKey),
+      passphrase
+    )
     try {
-      return await payload.derivePublicKey(privateKey, args)
+      const keyPair = {
+        publicKey: await payload.derivePublicKey(privateKey, args),
+        encryptedPrivateKeyBytes
+      }
+      return keyPair
     } catch (error) {
       console.error(error)
       throw error

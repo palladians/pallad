@@ -17,7 +17,8 @@ export function deriveMinaPublicKey(
 
 export function deriveMinaCredentials(
   args: MinaSpecificArgs,
-  publicCredential: Mina.PublicKey
+  publicCredential: Mina.PublicKey,
+  encryptedPrivateKeyBytes: Uint8Array
 ): MinaGroupedCredentials {
   return {
     '@context': ['https://w3id.org/wallet/v1'],
@@ -29,7 +30,8 @@ export function deriveMinaCredentials(
     chain: args.network,
     addressIndex: args.addressIndex,
     accountIndex: args.accountIndex,
-    address: publicCredential
+    address: publicCredential,
+    encryptedPrivateKeyBytes: encryptedPrivateKeyBytes
   }
 }
 

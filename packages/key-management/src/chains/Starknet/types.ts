@@ -27,6 +27,7 @@ export type StarknetGroupedCredentials = {
   accountIndex: number
   addressIndex: number
   address: string
+  encryptedPrivateKeyBytes: Uint8Array
 }
 
 export class StarknetPayload implements ChainSpecificPayload {

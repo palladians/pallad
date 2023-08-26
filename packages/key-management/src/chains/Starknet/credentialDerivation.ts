@@ -16,7 +16,8 @@ export async function deriveStarknetPublicAddress(
 
 export function deriveStarknetCredentials(
   args: StarknetSpecificArgs,
-  publicCredential: string
+  publicCredential: string,
+  encryptedPrivateKeyBytes: Uint8Array
 ): StarknetGroupedCredentials {
   return {
     '@context': ['https://w3id.org/wallet/v1'],
@@ -28,7 +29,8 @@ export function deriveStarknetCredentials(
     chain: args.network,
     accountIndex: 0, // default to 0 TODO: remove this
     addressIndex: args.addressIndex,
-    address: publicCredential
+    address: publicCredential,
+    encryptedPrivateKeyBytes: encryptedPrivateKeyBytes
   }
 }
 

@@ -26,7 +26,8 @@ export function deriveEthereumPublicKey(privateKey: Uint8Array): string {
 
 export function deriveEthereumCredentials(
   args: EthereumSpecificArgs,
-  publicCredential: string
+  publicCredential: string,
+  encryptedPrivateKeyBytes: Uint8Array
 ): EthereumGroupedCredentials {
   return {
     '@context': ['https://w3id.org/wallet/v1'],
@@ -38,7 +39,8 @@ export function deriveEthereumCredentials(
     chain: args.network,
     addressIndex: args.addressIndex,
     accountIndex: args.accountIndex,
-    address: publicCredential
+    address: publicCredential,
+    encryptedPrivateKeyBytes: encryptedPrivateKeyBytes
   }
 }
 

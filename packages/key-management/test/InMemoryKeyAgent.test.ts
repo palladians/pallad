@@ -122,11 +122,11 @@ describe('InMemoryKeyAgent', () => {
       }
       const payload = new MinaPayload()
 
-      await agent.restoreKeyAgent(payload, args)
+      await agent.restoreKeyAgent(payload, args, getPassphrase)
       expect(agent).to.be.instanceOf(InMemoryKeyAgent)
       expect(
-        agent.serializableData.credentialSubject.contents[0]
-      ).to.deep.equal(expectedGroupedCredentials)
+        agent.serializableData.credentialSubject.contents[0]?.address
+      ).to.deep.equal(expectedGroupedCredentials.address)
     })
     it('should restore an agent that has Mina credentials at initialisation and derives Ethereum credentials', async () => {
       const expectedPublicKey: Mina.PublicKey =
@@ -154,11 +154,11 @@ describe('InMemoryKeyAgent', () => {
       }
       const payload = new MinaPayload()
 
-      await agent.restoreKeyAgent(payload, args)
+      await agent.restoreKeyAgent(payload, args, getPassphrase)
       expect(agent).to.be.instanceOf(InMemoryKeyAgent)
       expect(
-        agent.serializableData.credentialSubject.contents[0]
-      ).to.deep.equal(expectedGroupedCredentials)
+        agent.serializableData.credentialSubject.contents[0]?.address
+      ).to.deep.equal(expectedGroupedCredentials.address)
 
       // Define a mocked publicKey, which should be expected from the derivation
       const expectedEthPublicAddress =
@@ -183,15 +183,10 @@ describe('InMemoryKeyAgent', () => {
       }
       const ethPayload = new EthereumPayload()
 
-      await agent.deriveCredentials(ethPayload, ethArgs, false)
+      await agent.deriveCredentials(ethPayload, ethArgs, getPassphrase, false)
       expect(
-        agent.serializableData.credentialSubject.contents[1]
-      ).to.deep.equal(expectedEthGroupedCredentials)
-      console.log('restored keyAgent', agent)
-      console.log(
-        'restored keyAgent credentials',
-        agent.serializableData.credentialSubject
-      )
+        agent.serializableData.credentialSubject.contents[1]?.address
+      ).to.deep.equal(expectedEthGroupedCredentials.address)
     })
   })
 })

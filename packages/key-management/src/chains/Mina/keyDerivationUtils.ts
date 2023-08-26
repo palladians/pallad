@@ -6,5 +6,5 @@
  */
 export function reverseBytes(bytes: Buffer) {
   const uint8 = new Uint8Array(bytes)
-  return new Buffer(uint8.reverse())
+  return Buffer.from(uint8.reverse())
 }

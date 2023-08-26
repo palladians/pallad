@@ -36,6 +36,7 @@ export type MinaGroupedCredentials = {
   addressIndex: number
   accountIndex: number
   address: Mina.PublicKey
+  encryptedPrivateKeyBytes: Uint8Array
   // TODO: make these credentials unique per Mina network using Mina.Networks
 }
 

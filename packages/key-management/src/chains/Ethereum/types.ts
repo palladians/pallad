@@ -25,6 +25,7 @@ export type EthereumGroupedCredentials = {
   addressIndex: number
   accountIndex: number
   address: string
+  encryptedPrivateKeyBytes: Uint8Array
 }
 
 export class EthereumPayload implements ChainSpecificPayload {

@@ -94,15 +94,17 @@ export interface KeyAgent {
     signable: ChainSignablePayload,
     args: ChainSpecificArgs
   ): Promise<ChainSignatureResult>
-
+  // TODO: Change name from deriveCredentials to deriveKeyPair
   derivePublicCredential<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs
-  ): Promise<ChainPublicKey>
+    args: ChainSpecificArgs,
+    passphrase: Uint8Array
+  ): Promise<ChainKeyPair>
 
   deriveCredentials<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
+    getPassphrase: GetPassphrase,
     pure?: boolean
   ): Promise<GroupedCredentials>
 
@@ -151,6 +153,11 @@ export type ChainPublicKey = Mina.PublicKey | string
 export type ChainSignatureResult = MinaSignatureResult
 
 export type ChainPrivateKey = string | Uint8Array
+
+export type ChainKeyPair = {
+  publicKey: ChainPublicKey
+  encryptedPrivateKeyBytes: Uint8Array
+}
 
 export type ChainSigningFunction = (
   args: ChainSpecificArgs,
