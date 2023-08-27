@@ -340,7 +340,7 @@ describe('KeyAgentBase', () => {
         transaction,
         Mina.TransactionKind.PAYMENT
       )
-      const signedTx = await instance.sign(payload, constructedTx, args)
+      const signedTx = await instance.sign(groupedCredential, constructedTx, args, getPassphrase)
       const minaClient = new Client({ network: args.networkType })
       const isVerified = minaClient.verifyTransaction(
         signedTx as Mina.SignedTransaction
@@ -387,7 +387,7 @@ describe('KeyAgentBase', () => {
       const message: Mina.MessageBody = {
         message: 'Hello, Bob!'
       }
-      const signedMessage = await instance.sign(payload, message, args)
+      const signedMessage = await instance.sign(groupedCredential, message, args, getPassphrase)
       const minaClient = new Client({ network: args.networkType })
       const isVerified = await minaClient.verifyMessage(
         signedMessage as Mina.SignedMessage
@@ -442,7 +442,7 @@ describe('KeyAgentBase', () => {
           BigInt(0)
         ]
       }
-      const signedFields = await instance.sign(payload, fields, args)
+      const signedFields = await instance.sign(groupedCredential, fields, args, getPassphrase)
       const minaClient = new Client({ network: args.networkType })
       const isVerified = await minaClient.verifyFields(
         signedFields as Mina.SignedFields
@@ -511,9 +511,10 @@ describe('KeyAgentBase', () => {
         }
       }
       const signedZkAppCommand = await instance.sign(
-        payload,
+        groupedCredential,
         zkAppCommand,
-        args
+        args,
+        getPassphrase
       )
       const minaClient = new Client({ network: args.networkType })
       const isVerified = await minaClient.verifyZkappCommand(
