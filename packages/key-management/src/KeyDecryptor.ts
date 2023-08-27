@@ -12,13 +12,24 @@ export class KeyDecryptor {
     this.getPassphrase = getPassphrase
   }
 
-  async decryptChildPrivateKey(encryptedPrivateKeyBytes: Uint8Array, noCache?: true): Promise<Uint8Array> {
-    const passphrase = await getPassphraseRethrowTypedError(() => this.getPassphrase(noCache))
+  async decryptChildPrivateKey(
+    encryptedPrivateKeyBytes: Uint8Array,
+    noCache?: true
+  ): Promise<Uint8Array> {
+    const passphrase = await getPassphraseRethrowTypedError(() =>
+      this.getPassphrase(noCache)
+    )
     let decryptedKeyBytes: Uint8Array
     try {
-      decryptedKeyBytes = await emip3decrypt(new Uint8Array(encryptedPrivateKeyBytes), passphrase)
+      decryptedKeyBytes = await emip3decrypt(
+        new Uint8Array(encryptedPrivateKeyBytes),
+        passphrase
+      )
     } catch (error) {
-      throw new errors.AuthenticationError('Failed to decrypt child private key', error)
+      throw new errors.AuthenticationError(
+        'Failed to decrypt child private key',
+        error
+      )
     }
     return decryptedKeyBytes
   }

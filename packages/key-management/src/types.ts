@@ -1,11 +1,17 @@
 import { Mina } from '@palladxyz/mina-core'
 
-import { deriveEthereumCredentials, isEthereumCredential } from './chains/Ethereum/credentialDerivation'
+import {
+  deriveEthereumCredentials,
+  isEthereumCredential
+} from './chains/Ethereum/credentialDerivation'
 import {
   EthereumGroupedCredentials,
   EthereumSpecificArgs
 } from './chains/Ethereum/types'
-import { deriveMinaCredentials, isMinaCredential } from './chains/Mina/credentialDerivation'
+import {
+  deriveMinaCredentials,
+  isMinaCredential
+} from './chains/Mina/credentialDerivation'
 import {
   MinaGroupedCredentials,
   MinaKeyConst,
@@ -13,7 +19,10 @@ import {
   MinaSignatureResult,
   MinaSpecificArgs
 } from './chains/Mina/types'
-import { deriveStarknetCredentials, isStarknetCredential } from './chains/Starknet/credentialDerivation'
+import {
+  deriveStarknetCredentials,
+  isStarknetCredential
+} from './chains/Starknet/credentialDerivation'
 import {
   StarknetGroupedCredentials,
   StarknetSpecificArgs
@@ -164,9 +173,12 @@ export type DeriveCredentialFunction<T extends ChainSpecificArgs> = (
   args: T,
   publicKey: ChainPublicKey,
   encryptedPrivateKeyBytes: Uint8Array
-) => GroupedCredentials;
+) => GroupedCredentials
 
-export const credentialDerivers: Record<Network, DeriveCredentialFunction<any>> = {
+export const credentialDerivers: Record<
+  Network,
+  DeriveCredentialFunction<any>
+> = {
   Mina: deriveMinaCredentials,
   Starknet: deriveStarknetCredentials,
   Ethereum: deriveEthereumCredentials

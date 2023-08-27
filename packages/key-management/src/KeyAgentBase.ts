@@ -68,46 +68,48 @@ export abstract class KeyAgentBase implements KeyAgent {
     getPassphrase: GetPassphrase,
     pure?: boolean
   ): Promise<GroupedCredentials> {
-    const passphrase = await getPassphraseRethrowTypedError(getPassphrase);
-    const matcher = credentialMatchers[payload.network];
+    const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
+    const matcher = credentialMatchers[payload.network]
     if (!matcher) {
-      throw new Error(`Unsupported network: ${payload.network}`);
+      throw new Error(`Unsupported network: ${payload.network}`)
     }
-  
+
     const knownCredential =
       this.serializableData.credentialSubject.contents.find((credential) =>
         matcher(credential, payload)
-      );
-  
-    if (knownCredential) return knownCredential;
-  
-    const derivedKeyPair =
-      await this.deriveKeyPair<ChainSpecificPayload>(
-        payload,
-        args,
-        passphrase
-      );
-  
+      )
+
+    if (knownCredential) return knownCredential
+
+    const derivedKeyPair = await this.deriveKeyPair<ChainSpecificPayload>(
+      payload,
+      args,
+      passphrase
+    )
+
     try {
-      const deriveFunction = credentialDerivers[payload.network];
+      const deriveFunction = credentialDerivers[payload.network]
       if (!deriveFunction) {
-        throw new Error(`Unsupported network: ${payload.network}`);
+        throw new Error(`Unsupported network: ${payload.network}`)
       }
-      const groupedCredential = deriveFunction(args, derivedKeyPair.publicKey, derivedKeyPair.encryptedPrivateKeyBytes);
-      
+      const groupedCredential = deriveFunction(
+        args,
+        derivedKeyPair.publicKey,
+        derivedKeyPair.encryptedPrivateKeyBytes
+      )
+
       if (!pure) {
         this.serializableData.credentialSubject.contents = [
           ...this.serializableData.credentialSubject.contents,
           groupedCredential
-        ];
+        ]
       }
-      return groupedCredential;
+      return groupedCredential
     } catch (error) {
-      console.error(error);
-      throw error;
+      console.error(error)
+      throw error
     }
   }
-  
 
   async deriveKeyPair<T extends ChainSpecificPayload>(
     payload: T,
@@ -138,9 +140,11 @@ export abstract class KeyAgentBase implements KeyAgent {
     args: ChainSpecificArgs
   ): Promise<ChainSignatureResult> {
     const encryptedPrivateKeyBytes = payload.encryptedPrivateKeyBytes
-    const decryptedKeyBytes = await this.keyDecryptor.decryptChildPrivateKey(encryptedPrivateKeyBytes)
+    const decryptedKeyBytes = await this.keyDecryptor.decryptChildPrivateKey(
+      encryptedPrivateKeyBytes
+    )
     const privateKey = Buffer.from(decryptedKeyBytes).toString()
-    
+
     try {
       if (args.network === 'Mina') {
         return MinaSigningOperations(
