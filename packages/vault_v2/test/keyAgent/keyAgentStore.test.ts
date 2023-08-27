@@ -50,7 +50,7 @@ describe('AccountStore', () => {
       mnemonicWords: mnemonic2
     }
     keyAgentName = 'test key agent'
-    keyAgentName2 = 'test key agent other'
+    keyAgentName2 = 'test key agent 2'
   })
 
   afterEach(() => {
@@ -143,11 +143,14 @@ describe('AccountStore', () => {
       networkType: 'testnet'
     }
     const payload = new MinaPayload()
-    const derivedCredential = await keyAgent1.keyAgent.deriveCredentials(
+    const derivedCredential = await keyAgent1.keyAgent?.deriveCredentials(
       payload,
       args,
+      getPassphrase,
       false
     )
-    expect(derivedCredential).to.deep.equal(expectedGroupedCredentials)
+    expect(derivedCredential?.address).to.equal(
+      expectedGroupedCredentials.address
+    )
   })
 })

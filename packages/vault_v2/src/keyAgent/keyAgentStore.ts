@@ -3,100 +3,107 @@ import {
   InMemoryKeyAgent
 } from '@palladxyz/key-management'
 import { getSecurePersistence } from '@palladxyz/persistence'
-import { createStore } from 'zustand'
+import { createStore, StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 import {
   initialKeyAgentState,
   keyAgentName,
   keyAgents,
-  KeyAgentStores
+  KeyAgentState,
+  SingleKeyAgentState
 } from './keyAgentState'
 
 export class KeyAgentStore {
-  private store: any
+  private store: StoreApi<KeyAgentState>
 
   constructor() {
-    this.store = createStore<KeyAgentStores>(
-      persist(
-        (set, get) => ({
-          state: {
-            keyAgents: {}
-          },
+    const persistedStore = persist<KeyAgentState>(
+      (set, get) => ({
+        state: {
+          keyAgents: {}
+        },
+        getState: get as () => KeyAgentState,
 
-          ensureKeyAgent: (name: keyAgentName) => {
-            set((current) => {
-              if (!current.state.keyAgents[name]) {
-                return {
-                  ...current,
-                  state: {
-                    ...current.state,
-                    keyAgents: {
-                      ...current.state.keyAgents,
-                      [name]: { ...initialKeyAgentState, name: name }
-                    }
+        ensureKeyAgent: (name: keyAgentName) => {
+          set((current: KeyAgentState) => {
+            if (!current.state.keyAgents[name]) {
+              return {
+                ...current,
+                state: {
+                  ...current.state,
+                  keyAgents: {
+                    ...current.state.keyAgents,
+                    [name]: { ...initialKeyAgentState, name: name }
                   }
                 }
               }
-              return current
-            })
-          },
-
-          initialiseKeyAgent: async (
-            name: keyAgentName,
-            keyAgentType: keyAgents,
-            { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps // for a ledger or trezor key agent this would be optional
-          ) => {
-            const agentArgs: FromBip39MnemonicWordsProps = {
-              getPassphrase: getPassphrase,
-              mnemonicWords: mnemonicWords,
-              mnemonic2ndFactorPassphrase: ''
             }
-            const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
-            set((current) => ({
+            return current
+          })
+        },
+
+        initialiseKeyAgent: async (
+          name: keyAgentName,
+          keyAgentType: keyAgents,
+          { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+        ) => {
+          const agentArgs: FromBip39MnemonicWordsProps = {
+            getPassphrase: getPassphrase,
+            mnemonicWords: mnemonicWords,
+            mnemonic2ndFactorPassphrase: ''
+          }
+          const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
+          set((current: KeyAgentState) => {
+            const existingAgentState = current.state.keyAgents[name] || {};
+            
+            return {
               ...current,
               state: {
                 ...current.state,
                 keyAgents: {
                   ...current.state.keyAgents,
                   [name]: {
-                    ...current.state.keyAgents[name],
-                    // TODO: make this keyAgentType configurable from args
+                    ...existingAgentState,
                     keyAgentType: keyAgentType,
-                    keyAgent: keyAgent
+                    keyAgent: keyAgent,
+                    name: name
                   }
                 }
               }
-            }))
-          },
+            };
+          })
+        },
 
-          getKeyAgent: (name: keyAgentName) => {
-            return get().state.keyAgents[name] || initialKeyAgentState
-          },
+        getKeyAgent: (name: keyAgentName): SingleKeyAgentState | typeof initialKeyAgentState => {
+          const current = get()
+          return current.state.keyAgents[name] || initialKeyAgentState
+        },
 
-          removeKeyAgent: (name: keyAgentName) => {
-            set((current) => {
-              const newKeyAgents = { ...current.state.keyAgents }
-              delete newKeyAgents[name]
-              return {
-                ...current,
-                state: {
-                  ...current.state,
-                  keyAgents: newKeyAgents
-                }
+        removeKeyAgent: (name: keyAgentName) => {
+          set((current: KeyAgentState) => {
+            const newKeyAgents = { ...current.state.keyAgents }
+            delete newKeyAgents[name]
+            return {
+              ...current,
+              state: {
+                ...current.state,
+                keyAgents: newKeyAgents
               }
-            })
-          }
-        }),
-        {
-          name: 'PalladKeyAgent',
-          storage: createJSONStorage(getSecurePersistence)
+            }
+          })
         }
-      )
+      }),
+      {
+        name: 'PalladKeyAgent',
+        storage: createJSONStorage(getSecurePersistence)
+      }
     )
+
+    this.store = createStore<KeyAgentState>(persistedStore as any)
   }
 
-  ensureKeyAgent(name: keyAgentName) {
+  ensureKeyAgent(name: keyAgentName): void {
     this.store.getState().ensureKeyAgent(name)
   }
 
@@ -104,15 +111,15 @@ export class KeyAgentStore {
     name: keyAgentName,
     keyAgentType: keyAgents,
     props: FromBip39MnemonicWordsProps
-  ) {
+  ): Promise<void> {
     await this.store.getState().initialiseKeyAgent(name, keyAgentType, props)
   }
 
-  getKeyAgent(name: keyAgentName) {
+  getKeyAgent(name: keyAgentName): SingleKeyAgentState | typeof initialKeyAgentState {
     return this.store.getState().getKeyAgent(name)
   }
 
-  removeKeyAgent(name: keyAgentName) {
+  removeKeyAgent(name: keyAgentName): void {
     this.store.getState().removeKeyAgent(name)
   }
 }

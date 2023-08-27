@@ -1,5 +1,5 @@
 /**
- * @file Represents the state definitions related to accounts.
+ * @file Represents the state definitions related to keyAgents.
  */
 
 import {
@@ -14,8 +14,8 @@ export enum keyAgents {
   trezor = 'TREZOR_KEY_AGENT'
 }
 /**
- * Type representing the basic state of an account.
- * @typedef {Object} SingleAccountState
+ * Type representing the basic state of a keyAgent.
+ * @typedef {Object} SingleKeyAgentState
  */
 export type SingleKeyAgentState = {
   name: string
@@ -35,7 +35,7 @@ export const initialKeyAgentState: SingleKeyAgentState = {
 
 /**
  * Type representing the aggregation of all keyAgents by name
- * @typedef {Object} AccountStoreState
+ * @typedef {Object} KeyAgentStoreState
  */
 export type KeyAgentStoreState = {
   keyAgents: Record<keyAgentName, SingleKeyAgentState>
@@ -43,7 +43,7 @@ export type KeyAgentStoreState = {
 
 /**
  * Type representing the store's state and actions combined.
- * @typedef {Object} AccountState
+ * @typedef {Object} KeyAgentState
  */
 export type KeyAgentState = {
   state: KeyAgentStoreState
@@ -71,6 +71,6 @@ export type KeyAgentState = {
 
 /**
  * The type of the store returned by createStore.
- * @typedef {Object} AccountStore
+ * @typedef {Object} KeyAgentStores
  */
-export type KeyAgentStores = ReturnType<typeof KeyAgentState>
+export type KeyAgentStores = KeyAgentState

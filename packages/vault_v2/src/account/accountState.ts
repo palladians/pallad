@@ -84,4 +84,4 @@ export type AccountState = {
  * The type of the store returned by createStore.
  * @typedef {Object} AccountStore
  */
-export type AccountStores = ReturnType<typeof AccountState>
+export type AccountStores = AccountState
