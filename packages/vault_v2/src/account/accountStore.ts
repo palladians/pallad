@@ -3,6 +3,7 @@ import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { createStore, StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+
 import {
   AccountState,
   initialSingleAccountState,
@@ -21,7 +22,10 @@ export class AccountStore {
           berkeley: {}
         },
 
-        ensureAccount: (network: Mina.Networks, address: ChainAddress): void => {
+        ensureAccount: (
+          network: Mina.Networks,
+          address: ChainAddress
+        ): void => {
           set((current) => {
             if (!current.state[network]) {
               return {
@@ -85,11 +89,17 @@ export class AccountStore {
           }))
         },
 
-        getAccountInfo: (network: Mina.Networks, address: ChainAddress): SingleAccountState => {
+        getAccountInfo: (
+          network: Mina.Networks,
+          address: ChainAddress
+        ): SingleAccountState => {
           return get().state[network]?.[address] || initialSingleAccountState
         },
 
-        getTransactions: (network: Mina.Networks, address: ChainAddress): Mina.TransactionBody[] => {
+        getTransactions: (
+          network: Mina.Networks,
+          address: ChainAddress
+        ): Mina.TransactionBody[] => {
           return get().state[network]?.[address]?.transactions || []
         },
 
@@ -118,7 +128,10 @@ export class AccountStore {
           })
         },
 
-        removeAccount: (network: Mina.Networks, address: ChainAddress): void => {
+        removeAccount: (
+          network: Mina.Networks,
+          address: ChainAddress
+        ): void => {
           set((current) => {
             const newState = { ...current.state[network] }
             delete newState[address]

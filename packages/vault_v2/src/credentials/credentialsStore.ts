@@ -1,13 +1,14 @@
+import { getSecurePersistence } from '@palladxyz/persistence'
 import { createStore, StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { getSecurePersistence } from '@palladxyz/persistence'
+
+import { keyAgentName } from '../keyAgent/keyAgentState'
 import {
-  initialCredentialState,
-  CredentialState,
   credentialName,
+  CredentialState,
+  initialCredentialState,
   SingleCredentialState
 } from './credentialsState'
-import { keyAgentName } from '../keyAgent/keyAgentState'
 
 export class CredentialStore {
   private store: StoreApi<CredentialState>
@@ -20,7 +21,10 @@ export class CredentialStore {
         },
         getState: get as () => CredentialState,
 
-        ensureCredential: (credentialName: credentialName, keyAgentName: keyAgentName): void => {
+        ensureCredential: (
+          credentialName: credentialName,
+          keyAgentName: keyAgentName
+        ): void => {
           set((current: CredentialState) => {
             if (!current.state.credentials[credentialName]) {
               return {
@@ -29,7 +33,7 @@ export class CredentialStore {
                   ...current.state,
                   credentials: {
                     ...current.state.credentials,
-                    [credentialName]: { 
+                    [credentialName]: {
                       ...initialCredentialState,
                       credentialName: credentialName,
                       keyAgentName: keyAgentName
@@ -56,9 +60,13 @@ export class CredentialStore {
           }))
         },
 
-        getCredential: (credentialName: credentialName): SingleCredentialState | typeof initialCredentialState => {
+        getCredential: (
+          credentialName: credentialName
+        ): SingleCredentialState | typeof initialCredentialState => {
           const current = get()
-          return current.state.credentials[credentialName] || initialCredentialState
+          return (
+            current.state.credentials[credentialName] || initialCredentialState
+          )
         },
 
         removeCredential: (credentialName: credentialName): void => {
@@ -79,12 +87,15 @@ export class CredentialStore {
         name: 'PalladCredential',
         storage: createJSONStorage(getSecurePersistence)
       }
-    );
+    )
 
-    this.store = createStore<CredentialState>(persistedStore as any);
+    this.store = createStore<CredentialState>(persistedStore as any)
   }
 
-  ensureCredential(credentialName: credentialName, keyAgentName: keyAgentName): void {
+  ensureCredential(
+    credentialName: credentialName,
+    keyAgentName: keyAgentName
+  ): void {
     this.store.getState().ensureCredential(credentialName, keyAgentName)
   }
 
@@ -92,7 +103,9 @@ export class CredentialStore {
     this.store.getState().setCredential(credentialState)
   }
 
-  getCredential(credentialName: credentialName): SingleCredentialState | typeof initialCredentialState {
+  getCredential(
+    credentialName: credentialName
+  ): SingleCredentialState | typeof initialCredentialState {
     return this.store.getState().getCredential(credentialName)
   }
 

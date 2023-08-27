@@ -55,8 +55,8 @@ export class KeyAgentStore {
           }
           const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
           set((current: KeyAgentState) => {
-            const existingAgentState = current.state.keyAgents[name] || {};
-            
+            const existingAgentState = current.state.keyAgents[name] || {}
+
             return {
               ...current,
               state: {
@@ -71,11 +71,13 @@ export class KeyAgentStore {
                   }
                 }
               }
-            };
+            }
           })
         },
 
-        getKeyAgent: (name: keyAgentName): SingleKeyAgentState | typeof initialKeyAgentState => {
+        getKeyAgent: (
+          name: keyAgentName
+        ): SingleKeyAgentState | typeof initialKeyAgentState => {
           const current = get()
           return current.state.keyAgents[name] || initialKeyAgentState
         },
@@ -115,7 +117,9 @@ export class KeyAgentStore {
     await this.store.getState().initialiseKeyAgent(name, keyAgentType, props)
   }
 
-  getKeyAgent(name: keyAgentName): SingleKeyAgentState | typeof initialKeyAgentState {
+  getKeyAgent(
+    name: keyAgentName
+  ): SingleKeyAgentState | typeof initialKeyAgentState {
     return this.store.getState().getKeyAgent(name)
   }
 
