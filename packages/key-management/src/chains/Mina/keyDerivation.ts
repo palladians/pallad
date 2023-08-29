@@ -19,7 +19,7 @@ export async function deriveMinaPrivateKey(
   if (!childNode?.privateKey) throw new Error('Unable to derive private key')
 
   childNode.privateKey[0] &= 0x3f
-  const childPrivateKey = reverseBytes(new Buffer(childNode.privateKey))
+  const childPrivateKey = reverseBytes(Buffer.from(childNode.privateKey))
   const privateKeyHex = `5a01${childPrivateKey.toString('hex')}`
   // Convert the hex string to a Uint8Array
   if (!privateKeyHex) {
