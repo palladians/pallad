@@ -16,7 +16,16 @@ import {
   SubmitTxResult
 } from '@palladxyz/mina-core'
 import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
-import { AccountStore, KeyAgentStore, CredentialStore, keyAgentName, keyAgents, SingleKeyAgentState, credentialName, SingleCredentialState } from '@palladxyz/vaultv2'
+import {
+  AccountStore,
+  credentialName,
+  CredentialStore,
+  keyAgentName,
+  keyAgents,
+  KeyAgentStore,
+  SingleCredentialState,
+  SingleKeyAgentState
+} from '@palladxyz/vaultv2'
 import { EventEmitter } from 'events'
 
 /**
@@ -98,29 +107,29 @@ export class MinaWalletImpl implements MinaWallet {
     this.networkSwitch.on('networkChanged', listener)
   }
   /**
-   * 
+   *
    * @returns {KeyAgentStore} The KeyAgentStore
    */
   private getKeyAgentStore() {
     return this.keyAgentStore
   }
   /**
-   * 
+   *
    * @returns {AccountStore} The AccountStore
    */
   private getAccountStore() {
     return this.accountStore
   }
   /**
-   * 
+   *
    * @returns {CredentialStore} The CredentialStore
    */
   private getCredentialStore() {
     return this.credentialStore
   }
   /**
-   * 
-   * @returns 
+   *
+   * @returns
    */
   getCurrentWallet(): SingleCredentialState | null {
     // Return the public credential or null
@@ -133,8 +142,8 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   /**
-   * 
-   * @returns 
+   *
+   * @returns
    */
   /*getCredentials(): GroupedCredentials[] | null {
     // Return the list of accounts for the current wallet
@@ -145,17 +154,17 @@ export class MinaWalletImpl implements MinaWallet {
     // Get the current network
     return this.network
   }
-  
+
   setCurrentNetwork(network: Mina.Networks): void {
     // set the current network property
     this.network = network
   }
 
-   /**
-   * 
+  /**
+   *
    * @returns a keyAgent that can sign operations
    */
-   getKeyAgent(name: keyAgentName): SingleKeyAgentState | null {
+  getKeyAgent(name: keyAgentName): SingleKeyAgentState | null {
     return this.getKeyAgentStore().getKeyAgent(name)
   }
 
@@ -210,7 +219,8 @@ export class MinaWalletImpl implements MinaWallet {
       throw new Error('Current network is null, empty or undefined')
     }
     return (
-      this.getAccountStore().getTransactions(currentNetwork, walletAddress) || null
+      this.getAccountStore().getTransactions(currentNetwork, walletAddress) ||
+      null
     )
   }
   // This can be improved
@@ -278,7 +288,7 @@ export class MinaWalletImpl implements MinaWallet {
     keyAgentName: keyAgentName,
     keyAgentType: keyAgents = keyAgents.inMemory,
     credentialName: credentialName = getRandomAnimalName()
-    ): Promise<void> {
+  ): Promise<void> {
     // Restore a wallet from a mnemonic
     const agentArgs: FromBip39MnemonicWordsProps = {
       getPassphrase: getPassphrase,
@@ -292,7 +302,11 @@ export class MinaWalletImpl implements MinaWallet {
       throw new Error('Mina archive provider is undefined')
     }
     // restore the agent state
-    await this.getKeyAgentStore().initialiseKeyAgent(keyAgentName, keyAgentType, agentArgs)
+    await this.getKeyAgentStore().initialiseKeyAgent(
+      keyAgentName,
+      keyAgentType,
+      agentArgs
+    )
     const keyAgent = this.getKeyAgentStore().getKeyAgent(keyAgentName)
     // set the current wallet
     const derivedCredential = await keyAgent.keyAgent?.deriveCredentials(
@@ -307,7 +321,7 @@ export class MinaWalletImpl implements MinaWallet {
     }
 
     const singleCredentialState: SingleCredentialState = {
-      credentialName: credentialName ,
+      credentialName: credentialName,
       keyAgentName: keyAgentName,
       credential: derivedCredential
     }

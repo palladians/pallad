@@ -1,2 +1,2 @@
-export * from './Wallet'
 export * from './utils'
+export * from './Wallet'

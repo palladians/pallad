@@ -5,16 +5,19 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
-import Client from 'mina-signer'
-import { expect, test } from 'vitest' 
-import { AccountStore, KeyAgentStore, CredentialStore } from '@palladxyz/vaultv2'
+import {
+  AccountStore,
+  CredentialStore,
+  KeyAgentStore
+} from '@palladxyz/vaultv2'
+import { keyAgentName } from '@palladxyz/vaultv2'
 
+//import { expect, test } from 'vitest'
 import {
   MinaWalletDependencies,
   MinaWalletImpl,
   MinaWalletProps
 } from '../src/Wallet'
-import { credentialName, keyAgentName } from '@palladxyz/vaultv2'
 const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
 const archiveUrl = 'https://devnet.graphql.minaexplorer.com'
 describe('MinaWalletImpl', () => {
@@ -77,15 +80,21 @@ describe('MinaWalletImpl', () => {
       networkType: 'testnet'
     }
     const payload = new MinaPayload()
-    await wallet.restoreWallet(payload, restoreArgs, network, {
-      mnemonicWords: mnemonic,
-      getPassphrase: getPassword
-    },
-    keyAgentName)
-  
+    await wallet.restoreWallet(
+      payload,
+      restoreArgs,
+      network,
+      {
+        mnemonicWords: mnemonic,
+        getPassphrase: getPassword
+      },
+      keyAgentName
+    )
+
     // check there exists the first account and address in the keyAgent not in the .serializableKeyAgentData knownCredentials
     const derivedCredential = wallet.getCurrentWallet()
     console.log('Derived Credentials:', derivedCredential)
+    expect(derivedCredential).toBeDefined()
   })
   /*
   test('restores wallet and signs message', async () => {

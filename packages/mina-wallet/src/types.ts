@@ -11,7 +11,11 @@ import {
   SubmitTxArgs,
   SubmitTxResult
 } from '@palladxyz/mina-core'
-import { SingleCredentialState, keyAgentName, keyAgents } from '@palladxyz/vaultv2'
+import {
+  keyAgentName,
+  keyAgents,
+  SingleCredentialState
+} from '@palladxyz/vaultv2'
 export interface MinaWallet {
   readonly balance: number
 
