@@ -3,8 +3,7 @@ import {
   ChainSignatureResult,
   ChainSpecificArgs,
   ChainSpecificPayload,
-  FromBip39MnemonicWordsProps,
-  GroupedCredentials
+  FromBip39MnemonicWordsProps
 } from '@palladxyz/key-management'
 import {
   AccountInfo,
@@ -12,7 +11,7 @@ import {
   SubmitTxArgs,
   SubmitTxResult
 } from '@palladxyz/mina-core'
-
+import { SingleCredentialState, keyAgentName, keyAgents } from '@palladxyz/vaultv2'
 export interface MinaWallet {
   readonly balance: number
 
@@ -23,11 +22,13 @@ export interface MinaWallet {
     payload: T,
     args: ChainSpecificArgs,
     network: Mina.Networks,
-    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
+    keyAgentName: keyAgentName,
+    keyAgentType?: keyAgents.inMemory
   ): Promise<void>
 
-  getCurrentWallet(): GroupedCredentials | null
-  getCredentials(): GroupedCredentials[] | null
+  getCurrentWallet(): SingleCredentialState | null
+  //getCredentials(): GroupedCredentials[] | null
 
   getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo | null>
 
@@ -41,17 +42,18 @@ export interface MinaWallet {
   ): Promise<Mina.ConstructedTransaction>
 
   sign(
-    signable: ChainSignablePayload
+    signable: ChainSignablePayload,
+    keyAgentName: keyAgentName
   ): Promise<ChainSignatureResult | undefined>
 
   submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult | undefined>
 
   switchNetwork(network: Mina.Networks): Promise<void>
   getCurrentNetwork(): Mina.Networks | null
-  setCurrentNetwork(network: Mina.Networks): Promise<void>
+  setCurrentNetwork(network: Mina.Networks): void
 
   // The wallet might need APIs for receiving challenges and completing them!
-  // Challenge(challenge: VerifiableCredentialChallenge): Promise<VerifiableCredentialChallengeResponse>
+  // Challenge(challenge: VerifiableCredentialChallenge): Promise<Proof>
 
   shutdown(): void
 }

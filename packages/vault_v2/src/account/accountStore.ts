@@ -200,6 +200,7 @@ export class AccountStore {
    * TODO:
    * - Account Sync
    * - Check for pending transactions & mutate if no longer pending
+   * - - Could do this with events and a subscription
    */
 }
 

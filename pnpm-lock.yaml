@@ -574,6 +574,9 @@ importers:
       '@palladxyz/vault':
         specifier: '*'
         version: link:../vault
+      '@palladxyz/vaultv2':
+        specifier: '*'
+        version: link:../vault_v2
       bs58check:
         specifier: ^3.0.1
         version: 3.0.1
