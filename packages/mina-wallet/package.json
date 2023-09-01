@@ -28,6 +28,7 @@
     "buffer": "^6.0.3",
     "events": "^3.3.0",
     "mina-signer": "^2.0.3",
+    "unique-names-generator": "^4.7.1",
     "zustand": "^4.3.8"
   },
   "devDependencies": {

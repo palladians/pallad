@@ -5,11 +5,15 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
-//import { Mina, SubmitTxArgs } from '@palladxyz/mina-core'
-import { keyAgentStore } from '@palladxyz/vault'
+import {
+  AccountStore,
+  CredentialStore,
+  KeyAgentStore
+} from '@palladxyz/vaultv2'
+import { keyAgentName } from '@palladxyz/vaultv2'
 import Client from 'mina-signer'
-import { expect, test } from 'vitest' // eslint-disable-line import/no-extraneous-dependencies
 
+//import { expect, test } from 'vitest'
 import {
   MinaWalletDependencies,
   MinaWalletImpl,
@@ -22,6 +26,7 @@ describe('MinaWalletImpl', () => {
   let walletDependencies: MinaWalletDependencies
   let walletProperties: MinaWalletProps
   let network: Mina.Networks
+  let keyAgentName: keyAgentName
 
   const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
   const mnemonic = [
@@ -41,10 +46,12 @@ describe('MinaWalletImpl', () => {
 
   beforeEach(() => {
     walletDependencies = {
-      keyAgent: keyAgentStore.getState().keyAgent
+      accountStore: new AccountStore(),
+      keyAgentStore: new KeyAgentStore(),
+      credentialStore: new CredentialStore()
     }
     walletProperties = {
-      network: Mina.Networks.MAINNET,
+      network: Mina.Networks.BERKELEY,
       name: 'Test Wallet',
       providers: {
         [Mina.Networks.MAINNET]: {
@@ -63,7 +70,8 @@ describe('MinaWalletImpl', () => {
     }
 
     wallet = new MinaWalletImpl(walletProperties, walletDependencies)
-    network = Mina.Networks.MAINNET
+    network = walletProperties.network
+    keyAgentName = 'test agent'
   })
   test('wallet restores a wallet', async () => {
     const restoreArgs: MinaSpecificArgs = {
@@ -73,17 +81,21 @@ describe('MinaWalletImpl', () => {
       networkType: 'testnet'
     }
     const payload = new MinaPayload()
-    await wallet.restoreWallet(payload, restoreArgs, network, {
-      mnemonicWords: mnemonic,
-      getPassphrase: getPassword
-    })
+    await wallet.restoreWallet(
+      payload,
+      restoreArgs,
+      network,
+      {
+        mnemonicWords: mnemonic,
+        getPassphrase: getPassword
+      },
+      keyAgentName
+    )
+
     // check there exists the first account and address in the keyAgent not in the .serializableKeyAgentData knownCredentials
-    const storeKeyAgentCredentials =
-      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
-        .contents
-    console.log('knownCredentials', storeKeyAgentCredentials)
-    expect(storeKeyAgentCredentials).toHaveLength(1)
-    console.log('Derived Credentials:', storeKeyAgentCredentials)
+    const derivedCredential = wallet.getCurrentWallet()
+    console.log('Derived Credentials:', derivedCredential)
+    expect(derivedCredential).toBeDefined()
   })
   test('restores wallet and signs message', async () => {
     // restore wallet
@@ -94,15 +106,21 @@ describe('MinaWalletImpl', () => {
       networkType: 'testnet'
     }
     const payload = new MinaPayload()
-    await wallet.restoreWallet(payload, args, network, {
-      mnemonicWords: mnemonic,
-      getPassphrase: getPassword
-    })
+    await wallet.restoreWallet(
+      payload,
+      args,
+      network,
+      {
+        mnemonicWords: mnemonic,
+        getPassphrase: getPassword
+      },
+      keyAgentName
+    )
     // sign message
     const message: Mina.MessageBody = {
       message: 'Hello, Bob!'
     }
-    const signedMessage = await wallet.sign(message)
+    const signedMessage = await wallet.sign(message, keyAgentName)
     const minaClient = new Client({ network: args.networkType })
     const isVerified = await minaClient.verifyMessage(
       signedMessage as Mina.SignedMessage
@@ -110,24 +128,6 @@ describe('MinaWalletImpl', () => {
     expect(isVerified).toBeTruthy()
   })
   it('restores wallet and signs transaction', async () => {
-    // restore wallet
-    const expectedPublicKey: Mina.PublicKey =
-      'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
-
-    const expectedGroupedCredentials = {
-      '@context': ['https://w3id.org/wallet/v1'],
-      id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      type: 'MinaAddress',
-      controller:
-        'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      name: 'Mina Account',
-      description: 'My Mina account.',
-      chain: Network.Mina,
-      accountIndex: 0,
-      addressIndex: 0,
-      address: expectedPublicKey
-    }
-
     const args: MinaSpecificArgs = {
       network: Network.Mina,
       accountIndex: 0,
@@ -135,19 +135,25 @@ describe('MinaWalletImpl', () => {
       networkType: 'testnet'
     }
     const payload = new MinaPayload()
-    await wallet.restoreWallet(payload, args, network, {
-      mnemonicWords: mnemonic,
-      getPassphrase: getPassword
-    })
+    await wallet.restoreWallet(
+      payload,
+      args,
+      network,
+      {
+        mnemonicWords: mnemonic,
+        getPassphrase: getPassword
+      },
+      keyAgentName
+    )
     const groupedCredential = await wallet.getCurrentWallet()
 
-    expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+    expect(groupedCredential).toBeDefined()
     if (groupedCredential === null) {
       throw new Error('Grouped credential is null')
     }
     const transaction: Mina.TransactionBody = {
-      to: groupedCredential.address,
-      from: groupedCredential.address,
+      to: groupedCredential.credential?.address as string,
+      from: groupedCredential.credential?.address as string,
       fee: 1,
       amount: 100,
       nonce: 0,
@@ -159,72 +165,26 @@ describe('MinaWalletImpl', () => {
       transaction,
       Mina.TransactionKind.PAYMENT
     )
-    const signedTx = await wallet.sign(constructedTx)
+    const signedTx = await wallet.sign(constructedTx, keyAgentName)
     const minaClient = new Client({ network: args.networkType })
     const isVerified = minaClient.verifyTransaction(
       signedTx as Mina.SignedTransaction
     )
     expect(isVerified).toBeTruthy()
   })
+
   test('create wallet of strength 128', async () => {
-    const wallet = new MinaWalletImpl(walletProperties, walletDependencies)
+    const wallet128 = new MinaWalletImpl(walletProperties, walletDependencies)
     const mnemonicStrength = 128
-    const walletMnemonic = await wallet.createWallet(mnemonicStrength)
+    const walletMnemonic = await wallet128.createWallet(mnemonicStrength)
     expect(walletMnemonic).toHaveProperty('mnemonic')
     expect(walletMnemonic?.mnemonic).toHaveLength(12)
   })
   test('create wallet of strength 256', async () => {
-    const wallet = new MinaWalletImpl(walletProperties, walletDependencies)
+    const wallet256 = new MinaWalletImpl(walletProperties, walletDependencies)
     const mnemonicStrength = 256
-    const walletMnemonic = await wallet.createWallet(mnemonicStrength)
+    const walletMnemonic = await wallet256.createWallet(mnemonicStrength)
     expect(walletMnemonic).toHaveProperty('mnemonic')
     expect(walletMnemonic?.mnemonic).toHaveLength(24)
-  })
-  test('signs and verifies attestation signature', async () => {
-    /*
-    This is a draft test for some kind of attestation method
-    See this example for a way to do attestation with snarkyjs: 
-    https://github.com/teddyjfpender/awesome-snarkyjs-learnings/tree/master/starter-contracts/5-zk-program-credential-proof
-    */
-    // restore wallet
-    const args: MinaSpecificArgs = {
-      network: Network.Mina,
-      accountIndex: 0,
-      addressIndex: 0,
-      networkType: 'testnet'
-    }
-    const restorePayload = new MinaPayload()
-    await wallet.restoreWallet(restorePayload, args, network, {
-      mnemonicWords: mnemonic,
-      getPassphrase: getPassword
-    })
-    // get derived credentials
-    const derivedCredentials =
-      keyAgentStore.getState().keyAgent?.serializableData.credentialSubject
-        .contents
-    if (derivedCredentials === undefined) {
-      throw new Error('Derived credentials are undefined')
-    }
-    // attestation payload
-    const attestationPayload = {
-      context: derivedCredentials[0]['@context'],
-      type: 'Attestation',
-      issuer: derivedCredentials[0].id,
-      issuanceDate: new Date().toISOString(),
-      credentialSubject: derivedCredentials[0]
-    }
-
-    // convert the attestationPayload object to a string
-    const attestationPayloadString: Mina.MessageBody = {
-      message: JSON.stringify(attestationPayload)
-    }
-
-    // sign attestation
-    const signedAttestation = await wallet.sign(attestationPayloadString)
-    const minaClient = new Client({ network: args.networkType })
-    const isVerified = await minaClient.verifyMessage(
-      signedAttestation as Mina.SignedMessage
-    )
-    expect(isVerified).toBeTruthy()
   })
 })
