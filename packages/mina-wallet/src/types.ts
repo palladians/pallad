@@ -54,10 +54,6 @@ export interface MinaWallet {
 
   switchNetwork(network: Mina.Networks): Promise<void>
   getCurrentNetwork(): Mina.Networks | null
-  setCurrentNetwork(network: Mina.Networks): void
-
-  // The wallet might need APIs for receiving challenges and completing them!
-  // Challenge(challenge: VerifiableCredentialChallenge): Promise<Proof>
 
   shutdown(): void
 }

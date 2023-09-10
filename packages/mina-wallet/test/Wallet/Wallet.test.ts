@@ -13,12 +13,14 @@ import {
 import { keyAgentName } from '@palladxyz/vaultv2'
 import Client from 'mina-signer'
 
+import { NetworkConfigurations, NetworkManager } from '../../src/Network'
+import { ProviderManager } from '../../src/Provider/ProviderManager'
 //import { expect, test } from 'vitest'
 import {
   MinaWalletDependencies,
   MinaWalletImpl,
   MinaWalletProps
-} from '../src/Wallet'
+} from '../../src/Wallet'
 const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
 const archiveUrl = 'https://devnet.graphql.minaexplorer.com'
 describe('MinaWalletImpl', () => {
@@ -27,6 +29,7 @@ describe('MinaWalletImpl', () => {
   let walletProperties: MinaWalletProps
   let network: Mina.Networks
   let keyAgentName: keyAgentName
+  let networkConfigurations: NetworkConfigurations
 
   const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
   const mnemonic = [
@@ -45,28 +48,35 @@ describe('MinaWalletImpl', () => {
   ]
 
   beforeEach(() => {
+    networkConfigurations = {
+      [Mina.Networks.MAINNET]: {
+        provider: nodeUrl,
+        archive: archiveUrl
+      },
+      [Mina.Networks.DEVNET]: {
+        provider: 'https://proxy.devnet.minaexplorer.com/',
+        archive: 'https://devnet.graphql.minaexplorer.com'
+      },
+      [Mina.Networks.BERKELEY]: {
+        provider: 'https://proxy.berkeley.minaexplorer.com/',
+        archive: 'https://berkeley.graphql.minaexplorer.com'
+      }
+    }
     walletDependencies = {
+      // stores
       accountStore: new AccountStore(),
       keyAgentStore: new KeyAgentStore(),
-      credentialStore: new CredentialStore()
+      credentialStore: new CredentialStore(),
+      // managers
+      networkManager: new NetworkManager(
+        networkConfigurations,
+        Mina.Networks.BERKELEY
+      ),
+      providerManager: new ProviderManager(networkConfigurations)
     }
     walletProperties = {
       network: Mina.Networks.BERKELEY,
-      name: 'Test Wallet',
-      providers: {
-        [Mina.Networks.MAINNET]: {
-          provider: nodeUrl,
-          archive: archiveUrl
-        },
-        [Mina.Networks.DEVNET]: {
-          provider: 'https://proxy.devnet.minaexplorer.com/',
-          archive: 'https://devnet.graphql.minaexplorer.com'
-        },
-        [Mina.Networks.BERKELEY]: {
-          provider: 'https://proxy.berkeley.minaexplorer.com/',
-          archive: 'https://berkeley.graphql.minaexplorer.com'
-        }
-      }
+      name: 'Test Wallet'
     }
 
     wallet = new MinaWalletImpl(walletProperties, walletDependencies)

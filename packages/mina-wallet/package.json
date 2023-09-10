@@ -22,7 +22,6 @@
     "@palladxyz/mina-core": "*",
     "@palladxyz/mina-graphql": "*",
     "@palladxyz/util": "*",
-    "@palladxyz/vault": "*",
     "@palladxyz/vaultv2": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
