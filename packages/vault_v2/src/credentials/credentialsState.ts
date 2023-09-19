@@ -7,7 +7,18 @@ import { GroupedCredentials } from '@palladxyz/key-management'
 import { keyAgentName } from '../keyAgent/keyAgentState'
 
 export type credentialName = string
-export type storedCredential = GroupedCredentials | undefined // can add other credential types here like verifiable credentials
+export type storedCredential = GroupedCredentials | object | undefined // can add other credential types here like verifiable credentials
+export interface SearchQuery {
+  [key: string]: SearchValue
+}
+export type SearchValue =
+  | string
+  | number
+  | boolean
+  | Uint8Array
+  | any[]
+  | SearchQuery
+
 /**
  * Type representing the basic state of a credential.
  * @typedef {Object} SingleCredentialState
@@ -55,6 +66,8 @@ export type CredentialState = {
   ) => SingleCredentialState | typeof initialCredentialState
 
   removeCredential: (name: keyAgentName) => void
+
+  searchCredentials(query: SearchQuery): storedCredential[]
 }
 
 /**

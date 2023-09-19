@@ -7,8 +7,11 @@ import {
   credentialName,
   CredentialState,
   initialCredentialState,
-  SingleCredentialState
+  SearchQuery,
+  SingleCredentialState,
+  storedCredential
 } from './credentialsState'
+import { matchesQuery } from './utils'
 
 export class CredentialStore {
   private store: StoreApi<CredentialState>
@@ -81,6 +84,19 @@ export class CredentialStore {
               }
             }
           })
+        },
+        searchCredentials: (query: SearchQuery): storedCredential[] => {
+          const credentialsStatesArray = Object.values(get().state.credentials)
+          const credentialsArray = credentialsStatesArray.map(
+            (cred) => cred.credential
+          )
+
+          return credentialsArray.filter((credential) => {
+            if (!credential) {
+              return false
+            }
+            return matchesQuery(credential, query)
+          })
         }
       }),
       {
@@ -111,6 +127,10 @@ export class CredentialStore {
 
   removeCredential(credentialName: credentialName): void {
     this.store.getState().removeCredential(credentialName)
+  }
+
+  searchCredentials(query: SearchQuery): storedCredential[] {
+    return this.store.getState().searchCredentials(query)
   }
 }
 
