@@ -14,7 +14,9 @@ import {
 import {
   keyAgentName,
   keyAgents,
-  SingleCredentialState
+  SearchQuery,
+  SingleCredentialState,
+  storedCredential
 } from '@palladxyz/vaultv2'
 export interface MinaWallet {
   readonly balance: number
@@ -32,7 +34,8 @@ export interface MinaWallet {
   ): Promise<void>
 
   getCurrentWallet(): SingleCredentialState | null
-  //getCredentials(): GroupedCredentials[] | null
+
+  getCredentials(query: SearchQuery): storedCredential[]
 
   getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo | null>
 

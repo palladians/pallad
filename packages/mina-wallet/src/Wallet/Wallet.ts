@@ -6,6 +6,7 @@ import {
   constructTransaction,
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
+  GroupedCredentials,
   MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
@@ -22,6 +23,7 @@ import {
   keyAgentName,
   keyAgents,
   KeyAgentStore,
+  SearchQuery,
   SingleCredentialState,
   SingleKeyAgentState,
   storedCredential
@@ -91,7 +93,8 @@ export class MinaWalletImpl implements MinaWallet {
     this.currentWallet = null
   }
   private _validateCurrentWallet(wallet: SingleCredentialState | null): void {
-    if (!wallet || !wallet.credential?.address) {
+    const credential = wallet?.credential as GroupedCredentials
+    if (!wallet || !credential?.address) {
       throw new WalletError('Invalid current wallet or address')
     }
   }
@@ -187,6 +190,10 @@ export class MinaWalletImpl implements MinaWallet {
     return this.name
   }
 
+  getCredentials(query: SearchQuery): storedCredential[] {
+    return this.getCredentialStore().searchCredentials(query)
+  }
+
   async getAccountInfo(): Promise<AccountInfo | null> {
     const currentWallet = this.getCurrentWallet()
     this._validateCurrentWallet(currentWallet)
@@ -194,10 +201,11 @@ export class MinaWalletImpl implements MinaWallet {
     const currentNetwork = this.getCurrentNetwork()
     this._validateCurrentNetwork(currentNetwork)
 
+    const walletCredential = currentWallet?.credential as GroupedCredentials
     const accountInformation =
       this.getAccountStore().getAccountInfo(
         currentNetwork,
-        currentWallet?.credential?.address as string
+        walletCredential?.address as string
       )?.accountInfo || null
     return accountInformation
   }
@@ -209,8 +217,8 @@ export class MinaWalletImpl implements MinaWallet {
         'Current wallet is null, empty or undefined in getTransactions method'
       )
     }
-
-    const walletAddress = currentWallet.credential?.address
+    const walletCredential = currentWallet.credential as GroupedCredentials
+    const walletAddress = walletCredential?.address
     if (walletAddress === undefined) {
       throw new AddressError(
         'Wallet address is undefined in getTransactions method'
@@ -245,7 +253,8 @@ export class MinaWalletImpl implements MinaWallet {
     keyAgentName: keyAgentName
   ): Promise<ChainSignatureResult | undefined> {
     // use current wallet to sign
-    const currentWallet = this.getCurrentWallet()?.credential
+    const currentWallet = this.getCurrentWallet()
+      ?.credential as GroupedCredentials
     if (currentWallet === undefined) {
       throw new WalletError(
         'Current wallet is null, empty or undefined in sign method'
@@ -283,7 +292,10 @@ export class MinaWalletImpl implements MinaWallet {
       .getProvider(network)
       ?.submitTransaction(submitTxArgs)
     // add pending transaction to the store
-    this.syncTransactions(network, this.getCurrentWallet()?.credential)
+    this.syncTransactions(
+      network,
+      this.getCurrentWallet()?.credential as GroupedCredentials
+    )
     return txResult
   }
 
@@ -343,7 +355,7 @@ export class MinaWalletImpl implements MinaWallet {
 
   private async syncTransactions(
     network: Mina.Networks,
-    derivedCredential: storedCredential
+    derivedCredential: GroupedCredentials
   ): Promise<void> {
     if (derivedCredential === undefined) {
       throw new Error('Derived credential is undefined')
@@ -372,7 +384,7 @@ export class MinaWalletImpl implements MinaWallet {
 
   private async syncAccountInfo(
     network: Mina.Networks,
-    derivedCredential: storedCredential
+    derivedCredential: GroupedCredentials
   ): Promise<void> {
     if (derivedCredential === undefined) {
       throw new WalletError(
@@ -423,8 +435,11 @@ export class MinaWalletImpl implements MinaWallet {
       )
     }
     // use the sync methods to sync the wallet
-    await this.syncAccountInfo(network, derivedCredential)
-    await this.syncTransactions(network, derivedCredential)
+    await this.syncAccountInfo(network, derivedCredential as GroupedCredentials)
+    await this.syncTransactions(
+      network,
+      derivedCredential as GroupedCredentials
+    )
   }
   shutdown(): void {
     // Implement the logic to shut down the wallet
