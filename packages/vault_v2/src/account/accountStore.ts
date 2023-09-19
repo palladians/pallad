@@ -1,7 +1,7 @@
 import { ChainAddress } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
-import { createStore, StoreApi } from 'zustand'
+import { create, StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 import {
@@ -20,6 +20,15 @@ export class AccountStore {
           mainnet: {},
           devnet: {},
           berkeley: {}
+        },
+        // Maybe this works?
+        rehydrate: async () => {
+          const state = await getSecurePersistence().getItem(
+            'PalladAccount'
+          )
+          if (state) {
+            set(JSON.parse(state))
+          }
         },
 
         ensureAccount: (
@@ -147,11 +156,12 @@ export class AccountStore {
       }),
       {
         name: 'PalladAccount',
-        storage: createJSONStorage(getSecurePersistence)
+        storage: createJSONStorage(getSecurePersistence),
+        skipHydration: true
       }
     )
 
-    this.store = createStore<AccountState>(persistedStore as any)
+    this.store = create<AccountState>(persistedStore as any)
   }
 
   ensureAccount(network: Mina.Networks, address: ChainAddress): void {
@@ -194,6 +204,10 @@ export class AccountStore {
 
   removeAccount(network: Mina.Networks, address: ChainAddress): void {
     this.store.getState().removeAccount(network, address)
+  }
+
+  rehydrate = async (): Promise<void> => {
+    await this.store.getState().rehydrate()
   }
 
   /**

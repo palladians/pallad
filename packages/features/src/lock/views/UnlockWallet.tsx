@@ -9,7 +9,6 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@palladxyz/ui'
-import { keyAgentStore } from '@palladxyz/vault'
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -39,8 +38,9 @@ export const UnlockWalletView = () => {
     spendingPassword: string
   }) => {
     await getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    keyAgentStore.destroy()
-    await keyAgentStore.persist.rehydrate()
+    //keyAgentStore.destroy()
+    //await keyAgentStore.persist.rehydrate()
+    wallet.rehydrateStores()
     const currentWallet = wallet.getCurrentWallet()
     if (!currentWallet) return await onError()
     return navigate('/dashboard')

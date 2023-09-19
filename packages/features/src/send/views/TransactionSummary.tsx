@@ -33,14 +33,14 @@ export const TransactionSummaryView = () => {
       from: address,
       fee,
       amount,
-      nonce: 0,
-      type: 'payment'
+      nonce: 0, // TODO: nonce management -- should we have a Nonce Manager in the wallet? Yes.
+      type: 'payment' // TODO: handle with enums (payment, delegation, zkApp commands?)
     }
     const constructedTx = await wallet.constructTx(
       transaction,
       Mina.TransactionKind.PAYMENT
     )
-    const signedTx = await wallet.sign(constructedTx)
+    const signedTx = await wallet.sign(constructedTx) // TODO: Fix this with new wallet API
     const submittedTx = await wallet.submitTx(signedTx)
     console.log('>>>ST', submittedTx?.result)
     navigate('/transactions/success')

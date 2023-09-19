@@ -52,6 +52,7 @@ export type CredentialStoreState = {
  * @typedef {Object} CredentialsState
  */
 export type CredentialState = {
+  rehydrate(): unknown
   getState(): unknown
   state: CredentialStoreState
 

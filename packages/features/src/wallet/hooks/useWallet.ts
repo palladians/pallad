@@ -1,9 +1,9 @@
-import { MinaNetwork } from '@palladxyz/key-management'
+import { GroupedCredentials, MinaNetwork } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
-import { MinaWalletImpl } from '@palladxyz/mina-wallet'
+import { MinaWalletImpl, NetworkManager, ProviderManager } from '@palladxyz/mina-wallet'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { toast } from '@palladxyz/ui'
-import { keyAgentStore } from '@palladxyz/vault'
+import { KeyAgentStore, CredentialStore, AccountStore } from '@palladxyz/vaultv2'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -24,6 +24,7 @@ const getNetworkValue = (network: MinaNetwork) => {
 }
 
 // Load environment variables
+// TODO: this is in the scope of the Network & Provider Managers
 const providers = {
   [Mina.Networks.MAINNET]: {
     provider: import.meta.env.VITE_APP_MINA_PROXY_MAINNET_URL,
@@ -59,16 +60,25 @@ export const useWallet = () => {
   )
   const walletDependencies = useMemo(
     () => ({
-      keyAgent: keyAgentStore.getState().keyAgent
-    }),
+      // stores
+      accountStore: new AccountStore(),
+      credentialStore: new CredentialStore(),
+      keyAgentStore: new KeyAgentStore(),
+
+      // managers
+      networkManager: new NetworkManager(providers, Mina.Networks.BERKELEY),
+      providerManager: new ProviderManager(providers)
+        }),
     []
   )
   const wallet = useMemo(
+    // TODO: update the dependencies with new wallet stores and managers
     () => new MinaWalletImpl(walletProperties, walletDependencies),
     [walletProperties, walletDependencies]
   )
-
-  const address = useMemo(() => wallet.getCurrentWallet()?.address, [wallet])
+  const walletCredential = wallet.getCurrentWallet()?.credential as GroupedCredentials
+  console.log(`Wallet Credential: ${JSON.stringify(walletCredential)}`)
+  const address = useMemo(() => walletCredential.address, [wallet])
   const gradientBackground = useMemo(
     () =>
       easyMeshGradient({
@@ -84,7 +94,8 @@ export const useWallet = () => {
   }
 
   const copyWalletAddress = async () => {
-    const address = wallet.getCurrentWallet()?.address
+    const walletCredential = wallet.getCurrentWallet()?.credential as GroupedCredentials
+    const address = walletCredential.address
     await navigator.clipboard.writeText(address || '')
     toast({
       title: 'Wallet address was copied.'
@@ -93,8 +104,10 @@ export const useWallet = () => {
 
   const lockWallet = () => {
     getSessionPersistence().setItem('spendingPassword', '')
-    keyAgentStore.destroy()
-    keyAgentStore.persist.rehydrate()
+    // TODO: create a store manager for keyAgentStore, accountStore, credentialStore
+    // store.destory()? Maybe we don't have to do this
+    // store.persist.rehydrate()
+    wallet.rehydrateStores()
     return navigate('/')
   }
 

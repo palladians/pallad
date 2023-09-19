@@ -46,6 +46,7 @@ export type KeyAgentStoreState = {
  * @typedef {Object} KeyAgentState
  */
 export type KeyAgentState = {
+  rehydrate(): unknown
   state: KeyAgentStoreState
 
   ensureKeyAgent: (name: keyAgentName) => void

@@ -1,5 +1,5 @@
 import { getSecurePersistence } from '@palladxyz/persistence'
-import { createStore, StoreApi } from 'zustand'
+import { create, StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 import { keyAgentName } from '../keyAgent/keyAgentState'
@@ -23,7 +23,15 @@ export class CredentialStore {
           credentials: {}
         },
         getState: get as () => CredentialState,
-
+        // Maybe this works?
+        rehydrate: async () => {
+          const state = await getSecurePersistence().getItem(
+            'PalladCredential'
+          )
+          if (state) {
+            set(JSON.parse(state))
+          }
+        },
         ensureCredential: (
           credentialName: credentialName,
           keyAgentName: keyAgentName
@@ -101,11 +109,12 @@ export class CredentialStore {
       }),
       {
         name: 'PalladCredential',
-        storage: createJSONStorage(getSecurePersistence)
+        storage: createJSONStorage(getSecurePersistence),
+        skipHydration: true
       }
     )
 
-    this.store = createStore<CredentialState>(persistedStore as any)
+    this.store = create<CredentialState>(persistedStore as any)
   }
 
   ensureCredential(
@@ -131,6 +140,10 @@ export class CredentialStore {
 
   searchCredentials(query: SearchQuery): storedCredential[] {
     return this.store.getState().searchCredentials(query)
+  }
+
+  rehydrate = async () => {
+    await this.store.getState().rehydrate()
   }
 }
 

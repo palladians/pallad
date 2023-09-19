@@ -3,7 +3,7 @@ import {
   InMemoryKeyAgent
 } from '@palladxyz/key-management'
 import { getSecurePersistence } from '@palladxyz/persistence'
-import { createStore, StoreApi } from 'zustand'
+import { create, StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 import {
@@ -24,6 +24,15 @@ export class KeyAgentStore {
           keyAgents: {}
         },
         getState: get as () => KeyAgentState,
+        // Maybe this works?
+        rehydrate: async () => {
+          const state = await getSecurePersistence().getItem(
+            'PalladKeyAgent'
+          )
+          if (state) {
+            set(JSON.parse(state))
+          }
+        },
 
         ensureKeyAgent: (name: keyAgentName) => {
           set((current: KeyAgentState) => {
@@ -98,11 +107,12 @@ export class KeyAgentStore {
       }),
       {
         name: 'PalladKeyAgent',
-        storage: createJSONStorage(getSecurePersistence)
+        storage: createJSONStorage(getSecurePersistence),
+        skipHydration: true
       }
     )
 
-    this.store = createStore<KeyAgentState>(persistedStore as any)
+    this.store = create<KeyAgentState>(persistedStore as any)
   }
 
   ensureKeyAgent(name: keyAgentName): void {
@@ -125,6 +135,10 @@ export class KeyAgentStore {
 
   removeKeyAgent(name: keyAgentName): void {
     this.store.getState().removeKeyAgent(name)
+  }
+
+  rehydrate = async () => {
+    await this.store.getState().rehydrate()
   }
 }
 

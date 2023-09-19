@@ -14,7 +14,7 @@ export const TransactionDetailsView = () => {
   const navigate = useNavigate()
   const { hash } = useParams()
   if (!hash) return null
-  const walletPublicKey = wallet.getCurrentWallet()?.address
+  const walletPublicKey = wallet.getCurrentWallet()?.address // TODO: Fix this with new wallet API
   if (!walletPublicKey) return null
   const { data: transactionData, isLoading: transactionLoading } =
     useTransaction({ hash })

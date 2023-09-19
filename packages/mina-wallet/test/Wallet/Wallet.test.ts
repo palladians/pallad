@@ -24,7 +24,7 @@ import {
 const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
 const archiveUrl = 'https://devnet.graphql.minaexplorer.com'
 describe('MinaWalletImpl', () => {
-  let wallet: MinaWalletImpl
+  let wallet: MinaWalletImpl 
   let walletDependencies: MinaWalletDependencies
   let walletProperties: MinaWalletProps
   let network: Mina.Networks

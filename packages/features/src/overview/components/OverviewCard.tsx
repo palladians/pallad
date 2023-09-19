@@ -15,10 +15,12 @@ import { useAccount } from '../../common/hooks/useAccount'
 import { truncateString } from '../../common/lib/string'
 import { useWallet } from '../../wallet/hooks/useWallet'
 import { AvatarMenu } from './AvatarMenu'
+import { GroupedCredentials } from '@palladxyz/key-management'
 
 export const OverviewCard = () => {
   const { wallet, copyWalletAddress, gradientBackground } = useWallet()
-  const walletAddress = wallet.getCurrentWallet()?.address
+  const walletCredential = wallet.getCurrentWallet()?.credential as GroupedCredentials
+  const walletAddress = walletCredential.address
   const navigate = useNavigate()
   const { isLoading: accountLoading, minaBalance } = useAccount()
   const { data: fiatPriceData, isLoading: priceLoading } = useFiatPrice()

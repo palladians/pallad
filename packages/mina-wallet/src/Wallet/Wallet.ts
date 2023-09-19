@@ -123,6 +123,16 @@ export class MinaWalletImpl implements MinaWallet {
   private getAccountStore() {
     return this.accountStore
   }
+
+  /**
+   * Rehydrate the wallet stores
+   */
+  async rehydrateStores(): Promise<void> {
+    // Rehydrate the stores
+   this.keyAgentStore.rehydrate()
+   this.accountStore.rehydrate()
+   this.credentialStore.rehydrate()
+  }
   /**
    *
    * @returns {CredentialStore} The CredentialStore
@@ -263,8 +273,8 @@ export class MinaWalletImpl implements MinaWallet {
     // currently only Mina specific
     const args: MinaSpecificArgs = {
       network: currentWallet?.chain as Network.Mina,
-      accountIndex: currentWallet?.accountIndex,
-      addressIndex: currentWallet?.addressIndex,
+      accountIndex: currentWallet?.accountIndex, // can be deprecated
+      addressIndex: currentWallet?.addressIndex, // can be deprecated
       networkType: 'testnet' // TODO: Make this dynamic
     }
     const keyAgent = this.getKeyAgentStore().getKeyAgent(keyAgentName)
