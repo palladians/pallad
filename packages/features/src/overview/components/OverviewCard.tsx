@@ -1,3 +1,4 @@
+import { GroupedCredentials } from '@palladxyz/key-management'
 import { useFiatPrice } from '@palladxyz/offchain-data'
 import {
   Button,
@@ -15,11 +16,11 @@ import { useAccount } from '../../common/hooks/useAccount'
 import { truncateString } from '../../common/lib/string'
 import { useWallet } from '../../wallet/hooks/useWallet'
 import { AvatarMenu } from './AvatarMenu'
-import { GroupedCredentials } from '@palladxyz/key-management'
 
 export const OverviewCard = () => {
   const { wallet, copyWalletAddress, gradientBackground } = useWallet()
-  const walletCredential = wallet.getCurrentWallet()?.credential as GroupedCredentials
+  const walletCredential = wallet.getCurrentWallet()
+    ?.credential as GroupedCredentials
   const walletAddress = walletCredential.address
   const navigate = useNavigate()
   const { isLoading: accountLoading, minaBalance } = useAccount()

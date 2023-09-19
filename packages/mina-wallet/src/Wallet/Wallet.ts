@@ -129,9 +129,9 @@ export class MinaWalletImpl implements MinaWallet {
    */
   async rehydrateStores(): Promise<void> {
     // Rehydrate the stores
-   this.keyAgentStore.rehydrate()
-   this.accountStore.rehydrate()
-   this.credentialStore.rehydrate()
+    this.keyAgentStore.rehydrate()
+    this.accountStore.rehydrate()
+    this.credentialStore.rehydrate()
   }
   /**
    *

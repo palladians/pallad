@@ -26,9 +26,7 @@ export class KeyAgentStore {
         getState: get as () => KeyAgentState,
         // Maybe this works?
         rehydrate: async () => {
-          const state = await getSecurePersistence().getItem(
-            'PalladKeyAgent'
-          )
+          const state = await getSecurePersistence().getItem('PalladKeyAgent')
           if (state) {
             set(JSON.parse(state))
           }

@@ -25,9 +25,7 @@ export class CredentialStore {
         getState: get as () => CredentialState,
         // Maybe this works?
         rehydrate: async () => {
-          const state = await getSecurePersistence().getItem(
-            'PalladCredential'
-          )
+          const state = await getSecurePersistence().getItem('PalladCredential')
           if (state) {
             set(JSON.parse(state))
           }

@@ -23,9 +23,7 @@ export class AccountStore {
         },
         // Maybe this works?
         rehydrate: async () => {
-          const state = await getSecurePersistence().getItem(
-            'PalladAccount'
-          )
+          const state = await getSecurePersistence().getItem('PalladAccount')
           if (state) {
             set(JSON.parse(state))
           }

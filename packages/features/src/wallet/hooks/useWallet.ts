@@ -1,9 +1,17 @@
 import { GroupedCredentials, MinaNetwork } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
-import { MinaWalletImpl, NetworkManager, ProviderManager } from '@palladxyz/mina-wallet'
+import {
+  MinaWalletImpl,
+  NetworkManager,
+  ProviderManager
+} from '@palladxyz/mina-wallet'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { toast } from '@palladxyz/ui'
-import { KeyAgentStore, CredentialStore, AccountStore } from '@palladxyz/vaultv2'
+import {
+  AccountStore,
+  CredentialStore,
+  KeyAgentStore
+} from '@palladxyz/vaultv2'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -68,7 +76,7 @@ export const useWallet = () => {
       // managers
       networkManager: new NetworkManager(providers, Mina.Networks.BERKELEY),
       providerManager: new ProviderManager(providers)
-        }),
+    }),
     []
   )
   const wallet = useMemo(
@@ -76,7 +84,8 @@ export const useWallet = () => {
     () => new MinaWalletImpl(walletProperties, walletDependencies),
     [walletProperties, walletDependencies]
   )
-  const walletCredential = wallet.getCurrentWallet()?.credential as GroupedCredentials
+  const walletCredential = wallet.getCurrentWallet()
+    ?.credential as GroupedCredentials
   console.log(`Wallet Credential: ${JSON.stringify(walletCredential)}`)
   const address = useMemo(() => walletCredential.address, [wallet])
   const gradientBackground = useMemo(
@@ -94,7 +103,8 @@ export const useWallet = () => {
   }
 
   const copyWalletAddress = async () => {
-    const walletCredential = wallet.getCurrentWallet()?.credential as GroupedCredentials
+    const walletCredential = wallet.getCurrentWallet()
+      ?.credential as GroupedCredentials
     const address = walletCredential.address
     await navigator.clipboard.writeText(address || '')
     toast({
