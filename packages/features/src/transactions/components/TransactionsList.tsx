@@ -9,8 +9,7 @@ interface TransactionsListProps {
 }
 
 export const TransactionsList = ({ transactions }: TransactionsListProps) => {
-  const { wallet } = useWallet()
-  const address = wallet.getCurrentWallet()?.address
+  const { address } = useWallet()
   if (!address) return null
   const txDates =
     transactions &&

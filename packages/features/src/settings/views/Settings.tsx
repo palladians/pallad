@@ -1,4 +1,4 @@
-import { MinaNetwork } from '@palladxyz/key-management'
+import { Mina } from '@palladxyz/mina-core'
 import {
   Card,
   Label,
@@ -26,11 +26,13 @@ export const SettingsView = () => {
     setNetwork: state.setNetwork,
     network: state.network
   }))
-  const handleNetworkSwitch = async (value: MinaNetwork) => {
+  const handleNetworkSwitch = async (value: Mina.Networks) => {
     await switchNetwork(value)
     await mutate(() => true, undefined, { revalidate: false })
     toast({
-      title: `Network has been changed to ${MinaNetwork[value]}`
+      title: `Network has been changed to ${
+        Mina.Networks[value.toUpperCase() as keyof typeof Mina.Networks]
+      }`
     })
   }
   const handleThemeSwitch = async (value: string) => {
@@ -51,21 +53,33 @@ export const SettingsView = () => {
           <RadioGroup value={network} onValueChange={handleNetworkSwitch}>
             <div className="flex items-center space-x-2">
               <RadioGroupItem
-                value={MinaNetwork[MinaNetwork.Mainnet]}
+                value={
+                  Mina.Networks[
+                    Mina.Networks.MAINNET.toUpperCase() as keyof typeof Mina.Networks
+                  ]
+                }
                 id="networkMainnet"
               />
               <Label htmlFor="networkMainnet">Mainnet</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem
-                value={MinaNetwork[MinaNetwork.Devnet]}
+                value={
+                  Mina.Networks[
+                    Mina.Networks.DEVNET.toUpperCase() as keyof typeof Mina.Networks
+                  ]
+                }
                 id="networkDevnet"
               />
               <Label htmlFor="networkDevnet">Devnet</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem
-                value={MinaNetwork[MinaNetwork.Berkeley]}
+                value={
+                  Mina.Networks[
+                    Mina.Networks.BERKELEY.toUpperCase() as keyof typeof Mina.Networks
+                  ]
+                }
                 id="networkBerkeley"
               />
               <Label htmlFor="networkBerkeley">Berkeley</Label>

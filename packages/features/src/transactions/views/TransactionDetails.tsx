@@ -10,11 +10,11 @@ import { TxIndicator } from '../components/TxIndicator'
 import { structurizeTransaction } from '../utils/structurizeTransactions'
 
 export const TransactionDetailsView = () => {
-  const { wallet } = useWallet()
+  const { address } = useWallet()
   const navigate = useNavigate()
   const { hash } = useParams()
   if (!hash) return null
-  const walletPublicKey = wallet.getCurrentWallet()?.address // TODO: Fix this with new wallet API
+  const walletPublicKey = address
   if (!walletPublicKey) return null
   const { data: transactionData, isLoading: transactionLoading } =
     useTransaction({ hash })

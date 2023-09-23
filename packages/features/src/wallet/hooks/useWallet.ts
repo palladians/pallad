@@ -1,4 +1,4 @@
-import { GroupedCredentials, MinaNetwork } from '@palladxyz/key-management'
+import { GroupedCredentials } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import {
   MinaWalletImpl,
@@ -19,21 +19,9 @@ import { shallow } from 'zustand/shallow'
 
 import { useAppStore } from '../store/app'
 
-// TODO: Remove mapping once network types are unified
-const getNetworkValue = (network: MinaNetwork) => {
-  switch (network) {
-    case MinaNetwork.Mainnet:
-      return Mina.Networks.MAINNET
-    case MinaNetwork.Devnet:
-      return Mina.Networks.DEVNET
-    case MinaNetwork.Berkeley:
-      return Mina.Networks.BERKELEY
-  }
-}
-
 // Load environment variables
 // TODO: this is in the scope of the Network & Provider Managers
-const providers = {
+const networkConfigurations = {
   [Mina.Networks.MAINNET]: {
     provider: import.meta.env.VITE_APP_MINA_PROXY_MAINNET_URL,
     archive: import.meta.env.VITE_APP_MINA_EXPLORER_MAINNET_URL
@@ -57,12 +45,11 @@ export const useWallet = () => {
     }),
     shallow
   )
-  const network = getNetworkValue(networkEnum)
+  const network = networkEnum
   const walletProperties = useMemo(
     () => ({
       network,
-      name: 'Pallad',
-      providers
+      name: 'Pallad'
     }),
     [network]
   )
@@ -74,8 +61,11 @@ export const useWallet = () => {
       keyAgentStore: new KeyAgentStore(),
 
       // managers
-      networkManager: new NetworkManager(providers, Mina.Networks.BERKELEY),
-      providerManager: new ProviderManager(providers)
+      networkManager: new NetworkManager(
+        networkConfigurations,
+        Mina.Networks.MAINNET
+      ),
+      providerManager: new ProviderManager(networkConfigurations)
     }),
     []
   )
@@ -86,8 +76,12 @@ export const useWallet = () => {
   )
   const walletCredential = wallet.getCurrentWallet()
     ?.credential as GroupedCredentials
-  console.log(`Wallet Credential: ${JSON.stringify(walletCredential)}`)
-  const address = useMemo(() => walletCredential.address, [wallet])
+  let address: string
+  if (walletCredential === undefined) {
+    address = useMemo(() => '', [])
+  } else {
+    address = useMemo(() => walletCredential.address, [walletCredential])
+  }
   const gradientBackground = useMemo(
     () =>
       easyMeshGradient({
@@ -97,15 +91,12 @@ export const useWallet = () => {
     [address]
   )
 
-  const switchNetwork = async (network: MinaNetwork) => {
+  const switchNetwork = async (network: Mina.Networks) => {
     setNetwork(network)
-    await wallet.switchNetwork(getNetworkValue(network))
+    await wallet.switchNetwork(network)
   }
 
   const copyWalletAddress = async () => {
-    const walletCredential = wallet.getCurrentWallet()
-      ?.credential as GroupedCredentials
-    const address = walletCredential.address
     await navigator.clipboard.writeText(address || '')
     toast({
       title: 'Wallet address was copied.'

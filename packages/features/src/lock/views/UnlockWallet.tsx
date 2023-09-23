@@ -41,7 +41,7 @@ export const UnlockWalletView = () => {
     //keyAgentStore.destroy()
     //await keyAgentStore.persist.rehydrate()
     wallet.rehydrateStores()
-    const currentWallet = wallet.getCurrentWallet()
+    const currentWallet = wallet.getCurrentWallet() // might have to return address
     if (!currentWallet) return await onError()
     return navigate('/dashboard')
   }
