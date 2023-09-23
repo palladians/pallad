@@ -1,0 +1,28 @@
+{
+  "name": "@palladxyz/multi-chain-core",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Multi-Chain Core Package SDK for Pallad",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules dist .turbo"
+  },
+  "dependencies": {
+    "@palladxyz/util": "*",
+    "@palladxyz/mina-core": "*"
+  },
+  "devDependencies": {
+    "@palladxyz/common": "*",
+    "@types/mocha": "^10.0.1"
+  }
+}

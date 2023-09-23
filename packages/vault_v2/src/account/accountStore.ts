@@ -1,5 +1,5 @@
 import { ChainAddress } from '@palladxyz/key-management'
-import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import { Multichain } from '@palladxyz/multi-chain-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { create, StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
@@ -17,9 +17,10 @@ export class AccountStore {
     const persistedStore = persist<AccountState>(
       (set, get) => ({
         state: {
-          mainnet: {},
-          devnet: {},
-          berkeley: {}
+          accounts: {} as Record<
+            Multichain.MultiChainNetworks,
+            Record<ChainAddress, SingleAccountState>
+          >
         },
         // Maybe this works?
         rehydrate: async () => {
@@ -30,24 +31,30 @@ export class AccountStore {
         },
 
         ensureAccount: (
-          network: Mina.Networks,
+          network: Multichain.MultiChainNetworks,
           address: ChainAddress
         ): void => {
           set((current) => {
-            if (!current.state[network]) {
-              return {
-                ...current,
-                state: { ...current.state, [network]: {} }
-              }
-            }
-            if (!current.state[network][address]) {
+            if (!current.state.accounts[network]) {
               return {
                 ...current,
                 state: {
                   ...current.state,
-                  [network]: {
-                    ...current.state[network],
-                    [address]: { ...initialSingleAccountState }
+                  accounts: { ...current.state.accounts, [network]: {} }
+                }
+              }
+            }
+            if (!current.state.accounts[network][address]) {
+              return {
+                ...current,
+                state: {
+                  ...current.state,
+                  accounts: {
+                    ...current.state.accounts,
+                    [network]: {
+                      ...current.state.accounts[network],
+                      [address]: { ...initialSingleAccountState }
+                    }
                   }
                 }
               }
@@ -57,76 +64,88 @@ export class AccountStore {
         },
 
         setAccountInfo: (
-          network: Mina.Networks,
+          network: Multichain.MultiChainNetworks,
           address: ChainAddress,
-          accountInfo: AccountInfo
+          accountInfo: Multichain.MultiChainAccountInfo
         ): void => {
-          set((current) => ({
-            ...current,
-            state: {
-              ...current.state,
-              [network]: {
-                ...current.state[network],
-                [address]: {
-                  ...current.state[network][address],
-                  accountInfo: accountInfo
+          set((current) => {
+            const networkAccounts = current.state.accounts[network] || {}
+            const accountData =
+              networkAccounts[address] || initialSingleAccountState
+
+            return {
+              ...current,
+              state: {
+                ...current.state,
+                accounts: {
+                  ...current.state.accounts,
+                  [network]: {
+                    ...networkAccounts,
+                    [address]: {
+                      ...accountData,
+                      accountInfo: accountInfo
+                    }
+                  }
                 }
               }
             }
-          }))
+          })
         },
 
         setTransactions: (
-          network: Mina.Networks,
+          network: Multichain.MultiChainNetworks,
           address: ChainAddress,
-          transactions: Mina.TransactionBody[]
+          transactions: Multichain.MultiChainTransaction[]
         ): void => {
-          set((current) => ({
-            ...current,
-            state: {
-              ...current.state,
-              [network]: {
-                ...current.state[network],
-                [address]: {
-                  ...current.state[network][address],
-                  transactions: transactions
+          set((current) => {
+            const networkAccounts = current.state.accounts[network] || {}
+            const accountData =
+              networkAccounts[address] || initialSingleAccountState
+
+            return {
+              ...current,
+              state: {
+                ...current.state,
+                accounts: {
+                  ...current.state.accounts,
+                  [network]: {
+                    ...networkAccounts,
+                    [address]: {
+                      ...accountData,
+                      transactions: transactions
+                    }
+                  }
                 }
               }
             }
-          }))
+          })
         },
 
-        getAccountInfo: (
-          network: Mina.Networks,
+        addAccount: (
+          network: Multichain.MultiChainNetworks,
           address: ChainAddress
-        ): SingleAccountState => {
-          return get().state[network]?.[address] || initialSingleAccountState
-        },
-
-        getTransactions: (
-          network: Mina.Networks,
-          address: ChainAddress
-        ): Mina.TransactionBody[] => {
-          return get().state[network]?.[address]?.transactions || []
-        },
-
-        addAccount: (network: Mina.Networks, address: ChainAddress): void => {
-          // This logic is the same as ensureAccount, consider reusing.
+        ): void => {
           set((current) => {
-            if (!current.state[network]) {
-              return {
-                ...current,
-                state: { ...current.state, [network]: {} }
-              }
-            }
-            if (!current.state[network][address]) {
+            if (!current.state.accounts[network]) {
               return {
                 ...current,
                 state: {
                   ...current.state,
-                  [network]: {
-                    ...current.state[network],
-                    [address]: { ...initialSingleAccountState }
+                  accounts: { ...current.state.accounts, [network]: {} }
+                }
+              }
+            }
+            if (!current.state.accounts[network][address]) {
+              return {
+                ...current,
+                state: {
+                  ...current.state,
+                  accounts: {
+                    ...current.state.accounts,
+                    [network]: {
+                      ...current.state.accounts[network],
+                      [address]: { ...initialSingleAccountState }
+                    }
                   }
                 }
               }
@@ -136,20 +155,40 @@ export class AccountStore {
         },
 
         removeAccount: (
-          network: Mina.Networks,
+          network: Multichain.MultiChainNetworks,
           address: ChainAddress
         ): void => {
           set((current) => {
-            const newState = { ...current.state[network] }
+            const newState = { ...current.state.accounts[network] }
             delete newState[address]
             return {
               ...current,
               state: {
                 ...current.state,
-                [network]: newState
+                accounts: {
+                  ...current.state.accounts,
+                  [network]: newState
+                }
               }
             }
           })
+        },
+
+        getAccountInfo: (
+          network: Multichain.MultiChainNetworks,
+          address: ChainAddress
+        ): SingleAccountState => {
+          return (
+            get().state.accounts[network]?.[address] ||
+            initialSingleAccountState
+          )
+        },
+
+        getTransactions: (
+          network: Multichain.MultiChainNetworks,
+          address: ChainAddress
+        ): Multichain.MultiChainTransaction[] => {
+          return get().state.accounts[network]?.[address]?.transactions || []
         }
       }),
       {
@@ -162,45 +201,54 @@ export class AccountStore {
     this.store = create<AccountState>(persistedStore as any)
   }
 
-  ensureAccount(network: Mina.Networks, address: ChainAddress): void {
+  ensureAccount(
+    network: Multichain.MultiChainNetworks,
+    address: ChainAddress
+  ): void {
     this.store.getState().ensureAccount(network, address)
   }
 
   setAccountInfo(
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     address: ChainAddress,
-    accountInfo: AccountInfo
+    accountInfo: Multichain.MultiChainAccountInfo
   ): void {
     this.store.getState().setAccountInfo(network, address, accountInfo)
   }
 
   setTransactions(
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     address: ChainAddress,
-    transactions: Mina.TransactionBody[]
+    transactions: Multichain.MultiChainTransaction[]
   ): void {
     this.store.getState().setTransactions(network, address, transactions)
   }
 
   getAccountInfo(
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     address: ChainAddress
   ): SingleAccountState {
     return this.store.getState().getAccountInfo(network, address)
   }
 
   getTransactions(
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     address: ChainAddress
-  ): Mina.TransactionBody[] {
+  ): Multichain.MultiChainTransaction[] {
     return this.store.getState().getTransactions(network, address)
   }
 
-  addAccount(network: Mina.Networks, address: ChainAddress): void {
+  addAccount(
+    network: Multichain.MultiChainNetworks,
+    address: ChainAddress
+  ): void {
     this.store.getState().addAccount(network, address)
   }
 
-  removeAccount(network: Mina.Networks, address: ChainAddress): void {
+  removeAccount(
+    network: Multichain.MultiChainNetworks,
+    address: ChainAddress
+  ): void {
     this.store.getState().removeAccount(network, address)
   }
 

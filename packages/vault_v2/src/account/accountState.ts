@@ -3,15 +3,15 @@
  */
 
 import { ChainAddress } from '@palladxyz/key-management'
-import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import { Multichain } from '@palladxyz/multi-chain-core'
 
 /**
  * Type representing the basic state of an account.
  * @typedef {Object} SingleAccountState
  */
 export type SingleAccountState = {
-  accountInfo: AccountInfo
-  transactions: Mina.TransactionBody[]
+  accountInfo: Multichain.MultiChainAccountInfo
+  transactions: Multichain.DarkMatterTransactionBody[]
 }
 
 /**
@@ -19,30 +19,37 @@ export type SingleAccountState = {
  * @typedef {Object} SingleAccountMutators
  */
 export const initialSingleAccountState: SingleAccountState = {
-  accountInfo: {} as AccountInfo,
+  accountInfo: {} as Multichain.MultiChainAccountInfo,
   transactions: []
 }
 
 /**
+ * Type representing a mapping of ChainAddress to SingleAccountState.
+ */
+type ChainAddressMapping = Record<ChainAddress, SingleAccountState>
+
+/**
  * Type representing the aggregated state of all accounts, indexed by network and then by address.
- * @typedef {Object} AccountStoreState
  */
 export type AccountStoreState = {
-  // could become accounts: Record<Network, Record<ChainAddress, SingleAccountState>> for network agnostic
-  mainnet: Record<ChainAddress, SingleAccountState>
-  devnet: Record<ChainAddress, SingleAccountState>
-  berkeley: Record<ChainAddress, SingleAccountState>
+  accounts: Record<Multichain.MultiChainNetworks, ChainAddressMapping>
 }
 
 /**
  * Constant representing the initial account states.
- * @typedef {Object} AccountStoreState
  */
 export const initialAccountStoreState: AccountStoreState = {
-  mainnet: {},
-  devnet: {},
-  berkeley: {}
+  accounts: {} as Record<Multichain.MultiChainNetworks, ChainAddressMapping>
 }
+/**
+ * Users could add new chains to the store with some function like:
+          function addNetworkToState(state: AccountStoreState, network: Multichain.MultiChainNetworks) {
+            if (!state.accounts[network]) {
+              state.accounts[network] = {} as Record<ChainAddress, SingleAccountState>;
+            }
+        }
+ * 
+ */
 
 /**
  * Type representing the store's state and actions combined.
@@ -52,33 +59,42 @@ export type AccountState = {
   rehydrate(): unknown
   state: AccountStoreState
 
-  ensureAccount: (network: Mina.Networks, address: ChainAddress) => void
+  ensureAccount: (
+    network: Multichain.MultiChainNetworks,
+    address: ChainAddress
+  ) => void
 
   setAccountInfo: (
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     address: ChainAddress,
-    accountInfo: AccountInfo
+    accountInfo: Multichain.MultiChainAccountInfo
   ) => void
 
   setTransactions: (
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     address: ChainAddress,
-    transactions: Mina.TransactionBody[]
+    transactions: Multichain.MultiChainTransaction[]
   ) => void
 
   getAccountInfo: (
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     address: ChainAddress
   ) => SingleAccountState | typeof initialSingleAccountState
 
   getTransactions: (
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     address: ChainAddress
-  ) => Mina.TransactionBody[]
+  ) => Multichain.MultiChainTransaction[]
 
-  addAccount: (network: Mina.Networks, address: ChainAddress) => void
+  addAccount: (
+    network: Multichain.MultiChainNetworks,
+    address: ChainAddress
+  ) => void
 
-  removeAccount: (network: Mina.Networks, address: ChainAddress) => void
+  removeAccount: (
+    network: Multichain.MultiChainNetworks,
+    address: ChainAddress
+  ) => void
 }
 
 /**

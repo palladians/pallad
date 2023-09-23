@@ -609,6 +609,22 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2(typescript@5.0.4)
 
+  packages/multi-chain-core:
+    dependencies:
+      '@palladxyz/mina-core':
+        specifier: '*'
+        version: link:../mina-core
+      '@palladxyz/util':
+        specifier: '*'
+        version: link:../util
+    devDependencies:
+      '@palladxyz/common':
+        specifier: '*'
+        version: link:../common
+      '@types/mocha':
+        specifier: ^10.0.1
+        version: 10.0.1
+
   packages/offchain-data:
     dependencies:
       swr:
@@ -810,6 +826,9 @@ importers:
       '@palladxyz/mina-graphql':
         specifier: '*'
         version: link:../mina-graphql
+      '@palladxyz/multi-chain-core':
+        specifier: '*'
+        version: link:../multi-chain-core
       '@palladxyz/persistence':
         specifier: '*'
         version: link:../persistence
