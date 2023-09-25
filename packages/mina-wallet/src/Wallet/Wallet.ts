@@ -16,6 +16,7 @@ import {
   SubmitTxArgs,
   SubmitTxResult
 } from '@palladxyz/mina-core'
+import { Multichain } from '@palladxyz/multi-chain-core'
 import {
   AccountStore,
   credentialName,
@@ -45,24 +46,24 @@ export interface MinaWalletDependencies {
   keyAgentStore: KeyAgentStore
   credentialStore: CredentialStore
   // managers
-  networkManager: NetworkManager
-  providerManager: ProviderManager
+  networkManager: NetworkManager<Multichain.MultiChainNetworks>
+  providerManager: ProviderManager<Multichain.MultiChainNetworks>
 }
 
 export interface MinaWalletProps {
-  readonly network: Mina.Networks
+  readonly network: Multichain.MultiChainNetworks
   readonly name: string
 }
 
 export class MinaWalletImpl implements MinaWallet {
-  public network: Mina.Networks
+  public network: Multichain.MultiChainNetworks
   // stores
   private keyAgentStore: KeyAgentStore
   private accountStore: AccountStore
   private credentialStore: CredentialStore
   // managers
-  private networkManager: NetworkManager
-  private providerManager: ProviderManager
+  private networkManager: NetworkManager<Multichain.MultiChainNetworks>
+  private providerManager: ProviderManager<Multichain.MultiChainNetworks>
   // other things
   readonly balance: number
   private currentWallet: SingleCredentialState | null
@@ -99,14 +100,18 @@ export class MinaWalletImpl implements MinaWallet {
     }
   }
 
-  private _validateCurrentNetwork(network: Mina.Networks | null): void {
+  private _validateCurrentNetwork(
+    network: Multichain.MultiChainNetworks | null
+  ): void {
     if (!network) {
       throw new NetworkError('Invalid current network')
     }
   }
 
   // Event listener for network change
-  public onNetworkChanged(listener: (network: Mina.Networks) => void) {
+  public onNetworkChanged(
+    listener: (network: Multichain.MultiChainNetworks) => void
+  ) {
     this.networkManager.onNetworkChanged(listener)
   }
   /**
@@ -154,7 +159,7 @@ export class MinaWalletImpl implements MinaWallet {
     this.currentWallet = credential
   }
 
-  getCurrentNetwork(): Mina.Networks {
+  getCurrentNetwork(): Multichain.MultiChainNetworks {
     // Get the current network
     return this.networkManager.getCurrentNetwork()
   }
@@ -167,19 +172,12 @@ export class MinaWalletImpl implements MinaWallet {
     return this.getKeyAgentStore().getKeyAgent(name)
   }
 
-  async switchNetwork(network: Mina.Networks): Promise<void> {
+  async switchNetwork(network: Multichain.MultiChainNetworks): Promise<void> {
     const provider = this.networkManager.getActiveProvider()
-    const archiveProvider = this.networkManager.getActiveArchiveProvider()
 
     if (!provider) {
       throw new NetworkError(
         'Mina provider is undefined in switchNetwork method'
-      )
-    }
-
-    if (!archiveProvider) {
-      throw new NetworkError(
-        'Mina archive provider is undefined in switchNetwork method'
       )
     }
 
@@ -220,7 +218,9 @@ export class MinaWalletImpl implements MinaWallet {
     return accountInformation
   }
 
-  async getTransactions(): Promise<Mina.TransactionBody[] | null> {
+  async getTransactions(): Promise<
+    Multichain.MultiChainTransactionBody[] | null
+  > {
     const currentWallet = this.getCurrentWallet()
     if (currentWallet === null) {
       throw new WalletError(
@@ -246,7 +246,7 @@ export class MinaWalletImpl implements MinaWallet {
     )
   }
   // This can be improved
-  async getTransaction({
+  /*async getTransaction({
     hash
   }: {
     hash: string
@@ -256,7 +256,7 @@ export class MinaWalletImpl implements MinaWallet {
       transactions?.filter((transaction) => transaction?.hash === hash)?.[0] ||
       null
     )
-  }
+  }*/
 
   async sign(
     signable: ChainSignablePayload,
@@ -316,7 +316,7 @@ export class MinaWalletImpl implements MinaWallet {
   async restoreWallet<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
     keyAgentName: keyAgentName,
     keyAgentType: keyAgents = keyAgents.inMemory,
@@ -364,20 +364,20 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   private async syncTransactions(
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     derivedCredential: GroupedCredentials
   ): Promise<void> {
     if (derivedCredential === undefined) {
       throw new Error('Derived credential is undefined')
     }
     // sync the transactions
-    if (this.providerManager.getArchiveProvider(network) === null) {
+    if (this.providerManager.getProvider(network) === null) {
       throw new NetworkError(
         'Mina archive provider is undefined in syncTransactions method'
       )
     }
     const transactions = await this.providerManager
-      .getArchiveProvider(network)
+      .getProvider(network)
       ?.getTransactions({ addresses: [derivedCredential.address] })
     if (transactions === undefined) {
       throw new WalletError(
@@ -393,7 +393,7 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   private async syncAccountInfo(
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     derivedCredential: GroupedCredentials
   ): Promise<void> {
     if (derivedCredential === undefined) {
@@ -407,6 +407,7 @@ export class MinaWalletImpl implements MinaWallet {
         'Mina provider is undefined in syncAccountInfo method'
       )
     }
+
     const accountInfo = await this.providerManager
       .getProvider(network)
       ?.getAccountInfo({
@@ -426,7 +427,7 @@ export class MinaWalletImpl implements MinaWallet {
   }
 
   private async syncWallet(
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     derivedCredential: storedCredential
   ): Promise<void> {
     if (derivedCredential === undefined) {
@@ -437,12 +438,6 @@ export class MinaWalletImpl implements MinaWallet {
     // sync the wallet
     if (this.providerManager.getProvider(network) === null) {
       throw new NetworkError('Mina provider is undefined in syncWallet method')
-    }
-
-    if (this.providerManager.getArchiveProvider(network) === null) {
-      throw new NetworkError(
-        'Mina archive provider is undefined in syncWallet method'
-      )
     }
     // use the sync methods to sync the wallet
     await this.syncAccountInfo(network, derivedCredential as GroupedCredentials)

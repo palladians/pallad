@@ -1,33 +1,48 @@
 import { Mina } from '@palladxyz/mina-core'
+import { Multichain } from '@palladxyz/multi-chain-core'
 
-import { NetworkConfigurations } from '../../src/Network'
 import { ProviderManager } from '../../src/Provider/ProviderManager'
 
 describe('ProviderManager', () => {
-  let providerConfigurations: NetworkConfigurations
-  let network: Mina.Networks
+  let providerConfigurations: Partial<
+    Record<Multichain.MultiChainNetworks, Multichain.MultichainProviderConfig>
+  >
+  let network: Multichain.MultiChainNetworks
 
   beforeEach(() => {
     providerConfigurations = {
       [Mina.Networks.MAINNET]: {
-        provider: 'https://proxy.mainnet.minaexplorer.com/',
-        archive: 'https://mainnet.graphql.minaexplorer.com'
+        nodeUrl: 'https://proxy.mainnet.minaexplorer.com/',
+        archiveUrl: 'https://mainnet.graphql.minaexplorer.com'
       },
       [Mina.Networks.DEVNET]: {
-        provider: 'https://proxy.devnet.minaexplorer.com/',
-        archive: 'https://devnet.graphql.minaexplorer.com'
+        nodeUrl: 'https://proxy.devnet.minaexplorer.com/',
+        archiveUrl: 'https://devnet.graphql.minaexplorer.com'
       },
       [Mina.Networks.BERKELEY]: {
-        provider: 'https://proxy.berkeley.minaexplorer.com/',
-        archive: 'https://berkeley.graphql.minaexplorer.com'
+        nodeUrl: 'https://proxy.berkeley.minaexplorer.com/',
+        archiveUrl: 'https://berkeley.graphql.minaexplorer.com'
       }
     }
-    network = Mina.Networks.MAINNET
+    network = Mina.Networks.DEVNET
   })
 
-  test('should initialize with default provider', () => {
-    const manager = new ProviderManager(providerConfigurations)
-    expect(manager.getArchiveProvider(network)).not.toBeNull()
+  it('should initialize with default provider', () => {
+    const manager = new ProviderManager<Multichain.MultiChainNetworks>(
+      providerConfigurations
+    )
+    console.log('manager', manager)
     expect(manager.getProvider(network)).not.toBeNull()
+  })
+
+  it('should call getAccountInfo on the active provider', async () => {
+    const manager = new ProviderManager<Multichain.MultiChainNetworks>(
+      providerConfigurations
+    )
+    const args = {
+      publicKey: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+    }
+    const accountInfo = await manager.getProvider(network)?.getAccountInfo(args)
+    expect(accountInfo).not.toBeNull()
   })
 })

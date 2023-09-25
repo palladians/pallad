@@ -11,6 +11,7 @@ import {
   SubmitTxArgs,
   SubmitTxResult
 } from '@palladxyz/mina-core'
+import { Multichain } from '@palladxyz/multi-chain-core'
 import {
   keyAgentName,
   keyAgents,
@@ -27,7 +28,7 @@ export interface MinaWallet {
   restoreWallet<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
-    network: Mina.Networks,
+    network: Multichain.MultiChainNetworks,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
     keyAgentName: keyAgentName,
     keyAgentType?: keyAgents.inMemory
@@ -40,10 +41,10 @@ export interface MinaWallet {
   getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo | null>
 
   getTransactions(
-    publicKey: Mina.PublicKey
-  ): Promise<Mina.TransactionBody[] | null>
+    publicKey: Mina.PublicKey // Need a multichain public key type
+  ): Promise<Multichain.MultiChainTransactionBody[] | null>
 
-  constructTx(
+  constructTx( // should leave this as mina only for now
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
   ): Promise<Mina.ConstructedTransaction>
@@ -55,8 +56,8 @@ export interface MinaWallet {
 
   submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult | undefined>
 
-  switchNetwork(network: Mina.Networks): Promise<void>
-  getCurrentNetwork(): Mina.Networks | null
+  switchNetwork(network: Multichain.MultiChainNetworks): Promise<void>
+  getCurrentNetwork(): Multichain.MultiChainNetworks | null
 
   shutdown(): void
 }

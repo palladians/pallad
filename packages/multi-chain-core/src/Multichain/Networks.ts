@@ -1,6 +1,6 @@
 import { Mina } from '@palladxyz/mina-core'
 
-export enum DarkMatterNetworks {
+enum DarkMatterNetworks {
   DARKMATTERMAINNET = 'darkmattermainnet',
   DARKMATTERTESTNET = 'darkmattertestnet'
 }

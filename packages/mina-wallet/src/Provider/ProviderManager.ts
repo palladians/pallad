@@ -1,65 +1,58 @@
-import { Mina } from '@palladxyz/mina-core'
-import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
+import { Multichain } from '@palladxyz/multi-chain-core'
+
+export const providerFactory = (
+  config: Multichain.MultichainProviderConfig,
+  network: Multichain.MultiChainNetworks
+): Multichain.MultiChainProvider => {
+  // Your logic to create a provider instance based on config
+  return new Multichain.MultiChainProvider(config, network)
+}
+
+export type ProvidersConfig = Partial<
+  Record<Multichain.MultiChainNetworks, Multichain.MultichainProviderConfig>
+>
 
 /**
  * ProviderManager manages the MinaProvider and MinaArchiveProvider instances
  * for different networks.
  */
-export class ProviderManager {
-  private minaProviders: Record<Mina.Networks, MinaProvider | null>
-  private minaArchiveProviders: Record<
-    Mina.Networks,
-    MinaArchiveProvider | null
+export class ProviderManager<Networks extends Multichain.MultiChainNetworks> {
+  // should change this to `multichainProvider`
+  private providers: Partial<
+    Record<Networks, Multichain.MultiChainProvider | null>
+  > = {} as Partial<
+    Record<Multichain.MultiChainNetworks, Multichain.MultiChainProvider | null>
   >
 
   /**
    * Creates a new instance of ProviderManager.
-   * @param providers - An object with provider and archive URLs for each network.
+   * @param providersConfig - An object with provider configurations for each network.
+   * @param providerFactory - Function to create a provider instance from a configuration.
    */
-  constructor(providers: {
-    [network in Mina.Networks]?: { provider: string; archive: string }
-  }) {
-    this.minaProviders = {
-      [Mina.Networks.MAINNET]: null,
-      [Mina.Networks.DEVNET]: null,
-      [Mina.Networks.BERKELEY]: null
-    }
-
-    this.minaArchiveProviders = {
-      [Mina.Networks.MAINNET]: null,
-      [Mina.Networks.DEVNET]: null,
-      [Mina.Networks.BERKELEY]: null
-    }
-
-    // Create providers for each network
-    for (const networkKey of Object.keys(providers)) {
-      const network = networkKey as Mina.Networks
-      if (providers[network]) {
-        this.minaProviders[network] = new MinaProvider(
-          providers[network]?.provider as string
-        )
-        this.minaArchiveProviders[network] = new MinaArchiveProvider(
-          providers[network]?.archive as string
+  constructor(
+    providersConfig: ProvidersConfig //Partial<Record<Networks, Multichain.MultichainProviderConfig>>,
+  ) {
+    for (const network in providersConfig) {
+      if (providersConfig[network as Networks]) {
+        this.providers[network as Networks] = this.providerFactory(
+          providersConfig[network as Networks]!,
+          network as Networks
         )
       }
     }
   }
 
   /**
-   * Get the MinaProvider for a given network.
+   * Get the Provider for a given network.
    * @param network - The target network.
-   * @returns The MinaProvider for the specified network.
+   * @returns The Provider for the specified network.
    */
-  getProvider(network: Mina.Networks): MinaProvider | null {
-    return this.minaProviders[network]
+  getProvider(network: Networks): Multichain.MultiChainProvider | null {
+    return this.providers[network] || null
   }
 
   /**
-   * Get the MinaArchiveProvider for a given network.
-   * @param network - The target network.
-   * @returns The MinaArchiveProvider for the specified network.
+   * Provider factory function.
    */
-  getArchiveProvider(network: Mina.Networks): MinaArchiveProvider | null {
-    return this.minaArchiveProviders[network]
-  }
+  private providerFactory = providerFactory
 }

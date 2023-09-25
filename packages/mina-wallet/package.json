@@ -23,6 +23,7 @@
     "@palladxyz/mina-graphql": "*",
     "@palladxyz/util": "*",
     "@palladxyz/vaultv2": "*",
+    "@palladxyz/multi-chain-core": "*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "events": "^3.3.0",

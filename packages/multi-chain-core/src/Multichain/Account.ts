@@ -1,6 +1,6 @@
-import { AccountInfo } from '@palladxyz/mina-core'
+import { AccountInfo, AccountInfoArgs } from '@palladxyz/mina-core'
 
-export type DarkMatterAccountInfo = {
+type DarkMatterAccountInfo = {
   balance: { total: number }
   nonce: number
   inferredNonce: number
@@ -9,3 +9,5 @@ export type DarkMatterAccountInfo = {
 }
 
 export type MultiChainAccountInfo = AccountInfo | DarkMatterAccountInfo
+
+export type MultiChainAccountInfoArgs = AccountInfoArgs

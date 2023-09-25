@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "@palladxyz/util": "*",
-    "@palladxyz/mina-core": "*"
+    "@palladxyz/mina-core": "*",
+    "@palladxyz/mina-graphql": "*"
   },
   "devDependencies": {
     "@palladxyz/common": "*",

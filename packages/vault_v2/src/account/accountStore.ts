@@ -95,7 +95,7 @@ export class AccountStore {
         setTransactions: (
           network: Multichain.MultiChainNetworks,
           address: ChainAddress,
-          transactions: Multichain.MultiChainTransaction[]
+          transactions: Multichain.MultiChainTransactionBody[]
         ): void => {
           set((current) => {
             const networkAccounts = current.state.accounts[network] || {}
@@ -187,7 +187,7 @@ export class AccountStore {
         getTransactions: (
           network: Multichain.MultiChainNetworks,
           address: ChainAddress
-        ): Multichain.MultiChainTransaction[] => {
+        ): Multichain.MultiChainTransactionBody[] => {
           return get().state.accounts[network]?.[address]?.transactions || []
         }
       }),
@@ -219,7 +219,7 @@ export class AccountStore {
   setTransactions(
     network: Multichain.MultiChainNetworks,
     address: ChainAddress,
-    transactions: Multichain.MultiChainTransaction[]
+    transactions: Multichain.MultiChainTransactionBody[]
   ): void {
     this.store.getState().setTransactions(network, address, transactions)
   }
@@ -234,7 +234,7 @@ export class AccountStore {
   getTransactions(
     network: Multichain.MultiChainNetworks,
     address: ChainAddress
-  ): Multichain.MultiChainTransaction[] {
+  ): Multichain.MultiChainTransactionBody[] {
     return this.store.getState().getTransactions(network, address)
   }
 

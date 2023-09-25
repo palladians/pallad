@@ -1,81 +1,59 @@
 import { Mina } from '@palladxyz/mina-core'
-import { MinaArchiveProvider, MinaProvider } from '@palladxyz/mina-graphql'
+import { Multichain } from '@palladxyz/multi-chain-core'
 import { EventEmitter } from 'events'
 
-type ProviderConfiguration = {
-  provider: string
-  archive: string
-}
+import { ProviderManager } from '../Provider/ProviderManager'
 
-type NetworkConfigurations = {
-  [network in Mina.Networks]?: ProviderConfiguration
-}
-
-class NetworkManager {
-  private activeNetwork: Mina.Networks
-  private providers: Record<Mina.Networks, MinaProvider | null>
-  private archiveProviders: Record<Mina.Networks, MinaArchiveProvider | null>
+class NetworkManager<Networks extends Multichain.MultiChainNetworks> {
+  private activeNetwork: Networks
+  private providerManager: ProviderManager<Networks>
   private networkSwitch: EventEmitter
 
   constructor(
-    networkConfigurations: NetworkConfigurations,
-    defaultNetwork: Mina.Networks = Mina.Networks.MAINNET
+    networkConfigurations: Partial<
+      Record<Networks, Multichain.MultichainProviderConfig>
+    >,
+    defaultNetwork: Networks = Mina.Networks.MAINNET as Networks
   ) {
     this.activeNetwork = defaultNetwork
     this.networkSwitch = new EventEmitter()
-    this.providers = {
-      [Mina.Networks.MAINNET]: null,
-      [Mina.Networks.DEVNET]: null,
-      [Mina.Networks.BERKELEY]: null
-    }
-    this.archiveProviders = {
-      [Mina.Networks.MAINNET]: null,
-      [Mina.Networks.DEVNET]: null,
-      [Mina.Networks.BERKELEY]: null
-    }
 
-    for (const network of Object.keys(networkConfigurations)) {
-      const config = networkConfigurations[network as Mina.Networks]
-      if (config) {
-        this.providers[network as Mina.Networks] = new MinaProvider(
-          config.provider
-        )
-        this.archiveProviders[network as Mina.Networks] =
-          new MinaArchiveProvider(config.archive)
-      }
+    // Create a ProviderManager instance for managing providers
+    this.providerManager = new ProviderManager<Networks>(
+      networkConfigurations as Record<
+        Networks,
+        Multichain.MultichainProviderConfig
+      >
+    )
+  }
+
+  public switchNetwork(network: Networks): void {
+    if (this.activeNetwork !== network) {
+      this.activeNetwork = network
+      this.networkSwitch.emit('networkChanged', network)
     }
   }
 
-  public switchNetwork(network: Mina.Networks): void {
-    this.activeNetwork = network
-    this.networkSwitch.emit('networkChanged', network)
-  }
-
-  public onNetworkChanged(listener: (network: Mina.Networks) => void): void {
-    this.networkSwitch.removeAllListeners('networkChanged')
+  public onNetworkChanged(listener: (network: Networks) => void): void {
     this.networkSwitch.on('networkChanged', listener)
   }
 
-  public offNetworkChanged(listener: (network: Mina.Networks) => void): void {
+  public offNetworkChanged(listener: (network: Networks) => void): void {
     this.networkSwitch.removeListener('networkChanged', listener)
   }
 
-  public getActiveProvider(): MinaProvider | null {
-    return this.providers[this.activeNetwork]
+  public getActiveProvider(): Multichain.MultiChainProvider | null {
+    return this.providerManager.getProvider(this.activeNetwork)
   }
 
-  public getActiveArchiveProvider(): MinaArchiveProvider | null {
-    return this.archiveProviders[this.activeNetwork]
+  public getAvailableNetworks(): Networks[] {
+    // Note: Object.keys doesn't ensure type safety. We're assuming every key in providerManager.providers is a valid network.
+    return Object.keys(this.providerManager['providers']) as Networks[]
   }
 
-  public getAvailableNetworks(): Mina.Networks[] {
-    return Object.keys(this.providers) as Mina.Networks[]
-  }
-
-  public getCurrentNetwork(): Mina.Networks {
+  public getCurrentNetwork(): Networks {
     return this.activeNetwork
   }
-  // Other utility methods or functionalities can be added as needed.
 }
 
-export { NetworkConfigurations, NetworkManager }
+export { NetworkManager }

@@ -73,7 +73,7 @@ export type AccountState = {
   setTransactions: (
     network: Multichain.MultiChainNetworks,
     address: ChainAddress,
-    transactions: Multichain.MultiChainTransaction[]
+    transactions: Multichain.MultiChainTransactionBody[]
   ) => void
 
   getAccountInfo: (
@@ -84,7 +84,7 @@ export type AccountState = {
   getTransactions: (
     network: Multichain.MultiChainNetworks,
     address: ChainAddress
-  ) => Multichain.MultiChainTransaction[]
+  ) => Multichain.MultiChainTransactionBody[]
 
   addAccount: (
     network: Multichain.MultiChainNetworks,
