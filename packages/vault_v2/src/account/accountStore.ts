@@ -187,8 +187,7 @@ export class AccountStore {
         }),
         {
           name: 'PalladAccount',
-          storage: createJSONStorage(getSecurePersistence),
-          skipHydration: true
+          storage: createJSONStorage(getSecurePersistence)
         }
       )
     )

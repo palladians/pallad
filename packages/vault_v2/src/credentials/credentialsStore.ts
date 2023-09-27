@@ -105,8 +105,7 @@ export class CredentialStore {
         }),
         {
           name: 'PalladCredential',
-          storage: createJSONStorage(getSecurePersistence),
-          skipHydration: true
+          storage: createJSONStorage(getSecurePersistence)
         }
       )
     )

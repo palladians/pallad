@@ -100,8 +100,7 @@ export class KeyAgentStore {
         }),
         {
           name: 'PalladKeyAgent',
-          storage: createJSONStorage(getSecurePersistence),
-          skipHydration: true
+          storage: createJSONStorage(getSecurePersistence)
         }
       )
     )
