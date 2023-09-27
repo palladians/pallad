@@ -5,6 +5,7 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
+import { Multichain } from '@palladxyz/multi-chain-core'
 import {
   AccountStore,
   CredentialStore,
@@ -28,9 +29,9 @@ describe('MinaWalletImpl', () => {
   let wallet: MinaWalletImpl
   let walletDependencies: MinaWalletDependencies
   let walletProperties: MinaWalletProps
-  let network: Mina.Networks
+  let network: Multichain.MultiChainNetworks
   let keyAgentName: keyAgentName
-  let networkConfigurations: NetworkConfigurations
+  let networkConfigurations: NetworkConfigurations<Multichain.MultiChainNetworks>
 
   const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
   const mnemonic = [
@@ -51,16 +52,16 @@ describe('MinaWalletImpl', () => {
   beforeEach(() => {
     networkConfigurations = {
       [Mina.Networks.MAINNET]: {
-        provider: 'https://proxy.minaexplorer.com/',
+        nodeUrl: 'https://proxy.minaexplorer.com/',
         archive: 'https://graphql.minaexplorer.com'
       },
       [Mina.Networks.DEVNET]: {
-        provider: 'https://proxy.devnet.minaexplorer.com/',
-        archive: 'https://devnet.graphql.minaexplorer.com'
+        nodeUrl: 'https://proxy.devnet.minaexplorer.com/',
+        archiveUrl: 'https://devnet.graphql.minaexplorer.com'
       },
       [Mina.Networks.BERKELEY]: {
-        provider: 'https://proxy.berkeley.minaexplorer.com/',
-        archive: 'https://berkeley.graphql.minaexplorer.com'
+        nodeUrl: 'https://proxy.berkeley.minaexplorer.com/',
+        archiveUrl: 'https://berkeley.graphql.minaexplorer.com'
       }
     }
     walletDependencies = {
@@ -69,11 +70,13 @@ describe('MinaWalletImpl', () => {
       keyAgentStore: new KeyAgentStore(),
       credentialStore: new CredentialStore(),
       // managers
-      networkManager: new NetworkManager(
+      networkManager: new NetworkManager<Multichain.MultiChainNetworks>(
         networkConfigurations,
         Mina.Networks.BERKELEY
       ),
-      providerManager: new ProviderManager(networkConfigurations)
+      providerManager: new ProviderManager<Multichain.MultiChainNetworks>(
+        networkConfigurations
+      )
     }
     walletProperties = {
       // this is the first network that the wallet will be initialized with

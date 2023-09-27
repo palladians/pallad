@@ -1,5 +1,6 @@
 import {
   MinaPayload,
+  MinaSpecificArgs,
   Network,
   validateMnemonic,
   wordlist
@@ -49,19 +50,21 @@ export const MnemonicInputView = () => {
     //keyAgentStore.destroy()
     //keyAgentStore.persist.rehydrate()
     wallet.rehydrateStores()
+    const restoreArgs: MinaSpecificArgs = {
+      network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      networkType: 'testnet' // TODO: make this configurable
+    }
     await wallet.restoreWallet(
       new MinaPayload(),
-      {
-        network: Network.Mina,
-        accountIndex: 0,
-        addressIndex: 0,
-        networkType: 'testnet'
-      },
+      restoreArgs,
       Mina.Networks.MAINNET,
       {
         mnemonicWords: mnemonic.split(' '),
         getPassphrase: async () => Buffer.from(spendingPassword)
-      }
+      },
+      walletName //this is the keyAgentName
     )
     setVaultStateInitialized()
     return navigate('/onboarding/finish')

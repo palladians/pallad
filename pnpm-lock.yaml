@@ -297,6 +297,9 @@ importers:
       '@palladxyz/mina-wallet':
         specifier: '*'
         version: link:../mina-wallet
+      '@palladxyz/multi-chain-core':
+        specifier: '*'
+        version: link:../multi-chain-core
       '@palladxyz/offchain-data':
         specifier: '*'
         version: link:../offchain-data

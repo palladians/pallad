@@ -5,6 +5,7 @@ import { TxSide } from '../../common/types'
 
 interface TxSideIndicatorProps {
   side: TxSide
+  // TODO: consider how to make this with Multichain
   kind: Mina.TransactionKind
 }
 

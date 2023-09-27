@@ -26,6 +26,7 @@ export const TransactionDetailsView = () => {
     })
   const transactionMetaFields = transaction && [
     { label: 'Hash', value: transaction.hash },
+    // TODO: Figure out how to make the amount not only MINA
     { label: 'Amount', value: `${transaction.minaAmount} MINA` },
     { label: 'Sender', value: transaction.from },
     { label: 'Receiver', value: transaction.to }

@@ -5,6 +5,7 @@ import {
   NetworkManager,
   ProviderManager
 } from '@palladxyz/mina-wallet'
+import { Multichain } from '@palladxyz/multi-chain-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { toast } from '@palladxyz/ui'
 import {
@@ -20,19 +21,18 @@ import { shallow } from 'zustand/shallow'
 import { useAppStore } from '../store/app'
 
 // Load environment variables
-// TODO: this is in the scope of the Network & Provider Managers
 const networkConfigurations = {
   [Mina.Networks.MAINNET]: {
-    provider: import.meta.env.VITE_APP_MINA_PROXY_MAINNET_URL,
-    archive: import.meta.env.VITE_APP_MINA_EXPLORER_MAINNET_URL
+    nodeUrl: import.meta.env.VITE_APP_MINA_PROXY_MAINNET_URL,
+    archiveUrl: import.meta.env.VITE_APP_MINA_EXPLORER_MAINNET_URL
   },
   [Mina.Networks.DEVNET]: {
-    provider: import.meta.env.VITE_APP_MINA_PROXY_DEVNET_URL,
-    archive: import.meta.env.VITE_APP_MINA_EXPLORER_DEVNET_URL
+    nodeUrl: import.meta.env.VITE_APP_MINA_PROXY_DEVNET_URL,
+    archiveUrl: import.meta.env.VITE_APP_MINA_EXPLORER_DEVNET_URL
   },
   [Mina.Networks.BERKELEY]: {
-    provider: import.meta.env.VITE_APP_MINA_PROXY_BERKELEY_URL,
-    archive: import.meta.env.VITE_APP_MINA_EXPLORER_BERKELEY_URL
+    nodeUrl: import.meta.env.VITE_APP_MINA_PROXY_BERKELEY_URL,
+    archiveUrl: import.meta.env.VITE_APP_MINA_EXPLORER_BERKELEY_URL
   }
 }
 
@@ -61,11 +61,13 @@ export const useWallet = () => {
       keyAgentStore: new KeyAgentStore(),
 
       // managers
-      networkManager: new NetworkManager(
+      networkManager: new NetworkManager<Multichain.MultiChainNetworks>(
         networkConfigurations,
         Mina.Networks.MAINNET
       ),
-      providerManager: new ProviderManager(networkConfigurations)
+      providerManager: new ProviderManager<Multichain.MultiChainNetworks>(
+        networkConfigurations
+      )
     }),
     []
   )

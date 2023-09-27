@@ -67,6 +67,7 @@ export class MinaWalletImpl implements MinaWallet {
   // other things
   readonly balance: number
   private currentWallet: SingleCredentialState | null
+  private currentKeyAgent: keyAgentName | null
 
   readonly name: string
 
@@ -92,6 +93,7 @@ export class MinaWalletImpl implements MinaWallet {
     this.name = name
     this.balance = 0
     this.currentWallet = null
+    this.currentKeyAgent = null
   }
   private _validateCurrentWallet(wallet: SingleCredentialState | null): void {
     const credential = wallet?.credential as GroupedCredentials
@@ -157,6 +159,14 @@ export class MinaWalletImpl implements MinaWallet {
   setCurrentWallet(credential: SingleCredentialState): void {
     // Set the current wallet
     this.currentWallet = credential
+  }
+
+  getCurrentKeyAgentName(): keyAgentName | null {
+    return this.currentKeyAgent
+  }
+
+  setCurrentKeyAgentName(keyAgentName: keyAgentName): void {
+    this.currentKeyAgent = keyAgentName
   }
 
   getCurrentNetwork(): Multichain.MultiChainNetworks {
@@ -335,6 +345,7 @@ export class MinaWalletImpl implements MinaWallet {
       keyAgentType,
       agentArgs
     )
+    this.setCurrentKeyAgentName(keyAgentName)
     const keyAgent = this.getKeyAgentStore().getKeyAgent(keyAgentName)
     // set the current wallet
     const derivedCredential = await keyAgent.keyAgent?.deriveCredentials(

@@ -30,6 +30,7 @@
     "@palladxyz/persistence": "*",
     "@palladxyz/ui": "*",
     "@palladxyz/vaultv2": "*",
+    "@palladxyz/multi-chain-core": "*",
     "@total-typescript/ts-reset": "^0.4.2",
     "dayjs": "^1.11.8",
     "easy-mesh-gradient": "^0.0.5",

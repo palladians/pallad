@@ -8,15 +8,21 @@ import {
 } from '@palladxyz/mina-core'
 
 type DarkMatterTransactionBody = {
-  amount: number
+  type: 'payment' | 'delegation' | 'zkApp'
+  to: string
+  from: string
   fee: number
   nonce: number
-  from: string
-  to: string
-  memo: string
-  validUntil: number
-  signature: string
-  publicKey: string
+  amount?: number
+  memo?: string
+  validUntil?: number
+  blockHeight?: number
+  token?: string
+  hash?: string
+  failureReason?: string
+  dateTime?: string
+  isDelegation?: boolean
+  kind?: Mina.TransactionKind // if this isn't a Mina type it breaks the @features package
 }
 
 export type MultiChainTransactionBody =

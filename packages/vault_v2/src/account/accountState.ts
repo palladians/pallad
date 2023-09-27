@@ -11,7 +11,7 @@ import { Multichain } from '@palladxyz/multi-chain-core'
  */
 export type SingleAccountState = {
   accountInfo: Multichain.MultiChainAccountInfo
-  transactions: Multichain.DarkMatterTransactionBody[]
+  transactions: Multichain.MultiChainTransactionBody[]
 }
 
 /**

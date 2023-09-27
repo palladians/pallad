@@ -1,4 +1,8 @@
-import { MinaPayload, Network } from '@palladxyz/key-management'
+import {
+  MinaPayload,
+  MinaSpecificArgs,
+  Network
+} from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button, cn, Input, Label } from '@palladxyz/ui'
@@ -49,19 +53,21 @@ export const MnemonicConfirmationView = () => {
     //keyAgentStore.destroy()
     //keyAgentStore.persist.rehydrate()
     wallet.rehydrateStores()
+    const restoreArgs: MinaSpecificArgs = {
+      network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      networkType: 'testnet' // TODO: make this configurable
+    }
     await wallet.restoreWallet(
       new MinaPayload(),
-      {
-        network: Network.Mina,
-        accountIndex: 0,
-        addressIndex: 0,
-        networkType: 'testnet'
-      },
+      restoreArgs,
       Mina.Networks.MAINNET,
       {
         mnemonicWords: mnemonic.split(' '),
         getPassphrase: async () => Buffer.from(spendingPassword)
-      }
+      },
+      walletName //this is the keyAgentName
     )
     setVaultStateInitialized()
     return navigate('/onboarding/finish')
