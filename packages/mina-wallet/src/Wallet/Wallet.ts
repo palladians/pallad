@@ -141,6 +141,15 @@ export class MinaWalletImpl implements MinaWallet {
     this.credentialStore.rehydrate()
   }
   /**
+   * Destory the wallet stores
+   */
+  async destroyStores(): Promise<void> {
+    // Destroy the stores
+    this.keyAgentStore.destroy()
+    this.accountStore.destroy()
+    this.credentialStore.destroy()
+  }
+  /**
    *
    * @returns {CredentialStore} The CredentialStore
    */

@@ -56,7 +56,6 @@ export const initialAccountStoreState: AccountStoreState = {
  * @typedef {Object} AccountState
  */
 export type AccountState = {
-  rehydrate(): unknown
   state: AccountStoreState
 
   ensureAccount: (

@@ -38,17 +38,19 @@ const networkConfigurations = {
 
 export const useWallet = () => {
   const navigate = useNavigate()
-  const { network: networkEnum, setNetwork } = useAppStore(
+  // The use App Store should be an API on the wallet
+  const { network: network, setNetwork } = useAppStore(
     (state) => ({
       network: state.network,
       setNetwork: state.setNetwork
     }),
     shallow
   )
-  const network = networkEnum
+
+  // Memoized Values
   const walletProperties = useMemo(
     () => ({
-      network,
+      network: network,
       name: 'Pallad'
     }),
     [network]
@@ -72,18 +74,16 @@ export const useWallet = () => {
     []
   )
   const wallet = useMemo(
-    // TODO: update the dependencies with new wallet stores and managers
     () => new MinaWalletImpl(walletProperties, walletDependencies),
     [walletProperties, walletDependencies]
   )
-  const walletCredential = wallet.getCurrentWallet()
-    ?.credential as GroupedCredentials
-  let address: string
-  if (walletCredential === undefined) {
-    address = useMemo(() => '', [])
-  } else {
-    address = useMemo(() => walletCredential.address, [walletCredential])
-  }
+
+  const address = useMemo(() => {
+    const credential = wallet.getCurrentWallet()
+      ?.credential as GroupedCredentials
+    return credential ? credential.address : 'undefined'
+  }, [wallet])
+
   const gradientBackground = useMemo(
     () =>
       easyMeshGradient({

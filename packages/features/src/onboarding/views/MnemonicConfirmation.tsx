@@ -52,6 +52,8 @@ export const MnemonicConfirmationView = () => {
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
     //keyAgentStore.destroy()
     //keyAgentStore.persist.rehydrate()
+    // TODO: Add await in UI when user clicks restore wallet
+    // only press "submit" once
     wallet.rehydrateStores()
     const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,

@@ -1,5 +1,5 @@
 import { getSecurePersistence } from '@palladxyz/persistence'
-import { create, StoreApi } from 'zustand'
+import { createStore } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 import { keyAgentName } from '../keyAgent/keyAgentState'
@@ -14,105 +14,104 @@ import {
 import { matchesQuery } from './utils'
 
 export class CredentialStore {
-  private store: StoreApi<CredentialState>
+  private store: any //StoreApi<CredentialState>
 
   constructor() {
-    const persistedStore = persist<CredentialState>(
-      (set, get) => ({
-        state: {
-          credentials: {}
-        },
-        getState: get as () => CredentialState,
-        // Maybe this works?
-        rehydrate: async () => {
-          const state = await getSecurePersistence().getItem('PalladCredential')
-          if (state) {
-            set(JSON.parse(state))
-          }
-        },
-        ensureCredential: (
-          credentialName: credentialName,
-          keyAgentName: keyAgentName
-        ): void => {
-          set((current: CredentialState) => {
-            if (!current.state.credentials[credentialName]) {
-              return {
-                ...current,
-                state: {
-                  ...current.state,
-                  credentials: {
-                    ...current.state.credentials,
-                    [credentialName]: {
-                      ...initialCredentialState,
-                      credentialName: credentialName,
-                      keyAgentName: keyAgentName
+    const persistedStore = createStore<CredentialState>()(
+      persist(
+        (set, get) => ({
+          state: {
+            credentials: {}
+          },
+          getState: get as () => CredentialState,
+
+          ensureCredential: (
+            credentialName: credentialName,
+            keyAgentName: keyAgentName
+          ): void => {
+            set((current: CredentialState) => {
+              if (!current.state.credentials[credentialName]) {
+                return {
+                  ...current,
+                  state: {
+                    ...current.state,
+                    credentials: {
+                      ...current.state.credentials,
+                      [credentialName]: {
+                        ...initialCredentialState,
+                        credentialName: credentialName,
+                        keyAgentName: keyAgentName
+                      }
                     }
                   }
                 }
               }
-            }
-            return current
-          })
-        },
+              return current
+            })
+          },
 
-        setCredential: (credentialState: SingleCredentialState): void => {
-          const { credentialName } = credentialState
-          set((current: CredentialState) => ({
-            ...current,
-            state: {
-              ...current.state,
-              credentials: {
-                ...current.state.credentials,
-                [credentialName]: credentialState
-              }
-            }
-          }))
-        },
-
-        getCredential: (
-          credentialName: credentialName
-        ): SingleCredentialState | typeof initialCredentialState => {
-          const current = get()
-          return (
-            current.state.credentials[credentialName] || initialCredentialState
-          )
-        },
-
-        removeCredential: (credentialName: credentialName): void => {
-          set((current: CredentialState) => {
-            const newCredentials = { ...current.state.credentials }
-            delete newCredentials[credentialName]
-            return {
+          setCredential: (credentialState: SingleCredentialState): void => {
+            const { credentialName } = credentialState
+            set((current: CredentialState) => ({
               ...current,
               state: {
                 ...current.state,
-                credentials: newCredentials
+                credentials: {
+                  ...current.state.credentials,
+                  [credentialName]: credentialState
+                }
               }
-            }
-          })
-        },
-        searchCredentials: (query: SearchQuery): storedCredential[] => {
-          const credentialsStatesArray = Object.values(get().state.credentials)
-          const credentialsArray = credentialsStatesArray.map(
-            (cred) => cred.credential
-          )
+            }))
+          },
 
-          return credentialsArray.filter((credential) => {
-            if (!credential) {
-              return false
-            }
-            return matchesQuery(credential, query)
-          })
+          getCredential: (
+            credentialName: credentialName
+          ): SingleCredentialState | typeof initialCredentialState => {
+            const current = get()
+            return (
+              current.state.credentials[credentialName] ||
+              initialCredentialState
+            )
+          },
+
+          removeCredential: (credentialName: credentialName): void => {
+            set((current: CredentialState) => {
+              const newCredentials = { ...current.state.credentials }
+              delete newCredentials[credentialName]
+              return {
+                ...current,
+                state: {
+                  ...current.state,
+                  credentials: newCredentials
+                }
+              }
+            })
+          },
+          searchCredentials: (query: SearchQuery): storedCredential[] => {
+            const credentialsStatesArray = Object.values(
+              get().state.credentials
+            )
+            const credentialsArray = credentialsStatesArray.map(
+              (cred) => cred.credential
+            )
+
+            return credentialsArray.filter((credential) => {
+              if (!credential) {
+                return false
+              }
+              return matchesQuery(credential, query)
+            })
+          }
+        }),
+        {
+          name: 'PalladCredential',
+          storage: createJSONStorage(getSecurePersistence),
+          skipHydration: true
         }
-      }),
-      {
-        name: 'PalladCredential',
-        storage: createJSONStorage(getSecurePersistence),
-        skipHydration: true
-      }
+      )
     )
 
-    this.store = create<CredentialState>(persistedStore as any)
+    this.store = persistedStore
   }
 
   ensureCredential(
@@ -141,7 +140,11 @@ export class CredentialStore {
   }
 
   rehydrate = async () => {
-    await this.store.getState().rehydrate()
+    await this.store.persist.rehydrate()
+  }
+
+  destroy = () => {
+    this.store.destroy()
   }
 }
 

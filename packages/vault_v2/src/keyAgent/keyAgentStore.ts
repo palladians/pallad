@@ -3,7 +3,7 @@ import {
   InMemoryKeyAgent
 } from '@palladxyz/key-management'
 import { getSecurePersistence } from '@palladxyz/persistence'
-import { create, StoreApi } from 'zustand'
+import { createStore } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 import {
@@ -15,102 +15,98 @@ import {
 } from './keyAgentState'
 
 export class KeyAgentStore {
-  private store: StoreApi<KeyAgentState>
+  private store: any //TODO: figure out how to type this
 
   constructor() {
-    const persistedStore = persist<KeyAgentState>(
-      (set, get) => ({
-        state: {
-          keyAgents: {}
-        },
-        getState: get as () => KeyAgentState,
-        // Maybe this works?
-        rehydrate: async () => {
-          const state = await getSecurePersistence().getItem('PalladKeyAgent')
-          if (state) {
-            set(JSON.parse(state))
-          }
-        },
+    const persistedStore = createStore<KeyAgentState>()(
+      // instead of createStore<KeyAgentState>()( we can do create<KeyAgentState>()(
+      persist(
+        (set, get) => ({
+          state: {
+            keyAgents: {}
+          },
+          getState: get as () => KeyAgentState,
 
-        ensureKeyAgent: (name: keyAgentName) => {
-          set((current: KeyAgentState) => {
-            if (!current.state.keyAgents[name]) {
+          ensureKeyAgent: (name: keyAgentName) => {
+            set((current: KeyAgentState) => {
+              if (!current.state.keyAgents[name]) {
+                return {
+                  ...current,
+                  state: {
+                    ...current.state,
+                    keyAgents: {
+                      ...current.state.keyAgents,
+                      [name]: { ...initialKeyAgentState, name: name }
+                    }
+                  }
+                }
+              }
+              return current
+            })
+          },
+
+          initialiseKeyAgent: async (
+            name: keyAgentName,
+            keyAgentType: keyAgents,
+            { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+          ) => {
+            const agentArgs: FromBip39MnemonicWordsProps = {
+              getPassphrase: getPassphrase,
+              mnemonicWords: mnemonicWords,
+              mnemonic2ndFactorPassphrase: ''
+            }
+            const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
+            set((current: KeyAgentState) => {
+              const existingAgentState = current.state.keyAgents[name] || {}
+
               return {
                 ...current,
                 state: {
                   ...current.state,
                   keyAgents: {
                     ...current.state.keyAgents,
-                    [name]: { ...initialKeyAgentState, name: name }
+                    [name]: {
+                      ...existingAgentState,
+                      keyAgentType: keyAgentType,
+                      keyAgent: keyAgent,
+                      name: name
+                    }
                   }
                 }
               }
-            }
-            return current
-          })
-        },
+            })
+          },
 
-        initialiseKeyAgent: async (
-          name: keyAgentName,
-          keyAgentType: keyAgents,
-          { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
-        ) => {
-          const agentArgs: FromBip39MnemonicWordsProps = {
-            getPassphrase: getPassphrase,
-            mnemonicWords: mnemonicWords,
-            mnemonic2ndFactorPassphrase: ''
+          getKeyAgent: (
+            name: keyAgentName
+          ): SingleKeyAgentState | typeof initialKeyAgentState => {
+            const current = get()
+            return current.state.keyAgents[name] || initialKeyAgentState
+          },
+
+          removeKeyAgent: (name: keyAgentName) => {
+            set((current: KeyAgentState) => {
+              const newKeyAgents = { ...current.state.keyAgents }
+              delete newKeyAgents[name]
+              return {
+                ...current,
+                state: {
+                  ...current.state,
+                  keyAgents: newKeyAgents
+                }
+              }
+            })
           }
-          const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
-          set((current: KeyAgentState) => {
-            const existingAgentState = current.state.keyAgents[name] || {}
-
-            return {
-              ...current,
-              state: {
-                ...current.state,
-                keyAgents: {
-                  ...current.state.keyAgents,
-                  [name]: {
-                    ...existingAgentState,
-                    keyAgentType: keyAgentType,
-                    keyAgent: keyAgent,
-                    name: name
-                  }
-                }
-              }
-            }
-          })
-        },
-
-        getKeyAgent: (
-          name: keyAgentName
-        ): SingleKeyAgentState | typeof initialKeyAgentState => {
-          const current = get()
-          return current.state.keyAgents[name] || initialKeyAgentState
-        },
-
-        removeKeyAgent: (name: keyAgentName) => {
-          set((current: KeyAgentState) => {
-            const newKeyAgents = { ...current.state.keyAgents }
-            delete newKeyAgents[name]
-            return {
-              ...current,
-              state: {
-                ...current.state,
-                keyAgents: newKeyAgents
-              }
-            }
-          })
+        }),
+        {
+          name: 'PalladKeyAgent',
+          storage: createJSONStorage(getSecurePersistence),
+          skipHydration: true
         }
-      }),
-      {
-        name: 'PalladKeyAgent',
-        storage: createJSONStorage(getSecurePersistence),
-        skipHydration: true
-      }
+      )
     )
 
-    this.store = create<KeyAgentState>(persistedStore as any)
+    this.store = persistedStore
   }
 
   ensureKeyAgent(name: keyAgentName): void {
@@ -136,7 +132,11 @@ export class KeyAgentStore {
   }
 
   rehydrate = async () => {
-    await this.store.getState().rehydrate()
+    await this.store.persist.rehydrate()
+  }
+
+  destroy = () => {
+    this.store.destroy()
   }
 }
 
