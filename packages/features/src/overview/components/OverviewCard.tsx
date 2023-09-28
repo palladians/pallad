@@ -17,8 +17,8 @@ import { useWallet } from '../../wallet/hooks/useWallet'
 import { AvatarMenu } from './AvatarMenu'
 
 export const OverviewCard = () => {
-  const { wallet, copyWalletAddress, gradientBackground } = useWallet()
-  const walletAddress = wallet.getCurrentWallet()?.address
+  const { copyWalletAddress, gradientBackground, address } = useWallet()
+  const walletAddress = address
   const navigate = useNavigate()
   const { isLoading: accountLoading, minaBalance } = useAccount()
   const { data: fiatPriceData, isLoading: priceLoading } = useFiatPrice()

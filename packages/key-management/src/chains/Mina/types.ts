@@ -36,6 +36,7 @@ export type MinaGroupedCredentials = {
   addressIndex: number
   accountIndex: number
   address: Mina.PublicKey
+  encryptedPrivateKeyBytes: Uint8Array
   // TODO: make these credentials unique per Mina network using Mina.Networks
 }
 
@@ -72,28 +73,4 @@ export const enum MinaKeyConst {
    * COIN_TYPE value for Mina network
    */
   MINA_COIN_TYPE = 12586
-}
-
-/**
- * This enumeration holds the different types of Mina networks.
- *
- * @remarks
- * Add any new Mina networks to this enum as part of the {@link pallad#key-generator | key-generator subsystem}.
- *
- * @beta
- */
-
-export enum MinaNetwork {
-  /**
-   * Mina mainnet network option
-   */
-  Mainnet = 'Mainnet',
-  /**
-   * Mina devnet network option
-   */
-  Devnet = 'Devnet',
-  /**
-   * Mina berkeley network option
-   */
-  Berkeley = 'Berkeley'
 }

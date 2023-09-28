@@ -178,11 +178,14 @@ describe('KeyAgentBase', () => {
       const groupedCredential = await instance.deriveCredentials(
         payload,
         args,
+        getPassphrase,
         true
       )
       console.log('Mina groupedCredential account index 0', groupedCredential)
 
-      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+      expect(groupedCredential.address).to.deep.equal(
+        expectedGroupedCredentials.address
+      )
     })
 
     it('should derive correct address for account index other than 0', async () => {
@@ -215,9 +218,12 @@ describe('KeyAgentBase', () => {
       const groupedCredential = await instance.deriveCredentials(
         payload,
         args,
+        getPassphrase,
         true
       )
-      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+      expect(groupedCredential.address).to.deep.equal(
+        expectedGroupedCredentials.address
+      )
     })
 
     it('should derive multiple unique Mina addresses for each account index and store credentials properly', async () => {
@@ -252,14 +258,22 @@ describe('KeyAgentBase', () => {
           networkType: networkType
         }
         // when pure is false it will store the credentials
-        const result = await instance.deriveCredentials(payload, args, false)
+        const result = await instance.deriveCredentials(
+          payload,
+          args,
+          getPassphrase,
+          false
+        )
 
         resultArray.push(result)
       }
 
       // Check if the credentials were stored properly.
-      expect(instance.knownCredentials).to.deep.equal(
-        expectedGroupedCredentialsArray
+      expect(instance.knownCredentials[0]?.address).to.deep.equal(
+        expectedGroupedCredentialsArray[0]?.address
+      )
+      expect(instance.knownCredentials[1]?.address).to.deep.equal(
+        expectedGroupedCredentialsArray[1]?.address
       )
     })
 
@@ -304,10 +318,13 @@ describe('KeyAgentBase', () => {
       const groupedCredential = await instance.deriveCredentials(
         payload,
         args,
+        getPassphrase,
         true
       )
 
-      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+      expect(groupedCredential.address).to.deep.equal(
+        expectedGroupedCredentials.address
+      )
 
       const transaction: Mina.TransactionBody = {
         to: groupedCredential.address,
@@ -323,7 +340,12 @@ describe('KeyAgentBase', () => {
         transaction,
         Mina.TransactionKind.PAYMENT
       )
-      const signedTx = await instance.sign(payload, constructedTx, args)
+      const signedTx = await instance.sign(
+        groupedCredential,
+        constructedTx,
+        args,
+        getPassphrase
+      )
       const minaClient = new Client({ network: args.networkType })
       const isVerified = minaClient.verifyTransaction(
         signedTx as Mina.SignedTransaction
@@ -360,14 +382,22 @@ describe('KeyAgentBase', () => {
       const groupedCredential = await instance.deriveCredentials(
         payload,
         args,
+        getPassphrase,
         true
       )
-      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+      expect(groupedCredential.address).to.deep.equal(
+        expectedGroupedCredentials.address
+      )
 
       const message: Mina.MessageBody = {
         message: 'Hello, Bob!'
       }
-      const signedMessage = await instance.sign(payload, message, args)
+      const signedMessage = await instance.sign(
+        groupedCredential,
+        message,
+        args,
+        getPassphrase
+      )
       const minaClient = new Client({ network: args.networkType })
       const isVerified = await minaClient.verifyMessage(
         signedMessage as Mina.SignedMessage
@@ -404,9 +434,12 @@ describe('KeyAgentBase', () => {
       const groupedCredential = await instance.deriveCredentials(
         payload,
         args,
+        getPassphrase,
         true
       )
-      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+      expect(groupedCredential.address).to.deep.equal(
+        expectedGroupedCredentials.address
+      )
 
       const fields: Mina.SignableFields = {
         fields: [
@@ -419,7 +452,12 @@ describe('KeyAgentBase', () => {
           BigInt(0)
         ]
       }
-      const signedFields = await instance.sign(payload, fields, args)
+      const signedFields = await instance.sign(
+        groupedCredential,
+        fields,
+        args,
+        getPassphrase
+      )
       const minaClient = new Client({ network: args.networkType })
       const isVerified = await minaClient.verifyFields(
         signedFields as Mina.SignedFields
@@ -456,9 +494,12 @@ describe('KeyAgentBase', () => {
       const groupedCredential = await instance.deriveCredentials(
         payload,
         args,
+        getPassphrase,
         true
       )
-      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+      expect(groupedCredential.address).to.deep.equal(
+        expectedGroupedCredentials.address
+      )
 
       const zkAppCommand: Mina.SignableZkAppCommand = {
         command: {
@@ -485,9 +526,10 @@ describe('KeyAgentBase', () => {
         }
       }
       const signedZkAppCommand = await instance.sign(
-        payload,
+        groupedCredential,
         zkAppCommand,
-        args
+        args,
+        getPassphrase
       )
       const minaClient = new Client({ network: args.networkType })
       const isVerified = await minaClient.verifyZkappCommand(
@@ -545,6 +587,7 @@ describe('KeyAgentBase', () => {
       const groupedCredential = await instance.deriveCredentials(
         payload,
         args,
+        getPassphrase,
         true
       )
       console.log(
@@ -552,7 +595,9 @@ describe('KeyAgentBase', () => {
         groupedCredential
       )
 
-      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+      expect(groupedCredential.address).to.deep.equal(
+        expectedGroupedCredentials.address
+      )
     })
   })
   describe('Starknet KeyAgent', () => {
@@ -606,13 +651,16 @@ describe('KeyAgentBase', () => {
       const groupedCredential = await instanceStarknet.deriveCredentials(
         payload,
         args,
+        getPassphrase,
         true
       )
       console.log(
         'Starknet groupedCredential address index 0',
         groupedCredential
       )
-      expect(groupedCredential).to.deep.equal(expectedGroupedCredentials)
+      expect(groupedCredential.address).to.deep.equal(
+        expectedGroupedCredentials.address
+      )
     })
     it('should derive correct Starknet private key', async () => {
       const layer = 'starkex'

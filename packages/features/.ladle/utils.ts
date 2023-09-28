@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { MinaNetwork, MinaPayload, Network } from '@palladxyz/key-management'
+import { MinaPayload, Network } from '@palladxyz/key-management'
 import { useWallet } from '../src/wallet/hooks/useWallet'
 import { Mina } from '@palladxyz/mina-core'
 

@@ -1,5 +1,6 @@
 import {
   MinaPayload,
+  MinaSpecificArgs,
   Network,
   validateMnemonic,
   wordlist
@@ -7,7 +8,6 @@ import {
 import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button, cn, Label, Textarea } from '@palladxyz/ui'
-import { keyAgentStore } from '@palladxyz/vault'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -47,21 +47,24 @@ export const MnemonicInputView = () => {
     if (!walletName) return
     if (!spendingPassword) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    keyAgentStore.destroy()
-    keyAgentStore.persist.rehydrate()
+    //keyAgentStore.destroy()
+    //keyAgentStore.persist.rehydrate()
+    wallet.rehydrateStores()
+    const restoreArgs: MinaSpecificArgs = {
+      network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      networkType: 'testnet' // TODO: make this configurable
+    }
     await wallet.restoreWallet(
       new MinaPayload(),
-      {
-        network: Network.Mina,
-        accountIndex: 0,
-        addressIndex: 0,
-        networkType: 'testnet'
-      },
+      restoreArgs,
       Mina.Networks.MAINNET,
       {
         mnemonicWords: mnemonic.split(' '),
         getPassphrase: async () => Buffer.from(spendingPassword)
-      }
+      },
+      walletName //this is the keyAgentName
     )
     setVaultStateInitialized()
     return navigate('/onboarding/finish')

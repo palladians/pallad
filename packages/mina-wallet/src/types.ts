@@ -3,8 +3,7 @@ import {
   ChainSignatureResult,
   ChainSpecificArgs,
   ChainSpecificPayload,
-  FromBip39MnemonicWordsProps,
-  GroupedCredentials
+  FromBip39MnemonicWordsProps
 } from '@palladxyz/key-management'
 import {
   AccountInfo,
@@ -12,7 +11,14 @@ import {
   SubmitTxArgs,
   SubmitTxResult
 } from '@palladxyz/mina-core'
-
+import { Multichain } from '@palladxyz/multi-chain-core'
+import {
+  keyAgentName,
+  keyAgents,
+  SearchQuery,
+  SingleCredentialState,
+  storedCredential
+} from '@palladxyz/vaultv2'
 export interface MinaWallet {
   readonly balance: number
 
@@ -22,36 +28,36 @@ export interface MinaWallet {
   restoreWallet<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
-    network: Mina.Networks,
-    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+    network: Multichain.MultiChainNetworks,
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
+    keyAgentName: keyAgentName,
+    keyAgentType?: keyAgents.inMemory
   ): Promise<void>
 
-  getCurrentWallet(): GroupedCredentials | null
-  getCredentials(): GroupedCredentials[] | null
+  getCurrentWallet(): SingleCredentialState | null
+
+  getCredentials(query: SearchQuery): storedCredential[]
 
   getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo | null>
 
   getTransactions(
-    publicKey: Mina.PublicKey
-  ): Promise<Mina.TransactionBody[] | null>
+    publicKey: Mina.PublicKey // Need a multichain public key type
+  ): Promise<Multichain.MultiChainTransactionBody[] | null>
 
-  constructTx(
+  constructTx( // should leave this as mina only for now
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
   ): Promise<Mina.ConstructedTransaction>
 
   sign(
-    signable: ChainSignablePayload
+    signable: ChainSignablePayload,
+    keyAgentName: keyAgentName
   ): Promise<ChainSignatureResult | undefined>
 
   submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult | undefined>
 
-  switchNetwork(network: Mina.Networks): Promise<void>
-  getCurrentNetwork(): Mina.Networks | null
-  setCurrentNetwork(network: Mina.Networks): Promise<void>
-
-  // The wallet might need APIs for receiving challenges and completing them!
-  // Challenge(challenge: VerifiableCredentialChallenge): Promise<VerifiableCredentialChallengeResponse>
+  switchNetwork(network: Multichain.MultiChainNetworks): Promise<void>
+  getCurrentNetwork(): Multichain.MultiChainNetworks | null
 
   shutdown(): void
 }

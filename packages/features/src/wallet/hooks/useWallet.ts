@@ -1,9 +1,18 @@
-import { MinaNetwork } from '@palladxyz/key-management'
+import { GroupedCredentials } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
-import { MinaWalletImpl } from '@palladxyz/mina-wallet'
+import {
+  MinaWalletImpl,
+  NetworkManager,
+  ProviderManager
+} from '@palladxyz/mina-wallet'
+import { Multichain } from '@palladxyz/multi-chain-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { toast } from '@palladxyz/ui'
-import { keyAgentStore } from '@palladxyz/vault'
+import {
+  AccountStore,
+  CredentialStore,
+  KeyAgentStore
+} from '@palladxyz/vaultv2'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -11,55 +20,56 @@ import { shallow } from 'zustand/shallow'
 
 import { useAppStore } from '../store/app'
 
-// TODO: Remove mapping once network types are unified
-const getNetworkValue = (network: MinaNetwork) => {
-  switch (network) {
-    case MinaNetwork.Mainnet:
-      return Mina.Networks.MAINNET
-    case MinaNetwork.Devnet:
-      return Mina.Networks.DEVNET
-    case MinaNetwork.Berkeley:
-      return Mina.Networks.BERKELEY
-  }
-}
-
 // Load environment variables
-const providers = {
+const networkConfigurations = {
   [Mina.Networks.MAINNET]: {
-    provider: import.meta.env.VITE_APP_MINA_PROXY_MAINNET_URL,
-    archive: import.meta.env.VITE_APP_MINA_EXPLORER_MAINNET_URL
+    nodeUrl: import.meta.env.VITE_APP_MINA_PROXY_MAINNET_URL,
+    archiveUrl: import.meta.env.VITE_APP_MINA_EXPLORER_MAINNET_URL
   },
   [Mina.Networks.DEVNET]: {
-    provider: import.meta.env.VITE_APP_MINA_PROXY_DEVNET_URL,
-    archive: import.meta.env.VITE_APP_MINA_EXPLORER_DEVNET_URL
+    nodeUrl: import.meta.env.VITE_APP_MINA_PROXY_DEVNET_URL,
+    archiveUrl: import.meta.env.VITE_APP_MINA_EXPLORER_DEVNET_URL
   },
   [Mina.Networks.BERKELEY]: {
-    provider: import.meta.env.VITE_APP_MINA_PROXY_BERKELEY_URL,
-    archive: import.meta.env.VITE_APP_MINA_EXPLORER_BERKELEY_URL
+    nodeUrl: import.meta.env.VITE_APP_MINA_PROXY_BERKELEY_URL,
+    archiveUrl: import.meta.env.VITE_APP_MINA_EXPLORER_BERKELEY_URL
   }
 }
 
 export const useWallet = () => {
   const navigate = useNavigate()
-  const { network: networkEnum, setNetwork } = useAppStore(
+  // The use App Store should be an API on the wallet
+  const { network: network, setNetwork } = useAppStore(
     (state) => ({
       network: state.network,
       setNetwork: state.setNetwork
     }),
     shallow
   )
-  const network = getNetworkValue(networkEnum)
+
+  // Memoized Values
   const walletProperties = useMemo(
     () => ({
-      network,
-      name: 'Pallad',
-      providers
+      network: network,
+      name: 'Pallad'
     }),
     [network]
   )
   const walletDependencies = useMemo(
     () => ({
-      keyAgent: keyAgentStore.getState().keyAgent
+      // stores
+      accountStore: new AccountStore(),
+      credentialStore: new CredentialStore(),
+      keyAgentStore: new KeyAgentStore(),
+
+      // managers
+      networkManager: new NetworkManager<Multichain.MultiChainNetworks>(
+        networkConfigurations,
+        Mina.Networks.MAINNET
+      ),
+      providerManager: new ProviderManager<Multichain.MultiChainNetworks>(
+        networkConfigurations
+      )
     }),
     []
   )
@@ -68,7 +78,12 @@ export const useWallet = () => {
     [walletProperties, walletDependencies]
   )
 
-  const address = useMemo(() => wallet.getCurrentWallet()?.address, [wallet])
+  const address = useMemo(() => {
+    const credential = wallet.getCurrentWallet()
+      ?.credential as GroupedCredentials
+    return credential ? credential.address : 'undefined'
+  }, [wallet])
+
   const gradientBackground = useMemo(
     () =>
       easyMeshGradient({
@@ -78,13 +93,12 @@ export const useWallet = () => {
     [address]
   )
 
-  const switchNetwork = async (network: MinaNetwork) => {
+  const switchNetwork = async (network: Mina.Networks) => {
     setNetwork(network)
-    await wallet.switchNetwork(getNetworkValue(network))
+    await wallet.switchNetwork(network)
   }
 
   const copyWalletAddress = async () => {
-    const address = wallet.getCurrentWallet()?.address
     await navigator.clipboard.writeText(address || '')
     toast({
       title: 'Wallet address was copied.'
@@ -93,8 +107,10 @@ export const useWallet = () => {
 
   const lockWallet = () => {
     getSessionPersistence().setItem('spendingPassword', '')
-    keyAgentStore.destroy()
-    keyAgentStore.persist.rehydrate()
+    // TODO: create a store manager for keyAgentStore, accountStore, credentialStore
+    // store.destory()? Maybe we don't have to do this
+    // store.persist.rehydrate()
+    wallet.rehydrateStores()
     return navigate('/')
   }
 

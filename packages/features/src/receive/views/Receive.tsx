@@ -10,8 +10,8 @@ import { useWallet } from '../../wallet/hooks/useWallet'
 export const ReceiveView = () => {
   const { theme } = useTheme()
   const navigate = useNavigate()
-  const { wallet, copyWalletAddress, gradientBackground } = useWallet()
-  const walletAddress = wallet.getCurrentWallet()?.address
+  const { copyWalletAddress, gradientBackground, address } = useWallet()
+  const walletAddress = address
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-4">

@@ -1,4 +1,5 @@
 import { Mina } from '@palladxyz/mina-core'
+import { Multichain } from '@palladxyz/multi-chain-core'
 import { Button, Card } from '@palladxyz/ui'
 import { ArrowDownLeftIcon } from 'lucide-react'
 import { useMemo } from 'react'
@@ -28,19 +29,25 @@ export const TransactionSummaryView = () => {
   const amount = BigInt(outgoingTransaction.amount * 1_000_000_000)
   const fee = BigInt(outgoingTransaction.fee * 1_000_000_000)
   const constructAndSubmitTx = async () => {
-    const transaction: Mina.TransactionBody = {
+    const transaction: Multichain.MultiChainTransactionBody = {
       to: outgoingTransaction.to,
       from: address,
       fee,
       amount,
-      nonce: 0,
-      type: 'payment'
+      nonce: 0, // TODO: nonce management -- should we have a Nonce Manager in the wallet? Yes.
+      type: 'payment' // TODO: handle with enums (payment, delegation, zkApp commands?)
     }
     const constructedTx = await wallet.constructTx(
       transaction,
       Mina.TransactionKind.PAYMENT
     )
-    const signedTx = await wallet.sign(constructedTx)
+    const keyAgentName = await wallet.getCurrentKeyAgentName()
+    if (!keyAgentName) {
+      throw new Error(
+        'No key agent name set in @features/send/views/TransactionSummary'
+      )
+    }
+    const signedTx = await wallet.sign(constructedTx, keyAgentName) // TODO: Fix this with new wallet API
     const submittedTx = await wallet.submitTx(signedTx)
     console.log('>>>ST', submittedTx?.result)
     navigate('/transactions/success')

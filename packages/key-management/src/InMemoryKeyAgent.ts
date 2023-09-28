@@ -76,9 +76,10 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
 
   async restoreKeyAgent<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs
+    args: ChainSpecificArgs,
+    getPassphrase: GetPassphrase
   ): Promise<InMemoryKeyAgent> {
-    await this.deriveCredentials(payload, args, false)
+    await this.deriveCredentials(payload, args, getPassphrase, false)
     return this
   }
 }

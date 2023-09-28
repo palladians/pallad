@@ -10,11 +10,11 @@ import { TxIndicator } from '../components/TxIndicator'
 import { structurizeTransaction } from '../utils/structurizeTransactions'
 
 export const TransactionDetailsView = () => {
-  const { wallet } = useWallet()
+  const { address } = useWallet()
   const navigate = useNavigate()
   const { hash } = useParams()
   if (!hash) return null
-  const walletPublicKey = wallet.getCurrentWallet()?.address
+  const walletPublicKey = address
   if (!walletPublicKey) return null
   const { data: transactionData, isLoading: transactionLoading } =
     useTransaction({ hash })
@@ -26,6 +26,7 @@ export const TransactionDetailsView = () => {
     })
   const transactionMetaFields = transaction && [
     { label: 'Hash', value: transaction.hash },
+    // TODO: Figure out how to make the amount not only MINA
     { label: 'Amount', value: `${transaction.minaAmount} MINA` },
     { label: 'Sender', value: transaction.from },
     { label: 'Receiver', value: transaction.to }

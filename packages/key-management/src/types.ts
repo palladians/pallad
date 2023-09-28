@@ -1,11 +1,17 @@
 import { Mina } from '@palladxyz/mina-core'
 
-import { isEthereumCredential } from './chains/Ethereum/credentialDerivation'
+import {
+  deriveEthereumCredentials,
+  isEthereumCredential
+} from './chains/Ethereum/credentialDerivation'
 import {
   EthereumGroupedCredentials,
   EthereumSpecificArgs
 } from './chains/Ethereum/types'
-import { isMinaCredential } from './chains/Mina/credentialDerivation'
+import {
+  deriveMinaCredentials,
+  isMinaCredential
+} from './chains/Mina/credentialDerivation'
 import {
   MinaGroupedCredentials,
   MinaKeyConst,
@@ -13,7 +19,10 @@ import {
   MinaSignatureResult,
   MinaSpecificArgs
 } from './chains/Mina/types'
-import { isStarknetCredential } from './chains/Starknet/credentialDerivation'
+import {
+  deriveStarknetCredentials,
+  isStarknetCredential
+} from './chains/Starknet/credentialDerivation'
 import {
   StarknetGroupedCredentials,
   StarknetSpecificArgs
@@ -89,20 +98,23 @@ export interface KeyAgent {
   /**
    * generic sign
    */
-  sign<T extends ChainSpecificPayload>(
+  sign<T extends GroupedCredentials>(
     payload: T,
     signable: ChainSignablePayload,
-    args: ChainSpecificArgs
+    args: ChainSpecificArgs,
+    getPassphrase: GetPassphrase
   ): Promise<ChainSignatureResult>
 
-  derivePublicCredential<T extends ChainSpecificPayload>(
+  deriveKeyPair<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs
-  ): Promise<ChainPublicKey>
+    args: ChainSpecificArgs,
+    passphrase: Uint8Array
+  ): Promise<ChainKeyPair>
 
   deriveCredentials<T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
+    getPassphrase: GetPassphrase,
     pure?: boolean
   ): Promise<GroupedCredentials>
 
@@ -151,6 +163,27 @@ export type ChainPublicKey = Mina.PublicKey | string
 export type ChainSignatureResult = MinaSignatureResult
 
 export type ChainPrivateKey = string | Uint8Array
+
+export type ChainKeyPair = {
+  publicKey: ChainPublicKey
+  encryptedPrivateKeyBytes: Uint8Array
+}
+
+export type DeriveCredentialFunction<T extends ChainSpecificArgs> = (
+  args: T,
+  publicKey: ChainPublicKey,
+  encryptedPrivateKeyBytes: Uint8Array
+) => GroupedCredentials
+
+export const credentialDerivers: Record<
+  Network,
+  DeriveCredentialFunction<any>
+> = {
+  Mina: deriveMinaCredentials,
+  Starknet: deriveStarknetCredentials,
+  Ethereum: deriveEthereumCredentials
+  // Add more as needed...
+}
 
 export type ChainSigningFunction = (
   args: ChainSpecificArgs,

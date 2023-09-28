@@ -1,16 +1,15 @@
-import { Mina } from '@palladxyz/mina-core'
+import { Multichain } from '@palladxyz/multi-chain-core'
 
 import { useWallet } from '../../wallet/hooks/useWallet'
 import { structurizeTransactions } from '../utils/structurizeTransactions'
 import { TxTile } from './TxTile'
 
 interface TransactionsListProps {
-  transactions: Mina.TransactionBody[]
+  transactions: Multichain.MultiChainTransactionBody[]
 }
 
 export const TransactionsList = ({ transactions }: TransactionsListProps) => {
-  const { wallet } = useWallet()
-  const address = wallet.getCurrentWallet()?.address
+  const { address } = useWallet()
   if (!address) return null
   const txDates =
     transactions &&
