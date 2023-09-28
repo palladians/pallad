@@ -1,4 +1,4 @@
-import { credentialName } from '@palladxyz/vaultv2'
+import { credentialName } from '@palladxyz/vault'
 import {
   adjectives,
   animals,

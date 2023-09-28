@@ -1,5 +1,5 @@
 {
-  "name": "@palladxyz/vaultv2",
+  "name": "@palladxyz/vault",
   "version": "0.0.1",
   "type": "module",
   "description": "A Vault for the Mina Wallet Package for Pallad",

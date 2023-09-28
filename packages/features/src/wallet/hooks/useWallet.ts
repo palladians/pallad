@@ -12,7 +12,7 @@ import {
   AccountStore,
   CredentialStore,
   KeyAgentStore
-} from '@palladxyz/vaultv2'
+} from '@palladxyz/vault'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'

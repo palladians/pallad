@@ -18,7 +18,7 @@ import {
   SearchQuery,
   SingleCredentialState,
   storedCredential
-} from '@palladxyz/vaultv2'
+} from '@palladxyz/vault'
 export interface MinaWallet {
   readonly balance: number
 

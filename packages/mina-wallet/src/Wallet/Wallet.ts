@@ -28,7 +28,7 @@ import {
   SingleCredentialState,
   SingleKeyAgentState,
   storedCredential
-} from '@palladxyz/vaultv2'
+} from '@palladxyz/vault'
 
 import { AddressError, NetworkError, WalletError } from '../Errors'
 // import managers

@@ -10,8 +10,8 @@ import {
   AccountStore,
   CredentialStore,
   KeyAgentStore
-} from '@palladxyz/vaultv2'
-import { keyAgentName } from '@palladxyz/vaultv2'
+} from '@palladxyz/vault'
+import { keyAgentName } from '@palladxyz/vault'
 import Client from 'mina-signer'
 
 import { NetworkManager } from '../../src/Network'

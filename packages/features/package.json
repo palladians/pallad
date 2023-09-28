@@ -29,7 +29,7 @@
     "@palladxyz/offchain-data": "*",
     "@palladxyz/persistence": "*",
     "@palladxyz/ui": "*",
-    "@palladxyz/vaultv2": "*",
+    "@palladxyz/vault": "*",
     "@palladxyz/multi-chain-core": "*",
     "@total-typescript/ts-reset": "^0.4.2",
     "dayjs": "^1.11.8",
