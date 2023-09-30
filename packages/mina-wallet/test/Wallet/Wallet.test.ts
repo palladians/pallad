@@ -6,11 +6,7 @@ import {
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
-import {
-  AccountStore,
-  CredentialStore,
-  KeyAgentStore
-} from '@palladxyz/vault'
+import { AccountStore, CredentialStore, KeyAgentStore } from '@palladxyz/vault'
 import { keyAgentName } from '@palladxyz/vault'
 import Client from 'mina-signer'
 

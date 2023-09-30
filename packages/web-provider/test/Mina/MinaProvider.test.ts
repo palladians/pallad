@@ -19,7 +19,7 @@ import {
   CredentialStore,
   keyAgentName,
   KeyAgentStore
-} from '@palladxyz/vaultv2'
+} from '@palladxyz/vault'
 
 import { MinaProvider } from '../../src/Mina'
 

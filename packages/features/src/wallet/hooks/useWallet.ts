@@ -8,11 +8,7 @@ import {
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { toast } from '@palladxyz/ui'
-import {
-  AccountStore,
-  CredentialStore,
-  KeyAgentStore
-} from '@palladxyz/vault'
+import { AccountStore, CredentialStore, KeyAgentStore } from '@palladxyz/vault'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'

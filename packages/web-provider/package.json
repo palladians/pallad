@@ -23,7 +23,7 @@
     "@palladxyz/mina-core": "*",
     "@palladxyz/multi-chain-core": "*",
     "@palladxyz/mina-graphql": "*",
-    "@palladxyz/vaultv2": "*"
+    "@palladxyz/vault": "*"
   },
   "devDependencies": {
     "@palladxyz/common": "*",

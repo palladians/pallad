@@ -890,9 +890,9 @@ importers:
       '@palladxyz/multi-chain-core':
         specifier: '*'
         version: link:../multi-chain-core
-      '@palladxyz/vaultv2':
+      '@palladxyz/vault':
         specifier: '*'
-        version: link:../vault_v2
+        version: link:../vault
     devDependencies:
       '@palladxyz/common':
         specifier: '*'
