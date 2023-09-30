@@ -1,0 +1,32 @@
+{
+  "name": "@palladxyz/web-provider",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "A web-provider for Mina wallets",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules dist .turbo"
+  },
+  "dependencies": {
+    "@palladxyz/key-management": "*",
+    "@palladxyz/mina-wallet": "*",
+    "@palladxyz/mina-core": "*",
+    "@palladxyz/multi-chain-core": "*",
+    "@palladxyz/mina-graphql": "*",
+    "@palladxyz/vaultv2": "*"
+  },
+  "devDependencies": {
+    "@palladxyz/common": "*",
+    "@types/mocha": "^10.0.1"
+  }
+}

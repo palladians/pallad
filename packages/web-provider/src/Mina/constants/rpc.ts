@@ -1,0 +1,17 @@
+export const REQUIRED_METHODS = ['mina_sendTransaction']
+export const OPTIONAL_METHODS = [
+  'mina_accounts',
+  'mina_requestAccounts',
+  'mina_sign',
+  'mina_signTransaction',
+  'mina_signTypedData',
+  'mina_sendTransaction'
+]
+export const REQUIRED_EVENTS = ['chainChanged', 'accountsChanged']
+export const OPTIONAL_EVENTS = [
+  'chainChanged',
+  'accountsChanged',
+  'message',
+  'disconnect',
+  'connect'
+]

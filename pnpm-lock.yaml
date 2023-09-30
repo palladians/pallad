@@ -873,6 +873,34 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2(typescript@5.0.4)
 
+  packages/web-provider:
+    dependencies:
+      '@palladxyz/key-management':
+        specifier: '*'
+        version: link:../key-management
+      '@palladxyz/mina-core':
+        specifier: '*'
+        version: link:../mina-core
+      '@palladxyz/mina-graphql':
+        specifier: '*'
+        version: link:../mina-graphql
+      '@palladxyz/mina-wallet':
+        specifier: '*'
+        version: link:../mina-wallet
+      '@palladxyz/multi-chain-core':
+        specifier: '*'
+        version: link:../multi-chain-core
+      '@palladxyz/vaultv2':
+        specifier: '*'
+        version: link:../vault_v2
+    devDependencies:
+      '@palladxyz/common':
+        specifier: '*'
+        version: link:../common
+      '@types/mocha':
+        specifier: ^10.0.1
+        version: 10.0.1
+
 packages:
 
   /@aashutoshrathi/word-wrap@1.2.6:
