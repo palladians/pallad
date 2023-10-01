@@ -278,8 +278,7 @@ export class MinaWalletImpl implements MinaWallet {
   }*/
 
   async sign(
-    signable: ChainSignablePayload,
-    keyAgentName: keyAgentName
+    signable: ChainSignablePayload
   ): Promise<ChainSignatureResult | undefined> {
     // use current wallet to sign
     const currentWallet = this.getCurrentWallet()
@@ -295,6 +294,10 @@ export class MinaWalletImpl implements MinaWallet {
       accountIndex: currentWallet?.accountIndex, // can be deprecated
       addressIndex: currentWallet?.addressIndex, // can be deprecated
       networkType: 'testnet' // TODO: Make this dynamic
+    }
+    const keyAgentName = this.getCurrentKeyAgentName()
+    if (keyAgentName === null) {
+      throw new WalletError('Key agent name is undefined in sign method')
     }
     const keyAgent = this.getKeyAgentStore().getKeyAgent(keyAgentName)
     if (keyAgent === null) {

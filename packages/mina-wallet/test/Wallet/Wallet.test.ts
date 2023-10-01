@@ -132,7 +132,7 @@ describe('MinaWalletImpl', () => {
     const message: Mina.MessageBody = {
       message: 'Hello, Bob!'
     }
-    const signedMessage = await wallet.sign(message, keyAgentName)
+    const signedMessage = await wallet.sign(message)
     const minaClient = new Client({ network: args.networkType })
     const isVerified = await minaClient.verifyMessage(
       signedMessage as Mina.SignedMessage
@@ -177,7 +177,7 @@ describe('MinaWalletImpl', () => {
       transaction,
       Mina.TransactionKind.PAYMENT
     )
-    const signedTx = await wallet.sign(constructedTx, keyAgentName)
+    const signedTx = await wallet.sign(constructedTx)
     const minaClient = new Client({ network: args.networkType })
     const isVerified = minaClient.verifyTransaction(
       signedTx as Mina.SignedTransaction

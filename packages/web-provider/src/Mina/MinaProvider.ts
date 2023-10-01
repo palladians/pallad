@@ -1,6 +1,12 @@
 import { MinaWalletImpl } from '@palladxyz/mina-wallet'
 import { EventEmitter } from 'events'
 
+import {
+  OPTIONAL_EVENTS,
+  OPTIONAL_METHODS,
+  REQUIRED_EVENTS,
+  REQUIRED_METHODS
+} from './constants/rpc'
 import { MinaWalletWrapper } from './MinaWalletWrapper'
 import { IMinaProvider as IProvider, IMinaProviderEvents } from './types'
 
@@ -122,9 +128,10 @@ export class MinaProvider implements IMinaProvider {
       optionalChains: opts.optionalChains || [],
       rpcMap: opts.rpcMap || {},
       projectId: opts.projectId,
-      methods: [], // Define your default methods here
-      events: [] // Define your default events here
-      // ... set up other properties as needed
+      methods: REQUIRED_METHODS, // Use required methods from constants
+      optionalMethods: OPTIONAL_METHODS, // Use optional methods from constants
+      events: REQUIRED_EVENTS, // Use required events from constants
+      optionalEvents: OPTIONAL_EVENTS // Use optional events from constants
     }
 
     // ... any other initialization logic
@@ -187,9 +194,10 @@ export class MinaProvider implements IMinaProvider {
       optionalChains: ops.optionalChains || [],
       rpcMap: ops.rpcMap || {},
       projectId: ops.projectId,
-      methods: [], // Define your default methods here
-      events: [] // Define your default events here
-      // ... set up other properties as needed
+      methods: REQUIRED_METHODS, // Use required methods from constants
+      optionalMethods: OPTIONAL_METHODS, // Use optional methods from constants
+      events: REQUIRED_EVENTS, // Use required events from constants
+      optionalEvents: OPTIONAL_EVENTS // Use optional events from constants
     }
   }
 

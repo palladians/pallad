@@ -50,8 +50,7 @@ export interface MinaWallet {
   ): Promise<Mina.ConstructedTransaction>
 
   sign(
-    signable: ChainSignablePayload,
-    keyAgentName: keyAgentName
+    signable: ChainSignablePayload
   ): Promise<ChainSignatureResult | undefined>
 
   submitTx(submitTxArgs: SubmitTxArgs): Promise<SubmitTxResult | undefined>

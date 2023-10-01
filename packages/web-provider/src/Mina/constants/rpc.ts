@@ -4,7 +4,8 @@ export const OPTIONAL_METHODS = [
   'mina_requestAccounts',
   'mina_sign',
   'mina_signTransaction',
-  'mina_signTypedData',
+  'mina_signFields',
+  'mina_getBalance',
   'mina_sendTransaction'
 ]
 export const REQUIRED_EVENTS = ['chainChanged', 'accountsChanged']

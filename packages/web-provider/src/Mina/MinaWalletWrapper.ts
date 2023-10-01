@@ -51,6 +51,16 @@ export class MinaWalletWrapper implements IMinaWalletImpl {
     switch (args.method) {
       case 'mina_requestAccounts':
         return this.getAccounts()
+      case 'mina_getBalance':
+        return this.getBalance(args.params)
+      case 'mina_sendTransaction':
+        return this.sendTransaction(args.params)
+      case 'mina_signTransaction':
+        return this.signTransaction(args.params)
+      case 'mina_signFields':
+        return this.signFields(args.params)
+      case 'mina_signMessage':
+        return this.signMessage(args.params)
       default:
         throw new Error('Method not supported')
     }
@@ -66,6 +76,41 @@ export class MinaWalletWrapper implements IMinaWalletImpl {
         return (credential as GroupedCredentials).address !== undefined
       })
       .map((credential) => credential.address)
+  }
+
+  async getBalance(params: any): Promise<any> {
+    // You can fetch balance using params and return
+    // For demonstration, let's assume params has an account address
+    // TODO: need to convert the params into arguments to query for
+    // specific account's info
+    console.log('params:', params)
+    const accountInfo = await this.wallet.getAccountInfo()
+    if (accountInfo === null) {
+      throw new Error('Account info is null in getBalance web-provider')
+    }
+    return accountInfo.balance.total
+  }
+
+  async sendTransaction(params: any): Promise<any> {
+    // Implement the logic to send a transaction
+    // TODO: need to convert the params into SubmitTxArgs
+    return await this.wallet.submitTx(params)
+  }
+
+  async signTransaction(params: any): Promise<any> {
+    // Implement the logic to sign a transaction
+    // TODO: need to convert the params into ChainSignablePayload
+    return await this.wallet.sign(params)
+  }
+
+  async signFields(params: any): Promise<any> {
+    // Implement the logic to sign fields
+    return await this.wallet.sign(params)
+  }
+
+  async signMessage(params: any): Promise<any> {
+    // Implement the logic to sign a message
+    return await this.wallet.sign(params)
   }
 
   // You'd also implement or proxy all other methods from MinaWalletImpl here...
