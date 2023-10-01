@@ -110,13 +110,21 @@ describe('MinaWalletImpl', () => {
     const derivedCredential = wallet.getCurrentWallet()
     expect(derivedCredential).toBeDefined()
 
+    const mockUserPrompt: (message: string) => Promise<boolean> = async (
+      message: string
+    ) => {
+      console.log('message:', message)
+      return true // Always confirm for testing purposes
+    }
+
     // create MinaProvider
     const provider = await MinaProvider.init(
       {
         chains: [Mina.Networks.BERKELEY],
         optionalChains: [],
         rpcMap: {}, // TODO
-        projectId: 'pallad'
+        projectId: 'pallad',
+        showUserPrompt: mockUserPrompt
       },
       wallet
     )

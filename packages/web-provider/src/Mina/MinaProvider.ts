@@ -89,11 +89,19 @@ interface MinaProviderOptions {
   rpcMap?: MinaRpcMap
   pairingTopic?: string
   projectId: string
+  showUserPrompt?: (message: string) => Promise<boolean>
 }
 
 interface RequestArguments {
   method: RpcMethod
   params?: any[] | object
+}
+
+async function showUserPrompt(message: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const userResponse = window.confirm(message)
+    resolve(userResponse)
+  })
 }
 
 export class MinaProvider implements IMinaProvider {
@@ -102,20 +110,25 @@ export class MinaProvider implements IMinaProvider {
   public chainId = 'Add Chain ID here'
   public signer: MinaWalletWrapper // I think the signer is something other than the wallet, like a wrapper around the wallet, but I'm not sure
 
+  private userPrompt: (message: string) => Promise<boolean> // maybe this is the right place for this?
+
   protected rpc: MinaRpcConfig
 
-  constructor(wallet: MinaWalletImpl) {
+  constructor(wallet: MinaWalletImpl, opts: MinaProviderOptions) {
     // Initialization logic
     this.signer = new MinaWalletWrapper(wallet)
     this.rpc = {} as MinaRpcConfig
+
+    // Use provided userPrompt function or default to the actual implementation
+    this.userPrompt = opts.showUserPrompt || showUserPrompt
   }
 
   static async init(
     opts: MinaProviderOptions,
     wallet: MinaWalletImpl
   ): Promise<MinaProvider> {
-    const provider = new MinaProvider(wallet)
-    await provider.initialize(opts)
+    const provider = new MinaProvider(wallet, opts)
+    await provider.initialize(opts) // I should include this in the constructor
     return provider
   }
 
@@ -140,6 +153,12 @@ export class MinaProvider implements IMinaProvider {
   public async enable(): Promise<string[]> {
     // Implement the logic to prompt the user to connect to the wallet
     // For example, you could open a modal and wait for the user to click 'Connect'
+    // Step 0: Prompt user for confirmation
+    const userConfirmed = await this.userPrompt('Do you want to connect?')
+    if (!userConfirmed) {
+      // should this emit an error event?
+      throw new Error('User denied connection.')
+    }
     await this.connect()
     // Once the user has connected, emit an 'accountsChanged' event
     this.events.emit('accountsChanged', this.accounts)
@@ -185,6 +204,14 @@ export class MinaProvider implements IMinaProvider {
   }
 
   public async request<T = unknown>(args: RequestArguments): Promise<T> {
+    // Prompt user for confirmation based on the method type
+    const userConfirmed = await this.userPrompt(
+      `Do you want to execute ${args.method}?`
+    )
+    if (!userConfirmed) {
+      // should this emit an error event?
+      throw new Error('User denied the request.')
+    }
     return await this.signer.request(args, this.chainId)
   }
 
