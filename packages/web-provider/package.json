@@ -19,14 +19,15 @@
   },
   "dependencies": {
     "@palladxyz/key-management": "*",
-    "@palladxyz/mina-wallet": "*",
     "@palladxyz/mina-core": "*",
-    "@palladxyz/multi-chain-core": "*",
     "@palladxyz/mina-graphql": "*",
+    "@palladxyz/mina-wallet": "*",
+    "@palladxyz/multi-chain-core": "*",
     "@palladxyz/vault": "*"
   },
   "devDependencies": {
     "@palladxyz/common": "*",
-    "@types/mocha": "^10.0.1"
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.8.0"
   }
 }

@@ -133,7 +133,7 @@ export class MinaProvider implements IMinaProvider {
   public async enable(): Promise<string[]> {
     // Implement the logic to prompt the user to connect to the wallet
     // For example, you could open a modal and wait for the user to click 'Connect'
-    this.connect()
+    await this.connect()
     // Once the user has connected, emit an 'accountsChanged' event
     this.events.emit('accountsChanged', this.accounts)
     return this.accounts

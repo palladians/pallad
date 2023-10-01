@@ -123,7 +123,7 @@ describe('MinaWalletImpl', () => {
 
     // connect to MinaProvider
     const connected = await provider.enable()
-
+    console.log('connected:', connected)
     expect(connected).toBeDefined()
   })
 })

@@ -57,16 +57,15 @@ export class MinaWalletWrapper implements IMinaWalletImpl {
   }
 
   async getAccounts(): Promise<string[]> {
-    // If there's a specific way to fetch accounts in MinaWalletImpl, call that method:
-    // return this.wallet.getAccountsOrSimilarMethod();
-    // Otherwise, if there isn't a direct method, maybe you get credentials and derive accounts from them:
     const credentials = this.wallet.getCredentials({
-      type: 'MinaAddress',
       chain: Network.Mina
     })
-    return credentials.map(
-      (credential) => (credential as GroupedCredentials)?.address || ''
-    )
+
+    return credentials
+      .filter((credential): credential is GroupedCredentials => {
+        return (credential as GroupedCredentials).address !== undefined
+      })
+      .map((credential) => credential.address)
   }
 
   // You'd also implement or proxy all other methods from MinaWalletImpl here...
