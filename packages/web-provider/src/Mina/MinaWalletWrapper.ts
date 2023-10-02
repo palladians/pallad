@@ -67,6 +67,8 @@ export class MinaWalletWrapper implements IMinaWalletImpl {
   }
 
   async getAccounts(): Promise<string[]> {
+    // this search function should take into account what should
+    // be returned from the query: all of the credential vs just specific parts
     const credentials = this.wallet.getCredentials({
       chain: Network.Mina
     })

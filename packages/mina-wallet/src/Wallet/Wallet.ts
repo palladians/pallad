@@ -217,8 +217,8 @@ export class MinaWalletImpl implements MinaWallet {
     return this.name
   }
 
-  getCredentials(query: SearchQuery): storedCredential[] {
-    return this.getCredentialStore().searchCredentials(query)
+  getCredentials(query: SearchQuery, props?: string[]): storedCredential[] {
+    return this.getCredentialStore().searchCredentials(query, props)
   }
 
   async getAccountInfo(): Promise<AccountInfo | null> {

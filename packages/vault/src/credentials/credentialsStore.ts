@@ -87,7 +87,7 @@ export class CredentialStore {
               }
             })
           },
-          searchCredentials: (query: SearchQuery): storedCredential[] => {
+          searchCredentials: (query: SearchQuery, props?: string[]): any[] => {
             const credentialsStatesArray = Object.values(
               get().state.credentials
             )
@@ -95,12 +95,26 @@ export class CredentialStore {
               (cred) => cred.credential
             )
 
-            return credentialsArray.filter((credential) => {
-              if (!credential) {
-                return false
+            const filteredCredentials = credentialsArray.filter(
+              (credential) => {
+                if (!credential) {
+                  return false
+                }
+                return matchesQuery(credential, query)
               }
-              return matchesQuery(credential, query)
-            })
+            )
+
+            if (props && props.length) {
+              const arrayOfArrays = filteredCredentials.map((credential) => {
+                return props
+                  .filter((prop) => credential && prop in credential)
+                  .map((prop) => (credential as Record<string, any>)[prop])
+              })
+
+              return arrayOfArrays.flat()
+            } else {
+              return filteredCredentials
+            }
           }
         }),
         {
@@ -134,8 +148,8 @@ export class CredentialStore {
     this.store.getState().removeCredential(credentialName)
   }
 
-  searchCredentials(query: SearchQuery): storedCredential[] {
-    return this.store.getState().searchCredentials(query)
+  searchCredentials(query: SearchQuery, props?: string[]): storedCredential[] {
+    return this.store.getState().searchCredentials(query, props)
   }
 
   rehydrate = async () => {
