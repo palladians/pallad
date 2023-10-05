@@ -29,6 +29,7 @@ import {
   SingleKeyAgentState,
   storedCredential
 } from '@palladxyz/vault'
+import { EventEmitter } from 'events'
 
 import { AddressError, NetworkError, WalletError } from '../Errors'
 // import managers
@@ -64,6 +65,8 @@ export class MinaWalletImpl implements MinaWallet {
   // managers
   private networkManager: NetworkManager<Multichain.MultiChainNetworks>
   private providerManager: ProviderManager<Multichain.MultiChainNetworks>
+  // events
+  private events: EventEmitter
   // other things
   readonly balance: number
   private currentWallet: SingleCredentialState | null
@@ -89,6 +92,8 @@ export class MinaWalletImpl implements MinaWallet {
     // managers
     this.networkManager = networkManager
     this.providerManager = providerManager
+    // events
+    this.events = new EventEmitter()
     // other things
     this.name = name
     this.balance = 0
@@ -108,6 +113,16 @@ export class MinaWalletImpl implements MinaWallet {
     if (!network) {
       throw new NetworkError('Invalid current network')
     }
+  }
+
+  // Provide a method to subscribe to events.
+  on(event: string, listener: (...args: any[]) => void) {
+    this.events.on(event, listener)
+  }
+
+  // Optionally, provide a method to unsubscribe from events.
+  off(event: string, listener: (...args: any[]) => void) {
+    this.events.off(event, listener)
   }
 
   // Event listener for network change
@@ -305,7 +320,9 @@ export class MinaWalletImpl implements MinaWallet {
     if (keyAgent === null) {
       throw new WalletError('Key agent is undefined in sign method')
     }
-    return await keyAgent.keyAgent?.sign(currentWallet, signable, args)
+    const signed = await keyAgent.keyAgent?.sign(currentWallet, signable, args)
+    this.events.emit('signed')
+    return signed
   }
 
   // This is Mina Specific
@@ -330,6 +347,7 @@ export class MinaWalletImpl implements MinaWallet {
       network,
       this.getCurrentWallet()?.credential as GroupedCredentials
     )
+    this.events.emit('transactionSubmitted')
     return txResult
   }
 
@@ -386,6 +404,11 @@ export class MinaWalletImpl implements MinaWallet {
 
     // sync the wallet
     await this.syncWallet(network, derivedCredential)
+    // emit the event
+    this.events.emit(
+      'walletRestored',
+      (singleCredentialState.credential! as GroupedCredentials).address
+    )
   }
 
   private async syncTransactions(
@@ -470,6 +493,7 @@ export class MinaWalletImpl implements MinaWallet {
       network,
       derivedCredential as GroupedCredentials
     )
+    this.events.emit('walletSynced')
   }
   shutdown(): void {
     // Implement the logic to shut down the wallet
