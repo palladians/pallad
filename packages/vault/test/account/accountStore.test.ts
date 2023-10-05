@@ -1,13 +1,15 @@
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import { expect } from 'vitest'
 
 import { initialSingleAccountState } from '../../src/account/accountState'
-import { AccountStore } from '../../src/account/accountStore'
+import { AccountStore, accountStore } from '../../src/account/accountStore'
 
 describe('AccountStore', () => {
   let address: string
   let network: Mina.Networks
   let mockAccountInfo: AccountInfo
   let mockTransactions: Mina.Paginated<Mina.TransactionBody>
+  let newAccountStore: typeof accountStore
 
   beforeEach(async () => {
     address = 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
@@ -41,11 +43,28 @@ describe('AccountStore', () => {
       ],
       totalResultCount: 1
     }
+
+    newAccountStore = accountStore
   })
 
   afterEach(() => {
     // Cleanup after each test if needed
   })
+
+  it('should create a new accountStore', async () => {
+    expect(newAccountStore).toBeDefined()
+  })
+
+  it('should create a new accountStore with initial state', async () => {
+    const accountInfo = mockAccountInfo
+    accountStore.getState().setAccountInfo(network, address, accountInfo)
+    expect(
+      accountStore.getState().getAccountInfo(network, address).accountInfo
+    ).toEqual(accountInfo)
+  })
+  /*
+    Add more tests for accountStore
+  */
 
   it('should create an account store', async () => {
     const accountStore = new AccountStore()

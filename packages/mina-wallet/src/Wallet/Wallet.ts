@@ -18,12 +18,12 @@ import {
 } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import {
-  AccountStore,
+  accountStore,
   credentialName,
-  CredentialStore,
+  credentialStore,
   keyAgentName,
   keyAgents,
-  KeyAgentStore,
+  keyAgentStore,
   SearchQuery,
   SingleCredentialState,
   SingleKeyAgentState,
@@ -42,9 +42,9 @@ import { getRandomAnimalName } from './utils'
 
 export interface MinaWalletDependencies {
   // stores
-  accountStore: AccountStore
-  keyAgentStore: KeyAgentStore
-  credentialStore: CredentialStore
+  //keyAgentStore: keyAgentStore
+  //accountStore: accountStore
+  //credentialStore: credentialStore
   // managers
   networkManager: NetworkManager<Multichain.MultiChainNetworks>
   providerManager: ProviderManager<Multichain.MultiChainNetworks>
@@ -58,9 +58,9 @@ export interface MinaWalletProps {
 export class MinaWalletImpl implements MinaWallet {
   public network: Multichain.MultiChainNetworks
   // stores
-  private keyAgentStore: KeyAgentStore
-  private accountStore: AccountStore
-  private credentialStore: CredentialStore
+  //private keyAgentStore: keyAgentStore
+  //private accountStore: accountStore
+  //private credentialStore: credentialStore
   // managers
   private networkManager: NetworkManager<Multichain.MultiChainNetworks>
   private providerManager: ProviderManager<Multichain.MultiChainNetworks>
@@ -74,18 +74,18 @@ export class MinaWalletImpl implements MinaWallet {
   constructor(
     { network, name }: MinaWalletProps,
     {
-      accountStore,
-      keyAgentStore,
-      credentialStore,
+      //keyAgentStore,
+      //accountStore,
+      //credentialStore,
       networkManager,
       providerManager
     }: MinaWalletDependencies
   ) {
     this.network = network
     // stores
-    this.keyAgentStore = keyAgentStore
-    this.accountStore = accountStore
-    this.credentialStore = credentialStore
+    //this.keyAgentStore = keyAgentStore
+    //this.accountStore = accountStore
+    //this.credentialStore = credentialStore
     // managers
     this.networkManager = networkManager
     this.providerManager = providerManager
@@ -118,17 +118,25 @@ export class MinaWalletImpl implements MinaWallet {
   }
   /**
    *
-   * @returns {KeyAgentStore} The KeyAgentStore
+   * @returns {keyAgentStore} The KeyAgent Store
    */
   private getKeyAgentStore() {
-    return this.keyAgentStore
+    return keyAgentStore.getState()
   }
   /**
    *
-   * @returns {AccountStore} The AccountStore
+   * @returns {accountStore} The Account Store
    */
   private getAccountStore() {
-    return this.accountStore
+    return accountStore.getState()
+  }
+
+  /**
+   *
+   * @returns {credentialStore} The Credential Store
+   */
+  private getCredentialStore() {
+    return credentialStore.getState()
   }
 
   /**
@@ -136,26 +144,20 @@ export class MinaWalletImpl implements MinaWallet {
    */
   async rehydrateStores(): Promise<void> {
     // Rehydrate the stores
-    this.keyAgentStore.rehydrate()
-    this.accountStore.rehydrate()
-    this.credentialStore.rehydrate()
+    keyAgentStore.persist.rehydrate()
+    accountStore.persist.rehydrate()
+    credentialStore.persist.rehydrate()
   }
   /**
    * Destory the wallet stores
    */
   async destroyStores(): Promise<void> {
     // Destroy the stores
-    this.keyAgentStore.destroy()
-    this.accountStore.destroy()
-    this.credentialStore.destroy()
+    keyAgentStore.destroy()
+    accountStore.destroy()
+    credentialStore.destroy()
   }
-  /**
-   *
-   * @returns {CredentialStore} The CredentialStore
-   */
-  private getCredentialStore() {
-    return this.credentialStore
-  }
+
   /**
    *
    * @returns
@@ -217,7 +219,7 @@ export class MinaWalletImpl implements MinaWallet {
     return this.name
   }
 
-  getCredentials(query: SearchQuery, props?: string[]): storedCredential[] {
+  getCredentials(query: SearchQuery, props: string[] = []): storedCredential[] {
     return this.getCredentialStore().searchCredentials(query, props)
   }
 

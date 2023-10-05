@@ -162,3 +162,105 @@ export class CredentialStore {
 }
 
 export default CredentialStore
+
+export const credentialStore = createStore<CredentialState>()(
+  persist(
+    (set, get) => ({
+      state: {
+        credentials: {}
+      },
+      getState: get as () => CredentialState,
+
+      ensureCredential: (
+        credentialName: credentialName,
+        keyAgentName: keyAgentName
+      ): void => {
+        set((current: CredentialState) => {
+          if (!current.state.credentials[credentialName]) {
+            return {
+              ...current,
+              state: {
+                ...current.state,
+                credentials: {
+                  ...current.state.credentials,
+                  [credentialName]: {
+                    ...initialCredentialState,
+                    credentialName: credentialName,
+                    keyAgentName: keyAgentName
+                  }
+                }
+              }
+            }
+          }
+          return current
+        })
+      },
+
+      setCredential: (credentialState: SingleCredentialState): void => {
+        const { credentialName } = credentialState
+        set((current: CredentialState) => ({
+          ...current,
+          state: {
+            ...current.state,
+            credentials: {
+              ...current.state.credentials,
+              [credentialName]: credentialState
+            }
+          }
+        }))
+      },
+
+      getCredential: (
+        credentialName: credentialName
+      ): SingleCredentialState | typeof initialCredentialState => {
+        const current = get()
+        return (
+          current.state.credentials[credentialName] || initialCredentialState
+        )
+      },
+
+      removeCredential: (credentialName: credentialName): void => {
+        set((current: CredentialState) => {
+          const newCredentials = { ...current.state.credentials }
+          delete newCredentials[credentialName]
+          return {
+            ...current,
+            state: {
+              ...current.state,
+              credentials: newCredentials
+            }
+          }
+        })
+      },
+      searchCredentials: (query: SearchQuery, props?: string[]): any[] => {
+        const credentialsStatesArray = Object.values(get().state.credentials)
+        const credentialsArray = credentialsStatesArray.map(
+          (cred) => cred.credential
+        )
+
+        const filteredCredentials = credentialsArray.filter((credential) => {
+          if (!credential) {
+            return false
+          }
+          return matchesQuery(credential, query)
+        })
+
+        if (props && props.length) {
+          const arrayOfArrays = filteredCredentials.map((credential) => {
+            return props
+              .filter((prop) => credential && prop in credential)
+              .map((prop) => (credential as Record<string, any>)[prop])
+          })
+
+          return arrayOfArrays.flat()
+        } else {
+          return filteredCredentials
+        }
+      }
+    }),
+    {
+      name: 'PalladCredential',
+      storage: createJSONStorage(getSecurePersistence)
+    }
+  )
+)

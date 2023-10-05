@@ -6,14 +6,15 @@ import {
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
-import { AccountStore, CredentialStore, KeyAgentStore } from '@palladxyz/vault'
+//import { AccountStore, CredentialStore, KeyAgentStore } from '@palladxyz/vault'
 import { keyAgentName } from '@palladxyz/vault'
 
+//import { expect } from 'vitest'
+import { NetworkManager } from '../src/Network/NetworkManager'
 import {
-  NetworkConfigurations,
-  NetworkManager
-} from '../src/Network/NetworkManager'
-import { ProviderManager } from '../src/Provider/ProviderManager'
+  ProviderManager,
+  ProvidersConfig
+} from '../src/Provider/ProviderManager'
 //import { expect, test } from 'vitest'
 import {
   MinaWalletDependencies,
@@ -27,7 +28,7 @@ describe('MinaWalletImpl', () => {
   let walletProperties: MinaWalletProps
   let network: Multichain.MultiChainNetworks
   let keyAgentName: keyAgentName
-  let networkConfigurations: NetworkConfigurations<Multichain.MultiChainNetworks>
+  let networkConfigurations: ProvidersConfig
 
   const getPassword: GetPassphrase = async () => Buffer.from('passphrase')
   const mnemonic = [
@@ -49,7 +50,7 @@ describe('MinaWalletImpl', () => {
     networkConfigurations = {
       [Mina.Networks.MAINNET]: {
         nodeUrl: 'https://proxy.minaexplorer.com/',
-        archive: 'https://graphql.minaexplorer.com'
+        archiveUrl: 'https://graphql.minaexplorer.com'
       },
       [Mina.Networks.DEVNET]: {
         nodeUrl: 'https://proxy.devnet.minaexplorer.com/',
@@ -62,9 +63,9 @@ describe('MinaWalletImpl', () => {
     }
     walletDependencies = {
       // stores
-      accountStore: new AccountStore(),
-      keyAgentStore: new KeyAgentStore(),
-      credentialStore: new CredentialStore(),
+      //accountStore: new AccountStore(),
+      //keyAgentStore: new KeyAgentStore(),
+      //credentialStore: new CredentialStore(),
       // managers
       networkManager: new NetworkManager<Multichain.MultiChainNetworks>(
         networkConfigurations,
