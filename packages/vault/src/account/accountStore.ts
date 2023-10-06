@@ -263,3 +263,180 @@ export class AccountStore {
 }
 
 export default AccountStore
+
+export const accountStore = createStore<AccountState>()(
+  persist(
+    (set, get) => ({
+      state: {
+        accounts: {} as Record<
+          Multichain.MultiChainNetworks,
+          Record<ChainAddress, SingleAccountState>
+        >
+      },
+
+      ensureAccount: (
+        network: Multichain.MultiChainNetworks,
+        address: ChainAddress
+      ): void => {
+        set((current) => {
+          if (!current.state.accounts[network]) {
+            return {
+              ...current,
+              state: {
+                ...current.state,
+                accounts: { ...current.state.accounts, [network]: {} }
+              }
+            }
+          }
+          if (!current.state.accounts[network][address]) {
+            return {
+              ...current,
+              state: {
+                ...current.state,
+                accounts: {
+                  ...current.state.accounts,
+                  [network]: {
+                    ...current.state.accounts[network],
+                    [address]: { ...initialSingleAccountState }
+                  }
+                }
+              }
+            }
+          }
+          return current // if no changes, return the current state
+        })
+      },
+
+      setAccountInfo: (
+        network: Multichain.MultiChainNetworks,
+        address: ChainAddress,
+        accountInfo: Multichain.MultiChainAccountInfo
+      ): void => {
+        set((current) => {
+          const networkAccounts = current.state.accounts[network] || {}
+          const accountData =
+            networkAccounts[address] || initialSingleAccountState
+
+          return {
+            ...current,
+            state: {
+              ...current.state,
+              accounts: {
+                ...current.state.accounts,
+                [network]: {
+                  ...networkAccounts,
+                  [address]: {
+                    ...accountData,
+                    accountInfo: accountInfo
+                  }
+                }
+              }
+            }
+          }
+        })
+      },
+
+      setTransactions: (
+        network: Multichain.MultiChainNetworks,
+        address: ChainAddress,
+        transactions: Multichain.MultiChainTransactionBody[]
+      ): void => {
+        set((current) => {
+          const networkAccounts = current.state.accounts[network] || {}
+          const accountData =
+            networkAccounts[address] || initialSingleAccountState
+
+          return {
+            ...current,
+            state: {
+              ...current.state,
+              accounts: {
+                ...current.state.accounts,
+                [network]: {
+                  ...networkAccounts,
+                  [address]: {
+                    ...accountData,
+                    transactions: transactions
+                  }
+                }
+              }
+            }
+          }
+        })
+      },
+
+      addAccount: (
+        network: Multichain.MultiChainNetworks,
+        address: ChainAddress
+      ): void => {
+        set((current) => {
+          if (!current.state.accounts[network]) {
+            return {
+              ...current,
+              state: {
+                ...current.state,
+                accounts: { ...current.state.accounts, [network]: {} }
+              }
+            }
+          }
+          if (!current.state.accounts[network][address]) {
+            return {
+              ...current,
+              state: {
+                ...current.state,
+                accounts: {
+                  ...current.state.accounts,
+                  [network]: {
+                    ...current.state.accounts[network],
+                    [address]: { ...initialSingleAccountState }
+                  }
+                }
+              }
+            }
+          }
+          return current // if no changes, return the current state
+        })
+      },
+
+      removeAccount: (
+        network: Multichain.MultiChainNetworks,
+        address: ChainAddress
+      ): void => {
+        set((current) => {
+          const newState = { ...current.state.accounts[network] }
+          delete newState[address]
+          return {
+            ...current,
+            state: {
+              ...current.state,
+              accounts: {
+                ...current.state.accounts,
+                [network]: newState
+              }
+            }
+          }
+        })
+      },
+
+      getAccountInfo: (
+        network: Multichain.MultiChainNetworks,
+        address: ChainAddress
+      ): SingleAccountState => {
+        return (
+          get().state.accounts[network]?.[address] || initialSingleAccountState
+        )
+      },
+
+      getTransactions: (
+        network: Multichain.MultiChainNetworks,
+        address: ChainAddress
+      ): Multichain.MultiChainTransactionBody[] => {
+        return get().state.accounts[network]?.[address]?.transactions || []
+      }
+    }),
+    {
+      name: 'PalladAccount',
+      storage: createJSONStorage(getSecurePersistence)
+    }
+  )
+)

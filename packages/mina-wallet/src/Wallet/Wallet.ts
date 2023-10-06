@@ -18,17 +18,18 @@ import {
 } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import {
-  AccountStore,
+  accountStore,
   credentialName,
-  CredentialStore,
+  credentialStore,
   keyAgentName,
   keyAgents,
-  KeyAgentStore,
+  keyAgentStore,
   SearchQuery,
   SingleCredentialState,
   SingleKeyAgentState,
   storedCredential
 } from '@palladxyz/vault'
+import { EventEmitter } from 'events'
 
 import { AddressError, NetworkError, WalletError } from '../Errors'
 // import managers
@@ -42,9 +43,9 @@ import { getRandomAnimalName } from './utils'
 
 export interface MinaWalletDependencies {
   // stores
-  accountStore: AccountStore
-  keyAgentStore: KeyAgentStore
-  credentialStore: CredentialStore
+  //keyAgentStore: keyAgentStore
+  //accountStore: accountStore
+  //credentialStore: credentialStore
   // managers
   networkManager: NetworkManager<Multichain.MultiChainNetworks>
   providerManager: ProviderManager<Multichain.MultiChainNetworks>
@@ -58,12 +59,14 @@ export interface MinaWalletProps {
 export class MinaWalletImpl implements MinaWallet {
   public network: Multichain.MultiChainNetworks
   // stores
-  private keyAgentStore: KeyAgentStore
-  private accountStore: AccountStore
-  private credentialStore: CredentialStore
+  //private keyAgentStore: keyAgentStore
+  //private accountStore: accountStore
+  //private credentialStore: credentialStore
   // managers
   private networkManager: NetworkManager<Multichain.MultiChainNetworks>
   private providerManager: ProviderManager<Multichain.MultiChainNetworks>
+  // events
+  private events: EventEmitter
   // other things
   readonly balance: number
   private currentWallet: SingleCredentialState | null
@@ -74,21 +77,23 @@ export class MinaWalletImpl implements MinaWallet {
   constructor(
     { network, name }: MinaWalletProps,
     {
-      accountStore,
-      keyAgentStore,
-      credentialStore,
+      //keyAgentStore,
+      //accountStore,
+      //credentialStore,
       networkManager,
       providerManager
     }: MinaWalletDependencies
   ) {
     this.network = network
     // stores
-    this.keyAgentStore = keyAgentStore
-    this.accountStore = accountStore
-    this.credentialStore = credentialStore
+    //this.keyAgentStore = keyAgentStore
+    //this.accountStore = accountStore
+    //this.credentialStore = credentialStore
     // managers
     this.networkManager = networkManager
     this.providerManager = providerManager
+    // events
+    this.events = new EventEmitter()
     // other things
     this.name = name
     this.balance = 0
@@ -110,6 +115,16 @@ export class MinaWalletImpl implements MinaWallet {
     }
   }
 
+  // Provide a method to subscribe to events.
+  on(event: string, listener: (...args: any[]) => void) {
+    this.events.on(event, listener)
+  }
+
+  // Optionally, provide a method to unsubscribe from events.
+  off(event: string, listener: (...args: any[]) => void) {
+    this.events.off(event, listener)
+  }
+
   // Event listener for network change
   public onNetworkChanged(
     listener: (network: Multichain.MultiChainNetworks) => void
@@ -118,17 +133,25 @@ export class MinaWalletImpl implements MinaWallet {
   }
   /**
    *
-   * @returns {KeyAgentStore} The KeyAgentStore
+   * @returns {keyAgentStore} The KeyAgent Store
    */
   private getKeyAgentStore() {
-    return this.keyAgentStore
+    return keyAgentStore.getState()
   }
   /**
    *
-   * @returns {AccountStore} The AccountStore
+   * @returns {accountStore} The Account Store
    */
   private getAccountStore() {
-    return this.accountStore
+    return accountStore.getState()
+  }
+
+  /**
+   *
+   * @returns {credentialStore} The Credential Store
+   */
+  private getCredentialStore() {
+    return credentialStore.getState()
   }
 
   /**
@@ -136,26 +159,20 @@ export class MinaWalletImpl implements MinaWallet {
    */
   async rehydrateStores(): Promise<void> {
     // Rehydrate the stores
-    this.keyAgentStore.rehydrate()
-    this.accountStore.rehydrate()
-    this.credentialStore.rehydrate()
+    keyAgentStore.persist.rehydrate()
+    accountStore.persist.rehydrate()
+    credentialStore.persist.rehydrate()
   }
   /**
    * Destory the wallet stores
    */
   async destroyStores(): Promise<void> {
     // Destroy the stores
-    this.keyAgentStore.destroy()
-    this.accountStore.destroy()
-    this.credentialStore.destroy()
+    keyAgentStore.destroy()
+    accountStore.destroy()
+    credentialStore.destroy()
   }
-  /**
-   *
-   * @returns {CredentialStore} The CredentialStore
-   */
-  private getCredentialStore() {
-    return this.credentialStore
-  }
+
   /**
    *
    * @returns
@@ -217,8 +234,8 @@ export class MinaWalletImpl implements MinaWallet {
     return this.name
   }
 
-  getCredentials(query: SearchQuery): storedCredential[] {
-    return this.getCredentialStore().searchCredentials(query)
+  getCredentials(query: SearchQuery, props: string[] = []): storedCredential[] {
+    return this.getCredentialStore().searchCredentials(query, props)
   }
 
   async getAccountInfo(): Promise<AccountInfo | null> {
@@ -278,8 +295,7 @@ export class MinaWalletImpl implements MinaWallet {
   }*/
 
   async sign(
-    signable: ChainSignablePayload,
-    keyAgentName: keyAgentName
+    signable: ChainSignablePayload
   ): Promise<ChainSignatureResult | undefined> {
     // use current wallet to sign
     const currentWallet = this.getCurrentWallet()
@@ -296,11 +312,17 @@ export class MinaWalletImpl implements MinaWallet {
       addressIndex: currentWallet?.addressIndex, // can be deprecated
       networkType: 'testnet' // TODO: Make this dynamic
     }
+    const keyAgentName = this.getCurrentKeyAgentName()
+    if (keyAgentName === null) {
+      throw new WalletError('Key agent name is undefined in sign method')
+    }
     const keyAgent = this.getKeyAgentStore().getKeyAgent(keyAgentName)
     if (keyAgent === null) {
       throw new WalletError('Key agent is undefined in sign method')
     }
-    return await keyAgent.keyAgent?.sign(currentWallet, signable, args)
+    const signed = await keyAgent.keyAgent?.sign(currentWallet, signable, args)
+    this.events.emit('signed')
+    return signed
   }
 
   // This is Mina Specific
@@ -325,6 +347,7 @@ export class MinaWalletImpl implements MinaWallet {
       network,
       this.getCurrentWallet()?.credential as GroupedCredentials
     )
+    this.events.emit('transactionSubmitted')
     return txResult
   }
 
@@ -381,6 +404,11 @@ export class MinaWalletImpl implements MinaWallet {
 
     // sync the wallet
     await this.syncWallet(network, derivedCredential)
+    // emit the event
+    this.events.emit(
+      'walletRestored',
+      (singleCredentialState.credential! as GroupedCredentials).address
+    )
   }
 
   private async syncTransactions(
@@ -465,6 +493,7 @@ export class MinaWalletImpl implements MinaWallet {
       network,
       derivedCredential as GroupedCredentials
     )
+    this.events.emit('walletSynced')
   }
   shutdown(): void {
     // Implement the logic to shut down the wallet

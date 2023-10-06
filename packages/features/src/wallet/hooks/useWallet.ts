@@ -1,4 +1,3 @@
-import { GroupedCredentials } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import {
   MinaWalletImpl,
@@ -8,13 +7,17 @@ import {
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { toast } from '@palladxyz/ui'
-import {
+/*import {
   AccountStore,
+  accountStore,
   CredentialStore,
-  KeyAgentStore
-} from '@palladxyz/vault'
+  credentialStore,
+  KeyAgentStore,
+  keyAgentStore,
+  SingleCredentialState
+} from '@palladxyz/vault'*/
 import easyMeshGradient from 'easy-mesh-gradient'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
@@ -47,22 +50,18 @@ export const useWallet = () => {
     shallow
   )
 
+  // useState for the address
+  const [address, setAddress] = useState<string | 'undefined'>('undefined')
+
   // Memoized Values
-  const walletProperties = useMemo(
-    () => ({
+  const wallet = useMemo(() => {
+    console.log('Creating a new wallet instance...')
+    const properties = {
       network: network,
       name: 'Pallad'
-    }),
-    [network]
-  )
-  const walletDependencies = useMemo(
-    () => ({
-      // stores
-      accountStore: new AccountStore(),
-      credentialStore: new CredentialStore(),
-      keyAgentStore: new KeyAgentStore(),
+    }
 
-      // managers
+    const dependencies = {
       networkManager: new NetworkManager<Multichain.MultiChainNetworks>(
         networkConfigurations,
         Mina.Networks.MAINNET
@@ -70,19 +69,34 @@ export const useWallet = () => {
       providerManager: new ProviderManager<Multichain.MultiChainNetworks>(
         networkConfigurations
       )
-    }),
-    []
-  )
-  const wallet = useMemo(
-    () => new MinaWalletImpl(walletProperties, walletDependencies),
-    [walletProperties, walletDependencies]
-  )
+    }
 
-  const address = useMemo(() => {
-    const credential = wallet.getCurrentWallet()
-      ?.credential as GroupedCredentials
-    return credential ? credential.address : 'undefined'
-  }, [wallet])
+    return new MinaWalletImpl(properties, dependencies)
+  }, [network])
+
+  // useEffect to listen for the walletRestored event.
+  useEffect(() => {
+    console.log('Subscribing to walletRestored event...')
+    // Define a handler for the walletRestored event.
+    function handleWalletRestored(address: string) {
+      // Perform any updates or side effects when the wallet is restored.
+      console.log('Wallet restored with address:', address)
+      setAddress(address)
+      console.log('Address state immediately after update:', address)
+      // ... any other logic ...
+
+      // If we have any state tied to wallet properties, we can update it here, in this handler.
+      // For example, if we use useState to manage the address, balances, transactions
+    }
+
+    // Subscribe to the walletRestored event.
+    wallet.on('walletRestored', handleWalletRestored)
+
+    // Cleanup: Unsubscribe from the event on component unmount.
+    return () => {
+      wallet.off('walletRestored', handleWalletRestored)
+    }
+  }, [wallet]) // Dependency on the wallet instance to ensure the effect runs when the wallet instance changes.
 
   const gradientBackground = useMemo(
     () =>
@@ -118,6 +132,7 @@ export const useWallet = () => {
     wallet,
     switchNetwork,
     copyWalletAddress,
+    // maybe we can return an object that contains all relevant wallet states
     address,
     gradientBackground,
     lockWallet

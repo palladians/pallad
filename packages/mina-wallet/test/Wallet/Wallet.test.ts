@@ -6,14 +6,11 @@ import {
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
-import {
-  AccountStore,
-  CredentialStore,
-  KeyAgentStore
-} from '@palladxyz/vault'
+//import { AccountStore, CredentialStore, KeyAgentStore } from '@palladxyz/vault'
 import { keyAgentName } from '@palladxyz/vault'
 import Client from 'mina-signer'
 
+//import { expect } from 'vitest'
 import { NetworkManager } from '../../src/Network'
 import {
   ProviderManager,
@@ -68,9 +65,9 @@ describe('MinaWalletImpl', () => {
     }
     walletDependencies = {
       // stores
-      accountStore: new AccountStore(),
-      keyAgentStore: new KeyAgentStore(),
-      credentialStore: new CredentialStore(),
+      //accountStore: new AccountStore(),
+      //keyAgentStore: new KeyAgentStore(),
+      //credentialStore: new CredentialStore(),
       // managers
       networkManager: new NetworkManager<Multichain.MultiChainNetworks>(
         networkConfigurations,
@@ -136,7 +133,7 @@ describe('MinaWalletImpl', () => {
     const message: Mina.MessageBody = {
       message: 'Hello, Bob!'
     }
-    const signedMessage = await wallet.sign(message, keyAgentName)
+    const signedMessage = await wallet.sign(message)
     const minaClient = new Client({ network: args.networkType })
     const isVerified = await minaClient.verifyMessage(
       signedMessage as Mina.SignedMessage
@@ -181,7 +178,7 @@ describe('MinaWalletImpl', () => {
       transaction,
       Mina.TransactionKind.PAYMENT
     )
-    const signedTx = await wallet.sign(constructedTx, keyAgentName)
+    const signedTx = await wallet.sign(constructedTx)
     const minaClient = new Client({ network: args.networkType })
     const isVerified = minaClient.verifyTransaction(
       signedTx as Mina.SignedTransaction

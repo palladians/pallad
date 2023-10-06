@@ -140,3 +140,90 @@ export class KeyAgentStore {
 }
 
 export default KeyAgentStore
+
+export const keyAgentStore = createStore<KeyAgentState>()(
+  // instead of createStore<KeyAgentState>()( we can do create<KeyAgentState>()(
+  persist(
+    (set, get) => ({
+      state: {
+        keyAgents: {}
+      },
+      getState: get as () => KeyAgentState,
+
+      ensureKeyAgent: (name: keyAgentName) => {
+        set((current: KeyAgentState) => {
+          if (!current.state.keyAgents[name]) {
+            return {
+              ...current,
+              state: {
+                ...current.state,
+                keyAgents: {
+                  ...current.state.keyAgents,
+                  [name]: { ...initialKeyAgentState, name: name }
+                }
+              }
+            }
+          }
+          return current
+        })
+      },
+
+      initialiseKeyAgent: async (
+        name: keyAgentName,
+        keyAgentType: keyAgents,
+        { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+      ) => {
+        const agentArgs: FromBip39MnemonicWordsProps = {
+          getPassphrase: getPassphrase,
+          mnemonicWords: mnemonicWords,
+          mnemonic2ndFactorPassphrase: ''
+        }
+        const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
+        set((current: KeyAgentState) => {
+          const existingAgentState = current.state.keyAgents[name] || {}
+
+          return {
+            ...current,
+            state: {
+              ...current.state,
+              keyAgents: {
+                ...current.state.keyAgents,
+                [name]: {
+                  ...existingAgentState,
+                  keyAgentType: keyAgentType,
+                  keyAgent: keyAgent,
+                  name: name
+                }
+              }
+            }
+          }
+        })
+      },
+
+      getKeyAgent: (
+        name: keyAgentName
+      ): SingleKeyAgentState | typeof initialKeyAgentState => {
+        const current = get()
+        return current.state.keyAgents[name] || initialKeyAgentState
+      },
+
+      removeKeyAgent: (name: keyAgentName) => {
+        set((current: KeyAgentState) => {
+          const newKeyAgents = { ...current.state.keyAgents }
+          delete newKeyAgents[name]
+          return {
+            ...current,
+            state: {
+              ...current.state,
+              keyAgents: newKeyAgents
+            }
+          }
+        })
+      }
+    }),
+    {
+      name: 'PalladKeyAgent',
+      storage: createJSONStorage(getSecurePersistence)
+    }
+  )
+)

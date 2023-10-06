@@ -67,7 +67,7 @@ export type CredentialState = {
 
   removeCredential: (name: keyAgentName) => void
 
-  searchCredentials(query: SearchQuery): storedCredential[]
+  searchCredentials(query: SearchQuery, props?: string[]): storedCredential[]
 }
 
 /**

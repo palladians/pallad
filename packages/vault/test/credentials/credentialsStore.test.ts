@@ -3,9 +3,9 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import {
   credentialName,
+  CredentialStore,
   SingleCredentialState
-} from '../../src/credentials/credentialsState'
-import { CredentialStore } from '../../src/credentials/credentialsStore'
+} from '../../src/credentials'
 import { keyAgentName } from '../../src/keyAgent/keyAgentState'
 
 describe('AccountStore', () => {
@@ -134,5 +134,28 @@ describe('AccountStore', () => {
       credentialStore.searchCredentials(searchQueryThree)
     expect(storedCredentialsThree).toBeDefined()
     expect(storedCredentialsThree.length).toEqual(1)
+  })
+  it('should add two Grouped Credentials and search for Mina addresses and return them as an array not as a credential object', async () => {
+    const credentialStore = new CredentialStore()
+    // add first credential
+    await credentialStore.setCredential(credentialState)
+    // add second credential
+    await credentialStore.setCredential(credentialStateTwo)
+    // search for first credential
+    const searchQuery = {
+      type: 'MinaAddress',
+      chain: Network.Mina
+    }
+    // return props
+    const props = ['address']
+    const storedCredentials = credentialStore.searchCredentials(
+      searchQuery,
+      props
+    )
+    console.log(
+      `stored credential addresses: ${JSON.stringify(storedCredentials)}`
+    )
+    expect(storedCredentials).toBeDefined()
+    expect(storedCredentials.length).toEqual(1)
   })
 })
