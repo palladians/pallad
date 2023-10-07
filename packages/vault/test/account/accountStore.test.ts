@@ -1,15 +1,15 @@
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import { renderHook } from '@testing-library/react'
 import { expect } from 'vitest'
 
 import { initialSingleAccountState } from '../../src/account/accountState'
-import { AccountStore, accountStore } from '../../src/account/accountStore'
+import { useAccountStore } from '../../src/account/accountStore'
 
 describe('AccountStore', () => {
   let address: string
   let network: Mina.Networks
   let mockAccountInfo: AccountInfo
   let mockTransactions: Mina.Paginated<Mina.TransactionBody>
-  let newAccountStore: typeof accountStore
 
   beforeEach(async () => {
     address = 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
@@ -43,8 +43,6 @@ describe('AccountStore', () => {
       ],
       totalResultCount: 1
     }
-
-    newAccountStore = accountStore
   })
 
   afterEach(() => {
@@ -52,47 +50,32 @@ describe('AccountStore', () => {
   })
 
   it('should create a new accountStore', async () => {
-    expect(newAccountStore).toBeDefined()
+    const { result } = renderHook(() => useAccountStore())
+    expect(result.current.accounts).toEqual({})
   })
 
   it('should create a new accountStore with initial state', async () => {
+    const { result } = renderHook(() => useAccountStore())
     const accountInfo = mockAccountInfo
-    accountStore.getState().setAccountInfo(network, address, accountInfo)
-    expect(
-      accountStore.getState().getAccountInfo(network, address).accountInfo
-    ).toEqual(accountInfo)
-  })
-  /*
-    Add more tests for accountStore
-  */
-
-  it('should create an account store', async () => {
-    const accountStore = new AccountStore()
-    expect(accountStore).toBeDefined()
-  })
-
-  it('should set account info', async () => {
-    const accountStore = new AccountStore()
-    const accountInfo = mockAccountInfo
-    accountStore.setAccountInfo(network, address, accountInfo)
-    expect(accountStore.getAccountInfo(network, address).accountInfo).toEqual(
+    result.current.setAccountInfo(network, address, accountInfo)
+    expect(result.current.getAccountInfo(network, address).accountInfo).toEqual(
       accountInfo
     )
   })
 
   it('should set and get transactions', async () => {
-    const accountStore = new AccountStore()
+    const { result } = renderHook(() => useAccountStore())
     const transactions = mockTransactions
-    accountStore.setTransactions(network, address, transactions.pageResults)
-    expect(accountStore.getTransactions(network, address)).toEqual(
+    result.current.setTransactions(network, address, transactions.pageResults)
+    expect(result.current.getTransactions(network, address)).toEqual(
       transactions.pageResults
     )
   })
 
   it('should add an account', () => {
-    const accountStore = new AccountStore()
-    accountStore.addAccount(network, address)
-    expect(accountStore.getAccountInfo(network, address)).toEqual(
+    const { result } = renderHook(() => useAccountStore())
+    result.current.addAccount(network, address)
+    expect(result.current.getAccountInfo(network, address)).toEqual(
       initialSingleAccountState
     )
   })

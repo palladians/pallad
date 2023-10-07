@@ -49,7 +49,7 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     if (!validMnemonic) throw new errors.InvalidMnemonicError()
 
     const entropy = mnemonicWordsToEntropy(mnemonicWords)
-    const seedBytes = await entropyToSeed(entropy, mnemonic2ndFactorPassphrase)
+    const seedBytes = entropyToSeed(entropy, mnemonic2ndFactorPassphrase)
     const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
     const encryptedSeedBytes = await emip3encrypt(seedBytes, passphrase)
 

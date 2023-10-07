@@ -42,7 +42,7 @@ const networkConfigurations = {
 export const useWallet = () => {
   const navigate = useNavigate()
   // The use App Store should be an API on the wallet
-  const { network: network, setNetwork } = useAppStore(
+  const { network, setNetwork } = useAppStore(
     (state) => ({
       network: state.network,
       setNetwork: state.setNetwork
@@ -51,7 +51,7 @@ export const useWallet = () => {
   )
 
   // useState for the address
-  const [address, setAddress] = useState<string | 'undefined'>('undefined')
+  const [address, setAddress] = useState<string | null>(null)
 
   // Memoized Values
   const wallet = useMemo(() => {
@@ -73,6 +73,8 @@ export const useWallet = () => {
 
     return new MinaWalletImpl(properties, dependencies)
   }, [network])
+
+  console.log('>>>NTWRK', network)
 
   // useEffect to listen for the walletRestored event.
   useEffect(() => {
@@ -96,10 +98,11 @@ export const useWallet = () => {
     return () => {
       wallet.off('walletRestored', handleWalletRestored)
     }
-  }, [wallet]) // Dependency on the wallet instance to ensure the effect runs when the wallet instance changes.
+  }, []) // Dependency on the wallet instance to ensure the effect runs when the wallet instance changes.
 
   const gradientBackground = useMemo(
     () =>
+      address &&
       easyMeshGradient({
         seed: address,
         hueRange: [180, 240]

@@ -26,37 +26,14 @@ export const initialSingleAccountState: SingleAccountState = {
 /**
  * Type representing a mapping of ChainAddress to SingleAccountState.
  */
-type ChainAddressMapping = Record<ChainAddress, SingleAccountState>
-
-/**
- * Type representing the aggregated state of all accounts, indexed by network and then by address.
- */
-export type AccountStoreState = {
-  accounts: Record<Multichain.MultiChainNetworks, ChainAddressMapping>
-}
-
-/**
- * Constant representing the initial account states.
- */
-export const initialAccountStoreState: AccountStoreState = {
-  accounts: {} as Record<Multichain.MultiChainNetworks, ChainAddressMapping>
-}
-/**
- * Users could add new chains to the store with some function like:
-          function addNetworkToState(state: AccountStoreState, network: Multichain.MultiChainNetworks) {
-            if (!state.accounts[network]) {
-              state.accounts[network] = {} as Record<ChainAddress, SingleAccountState>;
-            }
-        }
- * 
- */
+export type ChainAddressMapping = Record<ChainAddress, SingleAccountState>
 
 /**
  * Type representing the store's state and actions combined.
  * @typedef {Object} AccountState
  */
 export type AccountState = {
-  state: AccountStoreState
+  accounts: Record<Multichain.MultiChainNetworks, ChainAddressMapping>
 
   ensureAccount: (
     network: Multichain.MultiChainNetworks,
@@ -95,9 +72,3 @@ export type AccountState = {
     address: ChainAddress
   ) => void
 }
-
-/**
- * The type of the store returned by createStore.
- * @typedef {Object} AccountStore
- */
-export type AccountStores = AccountState

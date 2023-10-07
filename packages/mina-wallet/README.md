@@ -3,17 +3,21 @@
 This is a TypeScript library that offers functionalities to interact with Mina protocol. It provides services to retrieve account information, fetch transactions, construct transactions, sign transactions, and submit transactions for the Mina blockchain network.
 
 ## Installation
+
 To add this package to your project, you can use npm:
 
 ```bash
 npm install @palladxyz/mina-wallet
 ```
+
 or with yarn:
+
 ```bash
 yarn add @palladxyz/mina-wallet
 ```
 
 ## Key Classes and Methods
+
 `MinaWalletImpl`: This is the main class in the package and is an implementation of the `MinaWallet` interface.
 
 It provides the following methods:
@@ -26,6 +30,7 @@ It provides the following methods:
 - `shutdown()`: Shuts down the wallet.
 
 ## Usage
+
 Here is an example of how to use the MinaWallet:
 
 ```typescript
@@ -42,6 +47,7 @@ const minaWallet = new MinaWalletImpl(accountProvider, chainHistoryProvider, tra
 ```
 
 ## Diagram
+
 ```mermaid
 classDiagram
     class MinaWalletImpl{
@@ -75,4 +81,5 @@ classDiagram
 ```
 
 ## TODO
+
 - KMS
