@@ -71,4 +71,6 @@ export type AccountState = {
     network: Multichain.MultiChainNetworks,
     address: ChainAddress
   ) => void
+
+  clear: () => void
 }

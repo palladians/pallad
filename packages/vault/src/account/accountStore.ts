@@ -51,7 +51,8 @@ export const useAccountStore = create<AccountState>()(
       },
       addAccount: (network, address) => {
         set((state) => {
-          if (!state.accounts[network][address]) {
+          if (!state.accounts?.[network]?.[address]) {
+            state.accounts[network] = state.accounts[network] || {}
             state.accounts[network][address] = { ...initialSingleAccountState }
           }
         })
@@ -68,6 +69,11 @@ export const useAccountStore = create<AccountState>()(
       getTransactions: (network, address) => {
         const { accounts } = get()
         return accounts[network]?.[address]?.transactions || []
+      },
+      clear: () => {
+        set((state) => {
+          state.accounts = {} as never
+        })
       }
     })),
     {

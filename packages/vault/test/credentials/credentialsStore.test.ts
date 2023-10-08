@@ -1,17 +1,19 @@
 import { GroupedCredentials, Network } from '@palladxyz/key-management'
+import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import {
   credentialName,
-  CredentialStore,
-  SingleCredentialState
-} from '../../src/credentials'
-import { keyAgentName } from '../../src/keyAgent/keyAgentState'
+  SingleCredentialState,
+  StoredCredential,
+  useCredentialStore
+} from '../../src'
+import { KeyAgentName } from '../../src'
 
 describe('AccountStore', () => {
   let credential: GroupedCredentials
   let credentialName: credentialName
-  let keyAgentName: keyAgentName
+  let keyAgentName: KeyAgentName
   let credentialState: SingleCredentialState
   let credentialStateTwo: SingleCredentialState
   let credentialTwo: object
@@ -72,56 +74,46 @@ describe('AccountStore', () => {
   })
 
   afterEach(() => {
-    // Cleanup after each test if needed
+    const { result } = renderHook(() => useCredentialStore())
+    act(() => result.current.clear())
   })
 
   it('should create an credential store', async () => {
-    const credentialStore = new CredentialStore()
-    expect(credentialStore).toBeDefined()
+    const { result } = renderHook(() => useCredentialStore())
+    expect(result.current.credentials).toEqual({})
   })
 
   it('should add one Grouped Credentials and remove one from store', async () => {
-    const credentialStore = new CredentialStore()
-    // add first credential
-    await credentialStore.setCredential(credentialState)
-    // check that credential is in the store
-    const storedCredential = credentialStore.getCredential(credentialName)
-    expect(storedCredential.credential).toBeDefined()
-    expect(storedCredential.credential).toEqual(credential)
-    // remove credential
-    credentialStore.removeCredential(credentialName)
+    let storedCredential: SingleCredentialState | undefined
+    const { result } = renderHook(() => useCredentialStore())
+    act(() => {
+      result.current.setCredential(credentialState)
+      storedCredential = result.current.getCredential(credentialName)
+    })
+    expect(storedCredential?.credential).toEqual(credential)
+    act(() => {
+      result.current.removeCredential(credentialName)
+      storedCredential = result.current.getCredential(credentialName)
+    })
     // check that credential is removed
-    const storedCredentialRemoved =
-      credentialStore.getCredential(credentialName)
-    expect(storedCredentialRemoved.credential).toBeUndefined()
+    expect(storedCredential?.credential).toBeUndefined()
   })
 
   it('should add two Grouped Credentials and search for both separately', async () => {
-    const credentialStore = new CredentialStore()
-    // add first credential
-    await credentialStore.setCredential(credentialState)
-    // add second credential
-    await credentialStore.setCredential(credentialStateTwo)
+    let storedCredentials: StoredCredential[] | undefined
+    let storedCredentialsTwo: StoredCredential[] | undefined
+    let storedCredentialsThree: StoredCredential[] | undefined
+    const { result } = renderHook(() => useCredentialStore())
     // search for first credential
     const searchQuery = {
       type: 'MinaAddress',
       chain: Network.Mina
     }
-    const storedCredentials = credentialStore.searchCredentials(searchQuery)
-    console.log(`storedCredentials: ${JSON.stringify(storedCredentials)}`)
-    expect(storedCredentials).toBeDefined()
-    expect(storedCredentials.length).toEqual(1)
     // search for second credential
     const searchQueryTwo = {
       issuer: 'University of Example',
       type: 'UniversityDegreeCredential'
     }
-    // can partially search a credential with an array
-    const storedCredentialsTwo =
-      credentialStore.searchCredentials(searchQueryTwo)
-    expect(storedCredentialsTwo).toBeDefined()
-    expect(storedCredentialsTwo.length).toEqual(1)
-
     // search for second credential with a different query -- nested query
     const searchQueryThree = {
       credentialSubject: {
@@ -130,17 +122,30 @@ describe('AccountStore', () => {
         }
       }
     }
-    const storedCredentialsThree =
-      credentialStore.searchCredentials(searchQueryThree)
+    act(() => {
+      // add first credential
+      result.current.setCredential(credentialState)
+      // add second credential
+      result.current.setCredential(credentialStateTwo)
+      storedCredentials = result.current.searchCredentials(searchQuery)
+    })
+    expect(storedCredentials).toBeDefined()
+    expect(storedCredentials?.length).toEqual(1)
+    act(() => {
+      // can partially search a credential with an array
+      storedCredentialsTwo = result.current.searchCredentials(searchQueryTwo)
+    })
+    expect(storedCredentialsTwo).toBeDefined()
+    expect(storedCredentialsTwo?.length).toEqual(1)
+    act(() => {
+      storedCredentialsThree =
+        result.current.searchCredentials(searchQueryThree)
+    })
     expect(storedCredentialsThree).toBeDefined()
-    expect(storedCredentialsThree.length).toEqual(1)
+    expect(storedCredentialsThree?.length).toEqual(1)
   })
   it('should add two Grouped Credentials and search for Mina addresses and return them as an array not as a credential object', async () => {
-    const credentialStore = new CredentialStore()
-    // add first credential
-    await credentialStore.setCredential(credentialState)
-    // add second credential
-    await credentialStore.setCredential(credentialStateTwo)
+    let storedCredentials: StoredCredential[] | undefined
     // search for first credential
     const searchQuery = {
       type: 'MinaAddress',
@@ -148,14 +153,15 @@ describe('AccountStore', () => {
     }
     // return props
     const props = ['address']
-    const storedCredentials = credentialStore.searchCredentials(
-      searchQuery,
-      props
-    )
-    console.log(
-      `stored credential addresses: ${JSON.stringify(storedCredentials)}`
-    )
+    const { result } = renderHook(() => useCredentialStore())
+    act(() => {
+      // add first credential
+      result.current.setCredential(credentialState)
+      // add second credential
+      result.current.setCredential(credentialStateTwo)
+      storedCredentials = result.current.searchCredentials(searchQuery, props)
+    })
     expect(storedCredentials).toBeDefined()
-    expect(storedCredentials.length).toEqual(1)
+    expect(storedCredentials?.length).toEqual(1)
   })
 })
