@@ -6,22 +6,23 @@ import {
 import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button, cn, Input, Label } from '@palladxyz/ui'
+import { useKeyAgentStore } from '@palladxyz/vault'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useWallet } from '../../wallet/hooks/useWallet'
-import { useAppStore } from '../../wallet/store/app'
-import { useOnboardingStore } from '../../wallet/store/onboarding'
+import { useWalletUi } from '../../common/hooks/useWalletUi'
+import { useAppStore } from '../../common/store/app'
+import { useOnboardingStore } from '../../common/store/onboarding'
 
 const getConfirmationIndex = () => {
   return Math.floor(Math.random() * 12)
 }
 
 export const MnemonicConfirmationView = () => {
-  const { wallet } = useWallet()
+  const { restoreWallet } = useWalletUi()
   const [confirmationIndex] = useState(getConfirmationIndex())
   const setVaultStateInitialized = useAppStore(
     (state) => state.setVaultStateInitialized
@@ -50,18 +51,16 @@ export const MnemonicConfirmationView = () => {
     if (!spendingPassword) return
     if (!mnemonic) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    //keyAgentStore.destroy()
-    //keyAgentStore.persist.rehydrate()
+    useKeyAgentStore.destroy()
+    useKeyAgentStore.persist.rehydrate()
     // TODO: Add await in UI when user clicks restore wallet
-    // only press "submit" once
-    wallet.rehydrateStores()
     const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,
       accountIndex: 0,
       addressIndex: 0,
       networkType: 'testnet' // TODO: make this configurable
     }
-    await wallet.restoreWallet(
+    await restoreWallet(
       new MinaPayload(),
       restoreArgs,
       Mina.Networks.MAINNET,

@@ -1,21 +1,21 @@
 import { Mina } from '@palladxyz/mina-core'
 import useSWR from 'swr'
 
-import { useWallet } from '../../wallet/hooks/useWallet'
-import { useAppStore } from '../../wallet/store/app'
+import { useAppStore } from '../store/app'
+import { useWalletUi } from './useWalletUi'
 
 export const useAccount = () => {
-  const { wallet, address } = useWallet()
+  const { credentialAddress, getWalletAccountInfo } = useWalletUi()
   const network = useAppStore((state) => state.network)
   const swr = useSWR(
-    address
+    credentialAddress
       ? [
-          address,
+          credentialAddress,
           'account',
           Mina.Networks[network.toUpperCase() as keyof typeof Mina.Networks]
         ]
       : null,
-    async () => await wallet.getAccountInfo()
+    async () => await getWalletAccountInfo()
   )
   const rawMinaBalance = swr.isLoading ? 0 : swr.data?.balance?.total || 0
   const minaBalance =

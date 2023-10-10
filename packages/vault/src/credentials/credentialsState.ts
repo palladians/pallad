@@ -4,10 +4,10 @@
 
 import { GroupedCredentials } from '@palladxyz/key-management'
 
-import { keyAgentName } from '../keyAgent/keyAgentState'
+import { KeyAgentName } from '../keyAgent'
 
-export type credentialName = string
-export type storedCredential = GroupedCredentials | object | undefined // can add other credential types here like verifiable credentials
+export type CredentialName = string
+export type StoredCredential = GroupedCredentials | undefined
 export interface SearchQuery {
   [key: string]: SearchValue
 }
@@ -24,9 +24,9 @@ export type SearchValue =
  * @typedef {Object} SingleCredentialState
  */
 export type SingleCredentialState = {
-  credentialName: credentialName
-  keyAgentName: keyAgentName
-  credential: storedCredential
+  credentialName: CredentialName
+  keyAgentName: KeyAgentName
+  credential: StoredCredential
 }
 
 /**
@@ -40,38 +40,20 @@ export const initialCredentialState: SingleCredentialState = {
 }
 
 /**
- * Type representing the aggregation of all credentials by name
- * @typedef {Object} CredentialStoreState
- */
-export type CredentialStoreState = {
-  credentials: Record<credentialName, SingleCredentialState>
-}
-
-/**
  * Type representing the store's state and actions combined.
  * @typedef {Object} CredentialsState
  */
 export type CredentialState = {
-  getState(): unknown
-  state: CredentialStoreState
-
+  credentials: Record<CredentialName, SingleCredentialState>
   ensureCredential: (
-    credentialName: credentialName,
-    keyAgentName: keyAgentName
+    credentialName: CredentialName,
+    keyAgentName: KeyAgentName
   ) => void
-
   setCredential: (credentialState: SingleCredentialState) => void
   getCredential: (
-    credentialName: credentialName
+    credentialName: CredentialName
   ) => SingleCredentialState | typeof initialCredentialState
-
-  removeCredential: (name: keyAgentName) => void
-
-  searchCredentials(query: SearchQuery, props?: string[]): storedCredential[]
+  removeCredential: (name: KeyAgentName) => void
+  searchCredentials(query: SearchQuery, props?: string[]): StoredCredential[]
+  clear: () => void
 }
-
-/**
- * The type of the store returned by createStore.
- * @typedef {Object} CredentialStores
- */
-export type CredentialStores = CredentialState

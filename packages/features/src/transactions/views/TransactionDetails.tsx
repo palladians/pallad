@@ -5,24 +5,23 @@ import { AppLayout } from '../../common/components/AppLayout'
 import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useTransaction } from '../../common/hooks/useTransaction'
-import { useWallet } from '../../wallet/hooks/useWallet'
+import { useWalletUi } from '../../common/hooks/useWalletUi'
 import { TxIndicator } from '../components/TxIndicator'
 import { structurizeTransaction } from '../utils/structurizeTransactions'
 
 export const TransactionDetailsView = () => {
-  const { address } = useWallet()
+  const { credentialAddress } = useWalletUi()
   const navigate = useNavigate()
   const { hash } = useParams()
   if (!hash) return null
-  const walletPublicKey = address
-  if (!walletPublicKey) return null
+  if (!credentialAddress) return null
   const { data: transactionData, isLoading: transactionLoading } =
     useTransaction({ hash })
   const transaction =
     transactionData &&
     structurizeTransaction({
       tx: transactionData,
-      walletPublicKey
+      walletPublicKey: credentialAddress
     })
   const transactionMetaFields = transaction && [
     { label: 'Hash', value: transaction.hash },

@@ -6,9 +6,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { FormError } from '../../common/components/FormError'
 import { useAccount } from '../../common/hooks/useAccount'
+import { TransactionFee } from '../../common/lib/const'
+import { useTransactionStore } from '../../common/store/transaction'
 import { OutgoingTransaction } from '../../common/types'
-import { TransactionFee } from '../../wallet/lib/const'
-import { useTransactionStore } from '../../wallet/store/transaction'
 import { SendFormSchema } from './SendForm.schema'
 
 export const SendForm = () => {

@@ -9,11 +9,11 @@ import {
 import { LockIcon, SettingsIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-import { useWallet } from '../../wallet/hooks/useWallet'
+import { useWalletUi } from '../../common/hooks/useWalletUi'
 
 export const AvatarMenu = () => {
   const navigate = useNavigate()
-  const { gradientBackground, lockWallet } = useWallet()
+  const { lockWallet } = useWalletUi()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -21,7 +21,7 @@ export const AvatarMenu = () => {
           <AvatarFallback>
             <div
               className="w-full h-full cursor-pointer"
-              style={{ backgroundImage: gradientBackground }}
+              // style={{ backgroundImage: gradientBackground }}
             />
           </AvatarFallback>
         </Avatar>

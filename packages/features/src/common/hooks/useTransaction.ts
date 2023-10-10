@@ -1,20 +1,20 @@
 import { Mina } from '@palladxyz/mina-core'
 import useSWR from 'swr'
 
-import { useWallet } from '../../wallet/hooks/useWallet'
-import { useAppStore } from '../../wallet/store/app'
+import { useAppStore } from '../store/app'
+import { useWalletUi } from './useWalletUi'
 
 export const useTransaction = ({ hash }: { hash: string }) => {
-  const { wallet, address } = useWallet()
+  const { credentialAddress } = useWalletUi()
   const network = useAppStore((state) => state.network)
   return useSWR(
-    address
+    credentialAddress
       ? [
           'transaction',
           hash,
           Mina.Networks[network.toUpperCase() as keyof typeof Mina.Networks]
         ]
       : null,
-    async () => await wallet.getTransaction({ hash })
+    async () => []
   )
 }

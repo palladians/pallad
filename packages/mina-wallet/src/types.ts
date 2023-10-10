@@ -13,11 +13,11 @@ import {
 } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import {
-  keyAgentName,
-  keyAgents,
+  KeyAgentName,
+  KeyAgents,
   SearchQuery,
   SingleCredentialState,
-  storedCredential
+  StoredCredential
 } from '@palladxyz/vault'
 export interface MinaWallet {
   readonly balance: number
@@ -30,13 +30,13 @@ export interface MinaWallet {
     args: ChainSpecificArgs,
     network: Multichain.MultiChainNetworks,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
-    keyAgentName: keyAgentName,
-    keyAgentType?: keyAgents.inMemory
+    keyAgentName: KeyAgentName,
+    keyAgentType?: KeyAgents.InMemory
   ): Promise<void>
 
   getCurrentWallet(): SingleCredentialState | null
 
-  getCredentials(query: SearchQuery): storedCredential[]
+  getCredentials(query: SearchQuery): StoredCredential[]
 
   getAccountInfo(publicKey: Mina.PublicKey): Promise<AccountInfo | null>
 

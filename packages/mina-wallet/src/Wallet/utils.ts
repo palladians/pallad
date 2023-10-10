@@ -1,4 +1,4 @@
-import { credentialName } from '@palladxyz/vault'
+import { CredentialName } from '@palladxyz/vault'
 import {
   adjectives,
   animals,
@@ -27,10 +27,10 @@ function formatName(name: string): string {
   return name.split(' ').map(capitalizeFirstLetter).join(' ')
 }
 
-export function getRandomAnimalName(): credentialName {
-  return formatName(uniqueNamesGenerator(fullConfig)) as credentialName
+export function getRandomAnimalName(): CredentialName {
+  return formatName(uniqueNamesGenerator(fullConfig)) as CredentialName
 }
 
-export function getShortName(): credentialName {
-  return formatName(uniqueNamesGenerator(shortConfig)) as credentialName
+export function getShortName(): CredentialName {
+  return formatName(uniqueNamesGenerator(shortConfig)) as CredentialName
 }

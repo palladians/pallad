@@ -13,7 +13,7 @@ The goal is to build a KMS that is compliant with the [W3C Universal Wallet Spec
 - Signing operations for each chain
 - Supports seed decryption and exporting of seeds using an implementation of [EMIP-003](https://github.com/Emurgo/EmIPs/blob/master/specs/emip-003.md)
 - In-memory key agent with secure seed storage
-- Wrapper functions using `@scure/bip39` library 
+- Wrapper functions using `@scure/bip39` library
 
 ## Usage
 
@@ -35,10 +35,9 @@ This class provides several core functionalities:
 
 - Transaction Signing: Sign transactions or data with the root private key.
 
-
 ### InMemoryKeyAgent
 
-The `InMemoryKeyAgent` is an extension of `KeyAgentBase` that manages the encrypted seed bytes in memory and can restoring a key agent from a mnemonic. 
+The `InMemoryKeyAgent` is an extension of `KeyAgentBase` that manages the encrypted seed bytes in memory and can restoring a key agent from a mnemonic.
 
 #### Usage and Functionality
 
@@ -46,7 +45,7 @@ To use `InMemoryKeyAgent`, you need to provide a passphrase, which is a function
 
 The class provides the following functionalities:
 
-- Constructing a new instance: This requires providing all necessary details to create a `SerializableInMemoryKeyAgentData` type object, including the encrypted seed bytes and the passphrase function. 
+- Constructing a new instance: This requires providing all necessary details to create a `SerializableInMemoryKeyAgentData` type object, including the encrypted seed bytes and the passphrase function.
 
 - Restoring a KeyAgent: This feature can reinitialize a `KeyAgent` instance by deriving the necessary credentials. It takes a payload and arguments specific to the blockchain in use.
 
@@ -70,13 +69,13 @@ const mnemonicWords = [
   'witness',
   'alert',
   'like'
-];
-const getPassphrase = async () => Buffer.from('passphrase');
+]
+const getPassphrase = async () => Buffer.from('passphrase')
 
 const agent = await InMemoryKeyAgent.fromMnemonicWords({
   mnemonicWords,
   getPassphrase
-});
+})
 ```
 
 **Important**: When implementing, the passphrase function should be set up in a secure way that's suitable for your application.

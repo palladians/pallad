@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
-import { useOnboardingStore } from '../../wallet/store/onboarding'
+import { useOnboardingStore } from '../../common/store/onboarding'
 import { WalletInfoForm } from '../components/WalletInfoForm'
 
 export const RestoreWalletView = () => {

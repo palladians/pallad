@@ -1,7 +1,8 @@
-import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+import { BorrowedTypes } from '../../'
 
-export type SignedZkAppCommand = Json.Signed<Json.ZkappCommand>
+export type SignedZkAppCommand =
+  BorrowedTypes.Signed<BorrowedTypes.ZkappCommand>
 
 export type SignableZkAppCommand = {
-  command: Json.ZkappCommand
+  command: BorrowedTypes.ZkappCommand
 }

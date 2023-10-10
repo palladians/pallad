@@ -35,6 +35,7 @@ Positive, constructive behavior is essential in fostering an enriching environme
 
 Certain behaviors are considered unacceptable in our community.
 Inappropriate behaviors in our community include, but are not limited to:
+
 - Disrespectful language and actions
 - Unwelcome attention or advances
 - Harassment in any form

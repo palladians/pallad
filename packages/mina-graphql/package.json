@@ -25,7 +25,7 @@
     "events": "^3.3.0",
     "graphql": "^16.6.0",
     "graphql-request": "^6.1.0",
-    "mina-signer": "^2.0.3",
+    "mina-signer": "^2.1.1",
     "subscriptions-transport-ws": "^0.11.0",
     "ws": "^8.13.0"
   },

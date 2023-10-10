@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { MinaPayload, Network } from '@palladxyz/key-management'
-import { useWallet } from '../src/wallet/hooks/useWallet'
+import { useWallet } from '../src/common/hooks/useWallet'
 import { Mina } from '@palladxyz/mina-core'
 
 const MNEMONIC =

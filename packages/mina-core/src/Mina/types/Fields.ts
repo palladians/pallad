@@ -1,9 +1,9 @@
-import { Signed } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+import { BorrowedTypes } from '../../'
 
 /*
  * represents the signed message - SignedLegacy<MessageBody>
  */
-export type SignedFields = Signed<bigint[]>
+export type SignedFields = BorrowedTypes.Signed<bigint[]>
 
 export type SignableFields = {
   fields: bigint[]

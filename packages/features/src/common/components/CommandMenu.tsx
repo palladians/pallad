@@ -21,7 +21,7 @@ import {
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useWallet } from '../../wallet/hooks/useWallet'
+import { useWalletUi } from '../hooks/useWalletUi'
 
 interface CommandMenuProps {
   open: boolean
@@ -29,7 +29,7 @@ interface CommandMenuProps {
 }
 
 export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
-  const { lockWallet } = useWallet()
+  const { lockWallet } = useWalletUi()
   const navigate = useNavigate()
 
   const COMMAND_GROUPS = [

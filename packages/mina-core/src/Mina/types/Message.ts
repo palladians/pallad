@@ -1,4 +1,4 @@
-import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+import { BorrowedTypes } from '../../'
 
 /**
  * Represents the body of a message.
@@ -9,4 +9,4 @@ export interface MessageBody {
 /*
  * represents the signed message - SignedLegacy<MessageBody>
  */
-export type SignedMessage = SignedLegacy<string>
+export type SignedMessage = BorrowedTypes.SignedLegacy<string>
