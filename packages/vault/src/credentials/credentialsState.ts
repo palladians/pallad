@@ -7,7 +7,7 @@ import { GroupedCredentials } from '@palladxyz/key-management'
 import { KeyAgentName } from '../keyAgent'
 
 export type CredentialName = string
-export type StoredCredential = GroupedCredentials | object | undefined // can add other credential types here like verifiable credentials
+export type StoredCredential = GroupedCredentials | undefined
 export interface SearchQuery {
   [key: string]: SearchValue
 }

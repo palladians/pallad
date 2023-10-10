@@ -1,25 +1,19 @@
 import { InvalidStringError, OpaqueString } from '@palladxyz/util'
-import {
-  PrivateKey,
-  PublicKey,
-  SignedLegacy,
-  UInt32,
-  UInt64
-} from 'mina-signer/dist/node/mina-signer/src/TSTypes'
-import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+
+import { BorrowedTypes } from '../../'
 
 /**
  * Represents the body of a transaction.
  */
 export type TransactionBody = {
   type: 'payment' | 'delegation' | 'zkApp'
-  to: PublicKey
-  from: PublicKey
-  fee: UInt64
-  nonce: UInt32
-  amount?: UInt64
+  to: BorrowedTypes.PublicKey
+  from: BorrowedTypes.PublicKey
+  fee: BorrowedTypes.UInt64
+  nonce: BorrowedTypes.UInt32
+  amount?: BorrowedTypes.UInt64
   memo?: string
-  validUntil?: UInt32
+  validUntil?: BorrowedTypes.UInt32
   blockHeight?: number
   token?: string
   hash?: string
@@ -40,8 +34,8 @@ export enum TransactionKind {
  * Represents a key pair consisting of a public key and a private key.
  */
 export type KeyPair = {
-  publicKey: PublicKey
-  privateKey: PrivateKey
+  publicKey: BorrowedTypes.PublicKey
+  privateKey: BorrowedTypes.PrivateKey
 }
 
 /**
@@ -51,10 +45,11 @@ export type KeyPair = {
 export type NetworkType = 'mainnet' | 'testnet'
 
 export type ConstructedTransaction =
-  | (Json.Payment & { type: TransactionKind.PAYMENT })
-  | (Json.StakeDelegation & { type: TransactionKind.STAKE_DELEGATION })
+  | (BorrowedTypes.Payment & { type: TransactionKind.PAYMENT })
+  | (BorrowedTypes.StakeDelegation & { type: TransactionKind.STAKE_DELEGATION })
 
-export type SignedTransaction = SignedLegacy<ConstructedTransaction>
+export type SignedTransaction =
+  BorrowedTypes.SignedLegacy<ConstructedTransaction>
 
 /**
  * transaction hash as base64 string

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useAddressBookStore } from '../../wallet/store/addressBook'
+import { useAddressBookStore } from '../../common/store/addressBook'
 import { ContactTile } from '../components/ContactTile'
 
 const DonatePallad = {

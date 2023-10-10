@@ -1,5 +1,4 @@
-import { Mina } from '@palladxyz/mina-core'
-import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
 
 /**
  * Constructs a payment transaction object.
@@ -8,7 +7,7 @@ import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
  */
 export function constructPaymentTx(
   payment: Mina.TransactionBody
-): Json.Payment {
+): BorrowedTypes.Payment {
   const sendFee = BigInt(payment.fee)
   const sendAmount = payment.amount ? BigInt(payment.amount) : BigInt(0)
   const memo = payment.memo || ''
@@ -34,7 +33,7 @@ export function constructPaymentTx(
  */
 export function constructDelegationTx(
   delegation: Mina.TransactionBody
-): Json.StakeDelegation {
+): BorrowedTypes.StakeDelegation {
   const sendFee = BigInt(delegation.fee)
   const memo = delegation.memo || ''
   const validUntil = delegation.validUntil

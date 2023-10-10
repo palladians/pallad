@@ -1,13 +1,11 @@
-import { SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
-import * as Json from 'mina-signer/dist/node/mina-signer/src/TSTypes'
-
+import { BorrowedTypes } from '../../'
 import { TransactionBody, TransactionKind } from '../../Mina'
 import { Provider } from '../Provider'
 
 export type SubmitTxArgs = {
   signedTransaction:
-    | SignedLegacy<Json.Payment>
-    | SignedLegacy<Json.StakeDelegation>
+    | BorrowedTypes.SignedLegacy<BorrowedTypes.Payment>
+    | BorrowedTypes.SignedLegacy<BorrowedTypes.StakeDelegation>
   kind: TransactionKind
   transactionDetails: {
     fee: TransactionBody['fee']

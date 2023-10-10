@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useWallet } from '../../wallet/hooks/useWallet'
+import { useWalletUi } from '../../common/hooks/useWalletUi'
 
 export const ReceiveView = () => {
   const { theme } = useTheme()
   const navigate = useNavigate()
-  const { copyWalletAddress, gradientBackground, address } = useWallet()
-  const walletAddress = address
+  const { currentWallet } = useWalletUi()
+  const walletAddress = currentWallet?.credential?.address
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-4">

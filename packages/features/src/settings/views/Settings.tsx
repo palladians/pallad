@@ -13,13 +13,13 @@ import { useSWRConfig } from 'swr'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useWallet } from '../../wallet/hooks/useWallet'
-import { useAppStore } from '../../wallet/store/app'
+import { useWalletUi } from '../../common/hooks/useWalletUi'
+import { useAppStore } from '../../common/store/app'
 
 export const SettingsView = () => {
   const { toast } = useToast()
   const navigate = useNavigate()
-  const { switchNetwork } = useWallet()
+  const { switchNetwork } = useWalletUi()
   const { setTheme, theme } = useTheme()
   const { mutate } = useSWRConfig()
   const { network } = useAppStore((state) => ({

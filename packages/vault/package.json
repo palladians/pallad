@@ -27,7 +27,6 @@
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "immer": "^10.0.2",
-    "mina-signer": "^2.0.3",
     "rambda": "^7.5.0",
     "vitest": "^0.34.4",
     "zustand": "^4.3.8"
@@ -37,6 +36,7 @@
     "@testing-library/react": "^14.0.0",
     "@types/mocha": "^10.0.1",
     "@types/secp256k1": "^4.0.3",
+    "mina-signer": "^2.1.1",
     "msw": "^1.2.2"
   }
 }

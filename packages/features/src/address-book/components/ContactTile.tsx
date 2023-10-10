@@ -11,8 +11,8 @@ import { TrashIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { truncateString } from '../../common/lib/string'
+import { useAddressBookStore } from '../../common/store/addressBook'
 import { Contact } from '../../common/types'
-import { useAddressBookStore } from '../../wallet/store/addressBook'
 
 interface ContactTileProps {
   contact: Contact

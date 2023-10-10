@@ -3,7 +3,7 @@ import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import {
-  credentialName,
+  CredentialName,
   SingleCredentialState,
   StoredCredential,
   useCredentialStore
@@ -12,7 +12,7 @@ import { KeyAgentName } from '../../src'
 
 describe('AccountStore', () => {
   let credential: GroupedCredentials
-  let credentialName: credentialName
+  let credentialName: CredentialName
   let keyAgentName: KeyAgentName
   let credentialState: SingleCredentialState
   let credentialStateTwo: SingleCredentialState

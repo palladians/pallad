@@ -1,40 +1,47 @@
 import { getSecurePersistence } from '@palladxyz/persistence'
+import { produce } from 'immer'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { immer } from 'zustand/middleware/immer'
 
+import { StoreInstance } from '../types'
 import { CredentialState, initialCredentialState } from './credentialsState'
 import { matchesQuery } from './utils'
 
 export const useCredentialStore = create<CredentialState>()(
   persist(
-    immer((set, get) => ({
+    (set, get) => ({
       credentials: {},
       ensureCredential: (credentialName, keyAgentName) => {
-        set((state) => {
-          if (!state.credentials?.[credentialName]) {
-            state.credentials[credentialName] = {
-              ...initialCredentialState,
-              credentialName: credentialName,
-              keyAgentName: keyAgentName
+        set(
+          produce((state) => {
+            if (!state.credentials?.[credentialName]) {
+              state.credentials[credentialName] = {
+                ...initialCredentialState,
+                credentialName: credentialName,
+                keyAgentName: keyAgentName
+              }
             }
-          }
-        })
+          })
+        )
       },
       setCredential: (credentialState) => {
         const { credentialName } = credentialState
-        set((state) => {
-          state.credentials[credentialName] = credentialState
-        })
+        set(
+          produce((state) => {
+            state.credentials[credentialName] = credentialState
+          })
+        )
       },
       getCredential: (credentialName) => {
         const { credentials } = get()
         return credentials[credentialName] || initialCredentialState
       },
       removeCredential: (credentialName) => {
-        set((state) => {
-          delete state.credentials[credentialName]
-        })
+        set(
+          produce((state) => {
+            delete state.credentials[credentialName]
+          })
+        )
       },
       searchCredentials: (query, props) => {
         const { credentials } = get()
@@ -60,14 +67,18 @@ export const useCredentialStore = create<CredentialState>()(
         }
       },
       clear: () => {
-        set((state) => {
-          state.credentials = {}
-        })
+        set(
+          produce((state) => {
+            state.credentials = {}
+          })
+        )
       }
-    })),
+    }),
     {
       name: 'PalladCredential',
       storage: createJSONStorage(getSecurePersistence)
     }
   )
 )
+
+export type CredentialStoreInstance = StoreInstance<CredentialState>

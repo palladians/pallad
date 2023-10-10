@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
-import { useAppStore } from '../../wallet/store/app'
+import { useAppStore } from '../../common/store/app'
 
 export const StartView = () => {
   const [appInitialized, setAppInitialized] = useState<boolean>(false)

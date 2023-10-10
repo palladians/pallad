@@ -4,7 +4,7 @@ import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-import { useAddressBookStore } from '../../wallet/store/addressBook'
+import { useAddressBookStore } from '../../common/store/addressBook'
 import { NewAddressFormSchema } from './NewAddressForm.schema'
 
 export const NewAddressForm = () => {

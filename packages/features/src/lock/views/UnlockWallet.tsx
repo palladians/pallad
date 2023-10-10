@@ -9,6 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@palladxyz/ui'
+import { useKeyAgentStore } from '@palladxyz/vault'
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -16,11 +17,11 @@ import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useWallet } from '../../wallet/hooks/useWallet'
+import { useWalletUi } from '../../common/hooks/useWalletUi'
 
 export const UnlockWalletView = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const { wallet } = useWallet()
+  const { currentWallet } = useWalletUi()
   const [passwordError, setPasswordError] = useState(false)
   const navigate = useNavigate()
   const { register, handleSubmit } = useForm({
@@ -38,10 +39,8 @@ export const UnlockWalletView = () => {
     spendingPassword: string
   }) => {
     await getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    //keyAgentStore.destroy()
-    //await keyAgentStore.persist.rehydrate()
-    wallet.rehydrateStores()
-    const currentWallet = wallet.getCurrentWallet() // might have to return address
+    useKeyAgentStore.destroy()
+    useKeyAgentStore.persist.rehydrate()
     if (!currentWallet) return await onError()
     return navigate('/dashboard')
   }

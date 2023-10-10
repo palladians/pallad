@@ -8,8 +8,8 @@ import {
 import { Mina } from '@palladxyz/mina-core'
 import { act, renderHook } from '@testing-library/react'
 
-import { KeyAgents } from '../../src/keyAgent/keyAgentState'
-import { useKeyAgentStore } from '../../src/keyAgent/keyAgentStore'
+import { KeyAgents } from '../../src'
+import { useKeyAgentStore } from '../../src'
 
 const PREGENERATED_MNEMONIC = [
   'habit',

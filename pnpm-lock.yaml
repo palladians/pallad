@@ -461,8 +461,8 @@ importers:
         specifier: ^0.2.3
         version: 0.2.3
       mina-signer:
-        specifier: ^2.0.3
-        version: 2.0.3
+        specifier: ^2.1.1
+        version: 2.1.1
       sinon:
         specifier: ^10.0.0
         version: 10.0.0
@@ -501,8 +501,8 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       mina-signer:
-        specifier: ^2.0.3
-        version: 2.0.3
+        specifier: ^2.1.1
+        version: 2.1.1
     devDependencies:
       '@palladxyz/common':
         specifier: '*'
@@ -538,8 +538,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0(graphql@16.7.1)
       mina-signer:
-        specifier: ^2.0.3
-        version: 2.0.3
+        specifier: ^2.1.1
+        version: 2.1.1
       subscriptions-transport-ws:
         specifier: ^0.11.0
         version: 0.11.0(graphql@16.7.1)
@@ -596,8 +596,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       mina-signer:
-        specifier: ^2.0.3
-        version: 2.0.3
+        specifier: ^2.1.1
+        version: 2.1.1
       unique-names-generator:
         specifier: ^4.7.1
         version: 4.7.1
@@ -614,12 +614,24 @@ importers:
       '@types/mocha':
         specifier: ^10.0.1
         version: 10.0.1
+      '@types/react':
+        specifier: ^18.2.25
+        version: 18.2.25
+      '@types/react-dom':
+        specifier: ^18.2.11
+        version: 18.2.11
       '@types/secp256k1':
         specifier: ^4.0.3
         version: 4.0.3
       msw:
         specifier: ^1.2.2
         version: 1.2.2(typescript@5.0.4)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
 
   packages/multi-chain-core:
     dependencies:
@@ -814,8 +826,8 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       mina-signer:
-        specifier: ^2.0.3
-        version: 2.0.3
+        specifier: ^2.1.1
+        version: 2.1.1
       ts-custom-error:
         specifier: ^3.2.0
         version: 3.3.1
@@ -859,9 +871,6 @@ importers:
       immer:
         specifier: ^10.0.2
         version: 10.0.2
-      mina-signer:
-        specifier: ^2.0.3
-        version: 2.0.3
       rambda:
         specifier: ^7.5.0
         version: 7.5.0
@@ -884,6 +893,9 @@ importers:
       '@types/secp256k1':
         specifier: ^4.0.3
         version: 4.0.3
+      mina-signer:
+        specifier: ^2.1.1
+        version: 2.1.1
       msw:
         specifier: ^1.2.2
         version: 1.2.2(typescript@5.0.4)
@@ -3166,7 +3178,7 @@ packages:
       react: '>=16'
     dependencies:
       '@types/mdx': 2.0.5
-      '@types/react': 18.2.18
+      '@types/react': 18.2.25
       react: 18.2.0
 
   /@mswjs/cookies@0.2.2:
@@ -5567,6 +5579,12 @@ packages:
       '@types/react': 18.0.28
     dev: true
 
+  /@types/react-dom@18.2.11:
+    resolution: {integrity: sha512-zq6Dy0EiCuF9pWFW6I6k6W2LdpUixLE4P6XjXU1QHLfak3GPACQfLwEuHzY5pOYa4hzj1d0GxX/P141aFjZsyg==}
+    dependencies:
+      '@types/react': 18.2.25
+    dev: true
+
   /@types/react-dom@18.2.7:
     resolution: {integrity: sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==}
     dependencies:
@@ -5582,6 +5600,13 @@ packages:
 
   /@types/react@18.2.18:
     resolution: {integrity: sha512-da4NTSeBv/P34xoZPhtcLkmZuJ+oYaCxHmyHzwaDQo9RQPBeXV+06gEk2FpqEcsX9XrnNLvRpVh6bdavDSjtiQ==}
+    dependencies:
+      '@types/prop-types': 15.7.5
+      '@types/scheduler': 0.16.3
+      csstype: 3.1.2
+
+  /@types/react@18.2.25:
+    resolution: {integrity: sha512-24xqse6+VByVLIr+xWaQ9muX1B4bXJKXBbjszbld/UEDslGLY53+ZucF44HCmLbMPejTzGG9XgR+3m2/Wqu1kw==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
@@ -6511,7 +6536,6 @@ packages:
 
   /blakejs@1.2.1:
     resolution: {integrity: sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ==}
-    dev: false
 
   /bluebird@3.7.2:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
@@ -10254,7 +10278,6 @@ packages:
 
   /js-sha256@0.9.0:
     resolution: {integrity: sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==}
-    dev: false
 
   /js-string-escape@1.0.1:
     resolution: {integrity: sha512-Smw4xcfIQ5LVjAOuJCvN/zIodzA/BBSsluuoSykP+lUvScIi4U6RJLfwHet5cxFnCswUjISV8oAXaqaJDY3chg==}
@@ -11242,12 +11265,11 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
-  /mina-signer@2.0.3:
-    resolution: {integrity: sha512-grkid7OY0kV1LnUPHD+I5WZJg/COtYHTeZtk7NBWL4lGiKbBGSbmHdGchW0vJys0+TTpBzl0SM4sbvUpgkyRoQ==}
+  /mina-signer@2.1.1:
+    resolution: {integrity: sha512-bfdNTQg0Ka0xMR+V3q56GxOzV4Q/c7NL6nhCHTY+akJkul0qt9QZdfeow+XByde2JbnM3ZI502q1foKLZKQgog==}
     dependencies:
       blakejs: 1.2.1
       js-sha256: 0.9.0
-    dev: false
 
   /minimalistic-assert@1.0.1:
     resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}

@@ -27,7 +27,7 @@
     "@scure/bip39": "^1.2.0",
     "buffer": "^6.0.3",
     "micro-starknet": "^0.2.3",
-    "mina-signer": "^2.0.3",
+    "mina-signer": "^2.1.1",
     "sinon": "^10.0.0",
     "ts-custom-error": "^3.3.1",
     "tsup": "^7.1.0",

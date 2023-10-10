@@ -1,66 +1,82 @@
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
+import { produce } from 'immer'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { immer } from 'zustand/middleware/immer'
 
-export const initialAccountStoreState = {
-  accounts: {} as Record<Multichain.MultiChainNetworks, ChainAddressMapping>
+import { StoreInstance } from '../types'
+import { AccountState, AccountStore, SingleAccountState } from './accountState'
+
+export const initialAccountStoreState: AccountState = {
+  accounts: {} as never
 }
 
-import {
-  AccountState,
-  ChainAddressMapping,
-  initialSingleAccountState
-} from './accountState'
+export const initialSingleAccountState: SingleAccountState = {
+  accountInfo: {} as Multichain.MultiChainAccountInfo,
+  transactions: []
+}
 
-export const useAccountStore = create<AccountState>()(
+export const useAccountStore = create<AccountStore>()(
   persist(
-    immer((set, get) => ({
+    (set, get) => ({
       ...initialAccountStoreState,
       ensureAccount: (network, address) => {
-        set((state) => {
-          if (!state.accounts[network][address]) {
-            state.accounts[network][address] = { ...initialSingleAccountState }
-          }
-        })
+        set(
+          produce((state) => {
+            if (!state.accounts[network][address]) {
+              state.accounts[network][address] = {
+                ...initialSingleAccountState
+              }
+            }
+          })
+        )
       },
       setAccountInfo: (network, address, accountInfo) => {
-        set((state) => {
-          const networkAccounts = state.accounts[network] || {}
-          const accountData =
-            networkAccounts[address] || initialSingleAccountState
-          state.accounts[network] = state.accounts[network] || {}
-          state.accounts[network][address] = {
-            ...accountData,
-            accountInfo
-          }
-        })
+        set(
+          produce((state) => {
+            const networkAccounts = state.accounts[network] || {}
+            const accountData =
+              networkAccounts[address] || initialSingleAccountState
+            state.accounts[network] = state.accounts[network] || {}
+            state.accounts[network][address] = {
+              ...accountData,
+              accountInfo
+            }
+          })
+        )
       },
       setTransactions: (network, address, transactions) => {
-        set((state) => {
-          const networkAccounts = state.accounts[network] || {}
-          const accountData =
-            networkAccounts[address] || initialSingleAccountState
-          state.accounts[network] = state.accounts[network] || {}
-          state.accounts[network][address] = {
-            ...accountData,
-            transactions
-          }
-        })
+        set(
+          produce((state) => {
+            const networkAccounts = state.accounts[network] || {}
+            const accountData =
+              networkAccounts[address] || initialSingleAccountState
+            state.accounts[network] = state.accounts[network] || {}
+            state.accounts[network][address] = {
+              ...accountData,
+              transactions
+            }
+          })
+        )
       },
       addAccount: (network, address) => {
-        set((state) => {
-          if (!state.accounts?.[network]?.[address]) {
-            state.accounts[network] = state.accounts[network] || {}
-            state.accounts[network][address] = { ...initialSingleAccountState }
-          }
-        })
+        set(
+          produce((state) => {
+            if (!state.accounts?.[network]?.[address]) {
+              state.accounts[network] = state.accounts[network] || {}
+              state.accounts[network][address] = {
+                ...initialSingleAccountState
+              }
+            }
+          })
+        )
       },
       removeAccount: (network, address) => {
-        set((state) => {
-          delete state.accounts[network][address]
-        })
+        set(
+          produce((state) => {
+            delete state.accounts[network][address]
+          })
+        )
       },
       getAccountInfo: (network, address) => {
         const { accounts } = get()
@@ -71,14 +87,18 @@ export const useAccountStore = create<AccountState>()(
         return accounts[network]?.[address]?.transactions || []
       },
       clear: () => {
-        set((state) => {
-          state.accounts = {} as never
-        })
+        set(
+          produce((state) => {
+            state.accounts = {} as never
+          })
+        )
       }
-    })),
+    }),
     {
       name: 'PalladAccount',
       storage: createJSONStorage(getSecurePersistence)
     }
   )
 )
+
+export type AccountStoreInstance = StoreInstance<AccountStore>

@@ -2,8 +2,8 @@ import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { act, renderHook } from '@testing-library/react'
 import { expect } from 'vitest'
 
-import { initialSingleAccountState } from '../../src/account/accountState'
-import { useAccountStore } from '../../src/account/accountStore'
+import { initialSingleAccountState } from '../../src'
+import { useAccountStore } from '../../src'
 
 describe('AccountStore', () => {
   let address: string

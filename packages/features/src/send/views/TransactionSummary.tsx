@@ -8,47 +8,45 @@ import { useNavigate } from 'react-router-dom'
 import { AppLayout } from '../../common/components/AppLayout'
 import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useWalletUi } from '../../common/hooks/useWalletUi'
 import { truncateString } from '../../common/lib/string'
-import { useWallet } from '../../wallet/hooks/useWallet'
-import { useTransactionStore } from '../../wallet/store/transaction'
+import { useTransactionStore } from '../../common/store/transaction'
 
 export const TransactionSummaryView = () => {
   const navigate = useNavigate()
-  const { wallet } = useWallet()
+  const { sign, submitTx, constructTx, credentialAddress } = useWalletUi()
+  if (!credentialAddress) return null
   const outgoingTransaction = useTransactionStore(
     (state) => state.outgoingTransaction
   )
-  const { address } = useWallet()
+  if (!outgoingTransaction) return null
   const total = useMemo(
     () =>
-      outgoingTransaction.amount &&
-      outgoingTransaction.fee &&
-      outgoingTransaction.amount + outgoingTransaction.fee,
+      outgoingTransaction?.amount &&
+      outgoingTransaction?.fee &&
+      outgoingTransaction?.amount + outgoingTransaction.fee,
     []
   )
-  const amount = BigInt(outgoingTransaction.amount * 1_000_000_000)
-  const fee = BigInt(outgoingTransaction.fee * 1_000_000_000)
+  const rawAmount = parseInt(outgoingTransaction.amount || '')
+  const rawFee = parseInt(outgoingTransaction.fee || '')
+  const amount = BigInt(rawAmount * 1_000_000_000)
+  const fee = BigInt(rawFee * 1_000_000_000)
   const constructAndSubmitTx = async () => {
     const transaction: Multichain.MultiChainTransactionBody = {
       to: outgoingTransaction.to,
-      from: address,
+      from: credentialAddress,
       fee,
       amount,
       nonce: 0, // TODO: nonce management -- should we have a Nonce Manager in the wallet? Yes.
       type: 'payment' // TODO: handle with enums (payment, delegation, zkApp commands?)
     }
-    const constructedTx = await wallet.constructTx(
+    const constructedTx = await constructTx(
       transaction,
       Mina.TransactionKind.PAYMENT
     )
-    const keyAgentName = await wallet.getCurrentKeyAgentName()
-    if (!keyAgentName) {
-      throw new Error(
-        'No key agent name set in @features/send/views/TransactionSummary'
-      )
-    }
-    const signedTx = await wallet.sign(constructedTx, keyAgentName) // TODO: Fix this with new wallet API
-    const submittedTx = await wallet.submitTx(signedTx)
+    const signedTx = await sign(constructedTx) // TODO: Fix this with new wallet API
+    if (!signedTx) return
+    const submittedTx = await submitTx(signedTx as any)
     console.log('>>>ST', submittedTx?.result)
     navigate('/transactions/success')
   }
@@ -66,9 +64,9 @@ export const TransactionSummaryView = () => {
           <MetaField
             label="From"
             value={
-              (address &&
+              (credentialAddress &&
                 truncateString({
-                  value: address,
+                  value: credentialAddress,
                   endCharCount: 8,
                   firstCharCount: 8
                 })) ||
@@ -89,7 +87,7 @@ export const TransactionSummaryView = () => {
           />
         </Card>
         <Card className="grid grid-cols-2 gap-4 p-2">
-          <MetaField label="Kind" value={outgoingTransaction.kind} />
+          {/*<MetaField label="Kind" value={outgoingTransaction.kind} />*/}
           {outgoingTransaction.amount && (
             <MetaField
               label="Amount"

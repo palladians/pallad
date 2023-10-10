@@ -3,9 +3,9 @@ import {
   InMemoryKeyAgent
 } from '@palladxyz/key-management'
 import { getSecurePersistence } from '@palladxyz/persistence'
+import { produce } from 'immer'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { immer } from 'zustand/middleware/immer'
 
 import { initialKeyAgentState, KeyAgentState } from './keyAgentState'
 
@@ -15,14 +15,16 @@ const initialState = {
 
 export const useKeyAgentStore = create<KeyAgentState>()(
   persist(
-    immer((set) => ({
+    (set) => ({
       ...initialState,
       ensureKeyAgent(name) {
-        return set((state) => {
-          if (!state.keyAgents[name]) {
-            state.keyAgents[name] = { ...initialKeyAgentState, name: name }
-          }
-        })
+        return set(
+          produce((state) => {
+            if (!state.keyAgents[name]) {
+              state.keyAgents[name] = { ...initialKeyAgentState, name: name }
+            }
+          })
+        )
       },
       async initialiseKeyAgent(
         name,
@@ -35,25 +37,32 @@ export const useKeyAgentStore = create<KeyAgentState>()(
           mnemonic2ndFactorPassphrase: ''
         }
         const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
-        return set((state) => {
-          state.keyAgents[name] = {
-            keyAgentType: keyAgentType,
-            keyAgent: keyAgent,
-            name: name
-          }
-        })
+        console.log('>>>KI EJDZENT', keyAgent)
+        return set(
+          produce((state) => {
+            state.keyAgents[name] = {
+              keyAgentType: keyAgentType,
+              keyAgent: keyAgent,
+              name: name
+            }
+          })
+        )
       },
       removeKeyAgent(name) {
-        return set((state) => {
-          delete state.keyAgents[name]
-        })
+        return set(
+          produce((state) => {
+            delete state.keyAgents[name]
+          })
+        )
       },
       clear() {
-        return set((state) => {
-          state.keyAgents = {}
-        })
+        return set(
+          produce((state) => {
+            state.keyAgents = {}
+          })
+        )
       }
-    })),
+    }),
     {
       name: 'PalladKeyAgent',
       storage: createJSONStorage(getSecurePersistence)
