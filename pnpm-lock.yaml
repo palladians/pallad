@@ -129,8 +129,8 @@ importers:
         specifier: ^0.10.0
         version: 0.10.0
       zod:
-        specifier: ^3.21.4
-        version: 3.21.4
+        specifier: ^3.22.3
+        version: 3.22.3
     devDependencies:
       '@crxjs/vite-plugin':
         specifier: ^2.0.0-beta.18
@@ -297,8 +297,8 @@ importers:
         specifier: ^1.12.3
         version: 1.12.3
       zod:
-        specifier: ^3.21.4
-        version: 3.21.4
+        specifier: ^3.22.3
+        version: 3.22.3
       zustand:
         specifier: ^4.3.8
         version: 4.3.8(immer@10.0.2)(react@18.2.0)
@@ -737,8 +737,8 @@ importers:
         specifier: ^7.45.1
         version: 7.45.1(react@18.2.0)
       zod:
-        specifier: ^3.21.4
-        version: 3.21.4
+        specifier: ^3.22.3
+        version: 3.22.3
     devDependencies:
       '@palladxyz/common':
         specifier: '*'
@@ -15182,6 +15182,10 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false
+
+  /zod@3.22.3:
+    resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
     dev: false
 
   /zustand@4.3.8(immer@10.0.2)(react@18.2.0):
