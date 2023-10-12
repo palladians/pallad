@@ -1,7 +1,3 @@
-import {
-  FromBip39MnemonicWordsProps,
-  InMemoryKeyAgent
-} from '@palladxyz/key-management'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { produce } from 'immer'
 import { create } from 'zustand'
@@ -26,23 +22,13 @@ export const useKeyAgentStore = create<KeyAgentState>()(
           })
         )
       },
-      async initialiseKeyAgent(
-        name,
-        keyAgentType,
-        { mnemonicWords, getPassphrase }
-      ) {
-        const agentArgs: FromBip39MnemonicWordsProps = {
-          getPassphrase: getPassphrase,
-          mnemonicWords: mnemonicWords,
-          mnemonic2ndFactorPassphrase: ''
-        }
-        const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
-        console.log('>>>KI EJDZENT', keyAgent)
+      async initialiseKeyAgent(name, keyAgentType, InMemoryKeyAgent) {
+        console.log('>>>KI EJDZENT', InMemoryKeyAgent)
         return set(
           produce((state) => {
             state.keyAgents[name] = {
               keyAgentType: keyAgentType,
-              keyAgent: keyAgent,
+              keyAgent: InMemoryKeyAgent,
               name: name
             }
           })

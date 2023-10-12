@@ -6,6 +6,7 @@ import {
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
   GroupedCredentials,
+  InMemoryKeyAgent,
   MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
@@ -14,7 +15,6 @@ import { Multichain } from '@palladxyz/multi-chain-core'
 import {
   CredentialName,
   KeyAgentName,
-  KeyAgents,
   SearchQuery,
   SingleCredentialState,
   StoredCredential,
@@ -72,6 +72,7 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
   const initialiseKeyAgent = useKeyAgentStore(
     (state) => state.initialiseKeyAgent
   )
+
   const searchCredentials = useCredentialStore(
     (state) => state.searchCredentials
   )
@@ -287,7 +288,7 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
     network: Multichain.MultiChainNetworks,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
     keyAgentName: KeyAgentName,
-    keyAgentType: KeyAgents = KeyAgents.InMemory,
+    //keyAgentType: KeyAgents = KeyAgents.InMemory,
     credentialName: CredentialName = getRandomAnimalName()
   ) => {
     const agentArgs: FromBip39MnemonicWordsProps = {
@@ -295,11 +296,17 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
       mnemonicWords: mnemonicWords,
       mnemonic2ndFactorPassphrase: ''
     }
-    await initialiseKeyAgent(keyAgentName, keyAgentType, agentArgs)
+    const keyAgentInitialised = await InMemoryKeyAgent.fromMnemonicWords(
+      agentArgs
+    )
+
+    //await initialiseKeyAgent(keyAgentName, keyAgentType, keyAgentInitialised)
     setCurrentKeyAgentName(keyAgentName)
-    const keyAgent = getKeyAgent(keyAgentName)
-    console.log('>>>KA', keyAgent)
-    const derivedCredential = await keyAgent?.keyAgent?.deriveCredentials(
+    //const keyAgent = await getKeyAgent(keyAgentName)
+
+    console.log('>>>KAs', keyAgents)
+    //console.log('>>>KA', keyAgent)
+    const derivedCredential = await keyAgentInitialised.deriveCredentials(
       payload,
       args,
       getPassphrase,
@@ -317,11 +324,15 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
     setCredential(singleCredentialState)
     setCurrentWallet(singleCredentialState)
     await _syncWallet(network, derivedCredential)
+    return { keyAgentInitialised }
   }
 
   return {
     walletNetwork,
     walletName,
+    keyAgents,
+    initialiseKeyAgent,
+    setCurrentKeyAgentName,
     restoreWallet,
     createWallet,
     switchNetwork,

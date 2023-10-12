@@ -4,7 +4,9 @@ import {
   MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
+import { InMemoryKeyAgent } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
+import { KeyAgents } from '@palladxyz/vault'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { act, renderHook } from '@testing-library/react'
 
@@ -54,6 +56,47 @@ describe('useWallet', () => {
       mnemonic = (await result.current.createWallet(256)).mnemonic
     })
     expect(mnemonic).toHaveLength(24)
+  })
+  it('initializes the key agent correctly', async () => {
+    const { result } = renderHook(() =>
+      useWallet({ network: Mina.Networks.DEVNET, name: 'Pallad' })
+    )
+    const agentArgs = {
+      mnemonicWords: PREMADE_MNEMONIC,
+      getPassphrase: getPassword
+    }
+    let derivedCredential
+    let keyAgentInitialised: InMemoryKeyAgent
+    const restoreArgs: MinaSpecificArgs = {
+      network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      networkType: 'testnet'
+    }
+    const payload = new MinaPayload()
+    await act(async () => {
+      keyAgentInitialised = await result.current.restoreWallet(
+        payload,
+        restoreArgs,
+        Mina.Networks.DEVNET,
+        agentArgs,
+        keyAgentName
+      )
+      derivedCredential = result.current.currentWallet
+    })
+    expect(derivedCredential).toBeDefined()
+    // them initialise the key agent store
+    const keyAgentType = KeyAgents.InMemory
+
+    await act(async () => {
+      await result.current.initialiseKeyAgent(
+        keyAgentName,
+        keyAgentType,
+        keyAgentInitialised
+      )
+      result.current.setCurrentKeyAgentName(keyAgentName)
+    })
+    expect(result.current.keyAgents[keyAgentName]).toBeDefined()
   })
   it('restores a wallet', async () => {
     const { result } = renderHook(() =>

@@ -1,6 +1,7 @@
 import {
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
+  InMemoryKeyAgent,
   MinaPayload,
   MinaSpecificArgs,
   Network
@@ -38,6 +39,8 @@ describe('AccountStore', () => {
   let agentArgs2: FromBip39MnemonicWordsProps
   const keyAgentName = 'test key agent'
   const keyAgentName2 = 'test key agent 2'
+  let keyAgentInitialised: InMemoryKeyAgent
+  let keyAgentInitialised2: InMemoryKeyAgent
 
   beforeEach(async () => {
     randomMnemonic = generateMnemonicWords()
@@ -49,6 +52,8 @@ describe('AccountStore', () => {
       getPassphrase: getPassphrase,
       mnemonicWords: randomMnemonic
     }
+    keyAgentInitialised = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
+    keyAgentInitialised2 = await InMemoryKeyAgent.fromMnemonicWords(agentArgs2)
   })
 
   afterEach(() => {
@@ -69,7 +74,7 @@ describe('AccountStore', () => {
       await result.current.initialiseKeyAgent(
         keyAgentName,
         KeyAgents.InMemory,
-        agentArgs
+        keyAgentInitialised
       )
     })
     expect(result.current.keyAgents[keyAgentName]).toBeDefined()
@@ -82,13 +87,13 @@ describe('AccountStore', () => {
       await result.current.initialiseKeyAgent(
         keyAgentName,
         KeyAgents.InMemory,
-        agentArgs
+        keyAgentInitialised
       )
       // add second key agent
       await result.current.initialiseKeyAgent(
         keyAgentName2,
         KeyAgents.InMemory,
-        agentArgs2
+        keyAgentInitialised2
       )
     })
     const keyAgent1 = result.current.keyAgents[keyAgentName]
@@ -111,13 +116,13 @@ describe('AccountStore', () => {
       await result.current.initialiseKeyAgent(
         keyAgentName,
         KeyAgents.InMemory,
-        agentArgs
+        keyAgentInitialised
       )
       // add second key agent
       await result.current.initialiseKeyAgent(
         keyAgentName2,
         KeyAgents.InMemory,
-        agentArgs2
+        keyAgentInitialised2
       )
     })
     // check that both key agents are in the store
