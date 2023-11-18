@@ -8,7 +8,7 @@ import {
 import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button, cn, Label, Textarea } from '@palladxyz/ui'
-import { useKeyAgentStore } from '@palladxyz/vault'
+import { useVault } from '@palladxyz/vault'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -48,8 +48,8 @@ export const MnemonicInputView = () => {
     if (!walletName) return
     if (!spendingPassword) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    useKeyAgentStore.destroy()
-    useKeyAgentStore.persist.rehydrate()
+    useVault.destroy()
+    useVault.persist.rehydrate()
     const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,
       accountIndex: 0,

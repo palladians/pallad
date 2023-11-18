@@ -39,7 +39,7 @@ export type InStoreKeyAgents = Record<KeyAgentName, SingleKeyAgentState>
 /**
  * Type representing the store's state and actions combined.
  */
-export type KeyAgentState = {
+export type KeyAgentStore = {
   keyAgents: InStoreKeyAgents
   ensureKeyAgent: (name: KeyAgentName) => void
   initialiseKeyAgent: (

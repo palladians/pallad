@@ -43,7 +43,7 @@ export const initialCredentialState: SingleCredentialState = {
  * Type representing the store's state and actions combined.
  * @typedef {Object} CredentialsState
  */
-export type CredentialState = {
+export type CredentialStore = {
   credentials: Record<CredentialName, SingleCredentialState>
   ensureCredential: (
     credentialName: CredentialName,

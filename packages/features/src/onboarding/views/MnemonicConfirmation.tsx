@@ -6,7 +6,7 @@ import {
 import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button, cn, Input, Label } from '@palladxyz/ui'
-import { useKeyAgentStore } from '@palladxyz/vault'
+import { useVault } from '@palladxyz/vault'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -51,8 +51,8 @@ export const MnemonicConfirmationView = () => {
     if (!spendingPassword) return
     if (!mnemonic) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    useKeyAgentStore.destroy()
-    useKeyAgentStore.persist.rehydrate()
+    useVault.destroy()
+    useVault.persist.rehydrate()
     // TODO: Add await in UI when user clicks restore wallet
     const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,

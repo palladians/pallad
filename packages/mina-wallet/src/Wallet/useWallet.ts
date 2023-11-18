@@ -18,9 +18,7 @@ import {
   SearchQuery,
   SingleCredentialState,
   StoredCredential,
-  useAccountStore,
-  useCredentialStore,
-  useKeyAgentStore
+  useVault
 } from '@palladxyz/vault'
 import { useMemo, useState } from 'react'
 
@@ -31,7 +29,7 @@ import { getRandomAnimalName } from './'
 
 const NETWORK_CONFIG = {
   [Mina.Networks.MAINNET]: {
-    nodeUrl: 'https://proxy.minaexplorer.com/',
+    nodeUrl: 'https://proxy.minaexplorer.com/graphql',
     archiveUrl: 'https://graphql.minaexplorer.com'
   },
   [Mina.Networks.DEVNET]: {
@@ -68,23 +66,22 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
     () => new ProviderManager<Multichain.MultiChainNetworks>(NETWORK_CONFIG),
     []
   )
-  const keyAgents = useKeyAgentStore((state) => state.keyAgents)
-  const initialiseKeyAgent = useKeyAgentStore(
-    (state) => state.initialiseKeyAgent
-  )
-  const searchCredentials = useCredentialStore(
-    (state) => state.searchCredentials
-  )
-  const setCredential = useCredentialStore((state) => state.setCredential)
-  const getAccountInfo = useAccountStore((state) => state.getAccountInfo)
-  const getTransactions = useAccountStore((state) => state.getTransactions)
-  const setTransactions = useAccountStore((state) => state.setTransactions)
-  const setAccountInfo = useAccountStore((state) => state.setAccountInfo)
+  const keyAgents = useVault((state) => state.keyAgents)
+  const initialiseKeyAgent = useVault((state) => state.initialiseKeyAgent)
+  const searchCredentials = useVault((state) => state.searchCredentials)
+  const setCredential = useVault((state) => state.setCredential)
+  const getAccountInfo = useVault((state) => state.getAccountInfo)
+  const getTransactions = useVault((state) => state.getTransactions)
+  const setTransactions = useVault((state) => state.setTransactions)
+  const setAccountInfo = useVault((state) => state.setAccountInfo)
 
   const credentialAddress = useMemo(
     () => currentWallet?.credential?.address,
     [currentWallet]
   )
+
+  console.log('>>>AGENT', keyAgents)
+  console.log('>>>CURRENT', credentialAddress, currentWallet)
 
   const currentKeyAgent = useMemo(
     () => currentKeyAgentName && keyAgents[currentKeyAgentName],
@@ -298,7 +295,6 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
     await initialiseKeyAgent(keyAgentName, keyAgentType, agentArgs)
     setCurrentKeyAgentName(keyAgentName)
     const keyAgent = getKeyAgent(keyAgentName)
-    console.log('>>>KA', keyAgent)
     const derivedCredential = await keyAgent?.keyAgent?.deriveCredentials(
       payload,
       args,
