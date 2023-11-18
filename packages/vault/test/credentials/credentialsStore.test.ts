@@ -6,7 +6,7 @@ import {
   CredentialName,
   SingleCredentialState,
   StoredCredential,
-  useCredentialStore
+  useVault
 } from '../../src'
 import { KeyAgentName } from '../../src'
 
@@ -69,23 +69,23 @@ describe('AccountStore', () => {
     credentialStateTwo = {
       credentialName: 'green crocodile credential',
       keyAgentName: 'keyAgentNameTwo',
-      credential: credentialTwo
+      credential: credentialTwo as StoredCredential
     }
   })
 
   afterEach(() => {
-    const { result } = renderHook(() => useCredentialStore())
+    const { result } = renderHook(() => useVault())
     act(() => result.current.clear())
   })
 
   it('should create an credential store', async () => {
-    const { result } = renderHook(() => useCredentialStore())
+    const { result } = renderHook(() => useVault())
     expect(result.current.credentials).toEqual({})
   })
 
   it('should add one Grouped Credentials and remove one from store', async () => {
     let storedCredential: SingleCredentialState | undefined
-    const { result } = renderHook(() => useCredentialStore())
+    const { result } = renderHook(() => useVault())
     act(() => {
       result.current.setCredential(credentialState)
       storedCredential = result.current.getCredential(credentialName)
@@ -103,7 +103,7 @@ describe('AccountStore', () => {
     let storedCredentials: StoredCredential[] | undefined
     let storedCredentialsTwo: StoredCredential[] | undefined
     let storedCredentialsThree: StoredCredential[] | undefined
-    const { result } = renderHook(() => useCredentialStore())
+    const { result } = renderHook(() => useVault())
     // search for first credential
     const searchQuery = {
       type: 'MinaAddress',
@@ -153,7 +153,7 @@ describe('AccountStore', () => {
     }
     // return props
     const props = ['address']
-    const { result } = renderHook(() => useCredentialStore())
+    const { result } = renderHook(() => useVault())
     act(() => {
       // add first credential
       result.current.setCredential(credentialState)

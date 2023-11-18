@@ -3,7 +3,7 @@ import { act, renderHook } from '@testing-library/react'
 import { expect } from 'vitest'
 
 import { initialSingleAccountState } from '../../src'
-import { useAccountStore } from '../../src'
+import { useVault } from '../../src'
 
 describe('AccountStore', () => {
   let address: string
@@ -46,18 +46,18 @@ describe('AccountStore', () => {
   })
 
   afterEach(() => {
-    const { result } = renderHook(() => useAccountStore())
+    const { result } = renderHook(() => useVault())
     act(() => result.current.clear())
   })
 
   it('should create a new accountStore', async () => {
-    const { result } = renderHook(() => useAccountStore())
+    const { result } = renderHook(() => useVault())
     expect(result.current.accounts).toEqual({})
   })
 
   it('should create a new accountStore with initial state', async () => {
     let finalAccountInfo
-    const { result } = renderHook(() => useAccountStore())
+    const { result } = renderHook(() => useVault())
     const accountInfo = mockAccountInfo
     act(() => {
       result.current.setAccountInfo(network, address, accountInfo)
@@ -71,7 +71,7 @@ describe('AccountStore', () => {
 
   it('should set and get transactions', async () => {
     let finalTransactions
-    const { result } = renderHook(() => useAccountStore())
+    const { result } = renderHook(() => useVault())
     act(() => {
       result.current.setTransactions(
         network,
@@ -84,7 +84,7 @@ describe('AccountStore', () => {
   })
 
   it('should add an account', () => {
-    const { result } = renderHook(() => useAccountStore())
+    const { result } = renderHook(() => useVault())
     act(() => {
       result.current.addAccount(network, address)
     })
@@ -95,7 +95,7 @@ describe('AccountStore', () => {
 
   it('should remove an account', () => {
     let finalAccountInfo
-    const { result } = renderHook(() => useAccountStore())
+    const { result } = renderHook(() => useVault())
     act(() => {
       result.current.addAccount(network, address)
       result.current.setAccountInfo(network, address, mockAccountInfo)

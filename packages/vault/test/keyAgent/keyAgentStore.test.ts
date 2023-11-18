@@ -9,7 +9,7 @@ import { Mina } from '@palladxyz/mina-core'
 import { act, renderHook } from '@testing-library/react'
 
 import { KeyAgents } from '../../src'
-import { useKeyAgentStore } from '../../src'
+import { useVault } from '../../src'
 
 const PREGENERATED_MNEMONIC = [
   'habit',
@@ -54,17 +54,17 @@ describe('AccountStore', () => {
   afterEach(() => {
     const {
       result: { current }
-    } = renderHook(() => useKeyAgentStore())
+    } = renderHook(() => useVault())
     act(() => current.clear())
   })
 
   it('should create an keyAgent store', async () => {
-    const { result } = renderHook(() => useKeyAgentStore())
+    const { result } = renderHook(() => useVault())
     expect(result.current.keyAgents).toEqual({})
   })
 
   it('should initialize an InMemoryKeyAgent in the store', async () => {
-    const { result } = renderHook(() => useKeyAgentStore())
+    const { result } = renderHook(() => useVault())
     await act(async () => {
       await result.current.initialiseKeyAgent(
         keyAgentName,
@@ -76,7 +76,7 @@ describe('AccountStore', () => {
   })
 
   it('should add two InMemoryKeyAgents and remove one from store', async () => {
-    const { result } = renderHook(() => useKeyAgentStore())
+    const { result } = renderHook(() => useVault())
     await act(async () => {
       // add first key agent
       await result.current.initialiseKeyAgent(
@@ -105,7 +105,7 @@ describe('AccountStore', () => {
   })
 
   it('should add two InMemoryKeyAgents and derive credentials for both at addresses index 0', async () => {
-    const { result } = renderHook(() => useKeyAgentStore())
+    const { result } = renderHook(() => useVault())
     await act(async () => {
       // add first key agent
       await result.current.initialiseKeyAgent(
