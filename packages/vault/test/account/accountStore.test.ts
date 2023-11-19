@@ -86,11 +86,17 @@ describe('AccountStore', () => {
   it('should add an account', () => {
     const { result } = renderHook(() => useVault())
     act(() => {
-      result.current.addAccount(network, address)
+      result.current.addAccount(
+        network,
+        'B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69e'
+      )
     })
-    expect(result.current.getAccountInfo(network, address)).toEqual(
-      initialSingleAccountState
-    )
+    expect(
+      result.current.getAccountInfo(
+        network,
+        'B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69e'
+      )
+    ).toEqual(initialSingleAccountState)
   })
 
   it('should remove an account', () => {
