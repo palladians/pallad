@@ -47,6 +47,7 @@ export type KeyAgentStore = {
     keyAgentType: KeyAgents,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
   ) => Promise<void>
+  getKeyAgent: (name: KeyAgentName) => InMemoryKeyAgent | undefined
   removeKeyAgent: (name: KeyAgentName) => void
   clear: () => void
 }

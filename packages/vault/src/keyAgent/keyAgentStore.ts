@@ -11,7 +11,7 @@ const initialState = {
   keyAgents: {}
 }
 
-export const keyAgentSlice: StateCreator<KeyAgentStore> = (set) => ({
+export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
   ...initialState,
   ensureKeyAgent(name) {
     return set(
@@ -42,6 +42,10 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set) => ({
         }
       })
     )
+  },
+  getKeyAgent(name) {
+    const { keyAgents } = get()
+    return keyAgents[name]?.keyAgent
   },
   removeKeyAgent(name) {
     return set(
