@@ -8,6 +8,7 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { accountSlice, AccountStore } from '../account'
 import { credentialSlice, CredentialStore } from '../credentials'
 import { keyAgentSlice, KeyAgentStore } from '../keyAgent'
+import { providerSlice, ProviderStore } from '../providers'
 import { GlobalVaultState, GlobalVaultStore } from './vaultState'
 
 const defaultGlobalVaultState: GlobalVaultState = {
@@ -19,13 +20,18 @@ const defaultGlobalVaultState: GlobalVaultState = {
 }
 
 export const useVault = create<
-  AccountStore & CredentialStore & KeyAgentStore & GlobalVaultStore
+  AccountStore &
+    CredentialStore &
+    KeyAgentStore &
+    ProviderStore &
+    GlobalVaultStore
 >()(
   persist(
     (set, get, store) => ({
       ...accountSlice(set, get, store),
       ...credentialSlice(set, get, store),
       ...keyAgentSlice(set, get, store),
+      ...providerSlice(set, get, store),
       ...defaultGlobalVaultState,
       setChain(chain) {
         return set(

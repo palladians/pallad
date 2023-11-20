@@ -8,7 +8,6 @@ export const providerFactory = (
   config: Multichain.MultichainProviderConfig,
   network: Multichain.MultiChainNetworks
 ): Multichain.MultiChainProvider => {
-  // Your logic to create a provider instance based on config
   return new Multichain.MultiChainProvider(config, network)
 }
 
@@ -28,10 +27,10 @@ export const providerSlice: StateCreator<ProviderStore> = (set, get) => ({
     )
   },
   setProvider: (providerState) => {
-    const { networkName } = providerState
+    const { networkName, provider } = providerState
     set(
       produce((state) => {
-        state.providers[networkName] = providerState
+        state.providers[networkName] = provider
       })
     )
   },
