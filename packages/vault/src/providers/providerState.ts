@@ -15,6 +15,9 @@ export const initialProviderState: SingleProviderState = {
 
 export type ProviderStore = {
   providers: Record<NetworkName, SingleProviderState>
+  currentNetwork: NetworkName
+  setCurrentNetwork: (networkName: NetworkName) => void
+  getCurrentNetwork: () => NetworkName
   ensureProvider: (
     providerName: NetworkName,
     config: Multichain.MultichainProviderConfig,

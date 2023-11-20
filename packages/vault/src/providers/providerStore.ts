@@ -13,6 +13,19 @@ export const providerFactory = (
 
 export const providerSlice: StateCreator<ProviderStore> = (set, get) => ({
   providers: {},
+  currentNetwork: '',
+
+  setCurrentNetwork: (networkName) => {
+    set(
+      produce((state) => {
+        state.currentNetwork = networkName
+      })
+    )
+  },
+
+  getCurrentNetwork: () => {
+    return get().currentNetwork
+  },
   ensureProvider: (networkName, config, network) => {
     set(
       produce((state) => {
