@@ -32,7 +32,7 @@ const params = {
 }
 const getPassphrase = async () => Buffer.from(params.passphrase)
 
-describe('AccountStore', () => {
+describe('KeyAgentStore', () => {
   let randomMnemonic: string[]
   let agentArgs: FromBip39MnemonicWordsProps
   let agentArgs2: FromBip39MnemonicWordsProps

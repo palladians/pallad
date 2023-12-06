@@ -39,19 +39,19 @@ describe('ProviderStore', () => {
     expect(result.current.providers).toEqual({})
   })
 
-  it('should set a mainnet provider in the store', async () => {
+  it('should set a devnet provider in the store', async () => {
     const { result } = renderHook(() => useVault())
     await act(async () => {
       await result.current.setProvider({
-        networkName: 'Mina Mainnet',
+        networkName: 'Mina Devnet',
         provider: providerFactory(
-          providerConfigurations[Mina.Networks.MAINNET]!,
-          Mina.Networks.MAINNET
+          providerConfigurations[Mina.Networks.DEVNET]!,
+          Mina.Networks.DEVNET
         )
       })
       const networks = await result.current.getAvailableNetworks()
-      expect(result.current.getProvider('Mina Mainnet')).toBeDefined()
-      expect(networks).toContain('Mina Mainnet')
+      expect(result.current.getProvider('Mina Devnet')).toBeDefined()
+      expect(networks).toContain('Mina Devnet')
     })
   })
 })

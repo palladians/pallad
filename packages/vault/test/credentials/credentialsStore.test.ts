@@ -10,7 +10,7 @@ import {
 } from '../../src'
 import { KeyAgentName } from '../../src'
 
-describe('AccountStore', () => {
+describe('CredentialStore', () => {
   let credential: GroupedCredentials
   let credentialName: CredentialName
   let keyAgentName: KeyAgentName

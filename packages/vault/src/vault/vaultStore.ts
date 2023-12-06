@@ -1,5 +1,5 @@
 import { Network } from '@palladxyz/key-management'
-import { Networks } from '@palladxyz/mina-core'
+import { Mina } from '@palladxyz/mina-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { produce } from 'immer'
 import { create } from 'zustand'
@@ -61,7 +61,7 @@ export const useVault = create<
         return {
           keyAgent: getKeyAgent(keyAgentName),
           credential: getCredential(credentialName),
-          accountInfo: getAccountInfo(Networks.MAINNET, 'ADD ADDRESS HERE')
+          accountInfo: getAccountInfo(Mina.Networks.MAINNET, 'ADD ADDRESS HERE') // why is this not a dynamic address?
             .accountInfo,
           transactions: []
         }
