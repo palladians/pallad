@@ -20,7 +20,7 @@ import {
   StoredCredential,
   useVault
 } from '@palladxyz/vault'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { AddressError, NetworkError, WalletError } from '../Errors'
 import { NetworkManager } from '../Network'
@@ -48,24 +48,17 @@ type UseWalletProps = {
 }
 
 export const useWallet = ({ network, name }: UseWalletProps) => {
-  const [currentWallet, setCurrentWallet] =
-    useState<SingleCredentialState | null>(null)
-  const [currentKeyAgentName, setCurrentKeyAgentName] =
-    useState<KeyAgentName | null>(null)
   const [walletNetwork] = useState<Multichain.MultiChainNetworks>(network)
   const [walletName] = useState<string>(name)
-  const networkManager = useMemo(
-    () =>
-      new NetworkManager<Multichain.MultiChainNetworks>(
-        NETWORK_CONFIG,
-        network
-      ),
-    [network]
+  const networkManager = new NetworkManager<Multichain.MultiChainNetworks>(
+    NETWORK_CONFIG,
+    network
   )
-  const providerManager = useMemo(
-    () => new ProviderManager<Multichain.MultiChainNetworks>(NETWORK_CONFIG),
-    []
+  const providerManager = new ProviderManager<Multichain.MultiChainNetworks>(
+    NETWORK_CONFIG
   )
+  const getCurrentWallet = useVault((state) => state.getCurrentWallet)
+  const setCurrentWallet = useVault((state) => state.setCurrentWallet)
   const keyAgents = useVault((state) => state.keyAgents)
   const initialiseKeyAgent = useVault((state) => state.initialiseKeyAgent)
   const searchCredentials = useVault((state) => state.searchCredentials)
@@ -75,18 +68,12 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
   const setTransactions = useVault((state) => state.setTransactions)
   const setAccountInfo = useVault((state) => state.setAccountInfo)
 
-  const credentialAddress = useMemo(
-    () => currentWallet?.credential?.address,
-    [currentWallet]
-  )
+  const credentialAddress = getCurrentWallet()?.credential?.credential?.address
 
   console.log('>>>AGENT', keyAgents)
-  console.log('>>>CURRENT', credentialAddress, currentWallet)
+  console.log('>>>CURRENT', credentialAddress, getCurrentWallet())
 
-  const currentKeyAgent = useMemo(
-    () => currentKeyAgentName && keyAgents[currentKeyAgentName],
-    [currentKeyAgentName]
-  )
+  const currentKeyAgent = getCurrentWallet().keyAgent
 
   const _validateCurrentWallet = (wallet: SingleCredentialState | null) => {
     const credential = wallet?.credential as GroupedCredentials
@@ -187,9 +174,10 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
         'Mina provider is undefined in switchNetwork method'
       )
     networkManager.switchNetwork(network)
+    const currentWallet = getCurrentWallet()
     if (!currentWallet)
       throw new Error('Current wallet is null, empty or undefined')
-    await _syncWallet(network, currentWallet.credential)
+    await _syncWallet(network, currentWallet.credential.credential)
   }
 
   const getCredentials = (query: SearchQuery, props: string[] = []) => {
@@ -197,10 +185,12 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
   }
 
   const getWalletAccountInfo = async () => {
-    _validateCurrentWallet(currentWallet)
+    const currentWallet = getCurrentWallet()
+    _validateCurrentWallet(currentWallet.credential)
     const currentNetwork = getCurrentNetwork()
     _validateCurrentNetwork(currentNetwork)
-    const walletCredential = currentWallet?.credential as GroupedCredentials
+    const walletCredential = currentWallet?.credential
+      .credential as GroupedCredentials
     return (
       getAccountInfo(currentNetwork, walletCredential?.address as string)
         ?.accountInfo || null
@@ -208,11 +198,13 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
   }
 
   const getWalletTransactions = async () => {
+    const currentWallet = getCurrentWallet()
     if (!currentWallet)
       throw new WalletError(
         'Current wallet is null, empty or undefined in getTransactions method'
       )
-    const walletCredential = currentWallet.credential as GroupedCredentials
+    const walletCredential = currentWallet.credential
+      .credential as GroupedCredentials
     const walletAddress = walletCredential?.address
     if (!walletAddress)
       throw new AddressError(
@@ -227,27 +219,28 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
   }
 
   const sign = async (signable: ChainSignablePayload) => {
+    const currentWallet = getCurrentWallet()
     // use current wallet to sign
     if (!currentWallet?.credential) {
       throw new WalletError(
         'Current wallet is null, empty or undefined in sign method'
       )
     }
-    if (currentKeyAgentName === null) {
-      throw new WalletError('Key agent name is undefined in sign method')
-    }
-    const keyAgent = getKeyAgent(currentKeyAgentName)
+    // if (currentKeyAgentName === null) {
+    //   throw new WalletError('Key agent name is undefined in sign method')
+    // }
+    const keyAgent = currentWallet.keyAgent
     if (keyAgent === null) {
       throw new WalletError('Key agent is undefined in sign method')
     }
-    const credential = currentWallet.credential as GroupedCredentials
+    const credential = currentWallet.credential.credential as GroupedCredentials
     const args: MinaSpecificArgs = {
       network: Network.Mina,
       accountIndex: 0,
       addressIndex: 0,
       networkType: 'testnet'
     }
-    const signed = await keyAgent.keyAgent?.sign(credential, signable, args)
+    const signed = await keyAgent?.sign(credential, signable, args)
     return signed
   }
 
@@ -262,13 +255,14 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
   // This is Mina Specific
   // TODO: Make this chain agnostic
   const submitTx = async (submitTxArgs: SubmitTxArgs) => {
+    const currentWallet = getCurrentWallet()
     const network = getCurrentNetwork()
     const txResult = await providerManager
       .getProvider(network)
       ?.submitTransaction(submitTxArgs)
     await _syncTransactions(
       network,
-      currentWallet?.credential as GroupedCredentials
+      currentWallet?.credential.credential as GroupedCredentials
     )
     return txResult
   }
@@ -293,8 +287,15 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
       mnemonic2ndFactorPassphrase: ''
     }
     await initialiseKeyAgent(keyAgentName, keyAgentType, agentArgs)
-    setCurrentKeyAgentName(keyAgentName)
     const keyAgent = getKeyAgent(keyAgentName)
+    console.log(
+      '>>>KA',
+      keyAgents,
+      keyAgent,
+      keyAgentName,
+      keyAgentType,
+      agentArgs
+    )
     const derivedCredential = await keyAgent?.keyAgent?.deriveCredentials(
       payload,
       args,
@@ -311,7 +312,12 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
       credential: derivedCredential
     }
     setCredential(singleCredentialState)
-    setCurrentWallet(singleCredentialState)
+    setCurrentWallet({
+      keyAgentName,
+      credentialName,
+      currentAccountIndex: derivedCredential.accountIndex,
+      currentAddressIndex: derivedCredential.addressIndex
+    })
     await _syncWallet(network, derivedCredential)
   }
 
@@ -328,7 +334,7 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
     constructTx,
     submitTx,
     sign,
-    currentWallet,
+    currentWallet: getCurrentWallet(),
     credentialAddress,
     currentKeyAgent
   }

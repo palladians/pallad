@@ -66,6 +66,7 @@ export const MnemonicInputView = () => {
       },
       walletName //this is the keyAgentName
     )
+    setCurrentWallet
     setVaultStateInitialized()
     return navigate('/onboarding/finish')
   }

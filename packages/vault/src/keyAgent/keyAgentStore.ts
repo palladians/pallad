@@ -27,12 +27,14 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
     keyAgentType,
     { mnemonicWords, getPassphrase }
   ) {
+    const { ensureKeyAgent } = get()
     const agentArgs: FromBip39MnemonicWordsProps = {
       getPassphrase: getPassphrase,
       mnemonicWords: mnemonicWords,
       mnemonic2ndFactorPassphrase: ''
     }
     const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
+    ensureKeyAgent(name)
     return set(
       produce((state) => {
         state.keyAgents[name] = {
