@@ -1,19 +1,20 @@
 import { Multichain } from '@palladxyz/multi-chain-core'
 
-import { useWalletUi } from '../../common/hooks/useWalletUi'
 import { structurizeTransactions } from '../utils/structurizeTransactions'
 import { TxTile } from './TxTile'
+import { useVault } from '@palladxyz/vault'
 
 interface TransactionsListProps {
   transactions: Multichain.MultiChainTransactionBody[]
 }
 
 export const TransactionsList = ({ transactions }: TransactionsListProps) => {
-  const { credentialAddress } = useWalletUi()
-  if (!credentialAddress) return null
+  const currentWallet = useVault((state) => state.getCurrentWallet())
+  const { publicKey } = currentWallet.accountInfo
+  if (!publicKey) return null
   const txDates =
     transactions &&
-    Object.entries(structurizeTransactions([transactions, credentialAddress]))
+    Object.entries(structurizeTransactions([transactions, publicKey]))
   return (
     <div className="flex flex-col gap-4">
       {txDates?.map(([date, txs]) => (

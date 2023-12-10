@@ -8,7 +8,7 @@ import {
 import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { Button, cn, Label, Textarea } from '@palladxyz/ui'
-import { useVault } from '@palladxyz/vault'
+import { KeyAgents, useVault } from '@palladxyz/vault'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -16,12 +16,11 @@ import { shallow } from 'zustand/shallow'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useWalletUi } from '../../common/hooks/useWalletUi'
 import { useAppStore } from '../../common/store/app'
 import { useOnboardingStore } from '../../common/store/onboarding'
 
 export const MnemonicInputView = () => {
-  const { restoreWallet } = useWalletUi()
+  const restoreWallet = useVault((state) => state.restoreWallet)
   const navigate = useNavigate()
   const { walletName, spendingPassword } = useOnboardingStore(
     (state) => ({
@@ -64,9 +63,10 @@ export const MnemonicInputView = () => {
         mnemonicWords: mnemonic.split(' '),
         getPassphrase: async () => Buffer.from(spendingPassword)
       },
-      walletName //this is the keyAgentName
+      walletName,
+      KeyAgents.InMemory,
+      'Test'
     )
-    setCurrentWallet
     setVaultStateInitialized()
     return navigate('/onboarding/finish')
   }

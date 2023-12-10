@@ -233,9 +233,6 @@ importers:
       '@palladxyz/mina-graphql':
         specifier: '*'
         version: link:../mina-graphql
-      '@palladxyz/mina-wallet':
-        specifier: '*'
-        version: link:../mina-wallet
       '@palladxyz/multi-chain-core':
         specifier: '*'
         version: link:../multi-chain-core
@@ -499,73 +496,6 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2(typescript@5.0.4)
 
-  packages/mina-wallet:
-    dependencies:
-      '@palladxyz/key-management':
-        specifier: '*'
-        version: link:../key-management
-      '@palladxyz/mina-core':
-        specifier: '*'
-        version: link:../mina-core
-      '@palladxyz/mina-graphql':
-        specifier: '*'
-        version: link:../mina-graphql
-      '@palladxyz/multi-chain-core':
-        specifier: '*'
-        version: link:../multi-chain-core
-      '@palladxyz/util':
-        specifier: '*'
-        version: link:../util
-      '@palladxyz/vault':
-        specifier: '*'
-        version: link:../vault
-      bs58check:
-        specifier: ^3.0.1
-        version: 3.0.1
-      buffer:
-        specifier: ^6.0.3
-        version: 6.0.3
-      events:
-        specifier: ^3.3.0
-        version: 3.3.0
-      mina-signer:
-        specifier: ^2.1.1
-        version: 2.1.1
-      unique-names-generator:
-        specifier: ^4.7.1
-        version: 4.7.1
-      zustand:
-        specifier: ^4.3.8
-        version: 4.3.8(immer@10.0.2)(react@18.2.0)
-    devDependencies:
-      '@palladxyz/common':
-        specifier: '*'
-        version: link:../common
-      '@types/events':
-        specifier: ^3.0.0
-        version: 3.0.0
-      '@types/mocha':
-        specifier: ^10.0.1
-        version: 10.0.1
-      '@types/react':
-        specifier: ^18.2.25
-        version: 18.2.25
-      '@types/react-dom':
-        specifier: ^18.2.11
-        version: 18.2.11
-      '@types/secp256k1':
-        specifier: ^4.0.3
-        version: 4.0.3
-      msw:
-        specifier: ^1.2.2
-        version: 1.2.2(typescript@5.0.4)
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-
   packages/multi-chain-core:
     dependencies:
       '@palladxyz/mina-core':
@@ -807,6 +737,9 @@ importers:
       rambda:
         specifier: ^7.5.0
         version: 7.5.0
+      unique-names-generator:
+        specifier: ^4.7.1
+        version: 4.7.1
       vitest:
         specifier: ^0.34.4
         version: 0.34.4(happy-dom@9.20.3)
@@ -844,9 +777,6 @@ importers:
       '@palladxyz/mina-graphql':
         specifier: '*'
         version: link:../mina-graphql
-      '@palladxyz/mina-wallet':
-        specifier: '*'
-        version: link:../mina-wallet
       '@palladxyz/multi-chain-core':
         specifier: '*'
         version: link:../multi-chain-core
@@ -5461,12 +5391,6 @@ packages:
     resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
     dependencies:
       '@types/react': 18.0.28
-    dev: true
-
-  /@types/react-dom@18.2.11:
-    resolution: {integrity: sha512-zq6Dy0EiCuF9pWFW6I6k6W2LdpUixLE4P6XjXU1QHLfak3GPACQfLwEuHzY5pOYa4hzj1d0GxX/P141aFjZsyg==}
-    dependencies:
-      '@types/react': 18.2.25
     dev: true
 
   /@types/react-dom@18.2.7:

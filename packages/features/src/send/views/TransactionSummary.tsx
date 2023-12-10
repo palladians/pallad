@@ -1,6 +1,7 @@
 import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { Button, Card } from '@palladxyz/ui'
+import { useVault } from '@palladxyz/vault'
 import { ArrowDownLeftIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -8,14 +9,17 @@ import { useNavigate } from 'react-router-dom'
 import { AppLayout } from '../../common/components/AppLayout'
 import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useWalletUi } from '../../common/hooks/useWalletUi'
 import { truncateString } from '../../common/lib/string'
 import { useTransactionStore } from '../../common/store/transaction'
 
 export const TransactionSummaryView = () => {
   const navigate = useNavigate()
-  const { sign, submitTx, constructTx, credentialAddress } = useWalletUi()
-  if (!credentialAddress) return null
+  const sign = useVault((state) => state.sign)
+  const submitTx = useVault((state) => state.submitTx)
+  const constructTx = useVault((state) => state.constructTx)
+  const currentWallet = useVault((state) => state.getCurrentWallet())
+  const { publicKey } = currentWallet.accountInfo
+  if (!publicKey) return null
   const outgoingTransaction = useTransactionStore(
     (state) => state.outgoingTransaction
   )
@@ -34,7 +38,7 @@ export const TransactionSummaryView = () => {
   const constructAndSubmitTx = async () => {
     const transaction: Multichain.MultiChainTransactionBody = {
       to: outgoingTransaction.to,
-      from: credentialAddress,
+      from: publicKey,
       fee,
       amount,
       nonce: 0, // TODO: nonce management -- should we have a Nonce Manager in the wallet? Yes.
@@ -44,7 +48,7 @@ export const TransactionSummaryView = () => {
       transaction,
       Mina.TransactionKind.PAYMENT
     )
-    const signedTx = await sign(constructedTx) // TODO: Fix this with new wallet API
+    const signedTx = await sign(constructedTx as any) // TODO: Fix this with new wallet API
     if (!signedTx) return
     const submittedTx = await submitTx(signedTx as any)
     console.log('>>>ST', submittedTx?.result)
@@ -64,9 +68,9 @@ export const TransactionSummaryView = () => {
           <MetaField
             label="From"
             value={
-              (credentialAddress &&
+              (publicKey &&
                 truncateString({
-                  value: credentialAddress,
+                  value: publicKey,
                   endCharCount: 8,
                   firstCharCount: 8
                 })) ||

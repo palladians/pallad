@@ -17,11 +17,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useWalletUi } from '../../common/hooks/useWalletUi'
 
 export const UnlockWalletView = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const { currentWallet } = useWalletUi()
+  const currentWallet = useVault((state) => state.getCurrentWallet())
   const [passwordError, setPasswordError] = useState(false)
   const navigate = useNavigate()
   const { register, handleSubmit } = useForm({

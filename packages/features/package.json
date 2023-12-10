@@ -25,7 +25,6 @@
     "@palladxyz/key-management": "*",
     "@palladxyz/mina-core": "*",
     "@palladxyz/mina-graphql": "*",
-    "@palladxyz/mina-wallet": "*",
     "@palladxyz/offchain-data": "*",
     "@palladxyz/persistence": "*",
     "@palladxyz/ui": "*",

@@ -7,18 +7,20 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@palladxyz/ui'
+import { useVault } from '@palladxyz/vault'
 import { CopyIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAccount } from '../../common/hooks/useAccount'
-import { useWalletUi } from '../../common/hooks/useWalletUi'
 import { truncateString } from '../../common/lib/string'
 import { AvatarMenu } from './AvatarMenu'
 
 export const OverviewCard = () => {
-  const { credentialAddress } = useWalletUi()
-  if (!credentialAddress) return null
+  const currentWallet = useVault((state) => state.getCurrentWallet())
+  const { publicKey } = currentWallet.accountInfo
+  console.log('>>>PK', publicKey, currentWallet)
+  if (!publicKey) return null
   const navigate = useNavigate()
   const { isLoading: accountLoading, minaBalance } = useAccount()
   const { data: fiatPriceData, isLoading: priceLoading } = useFiatPrice()
@@ -66,9 +68,9 @@ export const OverviewCard = () => {
               className="text-sm font-semibold dark:text-blue-400 text-blue-600"
               data-testid="dashboard__addressTruncated"
             >
-              {credentialAddress &&
+              {publicKey &&
                 truncateString({
-                  value: credentialAddress,
+                  value: publicKey,
                   firstCharCount: 8,
                   endCharCount: 8
                 })}

@@ -47,6 +47,8 @@ type UseWalletProps = {
   name: string
 }
 
+// TODO: Remove this crap
+
 export const useWallet = ({ network, name }: UseWalletProps) => {
   const [walletNetwork] = useState<Multichain.MultiChainNetworks>(network)
   const [walletName] = useState<string>(name)
@@ -69,9 +71,6 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
   const setAccountInfo = useVault((state) => state.setAccountInfo)
 
   const credentialAddress = getCurrentWallet()?.credential?.credential?.address
-
-  console.log('>>>AGENT', keyAgents)
-  console.log('>>>CURRENT', credentialAddress, getCurrentWallet())
 
   const currentKeyAgent = getCurrentWallet().keyAgent
 

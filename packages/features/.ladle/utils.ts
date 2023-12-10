@@ -1,16 +1,17 @@
 import { useEffect } from 'react'
 import { MinaPayload, Network } from '@palladxyz/key-management'
-import { useWallet } from '../src/common/hooks/useWallet'
 import { Mina } from '@palladxyz/mina-core'
+import { useVault } from '@palladxyz/vault'
 
 const MNEMONIC =
   'habit hope tip crystal because grunt nation idea electric witness alert like'
 
 export const useStoriesWallet = () => {
-  const { wallet } = useWallet()
+  const restoreWallet = useVault((state) => state.restoreWallet)
+  const switchNetwork = useVault((state) => state.switchNetwork)
   useEffect(() => {
     const restore = async () => {
-      await wallet.restoreWallet(
+      await restoreWallet(
         new MinaPayload(),
         {
           network: Network.Mina,
@@ -24,8 +25,8 @@ export const useStoriesWallet = () => {
           getPassphrase: async () => Buffer.from('passphrase')
         }
       )
-      await wallet.switchNetwork(Mina.Networks.DEVNET)
-      restore()
+      await switchNetwork(Mina.Networks.DEVNET)
     }
+    restore()
   }, [])
 }

@@ -141,19 +141,19 @@ describe('WalletTest', () => {
     console.log('account info result: ', accountInfo)
     expect(result.current.credentials['Test Credential']).toBeDefined()
     expect(
-      result.current.getAccountInfo(Mina.Networks.DEVNET, credential.address)
+      result.current.getAccountInfo(Mina.Networks.DEVNET, credential?.address)
     ).toBeDefined()
     expect(
-      result.current.getTransactions(Mina.Networks.DEVNET, credential.address)
+      result.current.getTransactions(Mina.Networks.DEVNET, credential?.address)
     ).toBeDefined()
     console.log('credential: ', result.current.credentials['Test Credential'])
     console.log(
       'account info: ',
-      result.current.getAccountInfo(Mina.Networks.DEVNET, credential.address)
+      result.current.getAccountInfo(Mina.Networks.DEVNET, credential?.address)
     )
     console.log(
       'transactions: ',
-      result.current.getTransactions(Mina.Networks.DEVNET, credential.address)
+      result.current.getTransactions(Mina.Networks.DEVNET, credential?.address)
     )
   })
 })

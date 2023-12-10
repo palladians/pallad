@@ -9,11 +9,8 @@ import {
 import { LockIcon, SettingsIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-import { useWalletUi } from '../../common/hooks/useWalletUi'
-
 export const AvatarMenu = () => {
   const navigate = useNavigate()
-  const { lockWallet } = useWalletUi()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,7 +28,7 @@ export const AvatarMenu = () => {
           <SettingsIcon className="mr-2 h-4 w-4" />
           <span>Settings</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={lockWallet}>
+        <DropdownMenuItem onClick={() => console.log('not yet')}>
           <LockIcon className="mr-2 h-4 w-4" />
           <span>Lock Wallet</span>
         </DropdownMenuItem>

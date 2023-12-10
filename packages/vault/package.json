@@ -24,6 +24,7 @@
     "@palladxyz/multi-chain-core": "*",
     "@palladxyz/persistence": "*",
     "@palladxyz/util": "*",
+    "unique-names-generator": "^4.7.1",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "immer": "^10.0.2",
