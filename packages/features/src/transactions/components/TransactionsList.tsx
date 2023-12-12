@@ -1,8 +1,8 @@
 import { Multichain } from '@palladxyz/multi-chain-core'
+import { useVault } from '@palladxyz/vault'
 
 import { structurizeTransactions } from '../utils/structurizeTransactions'
 import { TxTile } from './TxTile'
-import { useVault } from '@palladxyz/vault'
 
 interface TransactionsListProps {
   transactions: Multichain.MultiChainTransactionBody[]

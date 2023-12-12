@@ -6,6 +6,7 @@ import {
   RadioGroupItem,
   useToast
 } from '@palladxyz/ui'
+import { useVault } from '@palladxyz/vault'
 import { TrashIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useNavigate } from 'react-router-dom'
@@ -14,7 +15,6 @@ import { useSWRConfig } from 'swr'
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useAppStore } from '../../common/store/app'
-import { useVault } from '@palladxyz/vault'
 
 export const SettingsView = () => {
   const { toast } = useToast()

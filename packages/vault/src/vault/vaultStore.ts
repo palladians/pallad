@@ -44,7 +44,7 @@ const NETWORK_CONFIG = {
 
 const networkManager = new NetworkManager<Multichain.MultiChainNetworks>(
   NETWORK_CONFIG,
-  Mina.Networks.MAINNET
+  Mina.Networks.DEVNET
 )
 const providerManager = new ProviderManager<Multichain.MultiChainNetworks>(
   NETWORK_CONFIG
@@ -68,7 +68,7 @@ const defaultGlobalVaultState: GlobalVaultState = {
   currentAddressIndex: 0,
   chain: Network.Mina,
   walletName: '',
-  walletNetwork: Mina.Networks.MAINNET
+  walletNetwork: Mina.Networks.DEVNET
 }
 
 export const useVault = create<
@@ -110,10 +110,13 @@ export const useVault = create<
           credentialName,
           getAccountInfo
         } = get()
+        const keyAgent = getKeyAgent(keyAgentName)
+        const credential = getCredential(credentialName)
+        const publicKey = credential.credential?.address ?? ''
         return {
-          keyAgent: getKeyAgent(keyAgentName),
-          credential: getCredential(credentialName),
-          accountInfo: getAccountInfo(Mina.Networks.MAINNET, 'ADD ADDRESS HERE') // why is this not a dynamic address?
+          keyAgent,
+          credential,
+          accountInfo: getAccountInfo(Mina.Networks.DEVNET, publicKey)
             .accountInfo,
           transactions: []
         }
@@ -302,7 +305,8 @@ export const useVault = create<
           getKeyAgent,
           setCredential,
           setCurrentWallet,
-          _syncWallet
+          _syncWallet,
+          ensureAccount
         } = get()
         const agentArgs: FromBip39MnemonicWordsProps = {
           getPassphrase: getPassphrase,
@@ -311,7 +315,6 @@ export const useVault = create<
         }
         await initialiseKeyAgent(keyAgentName, keyAgentType, agentArgs)
         const keyAgent = getKeyAgent(keyAgentName)
-        console.log('>>>KA', keyAgent, keyAgentName, keyAgentType, agentArgs)
         const derivedCredential = await keyAgent?.deriveCredentials(
           payload,
           args,
@@ -334,6 +337,7 @@ export const useVault = create<
           currentAccountIndex: derivedCredential.accountIndex,
           currentAddressIndex: derivedCredential.addressIndex
         })
+        ensureAccount(network, derivedCredential.address)
         await _syncWallet(network, derivedCredential)
       }
     }),

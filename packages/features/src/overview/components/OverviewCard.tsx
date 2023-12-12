@@ -18,12 +18,14 @@ import { AvatarMenu } from './AvatarMenu'
 
 export const OverviewCard = () => {
   const currentWallet = useVault((state) => state.getCurrentWallet())
-  const { publicKey } = currentWallet.accountInfo
-  console.log('>>>PK', publicKey, currentWallet)
-  if (!publicKey) return null
   const navigate = useNavigate()
-  const { isLoading: accountLoading, minaBalance } = useAccount()
+  const {
+    isLoading: accountLoading,
+    minaBalance,
+    gradientBackground
+  } = useAccount()
   const { data: fiatPriceData, isLoading: priceLoading } = useFiatPrice()
+  const { publicKey } = currentWallet.accountInfo
   const overviewLoading = accountLoading || priceLoading
   const fiatBalance = useMemo(() => {
     if (!minaBalance) return
@@ -31,14 +33,15 @@ export const OverviewCard = () => {
     if (!rawFiatPrice) return
     return Number(minaBalance) * rawFiatPrice
   }, [minaBalance, fiatPriceData])
+  if (!publicKey) return null
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[16px] gap-4 p-[2px] relative"
-      // style={{ backgroundImage: gradientBackground }}
+      style={{ backgroundImage: gradientBackground }}
     >
       <div
         className="absolute h-full w-full opacity-25 rounded-[14px] pointer-events-none"
-        // style={{ backgroundImage: gradientBackground }}
+        style={{ backgroundImage: gradientBackground }}
       />
       <div className="flex flex-col flex-1 w-full gap-4 bg-background rounded-[14px] py-4 px-4 backdrop-blur-2xl">
         {overviewLoading ? (

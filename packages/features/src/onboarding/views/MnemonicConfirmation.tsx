@@ -50,8 +50,7 @@ export const MnemonicConfirmationView = () => {
     if (!spendingPassword) return
     if (!mnemonic) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    useVault.destroy()
-    useVault.persist.rehydrate()
+    await useVault.persist.rehydrate()
     // TODO: Add await in UI when user clicks restore wallet
     const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,
@@ -62,7 +61,7 @@ export const MnemonicConfirmationView = () => {
     await restoreWallet(
       new MinaPayload(),
       restoreArgs,
-      Mina.Networks.MAINNET,
+      Mina.Networks.DEVNET,
       {
         mnemonicWords: mnemonic.split(' '),
         getPassphrase: async () => Buffer.from(spendingPassword)

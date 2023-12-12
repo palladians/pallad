@@ -11,7 +11,7 @@ import {
 } from '@palladxyz/ui'
 import { useVault } from '@palladxyz/vault'
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
@@ -23,7 +23,11 @@ export const UnlockWalletView = () => {
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const [passwordError, setPasswordError] = useState(false)
   const navigate = useNavigate()
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { isDirty }
+  } = useForm({
     defaultValues: {
       spendingPassword: ''
     }
@@ -38,11 +42,16 @@ export const UnlockWalletView = () => {
     spendingPassword: string
   }) => {
     await getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    useVault.destroy()
-    useVault.persist.rehydrate()
-    if (!currentWallet) return await onError()
-    return navigate('/dashboard')
+    await useVault.persist.rehydrate()
   }
+  useEffect(() => {
+    const unsub = useVault.persist.onFinishHydration(async () => {
+      if (!isDirty) return
+      if (!currentWallet?.accountInfo?.publicKey) return await onError()
+      navigate('/dashboard')
+    })
+    return () => unsub()
+  })
   return (
     <WizardLayout
       footer={

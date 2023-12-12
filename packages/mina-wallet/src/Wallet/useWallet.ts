@@ -287,14 +287,6 @@ export const useWallet = ({ network, name }: UseWalletProps) => {
     }
     await initialiseKeyAgent(keyAgentName, keyAgentType, agentArgs)
     const keyAgent = getKeyAgent(keyAgentName)
-    console.log(
-      '>>>KA',
-      keyAgents,
-      keyAgent,
-      keyAgentName,
-      keyAgentType,
-      agentArgs
-    )
     const derivedCredential = await keyAgent?.keyAgent?.deriveCredentials(
       payload,
       args,

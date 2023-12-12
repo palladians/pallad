@@ -47,8 +47,7 @@ export const MnemonicInputView = () => {
     if (!walletName) return
     if (!spendingPassword) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    useVault.destroy()
-    useVault.persist.rehydrate()
+    await useVault.persist.rehydrate()
     const restoreArgs: MinaSpecificArgs = {
       network: Network.Mina,
       accountIndex: 0,
@@ -58,7 +57,7 @@ export const MnemonicInputView = () => {
     await restoreWallet(
       new MinaPayload(),
       restoreArgs,
-      Mina.Networks.MAINNET,
+      Mina.Networks.DEVNET,
       {
         mnemonicWords: mnemonic.split(' '),
         getPassphrase: async () => Buffer.from(spendingPassword)

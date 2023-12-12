@@ -18,9 +18,11 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
   ensureAccount: (network, address) => {
     set(
       produce((state) => {
-        if (!state.accounts[network][address]) {
+        if (!state.accounts[network]?.[address]) {
+          state.accounts[network] = {}
           state.accounts[network][address] = {
-            ...initialSingleAccountState
+            ...initialSingleAccountState,
+            ...state.accounts[network][address]
           }
         }
       })
@@ -29,12 +31,8 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
   setAccountInfo: (network, address, accountInfo) => {
     set(
       produce((state) => {
-        const networkAccounts = state.accounts[network] || {}
-        const accountData =
-          networkAccounts[address] || initialSingleAccountState
-        state.accounts[network] = state.accounts[network] || {}
         state.accounts[network][address] = {
-          ...accountData,
+          ...state.accounts[network][address],
           accountInfo
         }
       })
@@ -43,12 +41,8 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
   setTransactions: (network, address, transactions) => {
     set(
       produce((state) => {
-        const networkAccounts = state.accounts[network] || {}
-        const accountData =
-          networkAccounts[address] || initialSingleAccountState
-        state.accounts[network] = state.accounts[network] || {}
         state.accounts[network][address] = {
-          ...accountData,
+          ...state.accounts[network][address],
           transactions
         }
       })

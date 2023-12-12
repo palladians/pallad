@@ -1,4 +1,5 @@
 import { Skeleton } from '@palladxyz/ui'
+import { useVault } from '@palladxyz/vault'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
@@ -7,7 +8,6 @@ import { ViewHeading } from '../../common/components/ViewHeading'
 import { useTransaction } from '../../common/hooks/useTransaction'
 import { TxIndicator } from '../components/TxIndicator'
 import { structurizeTransaction } from '../utils/structurizeTransactions'
-import { useVault } from '@palladxyz/vault'
 
 export const TransactionDetailsView = () => {
   const currentWallet = useVault((state) => state.getCurrentWallet())

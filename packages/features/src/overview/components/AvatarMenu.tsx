@@ -8,8 +8,10 @@ import {
 } from '@palladxyz/ui'
 import { LockIcon, SettingsIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useAccount } from '../../common/hooks/useAccount'
 
 export const AvatarMenu = () => {
+  const { gradientBackground } = useAccount()
   const navigate = useNavigate()
   return (
     <DropdownMenu>
@@ -18,7 +20,7 @@ export const AvatarMenu = () => {
           <AvatarFallback>
             <div
               className="w-full h-full cursor-pointer"
-              // style={{ backgroundImage: gradientBackground }}
+              style={{ backgroundImage: gradientBackground }}
             />
           </AvatarFallback>
         </Avatar>

@@ -534,8 +534,8 @@ importers:
         specifier: ^1.2.5
         version: 1.2.5(@capacitor/core@5.2.0)
       '@plasmohq/storage':
-        specifier: ^1.6.2
-        version: 1.6.2(react@18.2.0)
+        specifier: ^1.9.0
+        version: 1.9.0(react@18.2.0)
       capacitor-secure-storage-plugin:
         specifier: ^0.9.0
         version: 0.9.0(@capacitor/core@5.2.0)
@@ -550,8 +550,8 @@ importers:
         specifier: ^4.3.9
         version: 4.4.7(@types/node@20.8.0)
       zustand:
-        specifier: ^4.3.9
-        version: 4.3.9(immer@10.0.2)(react@18.2.0)
+        specifier: ^4.4.7
+        version: 4.4.7(immer@10.0.3)(react@18.2.0)
 
   packages/ui:
     dependencies:
@@ -732,8 +732,8 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       immer:
-        specifier: ^10.0.2
-        version: 10.0.2
+        specifier: ^10.0.3
+        version: 10.0.3
       rambda:
         specifier: ^7.5.0
         version: 7.5.0
@@ -744,8 +744,8 @@ importers:
         specifier: ^0.34.4
         version: 0.34.4(happy-dom@9.20.3)
       zustand:
-        specifier: ^4.3.8
-        version: 4.3.9(immer@10.0.2)(react@18.2.0)
+        specifier: ^4.4.7
+        version: 4.4.7(immer@10.0.3)(react@18.2.0)
     devDependencies:
       '@palladxyz/common':
         specifier: '*'
@@ -3224,8 +3224,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@plasmohq/storage@1.6.2(react@18.2.0):
-    resolution: {integrity: sha512-NYCBW0FA3dhWKnN/zYc2alLucyPMzKFAVB47jhE524UUWKIFyjVvtVLCJmqPIuBwmGU5dYCQd3skLA/lLGQ0hg==}
+  /@plasmohq/storage@1.9.0(react@18.2.0):
+    resolution: {integrity: sha512-mntoJ0EVh7JfYyMKWKnt6yqVlJnwavEkwdXssSOxS1CEeyNX2GPkXQfChvlGhuEJplqcRhLaym6rEc690Ao0fg==}
     peerDependencies:
       react: ^16.8.6 || ^17 || ^18
     peerDependenciesMeta:
@@ -9406,6 +9406,10 @@ packages:
 
   /immer@10.0.2:
     resolution: {integrity: sha512-Rx3CqeqQ19sxUtYV9CU911Vhy8/721wRFnJv3REVGWUmoAcIwzifTsdmJte/MV+0/XpM35LZdQMBGkRIoLPwQA==}
+    dev: false
+
+  /immer@10.0.3:
+    resolution: {integrity: sha512-pwupu3eWfouuaowscykeckFmVTpqbzW+rXFCX8rQLkZzM9ftBmU/++Ra+o+L27mz03zJTlyV4UUr+fdKNffo4A==}
 
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -15125,19 +15129,22 @@ packages:
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
-  /zustand@4.3.9(immer@10.0.2)(react@18.2.0):
-    resolution: {integrity: sha512-Tat5r8jOMG1Vcsj8uldMyqYKC5IZvQif8zetmLHs9WoZlntTHmIoNM8TpLRY31ExncuUvUOXehd0kvahkuHjDw==}
+  /zustand@4.4.7(immer@10.0.3)(react@18.2.0):
+    resolution: {integrity: sha512-QFJWJMdlETcI69paJwhSMJz7PPWjVP8Sjhclxmxmxv/RYI7ZOvR5BHX+ktH0we9gTWQMxcne8q1OY8xxz604gw==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
+      '@types/react': '>=16.8'
       immer: '>=9.0'
       react: '>=16.8'
     peerDependenciesMeta:
+      '@types/react':
+        optional: true
       immer:
         optional: true
       react:
         optional: true
     dependencies:
-      immer: 10.0.2
+      immer: 10.0.3
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
 

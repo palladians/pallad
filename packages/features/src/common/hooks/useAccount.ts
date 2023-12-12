@@ -3,6 +3,8 @@ import { useVault } from '@palladxyz/vault'
 import useSWR from 'swr'
 
 import { useAppStore } from '../store/app'
+import easyMeshGradient from 'easy-mesh-gradient'
+import { useMemo } from 'react'
 
 export const useAccount = () => {
   const currentWallet = useVault((state) => state.getCurrentWallet())
@@ -24,5 +26,14 @@ export const useAccount = () => {
     : swr.data?.accountInfo.balance.total || 0
   const minaBalance =
     rawMinaBalance && BigInt(rawMinaBalance) / BigInt(1_000_000_000)
-  return { ...swr, minaBalance }
+  const gradientBackground = useMemo(
+    () =>
+      publicKey &&
+      easyMeshGradient({
+        seed: publicKey,
+        hueRange: [180, 240]
+      }),
+    [publicKey]
+  )
+  return { ...swr, minaBalance, gradientBackground }
 }
