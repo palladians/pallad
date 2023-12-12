@@ -75,6 +75,11 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
     const { accounts } = get()
     return accounts[network]?.[address]?.transactions || []
   },
+  getTransaction: (network, address, hash) => {
+    const { accounts } = get()
+    const transactions = accounts[network]?.[address]?.transactions || []
+    return transactions.find((tx) => tx.hash === hash)
+  },
   clear: () => {
     set(
       produce((state) => {

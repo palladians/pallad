@@ -17,6 +17,6 @@ export const useTransactions = () => {
           Mina.Networks[network.toUpperCase() as keyof typeof Mina.Networks]
         ]
       : null,
-    async () => await getTransactions(network, publicKey)
+    () => getTransactions(network, publicKey)
   )
 }

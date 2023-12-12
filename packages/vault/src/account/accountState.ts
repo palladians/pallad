@@ -40,6 +40,12 @@ export type AccountActions = {
     address: ChainAddress
   ) => Multichain.MultiChainTransactionBody[]
 
+  getTransaction: (
+    network: Multichain.MultiChainNetworks,
+    address: ChainAddress,
+    hash: string
+  ) => Multichain.MultiChainTransactionBody | undefined
+
   addAccount: (
     network: Multichain.MultiChainNetworks,
     address: ChainAddress

@@ -6,6 +6,7 @@ import { useAppStore } from '../store/app'
 
 export const useTransaction = ({ hash }: { hash: string }) => {
   const currentWallet = useVault((state) => state.getCurrentWallet())
+  const getTransaction = useVault((state) => state.getTransaction)
   const { publicKey } = currentWallet.accountInfo
   const network = useAppStore((state) => state.network)
   return useSWR(
@@ -16,6 +17,6 @@ export const useTransaction = ({ hash }: { hash: string }) => {
           Mina.Networks[network.toUpperCase() as keyof typeof Mina.Networks]
         ]
       : null,
-    async () => []
+    () => getTransaction(network, publicKey, hash)
   )
 }
