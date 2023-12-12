@@ -60,12 +60,16 @@ describe('AccountStore', () => {
     const { result } = renderHook(() => useVault())
     const accountInfo = mockAccountInfo
     act(() => {
+      // adding an ensureAccount call here to ensure the account is created
+      // this fixes `TypeError: Cannot read properties of undefined`
+      result.current.ensureAccount(network, address)
       result.current.setAccountInfo(network, address, accountInfo)
       finalAccountInfo = result.current.getAccountInfo(
         network,
         address
       ).accountInfo
     })
+    console.log('finalAccountInfo', finalAccountInfo)
     expect(finalAccountInfo).toEqual(accountInfo)
   })
 
