@@ -233,9 +233,6 @@ importers:
       '@palladxyz/mina-graphql':
         specifier: '*'
         version: link:../mina-graphql
-      '@palladxyz/mina-wallet':
-        specifier: '*'
-        version: link:../mina-wallet
       '@palladxyz/multi-chain-core':
         specifier: '*'
         version: link:../multi-chain-core
@@ -499,73 +496,6 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2(typescript@5.0.4)
 
-  packages/mina-wallet:
-    dependencies:
-      '@palladxyz/key-management':
-        specifier: '*'
-        version: link:../key-management
-      '@palladxyz/mina-core':
-        specifier: '*'
-        version: link:../mina-core
-      '@palladxyz/mina-graphql':
-        specifier: '*'
-        version: link:../mina-graphql
-      '@palladxyz/multi-chain-core':
-        specifier: '*'
-        version: link:../multi-chain-core
-      '@palladxyz/util':
-        specifier: '*'
-        version: link:../util
-      '@palladxyz/vault':
-        specifier: '*'
-        version: link:../vault
-      bs58check:
-        specifier: ^3.0.1
-        version: 3.0.1
-      buffer:
-        specifier: ^6.0.3
-        version: 6.0.3
-      events:
-        specifier: ^3.3.0
-        version: 3.3.0
-      mina-signer:
-        specifier: ^2.1.1
-        version: 2.1.1
-      unique-names-generator:
-        specifier: ^4.7.1
-        version: 4.7.1
-      zustand:
-        specifier: ^4.3.8
-        version: 4.3.8(immer@10.0.2)(react@18.2.0)
-    devDependencies:
-      '@palladxyz/common':
-        specifier: '*'
-        version: link:../common
-      '@types/events':
-        specifier: ^3.0.0
-        version: 3.0.0
-      '@types/mocha':
-        specifier: ^10.0.1
-        version: 10.0.1
-      '@types/react':
-        specifier: ^18.2.25
-        version: 18.2.25
-      '@types/react-dom':
-        specifier: ^18.2.11
-        version: 18.2.11
-      '@types/secp256k1':
-        specifier: ^4.0.3
-        version: 4.0.3
-      msw:
-        specifier: ^1.2.2
-        version: 1.2.2(typescript@5.0.4)
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-
   packages/multi-chain-core:
     dependencies:
       '@palladxyz/mina-core':
@@ -604,8 +534,8 @@ importers:
         specifier: ^1.2.5
         version: 1.2.5(@capacitor/core@5.2.0)
       '@plasmohq/storage':
-        specifier: ^1.6.2
-        version: 1.6.2(react@18.2.0)
+        specifier: ^1.9.0
+        version: 1.9.0(react@18.2.0)
       capacitor-secure-storage-plugin:
         specifier: ^0.9.0
         version: 0.9.0(@capacitor/core@5.2.0)
@@ -620,8 +550,8 @@ importers:
         specifier: ^4.3.9
         version: 4.4.7(@types/node@20.8.0)
       zustand:
-        specifier: ^4.3.9
-        version: 4.3.9(immer@10.0.2)(react@18.2.0)
+        specifier: ^4.4.7
+        version: 4.4.7(immer@10.0.3)(react@18.2.0)
 
   packages/ui:
     dependencies:
@@ -802,17 +732,20 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       immer:
-        specifier: ^10.0.2
-        version: 10.0.2
+        specifier: ^10.0.3
+        version: 10.0.3
       rambda:
         specifier: ^7.5.0
         version: 7.5.0
+      unique-names-generator:
+        specifier: ^4.7.1
+        version: 4.7.1
       vitest:
         specifier: ^0.34.4
         version: 0.34.4(happy-dom@9.20.3)
       zustand:
-        specifier: ^4.3.8
-        version: 4.3.9(immer@10.0.2)(react@18.2.0)
+        specifier: ^4.4.7
+        version: 4.4.7(immer@10.0.3)(react@18.2.0)
     devDependencies:
       '@palladxyz/common':
         specifier: '*'
@@ -844,9 +777,6 @@ importers:
       '@palladxyz/mina-graphql':
         specifier: '*'
         version: link:../mina-graphql
-      '@palladxyz/mina-wallet':
-        specifier: '*'
-        version: link:../mina-wallet
       '@palladxyz/multi-chain-core':
         specifier: '*'
         version: link:../multi-chain-core
@@ -3294,8 +3224,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@plasmohq/storage@1.6.2(react@18.2.0):
-    resolution: {integrity: sha512-NYCBW0FA3dhWKnN/zYc2alLucyPMzKFAVB47jhE524UUWKIFyjVvtVLCJmqPIuBwmGU5dYCQd3skLA/lLGQ0hg==}
+  /@plasmohq/storage@1.9.0(react@18.2.0):
+    resolution: {integrity: sha512-mntoJ0EVh7JfYyMKWKnt6yqVlJnwavEkwdXssSOxS1CEeyNX2GPkXQfChvlGhuEJplqcRhLaym6rEc690Ao0fg==}
     peerDependencies:
       react: ^16.8.6 || ^17 || ^18
     peerDependenciesMeta:
@@ -5461,12 +5391,6 @@ packages:
     resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
     dependencies:
       '@types/react': 18.0.28
-    dev: true
-
-  /@types/react-dom@18.2.11:
-    resolution: {integrity: sha512-zq6Dy0EiCuF9pWFW6I6k6W2LdpUixLE4P6XjXU1QHLfak3GPACQfLwEuHzY5pOYa4hzj1d0GxX/P141aFjZsyg==}
-    dependencies:
-      '@types/react': 18.2.25
     dev: true
 
   /@types/react-dom@18.2.7:
@@ -9482,6 +9406,10 @@ packages:
 
   /immer@10.0.2:
     resolution: {integrity: sha512-Rx3CqeqQ19sxUtYV9CU911Vhy8/721wRFnJv3REVGWUmoAcIwzifTsdmJte/MV+0/XpM35LZdQMBGkRIoLPwQA==}
+    dev: false
+
+  /immer@10.0.3:
+    resolution: {integrity: sha512-pwupu3eWfouuaowscykeckFmVTpqbzW+rXFCX8rQLkZzM9ftBmU/++Ra+o+L27mz03zJTlyV4UUr+fdKNffo4A==}
 
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -15201,19 +15129,22 @@ packages:
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
-  /zustand@4.3.9(immer@10.0.2)(react@18.2.0):
-    resolution: {integrity: sha512-Tat5r8jOMG1Vcsj8uldMyqYKC5IZvQif8zetmLHs9WoZlntTHmIoNM8TpLRY31ExncuUvUOXehd0kvahkuHjDw==}
+  /zustand@4.4.7(immer@10.0.3)(react@18.2.0):
+    resolution: {integrity: sha512-QFJWJMdlETcI69paJwhSMJz7PPWjVP8Sjhclxmxmxv/RYI7ZOvR5BHX+ktH0we9gTWQMxcne8q1OY8xxz604gw==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
+      '@types/react': '>=16.8'
       immer: '>=9.0'
       react: '>=16.8'
     peerDependenciesMeta:
+      '@types/react':
+        optional: true
       immer:
         optional: true
       react:
         optional: true
     dependencies:
-      immer: 10.0.2
+      immer: 10.0.3
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
 

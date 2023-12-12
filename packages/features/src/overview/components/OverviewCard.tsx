@@ -12,15 +12,18 @@ import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAccount } from '../../common/hooks/useAccount'
-import { useWalletUi } from '../../common/hooks/useWalletUi'
 import { truncateString } from '../../common/lib/string'
 import { AvatarMenu } from './AvatarMenu'
 
 export const OverviewCard = () => {
-  const { credentialAddress } = useWalletUi()
-  if (!credentialAddress) return null
   const navigate = useNavigate()
-  const { isLoading: accountLoading, minaBalance } = useAccount()
+  const {
+    isLoading: accountLoading,
+    minaBalance,
+    gradientBackground,
+    publicKey,
+    copyWalletAddress
+  } = useAccount()
   const { data: fiatPriceData, isLoading: priceLoading } = useFiatPrice()
   const overviewLoading = accountLoading || priceLoading
   const fiatBalance = useMemo(() => {
@@ -29,14 +32,15 @@ export const OverviewCard = () => {
     if (!rawFiatPrice) return
     return Number(minaBalance) * rawFiatPrice
   }, [minaBalance, fiatPriceData])
+  if (!publicKey) return null
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[16px] gap-4 p-[2px] relative"
-      // style={{ backgroundImage: gradientBackground }}
+      style={{ backgroundImage: gradientBackground }}
     >
       <div
         className="absolute h-full w-full opacity-25 rounded-[14px] pointer-events-none"
-        // style={{ backgroundImage: gradientBackground }}
+        style={{ backgroundImage: gradientBackground }}
       />
       <div className="flex flex-col flex-1 w-full gap-4 bg-background rounded-[14px] py-4 px-4 backdrop-blur-2xl">
         {overviewLoading ? (
@@ -66,9 +70,9 @@ export const OverviewCard = () => {
               className="text-sm font-semibold dark:text-blue-400 text-blue-600"
               data-testid="dashboard__addressTruncated"
             >
-              {credentialAddress &&
+              {publicKey &&
                 truncateString({
-                  value: credentialAddress,
+                  value: publicKey,
                   firstCharCount: 8,
                   endCharCount: 8
                 })}
@@ -77,7 +81,7 @@ export const OverviewCard = () => {
               <TooltipTrigger asChild>
                 <Button
                   variant="link"
-                  // onClick={credentialAddress}
+                  onClick={copyWalletAddress}
                   className="!p-0 !h-auto"
                 >
                   <CopyIcon size={16} />

@@ -5,13 +5,12 @@ import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useWalletUi } from '../../common/hooks/useWalletUi'
+import { useAccount } from '../../common/hooks/useAccount'
 
 export const ReceiveView = () => {
   const { theme } = useTheme()
   const navigate = useNavigate()
-  const { currentWallet } = useWalletUi()
-  const walletAddress = currentWallet?.credential?.address
+  const { copyWalletAddress, publicKey } = useAccount()
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-4">
@@ -21,17 +20,17 @@ export const ReceiveView = () => {
         />
         <div className="flex flex-col flex-1 gap-6">
           <Card className="flex justify-center items-center p-4">
-            {walletAddress && (
+            {publicKey && (
               <div className="relative max-w-[256px] max-h-[256px] w-full h-full">
                 <QRCode
-                  value={walletAddress}
+                  value={publicKey}
                   bgColor={theme === 'dark' ? '#020617' : '#ffffff'}
                   fgColor={theme === 'dark' ? '#ffffff' : '#000000'}
                   className="relative w-full h-full rounded-lg"
                 />
                 <div
                   className="absolute w-full h-full inset-0 dark:mix-blend-darken mix-blend-lighten"
-                  style={{ backgroundImage: gradientBackground }}
+                  style={{ backgroundImage: '' }}
                 />
               </div>
             )}
@@ -42,7 +41,7 @@ export const ReceiveView = () => {
                 className="p-2 break-all text-center leading-8 cursor-pointer"
                 onClick={copyWalletAddress}
               >
-                {walletAddress}
+                {publicKey}
               </Card>
             </TooltipTrigger>
             <TooltipContent>

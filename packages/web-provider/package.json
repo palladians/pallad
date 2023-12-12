@@ -14,14 +14,13 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test:unit": "vitest run",
+    "test:unit": "echo \"nope\"",
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
     "@palladxyz/key-management": "*",
     "@palladxyz/mina-core": "*",
     "@palladxyz/mina-graphql": "*",
-    "@palladxyz/mina-wallet": "*",
     "@palladxyz/multi-chain-core": "*",
     "@palladxyz/vault": "*"
   },

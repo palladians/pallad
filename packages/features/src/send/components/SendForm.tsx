@@ -18,7 +18,8 @@ export const SendForm = () => {
   const { data: accountData, isLoading: accountLoading } = useAccount()
   if (accountLoading) return null
   const totalBalance =
-    accountData?.balance.total && accountData.balance.total / 1_000_000_000
+    accountData?.accountInfo.balance.total &&
+    accountData?.accountInfo.balance.total / 1_000_000_000
   const {
     register,
     handleSubmit,
@@ -46,10 +47,9 @@ export const SendForm = () => {
     const currentFee = TransactionFee[fee]
     setTransactionDetails({
       to: payload.to,
-      fee: currentFee,
+      fee: String(currentFee),
       amount: payload.amount,
-      memo: payload.memo,
-      kind: 'payment'
+      memo: payload.memo
     })
     navigate('/transactions/summary')
   }

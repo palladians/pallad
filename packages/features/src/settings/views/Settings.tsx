@@ -6,6 +6,7 @@ import {
   RadioGroupItem,
   useToast
 } from '@palladxyz/ui'
+import { useVault } from '@palladxyz/vault'
 import { TrashIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useNavigate } from 'react-router-dom'
@@ -13,13 +14,12 @@ import { useSWRConfig } from 'swr'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
-import { useWalletUi } from '../../common/hooks/useWalletUi'
 import { useAppStore } from '../../common/store/app'
 
 export const SettingsView = () => {
   const { toast } = useToast()
   const navigate = useNavigate()
-  const { switchNetwork } = useWalletUi()
+  const switchNetwork = useVault((state) => state.switchNetwork)
   const { setTheme, theme } = useTheme()
   const { mutate } = useSWRConfig()
   const { network } = useAppStore((state) => ({

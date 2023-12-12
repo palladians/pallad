@@ -1,6 +1,6 @@
 import { Multichain } from '@palladxyz/multi-chain-core'
 
-import { useWalletUi } from '../../common/hooks/useWalletUi'
+import { useAccount } from '../../common/hooks/useAccount'
 import { structurizeTransactions } from '../utils/structurizeTransactions'
 import { TxTile } from './TxTile'
 
@@ -9,11 +9,11 @@ interface TransactionsListProps {
 }
 
 export const TransactionsList = ({ transactions }: TransactionsListProps) => {
-  const { credentialAddress } = useWalletUi()
-  if (!credentialAddress) return null
+  const { publicKey } = useAccount()
+  if (!publicKey) return null
   const txDates =
     transactions &&
-    Object.entries(structurizeTransactions([transactions, credentialAddress]))
+    Object.entries(structurizeTransactions([transactions, publicKey]))
   return (
     <div className="flex flex-col gap-4">
       {txDates?.map(([date, txs]) => (

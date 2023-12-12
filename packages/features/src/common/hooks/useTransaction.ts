@@ -1,20 +1,22 @@
 import { Mina } from '@palladxyz/mina-core'
+import { useVault } from '@palladxyz/vault'
 import useSWR from 'swr'
 
 import { useAppStore } from '../store/app'
-import { useWalletUi } from './useWalletUi'
 
 export const useTransaction = ({ hash }: { hash: string }) => {
-  const { credentialAddress } = useWalletUi()
+  const currentWallet = useVault((state) => state.getCurrentWallet())
+  const getTransaction = useVault((state) => state.getTransaction)
+  const { publicKey } = currentWallet.accountInfo
   const network = useAppStore((state) => state.network)
   return useSWR(
-    credentialAddress
+    publicKey
       ? [
           'transaction',
           hash,
           Mina.Networks[network.toUpperCase() as keyof typeof Mina.Networks]
         ]
       : null,
-    async () => []
+    () => getTransaction(network, publicKey, hash)
   )
 }

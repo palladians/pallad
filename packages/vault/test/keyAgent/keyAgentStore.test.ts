@@ -1,7 +1,6 @@
 import {
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
-  InMemoryKeyAgent,
   MinaPayload,
   MinaSpecificArgs,
   Network
@@ -10,7 +9,7 @@ import { Mina } from '@palladxyz/mina-core'
 import { act, renderHook } from '@testing-library/react'
 
 import { KeyAgents } from '../../src'
-import { useKeyAgentStore } from '../../src'
+import { useVault } from '../../src'
 
 const PREGENERATED_MNEMONIC = [
   'habit',
@@ -33,14 +32,12 @@ const params = {
 }
 const getPassphrase = async () => Buffer.from(params.passphrase)
 
-describe('AccountStore', () => {
+describe('KeyAgentStore', () => {
   let randomMnemonic: string[]
   let agentArgs: FromBip39MnemonicWordsProps
   let agentArgs2: FromBip39MnemonicWordsProps
   const keyAgentName = 'test key agent'
   const keyAgentName2 = 'test key agent 2'
-  let keyAgentInitialised: InMemoryKeyAgent
-  let keyAgentInitialised2: InMemoryKeyAgent
 
   beforeEach(async () => {
     randomMnemonic = generateMnemonicWords()
@@ -52,48 +49,46 @@ describe('AccountStore', () => {
       getPassphrase: getPassphrase,
       mnemonicWords: randomMnemonic
     }
-    keyAgentInitialised = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
-    keyAgentInitialised2 = await InMemoryKeyAgent.fromMnemonicWords(agentArgs2)
   })
 
   afterEach(() => {
     const {
       result: { current }
-    } = renderHook(() => useKeyAgentStore())
+    } = renderHook(() => useVault())
     act(() => current.clear())
   })
 
   it('should create an keyAgent store', async () => {
-    const { result } = renderHook(() => useKeyAgentStore())
+    const { result } = renderHook(() => useVault())
     expect(result.current.keyAgents).toEqual({})
   })
 
   it('should initialize an InMemoryKeyAgent in the store', async () => {
-    const { result } = renderHook(() => useKeyAgentStore())
+    const { result } = renderHook(() => useVault())
     await act(async () => {
       await result.current.initialiseKeyAgent(
         keyAgentName,
         KeyAgents.InMemory,
-        keyAgentInitialised
+        agentArgs
       )
     })
     expect(result.current.keyAgents[keyAgentName]).toBeDefined()
   })
 
   it('should add two InMemoryKeyAgents and remove one from store', async () => {
-    const { result } = renderHook(() => useKeyAgentStore())
+    const { result } = renderHook(() => useVault())
     await act(async () => {
       // add first key agent
       await result.current.initialiseKeyAgent(
         keyAgentName,
         KeyAgents.InMemory,
-        keyAgentInitialised
+        agentArgs
       )
       // add second key agent
       await result.current.initialiseKeyAgent(
         keyAgentName2,
         KeyAgents.InMemory,
-        keyAgentInitialised2
+        agentArgs2
       )
     })
     const keyAgent1 = result.current.keyAgents[keyAgentName]
@@ -110,19 +105,19 @@ describe('AccountStore', () => {
   })
 
   it('should add two InMemoryKeyAgents and derive credentials for both at addresses index 0', async () => {
-    const { result } = renderHook(() => useKeyAgentStore())
+    const { result } = renderHook(() => useVault())
     await act(async () => {
       // add first key agent
       await result.current.initialiseKeyAgent(
         keyAgentName,
         KeyAgents.InMemory,
-        keyAgentInitialised
+        agentArgs
       )
       // add second key agent
       await result.current.initialiseKeyAgent(
         keyAgentName2,
         KeyAgents.InMemory,
-        keyAgentInitialised2
+        agentArgs2
       )
     })
     // check that both key agents are in the store

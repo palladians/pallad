@@ -4,24 +4,24 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { AppLayout } from '../../common/components/AppLayout'
 import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useAccount } from '../../common/hooks/useAccount'
 import { useTransaction } from '../../common/hooks/useTransaction'
-import { useWalletUi } from '../../common/hooks/useWalletUi'
 import { TxIndicator } from '../components/TxIndicator'
 import { structurizeTransaction } from '../utils/structurizeTransactions'
 
 export const TransactionDetailsView = () => {
-  const { credentialAddress } = useWalletUi()
+  const { publicKey } = useAccount()
   const navigate = useNavigate()
   const { hash } = useParams()
   if (!hash) return null
-  if (!credentialAddress) return null
+  if (!publicKey) return null
   const { data: transactionData, isLoading: transactionLoading } =
     useTransaction({ hash })
   const transaction =
     transactionData &&
     structurizeTransaction({
-      tx: transactionData,
-      walletPublicKey: credentialAddress
+      tx: transactionData as any,
+      walletPublicKey: publicKey
     })
   const transactionMetaFields = transaction && [
     { label: 'Hash', value: transaction.hash },
@@ -56,7 +56,7 @@ export const TransactionDetailsView = () => {
               </div>
             )}
             {transactionMetaFields?.map(({ label, value }) => (
-              <MetaField key={label} label={label} value={value} />
+              <MetaField key={label} label={label} value={value as any} />
             ))}
           </div>
         )}
