@@ -1,10 +1,10 @@
 import { Mina } from '@palladxyz/mina-core'
 import { useVault } from '@palladxyz/vault'
+import easyMeshGradient from 'easy-mesh-gradient'
+import { useMemo } from 'react'
 import useSWR from 'swr'
 
 import { useAppStore } from '../store/app'
-import easyMeshGradient from 'easy-mesh-gradient'
-import { useMemo } from 'react'
 
 export const useAccount = () => {
   const currentWallet = useVault((state) => state.getCurrentWallet())

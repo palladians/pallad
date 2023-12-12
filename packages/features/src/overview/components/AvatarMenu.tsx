@@ -8,6 +8,7 @@ import {
 } from '@palladxyz/ui'
 import { LockIcon, SettingsIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+
 import { useAccount } from '../../common/hooks/useAccount'
 
 export const AvatarMenu = () => {

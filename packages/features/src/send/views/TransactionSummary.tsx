@@ -51,7 +51,7 @@ export const TransactionSummaryView = () => {
     const signedTx = await sign(constructedTx as any) // TODO: Fix this with new wallet API
     if (!signedTx) return
     const submittedTx = await submitTx(signedTx as any)
-    console.log('>>>ST', submittedTx?.result)
+    console.log('>>>ST', submittedTx)
     navigate('/transactions/success')
   }
   return (
