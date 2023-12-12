@@ -3,7 +3,7 @@ import { AccountInfoArgs, TxStatusArgs } from '@palladxyz/mina-core'
 import { MinaProvider } from '../src'
 
 const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
-const nodeUrlMainnet = 'https://proxy.minaexplorer.com/'
+const nodeUrlMainnet = 'https://proxy.minaexplorer.com/graphql'
 
 describe('Provider', () => {
   let provider: MinaProvider
