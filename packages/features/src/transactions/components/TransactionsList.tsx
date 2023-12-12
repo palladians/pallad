@@ -1,6 +1,6 @@
 import { Multichain } from '@palladxyz/multi-chain-core'
-import { useVault } from '@palladxyz/vault'
 
+import { useAccount } from '../../common/hooks/useAccount'
 import { structurizeTransactions } from '../utils/structurizeTransactions'
 import { TxTile } from './TxTile'
 
@@ -9,8 +9,7 @@ interface TransactionsListProps {
 }
 
 export const TransactionsList = ({ transactions }: TransactionsListProps) => {
-  const currentWallet = useVault((state) => state.getCurrentWallet())
-  const { publicKey } = currentWallet.accountInfo
+  const { publicKey } = useAccount()
   if (!publicKey) return null
   const txDates =
     transactions &&

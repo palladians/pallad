@@ -7,7 +7,6 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@palladxyz/ui'
-import { useVault } from '@palladxyz/vault'
 import { CopyIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -17,15 +16,15 @@ import { truncateString } from '../../common/lib/string'
 import { AvatarMenu } from './AvatarMenu'
 
 export const OverviewCard = () => {
-  const currentWallet = useVault((state) => state.getCurrentWallet())
   const navigate = useNavigate()
   const {
     isLoading: accountLoading,
     minaBalance,
-    gradientBackground
+    gradientBackground,
+    publicKey,
+    copyWalletAddress
   } = useAccount()
   const { data: fiatPriceData, isLoading: priceLoading } = useFiatPrice()
-  const { publicKey } = currentWallet.accountInfo
   const overviewLoading = accountLoading || priceLoading
   const fiatBalance = useMemo(() => {
     if (!minaBalance) return
@@ -82,7 +81,7 @@ export const OverviewCard = () => {
               <TooltipTrigger asChild>
                 <Button
                   variant="link"
-                  // onClick={credentialAddress}
+                  onClick={copyWalletAddress}
                   className="!p-0 !h-auto"
                 >
                   <CopyIcon size={16} />

@@ -1,17 +1,16 @@
 import { Card, Tooltip, TooltipContent, TooltipTrigger } from '@palladxyz/ui'
-import { useVault } from '@palladxyz/vault'
 import { useTheme } from 'next-themes'
 import QRCode from 'react-qr-code'
 import { useNavigate } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useAccount } from '../../common/hooks/useAccount'
 
 export const ReceiveView = () => {
   const { theme } = useTheme()
   const navigate = useNavigate()
-  const currentWallet = useVault((state) => state.getCurrentWallet())
-  const { publicKey } = currentWallet.accountInfo
+  const { copyWalletAddress, publicKey } = useAccount()
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-4">
@@ -40,7 +39,7 @@ export const ReceiveView = () => {
             <TooltipTrigger>
               <Card
                 className="p-2 break-all text-center leading-8 cursor-pointer"
-                onClick={() => console.log('copied')}
+                onClick={copyWalletAddress}
               >
                 {publicKey}
               </Card>

@@ -1,17 +1,16 @@
 import { Skeleton } from '@palladxyz/ui'
-import { useVault } from '@palladxyz/vault'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useAccount } from '../../common/hooks/useAccount'
 import { useTransaction } from '../../common/hooks/useTransaction'
 import { TxIndicator } from '../components/TxIndicator'
 import { structurizeTransaction } from '../utils/structurizeTransactions'
 
 export const TransactionDetailsView = () => {
-  const currentWallet = useVault((state) => state.getCurrentWallet())
-  const { publicKey } = currentWallet.accountInfo
+  const { publicKey } = useAccount()
   const navigate = useNavigate()
   const { hash } = useParams()
   if (!hash) return null

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppLayout } from '../../common/components/AppLayout'
 import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useAccount } from '../../common/hooks/useAccount'
 import { truncateString } from '../../common/lib/string'
 import { useTransactionStore } from '../../common/store/transaction'
 
@@ -17,8 +18,7 @@ export const TransactionSummaryView = () => {
   const sign = useVault((state) => state.sign)
   const submitTx = useVault((state) => state.submitTx)
   const constructTx = useVault((state) => state.constructTx)
-  const currentWallet = useVault((state) => state.getCurrentWallet())
-  const { publicKey } = currentWallet.accountInfo
+  const { publicKey } = useAccount()
   if (!publicKey) return null
   const outgoingTransaction = useTransactionStore(
     (state) => state.outgoingTransaction

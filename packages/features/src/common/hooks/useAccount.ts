@@ -1,4 +1,5 @@
 import { Mina } from '@palladxyz/mina-core'
+import { useToast } from '@palladxyz/ui'
 import { useVault } from '@palladxyz/vault'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
@@ -7,6 +8,7 @@ import useSWR from 'swr'
 import { useAppStore } from '../store/app'
 
 export const useAccount = () => {
+  const { toast } = useToast()
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const getAccountInfo = useVault((state) => state.getAccountInfo)
   const network = useAppStore((state) => state.network)
@@ -35,5 +37,17 @@ export const useAccount = () => {
       }),
     [publicKey]
   )
-  return { ...swr, minaBalance, gradientBackground }
+  const copyWalletAddress = async () => {
+    await navigator.clipboard.writeText(publicKey || '')
+    toast({
+      title: 'Wallet address was copied.'
+    })
+  }
+  return {
+    ...swr,
+    minaBalance,
+    gradientBackground,
+    copyWalletAddress,
+    publicKey
+  }
 }
