@@ -51,7 +51,6 @@ This is a monorepo for all the Pallad-related code.
   - `key-management` - Blockchain agnostic key management.
   - `mina-core` - Core Mina Package SDK.
   - `mina-graphql` - GraphQL API client for the Mina Protocol.
-  - `mina-wallet` - Wrapper package for Mina Protocol wallets.
   - `offchain-data` - Client for fetching off-chain data like fiat price.
   - `persistence` - Persistence logic for wallet related data.
   - `ui` - UI framework based on shadcn/ui and Tailwind.
