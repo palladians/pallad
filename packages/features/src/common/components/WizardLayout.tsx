@@ -1,6 +1,7 @@
-import { Toggle } from '@palladxyz/ui'
 import { MoonIcon, SunIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
+
+import { Toggle } from '@/components/ui/toggle'
 
 import Logo from '../assets/logo.svg'
 

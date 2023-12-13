@@ -1,11 +1,4 @@
 import {
-  Button,
-  Card,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@palladxyz/ui'
-import {
   BookIcon,
   CoinsIcon,
   LayoutDashboardIcon,
@@ -13,6 +6,14 @@ import {
 } from 'lucide-react'
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 
 interface BottomNavigationProps {
   openCommandMenu: () => void

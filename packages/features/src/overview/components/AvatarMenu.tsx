@@ -1,13 +1,13 @@
+import { LockIcon, SettingsIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
-  Avatar,
-  AvatarFallback,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
-} from '@palladxyz/ui'
-import { LockIcon, SettingsIcon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+} from '@/components/ui/dropdown-menu'
 
 import { useAccount } from '../../common/hooks/useAccount'
 

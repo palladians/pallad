@@ -1,19 +1,19 @@
 import { getSessionPersistence } from '@palladxyz/persistence'
-import {
-  Alert,
-  AlertTitle,
-  Button,
-  Input,
-  Label,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@palladxyz/ui'
 import { useVault } from '@palladxyz/vault'
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+
+import { Alert, AlertTitle } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'

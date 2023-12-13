@@ -1,3 +1,6 @@
-import postcssConfig from '@palladxyz/ui/postcss.config.mjs'
-
-export default postcssConfig
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {}
+  }
+}

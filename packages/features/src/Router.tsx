@@ -1,7 +1,9 @@
-import { Toaster, TooltipProvider } from '@palladxyz/ui'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
+
+import { Toaster } from '@/components/ui/toaster'
+import { TooltipProvider } from '@/components/ui/tooltip'
 
 import { AboutView } from './about/views/About'
 import { AddressBookView } from './address-book/views/AddressBook'

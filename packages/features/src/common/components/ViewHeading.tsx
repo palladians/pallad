@@ -1,5 +1,6 @@
-import { Button } from '@palladxyz/ui'
 import { ArrowLeftIcon } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
 
 type ButtonProps = {
   label: React.ReactNode

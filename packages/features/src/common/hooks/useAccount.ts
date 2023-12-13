@@ -1,11 +1,12 @@
 import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
-import { useToast } from '@palladxyz/ui'
 import { useVault } from '@palladxyz/vault'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
+
+import { useToast } from '@/components/ui/use-toast'
 
 import { useAppStore } from '../store/app'
 

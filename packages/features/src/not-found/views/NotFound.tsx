@@ -1,5 +1,6 @@
-import { Button } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'

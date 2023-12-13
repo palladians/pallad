@@ -1,5 +1,6 @@
-import { Button } from '@palladxyz/ui'
 import { ElementType } from 'react'
+
+import { Button } from '@/components/ui/button'
 
 import { MetaField } from '../../common/components/MetaField'
 import { ViewHeading } from '../../common/components/ViewHeading'

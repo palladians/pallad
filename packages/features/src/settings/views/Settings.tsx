@@ -1,17 +1,20 @@
 import { Mina } from '@palladxyz/mina-core'
-import {
-  Button,
-  Card,
-  Label,
-  RadioGroup,
-  RadioGroupItem,
-  useToast
-} from '@palladxyz/ui'
 import { useVault } from '@palladxyz/vault'
 import { TrashIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useNavigate } from 'react-router-dom'
 import { useSWRConfig } from 'swr'
+
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import {
+  Label,
+  RadioGroup,
+  RadioGroupItem,
+  useToast
+} from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useToast } from '@/components/ui/use-toast'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'

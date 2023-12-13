@@ -1,5 +1,7 @@
-import { Avatar, AvatarFallback, Card } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Card } from '@/components/ui/card'
 
 import { formatCompact } from '../../common/lib/numbers'
 

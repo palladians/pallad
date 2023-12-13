@@ -1,7 +1,13 @@
-import { Card, Tooltip, TooltipContent, TooltipTrigger } from '@palladxyz/ui'
 import { useTheme } from 'next-themes'
 import QRCode from 'react-qr-code'
 import { useNavigate } from 'react-router-dom'
+
+import { Card } from '@/components/ui/card'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'

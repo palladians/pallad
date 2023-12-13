@@ -1,6 +1,11 @@
-import { Badge, Button, Checkbox, cn, Label } from '@palladxyz/ui'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'

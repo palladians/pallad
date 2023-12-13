@@ -1,7 +1,8 @@
 import { getSessionPersistence } from '@palladxyz/persistence'
-import { Button } from '@palladxyz/ui'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
 
 import { WizardLayout } from '../../common/components'
 import { useAppStore } from '../../common/store/app'

@@ -1,4 +1,4 @@
-import '@palladxyz/ui/dist/index.css'
+import '@/index.css'
 import { useEffect } from 'react'
 import {
   ActionType,
@@ -8,7 +8,7 @@ import {
 } from '@ladle/react'
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from 'next-themes'
-import { TooltipProvider } from '@palladxyz/ui'
+import { TooltipProvider } from '@/components/ui/tooltip'
 
 export const Provider: GlobalProvider = ({ children }) => {
   const { dispatch } = useLadleContext()

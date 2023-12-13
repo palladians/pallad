@@ -1,10 +1,12 @@
 import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
-import { Button, Card } from '@palladxyz/ui'
 import { useVault } from '@palladxyz/vault'
 import { ArrowDownLeftIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { MetaField } from '../../common/components/MetaField'

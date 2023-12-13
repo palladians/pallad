@@ -1,12 +1,4 @@
 import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from '@palladxyz/ui'
-import {
   ArrowRightLeftIcon,
   BookIcon,
   CoinsIcon,
@@ -20,6 +12,15 @@ import {
 } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from '@/components/ui/command'
 
 import { useAccount } from '../hooks/useAccount'
 

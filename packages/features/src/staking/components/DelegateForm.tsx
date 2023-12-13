@@ -1,8 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Input, Label, RadioGroup, RadioGroupItem } from '@palladxyz/ui'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 import { OutgoingTransaction } from '../../common/types'
 import { DelegateFormSchema } from './DelegateForm.schema'

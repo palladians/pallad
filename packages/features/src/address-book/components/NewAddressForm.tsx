@@ -1,8 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Input, Label } from '@palladxyz/ui'
 import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 import { useAddressBookStore } from '../../common/store/addressBook'
 import { NewAddressFormSchema } from './NewAddressForm.schema'

@@ -1,5 +1,7 @@
-import { Avatar, AvatarFallback, Skeleton } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import MinaLogo from '../../common/assets/mina.svg'
 import { ViewHeading } from '../../common/components/ViewHeading'

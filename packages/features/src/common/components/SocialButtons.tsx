@@ -1,5 +1,6 @@
-import { Button } from '@palladxyz/ui'
 import { TwitterIcon } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
 
 export const SocialButtons = () => {
   return (

@@ -1,3 +1,3 @@
-import postcssConfig from '@palladxyz/ui/postcss.config.mjs'
+import postcssConfig from '@palladxyz/features/postcss.config.mjs'
 
 export default postcssConfig

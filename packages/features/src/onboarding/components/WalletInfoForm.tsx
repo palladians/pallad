@@ -1,8 +1,13 @@
-import { Button, Checkbox, cn, Input, Label } from '@palladxyz/ui'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'

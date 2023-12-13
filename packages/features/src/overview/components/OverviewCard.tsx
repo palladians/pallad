@@ -1,15 +1,16 @@
 import { useFiatPrice } from '@palladxyz/offchain-data'
-import {
-  Button,
-  Label,
-  Skeleton,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@palladxyz/ui'
 import { CopyIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 
 import { useAccount } from '../../common/hooks/useAccount'
 import { truncateString } from '../../common/lib/string'

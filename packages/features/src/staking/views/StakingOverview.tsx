@@ -1,5 +1,6 @@
-import { Card } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
+
+import { Card } from '@/components/ui/card'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { MetaField } from '../../common/components/MetaField'

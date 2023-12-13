@@ -1,5 +1,6 @@
-import { Skeleton } from '@palladxyz/ui'
 import { useNavigate, useParams } from 'react-router-dom'
+
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { MetaField } from '../../common/components/MetaField'

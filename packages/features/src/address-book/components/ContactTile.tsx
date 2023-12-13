@@ -1,14 +1,14 @@
+import { TrashIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+
+import { Avatar } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import {
-  Avatar,
-  AvatarFallback,
-  Button,
-  Card,
   Tooltip,
   TooltipContent,
   TooltipTrigger
-} from '@palladxyz/ui'
-import { TrashIcon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+} from '@/components/ui/tooltip'
 
 import { truncateString } from '../../common/lib/string'
 import { useAddressBookStore } from '../../common/store/addressBook'

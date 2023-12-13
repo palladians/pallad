@@ -1,5 +1,7 @@
-import { Button, Card } from '@palladxyz/ui'
 import { useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 
 import packageJson from '../../../package.json'
 import Logo from '../../common/assets/logo.svg'

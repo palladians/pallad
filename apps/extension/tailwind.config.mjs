@@ -1,9 +1,9 @@
-import tailwindConfig from '@palladxyz/ui/tailwind.config.mjs'
+import tailwindConfig from '@palladxyz/features/tailwind.config.mjs'
 
 export default {
   content: [
     ...tailwindConfig.content,
-    '../../packages/{ui,features}/src/**/*.{js,jsx,ts,tsx,mdx}'
+    '../../packages/features/src/**/*.{js,jsx,ts,tsx,mdx}'
   ],
   presets: [tailwindConfig]
 }

@@ -1,5 +1,5 @@
 import './assets/app.css'
-import '@palladxyz/ui/dist/index.css'
+import '@palladxyz/features/dist/index.css'
 
 import { Router } from '@palladxyz/features'
 import { ThemeProvider } from 'next-themes'

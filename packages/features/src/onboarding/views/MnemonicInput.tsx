@@ -7,12 +7,16 @@ import {
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
-import { Button, cn, Label, Textarea } from '@palladxyz/ui'
 import { KeyAgents, useVault } from '@palladxyz/vault'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
+
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'
