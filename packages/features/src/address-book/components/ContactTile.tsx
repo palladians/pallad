@@ -1,7 +1,7 @@
 import { TrashIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-import { Avatar } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import {

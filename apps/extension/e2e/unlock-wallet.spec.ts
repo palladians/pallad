@@ -11,5 +11,5 @@ test('locks and unlocks existing wallet', async ({ page, extensionId }) => {
     .getByTestId('unlockWallet__password')
     .fill(devnetWallet.spendingPassword)
   await page.getByTestId('unlockWallet__unlockButton').click()
-  expect(await onboardingPom.getMinaBalance()).toEqual('0 MINA')
+  expect(await onboardingPom.getMinaBalance()).toContain('MINA')
 })

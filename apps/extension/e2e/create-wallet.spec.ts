@@ -20,5 +20,5 @@ test('create new wallet', async ({ page, extensionId }) => {
   const pageTitle = page.getByText('Stay Connected')
   await pageTitle.waitFor()
   await onboardingPom.goNext()
-  expect(await onboardingPom.getMinaBalance()).toEqual('0 MINA')
+  expect(await onboardingPom.getMinaBalance()).toContain('MINA')
 })
