@@ -1,7 +1,7 @@
 name: Extension E2E
 on:
   workflow_run:
-    workflows: ["Extension CI"]
+    workflows: ['Extension CI']
     branches: [main]
     types: [completed]
   workflow_dispatch:
@@ -11,10 +11,12 @@ jobs:
     env:
       VITE_APP_MODE: web
       VITE_APP_DEFAULT_NETWORK: Devnet
-      NODE_OPTIONS: "--max_old_space_size=4096"
+      NODE_OPTIONS: '--max_old_space_size=4096'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Setup deps
+        run: sudo apt-get install xvfb
       - name: Setup env
         uses: ./.github/actions/setup
         with:
@@ -30,7 +32,7 @@ jobs:
         working-directory: apps/extension
         run: pnpm test:e2e:install
       - name: Run E2E tests
-        run: pnpm test:e2e:extension
+        run: xvfb-run --auto-servernum pnpm test:e2e:extension
       - uses: actions/upload-artifact@v3
         with:
           name: pallad-extension-e2e
