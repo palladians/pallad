@@ -13,7 +13,6 @@ export type UnifiedMinaProviderConfig = {
 }
 
 export interface UnifiedMinaProviderType {
-  onNetworkChanged(listener: (url: string) => void): void
   changeNetwork(nodeUrl: string, archiveUrl: string): Promise<void>
   destroy(): Promise<void>
 

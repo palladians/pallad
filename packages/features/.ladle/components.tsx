@@ -1,4 +1,4 @@
-import '@/index.css'
+import '@/globals.css'
 import { useEffect } from 'react'
 import {
   ActionType,

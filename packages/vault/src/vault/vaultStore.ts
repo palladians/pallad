@@ -184,9 +184,6 @@ export const useVault = create<
           derivedCredential as GroupedCredentials
         )
       },
-      onNetworkChanged: (listener) => {
-        networkManager.onNetworkChanged(listener)
-      },
       getCurrentNetwork: () => {
         return networkManager.getCurrentNetwork()
       },

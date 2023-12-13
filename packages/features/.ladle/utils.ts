@@ -8,7 +8,6 @@ const MNEMONIC =
 
 export const useStoriesWallet = () => {
   const restoreWallet = useVault((state) => state.restoreWallet)
-  const switchNetwork = useVault((state) => state.switchNetwork)
   useEffect(() => {
     const restore = async () => {
       await restoreWallet(
@@ -25,7 +24,6 @@ export const useStoriesWallet = () => {
           getPassphrase: async () => Buffer.from('passphrase')
         }
       )
-      await switchNetwork(Mina.Networks.DEVNET)
     }
     restore()
   }, [])
