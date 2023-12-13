@@ -1,17 +1,24 @@
 import { Mina } from '@palladxyz/mina-core'
+import { getSessionPersistence } from '@palladxyz/persistence'
 import { useToast } from '@palladxyz/ui'
 import { useVault } from '@palladxyz/vault'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { useAppStore } from '../store/app'
 
 export const useAccount = () => {
+  const navigate = useNavigate()
   const { toast } = useToast()
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const getAccountInfo = useVault((state) => state.getAccountInfo)
+  const restartWallet = useVault((state) => state.restartWallet)
   const network = useAppStore((state) => state.network)
+  const setVaultStateUninitialized = useAppStore(
+    (state) => state.setVaultStateUninitialized
+  )
   const { publicKey } = currentWallet.accountInfo
   const swr = useSWR(
     publicKey
@@ -43,11 +50,23 @@ export const useAccount = () => {
       title: 'Wallet address was copied.'
     })
   }
+  const lockWallet = async () => {
+    await getSessionPersistence().setItem('spendingPassword', '')
+    await useVault.persist.rehydrate()
+    return navigate('/unlock')
+  }
+  const restartCurrentWallet = () => {
+    restartWallet()
+    setVaultStateUninitialized()
+    return navigate('/')
+  }
   return {
     ...swr,
     minaBalance,
     gradientBackground,
     copyWalletAddress,
-    publicKey
+    publicKey,
+    lockWallet,
+    restartCurrentWallet
   }
 }

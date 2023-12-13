@@ -1,6 +1,7 @@
 import {
   constructTransaction,
   FromBip39MnemonicWordsProps,
+  GroupedCredentials,
   MinaPayload,
   MinaSpecificArgs,
   Network
@@ -184,7 +185,7 @@ describe('WalletTest', () => {
     // get key agent
     const instance = keyAgent1?.keyAgent
     const signedTx = await instance!.sign(
-      groupedCredential?.credential,
+      groupedCredential?.credential as GroupedCredentials,
       constructedTx,
       args
     )

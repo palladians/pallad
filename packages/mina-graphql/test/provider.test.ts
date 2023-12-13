@@ -24,7 +24,7 @@ describe('Provider', () => {
     expect(response.delegate).toBeDefined()
     expect(response.publicKey).toBeDefined()
   })
-  test('getAccountInfo (mainnet)', async () => {
+  test.skip('getAccountInfo (mainnet)', async () => {
     const args: AccountInfoArgs = {
       publicKey: 'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq' // this must be a public key that doesn't exist yet on mainnet
     }

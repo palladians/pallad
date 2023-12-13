@@ -17,10 +17,12 @@ import { useNavigate } from 'react-router-dom'
 
 import { WizardLayout } from '../../common/components'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useAccount } from '../../common/hooks/useAccount'
 
 export const UnlockWalletView = () => {
   const [showPassword, setShowPassword] = useState(false)
   const currentWallet = useVault((state) => state.getCurrentWallet())
+  const { restartCurrentWallet } = useAccount()
   const [passwordError, setPasswordError] = useState(false)
   const navigate = useNavigate()
   const {
@@ -70,7 +72,7 @@ export const UnlockWalletView = () => {
           title="Unlock Wallet"
           button={{
             label: 'Restart Wallet',
-            onClick: () => console.log('restart')
+            onClick: restartCurrentWallet
           }}
         />
         {passwordError && (
