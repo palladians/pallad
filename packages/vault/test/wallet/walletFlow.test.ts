@@ -165,13 +165,13 @@ describe('WalletTest', () => {
     )
     // construct transaction, sign, and submit
     const amount = 1 * 1e9
-    const nonce = accountInfo?.nonce ?? 0
+    const inferredNonce = accountInfo?.inferredNonce ?? 0
     const transaction: Mina.TransactionBody = {
       to: groupedCredential!.credential!.address,
       from: groupedCredential!.credential!.address,
       fee: 1 * 1e9,
       amount: amount,
-      nonce: Number(nonce),
+      nonce: Number(inferredNonce),
       memo: 'hello Bob',
       type: 'payment',
       validUntil: 4294967295
@@ -217,7 +217,9 @@ describe('WalletTest', () => {
       }
     }
     // Note: If there is a pending transaction, this will fail -- good nonce management is needed
-    const txId = await provider.provider?.submitTransaction(submitTxArgs)
-    console.log('txId: ', txId)
+    const submitTxResult = await provider.provider?.submitTransaction(
+      submitTxArgs
+    )
+    console.log('submitTxResult: ', submitTxResult)
   })
 })
