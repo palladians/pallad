@@ -16,17 +16,26 @@ export function getTxSend(isRawSignature: boolean): string {
             }, 
             signature: {rawSignature: $rawSignature}) {
             payment {
-              amount
-              fee
-              feeToken
-              from
-              hash
+              __typename
               id
-              isDelegation
-              memo
-              nonce
+              hash
               kind
-              to
+              nonce
+              source {
+                publicKey
+              }
+              receiver {
+                publicKey
+              }
+              feePayer {
+                publicKey
+              }
+              validUntil
+              token
+              amount
+              feeToken
+              fee
+              memo
             }
           }
         }
@@ -48,17 +57,26 @@ export function getTxSend(isRawSignature: boolean): string {
             }, 
             signature: {field: $field, scalar: $scalar}) {
             payment {
-              amount
-              fee
-              feeToken
-              from
-              hash
+              __typename
               id
-              isDelegation
-              memo
-              nonce
+              hash
               kind
-              to
+              nonce
+              source {
+                publicKey
+              }
+              receiver {
+                publicKey
+              }
+              feePayer {
+                publicKey
+              }
+              validUntil
+              token
+              amount
+              feeToken
+              fee
+              memo
             }
           }
         }
@@ -83,17 +101,26 @@ export function getStakeTxSend(isRawSignature: boolean): string {
             }, 
             signature: {rawSignature: $rawSignature}) {
             delegation {
-              amount
-              fee
-              feeToken
-              from
-              hash
+              __typename
               id
-              isDelegation
-              memo
-              nonce
+              hash
               kind
-              to
+              nonce
+              source {
+                publicKey
+              }
+              receiver {
+                publicKey
+              }
+              feePayer {
+                publicKey
+              }
+              validUntil
+              token
+              amount
+              feeToken
+              fee
+              memo
             }
           }
         }
@@ -114,17 +141,26 @@ export function getStakeTxSend(isRawSignature: boolean): string {
             }, 
             signature: {field: $field, scalar: $scalar}) {
             delegation {
-              amount
-              fee
-              feeToken
-              from
-              hash
+              __typename
               id
-              isDelegation
-              memo
-              nonce
+              hash
               kind
-              to
+              nonce
+              source {
+                publicKey
+              }
+              receiver {
+                publicKey
+              }
+              feePayer {
+                publicKey
+              }
+              validUntil
+              token
+              amount
+              feeToken
+              fee
+              memo
             }
           }
         }

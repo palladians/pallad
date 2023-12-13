@@ -18,18 +18,27 @@ export type SubmitTxArgs = {
   }
 }
 
-export interface TxResult {
-  amount: string
-  fee: string
-  feeToken: string
-  from: string
-  hash: string
+interface TxResult {
   id: string
-  isDelegation: boolean
-  memo: string
-  nonce: number
+  hash: string
   kind: string
-  to: string
+  nonce: number
+  source: {
+    publicKey: string
+  }
+  receiver: {
+    publicKey: string
+  }
+  feePayer: {
+    publicKey: string
+  }
+  validUntil: string
+  token: string
+  amount: string
+  feeToken: string
+  fee: string
+  memo: string
+  __typename: string
 }
 
 export interface SubmitPaymentResult {
