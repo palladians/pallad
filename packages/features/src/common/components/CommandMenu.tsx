@@ -21,6 +21,8 @@ import {
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { useAccount } from '../hooks/useAccount'
+
 interface CommandMenuProps {
   open: boolean
   setOpen: (open: boolean) => void
@@ -28,6 +30,7 @@ interface CommandMenuProps {
 
 export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
   const navigate = useNavigate()
+  const { lockWallet } = useAccount()
 
   const COMMAND_GROUPS = [
     {
@@ -105,7 +108,7 @@ export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
         {
           name: 'Lock Wallet',
           icon: LockIcon,
-          onSelect: () => console.log('not yet'),
+          onSelect: lockWallet,
           testId: 'commandMenu__lockWallet'
         }
       ]

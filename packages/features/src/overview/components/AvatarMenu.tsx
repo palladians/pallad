@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAccount } from '../../common/hooks/useAccount'
 
 export const AvatarMenu = () => {
-  const { gradientBackground } = useAccount()
+  const { gradientBackground, lockWallet } = useAccount()
   const navigate = useNavigate()
   return (
     <DropdownMenu>
@@ -31,7 +31,7 @@ export const AvatarMenu = () => {
           <SettingsIcon className="mr-2 h-4 w-4" />
           <span>Settings</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => console.log('not yet')}>
+        <DropdownMenuItem onClick={lockWallet}>
           <LockIcon className="mr-2 h-4 w-4" />
           <span>Lock Wallet</span>
         </DropdownMenuItem>
