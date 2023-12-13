@@ -86,6 +86,7 @@ export type GlobalVaultActions = {
     keyAgentType: KeyAgents,
     credentialName: CredentialName
   ) => Promise<void>
+  restartWallet: () => void
 }
 
 export type GlobalVaultStore = GlobalVaultState & GlobalVaultActions

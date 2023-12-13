@@ -23,6 +23,7 @@ type AppMutators = {
   setNetwork: (network: Multichain.MultiChainNetworks) => void
   setVaultState: (vaultState: VaultState) => void
   setVaultStateInitialized: () => void
+  setVaultStateUninitialized: () => void
 }
 
 type AppStore = AppState & AppMutators & AppQueries
@@ -55,6 +56,10 @@ export const useAppStore = create<AppStore>()(
       setVaultStateInitialized: () => {
         const { setVaultState } = get()
         return setVaultState(VaultState.INITIALIZED)
+      },
+      setVaultStateUninitialized: () => {
+        const { setVaultState } = get()
+        return setVaultState(VaultState.UNINITIALIZED)
       }
     }),
     {

@@ -339,6 +339,20 @@ export const useVault = create<
         })
         ensureAccount(network, derivedCredential.address)
         await _syncWallet(network, derivedCredential)
+      },
+      restartWallet: () => {
+        const {
+          getCurrentWallet,
+          keyAgentName,
+          currentNetwork,
+          removeKeyAgent,
+          removeAccount,
+          removeCredential
+        } = get()
+        const currentWallet = getCurrentWallet()
+        removeAccount(currentNetwork as Networks, '')
+        removeKeyAgent(keyAgentName)
+        removeCredential(currentWallet.credential.credentialName)
       }
     }),
     { name: 'PalladVault', storage: createJSONStorage(getSecurePersistence) }

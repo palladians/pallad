@@ -14,7 +14,11 @@ export const useAccount = () => {
   const { toast } = useToast()
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const getAccountInfo = useVault((state) => state.getAccountInfo)
+  const restartWallet = useVault((state) => state.restartWallet)
   const network = useAppStore((state) => state.network)
+  const setVaultStateUninitialized = useAppStore(
+    (state) => state.setVaultStateUninitialized
+  )
   const { publicKey } = currentWallet.accountInfo
   const swr = useSWR(
     publicKey
@@ -51,12 +55,18 @@ export const useAccount = () => {
     await useVault.persist.rehydrate()
     return navigate('/unlock')
   }
+  const restartCurrentWallet = () => {
+    restartWallet()
+    setVaultStateUninitialized()
+    return navigate('/')
+  }
   return {
     ...swr,
     minaBalance,
     gradientBackground,
     copyWalletAddress,
     publicKey,
-    lockWallet
+    lockWallet,
+    restartCurrentWallet
   }
 }

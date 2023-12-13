@@ -1,5 +1,6 @@
 import { Mina } from '@palladxyz/mina-core'
 import {
+  Button,
   Card,
   Label,
   RadioGroup,
@@ -14,6 +15,7 @@ import { useSWRConfig } from 'swr'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
+import { useAccount } from '../../common/hooks/useAccount'
 import { useAppStore } from '../../common/store/app'
 
 export const SettingsView = () => {
@@ -26,6 +28,7 @@ export const SettingsView = () => {
     setNetwork: state.setNetwork,
     network: state.network
   }))
+  const { restartCurrentWallet } = useAccount()
   const handleNetworkSwitch = async (value: Mina.Networks) => {
     await switchNetwork(value)
     await mutate(() => true, undefined, { revalidate: false })
@@ -117,6 +120,9 @@ export const SettingsView = () => {
             </Card>
           </div>
         </div>
+        <Button variant="destructive" onClick={restartCurrentWallet}>
+          Restart Wallet
+        </Button>
       </div>
     </AppLayout>
   )
