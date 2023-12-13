@@ -1,4 +1,5 @@
 import {
+  constructTransaction,
   FromBip39MnemonicWordsProps,
   MinaPayload,
   MinaSpecificArgs,
@@ -7,6 +8,11 @@ import {
 import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { act, renderHook } from '@testing-library/react'
+import Client from 'mina-signer'
+import {
+  Payment,
+  SignedLegacy
+} from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
 import { KeyAgents } from '../../src'
 import { useVault } from '../../src'
@@ -122,6 +128,7 @@ describe('WalletTest', () => {
       const transactionHistory = await provider.provider?.getTransactions({
         addresses: [storedCredential?.credential?.address as string]
       })
+      result.current.ensureAccount(Mina.Networks.DEVNET, credential?.address)
       result.current.setAccountInfo(
         Mina.Networks.DEVNET,
         storedCredential?.credential?.address as string,
@@ -146,7 +153,8 @@ describe('WalletTest', () => {
     expect(
       result.current.getTransactions(Mina.Networks.DEVNET, credential?.address)
     ).toBeDefined()
-    console.log('credential: ', result.current.credentials['Test Credential'])
+    const groupedCredential = result.current.credentials['Test Credential']
+    console.log('credential: ', groupedCredential)
     console.log(
       'account info: ',
       result.current.getAccountInfo(Mina.Networks.DEVNET, credential?.address)
@@ -155,5 +163,61 @@ describe('WalletTest', () => {
       'transactions: ',
       result.current.getTransactions(Mina.Networks.DEVNET, credential?.address)
     )
+    // construct transaction, sign, and submit
+    const amount = 1 * 1e9
+    const nonce = accountInfo?.nonce ?? 0
+    const transaction: Mina.TransactionBody = {
+      to: groupedCredential!.credential!.address,
+      from: groupedCredential!.credential!.address,
+      fee: 1 * 1e9,
+      amount: amount,
+      nonce: Number(nonce),
+      memo: 'hello Bob',
+      type: 'payment',
+      validUntil: 4294967295
+    }
+    const constructedTx: Mina.ConstructedTransaction = constructTransaction(
+      transaction,
+      Mina.TransactionKind.PAYMENT
+    )
+
+    // get key agent
+    const instance = keyAgent1?.keyAgent
+    const signedTx = await instance!.sign(
+      groupedCredential?.credential,
+      constructedTx,
+      args
+    )
+
+    const minaClient = new Client({ network: args.networkType })
+    const paymentIsVerified = minaClient.verifyPayment(
+      signedTx as SignedLegacy<Payment>
+    )
+    console.log('paymentIsVerified: ', paymentIsVerified)
+    expect(paymentIsVerified).toBeTruthy()
+    const isVerified = minaClient.verifyTransaction(
+      signedTx as Mina.SignedTransaction
+    )
+    expect(isVerified).toBeTruthy()
+    console.log('isVerified: ', isVerified)
+    console.log('signedTx: ', signedTx)
+
+    // submit transaction
+    const submitTxArgs = {
+      signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>
+      kind: Mina.TransactionKind.PAYMENT,
+      transactionDetails: {
+        fee: transaction.fee,
+        to: transaction.to,
+        from: transaction.from,
+        nonce: transaction.nonce,
+        memo: transaction.memo,
+        amount: transaction.amount,
+        validUntil: transaction.validUntil
+      }
+    }
+    // Note: If there is a pending transaction, this will fail -- good nonce management is needed
+    const txId = await provider.provider?.submitTransaction(submitTxArgs)
+    console.log('txId: ', txId)
   })
 })
