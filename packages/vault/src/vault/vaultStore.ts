@@ -116,9 +116,9 @@ export const useVault = create<
         return {
           keyAgent,
           credential,
-          accountInfo: getAccountInfo(Mina.Networks.DEVNET, publicKey)
+          accountInfo: getAccountInfo(Mina.Networks.DEVNET, publicKey) // TODO: figure out why this is fixed to DEVNET
             .accountInfo,
-          transactions: []
+          transactions: [] // TODO: figure out why this is fixed to empty?
         }
       },
       _syncAccountInfo: async (network, derivedCredential) => {
@@ -259,10 +259,12 @@ export const useVault = create<
         }
         const credential = currentWallet.credential
           .credential as GroupedCredentials
+        // TODO: the `args` must be an argument to the sign method
         const args: MinaSpecificArgs = {
           network: Network.Mina,
           accountIndex: 0,
           addressIndex: 0,
+          // TODO: the network type must be an argument
           networkType: 'testnet'
         }
         const signed = await keyAgent?.sign(credential, signable, args)
@@ -279,6 +281,7 @@ export const useVault = create<
           .getProvider(network)
           ?.submitTransaction(submitTxArgs)
         await _syncTransactions(
+          // TODO: should this not be sync accountinfo & transactions?
           network,
           currentWallet?.credential.credential as GroupedCredentials
         )

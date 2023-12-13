@@ -2,6 +2,10 @@ import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { useVault } from '@palladxyz/vault'
 import { ArrowDownLeftIcon } from 'lucide-react'
+import {
+  Payment,
+  SignedLegacy
+} from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,6 +24,7 @@ export const TransactionSummaryView = () => {
   const sign = useVault((state) => state.sign)
   const submitTx = useVault((state) => state.submitTx)
   const constructTx = useVault((state) => state.constructTx)
+  const currentWallet = useVault((state) => state.getCurrentWallet)
   const { publicKey } = useAccount()
   if (!publicKey) return null
   const outgoingTransaction = useTransactionStore(
@@ -43,7 +48,7 @@ export const TransactionSummaryView = () => {
       from: publicKey,
       fee,
       amount,
-      nonce: 0, // TODO: nonce management -- should we have a Nonce Manager in the wallet? Yes.
+      nonce: currentWallet.accountInfo.inferredNonce, // This must be the `AccountInfo`'s inferred nonce
       type: 'payment' // TODO: handle with enums (payment, delegation, zkApp commands?)
     }
     const constructedTx = await constructTx(
@@ -52,7 +57,20 @@ export const TransactionSummaryView = () => {
     )
     const signedTx = await sign(constructedTx as any) // TODO: Fix this with new wallet API
     if (!signedTx) return
-    const submittedTx = await submitTx(signedTx as any)
+    const submitTxArgs = {
+      signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>
+      kind: Mina.TransactionKind.PAYMENT,
+      transactionDetails: {
+        fee: transaction.fee,
+        to: transaction.to,
+        from: transaction.from,
+        nonce: transaction.nonce,
+        memo: transaction.memo,
+        amount: transaction.amount,
+        validUntil: transaction.validUntil
+      }
+    }
+    const submittedTx = await submitTx(submitTxArgs as any)
     console.log('>>>ST', submittedTx)
     navigate('/transactions/success')
   }
