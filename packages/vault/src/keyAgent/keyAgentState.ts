@@ -4,7 +4,8 @@
 
 import {
   FromBip39MnemonicWordsProps,
-  InMemoryKeyAgent
+  InMemoryKeyAgent,
+  SerializableInMemoryKeyAgentData
 } from '@palladxyz/key-management'
 
 export type KeyAgentName = string
@@ -18,6 +19,7 @@ export enum KeyAgents {
  */
 export type SingleKeyAgentState = {
   name: string
+  serializableData: SerializableInMemoryKeyAgentData | undefined
   keyAgentType: KeyAgents | undefined
   keyAgent: InMemoryKeyAgent | undefined
 }
@@ -27,6 +29,7 @@ export type SingleKeyAgentState = {
  */
 export const initialKeyAgentState: SingleKeyAgentState = {
   name: '',
+  serializableData: undefined,
   keyAgentType: undefined,
   keyAgent: undefined
 }

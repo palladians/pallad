@@ -40,6 +40,7 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
         state.keyAgents[name] = {
           keyAgentType: keyAgentType,
           keyAgent: keyAgent,
+          serializableData: keyAgent.getSeralizableData(),
           name: name
         }
       })
@@ -48,6 +49,10 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
   getKeyAgent(name) {
     const { keyAgents } = get()
     return keyAgents[name]?.keyAgent
+    // Can be something like:
+    //  reutrn keyAgents[name]?.serializableData
+    // or even if we want another method to get the keyAgent instance
+    // return new InMemoryKeyAgent({getPassphrase, ...serializableData!})
   },
   removeKeyAgent(name) {
     return set(

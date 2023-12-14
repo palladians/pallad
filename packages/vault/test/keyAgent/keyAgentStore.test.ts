@@ -73,6 +73,9 @@ describe('KeyAgentStore', () => {
       )
     })
     expect(result.current.keyAgents[keyAgentName]).toBeDefined()
+    expect(
+      result.current.keyAgents[keyAgentName]?.serializableData
+    ).toBeDefined()
   })
 
   it('should add two InMemoryKeyAgents and remove one from store', async () => {
@@ -155,7 +158,7 @@ describe('KeyAgentStore', () => {
         payload,
         args,
         getPassphrase,
-        false
+        true // has to be true as we're not writing the credential to the key agent's serializable data
       )
       expect(derivedCredential?.address).toEqual(
         expectedGroupedCredentials.address
