@@ -24,7 +24,7 @@ export const TransactionSummaryView = () => {
   const sign = useVault((state) => state.sign)
   const submitTx = useVault((state) => state.submitTx)
   const constructTx = useVault((state) => state.constructTx)
-  const currentWallet = useVault((state) => state.getCurrentWallet)
+  const currentWallet = useVault((state) => state.getCurrentWallet())
   const { publicKey } = useAccount()
   if (!publicKey) return null
   const outgoingTransaction = useTransactionStore(
@@ -48,8 +48,8 @@ export const TransactionSummaryView = () => {
       from: publicKey,
       fee,
       amount,
-      nonce: currentWallet.accountInfo.inferredNonce, // This must be the `AccountInfo`'s inferred nonce
-      type: 'payment' // TODO: handle with enums (payment, delegation, zkApp commands?)
+      nonce: currentWallet.accountInfo.inferredNonce,
+      type: 'payment'
     }
     const constructedTx = await constructTx(
       transaction,
