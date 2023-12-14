@@ -267,6 +267,7 @@ export const useVault = create<
           // TODO: the network type must be an argument
           networkType: 'testnet'
         }
+        console.log('>>>KEJA', keyAgent)
         const signed = await keyAgent?.sign(credential, signable, args)
         return signed
       },

@@ -39,13 +39,15 @@ export const TransactionSummaryView = () => {
     []
   )
   const rawAmount = parseInt(outgoingTransaction.amount || '')
-  const rawFee = parseInt(outgoingTransaction.fee || '')
-  const amount = BigInt(rawAmount * 1_000_000_000)
-  const fee = BigInt(rawFee * 1_000_000_000)
+  const rawFee = parseFloat(outgoingTransaction.fee || '0.01')
+  const amount = BigInt(rawAmount * 1_000_000_000).toString()
+  const fee = BigInt(rawFee * 1_000_000_000).toString()
   const constructAndSubmitTx = async () => {
     const transaction: Multichain.MultiChainTransactionBody = {
       to: outgoingTransaction.to,
       from: publicKey,
+      memo: outgoingTransaction.memo,
+      validUntil: '4294967295',
       fee,
       amount,
       nonce: currentWallet.accountInfo.inferredNonce,
