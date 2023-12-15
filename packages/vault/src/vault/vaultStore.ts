@@ -254,7 +254,7 @@ export const useVault = create<
           throw new WalletError('Key agent state is not set')
         }
         const keyAgentState = currentWallet.singleKeyAgentState
-        if (keyAgent === null) {
+        if (keyAgentState === null) {
           throw new WalletError('Key agent state is undefined in sign method')
         }
         const credential = currentWallet.credential
