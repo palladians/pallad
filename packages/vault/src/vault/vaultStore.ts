@@ -320,7 +320,7 @@ export const useVault = create<
           payload,
           args,
           getPassphrase,
-          false
+          true // has to be true
         )
         if (!derivedCredential)
           throw new WalletError(
