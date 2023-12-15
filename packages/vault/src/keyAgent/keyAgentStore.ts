@@ -54,6 +54,14 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
     // or even if we want another method to get the keyAgent instance
     // return new InMemoryKeyAgent({getPassphrase, ...serializableData!})
   },
+  restoreKeyAgent(name, getPassphrase) {
+    const { keyAgents } = get()
+    const keyAgentData = keyAgents[name]?.serializableData
+    if (!keyAgentData) {
+      throw new Error(`KeyAgent ${name} serializable data not found`)
+    }
+    return new InMemoryKeyAgent({ getPassphrase, ...keyAgentData })
+  },
   removeKeyAgent(name) {
     return set(
       produce((state) => {

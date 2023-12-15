@@ -2,6 +2,7 @@
  * @file Represents the state definitions related to keyAgents.
  */
 
+import { GetPassphrase } from '@palladxyz/key-management'
 import {
   FromBip39MnemonicWordsProps,
   InMemoryKeyAgent,
@@ -50,6 +51,10 @@ export type KeyAgentStore = {
     keyAgentType: KeyAgents,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
   ) => Promise<void>
+  restoreKeyAgent: (
+    name: KeyAgentName,
+    passphrase: GetPassphrase
+  ) => InMemoryKeyAgent | undefined
   getKeyAgent: (name: KeyAgentName) => InMemoryKeyAgent | undefined
   removeKeyAgent: (name: KeyAgentName) => void
   clear: () => void

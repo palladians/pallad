@@ -78,6 +78,29 @@ describe('KeyAgentStore', () => {
     ).toBeDefined()
   })
 
+  it('should initialize an InMemoryKeyAgent in the store and restore it', async () => {
+    const { result } = renderHook(() => useVault())
+    await act(async () => {
+      await result.current.initialiseKeyAgent(
+        keyAgentName,
+        KeyAgents.InMemory,
+        agentArgs
+      )
+    })
+    expect(result.current.keyAgents[keyAgentName]).toBeDefined()
+    expect(
+      result.current.keyAgents[keyAgentName]?.serializableData
+    ).toBeDefined()
+    const keyAgent = result.current.keyAgents[keyAgentName]
+    const restoredKeyAgent = result.current.restoreKeyAgent(
+      keyAgentName,
+      getPassphrase
+    )
+    expect(restoredKeyAgent.serializableData).toEqual(
+      keyAgent?.serializableData
+    )
+  })
+
   it('should add two InMemoryKeyAgents and remove one from store', async () => {
     const { result } = renderHook(() => useVault())
     await act(async () => {
