@@ -4,9 +4,9 @@ import {
   ChainSpecificPayload,
   FromBip39MnemonicWordsProps,
   GroupedCredentials,
-  InMemoryKeyAgent,
   Network
 } from '@palladxyz/key-management'
+import { GetPassphrase } from '@palladxyz/key-management'
 import { Mina, Networks, SubmitTxArgs } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 
@@ -16,10 +16,10 @@ import {
   SingleCredentialState,
   StoredCredential
 } from '../credentials'
-import { KeyAgentName, KeyAgents } from '../keyAgent'
+import { KeyAgentName, KeyAgents, SingleKeyAgentState } from '../keyAgent'
 
 type CurrentWallet = {
-  keyAgent: InMemoryKeyAgent | undefined
+  singleKeyAgentState: SingleKeyAgentState | undefined
   credential: SingleCredentialState
   accountInfo: Multichain.MultiChainAccountInfo
   transactions: Multichain.MultiChainTransactionBody[]
@@ -67,7 +67,10 @@ export type GlobalVaultActions = {
   getCredentials: (query: SearchQuery, props: string[]) => StoredCredential[]
   getWalletAccountInfo: () => Promise<unknown>
   getWalletTransactions: () => Promise<unknown[]>
-  sign: (signable: ChainSignablePayload) => Promise<unknown>
+  sign: (
+    signable: ChainSignablePayload,
+    getPassphrase: GetPassphrase
+  ) => Promise<unknown>
   constructTx: (
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind

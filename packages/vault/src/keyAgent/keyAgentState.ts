@@ -55,7 +55,7 @@ export type KeyAgentStore = {
     name: KeyAgentName,
     passphrase: GetPassphrase
   ) => InMemoryKeyAgent | undefined
-  getKeyAgent: (name: KeyAgentName) => InMemoryKeyAgent | undefined
+  getKeyAgent: (name: KeyAgentName) => SingleKeyAgentState | undefined
   removeKeyAgent: (name: KeyAgentName) => void
   clear: () => void
 }
