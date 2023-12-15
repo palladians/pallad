@@ -1,15 +1,7 @@
-import { Mina } from '@palladxyz/mina-core'
-import { Multichain } from '@palladxyz/multi-chain-core'
-import { useVault } from '@palladxyz/vault'
 import { ArrowDownLeftIcon } from 'lucide-react'
-import {
-  Payment,
-  SignedLegacy
-} from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
 import { AppLayout } from '../../common/components/AppLayout'
@@ -18,13 +10,10 @@ import { ViewHeading } from '../../common/components/ViewHeading'
 import { useAccount } from '../../common/hooks/useAccount'
 import { truncateString } from '../../common/lib/string'
 import { useTransactionStore } from '../../common/store/transaction'
+import { ConfirmTransactionForm } from '../components/ConfirmTransactionForm'
 
 export const TransactionSummaryView = () => {
   const navigate = useNavigate()
-  const sign = useVault((state) => state.sign)
-  const submitTx = useVault((state) => state.submitTx)
-  const constructTx = useVault((state) => state.constructTx)
-  const currentWallet = useVault((state) => state.getCurrentWallet())
   const { publicKey } = useAccount()
   if (!publicKey) return null
   const outgoingTransaction = useTransactionStore(
@@ -35,47 +24,10 @@ export const TransactionSummaryView = () => {
     () =>
       outgoingTransaction?.amount &&
       outgoingTransaction?.fee &&
-      outgoingTransaction?.amount + outgoingTransaction.fee,
+      parseFloat(outgoingTransaction?.amount) +
+        parseFloat(outgoingTransaction.fee),
     []
   )
-  const rawAmount = parseInt(outgoingTransaction.amount || '')
-  const rawFee = parseFloat(outgoingTransaction.fee || '0.01')
-  const amount = BigInt(rawAmount * 1_000_000_000).toString()
-  const fee = BigInt(rawFee * 1_000_000_000).toString()
-  const constructAndSubmitTx = async () => {
-    const transaction: Multichain.MultiChainTransactionBody = {
-      to: outgoingTransaction.to,
-      from: publicKey,
-      memo: outgoingTransaction.memo,
-      validUntil: '4294967295',
-      fee,
-      amount,
-      nonce: currentWallet.accountInfo.inferredNonce,
-      type: 'payment'
-    }
-    const constructedTx = await constructTx(
-      transaction,
-      Mina.TransactionKind.PAYMENT
-    )
-    const signedTx = await sign(constructedTx as any) // TODO: Fix this with new wallet API
-    if (!signedTx) return
-    const submitTxArgs = {
-      signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>
-      kind: Mina.TransactionKind.PAYMENT,
-      transactionDetails: {
-        fee: transaction.fee,
-        to: transaction.to,
-        from: transaction.from,
-        nonce: transaction.nonce,
-        memo: transaction.memo,
-        amount: transaction.amount,
-        validUntil: transaction.validUntil
-      }
-    }
-    const submittedTx = await submitTx(submitTxArgs as any)
-    console.log('>>>ST', submittedTx)
-    navigate('/transactions/success')
-  }
   return (
     <AppLayout>
       <div className="flex flex-1 flex-col gap-4">
@@ -113,7 +65,7 @@ export const TransactionSummaryView = () => {
           />
         </Card>
         <Card className="grid grid-cols-2 gap-4 p-2">
-          {/*<MetaField label="Kind" value={outgoingTransaction.kind} />*/}
+          {/* <MetaField label="Kind" value={outgoingTransaction.kind} /> */}
           {outgoingTransaction.amount && (
             <MetaField
               label="Amount"
@@ -126,7 +78,7 @@ export const TransactionSummaryView = () => {
           )}
         </Card>
         <div className="flex-1" />
-        <Button onClick={constructAndSubmitTx}>Send</Button>
+        <ConfirmTransactionForm />
       </div>
     </AppLayout>
   )

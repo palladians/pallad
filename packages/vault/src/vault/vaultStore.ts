@@ -268,7 +268,6 @@ export const useVault = create<
           networkType: 'testnet'
         }
         const keyAgent = restoreKeyAgent(keyAgentState.name, getPassphrase)
-        console.log('>>>KEJA', keyAgent)
         const signed = await keyAgent?.sign(credential, signable, args)
         return signed
       },
