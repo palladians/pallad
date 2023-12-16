@@ -2,9 +2,11 @@
  * @file Represents the state definitions related to keyAgents.
  */
 
+import { GetPassphrase } from '@palladxyz/key-management'
 import {
   FromBip39MnemonicWordsProps,
-  InMemoryKeyAgent
+  InMemoryKeyAgent,
+  SerializableInMemoryKeyAgentData
 } from '@palladxyz/key-management'
 
 export type KeyAgentName = string
@@ -18,6 +20,7 @@ export enum KeyAgents {
  */
 export type SingleKeyAgentState = {
   name: string
+  serializableData: SerializableInMemoryKeyAgentData | undefined
   keyAgentType: KeyAgents | undefined
   keyAgent: InMemoryKeyAgent | undefined
 }
@@ -27,6 +30,7 @@ export type SingleKeyAgentState = {
  */
 export const initialKeyAgentState: SingleKeyAgentState = {
   name: '',
+  serializableData: undefined,
   keyAgentType: undefined,
   keyAgent: undefined
 }
@@ -47,7 +51,11 @@ export type KeyAgentStore = {
     keyAgentType: KeyAgents,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
   ) => Promise<void>
-  getKeyAgent: (name: KeyAgentName) => InMemoryKeyAgent | undefined
+  restoreKeyAgent: (
+    name: KeyAgentName,
+    passphrase: GetPassphrase
+  ) => InMemoryKeyAgent | undefined
+  getKeyAgent: (name: KeyAgentName) => SingleKeyAgentState | undefined
   removeKeyAgent: (name: KeyAgentName) => void
   clear: () => void
 }

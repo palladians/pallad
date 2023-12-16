@@ -40,14 +40,25 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
         state.keyAgents[name] = {
           keyAgentType: keyAgentType,
           keyAgent: keyAgent,
+          serializableData: keyAgent.getSeralizableData(),
           name: name
         }
       })
     )
   },
+  // we should deprecate this method
+  // it is superseded by restoreKeyAgent
   getKeyAgent(name) {
     const { keyAgents } = get()
-    return keyAgents[name]?.keyAgent
+    return keyAgents[name]
+  },
+  restoreKeyAgent(name, getPassphrase) {
+    const { keyAgents } = get()
+    const keyAgentData = keyAgents[name]?.serializableData
+    if (!keyAgentData) {
+      throw new Error(`KeyAgent ${name} serializable data not found`)
+    }
+    return new InMemoryKeyAgent({ getPassphrase, ...keyAgentData })
   },
   removeKeyAgent(name) {
     return set(

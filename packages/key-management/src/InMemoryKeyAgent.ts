@@ -82,4 +82,10 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     await this.deriveCredentials(payload, args, getPassphrase, false)
     return this
   }
+
+  getSeralizableData(): SerializableInMemoryKeyAgentData {
+    return {
+      ...this.serializableData
+    }
+  }
 }

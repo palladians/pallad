@@ -107,7 +107,8 @@ describe('WalletTest', () => {
     const credential = await keyAgent1?.keyAgent!.deriveCredentials(
       payload,
       args,
-      getPassphrase
+      getPassphrase,
+      true // has to be true as we're not writing the credential to the key agent's serializable data
     )
     const credentialState = {
       credentialName: 'Test Credential',

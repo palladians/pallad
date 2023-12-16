@@ -33,7 +33,7 @@ export const useAccount = () => {
   )
   const rawMinaBalance = swr.isLoading
     ? 0
-    : swr.data?.accountInfo.balance.total || 0
+    : swr.data?.accountInfo?.balance?.total ?? 0
   const minaBalance =
     rawMinaBalance && BigInt(rawMinaBalance) / BigInt(1_000_000_000)
   const gradientBackground = useMemo(
@@ -46,7 +46,7 @@ export const useAccount = () => {
     [publicKey]
   )
   const copyWalletAddress = async () => {
-    await navigator.clipboard.writeText(publicKey || '')
+    await navigator.clipboard.writeText(publicKey ?? '')
     toast({
       title: 'Wallet address was copied.'
     })

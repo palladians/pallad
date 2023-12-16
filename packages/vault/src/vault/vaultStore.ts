@@ -110,15 +110,15 @@ export const useVault = create<
           credentialName,
           getAccountInfo
         } = get()
-        const keyAgent = getKeyAgent(keyAgentName)
+        const singleKeyAgentState = getKeyAgent(keyAgentName)
         const credential = getCredential(credentialName)
         const publicKey = credential.credential?.address ?? ''
         return {
-          keyAgent,
+          singleKeyAgentState,
           credential,
-          accountInfo: getAccountInfo(Mina.Networks.DEVNET, publicKey)
+          accountInfo: getAccountInfo(Mina.Networks.DEVNET, publicKey) // TODO: figure out why this is fixed to DEVNET
             .accountInfo,
-          transactions: []
+          transactions: [] // TODO: figure out why this is fixed to empty?
         }
       },
       _syncAccountInfo: async (network, derivedCredential) => {
@@ -241,8 +241,8 @@ export const useVault = create<
           )
         return getTransactions(currentNetwork, walletAddress) || null
       },
-      sign: async (signable) => {
-        const { getCurrentWallet } = get()
+      sign: async (signable, getPassphrase) => {
+        const { getCurrentWallet, restoreKeyAgent } = get()
         const currentWallet = getCurrentWallet()
         // use current wallet to sign
         if (!currentWallet?.credential) {
@@ -250,21 +250,24 @@ export const useVault = create<
             'Current wallet is null, empty or undefined in sign method'
           )
         }
-        if (!currentWallet.keyAgent) {
-          throw new WalletError('Key agent not set')
+        if (!currentWallet.singleKeyAgentState) {
+          throw new WalletError('Key agent state is not set')
         }
-        const keyAgent = currentWallet.keyAgent
-        if (keyAgent === null) {
-          throw new WalletError('Key agent is undefined in sign method')
+        const keyAgentState = currentWallet.singleKeyAgentState
+        if (keyAgentState === null) {
+          throw new WalletError('Key agent state is undefined in sign method')
         }
         const credential = currentWallet.credential
           .credential as GroupedCredentials
+        // TODO: the `args` must be an argument to the sign method
         const args: MinaSpecificArgs = {
           network: Network.Mina,
           accountIndex: 0,
           addressIndex: 0,
+          // TODO: the network type must be an argument
           networkType: 'testnet'
         }
+        const keyAgent = restoreKeyAgent(keyAgentState.name, getPassphrase)
         const signed = await keyAgent?.sign(credential, signable, args)
         return signed
       },
@@ -279,6 +282,7 @@ export const useVault = create<
           .getProvider(network)
           ?.submitTransaction(submitTxArgs)
         await _syncTransactions(
+          // TODO: should this not be sync accountinfo & transactions?
           network,
           currentWallet?.credential.credential as GroupedCredentials
         )
@@ -299,7 +303,7 @@ export const useVault = create<
       ) => {
         const {
           initialiseKeyAgent,
-          getKeyAgent,
+          restoreKeyAgent,
           setCredential,
           setCurrentWallet,
           _syncWallet,
@@ -311,12 +315,12 @@ export const useVault = create<
           mnemonic2ndFactorPassphrase: ''
         }
         await initialiseKeyAgent(keyAgentName, keyAgentType, agentArgs)
-        const keyAgent = getKeyAgent(keyAgentName)
+        const keyAgent = restoreKeyAgent(keyAgentName, getPassphrase)
         const derivedCredential = await keyAgent?.deriveCredentials(
           payload,
           args,
           getPassphrase,
-          false
+          true // has to be true
         )
         if (!derivedCredential)
           throw new WalletError(

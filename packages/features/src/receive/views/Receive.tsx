@@ -16,7 +16,7 @@ import { useAccount } from '../../common/hooks/useAccount'
 export const ReceiveView = () => {
   const { theme } = useTheme()
   const navigate = useNavigate()
-  const { copyWalletAddress, publicKey } = useAccount()
+  const { copyWalletAddress, publicKey, gradientBackground } = useAccount()
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-4">
@@ -36,7 +36,7 @@ export const ReceiveView = () => {
                 />
                 <div
                   className="absolute w-full h-full inset-0 dark:mix-blend-darken mix-blend-lighten"
-                  style={{ backgroundImage: '' }}
+                  style={{ backgroundImage: gradientBackground }}
                 />
               </div>
             )}
