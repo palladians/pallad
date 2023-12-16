@@ -54,7 +54,7 @@ export const BottomNavigation = ({
     }
   ]
   return (
-    <Card className="flex justify-around p-1">
+    <Card className="sticky bottom-4 left-0 right-0 flex justify-around p-1">
       {NAV_ITEMS.map((navItem) => {
         const active = pathname === navItem.url
         return (
