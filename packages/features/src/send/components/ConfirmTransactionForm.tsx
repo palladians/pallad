@@ -73,6 +73,7 @@ export const ConfirmTransactionForm = () => {
       }
     }
     const submittedTx = await submitTx(submitTxArgs as any)
+    console.log('submittedTx', submittedTx)
     navigate('/transactions/success')
   }
   return (
