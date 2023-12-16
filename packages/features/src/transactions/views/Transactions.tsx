@@ -4,10 +4,11 @@ import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useTransactions } from '../../common/hooks/useTransactions'
 import { TransactionsList } from '../components/TransactionsList'
+import { ListSkeleton } from '@/components/list-skeleton'
 
 export const TransactionsView = () => {
   const navigate = useNavigate()
-  const { data: transactions } = useTransactions()
+  const { data: transactions, isLoading } = useTransactions()
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-4">
@@ -15,7 +16,11 @@ export const TransactionsView = () => {
           title="Transactions"
           button={{ label: 'Send', onClick: () => navigate('/send') }}
         />
-        {transactions && <TransactionsList transactions={transactions} />}
+        {isLoading ? (
+          <ListSkeleton />
+        ) : (
+          transactions && <TransactionsList transactions={transactions} />
+        )}
       </div>
     </AppLayout>
   )
