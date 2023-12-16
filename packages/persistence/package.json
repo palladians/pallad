@@ -19,7 +19,8 @@
     "@capacitor/preferences": "^5.0.6",
     "@capacitor/storage": "^1.2.5",
     "@plasmohq/storage": "^1.9.0",
-    "capacitor-secure-storage-plugin": "^0.9.0"
+    "capacitor-secure-storage-plugin": "^0.9.0",
+    "superjson": "^1.12.3"
   },
   "devDependencies": {
     "@capacitor/core": "^5.2.0",

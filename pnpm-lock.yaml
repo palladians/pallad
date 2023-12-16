@@ -121,7 +121,7 @@ importers:
         version: 1.0.6(tailwindcss@3.3.3)
       vite-plugin-node-stdlib-browser:
         specifier: ^0.2.1
-        version: 0.2.1(node-stdlib-browser@1.2.0)(rollup@3.27.0)(vite@4.5.1)
+        version: 0.2.1(node-stdlib-browser@1.2.0)(rollup@3.29.4)(vite@4.5.1)
       webext-bridge:
         specifier: ^6.0.1
         version: 6.0.1
@@ -185,7 +185,7 @@ importers:
         version: 0.2.1
       rollup-plugin-polyfill-node:
         specifier: ^0.12.0
-        version: 0.12.0(rollup@3.27.0)
+        version: 0.12.0(rollup@3.29.4)
       vite:
         specifier: ^4.5.1
         version: 4.5.1(@types/node@20.2.3)
@@ -194,16 +194,16 @@ importers:
         version: 0.10.1
       vite-plugin-node-polyfills:
         specifier: ^0.17.0
-        version: 0.17.0(rollup@3.27.0)(vite@4.5.1)
+        version: 0.17.0(rollup@3.29.4)(vite@4.5.1)
       vite-plugin-require-transform:
         specifier: ^1.0.21
         version: 1.0.21
       vite-plugin-svgr:
         specifier: ^4.2.0
-        version: 4.2.0(rollup@3.27.0)(vite@4.5.1)
+        version: 4.2.0(rollup@3.29.4)(vite@4.5.1)
       vite-plugin-top-level-await:
         specifier: ^1.4.1
-        version: 1.4.1(rollup@3.27.0)(vite@4.5.1)
+        version: 1.4.1(rollup@3.29.4)(vite@4.5.1)
       vite-plugin-wasm:
         specifier: ^3.3.0
         version: 3.3.0(vite@4.5.1)
@@ -641,6 +641,9 @@ importers:
       capacitor-secure-storage-plugin:
         specifier: ^0.9.0
         version: 0.9.0(@capacitor/core@5.2.0)
+      superjson:
+        specifier: ^1.12.3
+        version: 1.12.3
     devDependencies:
       '@capacitor/core':
         specifier: ^5.2.0
@@ -4822,7 +4825,7 @@ packages:
     engines: {node: '>=14'}
     dev: false
 
-  /@rollup/plugin-inject@5.0.3(rollup@3.27.0):
+  /@rollup/plugin-inject@5.0.3(rollup@3.29.4):
     resolution: {integrity: sha512-411QlbL+z2yXpRWFXSmw/teQRMkXcAAC8aYTemc15gwJRpvEVDQwoe+N/HTFD8RFG8+88Bme9DK2V9CVm7hJdA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -4831,12 +4834,12 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@3.27.0)
+      '@rollup/pluginutils': 5.1.0(rollup@3.29.4)
       estree-walker: 2.0.2
       magic-string: 0.27.0
-      rollup: 3.27.0
+      rollup: 3.29.4
 
-  /@rollup/plugin-inject@5.0.5(rollup@3.27.0):
+  /@rollup/plugin-inject@5.0.5(rollup@3.29.4):
     resolution: {integrity: sha512-2+DEJbNBoPROPkgTDNe8/1YXWcqxbN5DTjASVIOx8HS+pITXushyNiBV56RB08zuptzz8gT3YfkqriTBVycepg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -4845,10 +4848,10 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@3.27.0)
+      '@rollup/pluginutils': 5.1.0(rollup@3.29.4)
       estree-walker: 2.0.2
       magic-string: 0.30.5
-      rollup: 3.27.0
+      rollup: 3.29.4
     dev: true
 
   /@rollup/plugin-virtual@3.0.1:
@@ -4861,7 +4864,7 @@ packages:
         optional: true
     dev: true
 
-  /@rollup/plugin-virtual@3.0.2(rollup@3.27.0):
+  /@rollup/plugin-virtual@3.0.2(rollup@3.29.4):
     resolution: {integrity: sha512-10monEYsBp3scM4/ND4LNH5Rxvh3e/cVeL3jWTgZ2SrQ+BmUoQcopVQvnaMcOnykb1VkxUFuDAN+0FnpTFRy2A==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -4870,7 +4873,7 @@ packages:
       rollup:
         optional: true
     dependencies:
-      rollup: 3.27.0
+      rollup: 3.29.4
     dev: true
 
   /@rollup/pluginutils@4.2.1:
@@ -4895,7 +4898,7 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@rollup/pluginutils@5.1.0(rollup@3.27.0):
+  /@rollup/pluginutils@5.1.0(rollup@3.29.4):
     resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -4907,7 +4910,7 @@ packages:
       '@types/estree': 1.0.1
       estree-walker: 2.0.2
       picomatch: 2.3.1
-      rollup: 3.27.0
+      rollup: 3.29.4
 
   /@scure/base@1.1.1:
     resolution: {integrity: sha512-ZxOhsSyxYwLJj3pLZCefNitxsj093tb2vq90mp2txoYeBqbcjDjqFhyM8eUjq/uFm6zJ+mUuqxlS2FkuSY1MTA==}
@@ -13273,13 +13276,13 @@ packages:
       rollup-plugin-inject: 3.0.2
     dev: true
 
-  /rollup-plugin-polyfill-node@0.12.0(rollup@3.27.0):
+  /rollup-plugin-polyfill-node@0.12.0(rollup@3.29.4):
     resolution: {integrity: sha512-PWEVfDxLEKt8JX1nZ0NkUAgXpkZMTb85rO/Ru9AQ69wYW8VUCfDgP4CGRXXWYni5wDF0vIeR1UoF3Jmw/Lt3Ug==}
     peerDependencies:
       rollup: ^1.20.0 || ^2.0.0 || ^3.0.0
     dependencies:
-      '@rollup/plugin-inject': 5.0.3(rollup@3.27.0)
-      rollup: 3.27.0
+      '@rollup/plugin-inject': 5.0.3(rollup@3.29.4)
+      rollup: 3.29.4
     dev: true
 
   /rollup-pluginutils@2.8.2:
@@ -14916,12 +14919,12 @@ packages:
       magic-string: 0.30.5
     dev: true
 
-  /vite-plugin-node-polyfills@0.17.0(rollup@3.27.0)(vite@4.5.1):
+  /vite-plugin-node-polyfills@0.17.0(rollup@3.29.4)(vite@4.5.1):
     resolution: {integrity: sha512-iPmPn7376e5u6QvoTSJa16hf5Q0DFwHFXJk2uYpsNlmI3JdPms7hWyh55o+OysJ5jo9J5XPhLC9sMOYifwFd1w==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
     dependencies:
-      '@rollup/plugin-inject': 5.0.5(rollup@3.27.0)
+      '@rollup/plugin-inject': 5.0.5(rollup@3.29.4)
       buffer-polyfill: /buffer@6.0.3
       node-stdlib-browser: 1.2.0
       process: 0.11.10
@@ -14930,13 +14933,13 @@ packages:
       - rollup
     dev: true
 
-  /vite-plugin-node-stdlib-browser@0.2.1(node-stdlib-browser@1.2.0)(rollup@3.27.0)(vite@4.5.1):
+  /vite-plugin-node-stdlib-browser@0.2.1(node-stdlib-browser@1.2.0)(rollup@3.29.4)(vite@4.5.1):
     resolution: {integrity: sha512-6u2i613Dkqj5KaTNIrnZvE6y3/awWAp0S5TjucTvGxdhetftB1Mgvblc+nwYzlw6sntPlac8UOC7ttXNh+LZKA==}
     peerDependencies:
       node-stdlib-browser: ^1.2.0
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      '@rollup/plugin-inject': 5.0.3(rollup@3.27.0)
+      '@rollup/plugin-inject': 5.0.3(rollup@3.29.4)
       node-stdlib-browser: 1.2.0
       vite: 4.5.1(@types/node@20.2.3)
     transitivePeerDependencies:
@@ -14968,12 +14971,12 @@ packages:
       - supports-color
     dev: true
 
-  /vite-plugin-svgr@4.2.0(rollup@3.27.0)(vite@4.5.1):
+  /vite-plugin-svgr@4.2.0(rollup@3.29.4)(vite@4.5.1):
     resolution: {integrity: sha512-SC7+FfVtNQk7So0XMjrrtLAbEC8qjFPifyD7+fs/E6aaNdVde6umlVVh0QuwDLdOMu7vp5RiGFsB70nj5yo0XA==}
     peerDependencies:
       vite: ^2.6.0 || 3 || 4 || 5
     dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@3.27.0)
+      '@rollup/pluginutils': 5.1.0(rollup@3.29.4)
       '@svgr/core': 8.1.0
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0)
       vite: 4.5.1(@types/node@20.2.3)
@@ -14996,12 +14999,12 @@ packages:
       - rollup
     dev: true
 
-  /vite-plugin-top-level-await@1.4.1(rollup@3.27.0)(vite@4.5.1):
+  /vite-plugin-top-level-await@1.4.1(rollup@3.29.4)(vite@4.5.1):
     resolution: {integrity: sha512-hogbZ6yT7+AqBaV6lK9JRNvJDn4/IJvHLu6ET06arNfo0t2IsyCaon7el9Xa8OumH+ESuq//SDf8xscZFE0rWw==}
     peerDependencies:
       vite: '>=2.8'
     dependencies:
-      '@rollup/plugin-virtual': 3.0.2(rollup@3.27.0)
+      '@rollup/plugin-virtual': 3.0.2(rollup@3.29.4)
       '@swc/core': 1.3.100
       uuid: 9.0.1
       vite: 4.5.1(@types/node@20.2.3)

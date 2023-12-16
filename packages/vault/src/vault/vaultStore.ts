@@ -11,7 +11,7 @@ import { Multichain } from '@palladxyz/multi-chain-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { produce } from 'immer'
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { persist, PersistStorage } from 'zustand/middleware'
 
 import { accountSlice, AccountStore } from '../account'
 import {
@@ -356,6 +356,9 @@ export const useVault = create<
         removeCredential(currentWallet.credential.credentialName)
       }
     }),
-    { name: 'PalladVault', storage: createJSONStorage(getSecurePersistence) }
+    {
+      name: 'PalladVault',
+      storage: getSecurePersistence() as PersistStorage<any>
+    }
   )
 )
