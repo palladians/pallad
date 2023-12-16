@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { GroupedCredentials } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { useVault } from '@palladxyz/vault'
@@ -25,6 +26,7 @@ export const ConfirmTransactionForm = () => {
   const sign = useVault((state) => state.sign)
   const submitTx = useVault((state) => state.submitTx)
   const constructTx = useVault((state) => state.constructTx)
+  const syncWallet = useVault((state) => state._syncWallet)
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const { publicKey } = useAccount()
   const { register, handleSubmit } = useForm<ConfirmTransactionData>({
@@ -74,6 +76,11 @@ export const ConfirmTransactionForm = () => {
     }
     const submittedTx = await submitTx(submitTxArgs as any)
     console.log('submittedTx', submittedTx)
+    // then update account info store to get incremented nonce from network
+    await syncWallet(
+      Mina.Networks.DEVNET,
+      currentWallet.credential.credential as GroupedCredentials
+    )
     navigate('/transactions/success')
   }
   return (
