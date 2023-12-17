@@ -765,6 +765,9 @@ importers:
       '@palladxyz/common':
         specifier: '*'
         version: link:../common
+      '@testing-library/react':
+        specifier: ^14.0.0
+        version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
       '@types/mocha':
         specifier: ^10.0.1
         version: 10.0.1
