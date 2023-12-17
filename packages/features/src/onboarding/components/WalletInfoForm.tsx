@@ -45,53 +45,55 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
         </Button>
       }
     >
-      <div className="flex flex-col flex-1 gap-4">
+      <div className="flex flex-col flex-1">
         <ViewHeading
           title={title}
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <div className="gap-2">
-          <Label htmlFor="walletNameInput" className="cursor-pointer">
-            Wallet Name
-          </Label>
-          <Input
-            id="walletNameInput"
-            placeholder="Wallet Name"
-            data-testid="onboarding__walletNameInput"
-            {...register('walletName')}
-          />
-        </div>
-        <div className="gap-2">
-          <Label htmlFor="spendingPasswordInput" className="cursor-pointer">
-            Spending Password
-          </Label>
-          <div className="flex gap-2">
+        <div className="flex flex-col flex-1 gap-4 p-4">
+          <div className="gap-2">
+            <Label htmlFor="walletNameInput" className="cursor-pointer">
+              Wallet Name
+            </Label>
             <Input
-              id="spendingPasswordInput"
-              type={showPassword ? 'text' : 'password'}
-              data-testid="onboarding__spendingPasswordInput"
-              placeholder="Password"
-              {...register('spendingPassword')}
+              id="walletNameInput"
+              placeholder="Wallet Name"
+              data-testid="onboarding__walletNameInput"
+              {...register('walletName')}
             />
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-            </Button>
           </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <Checkbox
-            value={termsAccepted}
-            onClick={toggleAccepted}
-            data-testid="onboarding__tosCheckbox"
-            id="tosCheckbox"
-          />
-          <Label htmlFor="tosCheckbox" className="cursor-pointer">
-            I accept Terms of Service.
-          </Label>
+          <div className="gap-2">
+            <Label htmlFor="spendingPasswordInput" className="cursor-pointer">
+              Spending Password
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="spendingPasswordInput"
+                type={showPassword ? 'text' : 'password'}
+                data-testid="onboarding__spendingPasswordInput"
+                placeholder="Password"
+                {...register('spendingPassword')}
+              />
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+              </Button>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <Checkbox
+              value={termsAccepted}
+              onClick={toggleAccepted}
+              data-testid="onboarding__tosCheckbox"
+              id="tosCheckbox"
+            />
+            <Label htmlFor="tosCheckbox" className="cursor-pointer">
+              I accept Terms of Service.
+            </Label>
+          </div>
         </div>
       </div>
     </WizardLayout>

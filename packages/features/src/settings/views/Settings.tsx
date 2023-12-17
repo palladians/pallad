@@ -49,83 +49,85 @@ export const SettingsView = () => {
   }
   return (
     <AppLayout>
-      <div className="flex flex-col flex-1 gap-6">
+      <div className="flex flex-col flex-1">
         <ViewHeading
           title="Settings"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <div className="flex flex-col gap-2">
-          <Label>Network</Label>
-          <RadioGroup value={network} onValueChange={handleNetworkSwitch}>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem
-                value={
-                  Mina.Networks[
-                    Mina.Networks.MAINNET.toUpperCase() as keyof typeof Mina.Networks
-                  ]
-                }
-                id="networkMainnet"
-              />
-              <Label htmlFor="networkMainnet">Mainnet</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem
-                value={
-                  Mina.Networks[
-                    Mina.Networks.DEVNET.toUpperCase() as keyof typeof Mina.Networks
-                  ]
-                }
-                id="networkDevnet"
-              />
-              <Label htmlFor="networkDevnet">Devnet</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem
-                value={
-                  Mina.Networks[
-                    Mina.Networks.BERKELEY.toUpperCase() as keyof typeof Mina.Networks
-                  ]
-                }
-                id="networkBerkeley"
-              />
-              <Label htmlFor="networkBerkeley">Berkeley</Label>
-            </div>
-          </RadioGroup>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label>Theme</Label>
-          <RadioGroup value={theme} onValueChange={handleThemeSwitch}>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="light" id="themeLight" />
-              <Label htmlFor="themeLight">Light</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="dark" id="themeDark" />
-              <Label htmlFor="themeDark">Dark</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="system" id="themeSystem" />
-              <Label htmlFor="themeSystem">System</Label>
-            </div>
-          </RadioGroup>
-        </div>
-        <div className="flex flex-col gap-4">
-          <h2>Authorized Domains</h2>
+        <div className="flex flex-col gap-4 p-4 flex-1">
           <div className="flex flex-col gap-2">
-            <Card className="flex py-2 px-4 justify-between">
-              <div>Pallad</div>
-              <div className="flex gap-2 items-center">
-                <div>pallad.xyz</div>
-                <a>
-                  <TrashIcon size={16} />
-                </a>
+            <Label>Network</Label>
+            <RadioGroup value={network} onValueChange={handleNetworkSwitch}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem
+                  value={
+                    Mina.Networks[
+                      Mina.Networks.MAINNET.toUpperCase() as keyof typeof Mina.Networks
+                    ]
+                  }
+                  id="networkMainnet"
+                />
+                <Label htmlFor="networkMainnet">Mainnet</Label>
               </div>
-            </Card>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem
+                  value={
+                    Mina.Networks[
+                      Mina.Networks.DEVNET.toUpperCase() as keyof typeof Mina.Networks
+                    ]
+                  }
+                  id="networkDevnet"
+                />
+                <Label htmlFor="networkDevnet">Devnet</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem
+                  value={
+                    Mina.Networks[
+                      Mina.Networks.BERKELEY.toUpperCase() as keyof typeof Mina.Networks
+                    ]
+                  }
+                  id="networkBerkeley"
+                />
+                <Label htmlFor="networkBerkeley">Berkeley</Label>
+              </div>
+            </RadioGroup>
           </div>
+          <div className="flex flex-col gap-2">
+            <Label>Theme</Label>
+            <RadioGroup value={theme} onValueChange={handleThemeSwitch}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="light" id="themeLight" />
+                <Label htmlFor="themeLight">Light</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="dark" id="themeDark" />
+                <Label htmlFor="themeDark">Dark</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="system" id="themeSystem" />
+                <Label htmlFor="themeSystem">System</Label>
+              </div>
+            </RadioGroup>
+          </div>
+          <div className="flex flex-col gap-4">
+            <h2>Authorized Domains</h2>
+            <div className="flex flex-col gap-2">
+              <Card className="flex py-2 px-4 justify-between">
+                <div>Pallad</div>
+                <div className="flex gap-2 items-center">
+                  <div>pallad.xyz</div>
+                  <a>
+                    <TrashIcon size={16} />
+                  </a>
+                </div>
+              </Card>
+            </div>
+          </div>
+          <Button variant="destructive" onClick={restartCurrentWallet}>
+            Restart Wallet
+          </Button>
         </div>
-        <Button variant="destructive" onClick={restartCurrentWallet}>
-          Restart Wallet
-        </Button>
       </div>
     </AppLayout>
   )

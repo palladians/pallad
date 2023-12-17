@@ -26,7 +26,7 @@ export const ReceiveView = () => {
         />
         <div className="flex flex-col flex-1 justify-center items-center gap-4 p-4">
           {publicKey && (
-            <div className="relative max-w-[256px] max-h-[256px] w-full h-full">
+            <div className="animate-in slide-in-from-bottom-2 fade-in relative max-w-[256px] max-h-[256px] w-full h-full">
               <QRCode
                 value={publicKey}
                 bgColor={theme === 'dark' ? '#020617' : '#ffffff'}
@@ -42,7 +42,7 @@ export const ReceiveView = () => {
           <Tooltip>
             <TooltipTrigger>
               <Card
-                className="p-2 break-all text-center leading-8 cursor-pointer rounded-[1rem] text-sm max-w-[256px]"
+                className="animate-in slide-in-from-bottom-1 delay-100 fill-mode-both fade-in p-2 break-all text-center leading-8 cursor-pointer rounded-[1rem] text-sm max-w-[256px]"
                 onClick={copyWalletAddress}
               >
                 {publicKey}

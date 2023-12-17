@@ -96,7 +96,7 @@ export const MnemonicInputView = () => {
           backButton={{ onClick: () => navigate(-1) }}
         />
         {noOneIsLooking ? (
-          <div className="flex flex-1 flex-col gap-4">
+          <div className="flex flex-1 flex-col gap-4 p-4">
             <Label htmlFor="mnemonicTextarea">Your Mnemonic</Label>
             <Textarea
               id="mnemonicTextarea"
@@ -105,7 +105,7 @@ export const MnemonicInputView = () => {
             />
           </div>
         ) : (
-          <div className="flex flex-1 flex-col gap-2">
+          <div className="flex flex-1 flex-col gap-2 p-4">
             <Label htmlFor="confirmAlone">Confirm No One Is Behind You</Label>
             <Button
               id="confirmAlone"

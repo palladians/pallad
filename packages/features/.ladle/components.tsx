@@ -9,6 +9,7 @@ import {
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from 'next-themes'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { Toaster } from '@/components/ui/toaster'
 
 export const Provider: GlobalProvider = ({ children }) => {
   const { dispatch } = useLadleContext()
@@ -31,6 +32,7 @@ export const Provider: GlobalProvider = ({ children }) => {
             }}
           >
             {children}
+            <Toaster />
           </div>
         </MemoryRouter>
       </TooltipProvider>

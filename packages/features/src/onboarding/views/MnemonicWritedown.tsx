@@ -39,7 +39,7 @@ export const MnemonicWritedownView = () => {
           backButton={{ onClick: () => navigate(-1) }}
         />
         {noOneIsLooking ? (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 p-4">
             <Label>Write This Down</Label>
             <div className="flex flex-wrap gap-2">
               {mnemonic?.map((word, i) => (
@@ -61,7 +61,7 @@ export const MnemonicWritedownView = () => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col flex-1 gap-2">
+          <div className="flex flex-col flex-1 gap-2 p-4">
             <Label>Confirm No One Is Behind You</Label>
             <Button
               onClick={() => setNoOneIsLooking(true)}

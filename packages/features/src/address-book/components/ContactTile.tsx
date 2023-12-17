@@ -1,7 +1,7 @@
 import { TrashIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import {
@@ -24,13 +24,10 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
   const removeContact = useAddressBookStore((state) => state.removeContact)
   return (
     <Card
-      className="flex items-center justify-between p-2"
+      className="flex items-center justify-between p-1"
       data-testid="addressBook__contact"
     >
       <div className="flex items-center justify-center">
-        <Avatar>
-          <AvatarFallback>{contact.name?.[0]}</AvatarFallback>
-        </Avatar>
         <Button
           variant="link"
           className="text-sky-400"
@@ -39,7 +36,7 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
           }
           data-testid="addressBook__contactName"
         >
-          {contact.name}
+          <Badge variant="secondary">{contact.name}</Badge>
         </Button>
       </div>
       <div className="flex items-center gap-2">
@@ -55,7 +52,7 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
           <Tooltip>
             <TooltipTrigger>
               <Button
-                variant="outline"
+                variant="link"
                 size="icon"
                 onClick={() => removeContact({ index })}
                 data-testid="addressBook__removeAddress"

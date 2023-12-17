@@ -46,7 +46,7 @@ export const StartView = () => {
         </>
       }
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 p-4">
         <div>
           <h1 className="text-5xl text-sky-500 font-semibold">Pallad</h1>
           <h2 className="text-5xl">- Enter The Minaverse</h2>

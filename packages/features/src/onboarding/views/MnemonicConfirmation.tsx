@@ -105,7 +105,7 @@ export const MnemonicConfirmationView = () => {
           title="Confirm The Mnemonic"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <div className="flex flex-col flex-1 gap-4">
+        <div className="flex flex-col flex-1 gap-4 p-4">
           <Label data-testid="onboarding__writedownIndex">
             Type in the word #{confirmationIndex + 1}
           </Label>

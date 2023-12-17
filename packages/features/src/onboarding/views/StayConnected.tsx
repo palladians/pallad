@@ -26,23 +26,26 @@ export const StayConnectedView = () => {
         </>
       }
     >
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col flex-1">
         <ViewHeading title="Stay Connected" />
-        <div className="leading-8">
-          That's it. Before moving to Dashboard consider joining our Community.
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" asChild className="flex-1">
-            <a href={DISCORD_URL} target="_blank">
-              Discord
-            </a>
-          </Button>
-          <Button variant="outline" asChild className="flex-1">
-            <a href={TWITTER_URL} className="flex gap-2" target="_blank">
-              <TwitterIcon size={16} />
-              Twitter
-            </a>
-          </Button>
+        <div className="flex flex-col gap-4 flex-1 p-4">
+          <div className="leading-8">
+            That's it. Before moving to Dashboard consider joining our
+            Community.
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" asChild className="flex-1">
+              <a href={DISCORD_URL} target="_blank">
+                Discord
+              </a>
+            </Button>
+            <Button variant="outline" asChild className="flex-1">
+              <a href={TWITTER_URL} className="flex gap-2" target="_blank">
+                <TwitterIcon size={16} />
+                Twitter
+              </a>
+            </Button>
+          </div>
         </div>
       </div>
     </WizardLayout>
