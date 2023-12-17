@@ -27,9 +27,9 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test:unit": "echo 'not yet'",
-    "story:dev": "ladle serve",
-    "story:build": "ladle build -o ./build",
-    "story:preview": "ladle preview",
+    "story:dev": "VITE_APP_LADLE=true ladle serve",
+    "story:build": "VITE_APP_LADLE=true ladle build -o ./build",
+    "story:preview": "VITE_APP_LADLE=true ladle preview",
     "cleanup": "rimraf node_modules dist .turbo build"
   },
   "dependencies": {
@@ -113,6 +113,7 @@
     "mina-signer": "^2.1.1",
     "swr": "^2.1.5",
     "vite": "^4.5.1",
+    "vite-plugin-node-polyfills": "^0.17.0",
     "vite-plugin-svgr": "^3.2.0",
     "vite-plugin-top-level-await": "^1.3.1"
   },

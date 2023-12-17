@@ -358,7 +358,10 @@ export const useVault = create<
     }),
     {
       name: 'PalladVault',
-      storage: getSecurePersistence() as PersistStorage<any>
+      storage:
+        import.meta.env['VITE_APP_LADLE'] === 'true'
+          ? undefined
+          : (getSecurePersistence() as PersistStorage<any>)
     }
   )
 )
