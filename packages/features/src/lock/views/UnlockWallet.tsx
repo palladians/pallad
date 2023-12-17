@@ -67,7 +67,7 @@ export const UnlockWalletView = () => {
         </Button>
       }
     >
-      <div className="flex flex-col flex-1 gap-6">
+      <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Unlock Wallet"
           button={{
@@ -75,50 +75,52 @@ export const UnlockWalletView = () => {
             onClick: restartCurrentWallet
           }}
         />
-        {passwordError && (
-          <Alert
-            variant="destructive"
-            className="flex items-center"
-            data-testid="unlockWallet__error"
+        <div className="flex flex-col flex-1 gap-4 p-4">
+          {passwordError && (
+            <Alert
+              variant="destructive"
+              className="flex items-center"
+              data-testid="unlockWallet__error"
+            >
+              <AlertCircleIcon />
+              <AlertTitle>The password is wrong</AlertTitle>
+            </Alert>
+          )}
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-2"
+            id="unlockWalletForm"
           >
-            <AlertCircleIcon />
-            <AlertTitle>The password is wrong</AlertTitle>
-          </Alert>
-        )}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-2"
-          id="unlockWalletForm"
-        >
-          <Label htmlFor="spendingPassword" className="cursor-pointer">
-            Spending Password
-          </Label>
-          <div className="flex gap-2">
-            <Input
-              id="spendingPassword"
-              type={showPassword ? 'text' : 'password'}
-              data-testid="unlockWallet__password"
-              autoFocus
-              {...register('spendingPassword')}
-            />
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  data-testid="unlockWallet__togglePasswordVisible"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{showPassword ? 'Hide password' : 'Show password'}</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </form>
+            <Label htmlFor="spendingPassword" className="cursor-pointer">
+              Spending Password
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="spendingPassword"
+                type={showPassword ? 'text' : 'password'}
+                data-testid="unlockWallet__password"
+                autoFocus
+                {...register('spendingPassword')}
+              />
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    data-testid="unlockWallet__togglePasswordVisible"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{showPassword ? 'Hide password' : 'Show password'}</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </form>
+        </div>
       </div>
     </WizardLayout>
   )

@@ -16,15 +16,17 @@ export const WizardLayout = ({ children, footer }: WizardLayoutProps) => {
     theme === 'dark' ? setTheme('light') : setTheme('dark')
   }
   return (
-    <div className="flex flex-1 dark:bg-slate-950 bg-white flex-col p-4">
-      <div className="flex justify-between">
+    <div className="flex flex-1 dark:bg-slate-950 bg-white flex-col">
+      <div className="flex justify-between p-4">
         <Logo />
         <Toggle size="sm" onClick={toggleTheme}>
           {theme === 'dark' ? <SunIcon size={16} /> : <MoonIcon size={16} />}
         </Toggle>
       </div>
-      <div className="flex flex-1 items-center">{children}</div>
-      <div className="flex gap-4">{footer}</div>
+      <div className="animate-in fade-in flex flex-1 items-center">
+        {children}
+      </div>
+      <div className="flex gap-4 p-4">{footer}</div>
     </div>
   )
 }

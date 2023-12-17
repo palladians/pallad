@@ -1,36 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pallad</title>
     <link rel="stylesheet" href="/src/assets/fonts.css" />
     <style>
-        :root {
-            --popup: 1;
-        }
+      :root {
+        --popup: 1;
+      }
 
-        html {
-            width: 400px;
-            height: 600px;
-            background-color: #0a0a10;
-        }
+      html {
+        width: 400px;
+        height: 600px;
+        background-color: #0a0a10;
+      }
 
-        #root {
-            height: 100vh;
-            display: flex;
-        }
+      #root {
+        min-height: 100vh;
+        display: flex;
+      }
     </style>
     <script type="module">
-        import {Buffer} from "buffer";
-        window.Buffer = Buffer;
+      import { Buffer } from 'buffer'
+      window.Buffer = Buffer
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  </body>
 </html>

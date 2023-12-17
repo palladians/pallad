@@ -1,10 +1,12 @@
 import { ArrowLeftIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 type ButtonProps = {
   label: React.ReactNode
   onClick: () => void
+  icon?: React.ReactNode
   testId?: string
 }
 
@@ -16,15 +18,22 @@ interface ViewHeadingProps {
   title: string
   button?: ButtonProps
   backButton?: BackButtonProps
+  noHorizontalPadding?: boolean
 }
 
 export const ViewHeading = ({
   title,
   button,
-  backButton
+  backButton,
+  noHorizontalPadding
 }: ViewHeadingProps) => {
   return (
-    <div className="flex gap-4 items-center justify-between">
+    <div
+      className={cn(
+        'sticky top-0 right-0 left-0 bg-background flex gap-4 items-center justify-between px-4 py-2',
+        noHorizontalPadding && 'px-0'
+      )}
+    >
       {backButton && (
         <Button variant="outline" size="icon" onClick={backButton.onClick}>
           <ArrowLeftIcon className="text-sky-500" size={20} />
@@ -39,7 +48,9 @@ export const ViewHeading = ({
           size="sm"
           onClick={button.onClick}
           data-testid={button.testId}
+          className="gap-2"
         >
+          {button.icon}
           {button.label}
         </Button>
       )}

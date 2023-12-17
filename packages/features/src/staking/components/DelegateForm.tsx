@@ -31,14 +31,14 @@ export const DelegateForm = () => {
   })
   const onSubmit = (payload: OutgoingTransaction) => {
     console.log('>>>P', payload)
-    // const { fee } = getValues()
-    // const currentFee = TransactionFee[fee]
-    // setTransactionDetails({
-    //   to: payload.to,
-    //   fee: currentFee,
-    //   memo: payload.memo,
-    //   kind: 'staking'
-    // })
+    const { fee } = getValues()
+    const currentFee = TransactionFee[fee]
+    setTransactionDetails({
+      to: payload.to,
+      fee: currentFee,
+      memo: payload.memo,
+      kind: 'staking'
+    })
     navigate('/transactions/summary')
   }
   useEffect(() => {

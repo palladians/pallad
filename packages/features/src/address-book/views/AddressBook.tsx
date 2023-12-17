@@ -7,7 +7,7 @@ import { useAddressBookStore } from '../../common/store/addressBook'
 import { ContactTile } from '../components/ContactTile'
 
 const DonatePallad = {
-  name: 'Donate Pallad',
+  name: 'Donate To Pallad',
   address: 'B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS'
 }
 
@@ -16,7 +16,7 @@ export const AddressBookView = () => {
   const contacts = useAddressBookStore((state) => state.contacts)
   return (
     <AppLayout>
-      <div className="flex flex-col flex-1 gap-4">
+      <div className="flex flex-col flex-1">
         <ViewHeading
           title="Address Book"
           button={{
@@ -30,7 +30,7 @@ export const AddressBookView = () => {
             testId: 'addressBook__addAddressButton'
           }}
         />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 p-4">
           <ContactTile
             contact={{
               name: DonatePallad.name,

@@ -16,10 +16,15 @@ export const useAccount = () => {
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const getAccountInfo = useVault((state) => state.getAccountInfo)
   const restartWallet = useVault((state) => state.restartWallet)
+  const _syncWallet = useVault((state) => state._syncWallet)
   const network = useAppStore((state) => state.network)
   const setVaultStateUninitialized = useAppStore(
     (state) => state.setVaultStateUninitialized
   )
+  const fetchWallet = async () => {
+    await _syncWallet(network, currentWallet?.credential.credential)
+    return getAccountInfo(network, publicKey)
+  }
   const { publicKey } = currentWallet.accountInfo
   const swr = useSWR(
     publicKey
@@ -29,7 +34,10 @@ export const useAccount = () => {
           Mina.Networks[network.toUpperCase() as keyof typeof Mina.Networks]
         ]
       : null,
-    async () => await getAccountInfo(network, publicKey)
+    async () => await fetchWallet(),
+    {
+      refreshInterval: 30000
+    }
   )
   const rawMinaBalance = swr.isLoading
     ? 0
@@ -68,6 +76,7 @@ export const useAccount = () => {
     copyWalletAddress,
     publicKey,
     lockWallet,
-    restartCurrentWallet
+    restartCurrentWallet,
+    network
   }
 }

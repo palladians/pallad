@@ -35,50 +35,52 @@ export const TransactionSummaryView = () => {
           title="Transaction Summary"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <Card className="flex flex-col relative p-2 gap-2">
-          <div className="flex absolute right-4 h-full items-center justify-center text-blue-500">
-            <ArrowDownLeftIcon />
-          </div>
-          <MetaField
-            label="From"
-            value={
-              (publicKey &&
-                truncateString({
-                  value: publicKey,
-                  endCharCount: 8,
-                  firstCharCount: 8
-                })) ||
-              ''
-            }
-          />
-          <MetaField
-            label="To"
-            value={
-              (outgoingTransaction?.to &&
-                truncateString({
-                  value: outgoingTransaction.to,
-                  endCharCount: 8,
-                  firstCharCount: 8
-                })) ||
-              ''
-            }
-          />
-        </Card>
-        <Card className="grid grid-cols-2 gap-4 p-2">
-          {/* <MetaField label="Kind" value={outgoingTransaction.kind} /> */}
-          {outgoingTransaction.amount && (
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          <Card className="flex flex-col relative p-2 gap-2">
+            <div className="flex absolute right-4 h-full items-center justify-center text-blue-500">
+              <ArrowDownLeftIcon />
+            </div>
             <MetaField
-              label="Amount"
-              value={`${outgoingTransaction.amount} MINA`}
+              label="From"
+              value={
+                (publicKey &&
+                  truncateString({
+                    value: publicKey,
+                    endCharCount: 8,
+                    firstCharCount: 8
+                  })) ||
+                ''
+              }
             />
-          )}
-          <MetaField label="Fee" value={`${outgoingTransaction.fee} MINA`} />
-          {outgoingTransaction?.amount && (
-            <MetaField label="Total" value={`${total} MINA`} />
-          )}
-        </Card>
-        <div className="flex-1" />
-        <ConfirmTransactionForm />
+            <MetaField
+              label="To"
+              value={
+                (outgoingTransaction?.to &&
+                  truncateString({
+                    value: outgoingTransaction.to,
+                    endCharCount: 8,
+                    firstCharCount: 8
+                  })) ||
+                ''
+              }
+            />
+          </Card>
+          <Card className="grid grid-cols-2 gap-4 p-2">
+            {/* <MetaField label="Kind" value={outgoingTransaction.kind} /> */}
+            {outgoingTransaction.amount && (
+              <MetaField
+                label="Amount"
+                value={`${outgoingTransaction.amount} MINA`}
+              />
+            )}
+            <MetaField label="Fee" value={`${outgoingTransaction.fee} MINA`} />
+            {outgoingTransaction?.amount && (
+              <MetaField label="Total" value={`${total} MINA`} />
+            )}
+          </Card>
+          <div className="flex-1" />
+          <ConfirmTransactionForm />
+        </div>
       </div>
     </AppLayout>
   )

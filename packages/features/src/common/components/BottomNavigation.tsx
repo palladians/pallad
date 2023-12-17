@@ -54,11 +54,11 @@ export const BottomNavigation = ({
     }
   ]
   return (
-    <Card className="sticky bottom-4 left-0 right-0 flex justify-around p-1">
-      {NAV_ITEMS.map((navItem) => {
+    <Card className="sticky bottom-4 left-0 right-0 mx-4 flex justify-between p-1 bg-background/50 backdrop-blur-md shadow-2xl">
+      {NAV_ITEMS.map((navItem, i) => {
         const active = pathname === navItem.url
         return (
-          <Tooltip key={navItem.url}>
+          <Tooltip key={i}>
             <TooltipTrigger asChild>
               <Button
                 variant={active ? 'secondary' : 'ghost'}

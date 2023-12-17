@@ -6,21 +6,24 @@ import { Skeleton } from '@/components/ui/skeleton'
 import MinaLogo from '../../common/assets/mina.svg'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useAccount } from '../../common/hooks/useAccount'
+import { ClockIcon } from 'lucide-react'
 
 export const AssetList = () => {
   const navigate = useNavigate()
   const { isLoading: accountLoading, minaBalance } = useAccount()
   return (
-    <div className="flex flex-col flex-1 gap-3">
+    <div className="flex flex-col flex-1">
       <ViewHeading
         title="Assets"
         button={{
           label: 'See Transactions',
-          onClick: () => navigate('/transactions')
+          onClick: () => navigate('/transactions'),
+          icon: <ClockIcon size={16} />
         }}
+        noHorizontalPadding
       />
       {accountLoading ? (
-        <Skeleton className="w-full h-32" />
+        <Skeleton className="w-full h-8" />
       ) : (
         <div className="flex items-center gap-4">
           <Avatar>

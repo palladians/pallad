@@ -8,12 +8,14 @@ export const NewAddressView = () => {
   const navigate = useNavigate()
   return (
     <AppLayout>
-      <div className="flex flex-col flex-1 gap-6">
+      <div className="flex flex-col flex-1">
         <ViewHeading
           title="New Address"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <NewAddressForm />
+        <div className="flex flex-col flex-1 p-4">
+          <NewAddressForm />
+        </div>
       </div>
     </AppLayout>
   )

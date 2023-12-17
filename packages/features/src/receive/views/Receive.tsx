@@ -19,12 +19,12 @@ export const ReceiveView = () => {
   const { copyWalletAddress, publicKey, gradientBackground } = useAccount()
   return (
     <AppLayout>
-      <div className="flex flex-col flex-1 gap-4">
+      <div className="flex flex-col flex-1">
         <ViewHeading
           title="Receive"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <div className="flex flex-col flex-1 gap-6">
+        <div className="flex flex-col flex-1 gap-4 p-4">
           <Card className="flex justify-center items-center p-4">
             {publicKey && (
               <div className="relative max-w-[256px] max-h-[256px] w-full h-full">

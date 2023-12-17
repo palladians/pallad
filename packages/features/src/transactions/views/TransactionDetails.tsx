@@ -9,9 +9,10 @@ import { useAccount } from '../../common/hooks/useAccount'
 import { useTransaction } from '../../common/hooks/useTransaction'
 import { TxIndicator } from '../components/TxIndicator'
 import { structurizeTransaction } from '../utils/structurizeTransactions'
+import { getAccountUrl, getTransactionUrl } from '@/lib/explorer'
 
 export const TransactionDetailsView = () => {
-  const { publicKey } = useAccount()
+  const { publicKey, network } = useAccount()
   const navigate = useNavigate()
   const { hash } = useParams()
   if (!hash) return null
@@ -25,24 +26,35 @@ export const TransactionDetailsView = () => {
       walletPublicKey: publicKey
     })
   const transactionMetaFields = transaction && [
-    { label: 'Hash', value: transaction.hash },
-    // TODO: Figure out how to make the amount not only MINA
+    {
+      label: 'Hash',
+      value: transaction.hash,
+      url: getTransactionUrl({ network, hash })
+    },
     { label: 'Amount', value: `${transaction.minaAmount} MINA` },
-    { label: 'Sender', value: transaction.from },
-    { label: 'Receiver', value: transaction.to }
+    {
+      label: 'Sender',
+      value: transaction.from,
+      url: getAccountUrl({ network, publicKey: transaction.from })
+    },
+    {
+      label: 'Receiver',
+      value: transaction.to,
+      url: getAccountUrl({ network, publicKey: transaction.to })
+    }
   ]
   return (
     <AppLayout>
-      <div className="flex flex-col flex-1 gap-4">
+      <div className="flex flex-col flex-1">
         <ViewHeading
           title="Transaction Details"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        {transactionLoading ? (
-          <Skeleton className="w-full h-8" />
-        ) : (
-          <div className="flex flex-col gap-4">
-            {transaction && (
+        <div className="flex flex-col gap-4 p-4">
+          {transactionLoading ? (
+            <Skeleton className="w-full h-8" />
+          ) : (
+            transaction && (
               <div className="flex items-center gap-4">
                 {transaction.kind && (
                   <TxIndicator
@@ -55,12 +67,17 @@ export const TransactionDetailsView = () => {
                   <p>Incoming</p>
                 </div>
               </div>
-            )}
-            {transactionMetaFields?.map(({ label, value }) => (
-              <MetaField key={label} label={label} value={value as any} />
-            ))}
-          </div>
-        )}
+            )
+          )}
+          {transactionMetaFields?.map(({ label, value, url }) => (
+            <MetaField
+              key={label}
+              label={label}
+              value={value as any}
+              url={url}
+            />
+          ))}
+        </div>
       </div>
     </AppLayout>
   )

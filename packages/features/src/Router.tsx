@@ -35,7 +35,7 @@ dayjs.extend(relativeTime)
 export const Router = () => {
   return (
     <TooltipProvider>
-      <div className="flex flex-1 h-100vh">
+      <div className="flex flex-1">
         <MemoryRouter>
           <Routes>
             <Route path="/" element={<StartView />} />
