@@ -24,27 +24,25 @@ export const ReceiveView = () => {
           title="Receive"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <div className="flex flex-col flex-1 gap-4 p-4">
-          <Card className="flex justify-center items-center p-4">
-            {publicKey && (
-              <div className="relative max-w-[256px] max-h-[256px] w-full h-full">
-                <QRCode
-                  value={publicKey}
-                  bgColor={theme === 'dark' ? '#020617' : '#ffffff'}
-                  fgColor={theme === 'dark' ? '#ffffff' : '#000000'}
-                  className="relative w-full h-full rounded-lg"
-                />
-                <div
-                  className="absolute w-full h-full inset-0 dark:mix-blend-darken mix-blend-lighten"
-                  style={{ backgroundImage: gradientBackground }}
-                />
-              </div>
-            )}
-          </Card>
+        <div className="flex flex-col flex-1 justify-center items-center gap-4 p-4">
+          {publicKey && (
+            <div className="relative max-w-[256px] max-h-[256px] w-full h-full">
+              <QRCode
+                value={publicKey}
+                bgColor={theme === 'dark' ? '#020617' : '#ffffff'}
+                fgColor={theme === 'dark' ? '#ffffff' : '#000000'}
+                className="relative w-full h-full"
+              />
+              <div
+                className="absolute w-full h-full inset-0 dark:mix-blend-darken mix-blend-lighten"
+                style={{ backgroundImage: gradientBackground }}
+              />
+            </div>
+          )}
           <Tooltip>
             <TooltipTrigger>
               <Card
-                className="p-2 break-all text-center leading-8 cursor-pointer"
+                className="p-2 break-all text-center leading-8 cursor-pointer rounded-[1rem] text-sm max-w-[256px]"
                 onClick={copyWalletAddress}
               >
                 {publicKey}
