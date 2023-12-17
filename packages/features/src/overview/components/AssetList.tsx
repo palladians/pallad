@@ -1,3 +1,4 @@
+import { ClockIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -6,7 +7,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import MinaLogo from '../../common/assets/mina.svg'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useAccount } from '../../common/hooks/useAccount'
-import { ClockIcon } from 'lucide-react'
 
 export const AssetList = () => {
   const navigate = useNavigate()

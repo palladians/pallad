@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Skeleton } from '@/components/ui/skeleton'
+import { getAccountUrl, getTransactionUrl } from '@/lib/explorer'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { MetaField } from '../../common/components/MetaField'
@@ -9,7 +10,6 @@ import { useAccount } from '../../common/hooks/useAccount'
 import { useTransaction } from '../../common/hooks/useTransaction'
 import { TxIndicator } from '../components/TxIndicator'
 import { structurizeTransaction } from '../utils/structurizeTransactions'
-import { getAccountUrl, getTransactionUrl } from '@/lib/explorer'
 
 export const TransactionDetailsView = () => {
   const { publicKey, network } = useAccount()
