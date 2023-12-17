@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 
+import { useAccount } from '@/common/hooks/useAccount'
 import { ListSkeleton } from '@/components/list-skeleton'
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useTransactions } from '../../common/hooks/useTransactions'
 import { TransactionsList } from '../components/TransactionsList'
-import { useAccount } from '@/common/hooks/useAccount'
 
 export const TransactionsView = () => {
   const navigate = useNavigate()
