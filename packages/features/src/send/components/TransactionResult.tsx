@@ -31,11 +31,13 @@ export const TransactionResult = ({
   return (
     <div className="flex flex-col flex-1">
       <ViewHeading title={title} />
-      <div className="flex flex-1 justify-center items-center gap-4">
+      <div className="flex flex-1 justify-center items-center gap-4 p-4">
         <result.icon size={56} color={result.iconColor} />
         <MetaField label={result.label} value={result.content} />
       </div>
-      <Button onClick={button.onClick}>{button.label}</Button>
+      <div className="flex flex-col p-4">
+        <Button onClick={button.onClick}>{button.label}</Button>
+      </div>
     </div>
   )
 }

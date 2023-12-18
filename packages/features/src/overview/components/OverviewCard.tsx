@@ -1,5 +1,5 @@
 import { useFiatPrice } from '@palladxyz/offchain-data'
-import { CopyIcon } from 'lucide-react'
+import { CopyIcon, MoveUpRightIcon, QrCodeIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -79,18 +79,20 @@ export const OverviewCard = () => {
         </div>
         <div className="flex gap-2">
           <Button
-            className="flex-1"
+            className="flex-1 gap-2"
             size="sm"
             onClick={() => navigate('/send')}
           >
+            <MoveUpRightIcon size={16} />
             Send
           </Button>
           <Button
             variant="outline"
-            className="flex-1"
+            className="flex-1 gap-2"
             size="sm"
             onClick={() => navigate('/receive')}
           >
+            <QrCodeIcon size={16} />
             Receive
           </Button>
         </div>

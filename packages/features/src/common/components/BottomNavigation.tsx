@@ -64,6 +64,7 @@ export const BottomNavigation = ({
                 variant={active ? 'secondary' : 'ghost'}
                 onClick={navItem.onClick}
                 data-testid={navItem.testId}
+                className={!active && 'text-muted-foreground'}
               >
                 <navItem.icon />
               </Button>

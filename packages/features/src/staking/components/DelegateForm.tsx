@@ -3,6 +3,8 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { TransactionFee } from '@/common/lib/const'
+import { useTransactionStore } from '@/common/store/transaction'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -14,12 +16,13 @@ import { DelegateFormSchema } from './DelegateForm.schema'
 export const DelegateForm = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  // const setTransactionDetails = useTransactionStore((state) => state.set)
+  const setTransactionDetails = useTransactionStore((state) => state.set)
+  const setKind = useTransactionStore((state) => state.setKind)
   const {
     register,
     handleSubmit,
     setValue,
-    // getValues,
+    getValues,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(DelegateFormSchema),
@@ -30,14 +33,13 @@ export const DelegateForm = () => {
     }
   })
   const onSubmit = (payload: OutgoingTransaction) => {
-    console.log('>>>P', payload)
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
+    setKind('staking')
     setTransactionDetails({
       to: payload.to,
-      fee: currentFee,
-      memo: payload.memo,
-      kind: 'staking'
+      fee: String(currentFee),
+      memo: payload.memo
     })
     navigate('/transactions/summary')
   }
@@ -66,32 +68,22 @@ export const DelegateForm = () => {
       </div>
       <div className="flex flex-col gap-2 flex-1">
         <Label>Fee</Label>
-        <RadioGroup defaultValue="comfortable">
+        <RadioGroup defaultValue="default">
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="flow" id="feeSlow" />
-            <Label htmlFor="feeSlow">Slow</Label>
+            <RadioGroupItem value="slow" id="feeSlow" />
+            <Label htmlFor="feeSlow">Slow ({TransactionFee.slow} MINA)</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="default" id="feeDefault" defaultChecked />
-            <Label htmlFor="feeDefault">Default</Label>
+            <Label htmlFor="feeDefault">
+              Default ({TransactionFee.default} MINA)
+            </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="fast" id="feeFast" />
-            <Label htmlFor="feeFast">Fast</Label>
+            <Label htmlFor="feeFast">Fast ({TransactionFee.fast} MINA)</Label>
           </div>
         </RadioGroup>
-        {/*<RadioGroup*/}
-        {/*  options={[*/}
-        {/*    { value: 'slow', label: `Slow (${TransactionFee.slow} MINA)` },*/}
-        {/*    {*/}
-        {/*      value: 'default',*/}
-        {/*      label: `Default (${TransactionFee.default} MINA)`,*/}
-        {/*      defaultSelected: true*/}
-        {/*    },*/}
-        {/*    { value: 'fast', label: `Fast (${TransactionFee.fast} MINA)` }*/}
-        {/*  ]}*/}
-        {/*  onChange={(value: string) => setValue('fee', value)}*/}
-        {/*/>*/}
         <p>{errors.fee?.message}</p>
       </div>
       <Button type="submit">Next</Button>

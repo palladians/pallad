@@ -112,6 +112,7 @@ export const MnemonicConfirmationView = () => {
           <Input
             data-testid="onboarding__mnemonicConfirmationInput"
             {...register('mnemonicWord')}
+            autoFocus
           />
         </div>
       </form>

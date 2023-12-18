@@ -40,6 +40,7 @@ export const NewAddressForm = () => {
           placeholder="Name"
           data-testid="newAddress__nameInput"
           {...register('name')}
+          autoFocus
         />
         <p>{errors.name?.message}</p>
       </div>

@@ -1,10 +1,12 @@
 import { AlertOctagonIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import colors from 'tailwindcss/colors' // eslint-disable-line
 
 import { AppLayout } from '../../common/components/AppLayout'
 import { TransactionResult } from '../components/TransactionResult'
 
 export const TransactionErrorView = () => {
+  const navigate = useNavigate()
   return (
     <AppLayout>
       <TransactionResult
@@ -17,7 +19,7 @@ export const TransactionErrorView = () => {
         }}
         button={{
           label: 'Try Again',
-          onClick: () => console.log('details')
+          onClick: () => navigate(-1)
         }}
       />
     </AppLayout>

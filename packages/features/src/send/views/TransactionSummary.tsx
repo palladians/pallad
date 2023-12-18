@@ -19,6 +19,7 @@ export const TransactionSummaryView = () => {
   const outgoingTransaction = useTransactionStore(
     (state) => state.outgoingTransaction
   )
+  const kind = useTransactionStore((state) => state.kind)
   if (!outgoingTransaction) return null
   const total = useMemo(
     () =>
@@ -36,7 +37,7 @@ export const TransactionSummaryView = () => {
           backButton={{ onClick: () => navigate(-1) }}
         />
         <div className="flex flex-1 flex-col gap-4 p-4">
-          <Card className="flex flex-col relative p-2 gap-2">
+          <Card className="flex flex-col relative p-2 gap-2 rounded-[1rem]">
             <div className="flex absolute right-4 h-full items-center justify-center text-blue-500">
               <ArrowDownLeftIcon />
             </div>
@@ -65,8 +66,8 @@ export const TransactionSummaryView = () => {
               }
             />
           </Card>
-          <Card className="grid grid-cols-2 gap-4 p-2">
-            {/* <MetaField label="Kind" value={outgoingTransaction.kind} /> */}
+          <Card className="grid grid-cols-2 gap-4 p-2 rounded-[1rem]">
+            <MetaField label="Kind" value={kind} />
             {outgoingTransaction.amount && (
               <MetaField
                 label="Amount"

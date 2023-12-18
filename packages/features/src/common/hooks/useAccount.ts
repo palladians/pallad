@@ -53,6 +53,8 @@ export const useAccount = () => {
       }),
     [publicKey]
   )
+  const stakeDelegated =
+    currentWallet.accountInfo.publicKey !== currentWallet.accountInfo.delegate
   const copyWalletAddress = async () => {
     await navigator.clipboard.writeText(publicKey ?? '')
     toast({
@@ -74,9 +76,11 @@ export const useAccount = () => {
     minaBalance,
     gradientBackground,
     copyWalletAddress,
+    accountInfo: currentWallet.accountInfo,
     publicKey,
     lockWallet,
     restartCurrentWallet,
-    network
+    network,
+    stakeDelegated
   }
 }

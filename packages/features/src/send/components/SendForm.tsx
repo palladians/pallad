@@ -19,6 +19,7 @@ export const SendForm = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const setTransactionDetails = useTransactionStore((state) => state.set)
+  const setKind = useTransactionStore((state) => state.setKind)
   const { data: accountData, isLoading: accountLoading } = useAccount()
   if (accountLoading) return null
   const totalBalance =
@@ -49,6 +50,7 @@ export const SendForm = () => {
   const onSubmit = (payload: OutgoingTransaction) => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
+    setKind('transaction')
     setTransactionDetails({
       to: payload.to,
       fee: String(currentFee),
@@ -116,15 +118,17 @@ export const SendForm = () => {
         <RadioGroup defaultValue="default">
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="flow" id="feeSlow" />
-            <Label htmlFor="feeSlow">Slow</Label>
+            <Label htmlFor="feeSlow">Slow ({TransactionFee.slow} MINA)</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="default" id="feeDefault" defaultChecked />
-            <Label htmlFor="feeDefault">Default</Label>
+            <Label htmlFor="feeDefault">
+              Default ({TransactionFee.default} MINA)
+            </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="fast" id="feeFast" />
-            <Label htmlFor="feeFast">Fast</Label>
+            <Label htmlFor="feeFast">Fast ({TransactionFee.fast} MINA)</Label>
           </div>
         </RadioGroup>
         <FormError>{errors.fee?.message}</FormError>
