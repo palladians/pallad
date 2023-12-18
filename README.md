@@ -1,4 +1,18 @@
-# Pallad
+<!-- markdownlint-disable -->
+<div align="center">
+  <img src="./pallad_icon.svg" height="256">
+  <div style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 100px;">
+    Pallad 🦋
+  </div>
+</div>
+<div align="center">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+</div>
+<div align="center">
+<br />
+<!-- markdownlint-restore -->
 
 ![Module type: ESM](https://img.shields.io/badge/module%20type-esm-brightgreen)
 [![Discord](https://img.shields.io/discord/1127906495409958953?label=Discord)](https://discord.gg/ExzzfTGUnB)
@@ -6,15 +20,24 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/6d459ab7-81f7-44f9-86ee-05ae72b451eb/deploy-status)](https://app.netlify.com/sites/pallad/deploys)
 
 ⚠️ Work in progress ⚠️
+🚨 Now in Beta 🚨
+</div>
 
-An experimental and progressive Mina Protocol wallet.
+Welcome to Pallad an experimental and progressive Mina Protocol wallet! 
 
-## Prerequisite
+In the vast and evolving world of Web3, a wallet is not just a tool; it's the gateway to a whole new universe. It's the first consumer application anyone encounters in a blockchain ecosystem, and it's pivotal in shaping the user experience. That's where Pallad steps in!
+
+Pallad is at the frontier, leading the way in innovation and user-centric design. We're not just building a wallet; we're crafting the cornerstone of zero-knowledge application interaction design. With Pallad, you're stepping into the future.
+
+
+## Getting Started 🚀
+
+### Prerequisite 📌
 
 - [NVM](https://github.com/nvm-sh/nvm)
 - pnpm
 
-## Installation
+### Installation  💻
 
 Make sure you're on the right Node.js version, and you got pnpm installed.
 
@@ -37,7 +60,7 @@ Build all the modules in repo:
 $ pnpm build
 ```
 
-## Structure
+## Structure 🏗️
 
 This is a monorepo for all the Pallad-related code.
 
@@ -57,7 +80,7 @@ This is a monorepo for all the Pallad-related code.
   - `util` - Shared util functions for other packages.
   - `vault` - Credentials storage.
 
-## Development
+## Development 🛠️
 
 Set up the dev server of extension:
 
@@ -65,7 +88,7 @@ Set up the dev server of extension:
 $ pnpm dev:extension
 ```
 
-## Testing
+## Testing 🧪
 
 Running linter:
 
@@ -110,13 +133,13 @@ Thanks goes to these wonderful people
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 </a>
 
-## Contributing
+## Contributing 🤝
 
 We specified contributing guidelines. Please refer to them before starting contributing to this repository.
 
 [Contributing Guidelines](https://github.com/palladians/pallad/blob/main/CONTRIBUTING.md)
 
-## Links
+## Links 🌍
 
 [pallad.xyz - The official website of Pallad](https://pallad.xyz/)
 
