@@ -1,14 +1,9 @@
 <!-- markdownlint-disable -->
 <div align="center">
   <img src="./pallad_icon.svg" height="256">
-  <div style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 100px;">
-    Pallad 🦋
-  </div>
 </div>
 <div align="center">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+  <img src="./pallad_name.png" height="128">
 </div>
 <div align="center">
 <br />
