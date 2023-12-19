@@ -1,5 +1,7 @@
 name: Release Workflow 🚀
 on:
+  push:
+    branches: [chore/example-release-workflow]
   workflow_dispatch:
     inputs:
       version:
