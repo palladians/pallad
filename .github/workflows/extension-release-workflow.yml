@@ -34,8 +34,8 @@ jobs:
 
       - name: Compress dist folder
         run: |
-          cd apps/extension/dist/
-          zip -r ../../../../dist.zip .
+          cd apps/extension
+          zip -r ../../dist.zip dist/
 
       - name: Generate release tag
         id: tag
