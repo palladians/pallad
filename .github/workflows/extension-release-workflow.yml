@@ -33,7 +33,9 @@ jobs:
         run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:extension
 
       - name: Compress dist folder
-        run: zip -r dist.zip apps/extension/dist/
+        run: |
+          cd apps/extension/dist/
+          zip -r ../../../../dist.zip *
 
       - name: Generate release tag
         id: tag
