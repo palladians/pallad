@@ -68,7 +68,10 @@ export const DelegateForm = () => {
       </div>
       <div className="flex flex-col gap-2 flex-1">
         <Label>Fee</Label>
-        <RadioGroup defaultValue="default">
+        <RadioGroup
+          defaultValue="default"
+          onValueChange={(value) => setValue('fee', value)}
+        >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="slow" id="feeSlow" />
             <Label htmlFor="feeSlow">Slow ({TransactionFee.slow} MINA)</Label>

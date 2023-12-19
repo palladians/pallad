@@ -16,8 +16,8 @@ jobs:
     name: 'Build and test'
     env:
       VITE_APP_MODE: web
-      VITE_APP_DEFAULT_NETWORK: Devnet
-      NODE_OPTIONS: "--max_old_space_size=4096"
+      VITE_APP_DEFAULT_NETWORK: Berkeley
+      NODE_OPTIONS: '--max_old_space_size=4096'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

@@ -23,6 +23,10 @@ describe('ProviderStore', () => {
       [Mina.Networks.BERKELEY]: {
         nodeUrl: 'https://proxy.berkeley.minaexplorer.com/',
         archiveUrl: 'https://berkeley.graphql.minaexplorer.com'
+      },
+      [Mina.Networks.TESTWORLD]: {
+        nodeUrl: 'https://proxy.testworld.minaexplorer.com/',
+        archiveUrl: 'https://testworld.graphql.minaexplorer.com'
       }
     }
   })
@@ -42,11 +46,11 @@ describe('ProviderStore', () => {
   it('should set a devnet provider in the store', async () => {
     const { result } = renderHook(() => useVault())
     await act(async () => {
-      await result.current.setProvider({
+      result.current.setProvider({
         networkName: 'Mina Devnet',
         provider: providerFactory(
-          providerConfigurations[Mina.Networks.DEVNET]!,
-          Mina.Networks.DEVNET
+          providerConfigurations[Mina.Networks.BERKELEY]!,
+          Mina.Networks.BERKELEY
         )
       })
       const networks = await result.current.getAvailableNetworks()

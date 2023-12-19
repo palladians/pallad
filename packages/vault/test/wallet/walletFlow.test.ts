@@ -64,6 +64,10 @@ describe('WalletTest', () => {
       [Mina.Networks.BERKELEY]: {
         nodeUrl: 'https://proxy.berkeley.minaexplorer.com/',
         archiveUrl: 'https://berkeley.graphql.minaexplorer.com'
+      },
+      [Mina.Networks.TESTWORLD]: {
+        nodeUrl: 'https://proxy.testworld.minaexplorer.com/',
+        archiveUrl: 'https://testworld.graphql.minaexplorer.com'
       }
     }
   })
@@ -80,9 +84,9 @@ describe('WalletTest', () => {
     // define networks
     await act(async () => {
       await result.current.ensureProvider(
-        'Mina Devnet',
-        providerConfigurations[Mina.Networks.DEVNET]!,
-        Mina.Networks.DEVNET
+        'Mina BERKELEY',
+        providerConfigurations[Mina.Networks.BERKELEY]!,
+        Mina.Networks.BERKELEY
       )
     })
     // add first key agent
@@ -130,14 +134,14 @@ describe('WalletTest', () => {
       const transactionHistory = await provider.provider?.getTransactions({
         addresses: [storedCredential?.credential?.address as string]
       })
-      result.current.ensureAccount(Mina.Networks.DEVNET, credential?.address)
+      result.current.ensureAccount(Mina.Networks.BERKELEY, credential?.address)
       result.current.setAccountInfo(
-        Mina.Networks.DEVNET,
+        Mina.Networks.BERKELEY,
         storedCredential?.credential?.address as string,
         accountInfo as Multichain.MultiChainAccountInfo
       )
       result.current.setTransactions(
-        Mina.Networks.DEVNET,
+        Mina.Networks.BERKELEY,
         storedCredential?.credential?.address as string,
         transactionHistory?.pageResults as Multichain.MultiChainTransactionBody[]
       )
@@ -150,20 +154,26 @@ describe('WalletTest', () => {
     console.log('account info result: ', accountInfo)
     expect(result.current.credentials['Test Credential']).toBeDefined()
     expect(
-      result.current.getAccountInfo(Mina.Networks.DEVNET, credential?.address)
+      result.current.getAccountInfo(Mina.Networks.BERKELEY, credential?.address)
     ).toBeDefined()
     expect(
-      result.current.getTransactions(Mina.Networks.DEVNET, credential?.address)
+      result.current.getTransactions(
+        Mina.Networks.BERKELEY,
+        credential?.address
+      )
     ).toBeDefined()
     const groupedCredential = result.current.credentials['Test Credential']
     console.log('credential: ', groupedCredential)
     console.log(
       'account info: ',
-      result.current.getAccountInfo(Mina.Networks.DEVNET, credential?.address)
+      result.current.getAccountInfo(Mina.Networks.BERKELEY, credential?.address)
     )
     console.log(
       'transactions: ',
-      result.current.getTransactions(Mina.Networks.DEVNET, credential?.address)
+      result.current.getTransactions(
+        Mina.Networks.BERKELEY,
+        credential?.address
+      )
     )
     // construct transaction, sign, and submit
     const amount = 1 * 1e9

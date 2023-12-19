@@ -3,6 +3,7 @@ import { CopyIcon, MoveUpRightIcon, QrCodeIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -16,8 +17,13 @@ import { AvatarMenu } from './AvatarMenu'
 
 export const OverviewCard = () => {
   const navigate = useNavigate()
-  const { minaBalance, gradientBackground, publicKey, copyWalletAddress } =
-    useAccount()
+  const {
+    minaBalance,
+    gradientBackground,
+    publicKey,
+    copyWalletAddress,
+    network
+  } = useAccount()
   const { data: fiatPriceData } = useFiatPrice()
   const fiatBalance = useMemo(() => {
     if (!minaBalance) return
@@ -76,6 +82,9 @@ export const OverviewCard = () => {
               <p>Copy Address</p>
             </TooltipContent>
           </Tooltip>
+          <Badge variant="outline" className="capitalize">
+            {network}
+          </Badge>
         </div>
         <div className="flex gap-2">
           <Button
