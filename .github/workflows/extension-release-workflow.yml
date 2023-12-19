@@ -32,6 +32,9 @@ jobs:
           TURBO_TEAM: pallad
         run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:extension
 
+      - name: Compress dist folder
+        run: zip -r dist.zip apps/extension/dist/
+
       - name: Generate release tag
         id: tag
         run: |
@@ -47,4 +50,4 @@ jobs:
           body: 'Release of version ${{ steps.tag.outputs.release_tag }} 🚀'
           draft: false
           prerelease: false
-          files: apps/extension/dist/*
+          files: dist.zip
