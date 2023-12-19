@@ -13,13 +13,9 @@ jobs:
   build_and_release:
     name: 'Build and Release 🛠️'
     runs-on: ubuntu-latest
-    env:
-      VITE_APP_MODE: web
-      VITE_APP_DEFAULT_NETWORK: Devnet
-      NODE_OPTIONS: "--max_old_space_size=4096"
-      RELEASE_VERSION: ${{ github.event.inputs.version }}
     steps:
       - uses: actions/checkout@v3
+      
       - name: Setup env 🌍
         uses: ./.github/actions/setup
         with:
@@ -28,19 +24,27 @@ jobs:
 
       - name: Build extension 🏗️
         env:
+          VITE_APP_MODE: web
+          VITE_APP_DEFAULT_NETWORK: Devnet
+          NODE_OPTIONS: "--max_old_space_size=4096"
           TURBO_API: 'http://127.0.0.1:9080'
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
         run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:extension
 
+      - name: Generate release tag
+        id: tag
+        run: |
+          echo "::set-output name=release_tag::UserBuild_$(date +"%Y.%m.%d_%H-%M")"
+
       - name: Create Release 🎉
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.RELEASE_VERSION }}
-          name: Release ${{ env.RELEASE_VERSION }}
-          body: 'Release of version ${{ env.RELEASE_VERSION }} 🚀'
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          name: Release ${{ steps.tag.outputs.release_tag }}
+          body: 'Release of version ${{ steps.tag.outputs.release_tag }} 🚀'
           draft: false
           prerelease: false
           files: apps/extension/dist/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
