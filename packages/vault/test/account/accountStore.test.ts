@@ -13,7 +13,7 @@ describe('AccountStore', () => {
 
   beforeEach(async () => {
     address = 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
-    network = Mina.Networks.DEVNET
+    network = Mina.Networks.BERKELEY
     mockAccountInfo = {
       balance: {
         total: 49000000000

@@ -39,12 +39,16 @@ const NETWORK_CONFIG = {
   [Mina.Networks.BERKELEY]: {
     nodeUrl: 'https://proxy.berkeley.minaexplorer.com/',
     archiveUrl: 'https://berkeley.graphql.minaexplorer.com'
+  },
+  [Mina.Networks.TESTWORLD]: {
+    nodeUrl: 'https://proxy.testworld.minaexplorer.com/',
+    archiveUrl: 'https://testworld.graphql.minaexplorer.com'
   }
 } as const
 
 const networkManager = new NetworkManager<Multichain.MultiChainNetworks>(
   NETWORK_CONFIG,
-  Mina.Networks.DEVNET
+  Mina.Networks.BERKELEY
 )
 const providerManager = new ProviderManager<Multichain.MultiChainNetworks>(
   NETWORK_CONFIG
@@ -68,7 +72,7 @@ const defaultGlobalVaultState: GlobalVaultState = {
   currentAddressIndex: 0,
   chain: Network.Mina,
   walletName: '',
-  walletNetwork: Mina.Networks.DEVNET
+  walletNetwork: Mina.Networks.BERKELEY
 }
 
 export const useVault = create<
@@ -108,7 +112,8 @@ export const useVault = create<
           keyAgentName,
           getCredential,
           credentialName,
-          getAccountInfo
+          getAccountInfo,
+          walletNetwork
         } = get()
         const singleKeyAgentState = getKeyAgent(keyAgentName)
         const credential = getCredential(credentialName)
@@ -116,8 +121,7 @@ export const useVault = create<
         return {
           singleKeyAgentState,
           credential,
-          accountInfo: getAccountInfo(Mina.Networks.DEVNET, publicKey) // TODO: figure out why this is fixed to DEVNET
-            .accountInfo,
+          accountInfo: getAccountInfo(walletNetwork, publicKey).accountInfo,
           transactions: [] // TODO: figure out why this is fixed to empty?
         }
       },
@@ -194,14 +198,16 @@ export const useVault = create<
             'Mina provider is undefined in switchNetwork method'
           )
         networkManager.switchNetwork(network)
-        const { getCurrentWallet, _syncWallet } = get()
+        const { getCurrentWallet, _syncWallet, ensureAccount } = get()
         const currentWallet = getCurrentWallet()
         if (!currentWallet)
           throw new Error('Current wallet is null, empty or undefined')
+        ensureAccount(network, currentWallet.accountInfo.publicKey)
         await _syncWallet(
           network,
           currentWallet.credential.credential as GroupedCredentials
         )
+        return set({ currentNetwork: network })
       },
       getCredentials: (query, props = []) => {
         const { searchCredentials } = get()

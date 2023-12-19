@@ -4,10 +4,12 @@ import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { useVault } from '@palladxyz/vault'
 import { addHours } from 'date-fns'
+import { Loader2Icon } from 'lucide-react'
 import {
   Payment,
   SignedLegacy
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
@@ -24,6 +26,7 @@ import { ConfirmTransactionSchema } from './ConfirmTransactionForm.schema'
 type ConfirmTransactionData = z.infer<typeof ConfirmTransactionSchema>
 
 export const ConfirmTransactionForm = () => {
+  const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
   const sign = useVault((state) => state.sign)
   const submitTx = useVault((state) => state.submitTx)
@@ -83,20 +86,28 @@ export const ConfirmTransactionForm = () => {
         validUntil: transaction.validUntil
       }
     }
-    const submittedTx = (await submitTx(submitTxArgs as any)) as any
-    addPendingTransaction({
-      hash: submittedTx.sendPayment.payment.hash,
-      expireAt: addHours(new Date(), 8).toISOString()
-    })
-    await syncWallet(
-      Mina.Networks.DEVNET,
-      currentWallet.credential.credential as GroupedCredentials
-    )
-    navigate('/transactions/success', {
-      state: {
-        hash: submittedTx.sendPayment.payment.hash
-      }
-    })
+    try {
+      setSubmitting(true)
+      const submittedTx = (await submitTx(submitTxArgs as any)) as any
+      const hash =
+        submittedTx?.sendPayment?.payment?.hash ??
+        submittedTx?.sendDelegation?.delegation?.hash
+      addPendingTransaction({
+        hash,
+        expireAt: addHours(new Date(), 8).toISOString()
+      })
+      await syncWallet(
+        Mina.Networks.BERKELEY,
+        currentWallet.credential.credential as GroupedCredentials
+      )
+      navigate('/transactions/success', {
+        state: {
+          hash
+        }
+      })
+    } finally {
+      setSubmitting(false)
+    }
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -109,7 +120,10 @@ export const ConfirmTransactionForm = () => {
           autoFocus
         />
       </fieldset>
-      <Button>Send</Button>
+      <Button disabled={submitting}>
+        {submitting && <Loader2Icon size={16} className="animate-spin" />}
+        <span>Send</span>
+      </Button>
     </form>
   )
 }

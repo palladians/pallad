@@ -10,7 +10,7 @@ jobs:
     name: Run E2E tests
     env:
       VITE_APP_MODE: web
-      VITE_APP_DEFAULT_NETWORK: Devnet
+      VITE_APP_DEFAULT_NETWORK: Berkeley
       NODE_OPTIONS: '--max_old_space_size=4096'
     runs-on: ubuntu-latest
     steps:

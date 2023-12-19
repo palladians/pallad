@@ -6,10 +6,10 @@ describe('MultiChainProvider', () => {
   it('should create a mina provider and query the network', async () => {
     const provider = new MultiChainProvider(
       {
-        nodeUrl: 'https://proxy.devnet.minaexplorer.com/',
-        archiveUrl: 'https://devnet.graphql.minaexplorer.com'
+        nodeUrl: 'https://proxy.berkeley.minaexplorer.com/',
+        archiveUrl: 'https://berkeley.graphql.minaexplorer.com'
       },
-      Mina.Networks.DEVNET
+      Mina.Networks.BERKELEY
     )
 
     const accountInfo = await provider.getAccountInfo({

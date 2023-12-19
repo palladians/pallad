@@ -58,7 +58,7 @@ export const SettingsView = () => {
           <div className="flex flex-col gap-2">
             <Label>Network</Label>
             <RadioGroup value={network} onValueChange={handleNetworkSwitch}>
-              <div className="flex items-center space-x-2">
+              {/* TODO: Enable after Public Beta <div className="flex items-center space-x-2">
                 <RadioGroupItem
                   value={
                     Mina.Networks[
@@ -68,18 +68,7 @@ export const SettingsView = () => {
                   id="networkMainnet"
                 />
                 <Label htmlFor="networkMainnet">Mainnet</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value={
-                    Mina.Networks[
-                      Mina.Networks.DEVNET.toUpperCase() as keyof typeof Mina.Networks
-                    ]
-                  }
-                  id="networkDevnet"
-                />
-                <Label htmlFor="networkDevnet">Devnet</Label>
-              </div>
+              </div> */}
               <div className="flex items-center space-x-2">
                 <RadioGroupItem
                   value={
@@ -91,6 +80,17 @@ export const SettingsView = () => {
                 />
                 <Label htmlFor="networkBerkeley">Berkeley</Label>
               </div>
+              {/* <div className="flex items-center space-x-2">
+                <RadioGroupItem
+                  value={
+                    Mina.Networks[
+                      Mina.Networks.TESTWORLD.toUpperCase() as keyof typeof Mina.Networks
+                    ]
+                  }
+                  id="networkBerkeley"
+                />
+                <Label htmlFor="networkBerkeley">TestWorld 2.0</Label>
+              </div> */}
             </RadioGroup>
           </div>
           <div className="flex flex-col gap-2">

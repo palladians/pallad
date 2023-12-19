@@ -3,6 +3,6 @@ import { runtime } from 'webextension-polyfill'
 
 runtime.onInstalled.addListener(() => {
   onMessage('mina_chainId', () => {
-    return 'Devnet'
+    return 'Berkeley'
   })
 })

@@ -31,7 +31,7 @@ export const TransactionSummaryView = () => {
   )
   return (
     <AppLayout>
-      <div className="flex flex-1 flex-col gap-4">
+      <div className="flex flex-1 flex-col">
         <ViewHeading
           title="Transaction Summary"
           backButton={{ onClick: () => navigate(-1) }}
@@ -67,7 +67,7 @@ export const TransactionSummaryView = () => {
             />
           </Card>
           <Card className="grid grid-cols-2 gap-4 p-2 rounded-[1rem]">
-            <MetaField label="Kind" value={kind} />
+            <MetaField label="Kind" value={kind} capitalize />
             {outgoingTransaction.amount && (
               <MetaField
                 label="Amount"

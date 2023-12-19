@@ -8,6 +8,7 @@ import {
 import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { KeyAgents, useVault } from '@palladxyz/vault'
+import { Loader2Icon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -24,6 +25,7 @@ import { useAppStore } from '../../common/store/app'
 import { useOnboardingStore } from '../../common/store/onboarding'
 
 export const MnemonicInputView = () => {
+  const [restoring, setRestoring] = useState(false)
   const restoreWallet = useVault((state) => state.restoreWallet)
   const navigate = useNavigate()
   const { walletName, spendingPassword } = useOnboardingStore(
@@ -58,20 +60,25 @@ export const MnemonicInputView = () => {
       addressIndex: 0,
       networkType: 'testnet' // TODO: make this configurable
     }
-    await restoreWallet(
-      new MinaPayload(),
-      restoreArgs,
-      Mina.Networks.DEVNET,
-      {
-        mnemonicWords: mnemonic.split(' '),
-        getPassphrase: async () => Buffer.from(spendingPassword)
-      },
-      walletName,
-      KeyAgents.InMemory,
-      'Test'
-    )
-    setVaultStateInitialized()
-    return navigate('/onboarding/finish')
+    try {
+      setRestoring(true)
+      await restoreWallet(
+        new MinaPayload(),
+        restoreArgs,
+        Mina.Networks.BERKELEY,
+        {
+          mnemonicWords: mnemonic.split(' '),
+          getPassphrase: async () => Buffer.from(spendingPassword)
+        },
+        walletName,
+        KeyAgents.InMemory,
+        'Test'
+      )
+      setVaultStateInitialized()
+      return navigate('/onboarding/finish')
+    } finally {
+      setRestoring(false)
+    }
   }
   return (
     <WizardLayout
@@ -79,13 +86,14 @@ export const MnemonicInputView = () => {
         <Button
           variant="secondary"
           className={cn([
-            'flex-1 transition-opacity opacity-50',
+            'flex-1 transition-opacity opacity-50 gap-2',
             mnemonicValid && 'opacity-100'
           ])}
-          disabled={!mnemonicValid}
+          disabled={!mnemonicValid || restoring}
           onClick={handleSubmit(onSubmit)}
           data-testid="onboarding__nextButton"
         >
+          {restoring && <Loader2Icon size={16} className="animate-spin" />}
           Next
         </Button>
       }

@@ -57,6 +57,10 @@ describe('WalletTest', () => {
       [Mina.Networks.BERKELEY]: {
         nodeUrl: 'https://proxy.berkeley.minaexplorer.com/',
         archiveUrl: 'https://berkeley.graphql.minaexplorer.com'
+      },
+      [Mina.Networks.TESTWORLD]: {
+        nodeUrl: 'https://proxy.testworld.minaexplorer.com/',
+        archiveUrl: 'https://testworld.graphql.minaexplorer.com'
       }
     }
   })
@@ -67,8 +71,8 @@ describe('WalletTest', () => {
     await act(async () => {
       await result.current.ensureProvider(
         'Mina Devnet',
-        providerConfigurations[Mina.Networks.DEVNET]!,
-        Mina.Networks.DEVNET
+        providerConfigurations[Mina.Networks.BERKELEY]!,
+        Mina.Networks.BERKELEY
       )
     })
     // add first key agent
@@ -116,14 +120,14 @@ describe('WalletTest', () => {
       const transactionHistory = await provider.provider?.getTransactions({
         addresses: [storedCredential?.credential?.address as string]
       })
-      result.current.ensureAccount(Mina.Networks.DEVNET, credential?.address)
+      result.current.ensureAccount(Mina.Networks.BERKELEY, credential?.address)
       result.current.setAccountInfo(
-        Mina.Networks.DEVNET,
+        Mina.Networks.BERKELEY,
         storedCredential?.credential?.address as string,
         accountInfo as Multichain.MultiChainAccountInfo
       )
       result.current.setTransactions(
-        Mina.Networks.DEVNET,
+        Mina.Networks.BERKELEY,
         storedCredential?.credential?.address as string,
         transactionHistory?.pageResults as Multichain.MultiChainTransactionBody[]
       )

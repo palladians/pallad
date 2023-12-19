@@ -33,6 +33,7 @@ export class MultiChainProvider {
       case Mina.Networks.MAINNET:
       case Mina.Networks.DEVNET:
       case Mina.Networks.BERKELEY:
+      case Mina.Networks.TESTWORLD:
         // Assuming UnifiedMinaProviderType can be instantiated with providerConfig
         this.specificProvider = new UnifiedMinaProvider(providerConfig)
         break
@@ -50,7 +51,8 @@ export class MultiChainProvider {
     if (
       this.network === Mina.Networks.MAINNET ||
       this.network === Mina.Networks.DEVNET ||
-      this.network === Mina.Networks.BERKELEY
+      this.network === Mina.Networks.BERKELEY ||
+      this.network === Mina.Networks.TESTWORLD
     ) {
       return await this.specificProvider?.getAccountInfo(args)
     }
@@ -63,7 +65,8 @@ export class MultiChainProvider {
     if (
       this.network === Mina.Networks.MAINNET ||
       this.network === Mina.Networks.DEVNET ||
-      this.network === Mina.Networks.BERKELEY
+      this.network === Mina.Networks.BERKELEY ||
+      this.network === Mina.Networks.TESTWORLD
     ) {
       return await this.specificProvider?.getTransactionStatus(args)
     }
@@ -78,7 +81,8 @@ export class MultiChainProvider {
     if (
       this.network === Mina.Networks.MAINNET ||
       this.network === Mina.Networks.DEVNET ||
-      this.network === Mina.Networks.BERKELEY
+      this.network === Mina.Networks.BERKELEY ||
+      this.network === Mina.Networks.TESTWORLD
     ) {
       return await this.specificProvider?.submitTransaction(args)
     }
@@ -91,7 +95,8 @@ export class MultiChainProvider {
     if (
       this.network === Mina.Networks.MAINNET ||
       this.network === Mina.Networks.DEVNET ||
-      this.network === Mina.Networks.BERKELEY
+      this.network === Mina.Networks.BERKELEY ||
+      this.network === Mina.Networks.TESTWORLD
     ) {
       return await this.specificProvider?.getTransactions(args)
     }

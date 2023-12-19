@@ -115,7 +115,10 @@ export const SendForm = () => {
       </div>
       <div className="flex flex-col gap-2 flex-1">
         <Label>Fee</Label>
-        <RadioGroup defaultValue="default">
+        <RadioGroup
+          defaultValue="default"
+          onValueChange={(value) => setValue('fee', value)}
+        >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="flow" id="feeSlow" />
             <Label htmlFor="feeSlow">Slow ({TransactionFee.slow} MINA)</Label>
