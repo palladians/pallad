@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
+    "types": ["vite-plugin-svgr/client"],
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {

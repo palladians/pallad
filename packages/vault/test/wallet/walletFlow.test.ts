@@ -229,9 +229,8 @@ describe('WalletTest', () => {
       }
     }
     // Note: If there is a pending transaction, this will fail -- good nonce management is needed
-    const submitTxResult = await provider.provider?.submitTransaction(
-      submitTxArgs
-    )
+    const submitTxResult =
+      await provider.provider?.submitTransaction(submitTxArgs)
     console.log('submitTxResult: ', submitTxResult)
   })
 })

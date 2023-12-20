@@ -1,4 +1,4 @@
-import { chacha20_poly1305 } from '@noble/ciphers/chacha'
+import { chacha20poly1305 } from '@noble/ciphers/chacha'
 import { randomBytes } from '@noble/ciphers/webcrypto/utils'
 import { pbkdf2Async } from '@noble/hashes/pbkdf2'
 import { sha512 } from '@noble/hashes/sha512'
@@ -27,7 +27,7 @@ export const emip3encrypt = async (
   const salt = randomBytes(SALT_LENGTH)
   const key = await createPbkdf2Key(passphrase, salt)
   const nonce = randomBytes(NONCE_LENGTH)
-  const cipher = chacha20_poly1305(key, nonce)
+  const cipher = chacha20poly1305(key, nonce)
   const encrypted = cipher.encrypt(data)
   return Buffer.concat([salt, nonce, encrypted])
 }
@@ -40,6 +40,6 @@ export const emip3decrypt = async (
   const nonce = encrypted.slice(SALT_LENGTH, SALT_LENGTH + NONCE_LENGTH)
   const data = encrypted.slice(SALT_LENGTH + NONCE_LENGTH)
   const key = await createPbkdf2Key(passphrase, salt)
-  const decipher = chacha20_poly1305(key, nonce)
+  const decipher = chacha20poly1305(key, nonce)
   return decipher.decrypt(data)
 }
