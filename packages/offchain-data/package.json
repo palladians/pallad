@@ -12,14 +12,14 @@
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "bun build ./src/index.ts --outdir ./dist",
+    "dev": "bun run build ---watch",
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
     "swr": "^2.2.0"
   },
   "devDependencies": {
-    "@palladxyz/common": "*"
+    "@palladxyz/common": "workspace:*"
   }
 }

@@ -1,7 +1,6 @@
 import { sha256 } from '@noble/hashes/sha256'
 import { base58check } from '@scure/base'
 import { HDKey } from '@scure/bip32'
-import { Buffer } from 'buffer'
 
 import { reverseBytes } from './keyDerivationUtils'
 import { MinaKeyConst, MinaSpecificArgs } from './types'

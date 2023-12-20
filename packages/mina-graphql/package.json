@@ -12,16 +12,15 @@
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "bun build ./src/index.ts --outdir ./dist",
+    "dev": "bun run build ---watch",
     "test:unit": "vitest run",
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/mina-core": "*",
-    "@palladxyz/util": "*",
+    "@palladxyz/mina-core": "workspace:*",
+    "@palladxyz/util": "workspace:*",
     "bs58check": "^3.0.1",
-    "buffer": "^6.0.3",
     "events": "^3.3.0",
     "graphql": "^16.6.0",
     "graphql-request": "^6.1.0",
@@ -30,7 +29,7 @@
     "ws": "^8.13.0"
   },
   "devDependencies": {
-    "@palladxyz/common": "*",
+    "@palladxyz/common": "workspace:*",
     "@types/events": "^3.0.0",
     "@types/mocha": "^10.0.1",
     "@types/secp256k1": "^4.0.3",

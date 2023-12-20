@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { CredentialName } from '@palladxyz/vault'
 import {
   adjectives,

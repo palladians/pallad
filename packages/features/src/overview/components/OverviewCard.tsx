@@ -34,7 +34,7 @@ export const OverviewCard = () => {
   if (!publicKey) return null
   return (
     <div
-      className="flex flex-col items-center justify-center rounded-[16px] gap-4 p-[2px] relative"
+      className="flex flex-col items-center justify-center rounded-[1rem] gap-4 p-[2px] relative"
       style={{ backgroundImage: gradientBackground }}
     >
       <div

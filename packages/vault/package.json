@@ -12,28 +12,27 @@
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "bun build ./src/index.ts --outdir ./dist",
+    "dev": "bun run build ---watch",
     "test:unit": "vitest run",
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/key-management": "*",
-    "@palladxyz/mina-core": "*",
-    "@palladxyz/mina-graphql": "*",
-    "@palladxyz/multi-chain-core": "*",
-    "@palladxyz/persistence": "*",
-    "@palladxyz/util": "*",
+    "@palladxyz/key-management": "workspace:*",
+    "@palladxyz/mina-core": "workspace:*",
+    "@palladxyz/mina-graphql": "workspace:*",
+    "@palladxyz/multi-chain-core": "workspace:*",
+    "@palladxyz/persistence": "workspace:*",
+    "@palladxyz/util": "workspace:*",
     "unique-names-generator": "^4.7.1",
     "bs58check": "^3.0.1",
-    "buffer": "^6.0.3",
     "immer": "^10.0.3",
     "rambda": "^7.5.0",
     "vitest": "^0.34.4",
     "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "@palladxyz/common": "*",
+    "@palladxyz/common": "workspace:*",
     "@testing-library/react": "^14.0.0",
     "@types/mocha": "^10.0.1",
     "@types/secp256k1": "^4.0.3",

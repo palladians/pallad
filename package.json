@@ -4,34 +4,39 @@
   "description": "A progressive Mina Protocol wallet.",
   "homepage": "https://github.com/palladians/pallad",
   "license": "Apache-2.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
-    "b": "pnpm build",
+    "b": "bun run build",
     "build:extension": "turbo run build --filter=@palladxyz/extension...",
     "build:website": "turbo run build --filter=@palladxyz/website...",
     "build:features": "turbo run build --filter=@palladxyz/features...",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
     "dev": "turbo run dev",
-    "d": "pnpm dev",
+    "d": "bun run dev",
     "dev:extension": "turbo run dev --filter=@palladxyz/extension... --concurrency 20",
     "lint": "eslint \"{apps,packages}/**/*.{ts,tsx,js,jsx,cjs,mjs}\"",
-    "lint:fix": "pnpm lint --fix",
+    "lint:fix": "bun run lint --fix",
     "test:unit": "turbo run test:unit",
     "test:e2e:extension": "turbo run test:e2e --filter=@palladxyz/extension",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\" && pnpm lint:fix",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\" && bun run lint:fix",
     "cleanup": "turbo run cleanup && rimraf node_modules",
     "prepare": "husky install",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow bun"
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
-    "@tsconfig/strictest": "^2.0.1",
+    "@tsconfig/bun": "^1.0.1",
     "@turbo/gen": "^1.9.7",
     "@types/jest": "^29.5.5",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "@vitest/coverage-c8": "^0.33.0",
     "autoprefixer": "^10.4.14",
+    "bun-types": "^1.0.18-1",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
@@ -49,6 +54,5 @@
     "turbo": "^1.10.1",
     "typescript": "^5.0.4",
     "vitest": "^0.31.4"
-  },
-  "packageManager": "pnpm@8.6.10"
+  }
 }

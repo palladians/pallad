@@ -109,6 +109,7 @@ export const MnemonicInputView = () => {
             <Textarea
               id="mnemonicTextarea"
               data-testid="onboarding__yourMnemonicTextarea"
+              placeholder="Mnemonic"
               {...register('mnemonic')}
             />
           </div>

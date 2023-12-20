@@ -16,35 +16,29 @@
 
 ⚠️ Work in progress ⚠️
 🚨 Now in Beta 🚨
+
 </div>
 
-Welcome to Pallad an experimental and progressive Mina Protocol wallet! 
+Welcome to Pallad an experimental and progressive Mina Protocol wallet!
 
 In the vast and evolving world of Web3, a wallet is not just a tool; it's the gateway to a whole new universe. It's the first consumer application anyone encounters in a blockchain ecosystem, and it's pivotal in shaping the user experience. That's where Pallad steps in!
 
 Pallad is at the frontier, leading the way in innovation and user-centric design. We're not just building a wallet; we're crafting the cornerstone of zero-knowledge application interaction design. With Pallad, you're stepping into the future.
 
-
 ## Getting Started 🚀
 
 ### Prerequisite 📌
 
-- [NVM](https://github.com/nvm-sh/nvm)
-- pnpm
+- bun
 
-### Installation  💻
+### Installation 💻
 
-Make sure you're on the right Node.js version, and you got pnpm installed.
-
-```shell
-$ nvm use
-$ npm i -g pnpm
-```
+Make sure you got latest Bun.
 
 Install the dependencies:
 
 ```shell
-$ pnpm i
+$ bun i
 ```
 
 From `apps/extension` copy the `.env.example` as `.env` and adjust the variables there.
@@ -52,7 +46,7 @@ From `apps/extension` copy the `.env.example` as `.env` and adjust the variables
 Build all the modules in repo:
 
 ```shell
-$ pnpm build
+$ bun run build
 ```
 
 ## Structure 🏗️
@@ -80,7 +74,7 @@ This is a monorepo for all the Pallad-related code.
 Set up the dev server of extension:
 
 ```shell
-$ pnpm dev:extension
+$ bun run dev:extension
 ```
 
 ## Testing 🧪
@@ -88,20 +82,20 @@ $ pnpm dev:extension
 Running linter:
 
 ```shell
-$ pnpm lint
+$ bun run lint
 ```
 
 Running unit tests (Vitest):
 
 ```shell
-$ pnpm test:unit
+$ bun run test:unit
 ```
 
 Running E2E tests for browser extension (Playwright):
 
 ```shell
 $ npx playwright install chromium # make sure you have Chromium driver
-$ pnpm test:e2e:extension
+$ bun run test:e2e:extension
 ```
 
 ## Contributors ✨

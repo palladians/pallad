@@ -12,18 +12,18 @@
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test:unit": "vitest run", 
+    "build": "bun build ./src/index.ts --outdir ./dist",
+    "dev": "bun run build ---watch",
+    "test:unit": "vitest run",
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/util": "*",
-    "@palladxyz/mina-core": "*",
-    "@palladxyz/mina-graphql": "*"
+    "@palladxyz/util": "workspace:*",
+    "@palladxyz/mina-core": "workspace:*",
+    "@palladxyz/mina-graphql": "workspace:*"
   },
   "devDependencies": {
-    "@palladxyz/common": "*",
+    "@palladxyz/common": "workspace:*",
     "@types/mocha": "^10.0.1"
   }
 }

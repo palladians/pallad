@@ -21,7 +21,8 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --dts --format esm",
+    "build": "bun build ./src/index.ts --outdir ./dist",
+    "dev": "bun run build ---watch",
     "cleanup": "rimraf node_modules dist .turbo"
   }
 }
