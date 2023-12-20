@@ -1,20 +1,11 @@
-import {
-  bufferToHex,
-  privateToAddress,
-  privateToPublic,
-  toChecksumAddress
-} from '@ethereumjs/util' // need to replace with noble hashes
+import { Address, bufferToHex, privateToPublic } from '@ethereumjs/util' // need to replace with noble hashes
 
 import { EthereumGroupedCredentials, EthereumSpecificArgs } from './types'
 
 export async function deriveEthereumPublicAddress(
   privateKey: Uint8Array
 ): Promise<string> {
-  const privateKeyBuffer = Buffer.from(privateKey)
-  const address = toChecksumAddress(
-    '0x' + privateToAddress(privateKeyBuffer).toString('hex')
-  )
-  return address
+  return Address.fromPrivateKey(privateKey).toString()
 }
 
 export function deriveEthereumPublicKey(privateKey: Uint8Array): string {
