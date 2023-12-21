@@ -33,7 +33,7 @@ export const TxTile = ({ tx }: TxTileProps) => {
         <div className="flex-1 font-semibold">{getTransactionLabel(tx)}</div>
         <div className="flex-1 text-sm">{tx.time}</div>
       </div>
-      <div className="flex flex-col items-end">
+      <div className="flex flex-col items-end gap-2">
         <div className="flex items-center font-semibold">
           <span>{tx.minaAmount}</span>
           <MinaIcon stroke="8" size="18" />
