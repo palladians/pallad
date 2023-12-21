@@ -60,6 +60,8 @@ export const TransactionDetailsView = () => {
                   <TxIndicator
                     side={transaction.side}
                     kind={transaction.kind}
+                    from={transaction.from}
+                    to={transaction.to}
                   />
                 )}
                 <div className="flex flex-col gap-2">
