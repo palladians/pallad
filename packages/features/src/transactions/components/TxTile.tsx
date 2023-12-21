@@ -36,11 +36,11 @@ export const TxTile = ({ tx }: TxTileProps) => {
       <div className="flex flex-col items-end">
         <div className="flex items-center font-semibold">
           <span>{tx.minaAmount}</span>
-          <MinaIcon stroke="3" size="18" />
+          <MinaIcon stroke="8" size="18" />
         </div>
         <div className="flex items-center text-xs">
           <span>{tx.minaFee}</span>
-          <MinaIcon stroke="3" size="12" />
+          <MinaIcon stroke="8" size="12" />
           <span className="ml-1">Fee</span>
         </div>
       </div>

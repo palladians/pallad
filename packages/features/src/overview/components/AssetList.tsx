@@ -28,7 +28,7 @@ export const AssetList = () => {
         <div className="flex items-center gap-4">
           <Avatar>
             <AvatarFallback className="p-2 text-blue-charcoal-950 dark:text-white">
-              <MinaIcon stroke={'3'} />
+              <MinaIcon stroke="8" />
             </AvatarFallback>
           </Avatar>
           <p className="flex-1 font-semibold">MINA</p>
