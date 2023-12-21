@@ -24,6 +24,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rago4",
+      "name": "Rafał Goławski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19167236?v=4",
+      "profile": "https://dev.to/rgolawski",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
