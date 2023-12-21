@@ -1,5 +1,5 @@
 import * as bip39 from '@scure/bip39'
-import { wordlist } from '@scure/bip39/wordlists/english.js'
+import { wordlist } from '@scure/bip39/wordlists/english'
 
 /**
  * A wrapper around the bip39 package function, with default strength applied to produce 24 words
