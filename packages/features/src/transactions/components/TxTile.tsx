@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 
+import { MinaIcon } from '@/common/components/MinaIcon'
+
 import { StructurizedTransaction, TxKind, TxSide } from '../../common/types'
 import { TxIndicator } from './TxIndicator'
 
@@ -32,8 +34,15 @@ export const TxTile = ({ tx }: TxTileProps) => {
         <div className="flex-1 text-sm">{tx.time}</div>
       </div>
       <div className="flex flex-col items-end">
-        <div className="font-semibold">{tx.minaAmount} MINA</div>
-        <div className="text-xs text-gray-500">{tx.minaFee} MINA Fee</div>
+        <div className="flex items-center font-semibold">
+          <span>{tx.minaAmount}</span>
+          <MinaIcon stroke="3" size="18" />
+        </div>
+        <div className="flex items-center text-xs">
+          <span>{tx.minaFee}</span>
+          <MinaIcon stroke="3" size="12" />
+          <span className="ml-1">Fee</span>
+        </div>
       </div>
     </div>
   )
