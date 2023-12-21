@@ -21,6 +21,7 @@ export type StructurizedTransaction = Mina.TransactionBody & {
   date: string
   time: string
   minaAmount: number
+  minaFee: number
 }
 
 type StakingAccount = {
