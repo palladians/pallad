@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-import { StructurizedTransaction, TxSide } from '../../common/types'
+import { StructurizedTransaction, TxKind, TxSide } from '../../common/types'
 import { TxIndicator } from './TxIndicator'
 
 interface TxTileProps {
@@ -10,7 +10,10 @@ interface TxTileProps {
 export const TxTile = ({ tx }: TxTileProps) => {
   const navigate = useNavigate()
   const getTransactionLabel = (tx: StructurizedTransaction) => {
-    if (tx.from === tx.to) {
+    if (tx.kind === TxKind.STAKE_DELEGATION) {
+      return 'Delegation'
+    }
+    if (tx.from === tx.to && tx.kind === TxKind.PAYMENT) {
       return 'Sent to Self'
     }
     return tx.side === TxSide.INCOMING ? 'Received' : 'Sent'
