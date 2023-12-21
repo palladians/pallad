@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { TransactionFee } from '@/common/lib/const'
 import { useTransactionStore } from '@/common/store/transaction'
+import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -89,7 +90,10 @@ export const DelegateForm = () => {
         </RadioGroup>
         <p>{errors.fee?.message}</p>
       </div>
-      <Button type="submit">Next</Button>
+      <Button type="submit" className="group gap-2">
+        <span>Next</span>
+        <ButtonArrow />
+      </Button>
     </form>
   )
 }

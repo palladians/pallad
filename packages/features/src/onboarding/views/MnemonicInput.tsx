@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
+import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -86,7 +87,7 @@ export const MnemonicInputView = () => {
         <Button
           variant="secondary"
           className={cn([
-            'flex-1 transition-opacity opacity-50 gap-2',
+            'flex-1 transition-opacity opacity-50 gap-2 group',
             mnemonicValid && 'opacity-100'
           ])}
           disabled={!mnemonicValid || restoring}
@@ -94,7 +95,8 @@ export const MnemonicInputView = () => {
           data-testid="onboarding__nextButton"
         >
           {restoring && <Loader2Icon size={16} className="animate-spin" />}
-          Next
+          <span>Next</span>
+          <ButtonArrow />
         </Button>
       }
     >
