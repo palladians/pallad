@@ -52,7 +52,7 @@ export const ConfirmTransactionForm = () => {
   const kind = useTransactionStore((state) => state.kind)
   const { addPendingTransaction } = usePendingTransactionStore()
   if (!outgoingTransaction) return null
-  const rawAmount = parseInt(outgoingTransaction.amount || '0')
+  const rawAmount = parseFloat(outgoingTransaction.amount || '0.00')
   const rawFee = parseFloat(outgoingTransaction.fee || '0.01')
   const amount = BigInt(rawAmount * 1_000_000_000).toString()
   const fee = BigInt(rawFee * 1_000_000_000).toString()
