@@ -563,12 +563,12 @@ describe('KeyAgentBase', () => {
     })
     it('should derive correct Ethereum address', async () => {
       // Define a mocked publicKey, which should be expected from the derivation
-      const expectedPublicKey = '0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9'
+      const expectedPublicKey = '0xa98005e6ce8e62adf8f9020fa99888e8f107e3c9'
       const expectedGroupedCredentials = {
         '@context': ['https://w3id.org/wallet/v1'],
-        id: 'did:ethr:0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9',
+        id: 'did:ethr:0xa98005e6ce8e62adf8f9020fa99888e8f107e3c9',
         type: 'EthereumAddress',
-        controller: 'did:ethr:0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9',
+        controller: 'did:ethr:0xa98005e6ce8e62adf8f9020fa99888e8f107e3c9',
         name: 'Ethereum Account',
         description: 'My Ethereum account.',
         chain: Network.Ethereum,

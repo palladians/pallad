@@ -1,4 +1,4 @@
-import { CredentialName } from '@palladxyz/vault'
+import { CredentialName } from '@palladxyz/vault' // eslint-disable-line import/no-extraneous-dependencies
 import {
   adjectives,
   animals,
