@@ -31,7 +31,10 @@ export const TxTile = ({ tx }: TxTileProps) => {
         <div className="flex-1 font-semibold">{getTransactionLabel(tx)}</div>
         <div className="flex-1 text-sm">{tx.time}</div>
       </div>
-      <div className="font-semibold">{tx.minaAmount} MINA</div>
+      <div className="flex flex-col items-end">
+        <div className="font-semibold">{tx.minaAmount} MINA</div>
+        <div className="text-xs text-gray-500">{tx.minaFee} MINA Fee</div>
+      </div>
     </div>
   )
 }
