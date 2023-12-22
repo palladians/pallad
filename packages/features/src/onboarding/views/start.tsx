@@ -39,7 +39,7 @@ export const StartView = () => {
             onClick={() => navigate('/onboarding/restore')}
             data-testid="onboarding__restoreWalletButton"
           >
-            <span>Restore Wallet</span>
+            <span>Restore an existing wallet</span>
             <ButtonArrow />
           </Button>
           <Button
@@ -48,7 +48,7 @@ export const StartView = () => {
             onClick={() => navigate('/onboarding/create')}
             data-testid="onboarding__createWalletButton"
           >
-            <span>Create Wallet</span>
+            <span>Create a new wallet</span>
             <ButtonArrow />
           </Button>
         </div>
@@ -57,7 +57,7 @@ export const StartView = () => {
       <div className="flex flex-1 flex-col items-center justify-center gap-8 p-4 text-center">
         <img src="/intro.png" className="w-[220px]" />
         <p className="leading-7 text-muted-foreground">
-          The gateway to Minaverse.
+          Your gateway to Minaverse.
         </p>
       </div>
     </WizardLayout>
