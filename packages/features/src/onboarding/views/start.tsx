@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppStore } from '@/common/store/app'
+import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { WizardLayout } from '@/components/wizard-layout'
 
@@ -30,36 +31,33 @@ export const StartView = () => {
   if (!appInitialized) return null
   return (
     <WizardLayout
+      textLogo
       footer={
-        <>
+        <div className="flex flex-1 flex-col gap-2 px-4">
           <Button
-            className="flex-1"
+            className="flex-1 gap-2 group"
             onClick={() => navigate('/onboarding/restore')}
             data-testid="onboarding__restoreWalletButton"
           >
-            Restore Wallet
+            <span>Restore Wallet</span>
+            <ButtonArrow />
           </Button>
           <Button
             variant="secondary"
-            className="flex-1"
+            className="flex-1 gap-2 group"
             onClick={() => navigate('/onboarding/create')}
             data-testid="onboarding__createWalletButton"
           >
-            Create Wallet
+            <span>Create Wallet</span>
+            <ButtonArrow />
           </Button>
-        </>
+        </div>
       }
     >
-      <div className="flex flex-col items-center justify-center gap-8 p-4 text-center">
-        <div className="w-full">
-          <h1 className="text-8xl text-sky-500 font-semibold break-words">
-            Pallad
-          </h1>
-          <h2 className="text-2xl break-words">Enter The Minaverse</h2>
-        </div>
-        <p className="text-sm leading-2">
-          Enhance your Mina adventure. Transparent and intuitively designed for
-          your Web3 journey.
+      <div className="flex flex-1 flex-col items-center justify-center gap-8 p-4 text-center">
+        <img src="/intro.png" className="w-[220px]" />
+        <p className="leading-7 text-muted-foreground">
+          The gateway to Minaverse.
         </p>
       </div>
     </WizardLayout>
