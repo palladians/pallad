@@ -21,6 +21,10 @@ export const structurizeTransaction = ({
   time: dayjs(tx.dateTime).format('HH:mm'),
   minaAmount: (Number(tx.amount) / 1_000_000_000).toFixed(3),
   minaFee: (Number(tx.fee) / 1_000_000_000).toFixed(3),
+  txTotalMinaAmount: (
+    (Number(tx.amount) + Number(tx.fee)) /
+    1_000_000_000
+  ).toFixed(3),
   side: tx.from === walletPublicKey ? TxSide.OUTGOING : TxSide.INCOMING
 })
 
