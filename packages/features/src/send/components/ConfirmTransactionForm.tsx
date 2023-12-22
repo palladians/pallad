@@ -14,12 +14,15 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
+import { FormError } from '@/common/components/FormError'
 import { useAccount } from '@/common/hooks/useAccount'
 import { usePendingTransactionStore } from '@/common/store/pendingTransactions'
 import { useTransactionStore } from '@/common/store/transaction'
+import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 
 import { ConfirmTransactionSchema } from './ConfirmTransactionForm.schema'
 
@@ -34,7 +37,12 @@ export const ConfirmTransactionForm = () => {
   const syncWallet = useVault((state) => state._syncWallet)
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const { publicKey } = useAccount()
-  const { register, handleSubmit } = useForm<ConfirmTransactionData>({
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors }
+  } = useForm<ConfirmTransactionData>({
     resolver: zodResolver(ConfirmTransactionSchema),
     defaultValues: {
       spendingPassword: ''
@@ -68,7 +76,18 @@ export const ConfirmTransactionForm = () => {
         : Mina.TransactionKind.PAYMENT
     )
     const getPassphrase = async () => Buffer.from(data.spendingPassword)
-    const signedTx = await sign(constructedTx as any, getPassphrase)
+    let signedTx
+    try {
+      signedTx = await sign(constructedTx as any, getPassphrase)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.name === 'AuthenticationError')
+          setError('spendingPassword', {
+            type: 'wrongPassword',
+            message: 'The spending password is wrong'
+          })
+      }
+    }
     if (!signedTx) return
     const submitTxArgs = {
       signedTransaction: signedTx as unknown as SignedLegacy<Payment>,
@@ -110,19 +129,32 @@ export const ConfirmTransactionForm = () => {
     }
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <fieldset className="flex flex-col gap-2">
-        <Label>Spending Password</Label>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-1 flex-col gap-4"
+    >
+      <fieldset className="flex flex-1 flex-col gap-2">
+        <Label
+          htmlFor="spendingPassword"
+          className={cn(errors.spendingPassword && 'text-destructive')}
+        >
+          Spending Password
+        </Label>
         <Input
+          id="spendingPassword"
           type="password"
           placeholder="Spending Password"
+          className={errors.spendingPassword && 'border-destructive'}
           {...register('spendingPassword')}
           autoFocus
         />
+        <FormError>{errors.spendingPassword?.message}</FormError>
+        <div className="flex-1" />
       </fieldset>
-      <Button disabled={submitting}>
+      <Button disabled={submitting} className="group gap-2">
         {submitting && <Loader2Icon size={16} className="animate-spin" />}
         <span>Send</span>
+        <ButtonArrow />
       </Button>
     </form>
   )

@@ -3,9 +3,12 @@ import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
+import { FormError } from '@/common/components/FormError'
+import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 
 import { useAddressBookStore } from '../../common/store/addressBook'
 import { NewAddressFormSchema } from './NewAddressForm.schema'
@@ -34,29 +37,46 @@ export const NewAddressForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="gap-2">
-        <Label htmlFor="contactName">Contact's Name</Label>
+        <Label
+          htmlFor="contactName"
+          className={cn(errors.name && 'text-destructive')}
+        >
+          Contact's Name
+        </Label>
         <Input
           id="contactName"
           placeholder="Name"
           data-testid="newAddress__nameInput"
+          className={cn(errors.name && 'border-destructive')}
           {...register('name')}
           autoFocus
         />
-        <p>{errors.name?.message}</p>
+        <FormError>{errors.name?.message}</FormError>
       </div>
       <div className="gap-2 flex-1">
-        <Label htmlFor="contactAddress">Receiver Address</Label>
+        <Label
+          htmlFor="contactAddress"
+          className={cn(errors.address && 'text-destructive')}
+        >
+          Receiver Address
+        </Label>
         <Input
           id="contactAddress"
           placeholder="B62XXXXXXXXXXXX"
           data-testid="newAddress__addressInput"
+          className={cn(errors.address && 'border-destructive')}
           {...register('address')}
         />
-        <p>{errors.address?.message}</p>
+        <FormError>{errors.address?.message}</FormError>
       </div>
-      <Button type="submit" data-testid="newAddress__createButton">
+      <Button
+        type="submit"
+        className="group gap-2"
+        data-testid="newAddress__createButton"
+      >
         <PlusIcon size={16} />
-        Create Contact
+        <span>Create Contact</span>
+        <ButtonArrow />
       </Button>
     </form>
   )

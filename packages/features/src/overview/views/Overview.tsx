@@ -14,7 +14,7 @@ export const OverviewView = () => {
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-4 p-4">
-        {loading ? <Skeleton className="h-[180px]" /> : <OverviewCard />}
+        {loading ? <Skeleton className="h-[182px]" /> : <OverviewCard />}
         <AssetList />
       </div>
     </AppLayout>

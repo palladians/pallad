@@ -18,7 +18,9 @@ const sessionData = new Storage({
   area: 'session'
 })
 
-const secureStorage = new SecureStorage()
+const secureStorage = new SecureStorage({
+  area: 'local'
+})
 
 const setVaultSpendingPassword = async () => {
   const spendingPassword = await sessionData.get('spendingPassword')
