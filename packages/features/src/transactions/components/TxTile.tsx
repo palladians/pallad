@@ -10,25 +10,22 @@ interface TxTileProps {
   tx: StructurizedTransaction
 }
 
+const fiatTxValue = (amount, fiatValue) => {
+  if (!amount || !fiatValue) return 0
+  return Number(amount) * fiatValue
+}
+
+const getTransactionLabel = (tx) => {
+  if (tx.kind === TxKind.STAKE_DELEGATION) return 'Delegation'
+  if (tx.from === tx.to && tx.kind === TxKind.PAYMENT) return 'Sent to Self'
+  return tx.side === TxSide.INCOMING ? 'Received' : 'Sent'
+}
+
 export const TxTile = ({ tx }: TxTileProps) => {
   const navigate = useNavigate()
   const { data: fiatPriceData } = useFiatPrice()
-  const rawFiatPrice = fiatPriceData?.['mina-protocol']?.usd || 0
-  const fiatTxValue = (tx: StructurizedTransaction, fiatValue: number) => {
-    if (!tx.txTotalMinaAmount) return
-    if (!fiatValue) return
-    return Number(tx.txTotalMinaAmount) * fiatValue
-  }
+  const rawFiatPrice = fiatPriceData?.['mina-protocol']?.usd ?? 0
 
-  const getTransactionLabel = (tx: StructurizedTransaction) => {
-    if (tx.kind === TxKind.STAKE_DELEGATION) {
-      return 'Delegation'
-    }
-    if (tx.from === tx.to && tx.kind === TxKind.PAYMENT) {
-      return 'Sent to Self'
-    }
-    return tx.side === TxSide.INCOMING ? 'Received' : 'Sent'
-  }
   return (
     <div
       key={tx.hash}
@@ -48,7 +45,9 @@ export const TxTile = ({ tx }: TxTileProps) => {
           <MinaIcon stroke="8" size="18" />
         </div>
         <div className="flex items-center text-xs">
-          <span>{fiatTxValue(tx, rawFiatPrice).toFixed(3)}</span>
+          <span>
+            {fiatTxValue(tx.txTotalMinaAmount, rawFiatPrice).toFixed(3)}
+          </span>
           <span className="ml-1">USD</span>
         </div>
       </div>
