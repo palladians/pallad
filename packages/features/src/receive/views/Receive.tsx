@@ -2,16 +2,15 @@ import { useTheme } from 'next-themes'
 import QRCode from 'react-qr-code'
 import { useNavigate } from 'react-router-dom'
 
+import { useAccount } from '@/common/hooks/use-account'
+import { AppLayout } from '@/components/app-layout'
 import { Card } from '@/components/ui/card'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-
-import { AppLayout } from '../../common/components/AppLayout'
-import { ViewHeading } from '../../common/components/ViewHeading'
-import { useAccount } from '../../common/hooks/useAccount'
+import { ViewHeading } from '@/components/view-heading'
 
 export const ReceiveView = () => {
   const { theme } = useTheme()

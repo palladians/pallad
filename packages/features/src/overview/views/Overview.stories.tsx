@@ -1,7 +1,7 @@
 import { StoryDefault } from '@ladle/react'
 
 import { useStoriesWallet } from '../../../.ladle/utils'
-import { OverviewView } from './Overview'
+import { OverviewView } from './overview'
 
 export const View = () => {
   useStoriesWallet()

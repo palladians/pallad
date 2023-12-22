@@ -1,11 +1,11 @@
 import { useFiatPrice } from '@palladxyz/offchain-data'
 
-import { useAccount } from '@/common/hooks/useAccount'
+import { useAccount } from '@/common/hooks/use-account'
+import { AppLayout } from '@/components/app-layout'
 import { Skeleton } from '@/components/ui/skeleton'
 
-import { AppLayout } from '../../common/components/AppLayout'
-import { AssetList } from '../components/AssetList'
-import { OverviewCard } from '../components/OverviewCard'
+import { AssetList } from '../components/asset-list'
+import { OverviewCard } from '../components/overview-card'
 
 export const OverviewView = () => {
   const { isLoading: accountLoading } = useAccount()

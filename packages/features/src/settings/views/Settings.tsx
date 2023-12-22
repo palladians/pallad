@@ -5,6 +5,9 @@ import { useTheme } from 'next-themes'
 import { useNavigate } from 'react-router-dom'
 import { useSWRConfig } from 'swr'
 
+import { useAccount } from '@/common/hooks/use-account'
+import { useAppStore } from '@/common/store/app'
+import { AppLayout } from '@/components/app-layout'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import {
@@ -15,11 +18,7 @@ import {
 } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useToast } from '@/components/ui/use-toast'
-
-import { AppLayout } from '../../common/components/AppLayout'
-import { ViewHeading } from '../../common/components/ViewHeading'
-import { useAccount } from '../../common/hooks/useAccount'
-import { useAppStore } from '../../common/store/app'
+import { ViewHeading } from '@/components/view-heading'
 
 export const SettingsView = () => {
   const { toast } = useToast()

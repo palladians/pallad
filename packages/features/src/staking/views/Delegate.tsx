@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 
-import { AppLayout } from '../../common/components/AppLayout'
-import { ViewHeading } from '../../common/components/ViewHeading'
-import { DelegateForm } from '../components/DelegateForm'
+import { AppLayout } from '@/components/app-layout'
+import { ViewHeading } from '@/components/view-heading'
+
+import { DelegateForm } from '../components/delegate-form'
 
 export const DelegateView = () => {
   const navigate = useNavigate()

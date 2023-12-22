@@ -5,37 +5,37 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
-import { AboutView } from './about/views/About'
-import { AddressBookView } from './address-book/views/AddressBook'
-import { NewAddressView } from './address-book/views/NewAddress'
-import { UnlockWalletView } from './lock/views/UnlockWallet'
-import { NotFoundView } from './not-found/views/NotFound'
-import { CreateWalletView } from './onboarding/views/CreateWallet'
-import { MnemonicConfirmationView } from './onboarding/views/MnemonicConfirmation'
-import { MnemonicInputView } from './onboarding/views/MnemonicInput'
-import { MnemonicWritedownView } from './onboarding/views/MnemonicWritedown'
-import { RestoreWalletView } from './onboarding/views/RestoreWallet'
-import { StartView } from './onboarding/views/Start'
-import { StayConnectedView } from './onboarding/views/StayConnected'
-import { OverviewView } from './overview/views/Overview'
-import { ReceiveView } from './receive/views/Receive'
-import { SendView } from './send/views/Send'
-import { TransactionErrorView } from './send/views/TransactionError'
-import { TransactionSuccessView } from './send/views/TransactionSuccess'
-import { TransactionSummaryView } from './send/views/TransactionSummary'
-import { SettingsView } from './settings/views/Settings'
-import { BlockProducersView } from './staking/views/BlockProducers'
-import { DelegateView } from './staking/views/Delegate'
-import { StakingOverviewView } from './staking/views/StakingOverview'
-import { TransactionDetailsView } from './transactions/views/TransactionDetails'
-import { TransactionsView } from './transactions/views/Transactions'
+import { AboutView } from './about/views/about'
+import { AddressBookView } from './address-book/views/address-book'
+import { NewAddressView } from './address-book/views/new-address'
+import { UnlockWalletView } from './lock/views/unlock-wallet'
+import { NotFoundView } from './not-found/views/not-found'
+import { CreateWalletView } from './onboarding/views/create-wallet'
+import { MnemonicConfirmationView } from './onboarding/views/mnemonic-confirmation'
+import { MnemonicInputView } from './onboarding/views/mnemonic-input'
+import { MnemonicWritedownView } from './onboarding/views/mnemonic-writedown'
+import { RestoreWalletView } from './onboarding/views/restore-wallet'
+import { StartView } from './onboarding/views/start'
+import { StayConnectedView } from './onboarding/views/stay-connected'
+import { OverviewView } from './overview/views/overview'
+import { ReceiveView } from './receive/views/receive'
+import { SendView } from './send/views/send'
+import { TransactionErrorView } from './send/views/transaction-error'
+import { TransactionSuccessView } from './send/views/transaction-success'
+import { TransactionSummaryView } from './send/views/transaction-summary'
+import { SettingsView } from './settings/views/settings'
+import { BlockProducersView } from './staking/views/block-producers'
+import { DelegateView } from './staking/views/delegate'
+import { StakingOverviewView } from './staking/views/staking-overview'
+import { TransactionDetailsView } from './transactions/views/transaction-details'
+import { TransactionsView } from './transactions/views/transactions'
 
 dayjs.extend(relativeTime)
 
 export const Router = () => {
   return (
     <TooltipProvider>
-      <div className="flex flex-1">
+      <div className="flex flex-1 pointer">
         <MemoryRouter>
           <Routes>
             <Route path="/" element={<StartView />} />

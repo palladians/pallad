@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 
-import { AppLayout } from '../../common/components/AppLayout'
-import { ViewHeading } from '../../common/components/ViewHeading'
-import { SendForm } from '../components/SendForm'
+import { AppLayout } from '@/components/app-layout'
+import { ViewHeading } from '@/components/view-heading'
+
+import { SendForm } from '../components/send-form'
 
 export const SendView = () => {
   const navigate = useNavigate()

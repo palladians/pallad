@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 
+import Logo from '@/common/assets/logo.svg'
+import { AppLayout } from '@/components/app-layout'
+import { MetaField } from '@/components/meta-field'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { ViewHeading } from '@/components/view-heading'
 
 import packageJson from '../../../package.json'
-import Logo from '../../common/assets/logo.svg'
-import { AppLayout } from '../../common/components/AppLayout'
-import { MetaField } from '../../common/components/MetaField'
-import { ViewHeading } from '../../common/components/ViewHeading'
 
 const AppMeta = [
   {

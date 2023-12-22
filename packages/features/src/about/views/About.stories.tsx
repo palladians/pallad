@@ -1,6 +1,6 @@
 import { StoryDefault } from '@ladle/react'
 
-import { AboutView } from './About'
+import { AboutView } from './about'
 
 export const View = () => <AboutView />
 
