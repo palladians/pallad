@@ -207,7 +207,12 @@ export class MinaProvider implements IMinaProvider {
       // should this emit an error event?
       throw new Error('User denied the request.')
     }
-    return await this.signer.request(args, this.chainId)
+    if (args.method === 'mina_accounts') {
+      // handle mina_accounts
+      return vaultService.getAddresses() as unknown as T
+    }
+    // For unsupported methods, throw an error with a descriptive message -- must error with correct standard error
+    throw new Error(`Method ${args.method} is not supported.`)
   }
 
   public exampleMethod(): (string | undefined)[] {

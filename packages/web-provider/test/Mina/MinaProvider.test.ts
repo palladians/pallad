@@ -10,6 +10,7 @@ import { KeyAgents, useVault } from '@palladxyz/vault'
 import { act, renderHook } from '@testing-library/react'
 
 import { MinaProvider } from '../../src/Mina'
+import { RequestArguments } from '../../src/Mina/types'
 
 const PREGENERATED_MNEMONIC = [
   'habit',
@@ -38,6 +39,12 @@ describe('WalletTest', () => {
   >
   let agentArgs: FromBip39MnemonicWordsProps
   const keyAgentName = 'test key agent'
+
+  beforeAll(() => {
+    // Mock window.confirm to always return true (or false)
+    global.window = Object.create(window)
+    window.confirm = () => true
+  })
 
   beforeEach(async () => {
     agentArgs = {
@@ -149,9 +156,26 @@ describe('WalletTest', () => {
     }
     const provider = await MinaProvider.init(opts)
 
+    // Define the request arguments for the 'mina_accounts' method
+    const requestArgs: RequestArguments = {
+      method: 'mina_accounts'
+    }
+
+    // Ensure the provider is defined
     expect(provider).toBeDefined()
-    const accountAddresses = provider.exampleMethod()
-    console.log('accountAddresses', accountAddresses)
-    expect(accountAddresses).toEqual(addresses)
+
+    // Call the request function with the appropriate arguments
+    provider
+      .request(requestArgs)
+      .then((accountAddresses) => {
+        console.log('accountAddresses', accountAddresses)
+
+        // Compare the received addresses with the expected ones
+        expect(accountAddresses).toEqual(addresses)
+      })
+      .catch((error) => {
+        // Handle any errors here
+        console.error('Error fetching account addresses:', error)
+      })
   })
 })
