@@ -51,14 +51,16 @@ export const StartView = () => {
         </>
       }
     >
-      <div className="flex flex-col gap-8 p-4">
-        <div>
-          <h1 className="text-5xl text-sky-500 font-semibold">Pallad</h1>
-          <h2 className="text-5xl">- Enter The Minaverse</h2>
+      <div className="flex flex-col items-center justify-center gap-8 p-4 text-center">
+        <div className="w-full">
+          <h1 className="text-8xl text-sky-500 font-semibold break-words">
+            Pallad
+          </h1>
+          <h2 className="text-2xl break-words">Enter The Minaverse</h2>
         </div>
-        <p className="leading-8">
-          Take your Mina journey to the next level with out secure, transparent,
-          and intuitive wallet interface.
+        <p className="text-sm leading-2">
+          Enhance your Mina adventure. Transparent and intuitively designed for
+          your Web3 journey.
         </p>
       </div>
     </WizardLayout>
