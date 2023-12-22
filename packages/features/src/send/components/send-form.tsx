@@ -136,7 +136,7 @@ export const SendForm = () => {
           onValueChange={(value) => setValue('fee', value)}
         >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="flow" id="feeSlow" />
+            <RadioGroupItem value="slow" id="feeSlow" />
             <Label htmlFor="feeSlow">Slow ({TransactionFee.slow} MINA)</Label>
           </div>
           <div className="flex items-center space-x-2">
