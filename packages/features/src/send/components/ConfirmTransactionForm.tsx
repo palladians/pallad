@@ -14,6 +14,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
+import { FormError } from '@/common/components/FormError'
 import { useAccount } from '@/common/hooks/useAccount'
 import { usePendingTransactionStore } from '@/common/store/pendingTransactions'
 import { useTransactionStore } from '@/common/store/transaction'
@@ -21,6 +22,7 @@ import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 
 import { ConfirmTransactionSchema } from './ConfirmTransactionForm.schema'
 
@@ -132,18 +134,21 @@ export const ConfirmTransactionForm = () => {
       className="flex flex-1 flex-col gap-4"
     >
       <fieldset className="flex flex-1 flex-col gap-2">
-        <Label htmlFor="spendingPassword">Spending Password</Label>
+        <Label
+          htmlFor="spendingPassword"
+          className={cn(errors.spendingPassword && 'text-destructive')}
+        >
+          Spending Password
+        </Label>
         <Input
           id="spendingPassword"
           type="password"
           placeholder="Spending Password"
-          className={errors.spendingPassword && 'border-red-500'}
+          className={errors.spendingPassword && 'border-destructive'}
           {...register('spendingPassword')}
           autoFocus
         />
-        <p className="text-sm text-red-500">
-          {errors.spendingPassword?.message}
-        </p>
+        <FormError>{errors.spendingPassword?.message}</FormError>
         <div className="flex-1" />
       </fieldset>
       <Button disabled={submitting} className="group gap-2">

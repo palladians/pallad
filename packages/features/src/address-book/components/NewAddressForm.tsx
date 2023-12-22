@@ -3,6 +3,7 @@ import { PlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
+import { FormError } from '@/common/components/FormError'
 import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -50,7 +51,7 @@ export const NewAddressForm = () => {
           {...register('name')}
           autoFocus
         />
-        <p className="text-destructive">{errors.name?.message}</p>
+        <FormError>{errors.name?.message}</FormError>
       </div>
       <div className="gap-2 flex-1">
         <Label
@@ -66,7 +67,7 @@ export const NewAddressForm = () => {
           className={cn(errors.address && 'border-destructive')}
           {...register('address')}
         />
-        <p className="text-destructive">{errors.address?.message}</p>
+        <FormError>{errors.address?.message}</FormError>
       </div>
       <Button
         type="submit"

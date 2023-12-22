@@ -345,6 +345,7 @@ export const useVault = create<
           currentAddressIndex: derivedCredential.addressIndex
         })
         ensureAccount(network, derivedCredential.address)
+        getSecurePersistence().setItem('foo', 'bar' as any)
         await _syncWallet(network, derivedCredential)
       },
       restartWallet: () => {

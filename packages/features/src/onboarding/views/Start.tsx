@@ -1,4 +1,7 @@
-import { getSessionPersistence } from '@palladxyz/persistence'
+import {
+  getSecurePersistence,
+  getSessionPersistence
+} from '@palladxyz/persistence'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,20 +12,22 @@ import { useAppStore } from '../../common/store/app'
 
 export const StartView = () => {
   const [appInitialized, setAppInitialized] = useState<boolean>(false)
-  const isInitialized = useAppStore((state) => state.isInitialized())
+  const isStoreInitialized = useAppStore((state) => state.isInitialized())
   const navigate = useNavigate()
   useEffect(() => {
     const initialRedirect = async () => {
+      if (!isStoreInitialized) return setAppInitialized(true)
       const spendingPassword =
         (await getSessionPersistence().getItem('spendingPassword')) || ''
       const spendingPasswordSet = spendingPassword.length > 0
-      setAppInitialized(true)
-      if (!isInitialized) return
-      if (isInitialized && !spendingPasswordSet) return navigate('/unlock')
+      if (!spendingPasswordSet) return navigate('/unlock')
+      const authenticated =
+        (await getSecurePersistence().getItem('foo')) === 'bar'
+      if (!authenticated) return navigate('/unlock')
       return navigate('/dashboard')
     }
     initialRedirect()
-  }, [isInitialized])
+  }, [isStoreInitialized])
   if (!appInitialized) return null
   return (
     <WizardLayout

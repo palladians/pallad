@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
+import { FormError } from '@/common/components/FormError'
 import { passwordSchema } from '@/common/lib/validation'
 import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
@@ -83,7 +84,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
               className={cn(errors.walletName && 'border-destructive')}
               {...register('walletName')}
             />
-            <p className="text-destructive">{errors.walletName?.message}</p>
+            <FormError>{errors.walletName?.message}</FormError>
           </div>
           <div className="gap-2">
             <Label
@@ -112,9 +113,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </Button>
             </div>
-            <p className="text-destructive">
-              {errors.spendingPassword?.message}
-            </p>
+            <FormError>{errors.spendingPassword?.message}</FormError>
           </div>
           <div className="flex items-center gap-4">
             <Checkbox

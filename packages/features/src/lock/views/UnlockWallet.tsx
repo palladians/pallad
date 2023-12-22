@@ -1,5 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { getSessionPersistence } from '@palladxyz/persistence'
+import {
+  getSecurePersistence,
+  getSessionPersistence
+} from '@palladxyz/persistence'
 import { useVault } from '@palladxyz/vault'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -7,6 +10,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
+import { FormError } from '@/common/components/FormError'
 import { passwordSchema } from '@/common/lib/validation'
 import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
@@ -29,13 +33,12 @@ const formSchema = z.object({
 
 export const UnlockWalletView = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const currentWallet = useVault((state) => state.getCurrentWallet())
   const { restartCurrentWallet } = useAccount()
   const navigate = useNavigate()
   const {
     register,
     handleSubmit,
-    formState: { isDirty, errors },
+    formState: { errors },
     setError
   } = useForm({
     defaultValues: {
@@ -50,12 +53,19 @@ export const UnlockWalletView = () => {
   }) => {
     await getSessionPersistence().setItem('spendingPassword', spendingPassword)
     await useVault.persist.rehydrate()
+    setTimeout(() => {
+      setError('spendingPassword', {
+        type: 'wrongPassword',
+        message: 'The spending password is wrong'
+      })
+    }, 100)
   }
   useEffect(() => {
     const unsub = useVault.persist.onFinishHydration(async () => {
-      if (!isDirty) return
-      if (!currentWallet?.accountInfo?.publicKey) {
-        await getSessionPersistence().setItem('spendingPassword', '')
+      const authenticated =
+        (await getSecurePersistence().getItem('foo')) === 'bar'
+      if (!authenticated) {
+        await getSessionPersistence().removeItem('spendingPassword')
         return setError('spendingPassword', {
           type: 'wrongPassword',
           message: 'The spending password is wrong'
@@ -64,13 +74,13 @@ export const UnlockWalletView = () => {
       navigate('/dashboard')
     })
     return () => unsub()
-  })
+  }, [])
   return (
     <WizardLayout
       footer={
         <Button
           type="submit"
-          className="flex-1 group gap-2"
+          className="flex-1 group gap-2 animate-in slide-in-from-bottom-4 fade-in delay-100 fill-mode-both"
           form="unlockWalletForm"
           data-testid="unlockWallet__unlockButton"
         >
@@ -79,7 +89,7 @@ export const UnlockWalletView = () => {
         </Button>
       }
     >
-      <div className="flex flex-col flex-1 gap-4">
+      <div className="animate-in slide-in-from-bottom-4 flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Unlock Wallet"
           button={{
@@ -128,9 +138,7 @@ export const UnlockWalletView = () => {
                 </TooltipContent>
               </Tooltip>
             </div>
-            <p className="text-destructive">
-              {errors.spendingPassword?.message}
-            </p>
+            <FormError>{errors.spendingPassword?.message}</FormError>
           </form>
         </div>
       </div>

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { cn } from '@/lib/utils'
 
 import { FormError } from '../../common/components/FormError'
 import { useAccount } from '../../common/hooks/useAccount'
@@ -70,7 +71,12 @@ export const SendForm = () => {
     >
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
-          <Label htmlFor="receiverAddress">Receiver</Label>
+          <Label
+            htmlFor="receiverAddress"
+            className={cn(errors.to && 'text-destructive')}
+          >
+            Receiver
+          </Label>
           <Button
             type="button"
             variant="link"
@@ -83,7 +89,7 @@ export const SendForm = () => {
         <Input
           id="receiverAddress"
           placeholder="Receiver Address"
-          className={errors.to && 'border-red-500'}
+          className={errors.to && 'border-destructive'}
           autoFocus
           {...register('to')}
         />
@@ -91,7 +97,12 @@ export const SendForm = () => {
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
-          <Label htmlFor="amount">Amount</Label>
+          <Label
+            htmlFor="amount"
+            className={cn(errors.amount && 'text-destructive')}
+          >
+            Amount
+          </Label>
           <Button
             type="button"
             variant="link"
@@ -104,18 +115,20 @@ export const SendForm = () => {
         <Input
           id="amount"
           placeholder="Transaction Amount"
-          className={errors.amount && 'border-red-500'}
+          className={errors.amount && 'border-destructive'}
           {...register('amount')}
         />
         <FormError>{errors.amount?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="memo">Memo</Label>
+        <Label htmlFor="memo" className={cn(errors.memo && 'text-destructive')}>
+          Memo
+        </Label>
         <Input id="memo" placeholder="Memo" {...register('memo')} />
-        <p>{errors.memo?.message}</p>
+        <FormError>{errors.memo?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2 flex-1">
-        <Label>Fee</Label>
+        <Label className={cn(errors.fee && 'text-destructive')}>Fee</Label>
         <RadioGroup
           defaultValue="default"
           onValueChange={(value) => setValue('fee', value)}
