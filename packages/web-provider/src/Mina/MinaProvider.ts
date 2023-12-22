@@ -95,11 +95,31 @@ interface RequestArguments {
   method: RpcMethod
   params?: any[] | object
 }
-
 async function showUserPrompt(message: string): Promise<boolean> {
   return new Promise((resolve) => {
-    const userResponse = window.confirm(message)
-    resolve(userResponse)
+    console.log('User Prompt Message:', message)
+    // TODO: figure out if we need to add "types": ["chrome"] to tsconfig.json?
+    // should add the following to the extension app next to background.js, manifest.json, etc.
+    // ├── prompt.html         // Your custom prompt HTML page
+    // ├── prompt.js           // JavaScript for prompt.html
+    // ├── prompt.css          // CSS for prompt.html
+    // Create a new window with your custom HTML page for the prompt
+    chrome.windows.create(
+      {
+        url: 'prompt.html',
+        type: 'popup'
+        // Add any additional window properties as needed
+      },
+      (newWindow) => {
+        // Handle the communication and response from the popup
+        chrome.runtime.onMessage.addListener(function listener(response) {
+          if (response.windowId === newWindow.id) {
+            resolve(response.userResponse)
+            chrome.runtime.onMessage.removeListener(listener)
+          }
+        })
+      }
+    )
   })
 }
 

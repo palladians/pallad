@@ -8,6 +8,7 @@ import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { KeyAgents, useVault } from '@palladxyz/vault'
 import { act, renderHook } from '@testing-library/react'
+import { vi } from 'vitest'
 
 import { MinaProvider } from '../../src/Mina'
 import { RequestArguments } from '../../src/Mina/types'
@@ -40,12 +41,6 @@ describe('WalletTest', () => {
   let agentArgs: FromBip39MnemonicWordsProps
   const keyAgentName = 'test key agent'
 
-  beforeAll(() => {
-    // Mock window.confirm to always return true (or false)
-    global.window = Object.create(window)
-    window.confirm = () => true
-  })
-
   beforeEach(async () => {
     agentArgs = {
       getPassphrase: getPassphrase,
@@ -70,6 +65,25 @@ describe('WalletTest', () => {
         archiveUrl: 'https://testworld.graphql.minaexplorer.com'
       }
     }
+
+    // Mock the global chrome object
+    global.chrome = {
+      windows: {
+        create: vi.fn() as unknown as typeof chrome.windows.create
+      },
+      runtime: {
+        sendMessage: vi.fn() as unknown as typeof chrome.runtime.sendMessage,
+        onMessage: {
+          addListener: vi.fn(),
+          removeListener: vi.fn()
+        } as unknown as typeof chrome.runtime.onMessage
+      }
+    } as unknown as typeof chrome
+  })
+
+  afterEach(() => {
+    // Reset the mocks after each test
+    vi.resetAllMocks()
   })
 
   it('should initialise the wallet and the provider should access the account info', async () => {
