@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAccount } from '@/common/hooks/useAccount'
 import { useBlockchainSummary } from '@/common/hooks/useBlockchainSummary'
 import { truncateString } from '@/common/lib/string'
+import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -60,8 +61,12 @@ export const StakingOverviewView = () => {
           ) : (
             <div className="flex flex-col flex-1">
               <div className="flex-1" />
-              <Button onClick={() => navigate('/staking/delegate')}>
-                Start Staking
+              <Button
+                onClick={() => navigate('/staking/delegate')}
+                className="group gap-2"
+              >
+                <span>Start Staking</span>
+                <ButtonArrow />
               </Button>
             </div>
           )}

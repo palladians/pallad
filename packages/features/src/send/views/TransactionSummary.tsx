@@ -79,7 +79,6 @@ export const TransactionSummaryView = () => {
               <MetaField label="Total" value={`${total} MINA`} />
             )}
           </Card>
-          <div className="flex-1" />
           <ConfirmTransactionForm />
         </div>
       </div>

@@ -5,7 +5,7 @@ interface FormErrorProps {
 export const FormError = ({ children }: FormErrorProps) => {
   if (!children) return null
   return (
-    <div className="text-red-500 text-sm" data-testid="form__error">
+    <div className="text-destructive text-sm" data-testid="form__error">
       {children}
     </div>
   )
