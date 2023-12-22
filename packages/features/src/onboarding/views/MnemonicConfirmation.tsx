@@ -11,6 +11,7 @@ import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
+import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -91,7 +92,7 @@ export const MnemonicConfirmationView = () => {
           form="mnemonicConfirmationForm"
           variant="secondary"
           className={cn([
-            'flex-1 opacity-50 transition-opacity gap-2',
+            'flex-1 opacity-50 transition-opacity gap-2 group',
             isValid && 'opacity-100'
           ])}
           disabled={!isValid || restoring}
@@ -99,6 +100,7 @@ export const MnemonicConfirmationView = () => {
         >
           {restoring && <Loader2Icon size={16} className="animate-spin" />}
           <span>Next</span>
+          <ButtonArrow />
         </Button>
       }
     >

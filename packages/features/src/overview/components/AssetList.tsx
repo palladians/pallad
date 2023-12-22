@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 
-import MinaLogo from '../../common/assets/mina.svg'
+import { MinaIcon } from '../../common/components/MinaIcon'
 import { ViewHeading } from '../../common/components/ViewHeading'
 import { useAccount } from '../../common/hooks/useAccount'
 
@@ -27,8 +27,8 @@ export const AssetList = () => {
       ) : (
         <div className="flex items-center gap-4">
           <Avatar>
-            <AvatarFallback className="p-2">
-              <MinaLogo />
+            <AvatarFallback className="p-2 text-blue-charcoal-950 dark:text-white">
+              <MinaIcon stroke="8" />
             </AvatarFallback>
           </Avatar>
           <p className="flex-1 font-semibold">MINA</p>

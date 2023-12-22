@@ -20,12 +20,12 @@
     "@capacitor/storage": "^1.2.5",
     "@plasmohq/storage": "^1.9.0",
     "capacitor-secure-storage-plugin": "^0.9.0",
-    "superjson": "^1.12.3"
+    "superjson": "^2.2.1"
   },
   "devDependencies": {
-    "@capacitor/core": "^5.2.0",
-    "@palladxyz/common": "*",
-    "vite": "^4.5.1",
+    "@capacitor/core": "^5.6.0",
+    "@palladxyz/common": "^1.0.0",
+    "vite": "^5.0.10",
     "zustand": "^4.4.7"
   }
 }

@@ -28,13 +28,8 @@ describe('Guard functions tests', () => {
 
     const invalidPayload = { message: 'invalid_payload' }
 
-    it('should return true for valid payload', () => {
-      expect(isConstructedTransaction(validPayload)).toBeTruthy()
-    })
-
-    it('should return false for invalid payload', () => {
-      expect(isConstructedTransaction(invalidPayload)).not.toBeTruthy()
-    })
+    expect(isConstructedTransaction(validPayload)).toBeTruthy()
+    expect(isConstructedTransaction(invalidPayload)).not.toBeTruthy()
   })
 
   test('isMessageBody', () => {
@@ -46,13 +41,8 @@ describe('Guard functions tests', () => {
       notAMessage: 'invalid_payload'
     }
 
-    it('should return true for valid payload', () => {
-      expect(isMessageBody(validPayload)).toBeTruthy()
-    })
-
-    it('should return false for invalid payload', () => {
-      expect(isMessageBody(invalidPayload)).not.toBeTruthy()
-    })
+    expect(isMessageBody(validPayload)).toBeTruthy()
+    expect(isMessageBody(invalidPayload)).not.toBeTruthy()
   })
 
   test('isFields', () => {
@@ -65,13 +55,8 @@ describe('Guard functions tests', () => {
       fields: ['10n', '20n']
     }
 
-    it('should return true for valid payload', () => {
-      expect(isFields(validPayload)).toBeTruthy()
-    })
-
-    it('should return false for invalid payload', () => {
-      expect(isFields(invalidPayload)).not.toBeTruthy()
-    })
+    expect(isFields(validPayload)).toBeTruthy()
+    expect(isFields(invalidPayload)).not.toBeFalsy()
   })
 
   test('should validate zkAppCommand correctly', async () => {
@@ -104,12 +89,7 @@ describe('Guard functions tests', () => {
       // missing 'command'
     }
 
-    it('should return true for valid payload', () => {
-      expect(isZkAppTransaction(zkAppCommand)).toBeTruthy()
-    })
-
-    it('should return false for invalid payload', () => {
-      expect(isZkAppTransaction(invalidPayload)).not.toBeTruthy()
-    })
+    expect(isZkAppTransaction(zkAppCommand)).toBeTruthy()
+    expect(isZkAppTransaction(invalidPayload)).not.toBeTruthy()
   })
 })

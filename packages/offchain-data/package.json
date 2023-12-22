@@ -17,9 +17,9 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "swr": "^2.2.0"
+    "swr": "^2.2.4"
   },
   "devDependencies": {
-    "@palladxyz/common": "*"
+    "@palladxyz/common": "^1.0.0"
   }
 }

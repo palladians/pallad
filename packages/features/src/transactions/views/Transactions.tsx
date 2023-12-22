@@ -38,7 +38,10 @@ export const TransactionsView = () => {
         />
         <div className="fle flex-col gap-4 p-4 pb-12">
           {onlyPendingTransactions.length > 0 && (
-            <Alert className="mb-4 rounded-[1rem] p-2">
+            <Alert
+              className="mb-4 rounded-[1rem] p-2"
+              data-testid="transactions__pendingTransactions"
+            >
               <ClockIcon className="h-6 w-6" />
               <AlertTitle className="leading-6 ml-4">
                 There are transactions waiting to be broadcasted.

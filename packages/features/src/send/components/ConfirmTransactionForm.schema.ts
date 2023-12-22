@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { passwordSchema } from '@/common/lib/validation'
+
 export const ConfirmTransactionSchema = z.object({
-  spendingPassword: z.string().min(1)
+  spendingPassword: passwordSchema
 })

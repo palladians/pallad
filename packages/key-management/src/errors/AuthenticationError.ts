@@ -68,7 +68,10 @@ export const stripStackTrace = (error: unknown) => {
 export class ComposableError<InnerError = unknown> extends CustomError {
   private static stackDelimiter = '\n    at '
 
-  constructor(message: string, public innerError?: InnerError) {
+  constructor(
+    message: string,
+    public innerError?: InnerError
+  ) {
     let firstLineOfInnerErrorStack = ''
     let innerErrorStack: string[] = []
 

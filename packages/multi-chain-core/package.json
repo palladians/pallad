@@ -14,16 +14,16 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test:unit": "vitest run", 
+    "test:unit": "vitest run",
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/util": "*",
-    "@palladxyz/mina-core": "*",
-    "@palladxyz/mina-graphql": "*"
+    "@palladxyz/mina-core": "^0.0.1",
+    "@palladxyz/mina-graphql": "^0.0.1",
+    "@palladxyz/util": "^0.0.1"
   },
   "devDependencies": {
-    "@palladxyz/common": "*",
-    "@types/mocha": "^10.0.1"
+    "@palladxyz/common": "^1.0.0",
+    "@types/mocha": "^10.0.6"
   }
 }

@@ -18,23 +18,23 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/mina-core": "*",
-    "@palladxyz/util": "*",
+    "@palladxyz/mina-core": "^0.0.1",
+    "@palladxyz/util": "^0.0.1",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "events": "^3.3.0",
-    "graphql": "^16.6.0",
+    "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "mina-signer": "^2.1.1",
     "subscriptions-transport-ws": "^0.11.0",
-    "ws": "^8.13.0"
+    "ws": "^8.15.1"
   },
   "devDependencies": {
-    "@palladxyz/common": "*",
-    "@types/events": "^3.0.0",
-    "@types/mocha": "^10.0.1",
-    "@types/secp256k1": "^4.0.3",
+    "@palladxyz/common": "^1.0.0",
+    "@types/events": "^3.0.3",
+    "@types/mocha": "^10.0.6",
+    "@types/secp256k1": "^4.0.6",
     "esbuild-plugin-polyfill-node": "^0.3.0",
-    "msw": "^1.2.2"
+    "msw": "^2.0.11"
   }
 }
