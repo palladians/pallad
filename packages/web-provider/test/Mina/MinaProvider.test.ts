@@ -1,4 +1,5 @@
 import {
+  constructTransaction,
   FromBip39MnemonicWordsProps,
   MinaPayload,
   Network
@@ -141,7 +142,6 @@ describe('WalletTest', () => {
     // Call the request function to sign the message
     try {
       const signature = await provider.request(signRequestArgs)
-      console.log('Signature:', signature)
       const minaClient = new Client({
         network: networkType as Mina.NetworkType
       })
@@ -152,6 +152,100 @@ describe('WalletTest', () => {
     } catch (error) {
       console.error(
         'Error signing message:',
+        error instanceof Error ? error.message : error
+      )
+    }
+
+    // Sign fields
+    // Define the fields to be signed
+    const fields: Mina.SignableFields = {
+      fields: [
+        BigInt(10),
+        BigInt(20),
+        BigInt(30),
+        BigInt(340817401),
+        BigInt(2091283),
+        BigInt(1),
+        BigInt(0)
+      ]
+    }
+
+    // Define the request arguments for the 'mina_signFields' method
+    const signFieldsRequestArgs: RequestArguments = {
+      method: 'mina_signFields',
+      params: fields
+    }
+
+    // Call the request function to sign the fields
+    try {
+      const signature = await provider.request(signFieldsRequestArgs)
+      const minaClient = new Client({
+        network: networkType as Mina.NetworkType
+      })
+      const isVerified = await minaClient.verifyFields(
+        signature as Mina.SignedFields
+      )
+      expect(isVerified).toBeTruthy()
+    } catch (error) {
+      console.error(
+        'Error signing fields:',
+        error instanceof Error ? error.message : error
+      )
+    }
+
+    // Sign a constructed transaction
+    // Define the transaction to be signed
+    const transaction: Mina.TransactionBody = {
+      to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+      from: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+      fee: 1,
+      amount: 100,
+      nonce: 0,
+      memo: 'hello Bob',
+      validUntil: 321,
+      type: 'payment'
+    }
+    const constructedTx: Mina.ConstructedTransaction = constructTransaction(
+      transaction,
+      Mina.TransactionKind.PAYMENT
+    )
+
+    // Define the request arguments for the 'mina_signTransaction' method
+    const signTxRequestArgs: RequestArguments = {
+      method: 'mina_signTransaction',
+      params: constructedTx
+    }
+
+    // Call the request function to sign the transaction
+    try {
+      const signature = await provider.request(signTxRequestArgs)
+      const minaClient = new Client({
+        network: networkType as Mina.NetworkType
+      })
+      const isVerified = await minaClient.verifyTransaction(
+        signature as Mina.SignedTransaction
+      )
+      expect(isVerified).toBeTruthy()
+    } catch (error) {
+      console.error(
+        'Error signing transaction:',
+        error instanceof Error ? error.message : error
+      )
+    }
+
+    // get balance
+    // Define the request arguments for the 'mina_getBalance' method
+    const getBalanceRequestArgs: RequestArguments = {
+      method: 'mina_getBalance'
+    }
+
+    // Call the request function to get the balance
+    try {
+      const balance = await provider.request(getBalanceRequestArgs)
+      expect(balance).toBeGreaterThan(0)
+    } catch (error) {
+      console.error(
+        'Error getting balance:',
         error instanceof Error ? error.message : error
       )
     }

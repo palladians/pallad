@@ -32,6 +32,13 @@ export class VaultService {
     return store.sign(signable, getPassphrase)
   }
 
+  getBalance(): number {
+    const store = useVault.getState()
+    return Number(
+      store.getCurrentWallet().accountInfo.balance.total.toPrecision(8)
+    )
+  }
+
   // Add other methods as needed
 }
 

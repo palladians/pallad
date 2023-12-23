@@ -1,7 +1,7 @@
 export const REQUIRED_METHODS = ['mina_sendTransaction']
 export const OPTIONAL_METHODS = [
   'mina_accounts',
-  'mina_requestAccounts',
+  'mina_requestAccounts', // this is a legacy method, could be removed
   'mina_sign',
   'mina_signTransaction',
   'mina_signFields',

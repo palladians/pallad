@@ -250,6 +250,7 @@ export class MinaProvider implements IMinaProvider {
   }
 
   public async request<T = unknown>(args: RequestArguments): Promise<T> {
+    // TODO: implement handling of different args structures
     // Prompt user for confirmation based on the method type
     const userConfirmed = await this.userPrompt(
       `Do you want to execute ${args.method}?`
@@ -263,6 +264,7 @@ export class MinaProvider implements IMinaProvider {
       // todo: request permission to access accounts from user
       return vaultService.getAccounts() as unknown as T
     }
+    // should this be mina_signMessage
     if (args.method === 'mina_sign') {
       // handle mina_sign
       // prompt user for passphrase
@@ -271,11 +273,54 @@ export class MinaProvider implements IMinaProvider {
         'password'
       )
       if (passphrase === null) {
+        // TODO: find out what the correct error is
         throw new Error('User denied the request for passphrase.')
       }
       return vaultService.sign(args.params as MinaSignablePayload, async () =>
         Buffer.from(passphrase)
       ) as unknown as T
+    }
+    if (args.method === 'mina_signFields') {
+      // handle mina_signFields
+      // prompt user for passphrase
+      const passphrase = await this.userPrompt(
+        'Enter your passphrase:',
+        'password'
+      )
+      if (passphrase === null) {
+        // TODO: find out what the correct error is
+        throw new Error('User denied the request for passphrase.')
+      }
+      return vaultService.sign(args.params as MinaSignablePayload, async () =>
+        Buffer.from(passphrase)
+      ) as unknown as T
+    }
+    if (args.method === 'mina_signTransaction') {
+      // handle mina_signTransaction
+      // prompt user for passphrase
+      const passphrase = await this.userPrompt(
+        'Enter your passphrase:',
+        'password'
+      )
+      if (passphrase === null) {
+        // TODO: find out what the correct error is
+        throw new Error('User denied the request for passphrase.')
+      }
+      return vaultService.sign(args.params as MinaSignablePayload, async () =>
+        Buffer.from(passphrase)
+      ) as unknown as T
+    }
+    if (args.method === 'mina_getBalance') {
+      // handle mina_getBalance
+      // prompt user for passphrase
+      const userConfirmed = await this.userPrompt(
+        'Do you want to execute mina_getBalance?'
+      )
+      if (!userConfirmed) {
+        // should this emit an error event?
+        throw new Error('User denied connection.')
+      }
+      return vaultService.getBalance() as unknown as T
     }
     // For unsupported methods, throw an error with a descriptive message -- must error with correct standard error
     throw new Error(`Method ${args.method} is not supported.`)
