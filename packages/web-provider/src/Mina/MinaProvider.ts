@@ -141,7 +141,7 @@ async function showUserPrompt(
 export class MinaProvider implements IMinaProvider {
   public events = new EventEmitter()
   public accounts: string[] = []
-  public chainId = 'Add Chain ID here'
+  public chainId: string | undefined = undefined
   public connected = false
   // do we need to add a vaultService instance here?
   //public signer: any // This should be the VaultService
@@ -188,6 +188,7 @@ export class MinaProvider implements IMinaProvider {
     }
 
     // ... any other initialization logic
+    this.chainId = await vaultService.getChainId()
   }
   private createProviderRpcError(
     code: number,

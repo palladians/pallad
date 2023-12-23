@@ -118,7 +118,10 @@ describe('Wallet Provider Test', () => {
       ])
 
       // Assert that the connect event was emitted
-      expect(connectListener).toHaveBeenCalledWith(expect.anything())
+      expect(connectListener).toHaveBeenCalledWith({
+        chainId:
+          '3c41383994b87449625df91769dff7b507825c064287d30fada9286f3f1cb15e'
+      })
       expect(provider.isConnected()).toBeTruthy()
     })
 

@@ -1,5 +1,6 @@
 export * from './AccountInfo'
 export * from './ChainHistory'
+export * from './DaemonStatus'
 export * from './provider'
 export * from './providerArchive'
 export * from './TxStatus'

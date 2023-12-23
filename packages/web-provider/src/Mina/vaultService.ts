@@ -38,6 +38,11 @@ export class VaultService {
     return Number(store.getCurrentWallet().accountInfo.balance.total / 1e9)
   }
 
+  async getChainId(): Promise<string | undefined> {
+    const store = useVault.getState()
+    return store.getChainId()
+  }
+
   // Add other methods as needed
 }
 
