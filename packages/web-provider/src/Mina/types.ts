@@ -14,7 +14,24 @@ export interface MinaRpcProviderMap {
   [chainId: string]: IMinaProviderBase
 }
 
-// TODO: is the `_requestAccounts` method needed anymore or is it legacy or deprecated?
+export interface ProviderMessage {
+  type: string
+  data: unknown
+}
+
+export interface ProviderInfo {
+  chainId: string
+}
+
+export interface RequestArguments {
+  method: string
+  params?: unknown[] | Record<string, unknown> | object | undefined
+}
+
+export type ProviderChainId = ProviderInfo['chainId']
+
+export type ProviderAccounts = string[]
+
 export interface EIP1102Request extends RequestArguments {
   method: 'mina_requestAccounts'
 }

@@ -23,6 +23,7 @@
     "@palladxyz/mina-graphql": "^0.0.1",
     "@palladxyz/multi-chain-core": "^0.0.1",
     "@palladxyz/vault": "^0.0.1",
+    "mina-signer": "^2.1.1",
     "vitest": "^1.1.0"
   },
   "devDependencies": {
