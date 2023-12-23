@@ -7,17 +7,26 @@ import { Toggle } from '@/components/ui/toggle'
 interface WizardLayoutProps {
   children: React.ReactNode
   footer: React.ReactNode
+  textLogo?: boolean
 }
 
-export const WizardLayout = ({ children, footer }: WizardLayoutProps) => {
+export const WizardLayout = ({
+  children,
+  footer,
+  textLogo = false
+}: WizardLayoutProps) => {
   const { setTheme, theme } = useTheme()
   const toggleTheme = () => {
     theme === 'dark' ? setTheme('light') : setTheme('dark')
   }
   return (
     <div className="flex flex-1 dark:bg-slate-950 bg-white flex-col">
-      <div className="flex justify-between p-4">
-        <Logo />
+      <div className="flex justify-between items-center p-4">
+        {textLogo ? (
+          <span className="text-lg font-semibold ml-2">Pallad</span>
+        ) : (
+          <Logo />
+        )}
         <Toggle size="sm" onClick={toggleTheme}>
           {theme === 'dark' ? <SunIcon size={16} /> : <MoonIcon size={16} />}
         </Toggle>
