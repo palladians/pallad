@@ -10,6 +10,8 @@ import {
 import {
   IMinaProvider as IProvider,
   IMinaProviderEvents,
+  ProviderConnectInfo,
+  ProviderRpcError,
   RequestArguments
 } from './types'
 import { vaultService } from './vaultService'
@@ -141,6 +143,7 @@ export class MinaProvider implements IMinaProvider {
   public accounts: string[] = []
   public chainId = 'Add Chain ID here'
   public connected = false
+  // do we need to add a vaultService instance here?
   //public signer: any // This should be the VaultService
 
   private userPrompt: (
@@ -186,6 +189,17 @@ export class MinaProvider implements IMinaProvider {
 
     // ... any other initialization logic
   }
+  private createProviderRpcError(
+    code: number,
+    message: string
+  ): ProviderRpcError {
+    return {
+      name: 'ProviderRpcError',
+      message,
+      code
+      // Include any additional data if it is required
+    }
+  }
 
   public async enable(): Promise<string[]> {
     // Implement the logic to prompt the user to connect to the wallet
@@ -194,16 +208,28 @@ export class MinaProvider implements IMinaProvider {
     const userConfirmed = await this.userPrompt('Do you want to connect?')
     if (!userConfirmed) {
       // should this emit an error event?
-      throw new Error('User denied connection.')
+      throw this.createProviderRpcError(4001, 'User Rejected Request')
     }
     await this.connect()
-    // Once the user has connected, emit an 'accountsChanged' event
-    this.events.emit('accountsChanged', this.accounts)
+    // TODO: perform 'mina_requestAccounts' method
     return this.accounts
   }
-
+  // these are the methods that are called by the dapp to interact/listen to the wallet
   public on: IMinaProviderEvents['on'] = (event, listener) => {
     this.events.on(event, listener)
+    return this
+  }
+
+  public once: IMinaProviderEvents['once'] = (event, listener) => {
+    this.events.once(event, listener)
+    return this
+  }
+
+  public removeListener: IMinaProviderEvents['removeListener'] = (
+    event,
+    listener
+  ) => {
+    this.events.removeListener(event, listener)
     return this
   }
 
@@ -219,14 +245,22 @@ export class MinaProvider implements IMinaProvider {
     }
 
     // Step 2: Start the connection process.
-    // This might involve connecting to a Mina node, initializing a session, etc.
-    await this.connect()
+    // Implement the actual connection logic here.
+    // For example, connecting to a Mina node, initializing a session, etc.
 
-    // Step 3: Fetch accounts and set them
+    // Mock connection logic for example:
+    // Assuming you have a method in vaultService to connect, call it here.
+    // await vaultService.connectToMinaNode();
+
+    // Once connected, set the connected flag to true.
+    this.connected = true
+
+    // Step 3: Fetch accounts and set them.
     this.accounts = await vaultService.getAccounts()
 
-    // Emit a 'connect' event once connected
-    this.events.emit('connect', { chainId: 'Add Chain ID here' })
+    // Emit a 'connect' event once connected.
+    const connectInfo: ProviderConnectInfo = { chainId: this.chainId }
+    this.events.emit('connect', connectInfo)
   }
 
   public isConnected(): boolean {
@@ -236,94 +270,74 @@ export class MinaProvider implements IMinaProvider {
   public async disconnect(): Promise<void> {
     // Check if it's connected in the first place
     if (!this.isConnected()) {
-      throw new Error('Not connected.')
+      // Emit a 'disconnect' event with an error only if disconnected
+      this.events.emit(
+        'disconnect',
+        this.createProviderRpcError(4900, 'Disconnected')
+      )
+    } else {
+      // If it's connected, then handle the disconnection logic
+      // For example, disconnect from the Mina client or other cleanup
+      // ...
+
+      // Update the connected status
+      this.connected = false
+
+      // Reset accounts
+      this.accounts = []
+
+      // Emit a 'disconnect' event without an error
+      this.events.emit('disconnect')
     }
-
-    // Disconnect the vaultService?
-    // await this.disconnect()
-
-    // Reset accounts
-    this.accounts = []
-
-    // Emit a 'disconnect' event once disconnected
-    this.events.emit('disconnect')
   }
 
   public async request<T = unknown>(args: RequestArguments): Promise<T> {
-    // TODO: implement handling of different args structures
     // Prompt user for confirmation based on the method type
+    // what scenarios would we need to prompt the user?
     const userConfirmed = await this.userPrompt(
       `Do you want to execute ${args.method}?`
     )
     if (!userConfirmed) {
-      // should this emit an error event?
-      throw new Error('User denied the request.')
+      throw this.createProviderRpcError(4001, 'User Rejected Request')
     }
-    if (args.method === 'mina_accounts') {
-      // handle mina_accounts
-      // todo: request permission to access accounts from user
-      return vaultService.getAccounts() as unknown as T
-    }
-    // should this be mina_signMessage
-    if (args.method === 'mina_sign') {
-      // handle mina_sign
-      // prompt user for passphrase
-      const passphrase = await this.userPrompt(
-        'Enter your passphrase:',
-        'password'
-      )
-      if (passphrase === null) {
-        // TODO: find out what the correct error is
-        throw new Error('User denied the request for passphrase.')
+
+    switch (args.method) {
+      case 'mina_accounts': {
+        // handle mina_accounts
+        return vaultService.getAccounts() as unknown as T
       }
-      return vaultService.sign(args.params as MinaSignablePayload, async () =>
-        Buffer.from(passphrase)
-      ) as unknown as T
-    }
-    if (args.method === 'mina_signFields') {
-      // handle mina_signFields
-      // prompt user for passphrase
-      const passphrase = await this.userPrompt(
-        'Enter your passphrase:',
-        'password'
-      )
-      if (passphrase === null) {
-        // TODO: find out what the correct error is
-        throw new Error('User denied the request for passphrase.')
+
+      case 'mina_sign':
+      case 'mina_signFields':
+      case 'mina_signTransaction': {
+        const passphrase = await this.userPrompt(
+          'Enter your passphrase:',
+          'password'
+        )
+        if (passphrase === null) {
+          throw new Error('User denied the request for passphrase.')
+        }
+        return vaultService.sign(args.params as MinaSignablePayload, async () =>
+          Buffer.from(passphrase)
+        ) as unknown as T
       }
-      return vaultService.sign(args.params as MinaSignablePayload, async () =>
-        Buffer.from(passphrase)
-      ) as unknown as T
-    }
-    if (args.method === 'mina_signTransaction') {
-      // handle mina_signTransaction
-      // prompt user for passphrase
-      const passphrase = await this.userPrompt(
-        'Enter your passphrase:',
-        'password'
-      )
-      if (passphrase === null) {
-        // TODO: find out what the correct error is
-        throw new Error('User denied the request for passphrase.')
+
+      case 'mina_getBalance':
+      case 'mina_chainId': {
+        const userConfirmed = await this.userPrompt(
+          `Do you want to execute ${args.method}?`
+        )
+        if (!userConfirmed) {
+          throw this.createProviderRpcError(4001, 'User Rejected Request')
+        }
+        return args.method === 'mina_getBalance'
+          ? (vaultService.getBalance() as unknown as T)
+          : (this.chainId as unknown as T)
       }
-      return vaultService.sign(args.params as MinaSignablePayload, async () =>
-        Buffer.from(passphrase)
-      ) as unknown as T
+
+      default:
+        throw this.createProviderRpcError(4200, 'Unsupported Method')
     }
-    if (args.method === 'mina_getBalance') {
-      // handle mina_getBalance
-      // prompt user for passphrase
-      const userConfirmed = await this.userPrompt(
-        'Do you want to execute mina_getBalance?'
-      )
-      if (!userConfirmed) {
-        // should this emit an error event?
-        throw new Error('User denied connection.')
-      }
-      return vaultService.getBalance() as unknown as T
-    }
-    // For unsupported methods, throw an error with a descriptive message -- must error with correct standard error
-    throw new Error(`Method ${args.method} is not supported.`)
   }
 
   protected getRpcConfig(ops: MinaProviderOptions): MinaRpcConfig {

@@ -16,6 +16,7 @@ export class VaultService {
   }
 
   getAccounts(): string[] {
+    // TODO: handle errors
     const store = useVault.getState()
     const credentials = store.credentials
     const addresses = Object.values(credentials).map(
@@ -34,9 +35,7 @@ export class VaultService {
 
   getBalance(): number {
     const store = useVault.getState()
-    return Number(
-      store.getCurrentWallet().accountInfo.balance.total.toPrecision(8)
-    )
+    return Number(store.getCurrentWallet().accountInfo.balance.total / 1e9)
   }
 
   // Add other methods as needed

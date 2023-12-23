@@ -34,17 +34,47 @@ const params = {
 }
 const getPassphrase = async () => Buffer.from(params.passphrase)
 
-describe('WalletTest', () => {
+describe('Wallet Provider Test', () => {
   let agentArgs: FromBip39MnemonicWordsProps
   let networkType: string
+  let provider
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     agentArgs = {
       getPassphrase: getPassphrase,
       mnemonicWords: PREGENERATED_MNEMONIC
     }
     networkType = 'testnet'
 
+    // initialise the vault
+    const { result } = renderHook(() => useVault())
+    // restore wallet
+    await act(async () => {
+      await result.current.restoreWallet(
+        new MinaPayload(),
+        {
+          network: Network.Mina,
+          accountIndex: 0,
+          addressIndex: 0,
+          networkType: networkType
+        },
+        Mina.Networks.BERKELEY,
+        agentArgs,
+        'keyAgent test name',
+        KeyAgents.InMemory,
+        'credential test name'
+      )
+    })
+
+    // initialize the MinaProvider
+    const opts = {
+      projectId: 'test',
+      chains: ['Mina Devnet']
+    }
+    provider = await MinaProvider.init(opts)
+  })
+
+  beforeEach(() => {
     // Mock the global chrome object
     global.chrome = {
       windows: {
@@ -75,72 +105,45 @@ describe('WalletTest', () => {
     // Reset the mocks after each test
     vi.resetAllMocks()
   })
+  describe('MinaProvider', () => {
+    it('should emit connect event on successful connection when using `enable` method', async () => {
+      // Listen to the connect event
+      const connectListener = vi.fn()
+      provider.on('connect', connectListener)
 
-  it('should initialise the wallet and the provider should access the account info', async () => {
-    const { result } = renderHook(() => useVault())
-    // restore wallet
-    await act(async () => {
-      await result.current.restoreWallet(
-        new MinaPayload(),
-        {
-          network: Network.Mina,
-          accountIndex: 0,
-          addressIndex: 0,
-          networkType: networkType
-        },
-        Mina.Networks.BERKELEY,
-        agentArgs,
-        'keyAgent test name',
-        KeyAgents.InMemory,
-        'credential test name'
-      )
+      // Trigger connection
+      const result = await provider.enable()
+      expect(result).toEqual([
+        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+      ])
+
+      // Assert that the connect event was emitted
+      expect(connectListener).toHaveBeenCalledWith(expect.anything())
+      expect(provider.isConnected()).toBeTruthy()
     })
 
-    // initialize the MinaProvider
-    const opts = {
-      projectId: 'test',
-      chains: ['Mina Devnet']
-    }
-    const provider = await MinaProvider.init(opts)
+    it('should access the account info from provider with `mina_accounts` method', async () => {
+      const requestArgs: RequestArguments = {
+        method: 'mina_accounts'
+      }
 
-    // Define the request arguments for the 'mina_accounts' method
-    const requestArgs: RequestArguments = {
-      method: 'mina_accounts'
-    }
+      expect(provider).toBeDefined()
 
-    // Ensure the provider is defined
-    expect(provider).toBeDefined()
+      const accountAddresses = await provider.request(requestArgs)
+      expect(accountAddresses).toEqual([
+        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+      ])
+    })
 
-    // Call the request function with the appropriate arguments
-    provider
-      .request(requestArgs)
-      .then((accountAddresses) => {
-        console.log('accountAddresses', accountAddresses)
+    it('should sign a message and verify the signature with `mina_sign` method', async () => {
+      const message: Mina.MessageBody = {
+        message: 'Hello, Bob!'
+      }
+      const signRequestArgs: RequestArguments = {
+        method: 'mina_sign',
+        params: message
+      }
 
-        // Compare the received addresses with the expected ones
-        expect(accountAddresses).toEqual([
-          'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
-        ])
-      })
-      .catch((error) => {
-        // Handle any errors here
-        console.error('Error fetching account addresses:', error)
-      })
-
-    // Sign a message
-    // Define the message to be signed
-    const message: Mina.MessageBody = {
-      message: 'Hello, Bob!'
-    }
-
-    // Define the request arguments for the 'mina_sign' method
-    const signRequestArgs: RequestArguments = {
-      method: 'mina_sign',
-      params: message // if this is an array, the signer will throw an error -- TODO: check if this behaviour is correct
-    }
-
-    // Call the request function to sign the message
-    try {
       const signature = await provider.request(signRequestArgs)
       const minaClient = new Client({
         network: networkType as Mina.NetworkType
@@ -149,35 +152,25 @@ describe('WalletTest', () => {
         signature as Mina.SignedMessage
       )
       expect(isVerified).toBeTruthy()
-    } catch (error) {
-      console.error(
-        'Error signing message:',
-        error instanceof Error ? error.message : error
-      )
-    }
+    })
 
-    // Sign fields
-    // Define the fields to be signed
-    const fields: Mina.SignableFields = {
-      fields: [
-        BigInt(10),
-        BigInt(20),
-        BigInt(30),
-        BigInt(340817401),
-        BigInt(2091283),
-        BigInt(1),
-        BigInt(0)
-      ]
-    }
+    it('should sign fields and verify the signature', async () => {
+      const fields: Mina.SignableFields = {
+        fields: [
+          BigInt(10),
+          BigInt(20),
+          BigInt(30),
+          BigInt(340817401),
+          BigInt(2091283),
+          BigInt(1),
+          BigInt(0)
+        ]
+      }
+      const signFieldsRequestArgs: RequestArguments = {
+        method: 'mina_signFields',
+        params: fields
+      }
 
-    // Define the request arguments for the 'mina_signFields' method
-    const signFieldsRequestArgs: RequestArguments = {
-      method: 'mina_signFields',
-      params: fields
-    }
-
-    // Call the request function to sign the fields
-    try {
       const signature = await provider.request(signFieldsRequestArgs)
       const minaClient = new Client({
         network: networkType as Mina.NetworkType
@@ -186,38 +179,28 @@ describe('WalletTest', () => {
         signature as Mina.SignedFields
       )
       expect(isVerified).toBeTruthy()
-    } catch (error) {
-      console.error(
-        'Error signing fields:',
-        error instanceof Error ? error.message : error
+    })
+
+    it('should sign a constructed transaction and verify it', async () => {
+      const transaction: Mina.TransactionBody = {
+        to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        from: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        fee: 1,
+        amount: 100,
+        nonce: 0,
+        memo: 'hello Bob',
+        validUntil: 321,
+        type: 'payment'
+      }
+      const constructedTx: Mina.ConstructedTransaction = constructTransaction(
+        transaction,
+        Mina.TransactionKind.PAYMENT
       )
-    }
+      const signTxRequestArgs: RequestArguments = {
+        method: 'mina_signTransaction',
+        params: constructedTx
+      }
 
-    // Sign a constructed transaction
-    // Define the transaction to be signed
-    const transaction: Mina.TransactionBody = {
-      to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      from: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      fee: 1,
-      amount: 100,
-      nonce: 0,
-      memo: 'hello Bob',
-      validUntil: 321,
-      type: 'payment'
-    }
-    const constructedTx: Mina.ConstructedTransaction = constructTransaction(
-      transaction,
-      Mina.TransactionKind.PAYMENT
-    )
-
-    // Define the request arguments for the 'mina_signTransaction' method
-    const signTxRequestArgs: RequestArguments = {
-      method: 'mina_signTransaction',
-      params: constructedTx
-    }
-
-    // Call the request function to sign the transaction
-    try {
       const signature = await provider.request(signTxRequestArgs)
       const minaClient = new Client({
         network: networkType as Mina.NetworkType
@@ -226,28 +209,61 @@ describe('WalletTest', () => {
         signature as Mina.SignedTransaction
       )
       expect(isVerified).toBeTruthy()
-    } catch (error) {
-      console.error(
-        'Error signing transaction:',
-        error instanceof Error ? error.message : error
-      )
-    }
+    })
 
-    // get balance
-    // Define the request arguments for the 'mina_getBalance' method
-    const getBalanceRequestArgs: RequestArguments = {
-      method: 'mina_getBalance'
-    }
+    it('should retrieve the balance successfully', async () => {
+      const getBalanceRequestArgs: RequestArguments = {
+        method: 'mina_getBalance'
+      }
 
-    // Call the request function to get the balance
-    try {
       const balance = await provider.request(getBalanceRequestArgs)
       expect(balance).toBeGreaterThan(0)
-    } catch (error) {
-      console.error(
-        'Error getting balance:',
-        error instanceof Error ? error.message : error
+    })
+  })
+  describe('MinaProvider Errors', () => {
+    it('should throw ProviderRpcError with code 4001 on user rejection', async () => {
+      // Simulate user rejection by mocking the user prompt to return a rejection
+      provider.userPrompt = vi.fn().mockResolvedValue(null)
+
+      // Attempt to execute a method that requires user confirmation
+      const requestArgs: RequestArguments = { method: 'mina_accounts' }
+
+      await expect(provider.request(requestArgs)).rejects.toEqual(
+        expect.objectContaining({ code: 4001 })
+      ) // , message: 'User Rejected Request'
+    })
+
+    it('should throw ProviderRpcError with code 4001 when user rejects the connection', async () => {
+      // Mock user rejection
+      provider.userPrompt = vi.fn().mockResolvedValue(false)
+
+      // Attempt to enable and expect an error
+      await expect(provider.enable()).rejects.toEqual(
+        expect.objectContaining({
+          code: 4001,
+          message: 'User Rejected Request'
+        })
       )
-    }
+    })
+
+    it('should emit disconnect event with ProviderRpcError code 4900 when not connected', async () => {
+      // Set provider as not connected
+      provider.connected = false
+
+      // Listen to the disconnect event
+      const disconnectListener = vi.fn()
+      provider.on('disconnect', disconnectListener)
+
+      // Call the disconnect method
+      await provider.disconnect()
+
+      // Assert that the disconnect event was emitted with the correct error
+      expect(disconnectListener).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code: 4900,
+          message: 'Disconnected'
+        })
+      )
+    })
   })
 })

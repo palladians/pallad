@@ -11,8 +11,8 @@ export interface ProviderMessage {
   data: unknown
 }
 
-export interface ProviderInfo {
-  chainId: string
+export interface ProviderConnectInfo {
+  readonly chainId: string
 }
 
 export interface RequestArguments {
@@ -20,7 +20,7 @@ export interface RequestArguments {
   params?: unknown[] | Record<string, unknown> | object | undefined
 }
 
-export type ProviderChainId = ProviderInfo['chainId']
+export type ProviderChainId = ProviderConnectInfo['chainId']
 
 export type ProviderAccounts = string[]
 
@@ -36,7 +36,7 @@ export type ProviderEvent =
   | 'accountsChanged'
 
 export interface ProviderEventArguments {
-  connect: ProviderInfo
+  connect: ProviderConnectInfo
   disconnect: ProviderRpcError
   message: ProviderMessage
   chainChanged: ProviderChainId
@@ -73,7 +73,10 @@ export interface IMinaProviderEvents {
 
 export interface EIP1193Provider {
   // connection event
-  on(event: 'connect', listener: (info: ProviderInfo) => void): MinaProvider
+  on(
+    event: 'connect',
+    listener: (info: ProviderConnectInfo) => void
+  ): MinaProvider
   // disconnection event
   on(
     event: 'disconnect',
