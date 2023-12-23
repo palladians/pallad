@@ -1,3 +1,4 @@
+import { MinaSignablePayload } from '@palladxyz/key-management'
 import { EventEmitter } from 'events'
 
 import {
@@ -6,7 +7,11 @@ import {
   REQUIRED_EVENTS,
   REQUIRED_METHODS
 } from './constants/rpc'
-import { IMinaProvider as IProvider, IMinaProviderEvents } from './types'
+import {
+  IMinaProvider as IProvider,
+  IMinaProviderEvents,
+  RequestArguments
+} from './types'
 import { vaultService } from './vaultService'
 
 export type RpcMethod =
@@ -88,14 +93,16 @@ interface MinaProviderOptions {
   rpcMap?: MinaRpcMap
   pairingTopic?: string
   projectId: string
-  showUserPrompt?: (message: string) => Promise<boolean>
+  showUserPrompt?: (
+    message: string,
+    inputType?: 'text' | 'password'
+  ) => Promise<string>
 }
 
-interface RequestArguments {
-  method: RpcMethod
-  params?: any[] | object
-}
-async function showUserPrompt(message: string): Promise<boolean> {
+async function showUserPrompt(
+  message: string,
+  inputType: 'text' | 'password' = 'text'
+): Promise<string> {
   return new Promise((resolve) => {
     console.log('User Prompt Message:', message)
     // TODO: figure out if we need to add "types": ["chrome"] to tsconfig.json?
@@ -106,7 +113,9 @@ async function showUserPrompt(message: string): Promise<boolean> {
     // Create a new window with your custom HTML page for the prompt
     chrome.windows.create(
       {
-        url: 'prompt.html',
+        url: `prompt.html?message=${encodeURIComponent(
+          message
+        )}&inputType=${inputType}`,
         type: 'popup'
         // Add any additional window properties as needed
       },
@@ -114,7 +123,11 @@ async function showUserPrompt(message: string): Promise<boolean> {
         // Handle the communication and response from the popup
         chrome.runtime.onMessage.addListener(function listener(response) {
           if (response.windowId === newWindow.id) {
-            resolve(response.userResponse)
+            if (response.userRejected) {
+              resolve(null) // User rejected the prompt
+            } else {
+              resolve(response.userInput) // User provided input
+            }
             chrome.runtime.onMessage.removeListener(listener)
           }
         })
@@ -127,9 +140,13 @@ export class MinaProvider implements IMinaProvider {
   public events = new EventEmitter()
   public accounts: string[] = []
   public chainId = 'Add Chain ID here'
-  public signer: any // I think the signer is something other than the vault, but I'm not sure
+  public connected = false
+  //public signer: any // This should be the VaultService
 
-  private userPrompt: (message: string) => Promise<boolean> // maybe this is the right place for this?
+  private userPrompt: (
+    message: string,
+    inputType?: 'text' | 'password'
+  ) => Promise<string>
 
   protected rpc: MinaRpcConfig
 
@@ -138,7 +155,12 @@ export class MinaProvider implements IMinaProvider {
     this.rpc = {} as MinaRpcConfig
 
     // Use provided userPrompt function or default to the actual implementation
-    this.userPrompt = opts.showUserPrompt || showUserPrompt
+    if (opts.showUserPrompt) {
+      this.userPrompt = opts.showUserPrompt
+    } else {
+      // Default to the actual implementation
+      this.userPrompt = showUserPrompt
+    }
   }
 
   static async init(opts: MinaProviderOptions): Promise<MinaProvider> {
@@ -185,31 +207,40 @@ export class MinaProvider implements IMinaProvider {
     return this
   }
 
+  public off: IMinaProviderEvents['off'] = (event, listener) => {
+    this.events.off(event, listener)
+    return this
+  }
+
   public async connect(/*opts?: ConnectOps*/): Promise<void> {
     // Step 1: Check if already connected.
-    if (this.signer.isConnected()) {
+    if (this.connected) {
       throw new Error('Already connected.')
     }
 
     // Step 2: Start the connection process.
     // This might involve connecting to a Mina node, initializing a session, etc.
-    await this.signer.connect()
+    await this.connect()
 
     // Step 3: Fetch accounts and set them
-    this.accounts = await this.signer.getAccounts()
+    this.accounts = await vaultService.getAccounts()
 
     // Emit a 'connect' event once connected
     this.events.emit('connect', { chainId: 'Add Chain ID here' })
   }
 
+  public isConnected(): boolean {
+    return this.connected
+  }
+
   public async disconnect(): Promise<void> {
     // Check if it's connected in the first place
-    if (!this.signer.isConnected()) {
+    if (!this.isConnected()) {
       throw new Error('Not connected.')
     }
 
-    // Disconnect the signer
-    await this.signer.disconnect()
+    // Disconnect the vaultService?
+    // await this.disconnect()
 
     // Reset accounts
     this.accounts = []
@@ -229,17 +260,25 @@ export class MinaProvider implements IMinaProvider {
     }
     if (args.method === 'mina_accounts') {
       // handle mina_accounts
-      return vaultService.getAddresses() as unknown as T
+      // todo: request permission to access accounts from user
+      return vaultService.getAccounts() as unknown as T
+    }
+    if (args.method === 'mina_sign') {
+      // handle mina_sign
+      // prompt user for passphrase
+      const passphrase = await this.userPrompt(
+        'Enter your passphrase:',
+        'password'
+      )
+      if (passphrase === null) {
+        throw new Error('User denied the request for passphrase.')
+      }
+      return vaultService.sign(args.params as MinaSignablePayload, async () =>
+        Buffer.from(passphrase)
+      ) as unknown as T
     }
     // For unsupported methods, throw an error with a descriptive message -- must error with correct standard error
     throw new Error(`Method ${args.method} is not supported.`)
-  }
-
-  public exampleMethod(): (string | undefined)[] {
-    // This is an example of how you could implement a method
-    // that calls a method on the signer
-    const addresses = vaultService.getAddresses()
-    return addresses
   }
 
   protected getRpcConfig(ops: MinaProviderOptions): MinaRpcConfig {

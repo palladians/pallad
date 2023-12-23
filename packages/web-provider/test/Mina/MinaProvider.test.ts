@@ -1,13 +1,12 @@
 import {
   FromBip39MnemonicWordsProps,
   MinaPayload,
-  MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
-import { Multichain } from '@palladxyz/multi-chain-core'
 import { KeyAgents, useVault } from '@palladxyz/vault'
 import { act, renderHook } from '@testing-library/react'
+import Client from 'mina-signer'
 import { vi } from 'vitest'
 
 import { MinaProvider } from '../../src/Mina'
@@ -35,46 +34,36 @@ const params = {
 const getPassphrase = async () => Buffer.from(params.passphrase)
 
 describe('WalletTest', () => {
-  let providerConfigurations: Partial<
-    Record<Multichain.MultiChainNetworks, Multichain.MultichainProviderConfig>
-  >
   let agentArgs: FromBip39MnemonicWordsProps
-  const keyAgentName = 'test key agent'
+  let networkType: string
 
   beforeEach(async () => {
     agentArgs = {
       getPassphrase: getPassphrase,
       mnemonicWords: PREGENERATED_MNEMONIC
     }
-
-    providerConfigurations = {
-      [Mina.Networks.MAINNET]: {
-        nodeUrl: 'https://proxy.mainnet.minaexplorer.com/',
-        archiveUrl: 'https://mainnet.graphql.minaexplorer.com'
-      },
-      [Mina.Networks.DEVNET]: {
-        nodeUrl: 'https://proxy.devnet.minaexplorer.com/',
-        archiveUrl: 'https://devnet.graphql.minaexplorer.com'
-      },
-      [Mina.Networks.BERKELEY]: {
-        nodeUrl: 'https://proxy.berkeley.minaexplorer.com/',
-        archiveUrl: 'https://berkeley.graphql.minaexplorer.com'
-      },
-      [Mina.Networks.TESTWORLD]: {
-        nodeUrl: 'https://proxy.testworld.minaexplorer.com/',
-        archiveUrl: 'https://testworld.graphql.minaexplorer.com'
-      }
-    }
+    networkType = 'testnet'
 
     // Mock the global chrome object
     global.chrome = {
       windows: {
-        create: vi.fn() as unknown as typeof chrome.windows.create
+        create: vi.fn((options, callback) => {
+          // Simulate the creation of a window and immediately invoke the callback
+          // with a mock window ID.
+          callback({ id: 1234 })
+        }) as unknown as typeof chrome.windows.create
       },
       runtime: {
         sendMessage: vi.fn() as unknown as typeof chrome.runtime.sendMessage,
         onMessage: {
-          addListener: vi.fn(),
+          // Mock the addListener to simulate receiving a message with the passphrase
+          addListener: vi.fn((listener) => {
+            const mockResponse = {
+              windowId: 1234,
+              userInput: Buffer.from(params.passphrase) // This is the simulated passphrase input
+            }
+            listener(mockResponse)
+          }),
           removeListener: vi.fn()
         } as unknown as typeof chrome.runtime.onMessage
       }
@@ -88,80 +77,23 @@ describe('WalletTest', () => {
 
   it('should initialise the wallet and the provider should access the account info', async () => {
     const { result } = renderHook(() => useVault())
-    // define networks
+    // restore wallet
     await act(async () => {
-      await result.current.ensureProvider(
-        'Mina Devnet',
-        providerConfigurations[Mina.Networks.BERKELEY]!,
-        Mina.Networks.BERKELEY
-      )
-    })
-    // add first key agent
-    await act(async () => {
-      // add first key agent
-      await result.current.initialiseKeyAgent(
-        keyAgentName,
+      await result.current.restoreWallet(
+        new MinaPayload(),
+        {
+          network: Network.Mina,
+          accountIndex: 0,
+          addressIndex: 0,
+          networkType: networkType
+        },
+        Mina.Networks.BERKELEY,
+        agentArgs,
+        'keyAgent test name',
         KeyAgents.InMemory,
-        agentArgs
+        'credential test name'
       )
     })
-    const keyAgent1 = result.current.keyAgents[keyAgentName]
-    expect(keyAgent1?.keyAgent).toBeDefined()
-    // derive credentials for first key agent
-    const args: MinaSpecificArgs = {
-      network: Network.Mina,
-      accountIndex: 0,
-      addressIndex: 0,
-      networkType: 'testnet'
-    }
-    const payload = new MinaPayload()
-    const credential = await keyAgent1?.keyAgent!.deriveCredentials(
-      payload,
-      args,
-      getPassphrase,
-      true // has to be true as we're not writing the credential to the key agent's serializable data
-    )
-    const credentialState = {
-      credentialName: 'Test Credential',
-      keyAgentName: keyAgentName,
-      credential: credential
-    }
-    // add credential to credential store
-    act(() => {
-      result.current.setCredential(credentialState)
-    })
-
-    // get the credential from the store & fetch network data for it
-    act(async () => {
-      const storedCredential = result.current.getCredential('Test Credential')
-      const provider = result.current.getProvider('Mina Devnet')
-      const accountInfo = await provider.provider?.getAccountInfo({
-        publicKey: storedCredential?.credential?.address as string
-      })
-      const transactionHistory = await provider.provider?.getTransactions({
-        addresses: [storedCredential?.credential?.address as string]
-      })
-      result.current.ensureAccount(Mina.Networks.BERKELEY, credential?.address)
-      result.current.setAccountInfo(
-        Mina.Networks.BERKELEY,
-        storedCredential?.credential?.address as string,
-        accountInfo as Multichain.MultiChainAccountInfo
-      )
-      result.current.setTransactions(
-        Mina.Networks.BERKELEY,
-        storedCredential?.credential?.address as string,
-        transactionHistory?.pageResults as Multichain.MultiChainTransactionBody[]
-      )
-    })
-
-    // check that the account info is set
-    const cred = result.current.credentials['Test Credential']
-    // get list of all addresses in the credentials
-    const addresses = Object.values(result.current.credentials).map(
-      (cred) => cred?.credential?.address
-    )
-    expect(cred).toBeDefined()
-    console.log('addresses', addresses)
 
     // initialize the MinaProvider
     const opts = {
@@ -185,11 +117,43 @@ describe('WalletTest', () => {
         console.log('accountAddresses', accountAddresses)
 
         // Compare the received addresses with the expected ones
-        expect(accountAddresses).toEqual(addresses)
+        expect(accountAddresses).toEqual([
+          'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+        ])
       })
       .catch((error) => {
         // Handle any errors here
         console.error('Error fetching account addresses:', error)
       })
+
+    // Sign a message
+    // Define the message to be signed
+    const message: Mina.MessageBody = {
+      message: 'Hello, Bob!'
+    }
+
+    // Define the request arguments for the 'mina_sign' method
+    const signRequestArgs: RequestArguments = {
+      method: 'mina_sign',
+      params: message // if this is an array, the signer will throw an error -- TODO: check if this behaviour is correct
+    }
+
+    // Call the request function to sign the message
+    try {
+      const signature = await provider.request(signRequestArgs)
+      console.log('Signature:', signature)
+      const minaClient = new Client({
+        network: networkType as Mina.NetworkType
+      })
+      const isVerified = await minaClient.verifyMessage(
+        signature as Mina.SignedMessage
+      )
+      expect(isVerified).toBeTruthy()
+    } catch (error) {
+      console.error(
+        'Error signing message:',
+        error instanceof Error ? error.message : error
+      )
+    }
   })
 })

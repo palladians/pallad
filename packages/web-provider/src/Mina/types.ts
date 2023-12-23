@@ -17,7 +17,7 @@ export interface ProviderInfo {
 
 export interface RequestArguments {
   method: string
-  params?: unknown[] | object
+  params?: unknown[] | Record<string, unknown> | object | undefined
 }
 
 export type ProviderChainId = ProviderInfo['chainId']

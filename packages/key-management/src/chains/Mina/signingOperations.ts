@@ -26,10 +26,10 @@ export async function MinaSigningOperations<T extends MinaSignablePayload>(
     } else if (util.isZkAppTransaction(payload)) {
       return minaClient.signZkappCommand(payload.command, privateKey)
     } else {
-      throw new Error('Unsupported payload type.')
+      throw new Error(`Unsupported payload type of ${payload}.`)
     }
   } catch (err) {
     const errorMessage = errors.getRealErrorMsg(err) || 'Signing action failed.'
-    throw new Error(errorMessage)
+    throw new Error(`Error during Mina signing operations: ${errorMessage}`)
   }
 }
