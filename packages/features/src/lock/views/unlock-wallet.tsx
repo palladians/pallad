@@ -5,7 +5,7 @@ import {
 } from '@palladxyz/persistence'
 import { useVault } from '@palladxyz/vault'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
@@ -58,6 +58,10 @@ export const UnlockWalletView = () => {
         message: 'The spending password is wrong'
       })
     }, 100)
+  }
+  const togglePassword = (event: FormEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    setShowPassword(!showPassword)
   }
   useEffect(() => {
     const unsub = useVault.persist.onFinishHydration(async () => {
@@ -127,7 +131,7 @@ export const UnlockWalletView = () => {
                     variant="outline"
                     size="icon"
                     data-testid="unlockWallet__togglePasswordVisible"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={togglePassword}
                   >
                     {showPassword ? <EyeOffIcon /> : <EyeIcon />}
                   </Button>

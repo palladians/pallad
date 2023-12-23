@@ -17,12 +17,21 @@ export const StartView = () => {
   useEffect(() => {
     const initialRedirect = async () => {
       if (!isStoreInitialized) return setAppInitialized(true)
-      const spendingPassword =
-        (await getSessionPersistence().getItem('spendingPassword')) || ''
-      const spendingPasswordSet = spendingPassword.length > 0
+      let spendingPassword
+      try {
+        spendingPassword =
+          (await getSessionPersistence().getItem('spendingPassword')) || ''
+      } catch {
+        return navigate('/unlock')
+      }
+      const spendingPasswordSet = spendingPassword?.length > 0
       if (!spendingPasswordSet) return navigate('/unlock')
-      const authenticated =
-        (await getSecurePersistence().getItem('foo')) === 'bar'
+      let authenticated
+      try {
+        authenticated = (await getSecurePersistence().getItem('foo')) === 'bar'
+      } catch {
+        authenticated = false
+      }
       if (!authenticated) return navigate('/unlock')
       return navigate('/dashboard')
     }
