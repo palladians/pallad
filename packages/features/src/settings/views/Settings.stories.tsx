@@ -1,6 +1,6 @@
 import { StoryDefault } from '@ladle/react'
 
-import { SettingsView } from './Settings'
+import { SettingsView } from './settings'
 
 export const View = () => <SettingsView />
 

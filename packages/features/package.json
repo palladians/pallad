@@ -86,6 +86,7 @@
     "react-qr-code": "^2.0.12",
     "react-router": "^6.21.0",
     "react-router-dom": "^6.21.0",
+    "react-twc": "^1.0.1",
     "recharts": "^2.10.3",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.1.0",

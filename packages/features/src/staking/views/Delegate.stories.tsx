@@ -1,6 +1,6 @@
 import { StoryDefault } from '@ladle/react'
 
-import { DelegateView } from './Delegate'
+import { DelegateView } from './delegate'
 
 export const View = () => <DelegateView />
 

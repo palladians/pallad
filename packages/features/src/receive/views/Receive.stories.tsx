@@ -1,7 +1,7 @@
 import { StoryDefault } from '@ladle/react'
 
 import { useStoriesWallet } from '../../../.ladle/utils'
-import { ReceiveView } from './Receive'
+import { ReceiveView } from './receive'
 
 export const View = () => {
   useStoriesWallet()

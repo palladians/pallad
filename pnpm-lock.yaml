@@ -380,6 +380,9 @@ importers:
       react-router-dom:
         specifier: ^6.21.0
         version: 6.21.0(react-dom@18.2.0)(react@18.2.0)
+      react-twc:
+        specifier: ^1.0.1
+        version: 1.0.1(@types/react@18.2.45)(react@18.2.0)
       recharts:
         specifier: ^2.10.3
         version: 2.10.3(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
@@ -12972,6 +12975,16 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-lifecycles-compat: 3.0.4
+    dev: false
+
+  /react-twc@1.0.1(@types/react@18.2.45)(react@18.2.0):
+    resolution: {integrity: sha512-8G3iilx8xHHaZqgnZeYeBxihtTVAus42cFZZcKBDFrLPboSn6WL7tV+CQxRtjcNUiLKCU+4AAJGH3Asxwxj89Q==}
+    dependencies:
+      '@radix-ui/react-slot': 1.0.2(@types/react@18.2.45)(react@18.2.0)
+      clsx: 2.0.0
+    transitivePeerDependencies:
+      - '@types/react'
+      - react
     dev: false
 
   /react@18.2.0:

@@ -1,13 +1,13 @@
 import { StoryDefault } from '@ladle/react'
 
 import { useStoriesWallet } from '../../../.ladle/utils'
-import { OverviewView } from './overview'
+import { TransactionDetailsView } from './transaction-details'
 
 export const View = () => {
   useStoriesWallet()
-  return <OverviewView />
+  return <TransactionDetailsView />
 }
 
 export default {
-  title: 'Dashboard / Overview'
+  title: 'Dashboard / Transactions / Details'
 } satisfies StoryDefault

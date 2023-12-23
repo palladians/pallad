@@ -1,6 +1,6 @@
 import { StoryDefault } from '@ladle/react'
 
-import { SendView } from './Send'
+import { SendView } from './send'
 
 export const View = () => <SendView />
 
