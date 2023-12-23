@@ -10,6 +10,7 @@ import {
 import {
   IMinaProvider as IProvider,
   IMinaProviderEvents,
+  MinaRpcProviderMap,
   ProviderConnectInfo,
   ProviderRpcError,
   RequestArguments
@@ -142,6 +143,7 @@ export class MinaProvider implements IMinaProvider {
   public events = new EventEmitter()
   public accounts: string[] = []
   public chainId: string | undefined = undefined
+  public rpcProviders: MinaRpcProviderMap = {}
   public connected = false
   // do we need to add a vaultService instance here?
   //public signer: any // This should be the VaultService
@@ -189,6 +191,8 @@ export class MinaProvider implements IMinaProvider {
 
     // ... any other initialization logic
     this.chainId = await vaultService.getChainId()
+    // TODO: this should be the available providers the vault has access to
+    //this.rpcProviders[this.chainId] = this.getRpcUrl(this.chainId)
   }
   private createProviderRpcError(
     code: number,
@@ -292,7 +296,15 @@ export class MinaProvider implements IMinaProvider {
     }
   }
 
-  public async request<T = unknown>(args: RequestArguments): Promise<T> {
+  public async request<T = unknown>(
+    args: RequestArguments,
+    chain?: string | undefined
+  ): Promise<T> {
+    // In a method that requires a specific chain connection
+    if (this.chainId !== chain) {
+      // TODO: prompt the user they're on the wrong chain and ask if they want to switch
+      throw this.createProviderRpcError(4901, 'Chain Disconnected')
+    }
     // Prompt user for confirmation based on the method type
     // what scenarios would we need to prompt the user?
     const userConfirmed = await this.userPrompt(
@@ -318,6 +330,7 @@ export class MinaProvider implements IMinaProvider {
         if (passphrase === null) {
           throw new Error('User denied the request for passphrase.')
         }
+        // TODO: handle incorrect passphrase
         return vaultService.sign(args.params as MinaSignablePayload, async () =>
           Buffer.from(passphrase)
         ) as unknown as T
@@ -339,6 +352,15 @@ export class MinaProvider implements IMinaProvider {
       default:
         throw this.createProviderRpcError(4200, 'Unsupported Method')
     }
+  }
+
+  private onChainChanged(chainId: string): void {
+    // check if chainId is valid and supported by the vault
+    // const supported = vaultService(chainId);
+    // if (!supported) { throw new Error('Unsupported chainId') }
+    // updated the chainId
+    this.chainId = chainId
+    this.events.emit('chainChanged', chainId)
   }
 
   protected getRpcConfig(ops: MinaProviderOptions): MinaRpcConfig {

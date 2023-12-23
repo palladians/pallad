@@ -1,5 +1,10 @@
 import { MinaProvider } from './MinaProvider'
 
+// This should be chain agnostic
+export interface MinaRpcProviderMap {
+  [chainId: string]: IMinaProvider
+}
+
 export interface ProviderRpcError extends Error {
   message: string
   code: number

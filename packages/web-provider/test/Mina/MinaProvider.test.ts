@@ -125,6 +125,19 @@ describe('Wallet Provider Test', () => {
       expect(provider.isConnected()).toBeTruthy()
     })
 
+    it('should get the chainId with `mina_chainId` method', async () => {
+      const requestArgs: RequestArguments = {
+        method: 'mina_chainId'
+      }
+
+      expect(provider).toBeDefined()
+
+      const chainId = await provider.request(requestArgs)
+      expect(chainId).toEqual(
+        '3c41383994b87449625df91769dff7b507825c064287d30fada9286f3f1cb15e'
+      )
+    })
+
     it('should access the account info from provider with `mina_accounts` method', async () => {
       const requestArgs: RequestArguments = {
         method: 'mina_accounts'
@@ -224,6 +237,19 @@ describe('Wallet Provider Test', () => {
     })
   })
   describe('MinaProvider Errors', () => {
+    it('should throw ProviderRpcError with code 4200 when the method is not supported', async () => {
+      // Attempt to execute a method that is not supported
+      const requestArgs: RequestArguments = { method: 'mina_notSupported' }
+
+      await expect(provider.request(requestArgs)).rejects.toEqual(
+        expect.objectContaining({
+          code: 4200,
+          message: 'Unsupported Method',
+          name: 'ProviderRpcError'
+        })
+      )
+    })
+
     it('should throw ProviderRpcError with code 4001 on user rejection', async () => {
       // Simulate user rejection by mocking the user prompt to return a rejection
       provider.userPrompt = vi.fn().mockResolvedValue(null)
