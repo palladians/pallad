@@ -10,8 +10,8 @@ import { act, renderHook } from '@testing-library/react'
 import Client from 'mina-signer'
 import { vi } from 'vitest'
 
-import { MinaProvider } from '../../src/Mina'
-import { RequestArguments } from '../../src/Mina/types'
+import { MinaProvider } from '../../src/mina'
+import { RequestArguments } from '../../src/mina/types'
 
 const PREGENERATED_MNEMONIC = [
   'habit',
@@ -133,6 +133,7 @@ describe('Wallet Provider Test', () => {
       expect(provider).toBeDefined()
 
       const chainId = await provider.request(requestArgs)
+      console.log('chainId in test: ', chainId)
       expect(chainId).toEqual(
         '3c41383994b87449625df91769dff7b507825c064287d30fada9286f3f1cb15e'
       )

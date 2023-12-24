@@ -1,51 +1,22 @@
-import { MinaProvider } from './MinaProvider'
+import {
+  ProviderAccounts,
+  ProviderChainId,
+  ProviderConnectInfo,
+  ProviderEvent,
+  ProviderEventArguments,
+  ProviderMessage,
+  ProviderRpcError,
+  RequestArguments
+} from '../types'
+import { MinaProvider } from './mina-provider'
 
-// This should be chain agnostic
 export interface MinaRpcProviderMap {
-  [chainId: string]: IMinaProvider
+  [chainId: string]: IMinaProviderBase
 }
 
-export interface ProviderRpcError extends Error {
-  message: string
-  code: number
-  data?: unknown
-}
-
-export interface ProviderMessage {
-  type: string
-  data: unknown
-}
-
-export interface ProviderConnectInfo {
-  readonly chainId: string
-}
-
-export interface RequestArguments {
-  method: string
-  params?: unknown[] | Record<string, unknown> | object | undefined
-}
-
-export type ProviderChainId = ProviderConnectInfo['chainId']
-
-export type ProviderAccounts = string[]
-
+// TODO: is the `_requestAccounts` method needed anymore or is it legacy or deprecated?
 export interface EIP1102Request extends RequestArguments {
   method: 'mina_requestAccounts'
-}
-// Event types and interfaces
-export type ProviderEvent =
-  | 'connect'
-  | 'disconnect'
-  | 'message'
-  | 'chainChanged'
-  | 'accountsChanged'
-
-export interface ProviderEventArguments {
-  connect: ProviderConnectInfo
-  disconnect: ProviderRpcError
-  message: ProviderMessage
-  chainChanged: ProviderChainId
-  accountsChanged: ProviderAccounts
 }
 
 // IMinaProviderEvents interface
@@ -76,7 +47,8 @@ export interface IMinaProviderEvents {
   ) => boolean
 }
 
-export interface EIP1193Provider {
+// originally the EIP1193Provider interface
+export interface IMinaProviderBase {
   // connection event
   on(
     event: 'connect',
@@ -104,9 +76,6 @@ export interface EIP1193Provider {
   ): MinaProvider
   // make an Ethereum RPC method call.
   request(args: RequestArguments): Promise<unknown>
-}
-
-export interface IMinaProvider extends EIP1193Provider {
   // legacy alias for EIP-1102
   enable(): Promise<ProviderAccounts>
 }

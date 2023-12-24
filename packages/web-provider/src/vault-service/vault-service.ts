@@ -1,7 +1,9 @@
 import { ChainSignablePayload, GetPassphrase } from '@palladxyz/key-management'
 import { useVault } from '@palladxyz/vault'
 
-export class VaultService {
+import { IVaultService } from './types'
+
+export class VaultService implements IVaultService {
   private static instance: VaultService
 
   private constructor(exampleArg?: boolean) {
@@ -22,7 +24,9 @@ export class VaultService {
     const addresses = Object.values(credentials).map(
       (cred) => cred?.credential?.address
     )
-    return addresses
+    return addresses.filter(
+      (address): address is string => address !== undefined
+    )
   }
 
   async sign(

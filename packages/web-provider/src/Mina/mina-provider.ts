@@ -2,20 +2,26 @@ import { MinaSignablePayload } from '@palladxyz/key-management'
 import { EventEmitter } from 'events'
 
 import {
+  ChainProviderOptions,
+  ChainRpcConfig,
+  ConnectOps,
+  ProviderConnectInfo,
+  ProviderRpcError,
+  RequestArguments
+} from '../types'
+import { showUserPrompt } from '../utils/prompts'
+import { vaultService } from '../vault-service'
+import {
   OPTIONAL_EVENTS,
   OPTIONAL_METHODS,
   REQUIRED_EVENTS,
   REQUIRED_METHODS
 } from './constants/rpc'
 import {
-  IMinaProvider as IProvider,
+  IMinaProviderBase,
   IMinaProviderEvents,
-  MinaRpcProviderMap,
-  ProviderConnectInfo,
-  ProviderRpcError,
-  RequestArguments
+  MinaRpcProviderMap
 } from './types'
-import { vaultService } from './vaultService'
 
 export type RpcMethod =
   | 'mina_sendTransaction'
@@ -25,49 +31,13 @@ export type RpcMethod =
   | 'mina_sign'
   | 'mina_signTransaction'
 
-export type RpcEvent =
-  | 'accountsChanged'
-  | 'chainChanged'
-  | 'message'
-  | 'disconnect'
-  | 'connect'
-
-export interface MinaRpcMap {
-  [chainId: string]: string
-}
-
-export interface MinaEvent {
-  event: { name: string; data: any }
-  chainId: string
-}
-
-export interface MinaRpcConfig {
-  chains: string[]
-  optionalChains: string[]
-  methods: string[]
-  optionalMethods?: string[]
-  /**
-   * @description Events that the wallet MUST support or the connection will be rejected
-   */
-  events: string[]
-  optionalEvents?: string[]
-  rpcMap: MinaRpcMap
-  projectId: string
-}
-export interface ConnectOps {
-  chains?: number[]
-  optionalChains?: number[]
-  rpcMap?: MinaRpcMap
-  pairingTopic?: string
-}
-
-export interface IMinaProvider extends IProvider {
+export interface IMinaProvider extends IMinaProviderBase {
   connect(opts?: ConnectOps | undefined): Promise<void>
 }
 
 export function getRpcUrl(
   chainId: string,
-  rpc: MinaRpcConfig
+  rpc: ChainRpcConfig
 ): string | undefined {
   let rpcUrl: string | undefined
   if (rpc.rpcMap) {
@@ -80,84 +50,22 @@ export function getMinaChainId(chains: string[]): number {
   return Number(chains[0]?.split(':')[1])
 }
 
-export type NamespacesParams = {
-  chains: MinaRpcConfig['chains']
-  optionalChains: MinaRpcConfig['optionalChains']
-  methods?: MinaRpcConfig['methods']
-  optionalMethods?: MinaRpcConfig['methods']
-  events?: MinaRpcConfig['events']
-  rpcMap: MinaRpcConfig['rpcMap']
-  optionalEvents?: MinaRpcConfig['events']
-}
-
-interface MinaProviderOptions {
-  chains?: string[]
-  optionalChains?: string[]
-  rpcMap?: MinaRpcMap
-  pairingTopic?: string
-  projectId: string
-  showUserPrompt?: (
-    message: string,
-    inputType?: 'text' | 'password'
-  ) => Promise<string>
-}
-
-async function showUserPrompt(
-  message: string,
-  inputType: 'text' | 'password' = 'text'
-): Promise<string> {
-  return new Promise((resolve) => {
-    console.log('User Prompt Message:', message)
-    // TODO: figure out if we need to add "types": ["chrome"] to tsconfig.json?
-    // should add the following to the extension app next to background.js, manifest.json, etc.
-    // ├── prompt.html         // Your custom prompt HTML page
-    // ├── prompt.js           // JavaScript for prompt.html
-    // ├── prompt.css          // CSS for prompt.html
-    // Create a new window with your custom HTML page for the prompt
-    chrome.windows.create(
-      {
-        url: `prompt.html?message=${encodeURIComponent(
-          message
-        )}&inputType=${inputType}`,
-        type: 'popup'
-        // Add any additional window properties as needed
-      },
-      (newWindow) => {
-        // Handle the communication and response from the popup
-        chrome.runtime.onMessage.addListener(function listener(response) {
-          if (response.windowId === newWindow.id) {
-            if (response.userRejected) {
-              resolve(null) // User rejected the prompt
-            } else {
-              resolve(response.userInput) // User provided input
-            }
-            chrome.runtime.onMessage.removeListener(listener)
-          }
-        })
-      }
-    )
-  })
-}
-
 export class MinaProvider implements IMinaProvider {
   public events = new EventEmitter()
   public accounts: string[] = []
-  public chainId: string | undefined = undefined
+  public chainId: string | undefined = 'n/a' //should change this to undefined as default
   public rpcProviders: MinaRpcProviderMap = {}
   public connected = false
   // do we need to add a vaultService instance here?
   //public signer: any // This should be the VaultService
 
-  private userPrompt: (
-    message: string,
-    inputType?: 'text' | 'password'
-  ) => Promise<string>
+  private userPrompt: typeof showUserPrompt
 
-  protected rpc: MinaRpcConfig
+  protected rpc: ChainRpcConfig
 
-  constructor(opts: MinaProviderOptions) {
+  constructor(opts: ChainProviderOptions) {
     // Initialization logic
-    this.rpc = {} as MinaRpcConfig
+    this.rpc = {} as ChainRpcConfig
 
     // Use provided userPrompt function or default to the actual implementation
     if (opts.showUserPrompt) {
@@ -168,13 +76,13 @@ export class MinaProvider implements IMinaProvider {
     }
   }
 
-  static async init(opts: MinaProviderOptions): Promise<MinaProvider> {
+  static async init(opts: ChainProviderOptions): Promise<MinaProvider> {
     const provider = new MinaProvider(opts)
     await provider.initialize(opts)
     return provider
   }
   // why is this async?
-  private async initialize(opts: MinaProviderOptions) {
+  private async initialize(opts: ChainProviderOptions) {
     // Here, you'd set up any initial state or connections you need.
     // For example, you could set up the rpcConfig:
 
@@ -190,7 +98,8 @@ export class MinaProvider implements IMinaProvider {
     }
 
     // ... any other initialization logic
-    this.chainId = await vaultService.getChainId()
+    const chainId = await vaultService.getChainId()
+    this.chainId = chainId
     // TODO: this should be the available providers the vault has access to
     //this.rpcProviders[this.chainId] = this.getRpcUrl(this.chainId)
   }
@@ -243,29 +152,37 @@ export class MinaProvider implements IMinaProvider {
     return this
   }
 
-  public async connect(/*opts?: ConnectOps*/): Promise<void> {
-    // Step 1: Check if already connected.
-    if (this.connected) {
-      throw new Error('Already connected.')
+  public async connect(opts?: ConnectOps): Promise<void> {
+    try {
+      // Step 1: Check if already connected.
+      if (this.connected) {
+        throw new Error('Already connected.')
+      }
+      // Step 2: Attempt to connect to a chain.
+      if (!opts) {
+        // Try to connect to the default chain
+        const defaultChainId = await vaultService.getChainId()
+        if (!defaultChainId) {
+          throw new Error('Unable to connect: Default chain ID is undefined.')
+        }
+        this.chainId = defaultChainId
+      } else if (opts.chains && opts.chains.length > 0) {
+        this.chainId = String(opts.chains[0])
+      } else {
+        throw this.createProviderRpcError(4901, 'Chain Disconnected')
+      }
+      // Step 3: Fetch accounts and set them.
+      this.accounts = await vaultService.getAccounts()
+      // Step 4: Set the connected flag.
+      this.connected = true
+      // Step 5: Emit a 'connect' event.
+      const connectInfo: ProviderConnectInfo = { chainId: this.chainId }
+      this.events.emit('connect', connectInfo)
+    } catch (error) {
+      // Handle any errors that occurred during connection.
+      console.error('Error during connection:', error)
+      // Additional error handling as needed
     }
-
-    // Step 2: Start the connection process.
-    // Implement the actual connection logic here.
-    // For example, connecting to a Mina node, initializing a session, etc.
-
-    // Mock connection logic for example:
-    // Assuming you have a method in vaultService to connect, call it here.
-    // await vaultService.connectToMinaNode();
-
-    // Once connected, set the connected flag to true.
-    this.connected = true
-
-    // Step 3: Fetch accounts and set them.
-    this.accounts = await vaultService.getAccounts()
-
-    // Emit a 'connect' event once connected.
-    const connectInfo: ProviderConnectInfo = { chainId: this.chainId }
-    this.events.emit('connect', connectInfo)
   }
 
   public isConnected(): boolean {
@@ -291,6 +208,9 @@ export class MinaProvider implements IMinaProvider {
       // Reset accounts
       this.accounts = []
 
+      // Reset chainId
+      this.chainId = undefined
+
       // Emit a 'disconnect' event without an error
       this.events.emit('disconnect')
     }
@@ -301,9 +221,23 @@ export class MinaProvider implements IMinaProvider {
     chain?: string | undefined
   ): Promise<T> {
     // In a method that requires a specific chain connection
-    if (this.chainId !== chain) {
+    // TODO: handle when chain is not provided -- handle other methods with optional args
+    if (this.chainId !== chain && chain !== undefined) {
       // TODO: prompt the user they're on the wrong chain and ask if they want to switch
-      throw this.createProviderRpcError(4901, 'Chain Disconnected')
+      // maybe this error should be handled in the universal-provider?
+      // check if the chain is supported by Pallad
+      // const validChain = this.rpc.chains.includes(chain)
+      const changeChain = await this.userPrompt(
+        `You are on the wrong chain. Do you want to switch to ${chain}?`
+      )
+      if (changeChain) {
+        // TODO: switch to the correct chain
+        this.chainId = chain
+        this.onChainChanged(chain!)
+      } else {
+        // if they don't, throw an error
+        throw this.createProviderRpcError(4901, 'Chain Disconnected')
+      }
     }
     // Prompt user for confirmation based on the method type
     // what scenarios would we need to prompt the user?
@@ -338,9 +272,6 @@ export class MinaProvider implements IMinaProvider {
 
       case 'mina_getBalance':
       case 'mina_chainId': {
-        const userConfirmed = await this.userPrompt(
-          `Do you want to execute ${args.method}?`
-        )
         if (!userConfirmed) {
           throw this.createProviderRpcError(4001, 'User Rejected Request')
         }
@@ -363,7 +294,7 @@ export class MinaProvider implements IMinaProvider {
     this.events.emit('chainChanged', chainId)
   }
 
-  protected getRpcConfig(ops: MinaProviderOptions): MinaRpcConfig {
+  protected getRpcConfig(ops: ChainProviderOptions): ChainRpcConfig {
     return {
       chains: ops.chains || [],
       optionalChains: ops.optionalChains || [],

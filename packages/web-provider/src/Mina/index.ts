@@ -1,1 +1,1 @@
-export * from './MinaProvider'
+export * from './mina-provider'
