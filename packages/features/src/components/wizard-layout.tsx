@@ -20,10 +20,10 @@ export const WizardLayout = ({
     theme === 'dark' ? setTheme('light') : setTheme('dark')
   }
   return (
-    <div className="flex flex-1 dark:bg-slate-950 bg-white flex-col">
+    <div className="flex flex-1 bg-background flex-col">
       <div className="flex justify-between items-center p-4">
         {textLogo ? (
-          <span className="text-lg font-semibold ml-2">Pallad</span>
+          <span className="text-lg font-semibold">Pallad</span>
         ) : (
           <Logo />
         )}

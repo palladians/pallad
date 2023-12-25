@@ -16,13 +16,19 @@ import { shallow } from 'zustand/shallow'
 
 import { useAppStore } from '@/common/store/app'
 import { useOnboardingStore } from '@/common/store/onboarding'
+import { Autocomplete } from '@/components/autocomplete'
 import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { ViewHeading } from '@/components/view-heading'
 import { WizardLayout } from '@/components/wizard-layout'
 import { cn } from '@/lib/utils'
+
+const MNEMONIC_LENGTH = 12
+const mnemonicIterator = Array.from(
+  { length: MNEMONIC_LENGTH },
+  (_, i) => i + 1
+)
 
 export const MnemonicInputView = () => {
   const [restoring, setRestoring] = useState(false)
@@ -39,17 +45,14 @@ export const MnemonicInputView = () => {
     (state) => state.setVaultStateInitialized
   )
   const [noOneIsLooking, setNoOneIsLooking] = useState(false)
-  const { register, handleSubmit, watch } = useForm({
-    defaultValues: {
-      mnemonic: ''
-    }
-  })
+  const { register, handleSubmit, watch, setValue } = useForm()
   const mnemonic = watch('mnemonic')
   const mnemonicValid = useMemo(
     () => validateMnemonic(mnemonic, wordlist),
     [mnemonic]
   )
-  const onSubmit = async ({ mnemonic }: { mnemonic: string }) => {
+  const onSubmit = async (data: any) => {
+    console.log('>>>DATA', data)
     if (!walletName) return
     if (!spendingPassword) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
@@ -89,7 +92,7 @@ export const MnemonicInputView = () => {
             'flex-1 transition-opacity opacity-50 gap-2 group',
             mnemonicValid && 'opacity-100'
           ])}
-          disabled={!mnemonicValid || restoring}
+          // disabled={!mnemonicValid || restoring}
           onClick={handleSubmit(onSubmit)}
           data-testid="onboarding__nextButton"
         >
@@ -107,11 +110,16 @@ export const MnemonicInputView = () => {
         {noOneIsLooking ? (
           <div className="flex flex-1 flex-col gap-4 p-4">
             <Label htmlFor="mnemonicTextarea">Your Mnemonic</Label>
-            <Textarea
-              id="mnemonicTextarea"
-              data-testid="onboarding__yourMnemonicTextarea"
-              {...register('mnemonic')}
-            />
+            <div className="grid grid-cols-3 gap-2">
+              {mnemonicIterator.map((wordLabel, i) => (
+                <Autocomplete
+                  placeholder={wordLabel}
+                  options={wordlist}
+                  setValue={(value) => setValue(`mnemonic.${i}`, value)}
+                  {...register(`mnemonic.${i}`)}
+                />
+              ))}
+            </div>
           </div>
         ) : (
           <div className="flex flex-1 flex-col gap-2 p-4">

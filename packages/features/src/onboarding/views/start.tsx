@@ -42,7 +42,7 @@ export const StartView = () => {
     <WizardLayout
       textLogo
       footer={
-        <div className="flex flex-1 flex-col gap-2 px-4">
+        <div className="flex flex-1 flex-col gap-2">
           <Button
             className="flex-1 gap-2 group"
             onClick={() => navigate('/onboarding/restore')}
