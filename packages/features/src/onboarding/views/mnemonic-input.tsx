@@ -133,6 +133,7 @@ export const MnemonicInputView = () => {
                       setValue(`mnemonic.${i}`, word)
                     })
                   }}
+                  data-testid={`onboarding__mnemonicField.${i}`}
                   {...register(`mnemonic.${i}`)}
                 />
               ))}
