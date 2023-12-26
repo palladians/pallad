@@ -1,0 +1,71 @@
+name: Pakcages CI w/Mina Local Network
+
+on: 
+    workflow_dispatch:
+
+jobs:
+  mina-network-job:
+    runs-on: ubuntu-latest
+
+    services:
+      mina-local-network:
+        image: o1labs/mina-local-network:o1js-main-latest-lightnet
+        env:
+          NETWORK_TYPE: 'single-node'
+          PROOF_LEVEL: 'none'
+          LOG_LEVEL: 'Info'
+        ports:
+          - 3085:3085
+          - 5432:5432
+          - 8080:8080
+          - 8181:8181
+        volumes:
+          - /tmp:/root/logs
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup env
+        uses: ./.github/actions/setup
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TURBO_SERVER_TOKEN: ${{ secrets.TURBO_SERVER_TOKEN }}
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build Packages
+        run: pnpm b
+
+      - name: Wait for Mina Network readiness
+        uses: o1-labs/wait-for-mina-network-action@v1
+        with:
+          mina-graphql-port: 8080
+
+      - name: Check Mina Accounts Manager readiness
+        run: |
+          curl -f http://localhost:8181/acquire-account || exit 1
+
+      - name: Acquire Mina Account
+        id: acquire_account
+        run: |
+          response=$(curl -s http://localhost:8181/acquire-account)
+          pk=$(echo $response | jq -r '.pk')
+          echo "PK=$pk" >> $GITHUB_ENV
+
+      - name: Run Account Provider Tests
+        env:
+          PUBLIC_KEY: ${{ env.PK }}
+          NODE_URL: http://localhost:8080/graphql
+        run: |
+          cd packages/mina-graphql
+          pnpm test:unit test/local-network-provider/provider.test.ts
+
+      - name: Upload Mina logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: mina-logs
+          path: /tmp/*.log
+          retention-days: 5
