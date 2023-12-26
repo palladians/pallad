@@ -57,7 +57,7 @@ jobs:
       - name: Run Account Provider Tests
         env:
           PUBLIC_KEY: ${{ env.PK }}
-          NODE_URL: http://localhost:8080/graphql
+          NODE_URL: http://localhost:3085/graphql
         run: |
           cd packages/mina-graphql
           pnpm test:unit test/local-network-provider/provider.test.ts
