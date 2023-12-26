@@ -3,61 +3,36 @@ import {
   AccountInfoArgs,
   AccountInfoProvider,
   HealthCheckResponse
+  //HealthCheckResponseData
 } from '@palladxyz/mina-core'
-import { gql, GraphQLClient } from 'graphql-request'
+import { gql, request } from 'graphql-request'
 
-import {
-  customFetch,
-  defaultJsonSerializer,
-  ErrorPolicy,
-  ExtendedError,
-  ServerError
-} from '../utils'
 import { getAccountBalance, healthCheckQuery } from './queries'
+
+type AccountInfoHealthCheckResponseData = {
+  data: {
+    syncStatus: string
+  }
+}
 
 export interface AccountData {
   account: AccountInfo
 }
 
 export class AccountInfoGraphQLProvider implements AccountInfoProvider {
-  private graphqlClient: GraphQLClient
-  private graphqlClient: GraphQLClient
+  private minaGql: string | null
 
-  constructor(
-    minaGql: string,
-    errorPolicy: ErrorPolicy = 'ignore',
-    fetch?: typeof customFetch
-  ) {
-    this.graphqlClient = new GraphQLClient(minaGql, {
-      errorPolicy: errorPolicy,
-      jsonSerializer: defaultJsonSerializer,
-      fetch: fetch || customFetch
-    })
-  constructor(
-    minaGql: string,
-    errorPolicy: ErrorPolicy = 'ignore',
-    fetch?: typeof customFetch
-  ) {
-    this.graphqlClient = new GraphQLClient(minaGql, {
-      errorPolicy: errorPolicy,
-      jsonSerializer: defaultJsonSerializer,
-      fetch: fetch || customFetch
-    })
+  constructor(minaGql: string) {
+    this.minaGql = minaGql
   }
 
   public async destroy(): Promise<void> {
     console.log('Destroying AccountInfoGraphQLProvider...')
+    this.minaGql = null
   }
 
   async changeNetwork(minaGql: string): Promise<void> {
-    this.graphqlClient = new GraphQLClient(
-      minaGql,
-      this.graphqlClient.requestConfig
-    )
-    this.graphqlClient = new GraphQLClient(
-      minaGql,
-      this.graphqlClient.requestConfig
-    )
+    this.minaGql = minaGql
   }
 
   async healthCheck(): Promise<HealthCheckResponse> {
@@ -65,34 +40,26 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     const query = gql`
       ${healthCheckQuery}
     `
-
     try {
-      // TODO: should this be request or rawRequest?
-      // we can do this when standardising the same health check for all providers
-      const rawResponse: any = await this.graphqlClient.request(query)
+      console.log('Sending request for health check...')
+      const data = (await request(
+        this.minaGql as string,
+        query
+      )) as AccountInfoHealthCheckResponseData
+      console.log('Received response for health check:', data)
 
-      // Check for syncStatus directly in the response
-      const syncStatus = rawResponse.syncStatus || rawResponse.data?.syncStatus
-
-      if (!syncStatus) {
-        console.log('Sync status not found in response')
-        return { ok: false, message: 'Sync status not found' }
-      }
-
-      console.log(`Extracted syncStatus: ${syncStatus}`)
-      if (syncStatus === 'SYNCED') {
-        console.log('Health check passed with SYNCED status.')
+      if (data && data.data && data.data.syncStatus) {
         return { ok: true }
       } else {
-        console.log(`Health check failed. Sync status: ${syncStatus}`)
-        return {
-          ok: false,
-          message: `Health check failed. Sync status: ${syncStatus}`
-        }
+        throw new Error('Invalid schema response')
       }
-    } catch (error) {
-      console.error('Error during GraphQL request:', error)
-      return { ok: false, message: 'GraphQL request failed' }
+    } catch (error: unknown) {
+      console.error('Error in healthCheck:', error)
+      let errorMessage = 'Unknown error'
+      if (error instanceof Error) {
+        errorMessage = error.message
+      }
+      return { ok: false, message: errorMessage }
     }
   }
 
@@ -101,53 +68,34 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     const query = gql`
       ${getAccountBalance}
     `
-
-
     try {
       console.log('Sending request for account info...')
-      const data = await this.graphqlClient.rawRequest<AccountData>(query, {
+      const data = (await request(this.minaGql as string, query, {
         publicKey: args.publicKey
-      })
-
-      if (!data || !data.data.account) {
-        console.log('Account data not found, performing health check...')
-        const healthCheckResponse = await this.healthCheck()
-        if (!healthCheckResponse.ok) {
-          throw new Error('Node is not available')
-        }
-        console.log('Account does not exist yet, returning empty account.')
-        return {
-          balance: { total: 0 },
-          nonce: 0,
-          inferredNonce: 0,
-          delegate: '',
-          publicKey: args.publicKey
-        }
-      }
-
+      })) as AccountData
       console.log('Received response for account info:', data)
-      return data.data.account
-    } catch (error) {
-      const errorText = (error as any).text as string | undefined
-      if (errorText) {
-        let statusCode = 0
-        if (errorText.includes('503')) {
-          statusCode = 503
-        } else if (errorText.includes('500')) {
-          statusCode = 500
-        }
 
-        if (statusCode > 0) {
-          throw new ServerError(
-            error as unknown as ExtendedError,
-            statusCode,
-            errorText
-          )
-        }
+      if (!data || !data.account) {
+        throw new Error('Invalid account data response')
       }
-
-      // Other error handling or rethrow
-      throw new Error('Error fetching account info')
+      return data.account
+    } catch (error: unknown) {
+      // this can fail if the account doesn't exist yet on the chain & if the node is not available
+      // perform health check to see if the node is available
+      const healthCheckResponse = await this.healthCheck()
+      if (!healthCheckResponse.ok) {
+        throw new Error('Node is not available')
+      }
+      // if the node is available, then the account doesn't exist yet
+      // return an empty account
+      console.log('Error in getAccountInfo, account does not exist yet!')
+      return {
+        balance: { total: 0 },
+        nonce: 0,
+        inferredNonce: 0,
+        delegate: '',
+        publicKey: args.publicKey
+      }
     }
   }
 }
