@@ -13,7 +13,7 @@ export const SecurityCheck = ({ onConfirm }: SecurityCheckProps) => {
         Confirm your screen is not being recorded and no one is currently
         looking at your screen.
       </p>
-      <div className="flex flex-1 justify-end bg-gray-900 rounded-[1.25rem] p-1">
+      <div className="flex flex-1 justify-end dark:bg-gray-900 bg-gray-200 rounded-[1.25rem] p-1">
         <Button
           size="sm"
           id="confirmAlone"
