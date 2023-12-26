@@ -40,7 +40,7 @@ export const StartView = () => {
   if (!appInitialized) return null
   return (
     <WizardLayout
-      textLogo
+      title="Pallad"
       footer={
         <div className="flex flex-1 flex-col gap-2">
           <Button

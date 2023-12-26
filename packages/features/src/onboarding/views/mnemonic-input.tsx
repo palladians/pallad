@@ -9,8 +9,8 @@ import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { KeyAgents, useVault } from '@palladxyz/vault'
 import { Loader2Icon } from 'lucide-react'
-import { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
@@ -18,11 +18,15 @@ import { useAppStore } from '@/common/store/app'
 import { useOnboardingStore } from '@/common/store/onboarding'
 import { Autocomplete } from '@/components/autocomplete'
 import { ButtonArrow } from '@/components/button-arrow'
+import { SecurityCheck } from '@/components/security-check'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { ViewHeading } from '@/components/view-heading'
 import { WizardLayout } from '@/components/wizard-layout'
 import { cn } from '@/lib/utils'
+
+type MnemonicInputForm = {
+  mnemonic: string[]
+}
 
 const MNEMONIC_LENGTH = 12
 const mnemonicIterator = Array.from(
@@ -45,14 +49,11 @@ export const MnemonicInputView = () => {
     (state) => state.setVaultStateInitialized
   )
   const [noOneIsLooking, setNoOneIsLooking] = useState(false)
-  const { register, handleSubmit, watch, setValue } = useForm()
+  const { register, handleSubmit, watch, setValue } =
+    useForm<MnemonicInputForm>()
   const mnemonic = watch('mnemonic')
-  const mnemonicValid = useMemo(
-    () => validateMnemonic(mnemonic, wordlist),
-    [mnemonic]
-  )
-  const onSubmit = async (data: any) => {
-    console.log('>>>DATA', data)
+  const mnemonicValid = validateMnemonic(mnemonic?.join(' '), wordlist)
+  const onSubmit: SubmitHandler<MnemonicInputForm> = async (data) => {
     if (!walletName) return
     if (!spendingPassword) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
@@ -70,7 +71,7 @@ export const MnemonicInputView = () => {
         restoreArgs,
         Mina.Networks.BERKELEY,
         {
-          mnemonicWords: mnemonic.split(' '),
+          mnemonicWords: data.mnemonic,
           getPassphrase: async () => Buffer.from(spendingPassword)
         },
         walletName,
@@ -85,9 +86,10 @@ export const MnemonicInputView = () => {
   }
   return (
     <WizardLayout
+      title="Restore from Mnemonic"
+      backButtonPath={-1}
       footer={
         <Button
-          variant="secondary"
           className={cn([
             'flex-1 transition-opacity opacity-50 gap-2 group',
             mnemonicValid && 'opacity-100'
@@ -103,19 +105,34 @@ export const MnemonicInputView = () => {
       }
     >
       <div className="flex flex-1 flex-col gap-4">
-        <ViewHeading
-          title="Type In Your Mnemonic"
-          backButton={{ onClick: () => navigate(-1) }}
-        />
         {noOneIsLooking ? (
-          <div className="flex flex-1 flex-col gap-4 p-4">
-            <Label htmlFor="mnemonicTextarea">Your Mnemonic</Label>
+          <div className="animate-in fade-in slide-in-from-bottom-1 flex flex-1 flex-col gap-4 p-4">
+            <Label htmlFor="mnemonicTextarea">Mnemonic</Label>
             <div className="grid grid-cols-3 gap-2">
               {mnemonicIterator.map((wordLabel, i) => (
                 <Autocomplete
-                  placeholder={wordLabel}
+                  placeholder={wordLabel.toString()}
                   options={wordlist}
                   setValue={(value) => setValue(`mnemonic.${i}`, value)}
+                  autoFocus={i === 0}
+                  onEnterPressed={() => {
+                    if (i === mnemonicIterator.length - 1) return
+                    const nextElement = document.querySelector(
+                      `[name="mnemonic.${i + 1}"]`
+                    )
+                    if (!nextElement) return
+                    return (nextElement as HTMLElement).focus()
+                  }}
+                  onPaste={(event) => {
+                    if (i !== 0) return
+                    const value = event.clipboardData.getData('Text')
+                    event.currentTarget.blur()
+                    const mnemonic = value.split(' ')
+                    if (mnemonic.length !== 12) return
+                    mnemonic.forEach((word, i) => {
+                      setValue(`mnemonic.${i}`, word)
+                    })
+                  }}
                   {...register(`mnemonic.${i}`)}
                 />
               ))}
@@ -123,14 +140,7 @@ export const MnemonicInputView = () => {
           </div>
         ) : (
           <div className="flex flex-1 flex-col gap-2 p-4">
-            <Label htmlFor="confirmAlone">Confirm No One Is Behind You</Label>
-            <Button
-              id="confirmAlone"
-              onClick={() => setNoOneIsLooking(true)}
-              data-testid="onboarding__confirmAlone"
-            >
-              I am alone
-            </Button>
+            <SecurityCheck onConfirm={() => setNoOneIsLooking(true)} />
           </div>
         )}
       </div>
