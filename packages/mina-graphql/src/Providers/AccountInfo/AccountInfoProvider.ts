@@ -2,12 +2,18 @@ import {
   AccountInfo,
   AccountInfoArgs,
   AccountInfoProvider,
-  HealthCheckResponse,
-  HealthCheckResponseData
+  HealthCheckResponse
+  //HealthCheckResponseData
 } from '@palladxyz/mina-core'
 import { gql, request } from 'graphql-request'
 
 import { getAccountBalance, healthCheckQuery } from './queries'
+
+type AccountInfoHealthCheckResponseData = {
+  data: {
+    syncStatus: string
+  }
+}
 
 export interface AccountData {
   account: AccountInfo
@@ -39,10 +45,10 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       const data = (await request(
         this.minaGql as string,
         query
-      )) as HealthCheckResponseData
+      )) as AccountInfoHealthCheckResponseData
       console.log('Received response for health check:', data)
 
-      if (data && data.__schema && data.__schema.types.length > 0) {
+      if (data && data.data && data.data.syncStatus) {
         return { ok: true }
       } else {
         throw new Error('Invalid schema response')
