@@ -1,0 +1,44 @@
+name: Pakcages CI w/Mina Local Network
+
+on: 
+    workflow_dispatch:
+
+jobs:
+  mina-network-job:
+    runs-on: ubuntu-latest
+
+    services:
+      mina-local-network:
+        image: o1labs/mina-local-network:o1js-main-latest-lightnet
+        env:
+          NETWORK_TYPE: 'single-node'
+          PROOF_LEVEL: 'none'
+          LOG_LEVEL: 'Info'
+        ports:
+          - 3085:3085
+          - 5432:5432
+          - 8080:8080
+          - 8181:8181
+        volumes:
+          - /tmp:/root/logs
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Wait for Mina Network readiness
+        uses: o1-labs/wait-for-mina-network-action@v1
+        with:
+          mina-graphql-port: 8080
+
+      - name: Check Mina Accounts Manager readiness
+        run: |
+          curl -f http://localhost:8181/acquire-account || exit 1
+
+      - name: Upload Mina logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: mina-logs
+          path: /tmp/*.log
+          retention-days: 5
