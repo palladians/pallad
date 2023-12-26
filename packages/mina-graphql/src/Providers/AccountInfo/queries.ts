@@ -1,11 +1,7 @@
 export const healthCheckQuery = `
-  {
-    __schema {
-      types {
-        name
-      }
-    }
-  }
+query {
+  syncStatus
+}
 `
 
 export const getAccountBalance = `
