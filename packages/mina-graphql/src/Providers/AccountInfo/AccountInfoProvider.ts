@@ -3,6 +3,7 @@ import {
   AccountInfoArgs,
   AccountInfoProvider,
   HealthCheckResponse
+  //HealthCheckResponseData
 } from '@palladxyz/mina-core'
 import { gql, GraphQLClient } from 'graphql-request'
 
@@ -14,6 +15,12 @@ import {
   ServerError
 } from '../utils'
 import { getAccountBalance, healthCheckQuery } from './queries'
+
+type AccountInfoHealthCheckResponseData = {
+  data: {
+    syncStatus: string
+  }
+}
 
 export interface AccountData {
   account: AccountInfo
@@ -64,6 +71,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
         return { ok: false, message: 'Sync status not found' }
       }
 
+      if (data && data.data && data.data.syncStatus) {
       console.log(`Extracted syncStatus: ${syncStatus}`)
       if (syncStatus === 'SYNCED') {
         console.log('Health check passed with SYNCED status.')
