@@ -1,32 +1,45 @@
-import { MoonIcon, SunIcon } from 'lucide-react'
+import { ArrowLeftIcon, MoonIcon, SunIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { useNavigate } from 'react-router-dom'
 
-import Logo from '@/common/assets/logo.svg'
 import { Toggle } from '@/components/ui/toggle'
+
+import { Button } from './ui/button'
 
 interface WizardLayoutProps {
   children: React.ReactNode
   footer: React.ReactNode
-  textLogo?: boolean
+  title: React.ReactNode
+  backButtonPath?: string | number
 }
 
 export const WizardLayout = ({
   children,
   footer,
-  textLogo = false
+  title,
+  backButtonPath
 }: WizardLayoutProps) => {
+  const navigate = useNavigate()
   const { setTheme, theme } = useTheme()
   const toggleTheme = () => {
     theme === 'dark' ? setTheme('light') : setTheme('dark')
   }
   return (
-    <div className="flex flex-1 dark:bg-slate-950 bg-white flex-col">
+    <div className="flex flex-1 bg-background flex-col">
       <div className="flex justify-between items-center p-4">
-        {textLogo ? (
-          <span className="text-lg font-semibold ml-2">Pallad</span>
-        ) : (
-          <Logo />
-        )}
+        <div className="flex gap-4 items-center">
+          {backButtonPath && (
+            <Button
+              variant="secondary"
+              size="icon"
+              className="w-8 h-8"
+              onClick={() => navigate(backButtonPath as never)}
+            >
+              <ArrowLeftIcon size={16} />
+            </Button>
+          )}
+          <span className="text-lg font-semibold">{title}</span>
+        </div>
         <Toggle size="sm" onClick={toggleTheme}>
           {theme === 'dark' ? <SunIcon size={16} /> : <MoonIcon size={16} />}
         </Toggle>

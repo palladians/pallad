@@ -10,7 +10,7 @@ const TestId = {
   NEXT_BUTTON: 'onboarding__nextButton',
   BACK_BUTTON: 'onboarding__backButton',
   CONFIRM_ALONE: 'onboarding__confirmAlone',
-  YOUR_MNEMONIC_TEXTAREA: 'onboarding__yourMnemonicTextarea',
+  MNEMONIC_FIELD: 'onboarding__mnemonicField',
   ADDRESS_TRUNCATED: 'dashboard__addressTruncated',
   MINA_BALANCE: 'dashboard__minaBalance',
   MNEMONIC_WORD: 'onboarding__mnemonicWord',
@@ -61,11 +61,11 @@ export class OnboardingPom extends BasePom {
     const confirmAloneButton = this.page.getByTestId(TestId.CONFIRM_ALONE)
     return confirmAloneButton.click()
   }
-  async fillMnemonic(mnemonic: string) {
-    const mnemonicTextarea = this.page.getByTestId(
-      TestId.YOUR_MNEMONIC_TEXTAREA
-    )
-    return mnemonicTextarea.fill(mnemonic)
+  async fillMnemonic(mnemonic: string[]) {
+    for (let i = 0; i < mnemonic.length; i++) {
+      const field = this.page.getByTestId(`${TestId.MNEMONIC_FIELD}.${i}`)
+      await field.fill(mnemonic[i])
+    }
   }
   async getAddressTruncated() {
     const addressTruncated = this.page.getByTestId(TestId.ADDRESS_TRUNCATED)

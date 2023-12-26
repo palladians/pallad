@@ -35,11 +35,19 @@ export const ViewHeading = ({
       )}
     >
       {backButton && (
-        <Button variant="outline" size="icon" onClick={backButton.onClick}>
-          <ArrowLeftIcon className="text-sky-500" size={20} />
+        <Button
+          variant="secondary"
+          size="icon"
+          className="w-8 h-8"
+          onClick={backButton.onClick}
+        >
+          <ArrowLeftIcon size={16} />
         </Button>
       )}
-      <h2 className="flex-1 text-lg" data-testid="extension__pageTitle">
+      <h2
+        className="flex-1 text-lg font-semibold"
+        data-testid="extension__pageTitle"
+      >
         {title}
       </h2>
       {button && (

@@ -22,7 +22,6 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-import { ViewHeading } from '@/components/view-heading'
 import { WizardLayout } from '@/components/wizard-layout'
 import { cn } from '@/lib/utils'
 
@@ -80,6 +79,7 @@ export const UnlockWalletView = () => {
   }, [])
   return (
     <WizardLayout
+      title="Unlock Wallet"
       footer={
         <Button
           type="submit"
@@ -92,30 +92,24 @@ export const UnlockWalletView = () => {
         </Button>
       }
     >
-      <div className="animate-in slide-in-from-bottom-4 flex flex-col flex-1 gap-4">
-        <ViewHeading
-          title="Unlock Wallet"
-          button={{
-            label: 'Restart Wallet',
-            onClick: restartCurrentWallet
-          }}
-        />
-        <div className="flex flex-col flex-1 gap-4 p-4">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-2"
-            id="unlockWalletForm"
+      <div className="animate-in slide-in-from-bottom-4 flex flex-col flex-1 items-center gap-12 p-4">
+        <img src="/lock.png" className="w-[160px]" />
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-2 w-full"
+          id="unlockWalletForm"
+        >
+          <Label
+            htmlFor="spendingPassword"
+            className={cn(
+              'cursor-pointer',
+              errors.spendingPassword && 'text-destructive'
+            )}
           >
-            <Label
-              htmlFor="spendingPassword"
-              className={cn(
-                'cursor-pointer',
-                errors.spendingPassword && 'text-destructive'
-              )}
-            >
-              Spending Password
-            </Label>
-            <div className="flex gap-2">
+            Spending Password
+          </Label>
+          <div className="flex flex-col gap-2">
+            <div className="flex w-full relative">
               <Input
                 id="spendingPassword"
                 type={showPassword ? 'text' : 'password'}
@@ -128,12 +122,17 @@ export const UnlockWalletView = () => {
                 <TooltipTrigger>
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="secondary"
                     size="icon"
                     data-testid="unlockWallet__togglePasswordVisible"
+                    className="absolute right-1 top-1 rounded-full w-8 h-8 p-1"
                     onClick={togglePassword}
                   >
-                    {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                    {showPassword ? (
+                      <EyeOffIcon size={20} />
+                    ) : (
+                      <EyeIcon size={20} />
+                    )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -141,9 +140,18 @@ export const UnlockWalletView = () => {
                 </TooltipContent>
               </Tooltip>
             </div>
-            <FormError>{errors.spendingPassword?.message}</FormError>
-          </form>
-        </div>
+          </div>
+          <FormError>{errors.spendingPassword?.message}</FormError>
+          {errors.spendingPassword && (
+            <Button
+              variant="link"
+              onClick={restartCurrentWallet}
+              className="self-start p-0 m-0"
+            >
+              Forgotten password? Restore again.
+            </Button>
+          )}
+        </form>
       </div>
     </WizardLayout>
   )
