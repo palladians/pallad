@@ -22,7 +22,7 @@ export const Provider: GlobalProvider = ({ children }) => {
         <MemoryRouter>
           <div
             style={{
-              maxWidth: 400,
+              maxWidth: 371,
               width: '100%',
               maxHeight: 600,
               height: '100%',

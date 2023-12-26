@@ -17,7 +17,6 @@ import { ButtonArrow } from '@/components/button-arrow'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ViewHeading } from '@/components/view-heading'
 import { WizardLayout } from '@/components/wizard-layout'
 import { cn } from '@/lib/utils'
 
@@ -85,11 +84,12 @@ export const MnemonicConfirmationView = () => {
   }
   return (
     <WizardLayout
+      title="Confirm The Mnemonic"
+      backButtonPath={-1}
       footer={
         <Button
           type="submit"
           form="mnemonicConfirmationForm"
-          variant="secondary"
           className={cn([
             'flex-1 opacity-50 transition-opacity gap-2 group',
             isValid && 'opacity-100'
@@ -104,25 +104,19 @@ export const MnemonicConfirmationView = () => {
       }
     >
       <form
-        className="flex flex-col flex-1 gap-6"
+        className="flex flex-col flex-1 gap-4 p-4"
         id="mnemonicConfirmationForm"
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <ViewHeading
-          title="Confirm The Mnemonic"
-          backButton={{ onClick: () => navigate(-1) }}
+        <Label data-testid="onboarding__writedownIndex">
+          Type in the word #{confirmationIndex + 1}
+        </Label>
+        <Input
+          data-testid="onboarding__mnemonicConfirmationInput"
+          {...register('mnemonicWord')}
+          autoFocus
         />
-        <div className="flex flex-col flex-1 gap-4 p-4">
-          <Label data-testid="onboarding__writedownIndex">
-            Type in the word #{confirmationIndex + 1}
-          </Label>
-          <Input
-            data-testid="onboarding__mnemonicConfirmationInput"
-            {...register('mnemonicWord')}
-            autoFocus
-          />
-        </div>
       </form>
     </WizardLayout>
   )

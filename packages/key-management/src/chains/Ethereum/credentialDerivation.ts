@@ -1,4 +1,4 @@
-import { Address, bufferToHex, privateToPublic } from '@ethereumjs/util' // need to replace with noble hashes
+import { Address, bytesToHex, privateToPublic } from '@ethereumjs/util' // need to replace with noble hashes
 
 import { EthereumGroupedCredentials, EthereumSpecificArgs } from './types'
 
@@ -12,7 +12,7 @@ export function deriveEthereumPublicKey(privateKey: Uint8Array): string {
   const privateKeyBuffer = Buffer.from(privateKey)
   const publicKey = privateToPublic(privateKeyBuffer)
 
-  return bufferToHex(publicKey)
+  return bytesToHex(publicKey)
 }
 
 export function deriveEthereumCredentials(

@@ -13,10 +13,12 @@ export const NotFoundView = () => {
           title="Not Found"
           backButton={{ onClick: () => navigate(-1) }}
         />
-        <div className="flex flex-1 justify-center items-center">
-          <div>Sorry, but we couldn't find this page</div>
+        <div className="flex flex-col flex-1 gap-4 p-4">
+          <div className="flex flex-1 justify-center items-center">
+            <div>Sorry, but we couldn't find this page</div>
+          </div>
+          <Button onClick={() => navigate('/')}>Go to Dashboard</Button>
         </div>
-        <Button onClick={() => navigate('/')}>Go to Dashboard</Button>
       </div>
     </AppLayout>
   )

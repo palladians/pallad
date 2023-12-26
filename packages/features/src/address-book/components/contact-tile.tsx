@@ -39,7 +39,7 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
         </Button>
       </div>
       <div className="flex items-center gap-2">
-        <p className="text-sm break-keep truncate">
+        <p className="text-sm break-keep truncate pr-2">
           {contact?.address &&
             truncateString({
               value: contact.address,
