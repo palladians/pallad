@@ -94,6 +94,7 @@
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7",
+    "webextension-polyfill": "^0.10.0",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"
   },
@@ -111,6 +112,7 @@
     "@types/mocha": "^10.0.6",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
+    "@types/webextension-polyfill": "^0.10.7",
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "esbuild-plugin-svgr": "2.0.0",
     "graphql-request": "^6.1.0",

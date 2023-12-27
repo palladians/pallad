@@ -1,4 +1,5 @@
 import { useVault } from '@palladxyz/vault'
+import { storage } from 'webextension-polyfill'
 
 import {
   AlertDialog,
@@ -11,8 +12,6 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 
-import { useAppStore } from '..'
-
 type RestartWalletAlertProps = {
   open: boolean
   setOpen: (open: boolean) => void
@@ -22,12 +21,11 @@ export const RestartWalletAlert = ({
   open,
   setOpen
 }: RestartWalletAlertProps) => {
-  const setVaultStateUninitialized = useAppStore(
-    (state) => state.setVaultStateUninitialized
-  )
-  const confirm = () => {
+  const confirm = async () => {
     useVault.persist.clearStorage()
-    setVaultStateUninitialized()
+    await storage.local.clear()
+    await storage.session.clear()
+    await storage.managed.clear()
     setOpen(false)
     window.close()
   }
