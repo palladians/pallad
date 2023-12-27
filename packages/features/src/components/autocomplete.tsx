@@ -57,8 +57,8 @@ export const Autocomplete = React.forwardRef<
     }
     const filteredOptions = take(3, matchSorter(options, internalValue))
     const extendedSelect = (value: string) => {
+      setValue(value)
       setTimeout(() => setOpen(false), 100)
-      return setValue(value)
     }
     const extendedKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
       event
