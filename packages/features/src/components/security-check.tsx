@@ -1,3 +1,5 @@
+import { CheckIcon } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
@@ -19,9 +21,11 @@ export const SecurityCheck = ({ onConfirm }: SecurityCheckProps) => {
           id="confirmAlone"
           variant="secondary"
           data-testid="onboarding__confirmAlone"
+          className="group gap-2 pl-4"
           onClick={onConfirm}
         >
-          Confirm
+          <span>Confirm</span>
+          <CheckIcon size={16} className="w-0 group-hover:w-4 transition-all" />
         </Button>
       </div>
     </Card>

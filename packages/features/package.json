@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
+    "@jitsu/jitsu-react": "^1.7.2",
     "@palladxyz/key-management": "^0.0.1",
     "@palladxyz/mina-core": "^0.0.1",
     "@palladxyz/mina-graphql": "^0.0.1",

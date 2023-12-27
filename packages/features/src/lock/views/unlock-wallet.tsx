@@ -10,10 +10,10 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
-import { useAccount } from '@/common/hooks/use-account'
 import { passwordSchema } from '@/common/lib/validation'
 import { ButtonArrow } from '@/components/button-arrow'
 import { FormError } from '@/components/form-error'
+import { RestartWalletAlert } from '@/components/restart-wallet-alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -30,8 +30,8 @@ const formSchema = z.object({
 })
 
 export const UnlockWalletView = () => {
+  const [restartAlertVisible, setRestartAlertVisible] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const { restartCurrentWallet } = useAccount()
   const navigate = useNavigate()
   const {
     register,
@@ -63,7 +63,7 @@ export const UnlockWalletView = () => {
     setShowPassword(!showPassword)
   }
   useEffect(() => {
-    const unsub = useVault.persist.onFinishHydration(async () => {
+    const unsub = useVault.persist?.onFinishHydration(async () => {
       const authenticated =
         (await getSecurePersistence().getItem('foo')) === 'bar'
       if (!authenticated) {
@@ -75,7 +75,7 @@ export const UnlockWalletView = () => {
       }
       navigate('/dashboard')
     })
-    return () => unsub()
+    return () => unsub?.()
   }, [])
   return (
     <WizardLayout
@@ -92,6 +92,10 @@ export const UnlockWalletView = () => {
         </Button>
       }
     >
+      <RestartWalletAlert
+        open={restartAlertVisible}
+        setOpen={setRestartAlertVisible}
+      />
       <div className="animate-in slide-in-from-bottom-4 flex flex-col flex-1 items-center gap-12 p-4">
         <img src="/lock.png" className="w-[160px]" />
         <form
@@ -145,7 +149,7 @@ export const UnlockWalletView = () => {
           {errors.spendingPassword && (
             <Button
               variant="link"
-              onClick={restartCurrentWallet}
+              onClick={() => setRestartAlertVisible(true)}
               className="self-start p-0 m-0"
             >
               Forgotten password? Restore again.
