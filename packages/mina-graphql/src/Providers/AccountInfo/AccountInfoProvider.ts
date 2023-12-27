@@ -56,31 +56,38 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       ${healthCheckQuery}
     `
 
+    let rawResponse
     try {
-      const response = await request(this.minaGql as string, query)
-      // Check if response is a string and parse it
-      let jsonData
-      if (typeof response === 'string') {
-        jsonData = JSON.parse(response)
-      } else {
-        jsonData = response
-      }
-
-      // Now jsonData should be an object
-      const syncStatus = jsonData ? jsonData.syncStatus : null
-
-      if (syncStatus === 'SYNCED') {
-        return { ok: true }
-      } else {
-        console.log(`Health check failed. Sync status: ${syncStatus}`)
-        return {
-          ok: false,
-          message: `Health check failed. Sync status: ${syncStatus}`
-        }
-      }
+      console.log(`Sending GraphQL request to: ${this.minaGql}`)
+      rawResponse = await request(this.minaGql as string, query)
+      console.log(`Received raw response: ${JSON.stringify(rawResponse)}`)
     } catch (error) {
       console.error('Error during GraphQL request:', error)
       return { ok: false, message: 'GraphQL request failed' }
+    }
+
+    // Process the response outside the try-catch block
+    let jsonData
+    if (typeof rawResponse === 'string') {
+      console.log('Response is a string. Parsing to JSON...')
+      jsonData = JSON.parse(rawResponse)
+    } else {
+      jsonData = rawResponse
+    }
+    console.log(`Parsed JSON data: ${JSON.stringify(jsonData)}`)
+
+    const syncStatus = jsonData ? jsonData.syncStatus : null
+    console.log(`Extracted syncStatus: ${syncStatus}`)
+
+    if (syncStatus === 'SYNCED') {
+      console.log('Health check passed with SYNCED status.')
+      return { ok: true }
+    } else {
+      console.log(`Health check failed. Sync status: ${syncStatus}`)
+      return {
+        ok: false,
+        message: 'Health check failed due to invalid sync status'
+      }
     }
   }
 
