@@ -37,7 +37,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     try {
       console.log(`Sending GraphQL request to: ${this.minaGql}`)
       const client = new GraphQLClient(this.minaGql as string, {
-        errorPolicy: 'ignore'
+        errorPolicy: 'all'
       })
       const rawResponse: any = await client.request(query)
 
@@ -76,13 +76,13 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       console.log('Sending request for account info...')
       // redundant creation of client, but this is a temporary solution
       const client = new GraphQLClient(this.minaGql as string, {
-        errorPolicy: 'ignore'
+        errorPolicy: 'all'
       })
-      const data = (await client.request(query, {
+      const data = await client.rawRequest<AccountData>(query, {
         publicKey: args.publicKey
-      })) as AccountData
+      })
 
-      if (!data || !data.account) {
+      if (!data || !data.data.account) {
         console.log('Account data not found, performing health check...')
         const healthCheckResponse = await this.healthCheck()
         if (!healthCheckResponse.ok) {
@@ -99,7 +99,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       }
 
       console.log('Received response for account info:', data)
-      return data.account
+      return data.data.account
     } catch (error) {
       console.error('Error in getAccountInfo:', error)
       throw new Error('Error fetching account info')
