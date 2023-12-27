@@ -71,10 +71,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
         return { ok: false, message: 'Sync status not found' }
       }
 
-      if (data && data.data && data.data.syncStatus) {
-      console.log(`Extracted syncStatus: ${syncStatus}`)
-      if (syncStatus === 'SYNCED') {
-        console.log('Health check passed with SYNCED status.')
+      if (data.data.syncStatus == 'SYNCED') {
         return { ok: true }
       } else {
         console.log(`Health check failed. Sync status: ${syncStatus}`)
