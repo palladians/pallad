@@ -6,6 +6,7 @@ import {
   TxStatus,
   TxStatusArgs
 } from '@palladxyz/mina-core'
+import { HealthCheckResponse } from '@palladxyz/mina-core'
 
 import { AccountInfoGraphQLProvider } from './AccountInfo'
 import { TxStatusGraphQLProvider } from './TxStatus'
@@ -64,5 +65,9 @@ export class MinaProvider implements ProviderNode {
     args: SubmitTxArgs
   ): Promise<SubmitTxResult | undefined> {
     return this.txSubmitProvider?.submitTx(args)
+  }
+
+  public async healthCheck(): Promise<HealthCheckResponse | undefined> {
+    return this.accountInfoProvider?.healthCheck()
   }
 }
