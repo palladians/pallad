@@ -229,10 +229,10 @@ importers:
     dependencies:
       '@hookform/resolvers':
         specifier: ^3.3.2
-        version: 3.3.3(react-hook-form@7.49.2)
+        version: 3.3.2(react-hook-form@7.49.2)
       '@jitsu/jitsu-react':
         specifier: ^1.7.2
-        version: 1.7.2(@types/dlv@1.1.4)(@types/react@18.2.46)(react-router-dom@6.21.1)(react@18.2.0)
+        version: 1.7.2(@types/dlv@1.1.4)(@types/react@18.2.45)(react-router-dom@6.21.0)(react@18.2.0)
       '@palladxyz/key-management':
         specifier: ^0.0.1
         version: link:../key-management
@@ -846,7 +846,7 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.20
+      '@jridgewell/trace-mapping': 0.3.18
 
   /@analytics/cookie-utils@0.2.12:
     resolution: {integrity: sha512-2h/yuIu3kmu+ZJlKmlT6GoRvUEY2k1BbQBezEv5kGhnn9KpmzPz715Y3GmM2i+m7Y0QmBdVUoA260dQZkofs2A==}
@@ -2914,7 +2914,7 @@ packages:
       chalk: 4.1.2
     dev: true
 
-  /@jitsu/jitsu-react@1.7.2(@types/dlv@1.1.4)(@types/react@18.2.46)(react-router-dom@6.21.1)(react@18.2.0):
+  /@jitsu/jitsu-react@1.7.2(@types/dlv@1.1.4)(@types/react@18.2.45)(react-router-dom@6.21.0)(react@18.2.0):
     resolution: {integrity: sha512-afUn8Fq9hX+mjLBtsjY2n7btnlDdrSMMGtkE+10/dsAyV+vRLa6Dtyd9v39yEauB679aN5CicC+45EGIBiBRQw==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -2926,9 +2926,9 @@ packages:
         optional: true
     dependencies:
       '@jitsu/js': 1.7.2(@types/dlv@1.1.4)
-      '@types/react': 18.2.46
+      '@types/react': 18.2.45
       react: 18.2.0
-      react-router-dom: 6.21.1(react-dom@18.2.0)(react@18.2.0)
+      react-router-dom: 6.21.0(react-dom@18.2.0)(react@18.2.0)
     transitivePeerDependencies:
       - '@types/dlv'
     dev: false
@@ -5528,6 +5528,12 @@ packages:
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
     dependencies:
       '@types/ms': 0.7.34
+    dev: true
+
+  /@types/debug@4.1.8:
+    resolution: {integrity: sha512-/vPO1EPOs306Cvhwv7KfVfYvOJqA/S/AXjaHQiJboCZzcNDb+TIJFN9/2C9DZ//ijSKWioNyUxD792QmDJ+HKQ==}
+    dependencies:
+      '@types/ms': 0.7.31
     dev: true
 
   /@types/dlv@1.1.4:
