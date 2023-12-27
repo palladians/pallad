@@ -59,19 +59,12 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     `
 
     try {
-      // TODO: should this be request or rawRequest?
-      // we can do this when standardising the same health check for all providers
-      const rawResponse: any = await this.graphqlClient.request(query)
+      const response = await request(this.minaGql as string, query)
+      // Adjust this part based on the actual structure of your response
+      const data = response as AccountInfoHealthCheckResponseData
+      const syncStatus = data.data ? data.data.syncStatus : null
 
-      // Check for syncStatus directly in the response
-      const syncStatus = rawResponse.syncStatus || rawResponse.data?.syncStatus
-
-      if (!syncStatus) {
-        console.log('Sync status not found in response')
-        return { ok: false, message: 'Sync status not found' }
-      }
-
-      if (data.data.syncStatus == 'SYNCED') {
+      if (syncStatus === 'SYNCED') {
         return { ok: true }
       } else {
         console.log(`Health check failed. Sync status: ${syncStatus}`)
