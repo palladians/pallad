@@ -57,7 +57,7 @@ export const Autocomplete = React.forwardRef<
     }
     const filteredOptions = take(3, matchSorter(options, internalValue))
     const extendedSelect = (value: string) => {
-      setOpen(false)
+      setTimeout(() => setOpen(false), 100)
       return setValue(value)
     }
     const extendedKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
@@ -88,6 +88,7 @@ export const Autocomplete = React.forwardRef<
               <CommandItem
                 key={option}
                 onSelect={extendedSelect}
+                onClick={() => extendedSelect(option)}
                 value={option}
               >
                 {option}
