@@ -1,5 +1,5 @@
 export const healthCheckQuery = `
-query {
+{
   syncStatus
 }
 `
