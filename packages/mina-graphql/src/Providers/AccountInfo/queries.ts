@@ -12,9 +12,7 @@ export const getAccountBalance = `
       },
       nonce
       inferredNonce
-      delegateAccount {
-        publicKey
-      }
+      delegate
       publicKey
     }
   }
