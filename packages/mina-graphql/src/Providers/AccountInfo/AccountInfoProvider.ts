@@ -41,14 +41,12 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       ${healthCheckQuery}
     `
     try {
-      console.log('Sending request for health check...')
-      const data = (await request(
-        this.minaGql as string,
-        query
-      )) as AccountInfoHealthCheckResponseData
-      console.log('Received response for health check:', data)
+      const response = await request(this.minaGql as string, query)
+      // Adjust this part based on the actual structure of your response
+      const data = response as AccountInfoHealthCheckResponseData
+      const syncStatus = data.data ? data.data.syncStatus : null
 
-      if (data.data.syncStatus == 'SYNCED') {
+      if (syncStatus === 'SYNCED') {
         return { ok: true }
       } else {
         throw new Error('Invalid schema response')
