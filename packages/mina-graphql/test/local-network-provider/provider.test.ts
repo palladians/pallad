@@ -17,7 +17,11 @@ describe('Node Provider', () => {
   beforeAll(() => {
     provider = new MinaProvider(nodeUrl!)
   })
+<<<<<<< HEAD
   it.skip('should getAccountInfo for an address already in the ledger', async () => {
+=======
+  it('should getAccountInfo for an address already in the ledger', async () => {
+>>>>>>> 1a06f92 (fix(node provider test): change to health check)
     /*const publicKey =
       process.env['PUBLIC_KEY'] ||
       'B62qicdpMEVwzkDrf19uQiw6maKGDYV2C7DbnzhojF2dbVp4hWYhnNr'
@@ -28,7 +32,11 @@ describe('Node Provider', () => {
     //const response = await provider.getAccountInfo(args)
     const response = await provider.healthCheck()
     console.log('Node Provider Health Response:', response)
+<<<<<<< HEAD
     expect(response.ok).toBe(true)
+=======
+    expect(response).toBeDefined()
+>>>>>>> 1a06f92 (fix(node provider test): change to health check)
     //expect(response?.balance).toBeDefined()
     //expect(response?.nonce).toBeDefined()
     //expect(response?.inferredNonce).toBeDefined()
