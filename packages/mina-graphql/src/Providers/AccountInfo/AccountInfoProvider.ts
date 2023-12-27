@@ -58,11 +58,16 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
 
     try {
       console.log(`Sending GraphQL request to: ${this.minaGql}`)
+      const headers = {
+        'Content-Type': 'application/json',
+        Accept:
+          'application/graphql-response+json; charset=utf-8, application/json; charset=utf-8'
+      }
       const rawResponse: any = await request(
         this.minaGql as string,
         query,
         {},
-        { 'Content-Type': 'application/json' }
+        headers
       )
       console.log(`Received raw response: ${JSON.stringify(rawResponse)}`)
 
