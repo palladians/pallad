@@ -15,7 +15,7 @@ describe('Node Provider', () => {
   beforeAll(() => {
     provider = new MinaProvider(nodeUrl!)
   })
-  test('getAccountInfo', async () => {
+  it('should getAccountInfo for an address already in the ledger', async () => {
     const publicKey =
       process.env['PUBLIC_KEY'] ||
       'B62qicdpMEVwzkDrf19uQiw6maKGDYV2C7DbnzhojF2dbVp4hWYhnNr'
@@ -32,7 +32,7 @@ describe('Node Provider', () => {
     expect(response?.delegate).toBeDefined()
     expect(response?.publicKey).toBeDefined()
   })
-  test.skip('getAccountInfo (mainnet)', async () => {
+  /*it('getAccountInfo for account that doesn't exist', async () => {
     const args: AccountInfoArgs = {
       // this must be a public key that doesn't exist yet on the network
       publicKey: 'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
@@ -47,7 +47,7 @@ describe('Node Provider', () => {
     expect(response?.inferredNonce).toBe(0)
     expect(response?.delegate).toBe('')
     expect(response?.publicKey).toBe(args.publicKey)
-  })
+  })*/
   // TODO: add test for submitTransaction
   // this should be done with a local network
 })
