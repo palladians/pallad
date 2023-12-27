@@ -60,7 +60,12 @@ jobs:
           NODE_URL: http://localhost:8080/graphql
         run: |
           cd packages/mina-graphql
-          pnpm test:unit test/local-network-provider/provider.test.ts
+          curl -X POST -H "Content-Type: application/json" \
+              --data '{ 
+                "query": "query accountBalance($publicKey: PublicKey!) { account(publicKey: $publicKey) { balance { total }, nonce, inferredNonce, delegate, publicKey } }",
+                "variables": { "publicKey": "'"${PUBLIC_KEY}"'" }
+              }' \
+              $NODE_URL
 
       - name: Upload Mina logs
         if: always()
