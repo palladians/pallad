@@ -9,9 +9,9 @@ import { gql, request } from 'graphql-request'
 
 import { getAccountBalance, healthCheckQuery } from './queries'
 
-type AccountInfoHealthCheckResponseData = {
-  syncStatus: string
-}
+//type AccountInfoHealthCheckResponseData = {
+//  syncStatus: string
+//}
 
 export interface AccountData {
   account: AccountInfo
@@ -40,10 +40,16 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     `
     try {
       const response = await request(this.minaGql as string, query)
-      console.log('Received response for health check:', response)
-      console.log('Response type:', typeof response)
-      const data = response as AccountInfoHealthCheckResponseData
-      const syncStatus = data ? data.syncStatus : null
+      // Check if response is a string and parse it
+      let jsonData
+      if (typeof response === 'string') {
+        jsonData = JSON.parse(response)
+      } else {
+        jsonData = response
+      }
+
+      // Now jsonData should be an object
+      const syncStatus = jsonData ? jsonData.syncStatus : null
 
       if (syncStatus === 'SYNCED') {
         return { ok: true }
