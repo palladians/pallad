@@ -48,7 +48,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       )) as AccountInfoHealthCheckResponseData
       console.log('Received response for health check:', data)
 
-      if (data && data.data && data.data.syncStatus) {
+      if (data.data.syncStatus == 'SYNCED') {
         return { ok: true }
       } else {
         throw new Error('Invalid schema response')
