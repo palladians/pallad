@@ -18,7 +18,7 @@ describe('Node Provider', () => {
   test('getAccountInfo', async () => {
     const publicKey =
       process.env['PUBLIC_KEY'] ||
-      'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
+      'B62qicdpMEVwzkDrf19uQiw6maKGDYV2C7DbnzhojF2dbVp4hWYhnNr'
     const args: AccountInfoArgs = {
       publicKey: publicKey
     }
