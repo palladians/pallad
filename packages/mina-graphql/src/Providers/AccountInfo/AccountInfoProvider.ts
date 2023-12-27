@@ -3,8 +3,8 @@ import {
   AccountInfoArgs,
   AccountInfoProvider,
   HealthCheckResponse
-  //HealthCheckResponseData
 } from '@palladxyz/mina-core'
+import { gql, GraphQLClient } from 'graphql-request'
 import { gql, GraphQLClient } from 'graphql-request'
 
 import {
@@ -15,10 +15,6 @@ import {
   ServerError
 } from '../utils'
 import { getAccountBalance, healthCheckQuery } from './queries'
-
-//type AccountInfoHealthCheckResponseData = {
-//  syncStatus: string
-//}
 
 export interface AccountData {
   account: AccountInfo
@@ -58,35 +54,17 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
 
     try {
       console.log(`Sending GraphQL request to: ${this.minaGql}`)
-      const headers = {
-        'Content-Type': 'application/json',
-        Accept:
-          'application/graphql-response+json; charset=utf-8, application/json; charset=utf-8'
-      }
-      const rawResponse: any = await request(
-        this.minaGql as string,
-        query,
-        {},
-        headers
-      )
-      console.log(`Received raw response: ${JSON.stringify(rawResponse)}`)
+      const client = new GraphQLClient(this.minaGql as string, {
+        errorPolicy: 'all'
+      })
+      const rawResponse: any = await client.request(query)
 
-      let syncStatus
-      if (typeof rawResponse === 'object' && rawResponse !== null) {
-        if ('data' in rawResponse) {
-          const data = rawResponse.data as { syncStatus?: string }
-          syncStatus = data.syncStatus
-        } else {
-          syncStatus = rawResponse.syncStatus
-        }
-      }
+      // Check for syncStatus directly in the response
+      const syncStatus = rawResponse.syncStatus || rawResponse.data?.syncStatus
 
       if (!syncStatus) {
-        console.log('Unexpected response structure or syncStatus not found')
-        return {
-          ok: false,
-          message: 'Unexpected response structure or syncStatus not found'
-        }
+        console.log('Sync status not found in response')
+        return { ok: false, message: 'Sync status not found' }
       }
 
       console.log(`Extracted syncStatus: ${syncStatus}`)
@@ -97,7 +75,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
         console.log(`Health check failed. Sync status: ${syncStatus}`)
         return {
           ok: false,
-          message: 'Health check failed due to invalid sync status'
+          message: `Health check failed. Sync status: ${syncStatus}`
         }
       }
     } catch (error) {
@@ -112,13 +90,18 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       ${getAccountBalance}
     `
 
+
     try {
       console.log('Sending request for account info...')
-      const data = await this.graphqlClient.rawRequest<AccountData>(query, {
-        publicKey: args.publicKey
+      // redundant creation of client, but this is a temporary solution
+      const client = new GraphQLClient(this.minaGql as string, {
+        errorPolicy: 'all'
       })
+      const data = (await client.request(query, {
+        publicKey: args.publicKey
+      })) as AccountData
 
-      if (!data || !data.data.account) {
+      if (!data || !data.account) {
         console.log('Account data not found, performing health check...')
         const healthCheckResponse = await this.healthCheck()
         if (!healthCheckResponse.ok) {
@@ -135,27 +118,9 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       }
 
       console.log('Received response for account info:', data)
-      return data.data.account
+      return data.account
     } catch (error) {
-      const errorText = (error as any).text as string | undefined
-      if (errorText) {
-        let statusCode = 0
-        if (errorText.includes('503')) {
-          statusCode = 503
-        } else if (errorText.includes('500')) {
-          statusCode = 500
-        }
-
-        if (statusCode > 0) {
-          throw new ServerError(
-            error as unknown as ExtendedError,
-            statusCode,
-            errorText
-          )
-        }
-      }
-
-      // Other error handling or rethrow
+      console.error('Error in getAccountInfo:', error)
       throw new Error('Error fetching account info')
     }
   }

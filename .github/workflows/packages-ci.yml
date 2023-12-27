@@ -54,7 +54,7 @@ jobs:
           pk=$(echo $response | jq -r '.pk')
           echo "PK=$pk" >> $GITHUB_ENV
 
-      - name: Run Account Provider Tests
+      - name: Run Example CLI GraphQL Query
         env:
           PUBLIC_KEY: ${{ env.PK }}
           NODE_URL: http://localhost:8080/graphql
@@ -66,6 +66,14 @@ jobs:
                 "variables": { "publicKey": "'"${PUBLIC_KEY}"'" }
               }' \
               $NODE_URL
+
+      - name: Run Account Provider Tests
+        env:
+          PUBLIC_KEY: ${{ env.PK }}
+          NODE_URL: http://localhost:8080/graphql
+        run: |
+          cd packages/mina-graphql
+          pnpm test:unit test/local-network-provider/provider.test.ts
 
       - name: Upload Mina logs
         if: always()
