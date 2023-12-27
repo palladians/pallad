@@ -3,15 +3,10 @@ import {
   AccountInfoArgs,
   AccountInfoProvider,
   HealthCheckResponse
-  //HealthCheckResponseData
 } from '@palladxyz/mina-core'
-import { gql, request } from 'graphql-request'
+import { gql, GraphQLClient } from 'graphql-request'
 
 import { getAccountBalance, healthCheckQuery } from './queries'
-
-//type AccountInfoHealthCheckResponseData = {
-//  syncStatus: string
-//}
 
 export interface AccountData {
   account: AccountInfo
@@ -41,35 +36,17 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
 
     try {
       console.log(`Sending GraphQL request to: ${this.minaGql}`)
-      const headers = {
-        'Content-Type': 'application/json',
-        Accept:
-          'application/graphql-response+json; charset=utf-8, application/json; charset=utf-8'
-      }
-      const rawResponse: any = await request(
-        this.minaGql as string,
-        query,
-        {},
-        headers
-      )
-      console.log(`Received raw response: ${JSON.stringify(rawResponse)}`)
+      const client = new GraphQLClient(this.minaGql as string, {
+        errorPolicy: 'all'
+      })
+      const rawResponse: any = await client.request(query)
 
-      let syncStatus
-      if (typeof rawResponse === 'object' && rawResponse !== null) {
-        if ('data' in rawResponse) {
-          const data = rawResponse.data as { syncStatus?: string }
-          syncStatus = data.syncStatus
-        } else {
-          syncStatus = rawResponse.syncStatus
-        }
-      }
+      // Check for syncStatus directly in the response
+      const syncStatus = rawResponse.syncStatus || rawResponse.data?.syncStatus
 
       if (!syncStatus) {
-        console.log('Unexpected response structure or syncStatus not found')
-        return {
-          ok: false,
-          message: 'Unexpected response structure or syncStatus not found'
-        }
+        console.log('Sync status not found in response')
+        return { ok: false, message: 'Sync status not found' }
       }
 
       console.log(`Extracted syncStatus: ${syncStatus}`)
@@ -80,7 +57,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
         console.log(`Health check failed. Sync status: ${syncStatus}`)
         return {
           ok: false,
-          message: 'Health check failed due to invalid sync status'
+          message: `Health check failed. Sync status: ${syncStatus}`
         }
       }
     } catch (error) {
@@ -94,34 +71,38 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     const query = gql`
       ${getAccountBalance}
     `
+
     try {
       console.log('Sending request for account info...')
-      const data = (await request(this.minaGql as string, query, {
+      // redundant creation of client, but this is a temporary solution
+      const client = new GraphQLClient(this.minaGql as string, {
+        errorPolicy: 'all'
+      })
+      const data = (await client.request(query, {
         publicKey: args.publicKey
       })) as AccountData
-      console.log('Received response for account info:', data)
 
       if (!data || !data.account) {
-        throw new Error('Invalid account data response')
+        console.log('Account data not found, performing health check...')
+        const healthCheckResponse = await this.healthCheck()
+        if (!healthCheckResponse.ok) {
+          throw new Error('Node is not available')
+        }
+        console.log('Account does not exist yet, returning empty account.')
+        return {
+          balance: { total: 0 },
+          nonce: 0,
+          inferredNonce: 0,
+          delegate: '',
+          publicKey: args.publicKey
+        }
       }
+
+      console.log('Received response for account info:', data)
       return data.account
-    } catch (error: unknown) {
-      // this can fail if the account doesn't exist yet on the chain & if the node is not available
-      // perform health check to see if the node is available
-      const healthCheckResponse = await this.healthCheck()
-      if (!healthCheckResponse.ok) {
-        throw new Error('Node is not available')
-      }
-      // if the node is available, then the account doesn't exist yet
-      // return an empty account
-      console.log('Error in getAccountInfo, account does not exist yet!')
-      return {
-        balance: { total: 0 },
-        nonce: 0,
-        inferredNonce: 0,
-        delegate: '',
-        publicKey: args.publicKey
-      }
+    } catch (error) {
+      console.error('Error in getAccountInfo:', error)
+      throw new Error('Error fetching account info')
     }
   }
 }
