@@ -13,6 +13,7 @@ const VITE_APP_DEFAULT_NETWORK =
 type AppState = {
   network: Multichain.MultiChainNetworks
   vaultState: VaultState
+  shareData: boolean
 }
 
 type AppQueries = {
@@ -24,6 +25,7 @@ type AppMutators = {
   setVaultState: (vaultState: VaultState) => void
   setVaultStateInitialized: () => void
   setVaultStateUninitialized: () => void
+  setShareData: (shareData: boolean) => void
 }
 
 type AppStore = AppState & AppMutators & AppQueries
@@ -40,6 +42,7 @@ export const useAppStore = create<AppStore>()(
     (set, get) => ({
       network: defaultNetwork,
       vaultState: VaultState[VaultState.UNINITIALIZED],
+      shareData: true,
       isInitialized: () => {
         const { vaultState } = get()
         return vaultState === VaultState[VaultState.INITIALIZED]
@@ -49,6 +52,9 @@ export const useAppStore = create<AppStore>()(
           network:
             Mina.Networks[network.toUpperCase() as keyof typeof Mina.Networks]
         })
+      },
+      setShareData(shareData) {
+        return set({ shareData })
       },
       setVaultState(vaultState) {
         return set({ vaultState })

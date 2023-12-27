@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 import { useAccount } from '@/common/hooks/use-account'
+import { useAnalytics } from '@/common/hooks/use-analytics'
 import { usePendingTransactionStore } from '@/common/store/pending-transactions'
 import { useTransactionStore } from '@/common/store/transaction'
 import { ButtonArrow } from '@/components/button-arrow'
@@ -29,6 +30,7 @@ import { ConfirmTransactionSchema } from './confirm-transaction-form.schema'
 type ConfirmTransactionData = z.infer<typeof ConfirmTransactionSchema>
 
 export const ConfirmTransactionForm = () => {
+  const { track } = useAnalytics()
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
   const sign = useVault((state) => state.sign)
@@ -119,6 +121,14 @@ export const ConfirmTransactionForm = () => {
         Mina.Networks.BERKELEY,
         currentWallet.credential.credential as GroupedCredentials
       )
+      track({
+        event: kind === 'staking' ? 'portfolio_delegated' : 'transaction_sent',
+        metadata: {
+          amount: transaction.amount,
+          fee: transaction.fee,
+          to: kind === 'staking' && transaction.to
+        }
+      })
       navigate('/transactions/success', {
         state: {
           hash

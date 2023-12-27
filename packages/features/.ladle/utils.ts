@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { MinaPayload, Network } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
-import { useVault } from '@palladxyz/vault'
+import { KeyAgents, useVault } from '@palladxyz/vault'
 
 const MNEMONIC =
   'habit hope tip crystal because grunt nation idea electric witness alert like'
@@ -22,7 +22,10 @@ export const useStoriesWallet = () => {
         {
           mnemonicWords: MNEMONIC.split(' '),
           getPassphrase: async () => Buffer.from('passphrase')
-        }
+        },
+        'Pallad',
+        KeyAgents.InMemory,
+        'Test'
       )
     }
     restore()

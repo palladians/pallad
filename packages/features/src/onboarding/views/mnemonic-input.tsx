@@ -14,6 +14,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
+import { useAnalytics } from '@/common/hooks/use-analytics'
 import { useAppStore } from '@/common/store/app'
 import { useOnboardingStore } from '@/common/store/onboarding'
 import { Autocomplete } from '@/components/autocomplete'
@@ -35,6 +36,7 @@ const mnemonicIterator = Array.from(
 )
 
 export const MnemonicInputView = () => {
+  const { track } = useAnalytics()
   const [restoring, setRestoring] = useState(false)
   const restoreWallet = useVault((state) => state.restoreWallet)
   const navigate = useNavigate()
@@ -78,6 +80,7 @@ export const MnemonicInputView = () => {
         KeyAgents.InMemory,
         'Test'
       )
+      track({ event: 'wallet_restored' })
       setVaultStateInitialized()
       return navigate('/onboarding/finish')
     } finally {
@@ -94,7 +97,7 @@ export const MnemonicInputView = () => {
             'flex-1 transition-opacity opacity-50 gap-2 group',
             mnemonicValid && 'opacity-100'
           ])}
-          // disabled={!mnemonicValid || restoring}
+          disabled={!mnemonicValid || restoring}
           onClick={handleSubmit(onSubmit)}
           data-testid="onboarding__nextButton"
         >

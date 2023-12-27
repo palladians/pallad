@@ -1,36 +1,34 @@
 import { Mina } from '@palladxyz/mina-core'
 import { useVault } from '@palladxyz/vault'
-import { TrashIcon } from 'lucide-react'
+import { AlertCircleIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSWRConfig } from 'swr'
 
-import { useAccount } from '@/common/hooks/use-account'
 import { useAppStore } from '@/common/store/app'
 import { AppLayout } from '@/components/app-layout'
+import { RestartWalletAlert } from '@/components/restart-wallet-alert'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import {
-  Label,
-  RadioGroup,
-  RadioGroupItem,
-  useToast
-} from '@/components/ui/label'
+import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Switch } from '@/components/ui/switch'
 import { useToast } from '@/components/ui/use-toast'
 import { ViewHeading } from '@/components/view-heading'
 
 export const SettingsView = () => {
+  const [restartAlertVisible, setRestartAlertVisible] = useState(false)
   const { toast } = useToast()
   const navigate = useNavigate()
   const switchNetwork = useVault((state) => state.switchNetwork)
   const { setTheme, theme } = useTheme()
   const { mutate } = useSWRConfig()
-  const { network } = useAppStore((state) => ({
+  const { network, shareData, setShareData } = useAppStore((state) => ({
     setNetwork: state.setNetwork,
-    network: state.network
+    network: state.network,
+    shareData: state.shareData,
+    setShareData: state.setShareData
   }))
-  const { restartCurrentWallet } = useAccount()
   const handleNetworkSwitch = async (value: Mina.Networks) => {
     await switchNetwork(value)
     await mutate(() => true, undefined, { revalidate: false })
@@ -48,6 +46,10 @@ export const SettingsView = () => {
   }
   return (
     <AppLayout>
+      <RestartWalletAlert
+        open={restartAlertVisible}
+        setOpen={setRestartAlertVisible}
+      />
       <div className="flex flex-col flex-1">
         <ViewHeading
           title="Settings"
@@ -55,7 +57,7 @@ export const SettingsView = () => {
         />
         <div className="flex flex-col gap-4 p-4 flex-1">
           <div className="flex flex-col gap-2">
-            <Label>Network</Label>
+            <h2>Network</h2>
             <RadioGroup value={network} onValueChange={handleNetworkSwitch}>
               {/* TODO: Enable after Public Beta <div className="flex items-center space-x-2">
                 <RadioGroupItem
@@ -93,7 +95,7 @@ export const SettingsView = () => {
             </RadioGroup>
           </div>
           <div className="flex flex-col gap-2">
-            <Label>Theme</Label>
+            <h2>Theme</h2>
             <RadioGroup value={theme} onValueChange={handleThemeSwitch}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="light" id="themeLight" />
@@ -109,23 +111,27 @@ export const SettingsView = () => {
               </div>
             </RadioGroup>
           </div>
-          <div className="flex flex-col gap-4">
-            <h2>Authorized Domains</h2>
-            <div className="flex flex-col gap-2">
-              <Card className="flex py-2 px-4 justify-between">
-                <div>Pallad</div>
-                <div className="flex gap-2 items-center">
-                  <div>pallad.xyz</div>
-                  <a>
-                    <TrashIcon size={16} />
-                  </a>
-                </div>
-              </Card>
+          <div className="flex flex-col gap-2">
+            <h2>Privacy</h2>
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={shareData}
+                onCheckedChange={(value) => setShareData(value)}
+              />
+              <Label>Share anonymous data</Label>
             </div>
           </div>
-          <Button variant="destructive" onClick={restartCurrentWallet}>
-            Restart Wallet
-          </Button>
+          <div className="flex flex-col gap-2 items-start">
+            <h2>Danger Zone</h2>
+            <Button
+              variant="secondary"
+              className="gap-2"
+              onClick={() => setRestartAlertVisible(true)}
+            >
+              <AlertCircleIcon size={16} />
+              Restart Wallet
+            </Button>
+          </div>
         </div>
       </div>
     </AppLayout>

@@ -11,6 +11,7 @@ import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
+import { useAnalytics } from '@/common/hooks/use-analytics'
 import { useAppStore } from '@/common/store/app'
 import { useOnboardingStore } from '@/common/store/onboarding'
 import { ButtonArrow } from '@/components/button-arrow'
@@ -25,6 +26,7 @@ const getConfirmationIndex = () => {
 }
 
 export const MnemonicConfirmationView = () => {
+  const { track } = useAnalytics()
   const [restoring, setRestoring] = useState(false)
   const restoreWallet = useVault((state) => state.restoreWallet)
   const [confirmationIndex] = useState(getConfirmationIndex())
@@ -76,6 +78,7 @@ export const MnemonicConfirmationView = () => {
         KeyAgents.InMemory,
         'Test'
       )
+      track({ event: 'wallet_created' })
       setVaultStateInitialized()
       return navigate('/onboarding/finish')
     } finally {
