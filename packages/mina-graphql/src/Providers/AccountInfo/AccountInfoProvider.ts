@@ -13,6 +13,20 @@ export interface AccountData {
   account: AccountInfo
 }
 
+const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+  const response = await fetch(input, init);
+  const text = await response.text();
+  const parsed = JSONbig.parse(text);
+  return new Response(JSON.stringify(parsed), {
+    status: response.status,
+    statusText: response.statusText,
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      ...response.headers,
+    }),
+  });
+};
+
 export class AccountInfoGraphQLProvider implements AccountInfoProvider {
   private minaGql: string | null
 
@@ -40,7 +54,8 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       const jsonSerializer = JSONbig({ useNativeBigInt: true })
       const client = new GraphQLClient(this.minaGql as string, {
         errorPolicy: 'ignore',
-        jsonSerializer
+        jsonSerializer,
+        fetch: customFetch
       })
       const rawResponse: any = await client.request(query)
 
