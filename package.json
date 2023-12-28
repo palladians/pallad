@@ -11,9 +11,7 @@
     "build:website": "turbo run build --filter=@palladxyz/website...",
     "build:features": "turbo run build --filter=@palladxyz/features...",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
-    "dev": "turbo run dev",
-    "d": "pnpm dev",
-    "dev:extension": "turbo run dev --filter=@palladxyz/extension... --concurrency 20",
+    "dev:extension": "turbowatch extension.turbowatch.ts",
     "lint": "eslint \"{apps,packages}/**/*.{ts,tsx,js,jsx,cjs,mjs}\"",
     "lint:fix": "pnpm lint --fix",
     "test:unit": "turbo run test:unit",
@@ -47,6 +45,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tsup": "^8.0.1",
     "turbo": "^1.11.2",
+    "turbowatch": "^2.29.4",
     "typescript": "^5.3.3",
     "vitest": "^1.1.0"
   },
