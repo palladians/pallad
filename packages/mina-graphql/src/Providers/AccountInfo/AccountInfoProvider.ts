@@ -5,6 +5,7 @@ import {
   HealthCheckResponse
 } from '@palladxyz/mina-core'
 import { gql, GraphQLClient } from 'graphql-request'
+import JSONbig from 'json-bigint'
 
 import { getAccountBalance, healthCheckQuery } from './queries'
 
@@ -36,8 +37,10 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
 
     try {
       console.log(`Sending GraphQL request to: ${this.minaGql}`)
+      const jsonSerializer = JSONbig({ useNativeBigInt: true })
       const client = new GraphQLClient(this.minaGql as string, {
-        errorPolicy: 'all'
+        errorPolicy: 'ignore',
+        jsonSerializer
       })
       const rawResponse: any = await client.request(query)
 
@@ -75,8 +78,10 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     try {
       console.log('Sending request for account info...')
       // redundant creation of client, but this is a temporary solution
+      const jsonSerializer = JSONbig({ useNativeBigInt: true })
       const client = new GraphQLClient(this.minaGql as string, {
-        errorPolicy: 'all'
+        errorPolicy: 'ignore',
+        jsonSerializer
       })
       const data = await client.rawRequest<AccountData>(query, {
         publicKey: args.publicKey
