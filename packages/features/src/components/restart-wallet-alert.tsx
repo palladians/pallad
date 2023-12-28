@@ -41,8 +41,15 @@ export const RestartWalletAlert = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={confirm}>Continue</AlertDialogAction>
+          <AlertDialogCancel data-testid="restartWallet__cancel">
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={confirm}
+            data-testid="restartWallet__confirm"
+          >
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
