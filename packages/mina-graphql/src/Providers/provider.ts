@@ -2,6 +2,7 @@ import {
   AccountInfo,
   AccountInfoArgs,
   DaemonStatus,
+  HealthCheckResponse,
   SubmitTxArgs,
   SubmitTxResult,
   TxStatus,
@@ -68,6 +69,10 @@ export class MinaProvider implements ProviderNode {
     args: SubmitTxArgs
   ): Promise<SubmitTxResult | undefined> {
     return this.txSubmitProvider?.submitTx(args)
+  }
+
+  public async healthCheck(): Promise<HealthCheckResponse | undefined> {
+    return this.accountInfoProvider?.healthCheck()
   }
 
   public async getDaemonStatus(): Promise<DaemonStatus | undefined> {
