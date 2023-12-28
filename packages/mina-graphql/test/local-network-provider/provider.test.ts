@@ -5,6 +5,8 @@ import { MinaProvider } from '../../src'
  * This is a test for a local network provider.
  * A larger refactor of the test suites will add the
  * provider urls as a parameter to the test suite's cli command.
+ * to run, use:
+ *  NODE_URL=https://proxy.devnet.minaexplorer.com/ pnpm test:unit test/local-network-provider/provider.test.ts
  */
 
 const nodeUrl = process.env['NODE_URL'] || 'http://localhost:8080/graphql'
@@ -26,7 +28,7 @@ describe('Node Provider', () => {
     //const response = await provider.getAccountInfo(args)
     const response = await provider.healthCheck()
     console.log('Node Provider Health Response:', response)
-    expect(response).toBeDefined()
+    expect(response.ok).toBe(true)
     //expect(response?.balance).toBeDefined()
     //expect(response?.nonce).toBeDefined()
     //expect(response?.inferredNonce).toBeDefined()
