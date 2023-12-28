@@ -25,7 +25,7 @@ export const RestartWalletAlert = ({
     useVault.persist.clearStorage()
     await storage.local.clear()
     await storage.session.clear()
-    await storage.managed.clear()
+    await storage.sync.clear()
     setOpen(false)
     window.close()
   }
