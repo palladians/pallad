@@ -17,7 +17,7 @@ describe('Node Provider', () => {
   beforeAll(() => {
     provider = new MinaProvider(nodeUrl!)
   })
-  it('should getAccountInfo for an address already in the ledger', async () => {
+  it.skip('should getAccountInfo for an address already in the ledger', async () => {
     /*const publicKey =
       process.env['PUBLIC_KEY'] ||
       'B62qicdpMEVwzkDrf19uQiw6maKGDYV2C7DbnzhojF2dbVp4hWYhnNr'
