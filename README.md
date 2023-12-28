@@ -60,19 +60,19 @@ This is a monorepo for all the Pallad-related code.
 
 - `apps`
   - `extension` - Browser extension app.
-  - `website` - pallad.xyz website.
 - `packages`
   - `_template` - Template to follow for new packages in this repo.
   - `common` - Common configuration for packages (tsup and vitest).
-  - `features` - Common codebase for the extension.
+  - `features` - Wallet features, views, and UI components.
   - `key-management` - Blockchain agnostic key management.
   - `mina-core` - Core Mina Package SDK.
   - `mina-graphql` - GraphQL API client for the Mina Protocol.
+  - `multi-chain-core` - Foundation for hosting multiple blockchains.
   - `offchain-data` - Client for fetching off-chain data like fiat price.
   - `persistence` - Persistence logic for wallet related data.
-  - `ui` - UI framework based on shadcn/ui and Tailwind.
   - `util` - Shared util functions for other packages.
   - `vault` - Credentials storage.
+  - `web-provider` - Web provider to consume wallet interfaces in browser context.
 
 ## Development 🛠️
 
