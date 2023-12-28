@@ -7,11 +7,29 @@ on:
       - .github/workflows/apps-extension-ci.yml
       - apps/extension/**
       - packages/features/**
+      - packages/key-management/**
+      - packages/mina-core/**
+      - packages/mina-graphql/**
+      - packages/multi-chain-core/**
+      - packages/offchain-data/**
+      - packages/persistence/**
+      - packages/util/**
+      - packages/vault/**
+      - packages/web-provider/**
   pull_request:
     branches: [main]
     paths:
       - apps/extension/**
       - packages/features/**
+      - packages/key-management/**
+      - packages/mina-core/**
+      - packages/mina-graphql/**
+      - packages/multi-chain-core/**
+      - packages/offchain-data/**
+      - packages/persistence/**
+      - packages/util/**
+      - packages/vault/**
+      - packages/web-provider/**
 jobs:
   test_and_build:
     name: 'Build and test'
