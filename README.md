@@ -12,13 +12,12 @@
 ![Module type: ESM](https://img.shields.io/badge/module%20type-esm-brightgreen)
 [![Discord](https://img.shields.io/discord/1127906495409958953?label=Discord)](https://discord.gg/ExzzfTGUnB)
 ![example workflow](https://github.com/palladians/pallad/actions/workflows/apps-extension-ci.yml/badge.svg)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/6d459ab7-81f7-44f9-86ee-05ae72b451eb/deploy-status)](https://app.netlify.com/sites/pallad/deploys)
 
 ⚠️ Work in progress ⚠️
 🚨 Now in Beta 🚨
 </div>
 
-Welcome to Pallad an experimental and progressive Mina Protocol wallet! 
+Welcome to Pallad an experimental and progressive Mina Protocol wallet!
 
 In the vast and evolving world of Web3, a wallet is not just a tool; it's the gateway to a whole new universe. It's the first consumer application anyone encounters in a blockchain ecosystem, and it's pivotal in shaping the user experience. That's where Pallad steps in!
 
