@@ -3,15 +3,14 @@ import { EventEmitter } from 'events'
 import {
   ConnectOps,
   ProviderAccounts,
-  ProviderChainId,
-  ProviderConnectInfo,
-  ProviderMessage,
-  ProviderRpcError,
+  ProviderEvent,
+  ProviderEventArguments,
   RequestArguments
 } from '../types'
+import { UniversalProvider } from './universal-provider'
 
 export interface RpcProviderMap {
-  [chainId: string]: IProvider
+  [chainId: string]: IProvider | unknown // todo remove unknown
 }
 
 // a map of chainId to rpc provider -- like providerManager but for web-providers
@@ -40,25 +39,34 @@ export abstract class IEvents {
   public abstract removeListener(event: string, listener: any): void
 }
 
-export interface EIP1193Provider extends IEvents {
-  // connection event
-  on(event: 'connect', listener: (info: ProviderConnectInfo) => void): void
-  // disconnection event
-  on(event: 'disconnect', listener: (error: ProviderRpcError) => void): void
-  // arbitrary messages
-  on(event: 'message', listener: (message: ProviderMessage) => void): void
-  // chain changed event
-  on(event: 'chainChanged', listener: (chainId: ProviderChainId) => void): void
-  // accounts changed event
-  on(
-    event: 'accountsChanged',
-    listener: (accounts: ProviderAccounts) => void
-  ): void
-  // make an Ethereum RPC method call.
-  request(args: RequestArguments): Promise<unknown>
+export interface IUniversalProviderEvents {
+  on: <E extends ProviderEvent>(
+    event: E,
+    listener: (args: ProviderEventArguments[E]) => void
+  ) => UniversalProvider
+
+  once: <E extends ProviderEvent>(
+    event: E,
+    listener: (args: ProviderEventArguments[E]) => void
+  ) => UniversalProvider
+
+  off: <E extends ProviderEvent>(
+    event: E,
+    listener: (args: ProviderEventArguments[E]) => void
+  ) => UniversalProvider
+
+  removeListener: <E extends ProviderEvent>(
+    event: E,
+    listener: (args: ProviderEventArguments[E]) => void
+  ) => UniversalProvider
+
+  //emit: <E extends ProviderEvent>(
+  //  event: E,
+  //  payload: ProviderEventArguments[E]
+  //) => boolean
 }
 
-export interface IEthereumProvider extends EIP1193Provider {
+export interface IEthereumProvider extends IUniversalProviderEvents {
   // legacy alias for EIP-1102
   enable(): Promise<ProviderAccounts>
 }
@@ -70,9 +78,9 @@ export interface IUniversalProvider extends IEthereumProvider {
   uri: string | undefined
 
   request: <T = unknown>(args: RequestArguments, chain?: string) => Promise<T>
-  connect: (opts: ConnectOps) => Promise<boolean | undefined>
+  connect: (opts: ConnectOps) => Promise<void>
   disconnect: () => Promise<void>
-  cleanupPendingPairings: () => Promise<void>
-  abortPairingAttempt(): void
+  //cleanupPendingPairings: () => Promise<void>
+  //abortPairingAttempt(): void
   setDefaultChain: (chainId: string, rpcUrl?: string | undefined) => void
 }

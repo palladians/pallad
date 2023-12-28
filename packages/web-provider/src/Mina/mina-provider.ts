@@ -63,7 +63,10 @@ export class MinaProvider implements IMinaProvider {
 
   protected rpc: ChainRpcConfig
 
-  constructor(opts: ChainProviderOptions) {
+  constructor(
+    opts: ChainProviderOptions,
+    private externalEmitter?: EventEmitter
+  ) {
     // Initialization logic
     this.rpc = {} as ChainRpcConfig
 
@@ -76,8 +79,11 @@ export class MinaProvider implements IMinaProvider {
     }
   }
 
-  static async init(opts: ChainProviderOptions): Promise<MinaProvider> {
-    const provider = new MinaProvider(opts)
+  static async init(
+    opts: ChainProviderOptions,
+    externalEmitter?: EventEmitter
+  ): Promise<MinaProvider> {
+    const provider = new MinaProvider(opts, externalEmitter)
     await provider.initialize(opts)
     return provider
   }
@@ -114,7 +120,7 @@ export class MinaProvider implements IMinaProvider {
       // Include any additional data if it is required
     }
   }
-
+  // TODO: add ConnectOps as an optional parameter
   public async enable(): Promise<string[]> {
     // Implement the logic to prompt the user to connect to the wallet
     // For example, you could open a modal and wait for the user to click 'Connect'
@@ -130,12 +136,22 @@ export class MinaProvider implements IMinaProvider {
   }
   // these are the methods that are called by the dapp to interact/listen to the wallet
   public on: IMinaProviderEvents['on'] = (event, listener) => {
-    this.events.on(event, listener)
+    //this.events.on(event, listener)
+    if (this.externalEmitter) {
+      this.externalEmitter.on(event, listener)
+    } else {
+      this.events.on(event, listener)
+    }
     return this
   }
 
   public once: IMinaProviderEvents['once'] = (event, listener) => {
-    this.events.once(event, listener)
+    //this.events.once(event, listener)
+    if (this.externalEmitter) {
+      this.externalEmitter.once(event, listener)
+    } else {
+      this.events.once(event, listener)
+    }
     return this
   }
 
@@ -143,12 +159,22 @@ export class MinaProvider implements IMinaProvider {
     event,
     listener
   ) => {
-    this.events.removeListener(event, listener)
+    //this.events.removeListener(event, listener)
+    if (this.externalEmitter) {
+      this.externalEmitter.removeListener(event, listener)
+    } else {
+      this.events.removeListener(event, listener)
+    }
     return this
   }
 
   public off: IMinaProviderEvents['off'] = (event, listener) => {
-    this.events.off(event, listener)
+    //this.events.off(event, listener)
+    if (this.externalEmitter) {
+      this.externalEmitter.off(event, listener)
+    } else {
+      this.events.off(event, listener)
+    }
     return this
   }
 
@@ -177,12 +203,21 @@ export class MinaProvider implements IMinaProvider {
       this.connected = true
       // Step 5: Emit a 'connect' event.
       const connectInfo: ProviderConnectInfo = { chainId: this.chainId }
-      this.events.emit('connect', connectInfo)
+      //this.events.emit('connect', connectInfo)
+      if (this.externalEmitter) {
+        this.externalEmitter.emit('connect', connectInfo)
+      } else {
+        this.events.emit('connect', connectInfo)
+      }
     } catch (error) {
       // Handle any errors that occurred during connection.
       console.error('Error during connection:', error)
       // Additional error handling as needed
     }
+  }
+
+  public requestAccounts(): string[] {
+    return this.accounts
   }
 
   public isConnected(): boolean {
@@ -193,10 +228,21 @@ export class MinaProvider implements IMinaProvider {
     // Check if it's connected in the first place
     if (!this.isConnected()) {
       // Emit a 'disconnect' event with an error only if disconnected
-      this.events.emit(
-        'disconnect',
-        this.createProviderRpcError(4900, 'Disconnected')
-      )
+      //this.events.emit(
+      //  'disconnect',
+      //  this.createProviderRpcError(4900, 'Disconnected')
+      //)
+      if (this.externalEmitter) {
+        this.externalEmitter.emit(
+          'disconnect',
+          this.createProviderRpcError(4900, 'Disconnected')
+        )
+      } else {
+        this.events.emit(
+          'disconnect',
+          this.createProviderRpcError(4900, 'Disconnected')
+        )
+      }
     } else {
       // If it's connected, then handle the disconnection logic
       // For example, disconnect from the Mina client or other cleanup
@@ -212,7 +258,12 @@ export class MinaProvider implements IMinaProvider {
       this.chainId = undefined
 
       // Emit a 'disconnect' event without an error
-      this.events.emit('disconnect')
+      //this.events.emit('disconnect')
+      if (this.externalEmitter) {
+        this.externalEmitter.emit('disconnect')
+      } else {
+        this.events.emit('disconnect')
+      }
     }
   }
 
@@ -244,13 +295,14 @@ export class MinaProvider implements IMinaProvider {
     const userConfirmed = await this.userPrompt(
       `Do you want to execute ${args.method}?`
     )
+    console.log('userConfirmed with args.method: ', userConfirmed, args.method)
+    console.log('userConfirmed is not truthy: ', !userConfirmed)
     if (!userConfirmed) {
       throw this.createProviderRpcError(4001, 'User Rejected Request')
     }
 
     switch (args.method) {
       case 'mina_accounts': {
-        // handle mina_accounts
         return vaultService.getAccounts() as unknown as T
       }
 
@@ -291,7 +343,12 @@ export class MinaProvider implements IMinaProvider {
     // if (!supported) { throw new Error('Unsupported chainId') }
     // updated the chainId
     this.chainId = chainId
-    this.events.emit('chainChanged', chainId)
+    //this.events.emit('chainChanged', chainId)
+    if (this.externalEmitter) {
+      this.externalEmitter.emit('chainChanged', chainId)
+    } else {
+      this.events.emit('chainChanged', chainId)
+    }
   }
 
   protected getRpcConfig(ops: ChainProviderOptions): ChainRpcConfig {

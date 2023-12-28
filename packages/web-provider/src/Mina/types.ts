@@ -41,10 +41,10 @@ export interface IMinaProviderEvents {
     listener: (args: ProviderEventArguments[E]) => void
   ) => MinaProvider
 
-  emit: <E extends ProviderEvent>(
-    event: E,
-    payload: ProviderEventArguments[E]
-  ) => boolean
+  //emit: <E extends ProviderEvent>(
+  //  event: E,
+  //  payload: ProviderEventArguments[E]
+  //) => boolean
 }
 
 // originally the EIP1193Provider interface
