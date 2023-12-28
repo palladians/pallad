@@ -5,3 +5,4 @@ build
 test-results
 playwright-report
 coverage
+apps/mobile/ios

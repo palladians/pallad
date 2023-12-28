@@ -1,5 +1,6 @@
 import { Preferences } from '@capacitor/preferences'
 import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin'
+import superjson from 'superjson'
 import { StateStorage } from 'zustand/middleware'
 
 const sessionData = new Map()
@@ -9,10 +10,10 @@ export const sessionPersistence: StateStorage = {
     return (await sessionData.get(name)) || null
   },
   setItem: async (name, value) => {
-    await sessionData.set(name, value)
+    sessionData.set(name, value)
   },
   removeItem: async (name) => {
-    await sessionData.delete(name)
+    sessionData.delete(name)
   }
 }
 
@@ -30,10 +31,14 @@ export const localPersistence: StateStorage = {
 
 export const securePersistence: StateStorage = {
   getItem: async (name): Promise<string | null> => {
-    return (await SecureStoragePlugin.get({ key: name })).value || null
+    const value = (await SecureStoragePlugin.get({ key: name })).value || ''
+    return superjson.parse(value)
   },
   setItem: async (name, value) => {
-    await SecureStoragePlugin.set({ key: name, value })
+    await SecureStoragePlugin.set({
+      key: name,
+      value: superjson.stringify(value)
+    })
   },
   removeItem: async (name) => {
     await SecureStoragePlugin.remove({ key: name })
