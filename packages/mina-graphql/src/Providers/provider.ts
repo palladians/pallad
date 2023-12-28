@@ -2,6 +2,7 @@ import {
   AccountInfo,
   AccountInfoArgs,
   DaemonStatus,
+  HealthCheckResponse,
   SubmitTxArgs,
   SubmitTxResult,
   TxStatus,
