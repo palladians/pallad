@@ -32,6 +32,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TURBO_SERVER_TOKEN: ${{ secrets.TURBO_SERVER_TOKEN }}
 
+      - name: Install jq if not present
+        run: |
+          if ! command -v jq &> /dev/null
+          then
+            echo "jq could not be found, installing..."
+            sudo apt-get update
+            sudo apt-get install -y jq
+          else
+            echo "jq is already installed"
+          fi
+        
       - name: Install Dependencies
         run: pnpm install
 
@@ -52,11 +63,11 @@ jobs:
         run: |
           response=$(curl -s http://localhost:8181/acquire-account)
           pk=$(echo $response | jq -r '.pk')
-          echo "PK=$pk" >> $GITHUB_ENV
+          echo "PUBLIC_KEY=$pk" >> $GITHUB_ENV
 
-      - name: Run Example CLI GraphQL Query
+      - name: Get Public Key on Local Network
         env:
-          PUBLIC_KEY: ${{ env.PK }}
+          PUBLIC_KEY: ${{ env.PUBLIC_KEY }}
           NODE_URL: http://localhost:8080/graphql
         run: |
           cd packages/mina-graphql
@@ -67,13 +78,38 @@ jobs:
               }' \
               $NODE_URL
 
+      - name: Fetch Transactions and Set Environment Variables
+        env:
+          PUBLIC_KEY: ${{ env.PUBLIC_KEY }}
+          NODE_URL: http://localhost:8282/graphql
+        run: |
+            cd packages/mina-graphql
+            RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" \
+                --data '{ 
+                  "query": "query Transactions($address: String!, $limit: Int) { transactions(query: { canonical: true, OR: [{ to: $address }, { from: $address }] } limit: $limit sortBy: DATETIME_DESC) { amount to token kind isDelegation hash from fee failureReason dateTime blockHeight } }",
+                  "variables": { "address": "'"${PUBLIC_KEY}"'", "limit": 1 }
+                }' \
+                $NODE_URL)
+        
+            TX_HASH=$(echo $RESPONSE | jq -r '.data.transactions[0].hash')
+            TX_ID=$(echo $RESPONSE | jq -r '.data.transactions[0].blockHeight')
+            TRANSACTION=$(echo $RESPONSE | jq -c '.data.transactions[0]')
+
+            echo "TX_HASH=${TX_HASH}" >> $GITHUB_ENV
+            echo "TX_ID=${TX_ID}" >> $GITHUB_ENV
+            echo "TRANSACTION=${TRANSACTION}" >> $GITHUB_ENV
+
       - name: Run Account Provider Tests
         env:
-          PUBLIC_KEY: ${{ env.PK }}
+          PUBLIC_KEY: ${{ env.PUBLIC_KEY }}
           NODE_URL: http://127.0.0.1:8080/graphql
+          ARCHIVE_NODE_URL:  http://127.0.0.1:8282/graphql
+          TX_HASH:  ${{ env.TX_HASH }}
+          TX_ID:  ${{ env.TX_ID }}
+          
         run: |
           cd packages/mina-graphql
-          pnpm test:unit test/local-network-provider/provider.test.ts
+          pnpm test:unit
 
       - name: Upload Mina logs
         if: always()
