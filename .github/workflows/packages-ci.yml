@@ -1,4 +1,4 @@
-name: Pakcages CI w/Mina Local Network
+name: Mina Local Network Workflow 🪶
 
 on: 
     workflow_dispatch:
@@ -97,6 +97,10 @@ jobs:
             echo "TX_HASH=${TX_HASH}" >> $GITHUB_ENV
             echo "TX_ID=${TX_ID}" >> $GITHUB_ENV
             echo "TRANSACTION=${TRANSACTION}" >> $GITHUB_ENV
+
+            echo "Logged TX_HASH: ${TX_HASH}"
+            echo "Logged TX_ID: ${TX_ID}"
+            echo "Logged TRANSACTION: ${TRANSACTION}"
 
       - name: Run Account Provider Tests
         env:
