@@ -81,7 +81,7 @@ jobs:
       - name: Fetch Transactions and Set Environment Variables
         env:
           PUBLIC_KEY: ${{ env.PUBLIC_KEY }}
-          ARCHIVE_NODE_URL: http://localhost:8282/graphql
+          ARCHIVE_NODE_URL: http://localhost:8282
         run: |
           curl -X POST -H "Content-Type: application/json" \
               --data '{ 
