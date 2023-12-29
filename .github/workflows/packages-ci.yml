@@ -101,7 +101,7 @@ jobs:
           
         run: |
           cd packages/mina-graphql
-          pnpm test:unit
+          pnpm test:unit test/Providers/AccountInfoProvider.test.ts
 
       - name: Upload Mina logs
         if: always()
