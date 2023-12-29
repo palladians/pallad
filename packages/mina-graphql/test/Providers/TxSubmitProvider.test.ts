@@ -11,4 +11,5 @@ describe('TxSubmitGraphQLProvider for Testnet', () => {
 
     expect(response).toEqual({ ok: true })
   })
+  // TODO: add transaction submission test & transaction submission failure test
 })

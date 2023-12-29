@@ -5,25 +5,36 @@ import {
   SubmitTxResult,
   TxSubmitProvider
 } from '@palladxyz/mina-core'
-import { gql, request } from 'graphql-request'
+import { gql, GraphQLClient } from 'graphql-request'
 
+import { customFetch, defaultJsonSerializer, ErrorPolicy } from '../utils'
 import { getStakeTxSend, getTxSend } from './mutations'
 import { healthCheckQuery } from './queries'
 
 export class TxSubmitGraphQLProvider implements TxSubmitProvider {
-  private minaGql: string | null
+  graphqlClient: GraphQLClient
 
-  constructor(minaGql: string) {
-    this.minaGql = minaGql
+  constructor(
+    minaGql: string,
+    errorPolicy: ErrorPolicy = 'ignore',
+    fetch?: typeof customFetch
+  ) {
+    this.graphqlClient = new GraphQLClient(minaGql, {
+      errorPolicy: errorPolicy,
+      jsonSerializer: defaultJsonSerializer,
+      fetch: fetch || customFetch
+    })
   }
 
   public async destroy(): Promise<void> {
     console.log('Destroying TxSubmitGraphQLProvider...')
-    this.minaGql = null
   }
 
   async changeNetwork(minaGql: string): Promise<void> {
-    this.minaGql = minaGql
+    this.graphqlClient = new GraphQLClient(
+      minaGql,
+      this.graphqlClient.requestConfig
+    )
   }
 
   async healthCheck(): Promise<HealthCheckResponse> {
@@ -32,12 +43,10 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
     `
 
     try {
-      const data = (await request(
-        this.minaGql as string,
-        query
-      )) as HealthCheckResponseData
+      const data =
+        await this.graphqlClient.rawRequest<HealthCheckResponseData>(query)
 
-      if (data && data.__schema && data.__schema.types.length > 0) {
+      if (data && data.data.__schema && data.data.__schema.types.length > 0) {
         return { ok: true }
       } else {
         return { ok: false, message: 'Invalid schema response' }
@@ -75,12 +84,11 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
     }
 
     try {
-      const result = (await request(
-        this.minaGql as string,
+      const result = await this.graphqlClient.rawRequest<SubmitTxResult>(
         mutation,
         variables
-      )) as SubmitTxResult
-      return result
+      )
+      return result.data
     } catch (error: unknown) {
       let errorMessage: string
 
