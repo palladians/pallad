@@ -19,6 +19,7 @@ jobs:
           - 5432:5432
           - 8080:8080
           - 8181:8181
+          - 8282:8282
         volumes:
           - /tmp:/root/logs
 
@@ -70,7 +71,6 @@ jobs:
           PUBLIC_KEY: ${{ env.PUBLIC_KEY }}
           NODE_URL: http://localhost:8080/graphql
         run: |
-          cd packages/mina-graphql
           curl -X POST -H "Content-Type: application/json" \
               --data '{ 
                 "query": "query accountBalance($publicKey: PublicKey!) { account(publicKey: $publicKey) { balance { total }, nonce, inferredNonce, delegate, publicKey } }",
@@ -81,15 +81,14 @@ jobs:
       - name: Fetch Transactions and Set Environment Variables
         env:
           PUBLIC_KEY: ${{ env.PUBLIC_KEY }}
-          NODE_URL: http://localhost:8282/graphql
+          ARCHIVE_NODE_URL: http://localhost:8282/graphql
         run: |
-            cd packages/mina-graphql
             RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" \
                 --data '{ 
                   "query": "query Transactions($address: String!, $limit: Int) { transactions(query: { canonical: true, OR: [{ to: $address }, { from: $address }] } limit: $limit sortBy: DATETIME_DESC) { amount to token kind isDelegation hash from fee failureReason dateTime blockHeight } }",
                   "variables": { "address": "'"${PUBLIC_KEY}"'", "limit": 1 }
                 }' \
-                $NODE_URL)
+                $ARCHIVE_NODE_URL)
         
             TX_HASH=$(echo $RESPONSE | jq -r '.data.transactions[0].hash')
             TX_ID=$(echo $RESPONSE | jq -r '.data.transactions[0].blockHeight')
