@@ -6,14 +6,9 @@ import {
   TxSubmitProvider
 } from '@palladxyz/mina-core'
 import { gql, GraphQLClient } from 'graphql-request'
+import { gql, GraphQLClient } from 'graphql-request'
 
-import {
-  customFetch,
-  defaultJsonSerializer,
-  ErrorPolicy,
-  ExtendedError,
-  ServerError
-} from '../utils'
+import { customFetch, defaultJsonSerializer, ErrorPolicy } from '../utils'
 import { getStakeTxSend, getTxSend } from './mutations'
 import { healthCheckQuery } from './queries'
 
@@ -32,33 +27,15 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
     })
   }
 
-  private handleError(error: unknown): void {
-    console.error('Error in ChainHistoryGraphQLProvider:', error)
-
-    if (error instanceof Error && 'text' in error) {
-      const errorText = (error as any).text as string | undefined
-      if (errorText) {
-        let statusCode = 0
-        if (errorText.includes('503')) {
-          statusCode = 503
-        } else if (errorText.includes('500')) {
-          statusCode = 500
-        }
-
-        if (statusCode > 0) {
-          throw new ServerError(error as ExtendedError, statusCode, errorText)
-        }
-      }
-    }
-
-    throw new Error('Error processing GraphQL request')
-  }
-
   public async destroy(): Promise<void> {
     console.log('Destroying TxSubmitGraphQLProvider...')
   }
 
   async changeNetwork(minaGql: string): Promise<void> {
+    this.graphqlClient = new GraphQLClient(
+      minaGql,
+      this.graphqlClient.requestConfig
+    )
     this.graphqlClient = new GraphQLClient(
       minaGql,
       this.graphqlClient.requestConfig
@@ -73,7 +50,10 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
     try {
       const data =
         await this.graphqlClient.rawRequest<HealthCheckResponseData>(query)
+      const data =
+        await this.graphqlClient.rawRequest<HealthCheckResponseData>(query)
 
+      if (data && data.data.__schema && data.data.__schema.types.length > 0) {
       if (data && data.data.__schema && data.data.__schema.types.length > 0) {
         return { ok: true }
       } else {
@@ -106,6 +86,7 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
     }
 
     try {
+      const result = await this.graphqlClient.rawRequest<SubmitTxResult>(
       const result = await this.graphqlClient.rawRequest<SubmitTxResult>(
         mutation,
         variables
