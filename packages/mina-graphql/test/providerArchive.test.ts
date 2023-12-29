@@ -44,8 +44,13 @@ describe('Provider', () => {
       addresses: [address],
       pagination: { startAt: 0, limit: 10 }
     }
+    console.log('providerArchive test transactionsByAddresses args:', args)
 
     const response = await providerArchive.getTransactions(args)
+    console.log(
+      'providerArchive test transactionsByAddresses response:',
+      response
+    )
 
     expect(response.pageResults.length).toBeGreaterThan(0)
 
@@ -70,7 +75,9 @@ describe('Provider', () => {
         txHash as TransactionId
       ]
     }
+    console.log('providerArchive test transactionsByIds args:', args)
     const response = await providerArchive.getTransaction(args)
+    console.log('providerArchive test transactionsByIds response:', response)
 
     expect(response.length).toBeGreaterThan(0)
     expect(response[0]).toEqual(expectedTransaction)
