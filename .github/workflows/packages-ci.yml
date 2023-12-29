@@ -91,7 +91,7 @@ jobs:
                 $ARCHIVE_NODE_URL)
         
             TX_HASH=$(echo $RESPONSE | jq -r '.data.transactions[0].hash')
-            TX_ID=$(echo $RESPONSE | jq -r '.data.transactions[0].blockHeight')
+            TX_ID=$(echo $RESPONSE | jq -r '.data.transactions[0].id')
             TRANSACTION=$(echo $RESPONSE | jq -c '.data.transactions[0]')
 
             echo "TX_HASH=${TX_HASH}" >> $GITHUB_ENV
