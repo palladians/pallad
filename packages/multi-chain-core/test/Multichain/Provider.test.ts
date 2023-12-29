@@ -17,7 +17,7 @@ describe('MultiChainProvider', () => {
 
   it('should create a mina provider and query the network', async () => {
     const accountInfo = await provider.getAccountInfo({
-      publicKey: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+      publicKey: 'B62qs2mR2g7LB27P36MhxN5jnsnjS8t6azttZfCnAToVpCmTtRVT2nt'
     })
 
     expect(accountInfo).toBeDefined()
