@@ -6,15 +6,8 @@ import {
   TxStatusProvider
 } from '@palladxyz/mina-core'
 import { gql, GraphQLClient } from 'graphql-request'
-import { gql, GraphQLClient } from 'graphql-request'
 
-import {
-  customFetch,
-  defaultJsonSerializer,
-  ErrorPolicy,
-  ExtendedError,
-  ServerError
-} from '../utils'
+import { customFetch, defaultJsonSerializer, ErrorPolicy } from '../utils'
 import { healthCheckQuery, transactionStatus } from './queries'
 
 export class TxStatusGraphQLProvider implements TxStatusProvider {
@@ -30,28 +23,6 @@ export class TxStatusGraphQLProvider implements TxStatusProvider {
       jsonSerializer: defaultJsonSerializer,
       fetch: fetch || customFetch
     })
-  }
-
-  private handleError(error: unknown): void {
-    console.error('Error in ChainHistoryGraphQLProvider:', error)
-
-    if (error instanceof Error && 'text' in error) {
-      const errorText = (error as any).text as string | undefined
-      if (errorText) {
-        let statusCode = 0
-        if (errorText.includes('503')) {
-          statusCode = 503
-        } else if (errorText.includes('500')) {
-          statusCode = 500
-        }
-
-        if (statusCode > 0) {
-          throw new ServerError(error as ExtendedError, statusCode, errorText)
-        }
-      }
-    }
-
-    throw new Error('Error processing GraphQL request')
   }
 
   public async destroy(): Promise<void> {
