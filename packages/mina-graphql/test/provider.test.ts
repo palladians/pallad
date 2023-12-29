@@ -51,8 +51,9 @@ describe('Provider', () => {
     const args: TxStatusArgs = {
       ID: txId
     }
-
+    console.log('provider.test.ts getTransactionStatus args:', args)
     const response = await provider.getTransactionStatus(args)
+    console.log('provider.test.ts getTransactionStatus response:', response)
 
     expect(response).toBeDefined()
   })
