@@ -28,7 +28,6 @@
     "json-bigint": "^1.0.0",
     "mina-signer": "^2.1.1",
     "subscriptions-transport-ws": "^0.11.0",
-    "superjson": "^2.2.1",
     "ws": "^8.15.1"
   },
   "devDependencies": {
