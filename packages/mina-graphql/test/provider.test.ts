@@ -2,8 +2,15 @@ import { AccountInfoArgs, TxStatusArgs } from '@palladxyz/mina-core'
 
 import { MinaProvider } from '../src'
 
-const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
-const nodeUrlMainnet = 'https://proxy.minaexplorer.com/graphql'
+const nodeUrl =
+  process.env['NODE_URL'] || 'https://proxy.devnet.minaexplorer.com/'
+const address =
+  process.env['PUBLIC_KEY'] ||
+  'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
+const txId =
+  process.env['TX_ID'] ||
+  '3XpDTU4nx8aYjtRooxkf6eqLSVdzhEE4EEDQFTGkRYZZ9uRebxCTPYfC3731PKq5zK8nAqwQE7TUtGGveMGNhBhDrycFvnXEcWA6gtStmu4h9iiXG3CkFapgu9AZAKetNVjsx5ekVyRU8W5RHkBA9r5ntL36ddtodk9SCymkZ2qLhCGjpCaxuqih3kqWq3aVFwbNL5eQVrdgnYwZwuTTBdAVnYuqxkYKEKZuGGL12eZGBdnD1W9DMicXCkryzJx4dXJRas6ZrZGFEC8mTvtHZJ6ResVANXPfWuWKQu1xr8SPecfTuyKBC1VdeUqghpuHeznjTwdpNH6KBjvYkCzAuuaDrL8XgFHNC8Ka7bLBe9UXzemmtBxzQQs9uL3dZunhPudKn5aR42a4Z9rqtHC'
+console.log('Using node url:', nodeUrl)
 
 describe('Provider', () => {
   let provider: MinaProvider
@@ -12,7 +19,7 @@ describe('Provider', () => {
   })
   test('getAccountInfo', async () => {
     const args: AccountInfoArgs = {
-      publicKey: 'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
+      publicKey: address
     }
 
     const response = await provider.getAccountInfo(args)
@@ -24,11 +31,12 @@ describe('Provider', () => {
     expect(response.delegate).toBeDefined()
     expect(response.publicKey).toBeDefined()
   })
-  test.skip('getAccountInfo (mainnet)', async () => {
+  test.skip('getAccountInfo for an account that does not exist in the ledger', async () => {
     const args: AccountInfoArgs = {
-      publicKey: 'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq' // this must be a public key that doesn't exist yet on mainnet
+      // replace with random public key
+      publicKey: 'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq' // this must be a public key that doesn't exist yet on the network
     }
-    const mainnetProvider = new MinaProvider(nodeUrlMainnet)
+    const mainnetProvider = new MinaProvider(nodeUrl)
     const response = await mainnetProvider.getAccountInfo(args)
     console.log('Response:', response)
 
@@ -41,10 +49,11 @@ describe('Provider', () => {
   })
   test('getTransactionStatus', async () => {
     const args: TxStatusArgs = {
-      ID: '3XpDTU4nx8aYjtRooxkf6eqLSVdzhEE4EEDQFTGkRYZZ9uRebxCTPYfC3731PKq5zK8nAqwQE7TUtGGveMGNhBhDrycFvnXEcWA6gtStmu4h9iiXG3CkFapgu9AZAKetNVjsx5ekVyRU8W5RHkBA9r5ntL36ddtodk9SCymkZ2qLhCGjpCaxuqih3kqWq3aVFwbNL5eQVrdgnYwZwuTTBdAVnYuqxkYKEKZuGGL12eZGBdnD1W9DMicXCkryzJx4dXJRas6ZrZGFEC8mTvtHZJ6ResVANXPfWuWKQu1xr8SPecfTuyKBC1VdeUqghpuHeznjTwdpNH6KBjvYkCzAuuaDrL8XgFHNC8Ka7bLBe9UXzemmtBxzQQs9uL3dZunhPudKn5aR42a4Z9rqtHC'
+      ID: txId
     }
-
+    console.log('provider.test.ts getTransactionStatus args:', args)
     const response = await provider.getTransactionStatus(args)
+    console.log('provider.test.ts getTransactionStatus response:', response)
 
     expect(response).toBeDefined()
   })

@@ -5,24 +5,35 @@ import {
   TxStatusArgs,
   TxStatusProvider
 } from '@palladxyz/mina-core'
-import { gql, request } from 'graphql-request'
+import { gql, GraphQLClient } from 'graphql-request'
 
+import { customFetch, defaultJsonSerializer, ErrorPolicy } from '../utils'
 import { healthCheckQuery, transactionStatus } from './queries'
 
 export class TxStatusGraphQLProvider implements TxStatusProvider {
-  private minaGql: string | null
+  private graphqlClient: GraphQLClient
 
-  constructor(minaGql: string) {
-    this.minaGql = minaGql
+  constructor(
+    minaGql: string,
+    errorPolicy: ErrorPolicy = 'ignore',
+    fetch?: typeof customFetch
+  ) {
+    this.graphqlClient = new GraphQLClient(minaGql, {
+      errorPolicy: errorPolicy,
+      jsonSerializer: defaultJsonSerializer,
+      fetch: fetch || customFetch
+    })
   }
 
   public async destroy(): Promise<void> {
     console.log('Destroying TxStatusGraphQLProvider...')
-    this.minaGql = null
   }
 
   async changeNetwork(minaGql: string): Promise<void> {
-    this.minaGql = minaGql
+    this.graphqlClient = new GraphQLClient(
+      minaGql,
+      this.graphqlClient.requestConfig
+    )
   }
   async healthCheck(): Promise<HealthCheckResponse> {
     const query = gql`
@@ -30,12 +41,10 @@ export class TxStatusGraphQLProvider implements TxStatusProvider {
     `
 
     try {
-      const data = (await request(
-        this.minaGql as string,
-        query
-      )) as HealthCheckResponseData
+      const data =
+        await this.graphqlClient.rawRequest<HealthCheckResponseData>(query)
 
-      if (data && data.__schema && data.__schema.types.length > 0) {
+      if (data && data.data.__schema && data.data.__schema.types.length > 0) {
         return { ok: true }
       } else {
         return { ok: false, message: 'Invalid schema response' }
@@ -62,19 +71,15 @@ export class TxStatusGraphQLProvider implements TxStatusProvider {
     }
 
     try {
-      const data = (await request(
-        this.minaGql as string,
-        query,
-        variables
-      )) as {
-        transactionStatus: 'PENDING' | 'INCLUDED' | 'UNKNOWN' | 'FAILED'
-      }
+      const data = await this.graphqlClient.rawRequest<{
+        transactionStatus: TxStatus
+      }>(query, variables)
 
-      if (!data || !data.transactionStatus) {
+      if (!data || !data.data.transactionStatus) {
         throw new Error('Invalid transaction status response')
       }
 
-      return data.transactionStatus as TxStatus
+      return data.data.transactionStatus as TxStatus
     } catch (error: unknown) {
       let errorMessage: string
 

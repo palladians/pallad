@@ -1,5 +1,7 @@
 import { AccountInfoArgs, TxStatusArgs } from '@palladxyz/mina-core'
 import {
+  Transaction,
+  TransactionId,
   TransactionsByAddressesArgs,
   TransactionsByIdsArgs,
   UnifiedMinaProviderConfig
@@ -7,8 +9,37 @@ import {
 
 import { UnifiedMinaProvider } from '../src'
 
-const nodeUrl = 'https://proxy.devnet.minaexplorer.com/'
-const archiveUrl = 'https://devnet.graphql.minaexplorer.com'
+const nodeUrl =
+  process.env['NODE_URL'] || 'https://proxy.devnet.minaexplorer.com/'
+const archiveUrl =
+  process.env['ARCHIVE_NODE_URL'] || 'https://devnet.graphql.minaexplorer.com'
+const address =
+  process.env['PUBLIC_KEY'] ||
+  'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
+const txHash =
+  process.env['TX_HASH'] ||
+  'CkpZwt2TjukbsTkGi72vB2acPtZsNFF8shMm4A9cR1eaRQFWfMwUJ'
+const txId =
+  process.env['TX_ID'] ||
+  '3XpDTU4nx8aYjtRooxkf6eqLSVdzhEE4EEDQFTGkRYZZ9uRebxCTPYfC3731PKq5zK8nAqwQE7TUtGGveMGNhBhDrycFvnXEcWA6gtStmu4h9iiXG3CkFapgu9AZAKetNVjsx5ekVyRU8W5RHkBA9r5ntL36ddtodk9SCymkZ2qLhCGjpCaxuqih3kqWq3aVFwbNL5eQVrdgnYwZwuTTBdAVnYuqxkYKEKZuGGL12eZGBdnD1W9DMicXCkryzJx4dXJRas6ZrZGFEC8mTvtHZJ6ResVANXPfWuWKQu1xr8SPecfTuyKBC1VdeUqghpuHeznjTwdpNH6KBjvYkCzAuuaDrL8XgFHNC8Ka7bLBe9UXzemmtBxzQQs9uL3dZunhPudKn5aR42a4Z9rqtHC'
+const transaction: Transaction = {
+  amount: 50000000000,
+  blockHeight: 204824,
+  dateTime: '2023-06-26T09:12:00Z',
+  failureReason: null,
+  fee: 10000000,
+  from: 'B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69e',
+  hash: 'CkpZwt2TjukbsTkGi72vB2acPtZsNFF8shMm4A9cR1eaRQFWfMwUJ',
+  id: '3XpDTU4nx8aYjtRooxkf6eqLSVdzhEE4EEDQFTGkRYZZ9uRebxCTPYfC3731PKq5zK8nAqwQE7TUtGGveMGNhBhDrycFvnXEcWA6gtStmu4h9iiXG3CkFapgu9AZAKetNVjsx5ekVyRU8W5RHkBA9r5ntL36ddtodk9SCymkZ2qLhCGjpCaxuqih3kqWq3aVFwbNL5eQVrdgnYwZwuTTBdAVnYuqxkYKEKZuGGL12eZGBdnD1W9DMicXCkryzJx4dXJRas6ZrZGFEC8mTvtHZJ6ResVANXPfWuWKQu1xr8SPecfTuyKBC1VdeUqghpuHeznjTwdpNH6KBjvYkCzAuuaDrL8XgFHNC8Ka7bLBe9UXzemmtBxzQQs9uL3dZunhPudKn5aR42a4Z9rqtHC',
+  isDelegation: false,
+  kind: 'PAYMENT',
+  memo: 'E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH',
+  nonce: 2016,
+  to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+  token: 1
+}
+const expectedTransaction = process.env['TRANSACTION'] || transaction
+console.log('Using archive node url:', nodeUrl)
 
 describe('Provider', () => {
   let provider: UnifiedMinaProvider
@@ -21,7 +52,7 @@ describe('Provider', () => {
   })
   test('getAccountInfo', async () => {
     const args: AccountInfoArgs = {
-      publicKey: 'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
+      publicKey: address
     }
 
     const response = await provider.getAccountInfo(args)
@@ -35,7 +66,7 @@ describe('Provider', () => {
   })
   test('getTransactionStatus', async () => {
     const args: TxStatusArgs = {
-      ID: '3XpDTU4nx8aYjtRooxkf6eqLSVdzhEE4EEDQFTGkRYZZ9uRebxCTPYfC3731PKq5zK8nAqwQE7TUtGGveMGNhBhDrycFvnXEcWA6gtStmu4h9iiXG3CkFapgu9AZAKetNVjsx5ekVyRU8W5RHkBA9r5ntL36ddtodk9SCymkZ2qLhCGjpCaxuqih3kqWq3aVFwbNL5eQVrdgnYwZwuTTBdAVnYuqxkYKEKZuGGL12eZGBdnD1W9DMicXCkryzJx4dXJRas6ZrZGFEC8mTvtHZJ6ResVANXPfWuWKQu1xr8SPecfTuyKBC1VdeUqghpuHeznjTwdpNH6KBjvYkCzAuuaDrL8XgFHNC8Ka7bLBe9UXzemmtBxzQQs9uL3dZunhPudKn5aR42a4Z9rqtHC'
+      ID: txId
     }
 
     const response = await provider.getTransactionStatus(args)
@@ -44,7 +75,7 @@ describe('Provider', () => {
   })
   test('getTransactions', async () => {
     const args: TransactionsByAddressesArgs = {
-      addresses: ['B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'],
+      addresses: [address],
       pagination: { startAt: 0, limit: 10 }
     }
 
@@ -68,29 +99,11 @@ describe('Provider', () => {
   })
   test('getTransaction', async () => {
     const args: TransactionsByIdsArgs = {
-      ids: [
-        'CkpZwt2TjukbsTkGi72vB2acPtZsNFF8shMm4A9cR1eaRQFWfMwUJ' as TransactionId
-      ]
+      ids: [txHash as TransactionId]
     }
     const response = await provider.getTransaction(args)
 
     expect(response.length).toBeGreaterThan(0)
-    const expectedTransaction: Transaction = {
-      amount: 50000000000,
-      blockHeight: 204824,
-      dateTime: '2023-06-26T09:12:00Z',
-      failureReason: null,
-      fee: 10000000,
-      from: 'B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69e',
-      hash: 'CkpZwt2TjukbsTkGi72vB2acPtZsNFF8shMm4A9cR1eaRQFWfMwUJ',
-      id: '3XpDTU4nx8aYjtRooxkf6eqLSVdzhEE4EEDQFTGkRYZZ9uRebxCTPYfC3731PKq5zK8nAqwQE7TUtGGveMGNhBhDrycFvnXEcWA6gtStmu4h9iiXG3CkFapgu9AZAKetNVjsx5ekVyRU8W5RHkBA9r5ntL36ddtodk9SCymkZ2qLhCGjpCaxuqih3kqWq3aVFwbNL5eQVrdgnYwZwuTTBdAVnYuqxkYKEKZuGGL12eZGBdnD1W9DMicXCkryzJx4dXJRas6ZrZGFEC8mTvtHZJ6ResVANXPfWuWKQu1xr8SPecfTuyKBC1VdeUqghpuHeznjTwdpNH6KBjvYkCzAuuaDrL8XgFHNC8Ka7bLBe9UXzemmtBxzQQs9uL3dZunhPudKn5aR42a4Z9rqtHC',
-      isDelegation: false,
-      kind: 'PAYMENT',
-      memo: 'E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH',
-      nonce: 2016,
-      to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      token: 1
-    }
     expect(response[0]).toEqual(expectedTransaction)
   })
 })
