@@ -1,9 +1,3 @@
-export interface JsonSerializer {
-  stringify: (obj: any) => string
-  parse: (obj: string) => unknown
-}
+import JSONbig from 'json-bigint'
 
-export const defaultJsonSerializer: JsonSerializer = {
-  stringify: JSON.stringify,
-  parse: JSON.parse
-}
+export const defaultJsonSerializer = JSONbig({ useNativeBigInt: true })

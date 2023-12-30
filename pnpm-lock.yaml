@@ -593,12 +593,18 @@ importers:
       graphql-request:
         specifier: ^6.1.0
         version: 6.1.0(graphql@16.8.1)
+      json-bigint:
+        specifier: ^1.0.0
+        version: 1.0.0
       mina-signer:
         specifier: ^2.1.1
         version: 2.1.1
       subscriptions-transport-ws:
         specifier: ^0.11.0
         version: 0.11.0(graphql@16.8.1)
+      superjson:
+        specifier: ^2.2.1
+        version: 2.2.1
       ws:
         specifier: ^8.15.1
         version: 8.16.0
@@ -6513,6 +6519,10 @@ packages:
     engines: {node: '>=0.6'}
     dev: true
 
+  /bignumber.js@9.1.2:
+    resolution: {integrity: sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==}
+    dev: false
+
   /binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
@@ -10463,6 +10473,12 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
     dev: true
+
+  /json-bigint@1.0.0:
+    resolution: {integrity: sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==}
+    dependencies:
+      bignumber.js: 9.1.2
+    dev: false
 
   /json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
