@@ -1,3 +1,5 @@
+import { TransactionRequest } from 'ethers'
+
 import { ChainPublicKey, ChainSpecificPayload, Network } from '../../types'
 import { deriveEthereumPublicAddress } from './credentialDerivation'
 import { deriveEthereumPrivateKey } from './keyDerivation'
@@ -13,6 +15,9 @@ export type EthereumSpecificArgs = {
   accountIndex: number
   addressIndex: number
 }
+
+export type EthereumSignablePayload = TransactionRequest | string | Uint8Array
+export type EthereumSignatureResult = string
 
 export type EthereumGroupedCredentials = {
   '@context': ['https://w3id.org/wallet/v1']
@@ -37,7 +42,7 @@ export class EthereumPayload implements ChainSpecificPayload {
   async derivePrivateKey(
     decryptedSeedBytes: Uint8Array,
     args: EthereumSpecificArgs
-  ): Promise<Uint8Array> {
+  ): Promise<string> {
     return deriveEthereumPrivateKey(args, decryptedSeedBytes)
   }
 }

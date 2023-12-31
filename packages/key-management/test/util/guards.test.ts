@@ -6,7 +6,7 @@ import {
   isFields,
   isMessageBody,
   isZkAppTransaction
-} from '../../src/util'
+} from '../../src/chains/Mina/guards'
 import { constructTransaction } from '../../src/util/Transactions/buildMinaTx'
 
 describe('Guard functions tests', () => {

@@ -1,7 +1,7 @@
 import Client from 'mina-signer'
 
 import * as errors from '../../errors'
-import * as util from '../../util'
+import * as util from './guards'
 import {
   MinaSignablePayload,
   MinaSignatureResult,
