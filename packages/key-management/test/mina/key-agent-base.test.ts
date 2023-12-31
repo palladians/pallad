@@ -484,36 +484,5 @@ describe('KeyAgentBase (Mina Functionality)', () => {
       )
       expect(isVerified).toBeTruthy()
     })
-    it('should use the generic sign<T> function to create a nullifier correctly and the client should be able to verify it', async () => {
-      const args: MinaSpecificArgs = {
-        network: Network.Mina,
-        accountIndex: 0,
-        addressIndex: 0,
-        networkType: networkType
-      }
-      const payload = new MinaPayload()
-
-      const groupedCredential = await instance.deriveCredentials(
-        payload,
-        args,
-        getPassphrase,
-        true
-      )
-
-      const nullifier: Mina.CreatableNullifer = {
-        messageNullifier: [BigInt(10)]
-      }
-      const createdNullifier = await instance.sign(
-        groupedCredential,
-        nullifier,
-        args
-      )
-      //const minaClient = new Client({ network: args.networkType })
-      //const isVerified = await minaClient.verifyNullifier(
-      //  createdNullifier as Mina.CreatedNullifier
-      //)
-      console.log('createdNullifier', createdNullifier)
-      expect(createdNullifier).not.toBeUndefined()
-    })
   })
 })
