@@ -3,16 +3,15 @@ import * as bip32 from '@scure/bip32'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
-import { EthereumPayload, EthereumSpecificArgs } from '../src/chains/Ethereum'
-import { MinaPayload, MinaSpecificArgs } from '../src/chains/Mina'
+import { MinaPayload, MinaSpecificArgs } from '../../src/chains/Mina'
 //import { emip3encrypt } from '../src/emip3'
 import {
   FromBip39MnemonicWordsProps,
   //getPassphraseRethrowTypedError,
   InMemoryKeyAgent
-} from '../src/InMemoryKeyAgent'
-import { Network } from '../src/types'
-import * as bip39 from '../src/util/bip39'
+} from '../../src/InMemoryKeyAgent'
+import { Network } from '../../src/types'
+import * as bip39 from '../../src/util/bip39'
 
 // Create a sandbox for managing and restoring stubs
 const sandbox = sinon.createSandbox()
@@ -23,7 +22,7 @@ const params = {
 }
 const getPassphrase = async () => Buffer.from(params.passphrase)
 
-describe('InMemoryKeyAgent', () => {
+describe('Mina InMemoryKeyAgent', () => {
   let agent: InMemoryKeyAgent
   let rootKeyBytes: Uint8Array
   let mnemonic: string[]
@@ -127,66 +126,6 @@ describe('InMemoryKeyAgent', () => {
       expect(
         agent.serializableData.credentialSubject.contents[0]?.address
       ).to.deep.equal(expectedGroupedCredentials.address)
-    })
-    it('should restore an agent that has Mina credentials at initialisation and derives Ethereum credentials', async () => {
-      const expectedPublicKey: Mina.PublicKey =
-        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
-
-      const expectedGroupedCredentials = {
-        '@context': ['https://w3id.org/wallet/v1'],
-        id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-        type: 'MinaAddress',
-        controller:
-          'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-        name: 'Mina Account',
-        description: 'My Mina account.',
-        chain: Network.Mina,
-        accountIndex: 0,
-        addressIndex: 0,
-        address: expectedPublicKey
-      }
-
-      const args: MinaSpecificArgs = {
-        network: Network.Mina,
-        accountIndex: 0,
-        addressIndex: 0,
-        networkType: networkType
-      }
-      const payload = new MinaPayload()
-
-      await agent.restoreKeyAgent(payload, args, getPassphrase)
-      expect(agent).to.be.instanceOf(InMemoryKeyAgent)
-      expect(
-        agent.serializableData.credentialSubject.contents[0]?.address
-      ).to.deep.equal(expectedGroupedCredentials.address)
-
-      // Define a mocked publicKey, which should be expected from the derivation
-      const expectedEthPublicAddress =
-        '0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9'
-      const expectedEthGroupedCredentials = {
-        '@context': ['https://w3id.org/wallet/v1'],
-        id: 'did:ethr:0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9',
-        type: 'EthereumAddress',
-        controller: 'did:ethr:0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9',
-        name: 'Ethereum Account',
-        description: 'My Ethereum account.',
-        chain: Network.Ethereum,
-        accountIndex: 0,
-        addressIndex: 0,
-        address: expectedEthPublicAddress
-      }
-
-      const ethArgs: EthereumSpecificArgs = {
-        network: Network.Ethereum,
-        accountIndex: 0,
-        addressIndex: 0
-      }
-      const ethPayload = new EthereumPayload()
-
-      await agent.deriveCredentials(ethPayload, ethArgs, getPassphrase, false)
-      expect(
-        agent.serializableData.credentialSubject.contents[1]?.address.toLowerCase()
-      ).to.deep.equal(expectedEthGroupedCredentials.address.toLowerCase())
     })
   })
 })

@@ -1,11 +1,32 @@
-import { Address, bytesToHex, privateToPublic } from '@ethereumjs/util' // need to replace with noble hashes
+import { bytesToHex } from '@noble/hashes/utils'
+import * as secp256k1 from '@noble/secp256k1'
+import { Address } from 'micro-eth-signer'
 
 import { EthereumGroupedCredentials, EthereumSpecificArgs } from './types'
 
 export async function deriveEthereumPublicAddress(
   privateKey: Uint8Array
 ): Promise<string> {
-  return Address.fromPrivateKey(privateKey).toString()
+  return Address.fromPrivateKey(privateKey)
+}
+
+/**
+ * Throws if input is not a buffer
+ * @param {Buffer} input value to check
+ */
+export const assertIsBytes = function (input: Uint8Array): void {
+  if (!(input instanceof Uint8Array)) {
+    const msg = `This method only supports Uint8Array but input was: ${input}`
+    throw new Error(msg)
+  }
+}
+
+export const privateToPublic = function (privateKey: Uint8Array): Uint8Array {
+  assertIsBytes(privateKey)
+  // skip the type flag and use the X, Y points
+  return secp256k1.ProjectivePoint.fromPrivateKey(privateKey)
+    .toRawBytes(false)
+    .slice(1)
 }
 
 export function deriveEthereumPublicKey(privateKey: Uint8Array): string {

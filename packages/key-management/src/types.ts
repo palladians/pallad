@@ -6,6 +6,7 @@ import {
 } from './chains/Ethereum/credentialDerivation'
 import {
   EthereumGroupedCredentials,
+  EthereumSignatureResult,
   EthereumSpecificArgs
 } from './chains/Ethereum/types'
 import {
@@ -160,7 +161,7 @@ export interface ChainSpecificPayload {
 
 export type ChainPublicKey = Mina.PublicKey | string
 
-export type ChainSignatureResult = MinaSignatureResult
+export type ChainSignatureResult = MinaSignatureResult | EthereumSignatureResult
 
 export type ChainPrivateKey = string | Uint8Array
 

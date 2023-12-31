@@ -1,5 +1,6 @@
 import { HDKey } from '@scure/bip32'
 
+import { EthereumSignablePayload, EthereumSigningOperations } from './chains'
 import { MinaSignablePayload, MinaSpecificArgs } from './chains/Mina'
 import { MinaSigningOperations } from './chains/Mina/signingOperations'
 import { emip3encrypt } from './emip3'
@@ -150,6 +151,11 @@ export abstract class KeyAgentBase implements KeyAgent {
         return MinaSigningOperations(
           signable as MinaSignablePayload,
           args as MinaSpecificArgs,
+          privateKey as string
+        )
+      } else if (args.network === 'Ethereum') {
+        return EthereumSigningOperations(
+          signable as EthereumSignablePayload,
           privateKey as string
         )
       } else {
