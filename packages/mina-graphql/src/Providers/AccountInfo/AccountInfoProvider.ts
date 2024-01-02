@@ -6,7 +6,13 @@ import {
 } from '@palladxyz/mina-core'
 import { gql, GraphQLClient } from 'graphql-request'
 
-import { customFetch, defaultJsonSerializer, ErrorPolicy } from '../utils'
+import {
+  customFetch,
+  defaultJsonSerializer,
+  ErrorPolicy,
+  ExtendedError,
+  ServerError
+} from '../utils'
 import { getAccountBalance, healthCheckQuery } from './queries'
 
 export interface AccountData {
@@ -122,7 +128,25 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
       console.log('Received response for account info:', data)
       return data.data.account
     } catch (error) {
-      console.error('Error in getAccountInfo:', error)
+      const errorText = (error as any).text as string | undefined
+      if (errorText) {
+        let statusCode = 0
+        if (errorText.includes('503')) {
+          statusCode = 503
+        } else if (errorText.includes('500')) {
+          statusCode = 500
+        }
+
+        if (statusCode > 0) {
+          throw new ServerError(
+            error as unknown as ExtendedError,
+            statusCode,
+            errorText
+          )
+        }
+      }
+
+      // Other error handling or rethrow
       throw new Error('Error fetching account info')
     }
   }
