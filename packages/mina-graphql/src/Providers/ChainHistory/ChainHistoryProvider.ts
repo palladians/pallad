@@ -8,7 +8,13 @@ import {
 } from '@palladxyz/mina-core'
 import { gql, GraphQLClient } from 'graphql-request'
 
-import { customFetch, defaultJsonSerializer, ErrorPolicy } from '../utils'
+import {
+  customFetch,
+  defaultJsonSerializer,
+  ErrorPolicy,
+  ExtendedError,
+  ServerError
+} from '../utils'
 import {
   healthCheckQuery,
   transactionsByAddressesQuery,
@@ -38,6 +44,28 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
     })
   }
 
+  private handleError(error: unknown): void {
+    console.error('Error in ChainHistoryGraphQLProvider:', error)
+
+    if (error instanceof Error && 'text' in error) {
+      const errorText = (error as any).text as string | undefined
+      if (errorText) {
+        let statusCode = 0
+        if (errorText.includes('503')) {
+          statusCode = 503
+        } else if (errorText.includes('500')) {
+          statusCode = 500
+        }
+
+        if (statusCode > 0) {
+          throw new ServerError(error as ExtendedError, statusCode, errorText)
+        }
+      }
+    }
+
+    throw new Error('Error processing GraphQL request')
+  }
+
   public async destroy(): Promise<void> {
     console.log('Destroying ChainHistoryGraphQLProvider...')
   }
@@ -55,10 +83,6 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
     `
 
     try {
-      /*const data = (await request(
-        this.minaGql as string,
-        query
-      )) as HealthCheckResponseData*/
       const data =
         await this.graphqlClient.rawRequest<HealthCheckResponseData>(query)
 
@@ -68,15 +92,8 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
         return { ok: false, message: 'Invalid schema response' }
       }
     } catch (error: unknown) {
-      let errorMessage: string
-
-      if (error instanceof Error) {
-        errorMessage = error.message
-      } else {
-        errorMessage = 'Unknown error'
-      }
-
-      return { ok: false, message: errorMessage }
+      this.handleError(error)
+      return { ok: false, message: 'Error occurred' }
     }
   }
 
@@ -119,11 +136,6 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
       ${transactionsByHashesQuery}
     `
 
-    /*const transactions = await Promise.all(
-      args.ids.map(async (id: string) => {
-        const data = (await request(this.minaGql as string, query, {
-          hash: id
-        })) as TransactionData*/
     const transactions = await Promise.all(
       args.ids.map(async (id: string) => {
         const data = await this.graphqlClient.rawRequest<TransactionData>(

@@ -1,5 +1,7 @@
 //import { AccountInfoArgs } from '@palladxyz/mina-core'
 
+import { AccountInfoArgs } from '@palladxyz/mina-core'
+
 import { MinaProvider } from '../../src'
 /**
  * This is a test for a local network provider.
@@ -7,6 +9,7 @@ import { MinaProvider } from '../../src'
  * provider urls as a parameter to the test suite's cli command.
  * to run, use:
  *  NODE_URL=https://proxy.devnet.minaexplorer.com/ pnpm test:unit test/local-network-provider/provider.test.ts
+ * or NODE_URL=https://proxy.berkeley.minaexplorer.com/
  */
 
 const nodeUrl = process.env['NODE_URL'] || 'http://localhost:8080/graphql'
@@ -43,7 +46,7 @@ describe('Node Provider', () => {
     //expect(response?.delegate).toBeDefined()
     //expect(response?.publicKey).toBeDefined()
   })
-  /*it('getAccountInfo for account that doesn't exist', async () => {
+  it.skip("getAccountInfo for account that doesn't exist", async () => {
     const args: AccountInfoArgs = {
       // this must be a public key that doesn't exist yet on the network
       publicKey: 'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
@@ -58,7 +61,7 @@ describe('Node Provider', () => {
     expect(response?.inferredNonce).toBe(0)
     expect(response?.delegate).toBe('')
     expect(response?.publicKey).toBe(args.publicKey)
-  })*/
+  })
   // TODO: add test for submitTransaction
   // this should be done with a local network
 })
