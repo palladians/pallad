@@ -12,7 +12,7 @@ export const getSessionPersistence = () =>
     ? webPersistence.sessionPersistence
     : nativePersistence.sessionPersistence
 
-export const getSecurePersistence = () =>
+export const getSecurePersistence = <T>() =>
   VITE_APP_MODE === 'web'
-    ? webPersistence.securePersistence
+    ? webPersistence.getWebSecurePersistence<T>()
     : nativePersistence.securePersistence

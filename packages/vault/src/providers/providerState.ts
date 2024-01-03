@@ -13,9 +13,12 @@ export const initialProviderState: SingleProviderState = {
   provider: undefined
 }
 
-export type ProviderStore = {
+export type ProviderState = {
   providers: Record<NetworkName, SingleProviderState>
   currentNetwork: NetworkName
+}
+
+export type ProviderActions = {
   setCurrentNetwork: (networkName: NetworkName) => void
   getCurrentNetwork: () => NetworkName
   ensureProvider: (
@@ -31,3 +34,5 @@ export type ProviderStore = {
   getAvailableNetworks: () => NetworkName[]
   clear: () => void
 }
+
+export type ProviderStore = ProviderState & ProviderActions

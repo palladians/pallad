@@ -27,8 +27,9 @@ const setVaultSpendingPassword = async () => {
   return secureStorage.setPassword(spendingPassword)
 }
 
-export const securePersistence: PersistStorage<any> = {
-  getItem: async (name): Promise<any | null> => {
+// eslint-disable @typescript-eslint/no-explicit-any
+export const getWebSecurePersistence = <T>(): PersistStorage<T> => ({
+  getItem: async (name) => {
     await setVaultSpendingPassword()
     const value = await secureStorage.get(name)
     return superjson.parse(value)
@@ -41,7 +42,7 @@ export const securePersistence: PersistStorage<any> = {
     await setVaultSpendingPassword()
     await secureStorage.remove(name)
   }
-}
+})
 
 export const localPersistence: StateStorage = {
   getItem: async (name): Promise<string | null> => {

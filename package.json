@@ -8,7 +8,6 @@
     "build": "turbo run build",
     "b": "pnpm build",
     "build:extension": "turbo run build --filter=@palladxyz/extension...",
-    "build:website": "turbo run build --filter=@palladxyz/website...",
     "build:features": "turbo run build --filter=@palladxyz/features...",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
     "dev:extension": "turbowatch extension.turbowatch.ts",

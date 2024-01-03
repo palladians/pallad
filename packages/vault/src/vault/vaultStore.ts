@@ -11,20 +11,26 @@ import { Multichain } from '@palladxyz/multi-chain-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { produce } from 'immer'
 import { create } from 'zustand'
-import { persist, PersistStorage } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 
-import { accountSlice, AccountStore } from '../account'
+import { accountSlice, AccountState, AccountStore } from '../account'
 import {
   credentialSlice,
+  CredentialState,
   CredentialStore,
   SingleCredentialState
 } from '../credentials'
-import { KeyAgents, keyAgentSlice, KeyAgentStore } from '../keyAgent'
+import {
+  KeyAgents,
+  keyAgentSlice,
+  KeyAgentState,
+  KeyAgentStore
+} from '../keyAgent'
 import { AddressError, NetworkError, WalletError } from '../lib/Errors'
 import { NetworkManager } from '../lib/Network'
 import { ProviderManager } from '../lib/Provider'
 import { getRandomAnimalName } from '../lib/utils'
-import { providerSlice, ProviderStore } from '../providers'
+import { providerSlice, ProviderState, ProviderStore } from '../providers'
 import { GlobalVaultState, GlobalVaultStore } from './vaultState'
 
 const NETWORK_CONFIG = {
@@ -345,7 +351,7 @@ export const useVault = create<
           currentAddressIndex: derivedCredential.addressIndex
         })
         ensureAccount(network, derivedCredential.address)
-        getSecurePersistence().setItem('foo', 'bar' as any)
+        getSecurePersistence<string>().setItem('foo', 'bar' as any)
         await _syncWallet(network, derivedCredential)
       },
       restartWallet: () => {
@@ -368,7 +374,14 @@ export const useVault = create<
       storage:
         import.meta.env['VITE_APP_LADLE'] === 'true'
           ? undefined
-          : (getSecurePersistence() as PersistStorage<any>)
+          : // eslint-disable @typescript-eslint/no-explicit-any
+            (getSecurePersistence<
+              AccountState &
+                KeyAgentState &
+                CredentialState &
+                ProviderState &
+                GlobalVaultState
+            >() as any)
     }
   )
 )

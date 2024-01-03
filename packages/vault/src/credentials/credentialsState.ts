@@ -21,7 +21,6 @@ export type SearchValue =
 
 /**
  * Type representing the basic state of a credential.
- * @typedef {Object} SingleCredentialState
  */
 export type SingleCredentialState = {
   credentialName: CredentialName
@@ -31,7 +30,6 @@ export type SingleCredentialState = {
 
 /**
  * Constant representing the initial credential state
- * @typedef {Object}
  */
 export const initialCredentialState: SingleCredentialState = {
   credentialName: '',
@@ -39,11 +37,14 @@ export const initialCredentialState: SingleCredentialState = {
   credential: undefined
 }
 
+export type CredentialState = {
+  credentials: Record<CredentialName, SingleCredentialState>
+}
+
 /**
  * Type representing the store's state and actions combined.
- * @typedef {Object} CredentialsState
  */
-export type CredentialStore = {
+export type CredentialActions = {
   credentials: Record<CredentialName, SingleCredentialState>
   ensureCredential: (
     credentialName: CredentialName,
@@ -57,3 +58,5 @@ export type CredentialStore = {
   searchCredentials(query: SearchQuery, props?: string[]): StoredCredential[]
   clear: () => void
 }
+
+export type CredentialStore = CredentialState & CredentialActions

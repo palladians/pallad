@@ -40,11 +40,11 @@ export const initialKeyAgentState: SingleKeyAgentState = {
  */
 export type InStoreKeyAgents = Record<KeyAgentName, SingleKeyAgentState>
 
-/**
- * Type representing the store's state and actions combined.
- */
-export type KeyAgentStore = {
+export type KeyAgentState = {
   keyAgents: InStoreKeyAgents
+}
+
+export type KeyAgentActions = {
   ensureKeyAgent: (name: KeyAgentName) => void
   initialiseKeyAgent: (
     name: KeyAgentName,
@@ -59,3 +59,8 @@ export type KeyAgentStore = {
   removeKeyAgent: (name: KeyAgentName) => void
   clear: () => void
 }
+
+/**
+ * Type representing the store's state and actions combined.
+ */
+export type KeyAgentStore = KeyAgentState & KeyAgentActions
