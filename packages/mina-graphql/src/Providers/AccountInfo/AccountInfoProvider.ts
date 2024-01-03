@@ -5,45 +5,38 @@ import {
   HealthCheckResponse
 } from '@palladxyz/mina-core'
 import { gql, GraphQLClient } from 'graphql-request'
-import JSONbig from 'json-bigint'
 
+import { customFetch, defaultJsonSerializer, ErrorPolicy } from '../utils'
 import { getAccountBalance, healthCheckQuery } from './queries'
 
 export interface AccountData {
   account: AccountInfo
 }
 
-const customFetch = async (
-  input: RequestInfo | URL,
-  init?: RequestInit
-): Promise<Response> => {
-  const response = await fetch(input, init)
-  const text = await response.text()
-  const parsed = JSONbig.parse(text)
-  return new Response(JSON.stringify(parsed), {
-    status: response.status,
-    statusText: response.statusText,
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      ...response.headers
-    })
-  })
-}
-
 export class AccountInfoGraphQLProvider implements AccountInfoProvider {
-  private minaGql: string | null
+  private graphqlClient: GraphQLClient
 
-  constructor(minaGql: string) {
-    this.minaGql = minaGql
+  constructor(
+    minaGql: string,
+    errorPolicy: ErrorPolicy = 'ignore',
+    fetch?: typeof customFetch
+  ) {
+    this.graphqlClient = new GraphQLClient(minaGql, {
+      errorPolicy: errorPolicy,
+      jsonSerializer: defaultJsonSerializer,
+      fetch: fetch || customFetch
+    })
   }
 
   public async destroy(): Promise<void> {
     console.log('Destroying AccountInfoGraphQLProvider...')
-    this.minaGql = null
   }
 
   async changeNetwork(minaGql: string): Promise<void> {
-    this.minaGql = minaGql
+    this.graphqlClient = new GraphQLClient(
+      minaGql,
+      this.graphqlClient.requestConfig
+    )
   }
 
   async healthCheck(): Promise<HealthCheckResponse> {
@@ -53,14 +46,9 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     `
 
     try {
-      console.log(`Sending GraphQL request to: ${this.minaGql}`)
-      const jsonSerializer = JSONbig({ useNativeBigInt: true })
-      const client = new GraphQLClient(this.minaGql as string, {
-        errorPolicy: 'ignore',
-        jsonSerializer,
-        fetch: customFetch
-      })
-      const rawResponse: any = await client.request(query)
+      // TODO: should this be request or rawRequest?
+      // we can do this when standardising the same health check for all providers
+      const rawResponse: any = await this.graphqlClient.request(query)
 
       // Check for syncStatus directly in the response
       const syncStatus = rawResponse.syncStatus || rawResponse.data?.syncStatus
@@ -95,13 +83,7 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
 
     try {
       console.log('Sending request for account info...')
-      // redundant creation of client, but this is a temporary solution
-      const jsonSerializer = JSONbig({ useNativeBigInt: true })
-      const client = new GraphQLClient(this.minaGql as string, {
-        errorPolicy: 'ignore',
-        jsonSerializer
-      })
-      const data = await client.rawRequest<AccountData>(query, {
+      const data = await this.graphqlClient.rawRequest<AccountData>(query, {
         publicKey: args.publicKey
       })
 

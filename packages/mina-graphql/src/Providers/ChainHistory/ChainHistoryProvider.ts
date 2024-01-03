@@ -6,8 +6,9 @@ import {
   TransactionsByAddressesArgs,
   TransactionsByIdsArgs
 } from '@palladxyz/mina-core'
-import { gql, request } from 'graphql-request'
+import { gql, GraphQLClient } from 'graphql-request'
 
+import { customFetch, defaultJsonSerializer, ErrorPolicy } from '../utils'
 import {
   healthCheckQuery,
   transactionsByAddressesQuery,
@@ -23,19 +24,29 @@ interface TransactionsData {
 }
 
 export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
-  private minaGql: string | null
+  private graphqlClient: GraphQLClient
 
-  constructor(minaGql: string) {
-    this.minaGql = minaGql
+  constructor(
+    minaGql: string,
+    errorPolicy: ErrorPolicy = 'ignore',
+    fetch?: typeof customFetch
+  ) {
+    this.graphqlClient = new GraphQLClient(minaGql, {
+      errorPolicy: errorPolicy,
+      jsonSerializer: defaultJsonSerializer,
+      fetch: fetch || customFetch
+    })
   }
 
   public async destroy(): Promise<void> {
     console.log('Destroying ChainHistoryGraphQLProvider...')
-    this.minaGql = null
   }
 
   async changeNetwork(minaGql: string): Promise<void> {
-    this.minaGql = minaGql
+    this.graphqlClient = new GraphQLClient(
+      minaGql,
+      this.graphqlClient.requestConfig
+    )
   }
 
   async healthCheck(): Promise<HealthCheckResponse> {
@@ -44,12 +55,14 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
     `
 
     try {
-      const data = (await request(
+      /*const data = (await request(
         this.minaGql as string,
         query
-      )) as HealthCheckResponseData
+      )) as HealthCheckResponseData*/
+      const data =
+        await this.graphqlClient.rawRequest<HealthCheckResponseData>(query)
 
-      if (data && data.__schema && data.__schema.types.length > 0) {
+      if (data && data.data.__schema && data.data.__schema.types.length > 0) {
         return { ok: true }
       } else {
         return { ok: false, message: 'Invalid schema response' }
@@ -76,14 +89,19 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
 
     const { startAt, limit } = args.pagination || { startAt: 0, limit: 10 }
 
-    const data = (await request(this.minaGql as string, query, {
+    /*const data = (await request(this.minaGql as string, query, {
       address: args.addresses[0],
       limit,
       offset: startAt
-    })) as TransactionsData
+    })) as TransactionsData*/
+    const data = await this.graphqlClient.rawRequest<TransactionsData>(query, {
+      address: args.addresses[0],
+      limit,
+      offset: startAt
+    })
 
     // Assuming the 'transactions' field in the response contains the array of transactions.
-    const transactions = data.transactions
+    const transactions = data.data.transactions
 
     // May need to fetch the totalResultCount in a separate query if not returned by the server
     const totalResultCount = transactions.length
@@ -101,12 +119,20 @@ export class ChainHistoryGraphQLProvider implements ChainHistoryProvider {
       ${transactionsByHashesQuery}
     `
 
-    const transactions = await Promise.all(
+    /*const transactions = await Promise.all(
       args.ids.map(async (id: string) => {
         const data = (await request(this.minaGql as string, query, {
           hash: id
-        })) as TransactionData
-        return data.transaction
+        })) as TransactionData*/
+    const transactions = await Promise.all(
+      args.ids.map(async (id: string) => {
+        const data = await this.graphqlClient.rawRequest<TransactionData>(
+          query,
+          {
+            hash: id
+          }
+        )
+        return data.data.transaction
       })
     )
 
