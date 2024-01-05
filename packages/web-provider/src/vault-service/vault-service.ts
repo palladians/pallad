@@ -1,6 +1,7 @@
 import { ChainSignablePayload, GetPassphrase } from '@palladxyz/key-management'
 import { useVault } from '@palladxyz/vault'
 
+import { chainIdToNetwork } from '../utils'
 import { IVaultService } from './types'
 
 export class VaultService implements IVaultService {
@@ -47,7 +48,20 @@ export class VaultService implements IVaultService {
     return store.getChainId()
   }
 
-  // Add other methods as needed
+  async getChainIds(): Promise<string[] | undefined> {
+    const store = useVault.getState()
+    return store.getChainIds()
+  }
+
+  switchNetwork(network: string): Promise<void> {
+    const store = useVault.getState()
+    // map chainId to network
+    const networkName = chainIdToNetwork(network)
+    if (!networkName) {
+      throw new Error(`Invalid chain id: ${network}`)
+    }
+    return store.switchNetwork(networkName)
+  }
 }
 
 export const vaultService = VaultService.getInstance()

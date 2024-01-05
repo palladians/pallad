@@ -37,7 +37,7 @@ const getPassphrase = async () => Buffer.from(params.passphrase)
 describe('Wallet Provider Test', () => {
   let agentArgs: FromBip39MnemonicWordsProps
   let networkType: string
-  let provider
+  let provider: MinaProvider
 
   beforeAll(async () => {
     agentArgs = {
@@ -235,6 +235,26 @@ describe('Wallet Provider Test', () => {
 
       const balance = await provider.request(getBalanceRequestArgs)
       expect(balance).toBeGreaterThan(0)
+    })
+
+    it('should switch the network successfully when requesting the balance of another chain id', async () => {
+      // Listen to the chains changed event
+      const connectListener = vi.fn()
+      provider.on('chainChanged', connectListener)
+
+      const switchNetworkRequestArgs: RequestArguments = {
+        method: 'mina_getBalance'
+      }
+      const newChainId =
+        'b6ee40d336f4cc3f33c1cc04dee7618eb8e556664c2b2d82ad4676b512a82418' // Devnet chainId
+      const result = await provider.request(
+        switchNetworkRequestArgs,
+        newChainId
+      )
+      expect(result).toBeDefined()
+
+      // Assert that the connect event was emitted
+      expect(connectListener).toHaveBeenCalledWith(newChainId)
     })
   })
   describe('MinaProvider Errors', () => {

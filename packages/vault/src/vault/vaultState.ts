@@ -63,6 +63,7 @@ export type GlobalVaultActions = {
     derivedCredential: GroupedCredentials
   ) => Promise<void>
   getChainId: () => Promise<string | undefined>
+  getChainIds: () => Promise<string[] | undefined>
   getCurrentNetwork: () => Networks
   switchNetwork: (network: Multichain.MultiChainNetworks) => Promise<void>
   getCredentials: (query: SearchQuery, props: string[]) => StoredCredential[]

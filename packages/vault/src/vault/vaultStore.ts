@@ -198,6 +198,14 @@ export const useVault = create<
           )
         return provider.getChainId()
       },
+      getChainIds: async () => {
+        // this isn't very functional as it mutates the state
+        // in the providerManager
+        if (providerManager.getAvailableChainIds().length === 0) {
+          await providerManager.refreshChainIds()
+        }
+        return providerManager.getAvailableChainIds()
+      },
       getCurrentNetwork: () => {
         return networkManager.getCurrentNetwork()
       },

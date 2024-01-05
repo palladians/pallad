@@ -53,11 +53,9 @@ export function getMinaChainId(chains: string[]): number {
 export class MinaProvider implements IMinaProvider {
   public events = new EventEmitter()
   public accounts: string[] = []
-  public chainId: string | undefined = 'n/a' //should change this to undefined as default
+  public chainId: string | undefined = undefined
   public rpcProviders: MinaRpcProviderMap = {}
   public connected = false
-  // do we need to add a vaultService instance here?
-  //public signer: any // This should be the VaultService
 
   private userPrompt: typeof showUserPrompt
 
@@ -103,10 +101,11 @@ export class MinaProvider implements IMinaProvider {
       optionalEvents: OPTIONAL_EVENTS // Use optional events from constants
     }
 
-    // ... any other initialization logic
+    // get the wallet's current chain id
     const chainId = await vaultService.getChainId()
     this.chainId = chainId
-    // TODO: this should be the available providers the vault has access to
+    // set the rpc provider
+
     //this.rpcProviders[this.chainId] = this.getRpcUrl(this.chainId)
   }
   private createProviderRpcError(
@@ -186,7 +185,7 @@ export class MinaProvider implements IMinaProvider {
       }
       // Step 2: Attempt to connect to a chain.
       if (!opts) {
-        // Try to connect to the default chain
+        // Try to connect to the default chain -- this is actually the current chain the wallet is connected to not the default chain
         const defaultChainId = await vaultService.getChainId()
         if (!defaultChainId) {
           throw new Error('Unable to connect: Default chain ID is undefined.')
@@ -277,12 +276,17 @@ export class MinaProvider implements IMinaProvider {
       // TODO: prompt the user they're on the wrong chain and ask if they want to switch
       // maybe this error should be handled in the universal-provider?
       // check if the chain is supported by Pallad
-      // const validChain = this.rpc.chains.includes(chain)
+      const chains = (await vaultService.getChainIds()) ?? []
+      const validChain = chains?.includes(chain)
+      if (!validChain) {
+        throw this.createProviderRpcError(4901, 'Chain Disconnected')
+      }
       const changeChain = await this.userPrompt(
         `You are on the wrong chain. Do you want to switch to ${chain}?`
       )
       if (changeChain) {
         // TODO: switch to the correct chain
+        vaultService.switchNetwork(chain)
         this.chainId = chain
         this.onChainChanged(chain!)
       } else {
@@ -295,8 +299,6 @@ export class MinaProvider implements IMinaProvider {
     const userConfirmed = await this.userPrompt(
       `Do you want to execute ${args.method}?`
     )
-    console.log('userConfirmed with args.method: ', userConfirmed, args.method)
-    console.log('userConfirmed is not truthy: ', !userConfirmed)
     if (!userConfirmed) {
       throw this.createProviderRpcError(4001, 'User Rejected Request')
     }
@@ -338,12 +340,8 @@ export class MinaProvider implements IMinaProvider {
   }
 
   private onChainChanged(chainId: string): void {
-    // check if chainId is valid and supported by the vault
-    // const supported = vaultService(chainId);
-    // if (!supported) { throw new Error('Unsupported chainId') }
     // updated the chainId
     this.chainId = chainId
-    //this.events.emit('chainChanged', chainId)
     if (this.externalEmitter) {
       this.externalEmitter.emit('chainChanged', chainId)
     } else {
