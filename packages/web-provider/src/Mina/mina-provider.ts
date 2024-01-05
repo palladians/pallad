@@ -105,8 +105,8 @@ export class MinaProvider implements IMinaProvider {
     const chainId = await vaultService.getChainId()
     this.chainId = chainId
     // set the rpc provider
-
-    //this.rpcProviders[this.chainId] = this.getRpcUrl(this.chainId)
+    // TODO:
+    //this.rpcProviders = vaultService.getChainIds() ?? {}
   }
   private createProviderRpcError(
     code: number,
@@ -135,7 +135,6 @@ export class MinaProvider implements IMinaProvider {
   }
   // these are the methods that are called by the dapp to interact/listen to the wallet
   public on: IMinaProviderEvents['on'] = (event, listener) => {
-    //this.events.on(event, listener)
     if (this.externalEmitter) {
       this.externalEmitter.on(event, listener)
     } else {
@@ -145,7 +144,6 @@ export class MinaProvider implements IMinaProvider {
   }
 
   public once: IMinaProviderEvents['once'] = (event, listener) => {
-    //this.events.once(event, listener)
     if (this.externalEmitter) {
       this.externalEmitter.once(event, listener)
     } else {
@@ -158,7 +156,6 @@ export class MinaProvider implements IMinaProvider {
     event,
     listener
   ) => {
-    //this.events.removeListener(event, listener)
     if (this.externalEmitter) {
       this.externalEmitter.removeListener(event, listener)
     } else {
@@ -168,7 +165,6 @@ export class MinaProvider implements IMinaProvider {
   }
 
   public off: IMinaProviderEvents['off'] = (event, listener) => {
-    //this.events.off(event, listener)
     if (this.externalEmitter) {
       this.externalEmitter.off(event, listener)
     } else {
@@ -227,10 +223,6 @@ export class MinaProvider implements IMinaProvider {
     // Check if it's connected in the first place
     if (!this.isConnected()) {
       // Emit a 'disconnect' event with an error only if disconnected
-      //this.events.emit(
-      //  'disconnect',
-      //  this.createProviderRpcError(4900, 'Disconnected')
-      //)
       if (this.externalEmitter) {
         this.externalEmitter.emit(
           'disconnect',
@@ -257,7 +249,6 @@ export class MinaProvider implements IMinaProvider {
       this.chainId = undefined
 
       // Emit a 'disconnect' event without an error
-      //this.events.emit('disconnect')
       if (this.externalEmitter) {
         this.externalEmitter.emit('disconnect')
       } else {
@@ -348,6 +339,21 @@ export class MinaProvider implements IMinaProvider {
       this.events.emit('chainChanged', chainId)
     }
   }
+  // The set of accounts only changes when the user
+  // 1. adds a new account
+  // 2. removes an account
+  // We can listen to the vaultService for changes to the accounts
+  /*private onAccountsChanged(): void {
+    // listen to the vaultService for changes to the accounts
+    // e.g. vaultService.events.on('accountsChanged', this.updateAccounts)
+    const accounts = vaultService.getAccounts()
+    this.accounts = accounts
+    if (this.externalEmitter) {
+      this.externalEmitter.emit('accountsChanged', accounts)
+    } else {
+      this.events.emit('accountsChanged', accounts)
+    }
+  }*/
 
   protected getRpcConfig(ops: ChainProviderOptions): ChainRpcConfig {
     return {
