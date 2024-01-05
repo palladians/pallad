@@ -1,12 +1,8 @@
 import {
-  ProviderAccounts,
-  ProviderChainId,
   ProviderConnectInfo,
   ProviderEvent,
   ProviderEventArguments,
-  ProviderMessage,
-  ProviderRpcError,
-  RequestArguments
+  ProviderRpcError
 } from '../types'
 import { MinaProvider } from './mina-provider'
 
