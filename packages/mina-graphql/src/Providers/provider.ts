@@ -8,10 +8,8 @@ import {
   TxStatus,
   TxStatusArgs
 } from '@palladxyz/mina-core'
-import { HealthCheckResponse } from '@palladxyz/mina-core'
 
 import { AccountInfoGraphQLProvider } from './AccountInfo'
-import { DaemonStatusGraphQLProvider } from './DaemonStatus'
 import { DaemonStatusGraphQLProvider } from './DaemonStatus'
 import { TxStatusGraphQLProvider } from './TxStatus'
 import { TxSubmitGraphQLProvider } from './TxSubmit'
@@ -22,14 +20,12 @@ export class MinaProvider implements ProviderNode {
   private txSubmitProvider: TxSubmitGraphQLProvider | null
   private txStatusProvider: TxStatusGraphQLProvider | null
   private daemonStatusProvider: DaemonStatusGraphQLProvider | null
-  private daemonStatusProvider: DaemonStatusGraphQLProvider | null
   public providerUrl: string
 
   constructor(nodeUrl: string) {
     this.accountInfoProvider = new AccountInfoGraphQLProvider(nodeUrl)
     this.txSubmitProvider = new TxSubmitGraphQLProvider(nodeUrl)
     this.txStatusProvider = new TxStatusGraphQLProvider(nodeUrl)
-    this.daemonStatusProvider = new DaemonStatusGraphQLProvider(nodeUrl)
     this.daemonStatusProvider = new DaemonStatusGraphQLProvider(nodeUrl)
     this.providerUrl = nodeUrl
   }
@@ -73,14 +69,6 @@ export class MinaProvider implements ProviderNode {
     args: SubmitTxArgs
   ): Promise<SubmitTxResult | undefined> {
     return this.txSubmitProvider?.submitTx(args)
-  }
-
-  public async healthCheck(): Promise<HealthCheckResponse | undefined> {
-    return this.accountInfoProvider?.healthCheck()
-  }
-
-  public async getDaemonStatus(): Promise<DaemonStatus | undefined> {
-    return this.daemonStatusProvider?.getDaemonStatus()
   }
 
   public async healthCheck(): Promise<HealthCheckResponse | undefined> {
