@@ -7,7 +7,13 @@ import {
 } from '@palladxyz/mina-core'
 import { gql, GraphQLClient } from 'graphql-request'
 
-import { customFetch, defaultJsonSerializer, ErrorPolicy } from '../utils'
+import {
+  customFetch,
+  defaultJsonSerializer,
+  ErrorPolicy,
+  ExtendedError,
+  ServerError
+} from '../utils'
 import { getStakeTxSend, getTxSend } from './mutations'
 import { healthCheckQuery } from './queries'
 
@@ -24,6 +30,28 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
       jsonSerializer: defaultJsonSerializer,
       fetch: fetch || customFetch
     })
+  }
+
+  private handleError(error: unknown): void {
+    console.error('Error in ChainHistoryGraphQLProvider:', error)
+
+    if (error instanceof Error && 'text' in error) {
+      const errorText = (error as any).text as string | undefined
+      if (errorText) {
+        let statusCode = 0
+        if (errorText.includes('503')) {
+          statusCode = 503
+        } else if (errorText.includes('500')) {
+          statusCode = 500
+        }
+
+        if (statusCode > 0) {
+          throw new ServerError(error as ExtendedError, statusCode, errorText)
+        }
+      }
+    }
+
+    throw new Error('Error processing GraphQL request')
   }
 
   public async destroy(): Promise<void> {
@@ -52,15 +80,9 @@ export class TxSubmitGraphQLProvider implements TxSubmitProvider {
         return { ok: false, message: 'Invalid schema response' }
       }
     } catch (error: unknown) {
-      let errorMessage: string
+      this.handleError(error)
 
-      if (error instanceof Error) {
-        errorMessage = error.message
-      } else {
-        errorMessage = 'Unknown error'
-      }
-
-      return { ok: false, message: errorMessage }
+      return { ok: false, message: 'Error ocurred' }
     }
   }
 
