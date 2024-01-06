@@ -40,6 +40,7 @@ export interface ChainRpcConfig {
   optionalChains: string[]
   methods: string[]
   optionalMethods?: string[]
+  unauthorizedMethods?: string[]
   /**
    * @description Events that the wallet MUST support or the connection will be rejected
    */

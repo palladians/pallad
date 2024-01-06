@@ -71,7 +71,7 @@ describe('Wallet Provider Test', () => {
       projectId: 'test',
       chains: ['Mina Devnet']
     }
-    provider = await MinaProvider.init(opts)
+    provider = await MinaProvider.init(opts, [])
   })
 
   beforeEach(() => {

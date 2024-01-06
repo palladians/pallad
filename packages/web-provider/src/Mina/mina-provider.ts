@@ -79,14 +79,18 @@ export class MinaProvider implements IMinaProvider {
 
   static async init(
     opts: ChainProviderOptions,
+    authorizedMethods: string[] = REQUIRED_METHODS,
     externalEmitter?: EventEmitter
   ): Promise<MinaProvider> {
     const provider = new MinaProvider(opts, externalEmitter)
-    await provider.initialize(opts)
+    await provider.initialize(opts, authorizedMethods)
     return provider
   }
   // why is this async?
-  private async initialize(opts: ChainProviderOptions) {
+  private async initialize(
+    opts: ChainProviderOptions,
+    unauthorizedMethods: string[] = []
+  ) {
     // Here, you'd set up any initial state or connections you need.
     // For example, you could set up the rpcConfig:
 
@@ -97,6 +101,7 @@ export class MinaProvider implements IMinaProvider {
       projectId: opts.projectId,
       methods: REQUIRED_METHODS, // Use required methods from constants
       optionalMethods: OPTIONAL_METHODS, // Use optional methods from constants
+      unauthorizedMethods: unauthorizedMethods,
       events: REQUIRED_EVENTS, // Use required events from constants
       optionalEvents: OPTIONAL_EVENTS // Use optional events from constants
     }
@@ -261,6 +266,16 @@ export class MinaProvider implements IMinaProvider {
     args: RequestArguments,
     chain?: string | undefined
   ): Promise<T> {
+    if (
+      // when the provider is initialized, the rpc methods are set to the required methods
+      // this can be the set of authorized methods the user has given permission for the zkApp to use
+      this.rpc.unauthorizedMethods!.includes(args.method)
+    ) {
+      throw this.createProviderRpcError(
+        4100,
+        'Unauthorized - The requested method and/or account has not been authorized by the user.'
+      )
+    }
     // In a method that requires a specific chain connection
     // TODO: handle when chain is not provided -- handle other methods with optional args
     if (this.chainId !== chain && chain !== undefined) {
@@ -363,6 +378,7 @@ export class MinaProvider implements IMinaProvider {
       projectId: ops.projectId,
       methods: REQUIRED_METHODS, // Use required methods from constants
       optionalMethods: OPTIONAL_METHODS, // Use optional methods from constants
+      unauthorizedMethods: this.rpc.unauthorizedMethods!,
       events: REQUIRED_EVENTS, // Use required events from constants
       optionalEvents: OPTIONAL_EVENTS // Use optional events from constants
     }

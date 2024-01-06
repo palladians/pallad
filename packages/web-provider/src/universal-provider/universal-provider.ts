@@ -29,7 +29,7 @@ export class UniversalProvider implements IUniversalProvider {
   private events: EventEmitter
   private userPrompt: typeof showUserPrompt
 
-  constructor(opts: ChainProviderOptions) {
+  constructor(opts: ChainProviderOptions, authorizedMethods?: string[]) {
     this.defaultChain = 'mina' // Set a default chain -- but we have different mina chains too (devnet, mainnet, berkeley).
     // Initialize MinaProvider and add to providers map
     // TODO: Improve how we initialize providers
@@ -38,7 +38,9 @@ export class UniversalProvider implements IUniversalProvider {
     this.accounts = []
     this.events = new EventEmitter()
     this.uri = '' // TODO
-    this.rpcProviders = { mina: MinaProvider.init(opts, this.events) }
+    this.rpcProviders = {
+      mina: MinaProvider.init(opts, authorizedMethods, this.events)
+    }
 
     // Use provided userPrompt function or default to the actual implementation
     if (opts.showUserPrompt) {
