@@ -5,7 +5,7 @@ import { EthereumKeyConst, EthereumSpecificArgs } from './types'
 export async function deriveEthereumPrivateKey(
   args: EthereumSpecificArgs,
   decryptedSeedBytes: Uint8Array
-): Promise<Uint8Array> {
+): Promise<string> {
   const { accountIndex, addressIndex } = args
 
   // Create an HDKey from the root private key
@@ -16,5 +16,6 @@ export async function deriveEthereumPrivateKey(
 
   const privateKey = childNode.privateKey
   // maybe want to return bufferToHex(privateKey)
-  return privateKey
+  const privateKeyHex = Buffer.from(privateKey).toString('hex')
+  return privateKeyHex
 }
