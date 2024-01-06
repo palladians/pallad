@@ -25,3 +25,7 @@ export function isZkAppTransaction(
 ): payload is Mina.SignableZkAppCommand {
   return payload && typeof payload === 'object' && 'command' in payload
 }
+
+export function isNullifier(payload: any): payload is Mina.CreatableNullifer {
+  return payload && typeof payload === 'object' && 'messageNullifier' in payload
+}
