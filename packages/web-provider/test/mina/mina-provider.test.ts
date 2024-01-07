@@ -10,8 +10,8 @@ import { act, renderHook } from '@testing-library/react'
 import Client from 'mina-signer'
 import { vi } from 'vitest'
 
-import { MinaProvider } from '../../src/mina'
-import { RequestArguments } from '../../src/web-provider-types'
+import { MinaProvider } from '../../src/mina/mina-provider'
+import { RequestArguments } from '../../src/web-provider-types/data-model'
 
 const PREGENERATED_MNEMONIC = [
   'habit',

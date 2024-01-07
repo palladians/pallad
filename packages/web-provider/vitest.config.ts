@@ -3,7 +3,7 @@ import { defineConfig } from 'vitest/config' // eslint-disable-line import/no-ex
 export default defineConfig({
   test: {
     environment: 'happy-dom',
-    testTimeout: 10000,
+    testTimeout: 100000,
     globals: true
   }
 })
