@@ -40,6 +40,7 @@ describe('Wallet Provider Test', () => {
   let provider: MinaProvider
 
   beforeAll(async () => {
+    console.log('Current working directory:', process.cwd())
     agentArgs = {
       getPassphrase: getPassphrase,
       mnemonicWords: PREGENERATED_MNEMONIC
