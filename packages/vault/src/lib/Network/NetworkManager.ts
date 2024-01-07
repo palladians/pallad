@@ -30,6 +30,14 @@ class NetworkManager<Networks extends Multichain.MultiChainNetworks> {
     }
   }
 
+  public async refreshChainIds(): Promise<void> {
+    await this.providerManager.refreshChainIds()
+  }
+
+  public getAvailableChainIds(): string[] {
+    return this.providerManager.getAvailableChainIds()
+  }
+
   public getActiveProvider(): Multichain.MultiChainProvider | null {
     return this.providerManager.getProvider(this.activeNetwork)
   }

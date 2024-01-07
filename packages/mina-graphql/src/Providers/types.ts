@@ -1,6 +1,7 @@
 import {
   AccountInfo,
   AccountInfoArgs,
+  DaemonStatus,
   Mina,
   SubmitTxArgs,
   SubmitTxResult,
@@ -35,6 +36,8 @@ export interface ProviderNode {
   getTransactionStatus(args: TxStatusArgs): Promise<TxStatus | undefined>
 
   submitTransaction(args: SubmitTxArgs): Promise<SubmitTxResult | undefined>
+
+  getDaemonStatus(): Promise<DaemonStatus | undefined>
 }
 
 /**

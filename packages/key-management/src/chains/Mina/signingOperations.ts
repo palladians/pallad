@@ -30,10 +30,10 @@ export async function MinaSigningOperations<T extends MinaSignablePayload>(
       // in the object deanonimize the user. We should only return what the zkApp needs
       return minaClient.createNullifier(payload.messageNullifier, privateKey)
     } else {
-      throw new Error('Unsupported payload type.')
+      throw new Error(`Unsupported payload type of ${payload}.`)
     }
   } catch (err) {
     const errorMessage = errors.getRealErrorMsg(err) || 'Signing action failed.'
-    throw new Error(errorMessage)
+    throw new Error(`Error during Mina signing operations: ${errorMessage}`)
   }
 }

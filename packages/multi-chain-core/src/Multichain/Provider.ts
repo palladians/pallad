@@ -59,6 +59,25 @@ export class MultiChainProvider {
     throw new Error('Provider not initialized in Multichain getAccountInfo.')
   }
 
+  public async getChainId(): Promise<string | undefined> {
+    if (
+      this.network === Mina.Networks.MAINNET ||
+      this.network === Mina.Networks.DEVNET ||
+      this.network === Mina.Networks.BERKELEY ||
+      this.network === Mina.Networks.TESTWORLD
+    ) {
+      return await this.specificProvider?.getDaemonStatus().then((status) => {
+        if (status && status.daemonStatus && status.daemonStatus.chainId) {
+          return status.daemonStatus.chainId
+        }
+        throw new Error(
+          'Invalid daemon status data response in Multichain getChainId.'
+        )
+      })
+    }
+    throw new Error('Provider not initialized in Multichain getChainId.')
+  }
+
   public async getTransactionStatus(
     args: MultiChainTransactionStatusArgs
   ): Promise<MultiChainTransactionStatus | undefined> {

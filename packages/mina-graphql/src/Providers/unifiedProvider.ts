@@ -1,6 +1,7 @@
 import {
   AccountInfo,
   AccountInfoArgs,
+  DaemonStatus,
   Mina,
   SubmitTxArgs,
   SubmitTxResult,
@@ -58,6 +59,10 @@ export class UnifiedMinaProvider implements ProviderNode, ProviderArchive {
     args: SubmitTxArgs
   ): Promise<SubmitTxResult | undefined> {
     return this.nodeProvider.submitTransaction(args)
+  }
+
+  public async getDaemonStatus(): Promise<DaemonStatus | undefined> {
+    return this.nodeProvider.getDaemonStatus()
   }
 
   // Methods related to MinaArchiveProvider

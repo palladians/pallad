@@ -4,6 +4,7 @@ import {
   TransactionsByAddressesArgs,
   TransactionsByIdsArgs
 } from './ChainHistoryProvider'
+import { DaemonStatus } from './DaemonStatusProvider'
 import { TxStatus, TxStatusArgs } from './TxStatusProvider'
 import { SubmitTxArgs, SubmitTxResult } from './TxSubmitProvider'
 
@@ -20,6 +21,7 @@ export interface UnifiedMinaProviderType {
   getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo | undefined>
   getTransactionStatus(args: TxStatusArgs): Promise<TxStatus | undefined>
   submitTransaction(args: SubmitTxArgs): Promise<SubmitTxResult | undefined>
+  getDaemonStatus(): Promise<DaemonStatus | undefined>
 
   // Methods related to ProviderArchive
   getTransactions(

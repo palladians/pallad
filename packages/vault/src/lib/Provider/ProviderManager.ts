@@ -23,6 +23,7 @@ export class ProviderManager<Networks extends Multichain.MultiChainNetworks> {
   > = {} as Partial<
     Record<Multichain.MultiChainNetworks, Multichain.MultiChainProvider | null>
   >
+  public availableChainIds: string[] = []
 
   /**
    * Creates a new instance of ProviderManager.
@@ -40,6 +41,22 @@ export class ProviderManager<Networks extends Multichain.MultiChainNetworks> {
         )
       }
     }
+  }
+
+  async refreshChainIds() {
+    for (const network in this.providers) {
+      const provider = this.providers[network as Networks]
+      this.availableChainIds.push((await provider?.getChainId()) || '')
+    }
+  }
+
+  /**
+   * Get the available chain ids.
+   * @returns The available chain ids.
+   */
+
+  getAvailableChainIds(): string[] {
+    return this.availableChainIds
   }
 
   /**

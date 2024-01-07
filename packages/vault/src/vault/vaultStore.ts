@@ -188,6 +188,24 @@ export const useVault = create<
           derivedCredential as GroupedCredentials
         )
       },
+      getChainId: () => {
+        const { getCurrentNetwork } = get()
+        const currentNetwork = getCurrentNetwork() as Networks
+        const provider = providerManager.getProvider(currentNetwork)
+        if (!provider)
+          throw new NetworkError(
+            'Mina provider is undefined in getChainId method'
+          )
+        return provider.getChainId()
+      },
+      getChainIds: async () => {
+        // this isn't very functional as it mutates the state
+        // in the providerManager
+        if (providerManager.getAvailableChainIds().length === 0) {
+          await providerManager.refreshChainIds()
+        }
+        return providerManager.getAvailableChainIds()
+      },
       getCurrentNetwork: () => {
         return networkManager.getCurrentNetwork()
       },
