@@ -1,13 +1,13 @@
 import EventEmitter from 'events'
 
 import { MinaProvider } from '../mina'
+import { showUserPrompt } from '../utils'
 import {
   ChainProviderOptions,
   ConnectOps,
   ProviderRpcError,
   RequestArguments
-} from '../types'
-import { showUserPrompt } from '../utils'
+} from '../web-provider-types'
 import {
   IUniversalProvider,
   IUniversalProviderEvents,

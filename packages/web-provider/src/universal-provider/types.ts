@@ -6,7 +6,7 @@ import {
   ProviderEvent,
   ProviderEventArguments,
   RequestArguments
-} from '../types'
+} from '../web-provider-types'
 import { UniversalProvider } from './universal-provider'
 
 export interface RpcProviderMap {

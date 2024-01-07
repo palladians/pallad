@@ -1,6 +1,8 @@
 import { MinaSignablePayload } from '@palladxyz/key-management'
 import { EventEmitter } from 'events'
 
+import { showUserPrompt } from '../utils/prompts'
+import { vaultService } from '../vault-service'
 import {
   ChainProviderOptions,
   ChainRpcConfig,
@@ -8,9 +10,7 @@ import {
   ProviderConnectInfo,
   ProviderRpcError,
   RequestArguments
-} from '../types'
-import { showUserPrompt } from '../utils/prompts'
-import { vaultService } from '../vault-service'
+} from '../web-provider-types'
 import {
   OPTIONAL_EVENTS,
   OPTIONAL_METHODS,

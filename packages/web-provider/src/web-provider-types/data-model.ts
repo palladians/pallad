@@ -78,6 +78,10 @@ export interface RequestArguments {
 
 export type ProviderChainId = ProviderConnectInfo['chainId']
 
+export interface ProviderInfo {
+  chainId: string
+}
+
 export type ProviderAccounts = string[]
 
 // Event types and interfaces
