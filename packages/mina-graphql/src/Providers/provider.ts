@@ -8,6 +8,7 @@ import {
   TxStatus,
   TxStatusArgs
 } from '@palladxyz/mina-core'
+import { HealthCheckResponse } from '@palladxyz/mina-core'
 
 import { AccountInfoGraphQLProvider } from './AccountInfo'
 import { DaemonStatusGraphQLProvider } from './DaemonStatus'
@@ -74,7 +75,7 @@ export class MinaProvider implements ProviderNode {
   public async getDaemonStatus(): Promise<DaemonStatus | undefined> {
     return this.daemonStatusProvider?.getDaemonStatus()
   }
-
+  
   public async healthCheck(): Promise<HealthCheckResponse | undefined> {
     return this.accountInfoProvider?.healthCheck()
   }
