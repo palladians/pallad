@@ -24,6 +24,7 @@ export type MinaSpecificArgs = {
   accountIndex: number
   addressIndex: number
   networkType: Mina.NetworkType
+  operation?: string // optional for now
 }
 
 export type MinaGroupedCredentials = {
@@ -46,6 +47,7 @@ export type MinaSignablePayload =
   | Mina.MessageBody
   | Mina.SignableFields
   | Mina.SignableZkAppCommand
+  | Mina.CreatableNullifer
 
 export class MinaPayload implements ChainSpecificPayload {
   network = Network.Mina

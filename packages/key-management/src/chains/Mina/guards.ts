@@ -27,5 +27,10 @@ export function isZkAppTransaction(
 }
 
 export function isNullifier(payload: any): payload is Mina.CreatableNullifer {
-  return payload && typeof payload === 'object' && 'messageNullifier' in payload
+  return (
+    payload &&
+    typeof payload === 'object' &&
+    Array.isArray(payload.message) &&
+    payload.message.every((item: any) => typeof item === 'bigint')
+  )
 }
