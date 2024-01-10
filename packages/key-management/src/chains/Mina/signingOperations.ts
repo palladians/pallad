@@ -25,7 +25,7 @@ export async function MinaSigningOperations<T extends MinaSignablePayload>(
       return minaClient.signFields(payload.fields, privateKey)
     } else if (util.isZkAppTransaction(payload)) {
       return minaClient.signZkappCommand(payload.command, privateKey)
-    } else if (util.isNullifier(payload, privateKey)) {
+    } else if (util.isNullifier(payload)) {
       // TODO: This returns the entire nullifier object, but some of the fields
       // in the object deanonimize the user. We should only return what the zkApp needs
       return minaClient.createNullifier(payload.messageNullifier, privateKey)
