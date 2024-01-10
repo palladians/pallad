@@ -1,6 +1,5 @@
 import { wordlist } from '@scure/bip39/wordlists/english'
 
-import { emip3encrypt } from './emip3'
 import * as errors from './errors'
 import { KeyAgentBase } from './KeyAgentBase'
 import {
@@ -12,9 +11,8 @@ import {
   SerializableInMemoryKeyAgentData
 } from './types'
 import {
-  entropyToSeed,
   joinMnemonicWords,
-  mnemonicWordsToEntropy,
+  mnemonicWordsToEncryptedSeed,
   validateMnemonic
 } from './util'
 
@@ -48,10 +46,12 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     const validMnemonic = validateMnemonic(mnemonic, wordlist)
     if (!validMnemonic) throw new errors.InvalidMnemonicError()
 
-    const entropy = mnemonicWordsToEntropy(mnemonicWords)
-    const seedBytes = entropyToSeed(entropy, mnemonic2ndFactorPassphrase)
     const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
-    const encryptedSeedBytes = await emip3encrypt(seedBytes, passphrase)
+    const encryptedSeedBytes = await mnemonicWordsToEncryptedSeed(
+      mnemonicWords,
+      passphrase,
+      mnemonic2ndFactorPassphrase
+    )
 
     return new InMemoryKeyAgent({
       encryptedSeedBytes,
