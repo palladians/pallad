@@ -14,6 +14,7 @@ export type EthereumSpecificArgs = {
   network: Network.Ethereum
   accountIndex: number
   addressIndex: number
+  operation?: string
 }
 
 export type EthereumSignablePayload = TransactionRequest | string | Uint8Array

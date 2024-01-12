@@ -2,37 +2,66 @@ import { ethers } from 'ethers'
 
 import * as errors from '../../errors'
 import * as util from './guards'
-import { EthereumSignablePayload, EthereumSignatureResult } from './types'
+import {
+  EthereumSignablePayload,
+  EthereumSignatureResult,
+  EthereumSpecificArgs
+} from './types'
 
 export async function EthereumSigningOperations<
   T extends EthereumSignablePayload
 >(
   payload: T,
-  //args: EthereumSpecificArgs, // this is not used in the function
+  args: EthereumSpecificArgs,
   privateKey: string
 ): Promise<EthereumSignatureResult> {
   // Create a wallet instance using the private key
-  const wallet = new ethers.Wallet(privateKey)
+  let wallet: ethers.Wallet | null = new ethers.Wallet(privateKey)
+  let result
 
-  // Perform the specific signing action
   try {
-    if (util.isTransaction(payload)) {
-      // Sign a transaction
-      const transaction = await wallet.signTransaction(payload)
-      // remove wallet from memory
-      // wallet.free();
-      return transaction
-    } else if (util.isMessage(payload)) {
-      // Sign a message
-      const signature = await wallet.signMessage(payload)
-      // remove wallet from memory
-      // wallet.free();
-      return signature
+    // Perform the specific signing action
+    if (args.operation) {
+      switch (args.operation) {
+        case 'eth_signTransaction': {
+          if (util.isTransaction(payload)) {
+            result = await wallet.signTransaction(payload)
+          } else {
+            throw new Error('Invalid transaction payload')
+          }
+          break
+        }
+
+        case 'eth_signMessage': {
+          if (util.isMessage(payload)) {
+            result = await wallet.signMessage(payload)
+          } else {
+            throw new Error('Invalid message payload')
+          }
+          break
+        }
+
+        // Add more cases as needed
+
+        default:
+          throw new Error('Unsupported private key operation')
+      }
     } else {
-      throw new Error('Unsupported payload type.')
+      if (util.isTransaction(payload)) {
+        result = await wallet.signTransaction(payload)
+      } else if (util.isMessage(payload)) {
+        result = await wallet.signMessage(payload)
+      } else {
+        throw new Error('Unsupported payload type.')
+      }
     }
   } catch (err) {
     const errorMessage = errors.getRealErrorMsg(err) || 'Signing action failed.'
     throw new Error(errorMessage)
+  } finally {
+    // Free the wallet instance
+    wallet = null
   }
+
+  return result
 }
