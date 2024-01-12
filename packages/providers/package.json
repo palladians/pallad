@@ -1,0 +1,41 @@
+{
+  "name": "@palladxyz/providers",
+  "version": "0.0.1",
+  "description": "Proivder Package SDK for Pallad, the next generation of the `@palladxyz/mina-graphql` package.",
+  "type": "module",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules dist .turbo"
+  },
+  "dependencies": {
+    "@palladxyz/mina-core": "^0.0.1",
+    "@palladxyz/util": "^0.0.1",
+    "bs58check": "^3.0.1",
+    "buffer": "^6.0.3",
+    "events": "^3.3.0",
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
+    "json-bigint": "^1.0.0",
+    "mina-signer": "^2.1.1",
+    "subscriptions-transport-ws": "^0.11.0",
+    "ws": "^8.15.1"
+  },
+  "devDependencies": {
+    "@palladxyz/common": "^1.0.0",
+    "@types/events": "^3.0.3",
+    "@types/json-bigint": "^1.0.4",
+    "@types/mocha": "^10.0.6",
+    "esbuild-plugin-polyfill-node": "^0.3.0",
+    "msw": "^2.0.11"
+  }
+}
