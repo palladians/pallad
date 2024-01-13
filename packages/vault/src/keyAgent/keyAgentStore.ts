@@ -46,11 +46,23 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
       })
     )
   },
+  // TODO: this should take a password too.
   async request(name, credential, signable, args) {
     const { keyAgents } = get()
     const keyAgent = keyAgents[name]
 
     return keyAgent?.keyAgent?.sign(credential, signable, args)
+  },
+  async createCredential(name, payload, args, passphrase) {
+    const { keyAgents } = get()
+    const keyAgent = keyAgents[name]
+
+    return keyAgent?.keyAgent?.deriveCredentials(
+      payload,
+      args,
+      passphrase,
+      true
+    )
   },
   // we should deprecate this method
   // it is superseded by restoreKeyAgent

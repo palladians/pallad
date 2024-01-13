@@ -200,39 +200,33 @@ describe('KeyAgentStore', () => {
         KeyAgents.InMemory,
         agentArgs
       )
-    })
-    // check that key agent is in the store
-    const keyAgent = result.current.keyAgents[keyAgentName]
-    expect(keyAgent?.keyAgent).toBeDefined()
+      // create credential
+      const args: MinaSpecificArgs = {
+        network: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        networkType: 'testnet'
+      }
+      const payload = new MinaPayload()
+      const groupedCredential = await result.current.createCredential(
+        keyAgentName,
+        payload,
+        args,
+        getPassphrase
+      )
 
-    // create credential
-    const args: MinaSpecificArgs = {
-      network: Network.Mina,
-      accountIndex: 0,
-      addressIndex: 0,
-      networkType: 'testnet'
-    }
-    const payload = new MinaPayload()
-    const groupedCredential = await keyAgent?.keyAgent?.deriveCredentials(
-      payload,
-      args,
-      getPassphrase,
-      true // has to be true as we're not writing the credential to the key agent's serializable data
-    )
-    console.log('groupedCredential: ', groupedCredential)
-    // signable payload
-    const message: Mina.MessageBody = {
-      message: 'Hello, Bob!'
-    }
-    // define operation object
-    const operations: ChainOperationArgs = {
-      operation: 'mina_sign',
-      network: 'Mina',
-      networkType: 'testnet'
-    }
-    // sign payload
-
-    await act(async () => {
+      console.log('groupedCredential: ', groupedCredential)
+      // signable payload
+      const message: Mina.MessageBody = {
+        message: 'Hello, Bob!'
+      }
+      // define operation object
+      const operations: ChainOperationArgs = {
+        operation: 'mina_sign',
+        network: 'Mina',
+        networkType: 'testnet'
+      }
+      // sign payload
       const signedMessage = await result.current.request(
         keyAgentName,
         groupedCredential as GroupedCredentials,
@@ -241,6 +235,9 @@ describe('KeyAgentStore', () => {
       )
       console.log('signedMessage: ', signedMessage)
     })
+    // check that key agent is in the store
+    const keyAgent = result.current.keyAgents[keyAgentName]
+    expect(keyAgent?.keyAgent).toBeDefined()
 
     expect(true).toEqual(true)
   })

@@ -6,6 +6,8 @@ import {
   ChainOperationArgs,
   ChainSignablePayload,
   ChainSignatureResult,
+  ChainSpecificArgs,
+  ChainSpecificPayload,
   GetPassphrase,
   GroupedCredentials
 } from '@palladxyz/key-management'
@@ -68,6 +70,12 @@ export type KeyAgentStore = {
     signable: ChainSignablePayload,
     args: ChainOperationArgs
   ) => Promise<ChainSignatureResult | undefined>
+  createCredential: (
+    name: KeyAgentName,
+    payload: ChainSpecificPayload,
+    args: ChainSpecificArgs,
+    passphrase: GetPassphrase
+  ) => Promise<GroupedCredentials | undefined>
   getKeyAgent: (name: KeyAgentName) => SingleKeyAgentState | undefined
   removeKeyAgent: (name: KeyAgentName) => void
   clear: () => void
