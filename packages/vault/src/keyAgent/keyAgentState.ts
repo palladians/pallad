@@ -2,7 +2,13 @@
  * @file Represents the state definitions related to keyAgents.
  */
 
-import { GetPassphrase } from '@palladxyz/key-management'
+import {
+  ChainOperationArgs,
+  ChainSignablePayload,
+  ChainSignatureResult,
+  GetPassphrase,
+  GroupedCredentials
+} from '@palladxyz/key-management'
 import {
   FromBip39MnemonicWordsProps,
   InMemoryKeyAgent,
@@ -55,6 +61,12 @@ export type KeyAgentStore = {
     name: KeyAgentName,
     passphrase: GetPassphrase
   ) => InMemoryKeyAgent | undefined
+  request: (
+    name: KeyAgentName,
+    credential: GroupedCredentials,
+    signable: ChainSignablePayload,
+    args: ChainOperationArgs
+  ) => Promise<ChainSignatureResult>
   getKeyAgent: (name: KeyAgentName) => SingleKeyAgentState | undefined
   removeKeyAgent: (name: KeyAgentName) => void
   clear: () => void

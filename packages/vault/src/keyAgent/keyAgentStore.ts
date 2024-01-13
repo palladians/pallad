@@ -46,6 +46,12 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
       })
     )
   },
+  async request(name, credential, signable, args) {
+    const { keyAgents } = get()
+    const keyAgent = keyAgents[name]
+
+    return keyAgent?.keyAgent?.sign(credential, signable, args)
+  },
   // we should deprecate this method
   // it is superseded by restoreKeyAgent
   getKeyAgent(name) {
