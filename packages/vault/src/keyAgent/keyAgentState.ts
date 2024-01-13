@@ -61,12 +61,13 @@ export type KeyAgentStore = {
     name: KeyAgentName,
     passphrase: GetPassphrase
   ) => InMemoryKeyAgent | undefined
+  // example of a request method
   request: (
     name: KeyAgentName,
     credential: GroupedCredentials,
     signable: ChainSignablePayload,
     args: ChainOperationArgs
-  ) => Promise<ChainSignatureResult>
+  ) => Promise<ChainSignatureResult | undefined>
   getKeyAgent: (name: KeyAgentName) => SingleKeyAgentState | undefined
   removeKeyAgent: (name: KeyAgentName) => void
   clear: () => void
