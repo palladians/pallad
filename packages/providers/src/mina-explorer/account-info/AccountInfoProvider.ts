@@ -46,7 +46,6 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
   }
 
   async healthCheck(): Promise<HealthCheckResponse> {
-    console.log('Initiating health check...')
     const query = gql`
       ${healthCheckQuery}
     `
@@ -82,24 +81,20 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
   }
 
   async getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo> {
-    console.log('Initiating getAccountInfo with args:', args)
     const query = gql`
       ${getAccountBalance}
     `
 
     try {
-      console.log('Sending request for account info...')
       const data = await this.graphqlClient.rawRequest<AccountData>(query, {
         publicKey: args.publicKey
       })
 
       if (!data || !data.data.account) {
-        console.log('Account data not found, performing health check...')
         const healthCheckResponse = await this.healthCheck()
         if (!healthCheckResponse.ok) {
           throw new Error('Node is not available')
         }
-        console.log('Account does not exist yet, returning empty account.')
         return {
           balance: { total: 0 },
           nonce: 0,
@@ -109,7 +104,6 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
         }
       }
 
-      console.log('Received response for account info:', data)
       return data.data.account
     } catch (error) {
       const errorText = (error as any).text as string | undefined

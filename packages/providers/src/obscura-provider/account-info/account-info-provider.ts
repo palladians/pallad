@@ -36,7 +36,7 @@ export class AccountInfoProviderRPC implements AccountInfoProvider {
         return {
           ok: false,
           message: `GraphQL error: ${data.errors
-            .map((e) => e.message)
+            .map((e: any) => e.message)
             .join(', ')}`
         }
       }
@@ -87,7 +87,7 @@ export class AccountInfoProviderRPC implements AccountInfoProvider {
 
     if (data.errors) {
       throw new Error(
-        `GraphQL error: ${data.errors.map((e) => e.message).join(', ')}`
+        `GraphQL error: ${data.errors.map((e: any) => e.message).join(', ')}`
       )
     }
 
