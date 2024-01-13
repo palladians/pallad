@@ -2,6 +2,7 @@ import { Mina } from '@palladxyz/mina-core'
 import Client from 'mina-signer'
 
 import * as errors from '../../errors'
+import { ChainOperationArgs } from '../../types'
 import * as util from './guards'
 import {
   MinaSignablePayload,
@@ -11,9 +12,12 @@ import {
 
 export async function MinaSigningOperations<T extends MinaSignablePayload>(
   payload: T,
-  args: MinaSpecificArgs,
+  args: MinaSpecificArgs | ChainOperationArgs,
   privateKey: string
 ): Promise<MinaSignatureResult> {
+  if (!args.networkType) {
+    throw new Error('networkType undefined in MinaSigningOperations.')
+  }
   // Mina network client.
   const minaClient = new Client({ network: args.networkType })
 

@@ -2,7 +2,11 @@ import { bytesToHex } from '@noble/hashes/utils'
 import * as secp256k1 from '@noble/secp256k1'
 import { Address } from 'micro-eth-signer'
 
-import { EthereumGroupedCredentials, EthereumSpecificArgs } from './types'
+import {
+  EthereumDerivationArgs,
+  EthereumGroupedCredentials,
+  EthereumSpecificArgs
+} from './types'
 
 export async function deriveEthereumPublicAddress(
   privateKey: Uint8Array
@@ -37,7 +41,7 @@ export function deriveEthereumPublicKey(privateKey: Uint8Array): string {
 }
 
 export function deriveEthereumCredentials(
-  args: EthereumSpecificArgs,
+  args: EthereumSpecificArgs | EthereumDerivationArgs,
   publicCredential: string,
   encryptedPrivateKeyBytes: Uint8Array
 ): EthereumGroupedCredentials {

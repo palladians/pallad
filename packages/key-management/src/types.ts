@@ -143,10 +143,17 @@ export enum Network {
   Starknet = 'Starknet'
 }
 
+// TODO: Change this to a ChainDerivationArgs
 export type ChainSpecificArgs =
   | MinaSpecificArgs
   | StarknetSpecificArgs
   | EthereumSpecificArgs
+
+export type ChainOperationArgs = {
+  operation: string
+  network: 'Mina' | 'Ethereum'
+  networkType?: Mina.NetworkType
+}
 
 export interface ChainSpecificPayload {
   network: Network

@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 
 import * as errors from '../../errors'
+import { ChainOperationArgs } from '../../types'
 import * as util from './guards'
 import {
   EthereumSignablePayload,
@@ -12,7 +13,7 @@ export async function EthereumSigningOperations<
   T extends EthereumSignablePayload
 >(
   payload: T,
-  args: EthereumSpecificArgs,
+  args: EthereumSpecificArgs | ChainOperationArgs,
   privateKey: string
 ): Promise<EthereumSignatureResult> {
   // Create a wallet instance using the private key

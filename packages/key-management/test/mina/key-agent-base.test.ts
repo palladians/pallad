@@ -10,6 +10,7 @@ import { emip3encrypt } from '../../src/emip3'
 import { getPassphraseRethrowTypedError } from '../../src/InMemoryKeyAgent'
 import { KeyAgentBase } from '../../src/KeyAgentBase'
 import {
+  ChainOperationArgs,
   GetPassphrase,
   KeyAgentType,
   Network,
@@ -532,10 +533,17 @@ describe('KeyAgentBase (Mina Functionality)', () => {
       const nullifier: Mina.CreatableNullifer = {
         message: [BigInt(10)]
       }
+
+      const operations: ChainOperationArgs = {
+        operation: 'mina_createNullifier',
+        network: 'Mina',
+        networkType: 'testnet'
+      }
+
       const createdNullifier = await instance.sign(
         groupedCredential,
         nullifier,
-        args
+        operations
       )
 
       console.log('createdNullifier', createdNullifier)

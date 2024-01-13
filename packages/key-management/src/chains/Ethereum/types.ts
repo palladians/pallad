@@ -17,6 +17,12 @@ export type EthereumSpecificArgs = {
   operation?: string
 }
 
+export type EthereumDerivationArgs = {
+  network: Network.Ethereum
+  accountIndex: number
+  addressIndex: number
+}
+
 export type EthereumSignablePayload = TransactionRequest | string | Uint8Array
 export type EthereumSignatureResult = string
 

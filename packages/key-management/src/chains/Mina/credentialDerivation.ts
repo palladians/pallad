@@ -1,7 +1,11 @@
 import { Mina } from '@palladxyz/mina-core'
 import Client from 'mina-signer'
 
-import { MinaGroupedCredentials, MinaSpecificArgs } from './types'
+import {
+  MinaDerivationArgs,
+  MinaGroupedCredentials,
+  MinaSpecificArgs
+} from './types'
 
 export function deriveMinaPublicKey(
   //rename payload to args
@@ -16,7 +20,7 @@ export function deriveMinaPublicKey(
 }
 
 export function deriveMinaCredentials(
-  args: MinaSpecificArgs,
+  args: MinaSpecificArgs | MinaDerivationArgs,
   publicCredential: Mina.PublicKey,
   encryptedPrivateKeyBytes: Uint8Array
 ): MinaGroupedCredentials {

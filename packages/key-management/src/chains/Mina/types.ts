@@ -27,6 +27,12 @@ export type MinaSpecificArgs = {
   operation?: string // optional for now
 }
 
+export type MinaDerivationArgs = {
+  network: Network.Mina
+  accountIndex: number
+  addressIndex: number
+}
+
 export type MinaGroupedCredentials = {
   '@context': ['https://w3id.org/wallet/v1']
   id: string

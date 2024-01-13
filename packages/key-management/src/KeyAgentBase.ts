@@ -1,11 +1,7 @@
 import { HDKey } from '@scure/bip32'
 
-import {
-  EthereumSignablePayload,
-  EthereumSigningOperations,
-  EthereumSpecificArgs
-} from './chains'
-import { MinaSignablePayload, MinaSpecificArgs } from './chains/Mina'
+import { EthereumSignablePayload, EthereumSigningOperations } from './chains'
+import { MinaSignablePayload } from './chains/Mina'
 import { MinaSigningOperations } from './chains/Mina/signingOperations'
 import { emip3encrypt } from './emip3'
 import * as errors from './errors'
@@ -13,6 +9,7 @@ import { getPassphraseRethrowTypedError } from './InMemoryKeyAgent'
 import { KeyDecryptor } from './KeyDecryptor'
 import {
   ChainKeyPair,
+  ChainOperationArgs,
   ChainPrivateKey,
   ChainSignablePayload,
   ChainSignatureResult,
@@ -142,7 +139,7 @@ export abstract class KeyAgentBase implements KeyAgent {
   async sign<T extends GroupedCredentials>(
     payload: T,
     signable: ChainSignablePayload,
-    args: ChainSpecificArgs
+    args: ChainSpecificArgs | ChainOperationArgs
   ): Promise<ChainSignatureResult> {
     const encryptedPrivateKeyBytes = payload.encryptedPrivateKeyBytes
     const decryptedKeyBytes = await this.keyDecryptor.decryptChildPrivateKey(
@@ -156,13 +153,13 @@ export abstract class KeyAgentBase implements KeyAgent {
       if (args.network === 'Mina') {
         result = MinaSigningOperations(
           signable as MinaSignablePayload,
-          args as MinaSpecificArgs,
+          args,
           privateKey
         )
       } else if (args.network === 'Ethereum') {
         result = EthereumSigningOperations(
           signable as EthereumSignablePayload,
-          args as EthereumSpecificArgs,
+          args,
           privateKey
         )
       } else {
