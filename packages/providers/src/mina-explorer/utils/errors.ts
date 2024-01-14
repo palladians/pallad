@@ -18,10 +18,11 @@ export class ServerError extends Error {
     this.statusCode = statusCode
     this.responseBody = responseBody
 
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, ServerError)
-    } else {
-      this.stack = originalError.stack || '' // Handling potential undefined
+    // Manually adjust the stack trace to omit the constructor call
+    if (this.stack) {
+      const newStack = this.stack.split('\n')
+      newStack.splice(1, 1) // Remove the constructor call from the stack trace
+      this.stack = newStack.join('\n')
     }
   }
 }

@@ -1,15 +1,15 @@
-import { AccountInfoProviderRPC } from '../../../src/obscura-provider'
+import { createAccountInfoProvider } from '../../../src/obscura-provider'
 
 const nodeUrl = process.env['OBSCURA_URL'] || ''
 const publicKey =
   process.env['PUBLIC_KEY'] ||
   'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
 
-describe('Obscura Account Info Provider', () => {
-  let provider: AccountInfoProviderRPC
+describe('Obscura Account Info Provider (Functional)', () => {
+  let provider: ReturnType<typeof createAccountInfoProvider>
 
   beforeEach(() => {
-    provider = new AccountInfoProviderRPC({ url: nodeUrl })
+    provider = createAccountInfoProvider(nodeUrl)
   })
 
   describe('healthCheck', () => {

@@ -5,6 +5,8 @@ import {
   HealthCheckResponse
 } from '@palladxyz/mina-core'
 
+import { healthCheckQuery } from './queries'
+
 export type AccountInfoConstructor = {
   url: string
 }
@@ -17,13 +19,11 @@ export class AccountInfoProviderRPC implements AccountInfoProvider {
   }
 
   async healthCheck(): Promise<HealthCheckResponse> {
-    const query = `{ syncStatus }`
-
     try {
       const response = await fetch(this.url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ healthCheckQuery })
       })
 
       if (!response.ok) {
@@ -56,6 +56,7 @@ export class AccountInfoProviderRPC implements AccountInfoProvider {
   }
 
   async getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo> {
+    // this doesn't work when switching out the query for the constant
     const query = `
             query accountBalance($publicKey: PublicKey!) {
                 account(publicKey: $publicKey) {
