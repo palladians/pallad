@@ -1,7 +1,7 @@
 import { HDKey } from '@scure/bip32'
 
 import { EthereumSignablePayload, EthereumSigningOperations } from './chains'
-import { MinaSignablePayload, MinaSpecificArgs } from './chains/Mina'
+import { MinaSignablePayload } from './chains/Mina'
 import { MinaSigningOperations } from './chains/Mina/signingOperations'
 import { emip3encrypt } from './emip3'
 import * as errors from './errors'
@@ -9,6 +9,7 @@ import { getPassphraseRethrowTypedError } from './InMemoryKeyAgent'
 import { KeyDecryptor } from './KeyDecryptor'
 import {
   ChainKeyPair,
+  ChainOperationArgs,
   ChainPrivateKey,
   ChainSignablePayload,
   ChainSignatureResult,
@@ -138,29 +139,38 @@ export abstract class KeyAgentBase implements KeyAgent {
   async sign<T extends GroupedCredentials>(
     payload: T,
     signable: ChainSignablePayload,
-    args: ChainSpecificArgs
+    args: ChainSpecificArgs | ChainOperationArgs
   ): Promise<ChainSignatureResult> {
     const encryptedPrivateKeyBytes = payload.encryptedPrivateKeyBytes
     const decryptedKeyBytes = await this.keyDecryptor.decryptChildPrivateKey(
       encryptedPrivateKeyBytes
     )
-    const privateKey = Buffer.from(decryptedKeyBytes).toString()
+
+    let privateKey: string | null = Buffer.from(decryptedKeyBytes).toString()
 
     try {
+      let result
       if (args.network === 'Mina') {
-        return MinaSigningOperations(
+        result = MinaSigningOperations(
           signable as MinaSignablePayload,
-          args as MinaSpecificArgs,
-          privateKey as string
+          args,
+          privateKey
         )
       } else if (args.network === 'Ethereum') {
-        return EthereumSigningOperations(
+        result = EthereumSigningOperations(
           signable as EthereumSignablePayload,
-          privateKey as string
+          args,
+          privateKey
         )
       } else {
         throw new Error('Unsupported network')
       }
+
+      // Overwrite and nullify the privateKey
+      privateKey = '0'.repeat(privateKey.length)
+      privateKey = null
+
+      return result
     } catch (error) {
       console.error(error)
       throw error

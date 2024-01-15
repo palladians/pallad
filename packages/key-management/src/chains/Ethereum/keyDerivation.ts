@@ -1,9 +1,13 @@
 import { HDKey } from '@scure/bip32'
 
-import { EthereumKeyConst, EthereumSpecificArgs } from './types'
+import {
+  EthereumDerivationArgs,
+  EthereumKeyConst,
+  EthereumSpecificArgs
+} from './types'
 
 export async function deriveEthereumPrivateKey(
-  args: EthereumSpecificArgs,
+  args: EthereumSpecificArgs | EthereumDerivationArgs,
   decryptedSeedBytes: Uint8Array
 ): Promise<string> {
   const { accountIndex, addressIndex } = args

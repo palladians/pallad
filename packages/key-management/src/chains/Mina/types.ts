@@ -1,4 +1,4 @@
-import { Mina } from '@palladxyz/mina-core'
+import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
 
 import { ChainSpecificPayload, Network } from '../../types'
 import { ChainPublicKey } from '../../types'
@@ -10,6 +10,7 @@ export type MinaSignatureResult =
   | Mina.SignedMessage
   | Mina.SignedFields
   | Mina.SignedZkAppCommand
+  | BorrowedTypes.Nullifier
 
 export type MinaSpecificPayload = {
   network: Network.Mina
@@ -23,6 +24,13 @@ export type MinaSpecificArgs = {
   accountIndex: number
   addressIndex: number
   networkType: Mina.NetworkType
+  operation?: string // optional for now
+}
+
+export type MinaDerivationArgs = {
+  network: Network.Mina
+  accountIndex: number
+  addressIndex: number
 }
 
 export type MinaGroupedCredentials = {
@@ -45,6 +53,7 @@ export type MinaSignablePayload =
   | Mina.MessageBody
   | Mina.SignableFields
   | Mina.SignableZkAppCommand
+  | Mina.CreatableNullifer
 
 export class MinaPayload implements ChainSpecificPayload {
   network = Network.Mina

@@ -1,3 +1,3 @@
 export type CreatableNullifer = {
-  messageNullifier: bigint[]
+  message: bigint[]
 }
