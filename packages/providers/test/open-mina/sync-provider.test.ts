@@ -9,7 +9,7 @@ describe('Open Mina Provider', () => {
     url = 'http://localhost:3000'
     //await startLocalNode()
   })
-  it('should return sync stats', async () => {
+  test.skip('should return sync stats', async () => {
     const response = await localNodeSyncStats(url, '?limit=1')
     console.log('Open Mina Provider Response', response)
     console.log('Ledgers', response[0].ledgers)

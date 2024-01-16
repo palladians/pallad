@@ -2,7 +2,9 @@ import { TxStatus } from '@palladxyz/mina-core'
 
 import { createTransactionStatusProvider } from '../../../src/obscura-provider'
 
-const nodeUrl = process.env['OBSCURA_URL'] || ''
+const nodeUrl =
+  process.env['OBSCURA_URL'] ||
+  'http://alpha.mina-berkeley.obscura.build:3085/graphql'
 const txId =
   process.env['TX_ID'] ||
   'Av0AwusL/+cWVFkjyBFPR9rFNHta+V8q8vHbYTQ3gMyHKyXkcjQACwD//yIBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/nFlRZI8gRT0faxTR7WvlfKvLx22E0N4DMhysl5HI0APyAGeuEAAAAAP/nFlRZI8gRT0faxTR7WvlfKvLx22E0N4DMhysl5HI0AIDa/ybX+NBM+IrPyZXk1uTQzqHlzzlbmr1PufF0wAQKDq/ia0vONmdHjndfjXK6Gur0JeSbVaMoxBDS9bm2iQw='

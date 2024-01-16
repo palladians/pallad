@@ -2,7 +2,9 @@ import { TokenIdMap } from '@palladxyz/mina-core'
 
 import { createAccountInfoProvider } from '../../../src/obscura-provider'
 
-const nodeUrl = process.env['OBSCURA_URL'] || ''
+const nodeUrl =
+  process.env['OBSCURA_URL'] ||
+  'http://alpha.mina-berkeley.obscura.build:3085/graphql'
 const publicKey =
   process.env['PUBLIC_KEY'] ||
   'B62qicdpMEVwzkDrf19uQiw6maKGDYV2C7DbnzhojF2dbVp4hWYhnNr'
