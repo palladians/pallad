@@ -1,6 +1,13 @@
 import { Mina, Provider } from '../..'
 
-export type AccountInfoArgs = { publicKey: Mina.PublicKey }
+export interface TokenIdMap {
+  [alias: string]: string
+}
+
+export type AccountInfoArgs = {
+  publicKey: Mina.PublicKey
+  tokenMap?: TokenIdMap
+}
 
 export interface AccountInfo {
   balance: { total: number }
@@ -17,5 +24,7 @@ export interface AccountInfoProvider extends Provider {
    * @param {Mina.PublicKey} publicKey - Public Key of the account
    * @returns {AccountInfo} - An object with balance and account information
    */
-  getAccountInfo: (args: AccountInfoArgs) => Promise<AccountInfo>
+  getAccountInfo: (
+    args: AccountInfoArgs
+  ) => Promise<AccountInfo> | Promise<Record<string, AccountInfo>>
 }

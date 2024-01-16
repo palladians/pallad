@@ -18,7 +18,9 @@ import { getAccountBalance, healthCheckQuery } from './queries'
 export interface AccountData {
   account: AccountInfo
 }
-
+/**
+ * This is now deprecated and will be removed in the next major release.
+ */
 export class AccountInfoGraphQLProvider implements AccountInfoProvider {
   private graphqlClient: GraphQLClient
 

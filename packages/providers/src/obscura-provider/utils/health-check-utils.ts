@@ -1,9 +1,13 @@
+import { HealthCheckResponse } from '@palladxyz/mina-core'
+
 import { fetchGraphQL } from './fetch-utils'
 
 export const healthCheckQuery = `{ syncStatus }`
 
-export const healthCheck = async (url, query) => {
-  const result = await fetchGraphQL(url, query)
+export const healthCheck = async (
+  url: string
+): Promise<HealthCheckResponse> => {
+  const result = await fetchGraphQL(url, healthCheckQuery)
   if (!result.ok) {
     return result
   }

@@ -4,7 +4,7 @@ import {
   AccountInfoProvider
 } from '@palladxyz/mina-core'
 
-import { fetchGraphQL } from '../utils/fetch-utils'
+import { createGraphQLRequest } from '../utils/fetch-utils'
 import { healthCheck } from '../utils/health-check-utils'
 import { getTokenAccountInfoQuery } from './queries'
 
@@ -14,7 +14,8 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
   ): Promise<Record<string, AccountInfo>> => {
     const variables = { publicKey: args.publicKey }
     const query = getTokenAccountInfoQuery(args.tokenMap || { MINA: '1' })
-    const result = await fetchGraphQL(url, query, variables)
+    const fetchGraphQL = createGraphQLRequest(url)
+    const result = await fetchGraphQL(query, variables)
 
     if (!result.ok) {
       throw new Error(result.message)
