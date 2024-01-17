@@ -4,7 +4,7 @@ import { createAccountInfoProvider } from '../../../src/obscura-provider'
 
 const nodeUrl =
   process.env['OBSCURA_URL'] ||
-  'http://alpha.mina-berkeley.obscura.build:3085/graphql'
+  'https://mina.obscura.build/v1/bfce6350-4f7a-4b63-be9b-8981dec92050/graphql'
 const publicKey =
   process.env['PUBLIC_KEY'] ||
   'B62qicdpMEVwzkDrf19uQiw6maKGDYV2C7DbnzhojF2dbVp4hWYhnNr'

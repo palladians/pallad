@@ -27,8 +27,25 @@ describe('Mina Explorer Chain History Provider (Functional)', () => {
       const response = await provider.transactionsByAddresses({
         addresses: [publicKey]
       })
-      console.log('Mina Explorer Chain History Provider Response', response)
-      expect(response[0]).toHaveProperty('amount')
+      // TODO: check why pageResults is undefined
+      console.log(
+        'Mina Explorer Chain History Provider Response',
+        response.pageResults
+      )
+      // TODO: investigate pagination
+      const transaction = response.transactions[0]
+
+      expect(transaction).toHaveProperty('amount')
+      expect(transaction).toHaveProperty('blockHeight')
+      expect(transaction).toHaveProperty('dateTime')
+      expect(transaction).toHaveProperty('failureReason')
+      expect(transaction).toHaveProperty('fee')
+      expect(transaction).toHaveProperty('from')
+      expect(transaction).toHaveProperty('hash')
+      expect(transaction).toHaveProperty('isDelegation')
+      expect(transaction).toHaveProperty('kind')
+      expect(transaction).toHaveProperty('to')
+      expect(transaction).toHaveProperty('token')
     })
   })
 
