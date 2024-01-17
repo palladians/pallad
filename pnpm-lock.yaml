@@ -696,6 +696,9 @@ importers:
 
   packages/providers:
     dependencies:
+      '@palladxyz/key-management':
+        specifier: ^0.0.1
+        version: link:../key-management
       '@palladxyz/mina-core':
         specifier: ^0.0.1
         version: link:../mina-core

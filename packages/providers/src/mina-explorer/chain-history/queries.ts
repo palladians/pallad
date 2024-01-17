@@ -1,13 +1,3 @@
-export const healthCheckQuery = `
-  {
-    __schema {
-      types {
-        name
-      }
-    }
-  }
-`
-
 export const transactionsByAddressesQuery = `
   query Transactions($address: String!, $limit: Int) {
     transactions(

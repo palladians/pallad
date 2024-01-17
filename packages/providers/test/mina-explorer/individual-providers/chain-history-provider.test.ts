@@ -28,7 +28,7 @@ describe('Mina Explorer Chain History Provider (Functional)', () => {
         addresses: [publicKey]
       })
       console.log('Mina Explorer Chain History Provider Response', response)
-      //expect(response).toHaveProperty('MINA')
+      expect(response[0]).toHaveProperty('amount')
     })
   })
 
