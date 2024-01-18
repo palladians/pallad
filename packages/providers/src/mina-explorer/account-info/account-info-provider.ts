@@ -14,6 +14,7 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
   ): Promise<Record<string, AccountInfo>> => {
     const variables = { publicKey: args.publicKey }
     const query = getTokenAccountInfoQuery(args.tokenMap || { MINA: '1' })
+    console.log('Query', query)
     const fetchGraphQL = createGraphQLRequest(url)
     const result = await fetchGraphQL(query, variables)
 
