@@ -6,6 +6,7 @@ import {
 } from './chains/Ethereum/credentialDerivation'
 import {
   EthereumGroupedCredentials,
+  EthereumSignablePayload,
   EthereumSignatureResult,
   EthereumSpecificArgs
 } from './chains/Ethereum/types'
@@ -142,10 +143,17 @@ export enum Network {
   Starknet = 'Starknet'
 }
 
+// TODO: Change this to a ChainDerivationArgs
 export type ChainSpecificArgs =
   | MinaSpecificArgs
   | StarknetSpecificArgs
   | EthereumSpecificArgs
+
+export type ChainOperationArgs = {
+  operation: string
+  network: 'Mina' | 'Ethereum'
+  networkType?: Mina.NetworkType
+}
 
 export interface ChainSpecificPayload {
   network: Network
@@ -191,7 +199,7 @@ export type ChainSigningFunction = (
   privateKey: ChainPrivateKey
 ) => Promise<ChainSignatureResult>
 
-export type ChainSignablePayload = MinaSignablePayload
+export type ChainSignablePayload = MinaSignablePayload | EthereumSignablePayload
 
 /*export const chainSigningOperations: Record<string, ChainSigningFunction> = {
   'Mina': MinaSigningOperations,

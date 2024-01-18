@@ -6,6 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "build:firefox": "web-ext build --source-dir=dist",
+    "build:safari": "xcrun safari-web-extension-converter dist --app-name Pallad --bundle-identifier xyz.pallad.app --swift --no-prompt --force --macos-only --no-open",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "cleanup": "rimraf node_modules dist .turbo",

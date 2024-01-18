@@ -1,6 +1,8 @@
 import * as bip39 from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/english'
 
+import { emip3encrypt } from '../emip3'
+
 /**
  * A wrapper around the bip39 package function, with default strength applied to produce 24 words
  */
@@ -33,6 +35,22 @@ export const entropyToSeed = (entropy: Uint8Array, passphrase?: string) => {
   //const root = bip32.HDKey.fromMasterSeed(seed)
   // Return unencrypted root key bytes
   return seed //root.privateKey ? root.privateKey : Buffer.from([])
+}
+
+/**
+ * A wrapper to produce an encrypted seed
+ */
+export const mnemonicWordsToEncryptedSeed = async (
+  mnemonicWords: string[],
+  passphrase: Uint8Array,
+  mnemonic2ndFactorPassphrase: string
+) => {
+  // get seed from mnemonic
+  const seed = mnemonicToSeed(mnemonicWords, mnemonic2ndFactorPassphrase)
+  // encrypt seed
+  const encryptedSeed = await emip3encrypt(seed, passphrase)
+
+  return encryptedSeed
 }
 
 export { wordlist }

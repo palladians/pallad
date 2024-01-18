@@ -1,12 +1,15 @@
 import {
+  ChainOperationArgs,
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
+  GroupedCredentials,
   MinaPayload,
   MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { act, renderHook } from '@testing-library/react'
+import { expect } from 'vitest'
 
 import { KeyAgents } from '../../src'
 import { useVault } from '../../src'
@@ -187,5 +190,55 @@ describe('KeyAgentStore', () => {
         expectedGroupedCredentials.address
       )
     })
+  })
+  it('should sign a payload with a key agent', async () => {
+    const { result } = renderHook(() => useVault())
+    await act(async () => {
+      // add first key agent
+      await result.current.initialiseKeyAgent(
+        keyAgentName,
+        KeyAgents.InMemory,
+        agentArgs
+      )
+      // create credential
+      const args: MinaSpecificArgs = {
+        network: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0,
+        networkType: 'testnet'
+      }
+      const payload = new MinaPayload()
+      const groupedCredential = await result.current.createCredential(
+        keyAgentName,
+        payload,
+        args,
+        getPassphrase
+      )
+
+      console.log('groupedCredential: ', groupedCredential)
+      // signable payload
+      const message: Mina.MessageBody = {
+        message: 'Hello, Bob!'
+      }
+      // define operation object
+      const operations: ChainOperationArgs = {
+        operation: 'mina_sign',
+        network: 'Mina',
+        networkType: 'testnet'
+      }
+      // sign payload
+      const signedMessage = await result.current.request(
+        keyAgentName,
+        groupedCredential as GroupedCredentials,
+        message,
+        operations
+      )
+      console.log('signedMessage: ', signedMessage)
+    })
+    // check that key agent is in the store
+    const keyAgent = result.current.keyAgents[keyAgentName]
+    expect(keyAgent?.keyAgent).toBeDefined()
+
+    expect(true).toEqual(true)
   })
 })
