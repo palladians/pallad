@@ -1,4 +1,5 @@
 import {
+  ChainOperationArgs,
   constructTransaction,
   FromBip39MnemonicWordsProps,
   InMemoryKeyAgent,
@@ -109,10 +110,9 @@ describe('Mina Explorer Submit Transaction Provider (Functional)', () => {
         Mina.TransactionKind.PAYMENT
       )
       const credential = agent.serializableData.credentialSubject.contents[0]
-      const args: MinaSpecificArgs = {
-        network: Network.Mina,
-        accountIndex: 0,
-        addressIndex: 0,
+      const args: ChainOperationArgs = {
+        operation: 'mina_signTransaction',
+        network: 'Mina',
         networkType: networkType
       }
       console.log('Credential', credential)
