@@ -23,7 +23,7 @@ describe('Mina Explorer Account Info Provider (Functional)', () => {
     it('should return a health check response', async () => {
       // This test depends on the actual response from the server
       const response = await provider.healthCheck()
-      expect(response).toHaveProperty('ok')
+      expect(response.ok).toBe(true)
     })
   })
 
