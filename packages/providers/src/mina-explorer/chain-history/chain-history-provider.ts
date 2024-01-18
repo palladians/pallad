@@ -17,7 +17,7 @@ export const createChainHistoryProvider = (
 ): ChainHistoryProvider => {
   const transactionsByAddresses = async (
     args: TransactionsByAddressesArgs
-  ): Promise<Mina.Paginated<Mina.TransactionBody>> => {
+  ): Promise<Mina.TransactionBody[]> => {
     const { startAt, limit } = args.pagination || { startAt: 0, limit: 10 }
     // TODO: remove array of addresses from TransactionsByAddressesArgs
     const variables = { address: args.addresses[0], limit, offset: startAt }
@@ -29,7 +29,7 @@ export const createChainHistoryProvider = (
       throw new Error(result.message)
     }
 
-    const transactions = result.data
+    const transactions = result.data.transactions
 
     return transactions
   }

@@ -1,3 +1,5 @@
+import { Mina } from '@palladxyz/mina-core'
+
 import { createChainHistoryProvider } from '../../../src/mina-explorer/chain-history'
 
 const nodeUrl =
@@ -24,16 +26,13 @@ describe('Mina Explorer Chain History Provider (Functional)', () => {
   describe('transactionsByAddresses', () => {
     it('should return transaction history for a public key', async () => {
       // This test now depends on the actual response from the server
-      const response = await provider.transactionsByAddresses({
+      const response = (await provider.transactionsByAddresses({
         addresses: [publicKey]
-      })
+      })) as Mina.TransactionBody[]
       // TODO: check why pageResults is undefined
-      console.log(
-        'Mina Explorer Chain History Provider Response',
-        response.pageResults
-      )
+      console.log('Mina Explorer Chain History Provider Response', response)
       // TODO: investigate pagination
-      const transaction = response.transactions[0]
+      const transaction = response[0]
 
       expect(transaction).toHaveProperty('amount')
       expect(transaction).toHaveProperty('blockHeight')
