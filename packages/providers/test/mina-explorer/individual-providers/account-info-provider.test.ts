@@ -1,6 +1,6 @@
 import { TokenIdMap } from '@palladxyz/mina-core'
 
-import { createAccountInfoProvider } from '../../../src/mina-explorer/account-info/account-info-provider'
+import { MinaExplorer } from '../../../src/'
 
 const nodeUrl =
   process.env['NODE_URL'] || 'https://proxy.berkeley.minaexplorer.com/'
@@ -9,11 +9,11 @@ const publicKey =
   'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
 
 describe('Mina Explorer Account Info Provider (Functional)', () => {
-  let provider: ReturnType<typeof createAccountInfoProvider>
+  let provider: ReturnType<typeof MinaExplorer.createAccountInfoProvider>
   let tokenMap: TokenIdMap
 
   beforeEach(() => {
-    provider = createAccountInfoProvider(nodeUrl)
+    provider = MinaExplorer.createAccountInfoProvider(nodeUrl)
     tokenMap = {
       MINA: '1'
     }

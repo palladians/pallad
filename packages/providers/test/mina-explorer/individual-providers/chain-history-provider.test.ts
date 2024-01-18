@@ -1,6 +1,6 @@
 import { Mina } from '@palladxyz/mina-core'
 
-import { createChainHistoryProvider } from '../../../src/mina-explorer/chain-history'
+import { MinaExplorer } from '../../../src'
 
 const nodeUrl =
   process.env['ARCHIVE_NODE_URL'] || 'https://berkeley.graphql.minaexplorer.com'
@@ -9,10 +9,10 @@ const publicKey =
   'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
 
 describe('Mina Explorer Chain History Provider (Functional)', () => {
-  let provider: ReturnType<typeof createChainHistoryProvider>
+  let provider: ReturnType<typeof MinaExplorer.createChainHistoryProvider>
 
   beforeEach(() => {
-    provider = createChainHistoryProvider(nodeUrl)
+    provider = MinaExplorer.createChainHistoryProvider(nodeUrl)
   })
 
   describe('healthCheck', () => {

@@ -13,8 +13,7 @@ import {
   SignedLegacy
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
-import { createAccountInfoProvider } from '../../../src/obscura-provider/account-info'
-import { createTxSubmitProvider } from '../../../src/obscura-provider/tx-submit'
+import { Obscura } from '../../../src'
 
 const nodeUrl =
   process.env['OBSCURA_URL'] ||
@@ -30,16 +29,16 @@ const params = {
 const getPassphrase = async () => Buffer.from(params.passphrase)
 
 describe('Mina Explorer Submit Transaction Provider (Functional)', () => {
-  let provider: ReturnType<typeof createTxSubmitProvider>
-  let accountInfoProvider: ReturnType<typeof createAccountInfoProvider>
+  let provider: ReturnType<typeof Obscura.createTxSubmitProvider>
+  let accountInfoProvider: ReturnType<typeof Obscura.createAccountInfoProvider>
   let tokenMap: TokenIdMap
   let networkType: Mina.NetworkType
   let agent: InMemoryKeyAgent
   let mnemonic: string[]
 
   beforeEach(() => {
-    provider = createTxSubmitProvider(nodeUrl)
-    accountInfoProvider = createAccountInfoProvider(nodeUrl)
+    provider = Obscura.createTxSubmitProvider(nodeUrl)
+    accountInfoProvider = Obscura.createAccountInfoProvider(nodeUrl)
     tokenMap = {
       MINA: '1'
     }

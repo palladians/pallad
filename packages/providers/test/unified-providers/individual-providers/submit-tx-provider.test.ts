@@ -13,10 +13,15 @@ import {
   SignedLegacy
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
-import { MinaExplorer } from '../../../src'
+import {
+  createAccountInfoProvider,
+  createTxSubmitProvider,
+  ProviderConfig
+} from '../../../src'
 
-const nodeUrl =
+const minaExplorerUrl =
   process.env['NODE_URL'] || 'https://proxy.berkeley.minaexplorer.com/'
+
 const publicKey =
   process.env['PUBLIC_KEY'] ||
   'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
@@ -26,20 +31,25 @@ const params = {
 }
 const getPassphrase = async () => Buffer.from(params.passphrase)
 
-// TODO: use different mnemonic for this test -- else there are two duplicate transactions with the unified provider tests
-describe.skip('Mina Explorer Submit Transaction Provider (Functional)', () => {
-  let provider: ReturnType<typeof MinaExplorer.createTxSubmitProvider>
-  let accountInfoProvider: ReturnType<
-    typeof MinaExplorer.createAccountInfoProvider
-  >
+describe('Unified Submit Transaction Provider (Functional)', () => {
+  let provider: ReturnType<typeof createTxSubmitProvider>
+  let accountInfoProvider: ReturnType<typeof createAccountInfoProvider>
   let tokenMap: TokenIdMap
   let networkType: Mina.NetworkType
   let agent: InMemoryKeyAgent
   let mnemonic: string[]
+  let configMinaExplorer: ProviderConfig
+  //let configObscura: ProviderConfig // TODO: add Obscura tests
 
   beforeEach(() => {
-    provider = MinaExplorer.createTxSubmitProvider(nodeUrl)
-    accountInfoProvider = MinaExplorer.createAccountInfoProvider(nodeUrl)
+    configMinaExplorer = {
+      providerName: 'mina-explorer',
+      networkName: 'berkeley',
+      url: minaExplorerUrl,
+      chainId: '...'
+    }
+    provider = createTxSubmitProvider(configMinaExplorer)
+    accountInfoProvider = createAccountInfoProvider(configMinaExplorer)
     tokenMap = {
       MINA: '1'
     }
@@ -86,7 +96,7 @@ describe.skip('Mina Explorer Submit Transaction Provider (Functional)', () => {
     })
   })
   // TODO: use different mnemonic for this test -- else there are two duplicate transactions
-  describe.skip('submitTx', () => {
+  describe('submitTx', () => {
     it('should return the submitted transaction response', async () => {
       // fetch account info
       const accountInfo = await accountInfoProvider.getAccountInfo({
@@ -138,9 +148,8 @@ describe.skip('Mina Explorer Submit Transaction Provider (Functional)', () => {
         'Mina Explorer Submit Transaction Provider Response',
         response
       )
-      //expect(response).toHaveProperty('MINA')
     })
   })
 
-  //TODO: Other tests...
+  //TODO: Add Obscura tests
 })

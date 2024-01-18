@@ -1,19 +1,19 @@
 import { Mina } from '@palladxyz/mina-core'
 
-import { createChainHistoryProvider } from '../../../src/obscura-provider'
+import { Obscura } from '../../../src'
 
 const nodeUrl =
-  process.env['OBSCURA_URL'] ||
+  process.env['ARCHIVE_OBSCURA_URL'] ||
   'https://mina-berkeley.obscura.build/v1/bfce6350-4f7a-4b63-be9b-8981dec92050/graphql'
 const publicKey =
   process.env['PUBLIC_KEY'] ||
   'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
 
 describe.skip('Obscura Chain History Provider (Functional)', () => {
-  let provider: ReturnType<typeof createChainHistoryProvider>
+  let provider: ReturnType<typeof Obscura.createChainHistoryProvider>
 
   beforeEach(() => {
-    provider = createChainHistoryProvider(nodeUrl)
+    provider = Obscura.createChainHistoryProvider(nodeUrl)
   })
 
   describe('healthCheck', () => {

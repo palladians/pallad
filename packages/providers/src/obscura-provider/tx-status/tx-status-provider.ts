@@ -1,7 +1,7 @@
 import { TxStatus, TxStatusArgs, TxStatusProvider } from '@palladxyz/mina-core'
 
 import { fetchGraphQL } from '../utils/fetch-utils'
-import { healthCheck, healthCheckQuery } from '../utils/health-check-utils'
+import { healthCheck } from '../utils/health-check-utils'
 import { transactionStatus as transactionStatusQuery } from './queries'
 
 export const createTransactionStatusProvider = (
@@ -23,7 +23,7 @@ export const createTransactionStatusProvider = (
   }
 
   return {
-    healthCheck: () => healthCheck(url, healthCheckQuery),
+    healthCheck: () => healthCheck(url),
     checkTxStatus
   }
 }

@@ -1,6 +1,6 @@
 import { TokenIdMap } from '@palladxyz/mina-core'
 
-import { createAccountInfoProvider } from '../../../src/obscura-provider'
+import { Obscura } from '../../../src/'
 
 const nodeUrl =
   process.env['OBSCURA_URL'] ||
@@ -10,11 +10,11 @@ const publicKey =
   'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
 
 describe('Obscura Account Info Provider (Functional)', () => {
-  let provider: ReturnType<typeof createAccountInfoProvider>
+  let provider: ReturnType<typeof Obscura.createAccountInfoProvider>
   let tokenMap: TokenIdMap
 
   beforeEach(() => {
-    provider = createAccountInfoProvider(nodeUrl)
+    provider = Obscura.createAccountInfoProvider(nodeUrl)
     tokenMap = {
       MINA: '1'
     }
