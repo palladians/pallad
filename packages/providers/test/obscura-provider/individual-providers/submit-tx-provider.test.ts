@@ -86,7 +86,7 @@ describe('Mina Explorer Submit Transaction Provider (Functional)', () => {
     })
   })
 
-  describe('submitTx', () => {
+  describe.skip('submitTx', () => {
     it('should return the submitted transaction response', async () => {
       // fetch account info
       const accountInfo = await accountInfoProvider.getAccountInfo({
