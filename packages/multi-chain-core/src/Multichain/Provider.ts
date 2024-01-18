@@ -11,9 +11,7 @@ import {
   MultiChainPaginatedTransactions,
   MultiChainSubmitTxArgs,
   MultiChainSubmitTxResult,
-  MultiChainTransactionsByAddressesArgs,
-  MultiChainTransactionStatus,
-  MultiChainTransactionStatusArgs
+  MultiChainTransactionsByAddressesArgs
 } from './Transaction'
 
 export type MultichainProviderConfig = UnifiedMinaProviderConfig
@@ -54,25 +52,11 @@ export class MultiChainProvider {
       this.network === Mina.Networks.BERKELEY ||
       this.network === Mina.Networks.TESTWORLD
     ) {
-      return await this.specificProvider?.getAccountInfo(args)
+      return (await this.specificProvider?.getAccountInfo(args)) as
+        | MultiChainAccountInfo
+        | undefined
     }
     throw new Error('Provider not initialized in Multichain getAccountInfo.')
-  }
-
-  public async getTransactionStatus(
-    args: MultiChainTransactionStatusArgs
-  ): Promise<MultiChainTransactionStatus | undefined> {
-    if (
-      this.network === Mina.Networks.MAINNET ||
-      this.network === Mina.Networks.DEVNET ||
-      this.network === Mina.Networks.BERKELEY ||
-      this.network === Mina.Networks.TESTWORLD
-    ) {
-      return await this.specificProvider?.getTransactionStatus(args)
-    }
-    throw new Error(
-      'Provider not initialized in Multichain getTransactionStatus.'
-    )
   }
 
   public async submitTransaction(
@@ -98,7 +82,9 @@ export class MultiChainProvider {
       this.network === Mina.Networks.BERKELEY ||
       this.network === Mina.Networks.TESTWORLD
     ) {
-      return await this.specificProvider?.getTransactions(args)
+      return (await this.specificProvider?.getTransactions(args)) as
+        | MultiChainPaginatedTransactions
+        | undefined
     }
     throw new Error('Provider not initialized in Multichain getTransactions.')
   }

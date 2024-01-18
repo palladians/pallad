@@ -13,7 +13,7 @@ export interface Provider {
   /**
    * @throws ProviderError
    */
-  healthCheck(): Promise<HealthCheckResponse>
+  healthCheck(url?: string): Promise<HealthCheckResponse>
 }
 
 export type HttpProviderConfigPaths<T extends Provider> = {
