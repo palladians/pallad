@@ -26,9 +26,11 @@ describe('Unified Account Info Provider (Functional)', () => {
   describe('Mina Explorer Configuration', () => {
     beforeEach(() => {
       configMinaExplorer = {
-        providerName: 'mina-explorer',
+        nodeEndpoint: {
+          providerName: 'mina-explorer',
+          url: minaExplorerUrl
+        },
         networkName: 'berkeley',
-        url: minaExplorerUrl,
         chainId: '...'
       }
       provider = createAccountInfoProvider(configMinaExplorer)
@@ -54,9 +56,11 @@ describe('Unified Account Info Provider (Functional)', () => {
   describe('Obscura Configuration', () => {
     beforeEach(() => {
       configObscura = {
-        providerName: 'obscura',
+        nodeEndpoint: {
+          providerName: 'obscura',
+          url: obscuraUrl
+        },
         networkName: 'berkeley',
-        url: obscuraUrl,
         chainId: '...'
       }
 

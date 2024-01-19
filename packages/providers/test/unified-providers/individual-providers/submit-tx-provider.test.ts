@@ -43,9 +43,11 @@ describe('Unified Submit Transaction Provider (Functional)', () => {
 
   beforeEach(() => {
     configMinaExplorer = {
-      providerName: 'mina-explorer',
+      nodeEndpoint: {
+        providerName: 'mina-explorer',
+        url: minaExplorerUrl
+      },
       networkName: 'berkeley',
-      url: minaExplorerUrl,
       chainId: '...'
     }
     provider = createTxSubmitProvider(configMinaExplorer)

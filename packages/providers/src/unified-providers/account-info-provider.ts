@@ -13,7 +13,9 @@ export const createAccountInfoProvider = (
   config: ProviderConfig
 ): AccountInfoProvider => {
   const underlyingProvider =
-    config.providerName === 'mina-explorer' ? me(config.url) : ob(config.url)
+    config.nodeEndpoint.providerName === 'mina-explorer'
+      ? me(config.nodeEndpoint.url)
+      : ob(config.nodeEndpoint.url)
 
   const getAccountInfo = async (
     args: AccountInfoArgs

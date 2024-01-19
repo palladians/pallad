@@ -28,10 +28,15 @@ describe('Mina Provider (Functional)', () => {
   describe('Mina Provider - Mina Explorer Configuration', () => {
     beforeEach(() => {
       configMinaExplorer = {
-        providerName: 'mina-explorer',
+        nodeEndpoint: {
+          providerName: 'mina-explorer',
+          url: minaExplorerUrl
+        },
+        archiveNodeEndpoint: {
+          providerName: 'mina-explorer',
+          url: minaExplorerArchiveUrl
+        },
         networkName: 'berkeley',
-        url: minaExplorerUrl,
-        archiveUrl: minaExplorerArchiveUrl,
         chainId: '...'
       }
       provider = createMinaProvider(configMinaExplorer)
@@ -76,12 +81,18 @@ describe('Mina Provider (Functional)', () => {
     })
   })
 
-  describe('Obscura Configuration', () => {
+  describe('Obscura Configuration (Mixed with Mina Explorer for Chain History)', () => {
     beforeEach(() => {
       configObscura = {
-        providerName: 'obscura',
+        nodeEndpoint: {
+          providerName: 'obscura',
+          url: obscuraUrl
+        },
+        archiveNodeEndpoint: {
+          providerName: 'mina-explorer',
+          url: minaExplorerArchiveUrl
+        },
         networkName: 'berkeley',
-        url: obscuraUrl,
         chainId: '...'
       }
 

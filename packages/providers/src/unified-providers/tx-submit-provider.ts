@@ -13,9 +13,9 @@ export const createTxSubmitProvider = (
   config: ProviderConfig
 ): TxSubmitProvider => {
   const underlyingProvider =
-    config.providerName === 'mina-explorer'
-      ? me(config.archiveUrl || config.url)
-      : ob(config.archiveUrl || config.url)
+    config.nodeEndpoint.providerName === 'mina-explorer'
+      ? me(config.nodeEndpoint.url)
+      : ob(config.nodeEndpoint.url)
 
   const submitTx = async (args: SubmitTxArgs): Promise<SubmitTxResult> => {
     // Delegate the call to the underlying provider's getAccountInfo method

@@ -44,7 +44,7 @@ export const createMinaProvider = (
     const node = await healthCheckNode()
     let archiveResult: HealthCheckResponse = { ok: true, message: '' }
 
-    if (config.archiveUrl) {
+    if (config.archiveNodeEndpoint) {
       archiveResult = await healthCheckArchive()
     }
 
