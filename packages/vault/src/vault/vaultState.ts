@@ -12,11 +12,11 @@ import { Multichain } from '@palladxyz/multi-chain-core'
 
 import {
   CredentialName,
-  SearchQuery,
   SingleCredentialState,
   StoredCredential
 } from '../credentials'
 import { KeyAgentName, KeyAgents, SingleKeyAgentState } from '../keyAgent'
+import { SearchQuery } from '../utils/utils'
 
 type CurrentWallet = {
   singleKeyAgentState: SingleKeyAgentState | undefined

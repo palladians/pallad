@@ -1,8 +1,8 @@
 import { produce } from 'immer'
 import { StateCreator } from 'zustand'
 
+import { matchesQuery } from '../utils/utils'
 import { CredentialStore, initialCredentialState } from './credentialsState'
-import { matchesQuery } from './utils'
 
 export const credentialSlice: StateCreator<CredentialStore> = (set, get) => ({
   credentials: {},
