@@ -794,6 +794,9 @@ importers:
       '@palladxyz/persistence':
         specifier: '*'
         version: link:../persistence
+      '@palladxyz/providers':
+        specifier: '*'
+        version: link:../providers
       '@palladxyz/util':
         specifier: '*'
         version: link:../util

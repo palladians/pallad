@@ -21,6 +21,7 @@
     "@palladxyz/key-management": "*",
     "@palladxyz/mina-core": "*",
     "@palladxyz/mina-graphql": "*",
+    "@palladxyz/providers": "*",
     "@palladxyz/multi-chain-core": "*",
     "@palladxyz/persistence": "*",
     "@palladxyz/util": "*",

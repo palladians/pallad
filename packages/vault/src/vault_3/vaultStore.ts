@@ -24,7 +24,6 @@ import { AddressError, NetworkError, WalletError } from '../lib/Errors'
 import { NetworkManager } from '../lib/Network'
 import { ProviderManager } from '../lib/Provider'
 import { getRandomAnimalName } from '../lib/utils'
-import { networkInfoSlice, NetworkInfoStore } from '../network-info'
 import { objectSlice, ObjectStore } from '../objects'
 import { providerSlice, ProviderStore } from '../providers'
 import { GlobalVaultState, GlobalVaultStore } from './vaultState'
@@ -83,7 +82,6 @@ export const useVault = create<
     KeyAgentStore &
     ProviderStore &
     ObjectStore &
-    NetworkInfoStore &
     GlobalVaultStore
 >()(
   persist(
@@ -93,7 +91,6 @@ export const useVault = create<
       ...keyAgentSlice(set, get, store),
       ...providerSlice(set, get, store),
       ...objectSlice(set, get, store),
-      ...networkInfoSlice(set, get, store),
       ...defaultGlobalVaultState,
       setChain(chain) {
         return set(

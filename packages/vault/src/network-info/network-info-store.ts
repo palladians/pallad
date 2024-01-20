@@ -1,35 +1,58 @@
 import { produce } from 'immer'
 import { StateCreator } from 'zustand'
 
-import { TokenInfoStore } from './token-info-state'
+import { NetworkInfoStore } from './network-info-state'
+/* 
+export type NetworkName = string
+export type NetworkInfoStore = {
+  networkInfo: Record<NetworkName, ProviderConfig>
+  setCurrentNetwork: (networkName: NetworkName) => void
+  setNetworkInfo: (networkName: NetworkName, providerConfig: ProviderConfig) => void
+  getNetworkInfo: (networkName: NetworkName) => ProviderConfig | undefined
+  removeNetworkInfo: (ticker: string) => void
+  allNetworkInfo: () => ProviderConfig[]
+  clear: () => void
+}
+*/
 
-export const tokenInfoSlice: StateCreator<TokenInfoStore> = (set, get) => ({
-  tokenInfo: {},
-  setTokenInfo: (tokenInfo) => {
-    const { ticker, tokenId } = tokenInfo
+export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
+  networkInfo: {},
+  currentNetworkInfo: undefined,
+  setCurrentNetworkInfo: (networkName) => {
+    const { networkInfo } = get()
     set(
       produce((state) => {
-        state.tokenInfo[ticker] = tokenId
+        state.currentNetwork = networkInfo[networkName]
       })
     )
   },
-  getTokenInfo: (ticker) => {
-    const { tokenInfo } = get()
-    return { ticker: ticker, tokenId: tokenInfo[ticker] } || undefined
+  getCurrentNetworkInfo: () => {
+    const { currentNetworkInfo } = get()
+    return currentNetworkInfo
   },
-  removeTokenInfo: (ticker) => {
+  setNetworkInfo: (networkName, providerConfig) => {
     set(
       produce((state) => {
-        delete state.tokenInfo[ticker]
+        state.networkInfo[networkName] = providerConfig
       })
     )
   },
-  allTokenInfo: () => {
-    const { tokenInfo } = get()
-    return Object.keys(tokenInfo).map((ticker) => ({
-      ticker,
-      tokenId: tokenInfo[ticker]
-    }))
+  getNetworkInfo: (networkName) => {
+    const { networkInfo } = get()
+    return networkInfo[networkName] || undefined
+  },
+  removeNetworkInfo: (networkName) => {
+    set(
+      produce((state) => {
+        delete state.networkInfo[networkName]
+      })
+    )
+  },
+  allNetworkInfo: () => {
+    const { networkInfo } = get()
+    return Object.keys(networkInfo).map(
+      (networkName) => networkInfo[networkName]
+    )
   },
   clear: () => {
     set(
