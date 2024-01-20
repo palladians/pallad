@@ -57,7 +57,6 @@ describe('ObjectStore', () => {
     }
 
     objectName = 'credentialName'
-    keyAgentName = 'keyAgentName'
     objectState = {
       objectName: objectName,
       object: object as StoredObject
