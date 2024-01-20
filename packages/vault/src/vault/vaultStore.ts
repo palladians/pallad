@@ -94,7 +94,10 @@ export const useVault = create<
       ...providerSlice(set, get, store),
       ...objectSlice(set, get, store),
       ...networkInfoSlice(set, get, store),
+      // TODO: add token Info store
       ...defaultGlobalVaultState,
+      // This is now available in the networkInfo store
+      // api.networkInfo.setCurrentNetworkInfo(networkName, providerConfigMainnet)
       setChain(chain) {
         return set(
           produce((state) => {
@@ -102,6 +105,7 @@ export const useVault = create<
           })
         )
       },
+      // TODO: create a new store for wallet?
       setCurrentWallet(payload) {
         return set(
           produce((state) => {
@@ -112,6 +116,8 @@ export const useVault = create<
           })
         )
       },
+      // TODO: simplify this method
+      // the credential doesn't need to be returned, nor does the transactions, nor the singleKeyAgentState
       getCurrentWallet() {
         const {
           getKeyAgent,
@@ -131,12 +137,23 @@ export const useVault = create<
           transactions: [] // TODO: figure out why this is fixed to empty?
         }
       },
+      // TODO: remove providerManager
       _syncAccountInfo: async (network, derivedCredential) => {
         if (!derivedCredential) {
           throw new WalletError(
             'Derived credential is undefined in syncAccountInfo method'
           )
         }
+        /*
+        // TODO: remove providerManager
+        // TODO: improve accountInfo store as there are now an array of accounts custom tokens
+        // TODO: add a get current account public key method on wallet store
+        _syncAccountInfo: async (providerConfig, publicKey) => {
+        const { setAccountInfo } = get()
+        provider = createMinaProvider(providerConfig)
+        const accountInfo = await provider?.getAccountInfo({ publicKey: publickey })
+        setAccountInfo(providerConfig.networkName, publickey, accountInfo)
+        */
         const provider = providerManager.getProvider(network)
         if (!provider) {
           throw new NetworkError(
@@ -155,6 +172,14 @@ export const useVault = create<
         setAccountInfo(network, derivedCredential.address, accountInfo)
       },
       _syncTransactions: async (network, derivedCredential) => {
+        /*
+        // TODO: remove providerManager
+        _syncTransactions: async (providerConfig, publicKey) => {
+        const { setTransactions } = get()
+        provider = createMinaProvider(providerConfig)
+        const transactions = await provider?.getTransactions({ addresses: [publickey] })
+        setTransactions(providerConfig.networkName, publickey, transactions) // note: there is no pagination now
+        */
         if (!derivedCredential)
           throw new Error('Derived credential is undefined')
         const provider = providerManager.getProvider(network)
@@ -177,6 +202,15 @@ export const useVault = create<
         )
       },
       _syncWallet: async (network, derivedCredential) => {
+        /*
+        // TODO: add a get current account public key method on wallet store
+        _syncWallet: async () => {
+        const { getCurrentNetworkInfo, getCurrentAccountPublicKey } = get()
+        const publickey = getCurrentAccountPublicKey()
+        const providerConfig = getCurrentNetworkInfo()
+        _syncAccountInfo(providerConfig, publickey)
+        _syncTransactions(providerConfig, publickey)
+        */
         if (!derivedCredential) {
           throw new WalletError(
             'Derived credential is undefined in syncWallet method'
@@ -195,9 +229,20 @@ export const useVault = create<
         )
       },
       getCurrentNetwork: () => {
+        /*
+          const { getCurrentNetworkInfo } = get()
+          const network = getCurrentNetworkInfo().networkName
+        */
         return networkManager.getCurrentNetwork()
       },
       switchNetwork: async (network) => {
+        /*
+          // if the network info is already stored we can just switch to it using the networkName
+          switchNetwork: async (networkName) => {
+          const { setCurrentNetworkInfo } = get()
+          setCurrentNetworkInfo(networkName)
+          await _syncWallet()
+        */
         const provider = networkManager.getActiveProvider()
         if (!provider)
           throw new NetworkError(
@@ -220,6 +265,14 @@ export const useVault = create<
         return searchCredentials(query, props)
       },
       getWalletAccountInfo: async () => {
+        /*
+          // TODO: add a get current account public key method on wallet store
+          getWalletAccountInfo: async () => {
+          const { getCurrentNetworkInfo, getCurrentAccountPublicKey } = get()
+          const publickey = getCurrentAccountPublicKey()
+          const providerConfig = getCurrentNetworkInfo()
+          return getAccountInfo(providerConfig.networkName, publickey)
+        */
         const { getCurrentWallet, getCurrentNetwork, getAccountInfo } = get()
         const currentWallet = getCurrentWallet()
         _validateCurrentWallet(currentWallet.credential)
@@ -233,6 +286,14 @@ export const useVault = create<
         )
       },
       getWalletTransactions: async () => {
+        /*
+          // TODO: add a get current account public key method on wallet store
+          getWalletTransactions: async () => {
+          const { getCurrentNetworkInfo, getCurrentAccountPublicKey } = get()
+          const publickey = getCurrentAccountPublicKey()
+          const providerConfig = getCurrentNetworkInfo()
+          return getTransactions(providerConfig.networkName, publickey)
+        */
         const { getCurrentWallet, getCurrentNetwork, getTransactions } = get()
         const currentWallet = getCurrentWallet()
         if (!currentWallet)
@@ -254,6 +315,16 @@ export const useVault = create<
         return getTransactions(currentNetwork, walletAddress) || null
       },
       sign: async (signable, getPassphrase) => {
+        /*
+          We can use the new sign api methods here and leave this
+          to the key agent request method to handle the signing
+          // TODO add the networkType here too, maybe a util on the ProviderConfig object could work
+          sign: async (signable, args, getPassphrase) => {
+          const { getKeyAgent, getCurrentCredential } = get()
+          const keyAgent = getKeyAgent()
+          const credential = getCurrentCredential()
+          return keyAgent?.request(keyAgent.keyAgentName, credential, signable, args)
+        */
         const { getCurrentWallet, restoreKeyAgent } = get()
         const currentWallet = getCurrentWallet()
         // use current wallet to sign
@@ -287,6 +358,14 @@ export const useVault = create<
         return constructTransaction(transaction, kind)
       },
       submitTx: async (submitTxArgs) => {
+        /*
+        const { getCurrentNetworkInfo } = get()
+        const providerConfig = getCurrentNetworkInfo()
+        const provider = createMinaProvider(providerConfig)
+        const txResult = await provider?.submitTransaction(submitTxArgs)
+        await _syncTransactions(providerConfig)
+        return txResult
+        */
         const { getCurrentWallet, getCurrentNetwork, _syncTransactions } = get()
         const currentWallet = getCurrentWallet()
         const network = getCurrentNetwork() as Networks
@@ -326,6 +405,7 @@ export const useVault = create<
           mnemonicWords: mnemonicWords,
           mnemonic2ndFactorPassphrase: ''
         }
+        // TODO: this should be a key agent method? can we simplify this?
         await initialiseKeyAgent(keyAgentName, keyAgentType, agentArgs)
         const keyAgent = restoreKeyAgent(keyAgentName, getPassphrase)
         const derivedCredential = await keyAgent?.deriveCredentials(

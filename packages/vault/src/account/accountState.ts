@@ -12,6 +12,7 @@ export type AccountState = {
   accounts: Record<Multichain.MultiChainNetworks, ChainAddressMapping>
 }
 
+// TODO: refactor to integrate custom tokens
 export type AccountActions = {
   ensureAccount: (
     network: Multichain.MultiChainNetworks,
