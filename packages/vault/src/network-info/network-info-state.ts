@@ -13,9 +13,9 @@ import { ProviderConfig } from '@palladxyz/providers'
 export type NetworkName = string
 export type NetworkInfoStore = {
   networkInfo: Record<NetworkName, ProviderConfig>
-  currentNetworkInfo: ProviderConfig | undefined
+  currentNetworkInfo: ProviderConfig
   setCurrentNetworkInfo: (networkName: NetworkName) => void
-  getCurrentNetworkInfo: () => ProviderConfig | undefined
+  getCurrentNetworkInfo: () => ProviderConfig
   setNetworkInfo: (
     networkName: NetworkName,
     providerConfig: ProviderConfig

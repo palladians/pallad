@@ -1,4 +1,3 @@
-import { Multichain } from '@palladxyz/multi-chain-core'
 import { produce } from 'immer'
 import { StateCreator } from 'zustand'
 
@@ -9,8 +8,8 @@ export const initialAccountStoreState: AccountState = {
 }
 
 export const initialSingleAccountState: SingleAccountState = {
-  accountInfo: {} as Multichain.MultiChainAccountInfo,
-  transactions: []
+  accountInfo: {},
+  transactions: {}
 }
 
 export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
@@ -71,13 +70,14 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
     const { accounts } = get()
     return accounts[network]?.[address] || initialSingleAccountState
   },
-  getTransactions: (network, address) => {
+  getTransactions: (network, address, ticker) => {
     const { accounts } = get()
-    return accounts[network]?.[address]?.transactions || []
+    return accounts[network]?.[address]?.transactions[ticker] || []
   },
-  getTransaction: (network, address, hash) => {
+  getTransaction: (network, address, hash, ticker) => {
     const { accounts } = get()
-    const transactions = accounts[network]?.[address]?.transactions || []
+    const transactions =
+      accounts[network]?.[address]?.transactions[ticker] || []
     return transactions.find((tx) => tx.hash === hash)
   },
   clear: () => {

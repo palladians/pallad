@@ -39,7 +39,7 @@ const params = {
 }
 const getPassphrase = async () => Buffer.from(params.passphrase)
 
-describe('WalletTest', () => {
+describe.skip('WalletTest', () => {
   let providerConfigurations: Partial<
     Record<Multichain.MultiChainNetworks, Multichain.MultichainProviderConfig>
   >

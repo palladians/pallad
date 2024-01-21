@@ -1,3 +1,4 @@
+import { ProviderConfig } from '@palladxyz/providers'
 import { produce } from 'immer'
 import { StateCreator } from 'zustand'
 
@@ -6,7 +7,7 @@ import { NetworkInfoStore } from './network-info-state'
 
 export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
   networkInfo: DEFAULT_NETWORK_INFO,
-  currentNetworkInfo: DEFAULT_NETWORK_INFO[DEFAULT_NETWORK],
+  currentNetworkInfo: DEFAULT_NETWORK_INFO[DEFAULT_NETWORK] as ProviderConfig,
   setCurrentNetworkInfo: (networkName) => {
     const { networkInfo } = get()
     set(

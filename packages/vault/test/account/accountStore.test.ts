@@ -7,24 +7,26 @@ import { useVault } from '../../src'
 
 describe('AccountStore', () => {
   let address: string
-  let network: Mina.Networks
-  let mockAccountInfo: AccountInfo
-  let mockTransactions: Mina.Paginated<Mina.TransactionBody>
+  let network: string
+  let mockAccountInfo: Record<string, AccountInfo>
+  let mockTransactions: Record<string, Mina.TransactionBody[]>
 
   beforeEach(async () => {
     address = 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
-    network = Mina.Networks.BERKELEY
+    network = 'berkeley'
     mockAccountInfo = {
-      balance: {
-        total: 49000000000
-      },
-      delegate: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      inferredNonce: 0,
-      nonce: 0,
-      publicKey: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+      MINA: {
+        balance: {
+          total: 49000000000
+        },
+        delegate: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        inferredNonce: 0,
+        nonce: 0,
+        publicKey: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+      }
     }
     mockTransactions = {
-      pageResults: [
+      MINA: [
         {
           amount: 50000000000,
           blockHeight: 204824,
@@ -40,8 +42,7 @@ describe('AccountStore', () => {
           type: Mina.TransactionKind.PAYMENT,
           nonce: 0
         }
-      ],
-      totalResultCount: 1
+      ]
     }
   })
 
@@ -77,14 +78,14 @@ describe('AccountStore', () => {
     let finalTransactions
     const { result } = renderHook(() => useVault())
     act(() => {
-      result.current.setTransactions(
+      result.current.setTransactions(network, address, mockTransactions)
+      finalTransactions = result.current.getTransactions(
         network,
         address,
-        mockTransactions.pageResults
+        'MINA'
       )
-      finalTransactions = result.current.getTransactions(network, address)
     })
-    expect(finalTransactions).toEqual(mockTransactions.pageResults)
+    expect(finalTransactions).toEqual(mockTransactions['MINA'])
   })
 
   it('should add an account', () => {

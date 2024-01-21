@@ -1,14 +1,15 @@
 import {
+  ChainAddress,
   ChainSignablePayload,
   ChainSpecificArgs,
   ChainSpecificPayload,
   FromBip39MnemonicWordsProps,
-  GroupedCredentials,
   Network
 } from '@palladxyz/key-management'
 import { GetPassphrase } from '@palladxyz/key-management'
-import { Mina, Networks, SubmitTxArgs } from '@palladxyz/mina-core'
+import { AccountInfo, Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
+import { ProviderConfig } from '@palladxyz/providers'
 
 import {
   CredentialName,
@@ -16,13 +17,14 @@ import {
   StoredCredential
 } from '../credentials'
 import { KeyAgentName, KeyAgents, SingleKeyAgentState } from '../keyAgent'
+import { NetworkName } from '../network-info'
 import { SearchQuery } from '../utils/utils'
 
 type CurrentWallet = {
   singleKeyAgentState: SingleKeyAgentState | undefined
   credential: SingleCredentialState
-  accountInfo: Multichain.MultiChainAccountInfo
-  transactions: Multichain.MultiChainTransactionBody[]
+  accountInfo: Record<string, AccountInfo> // string here is token ticker
+  transactions: Record<string, Mina.TransactionBody[]> // string here is token ticker
 }
 
 type CurrentWalletPayload = {
@@ -51,19 +53,16 @@ export type GlobalVaultActions = {
   getCurrentWallet: () => CurrentWallet
   setCurrentWallet: (payload: CurrentWalletPayload) => void
   _syncAccountInfo: (
-    network: Networks,
-    derivedCredential: GroupedCredentials
+    providerConfig: ProviderConfig,
+    publicKey: ChainAddress
   ) => Promise<void>
   _syncTransactions: (
-    network: Networks,
-    derivedCredential: GroupedCredentials
+    providerConfig: ProviderConfig,
+    publicKey: ChainAddress
   ) => Promise<void>
-  _syncWallet: (
-    network: Networks,
-    derivedCredential: GroupedCredentials
-  ) => Promise<void>
-  getCurrentNetwork: () => Networks
-  switchNetwork: (network: Multichain.MultiChainNetworks) => Promise<void>
+  _syncWallet: () => Promise<void>
+  getCurrentNetwork: () => string
+  switchNetwork: (networkName: NetworkName) => Promise<void>
   getCredentials: (query: SearchQuery, props: string[]) => StoredCredential[]
   getWalletAccountInfo: () => Promise<unknown>
   getWalletTransactions: () => Promise<unknown[]>
