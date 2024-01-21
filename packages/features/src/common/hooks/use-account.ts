@@ -1,4 +1,3 @@
-import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { useVault } from '@palladxyz/vault'
 import easyMeshGradient from 'easy-mesh-gradient'
@@ -22,18 +21,12 @@ export const useAccount = () => {
     (state) => state.setVaultStateUninitialized
   )
   const fetchWallet = async () => {
-    await _syncWallet(network, currentWallet?.credential.credential)
+    await _syncWallet()
     return getAccountInfo(network, publicKey)
   }
-  const { publicKey } = currentWallet.accountInfo
+  const publicKey = currentWallet.credential.credential?.address as string
   const swr = useSWR(
-    publicKey
-      ? [
-          publicKey,
-          'account',
-          Mina.Networks[network.toUpperCase() as keyof typeof Mina.Networks]
-        ]
-      : null,
+    publicKey ? [publicKey, 'account', network] : null,
     async () => await fetchWallet(),
     {
       refreshInterval: 30000
@@ -41,7 +34,7 @@ export const useAccount = () => {
   )
   const rawMinaBalance = swr.isLoading
     ? 0
-    : swr.data?.accountInfo?.balance?.total ?? 0
+    : swr.data?.accountInfo['MINA']?.balance?.total ?? 0 // TODO: remove hardcoded 'MINA'
   const minaBalance =
     rawMinaBalance && BigInt(rawMinaBalance) / BigInt(1_000_000_000)
   const gradientBackground = useMemo(
@@ -54,7 +47,8 @@ export const useAccount = () => {
     [publicKey]
   )
   const stakeDelegated =
-    currentWallet.accountInfo.publicKey !== currentWallet.accountInfo.delegate
+    currentWallet.accountInfo['MINA'].publicKey !==
+    currentWallet.accountInfo['MINA'].delegate
   const copyWalletAddress = async () => {
     await navigator.clipboard.writeText(publicKey ?? '')
     toast({

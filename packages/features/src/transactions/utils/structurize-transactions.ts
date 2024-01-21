@@ -13,6 +13,7 @@ export const structurizeTransaction = ({
   tx,
   walletPublicKey
 }: {
+  // TODO: remove the multichain package from this file
   tx: Multichain.MultiChainTransactionBody
   walletPublicKey: string
 }) => ({

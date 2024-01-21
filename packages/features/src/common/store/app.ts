@@ -1,17 +1,13 @@
-import { Mina } from '@palladxyz/mina-core'
-import { Multichain } from '@palladxyz/multi-chain-core'
 import { getLocalPersistence } from '@palladxyz/persistence'
+import { DEFAULT_NETWORK } from '@palladxyz/vault'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 import { VaultState } from '../lib/const'
 
-const VITE_APP_DEFAULT_NETWORK =
-  import.meta.env.VITE_APP_DEFAULT_NETWORK || 'Mainnet'
-
 // TODO: Make network a generic type that can support networks other than just Mina
 type AppState = {
-  network: Multichain.MultiChainNetworks
+  network: string
   vaultState: VaultState
   shareData: boolean
 }
@@ -21,7 +17,7 @@ type AppQueries = {
 }
 
 type AppMutators = {
-  setNetwork: (network: Multichain.MultiChainNetworks) => void
+  setNetwork: (network: string) => void
   setVaultState: (vaultState: VaultState) => void
   setVaultStateInitialized: () => void
   setVaultStateUninitialized: () => void
@@ -30,12 +26,9 @@ type AppMutators = {
 
 type AppStore = AppState & AppMutators & AppQueries
 
-// TODO: figure out how to use Multichain.MultiChainNetworks -- investigate need for
-// MultiChainNetworksEnum
-const defaultNetwork =
-  Mina.Networks[
-    VITE_APP_DEFAULT_NETWORK.toUpperCase() as keyof typeof Mina.Networks
-  ]
+// TODO: this should be with vite
+// const VITE_APP_DEFAULT_NETWORK = import.meta.env.VITE_APP_DEFAULT_NETWORK || 'Mainnet'
+const defaultNetwork = DEFAULT_NETWORK
 
 export const useAppStore = create<AppStore>()(
   persist(
@@ -49,8 +42,7 @@ export const useAppStore = create<AppStore>()(
       },
       setNetwork(network) {
         return set({
-          network:
-            Mina.Networks[network.toUpperCase() as keyof typeof Mina.Networks]
+          network: network
         })
       },
       setShareData(shareData) {

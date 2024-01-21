@@ -6,6 +6,7 @@ import { structurizeTransactions } from '../utils/structurize-transactions'
 import { TxTile } from './tx-tile'
 
 interface TransactionsListProps {
+  // TODO: Refactor to not use multichain package and use new signing args
   transactions: Multichain.MultiChainTransactionBody[]
 }
 

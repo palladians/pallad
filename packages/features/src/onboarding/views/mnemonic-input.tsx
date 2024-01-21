@@ -5,9 +5,8 @@ import {
   validateMnemonic,
   wordlist
 } from '@palladxyz/key-management'
-import { Mina } from '@palladxyz/mina-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
-import { KeyAgents, useVault } from '@palladxyz/vault'
+import { DEFAULT_NETWORK, KeyAgents, useVault } from '@palladxyz/vault'
 import { Loader2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -41,6 +40,7 @@ export const MnemonicInputView = () => {
   const restoreWallet = useVault((state) => state.restoreWallet)
   const navigate = useNavigate()
   const { walletName, spendingPassword } = useOnboardingStore(
+    // TODO: fix this useOnboardingStore it is deprecated
     (state) => ({
       spendingPassword: state.spendingPassword,
       walletName: state.walletName
@@ -64,21 +64,21 @@ export const MnemonicInputView = () => {
       network: Network.Mina,
       accountIndex: 0,
       addressIndex: 0,
-      networkType: 'testnet' // TODO: make this configurable
+      networkType: 'testnet' // TODO: make this configurable if the user restores to mainnet it needs to be 'mainnet
     }
     try {
       setRestoring(true)
       await restoreWallet(
         new MinaPayload(),
         restoreArgs,
-        Mina.Networks.BERKELEY,
+        DEFAULT_NETWORK,
         {
           mnemonicWords: data.mnemonic,
           getPassphrase: async () => Buffer.from(spendingPassword)
         },
         walletName,
         KeyAgents.InMemory,
-        'Test'
+        'Test' // TODO: make this a configurable credential name or random if not provided
       )
       track({ event: 'wallet_restored' })
       setVaultStateInitialized()

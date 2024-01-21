@@ -1,4 +1,3 @@
-import { Mina } from '@palladxyz/mina-core'
 import { useVault } from '@palladxyz/vault'
 import useSWR from 'swr'
 
@@ -7,16 +6,10 @@ import { useAppStore } from '../store/app'
 export const useTransactions = () => {
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const getTransactions = useVault((state) => state.getTransactions)
-  const { publicKey } = currentWallet.accountInfo
+  const publicKey = currentWallet.credential.credential?.address as string
   const network = useAppStore((state) => state.network)
   return useSWR(
-    publicKey
-      ? [
-          publicKey,
-          'transactions',
-          Mina.Networks[network.toUpperCase() as keyof typeof Mina.Networks]
-        ]
-      : null,
-    async () => await getTransactions(network, publicKey)
+    publicKey ? [publicKey, 'transactions', network] : null,
+    async () => await getTransactions(network, publicKey, 'MINA') // TODO: remove hardcoded 'MINA'
   )
 }

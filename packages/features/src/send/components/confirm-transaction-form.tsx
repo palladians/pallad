@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { GroupedCredentials } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { useVault } from '@palladxyz/vault'
@@ -28,11 +27,13 @@ import { cn } from '@/lib/utils'
 import { ConfirmTransactionSchema } from './confirm-transaction-form.schema'
 
 type ConfirmTransactionData = z.infer<typeof ConfirmTransactionSchema>
-
+// TODO: Refactor to not use multichain package and use new signing args
 export const ConfirmTransactionForm = () => {
   const { track } = useAnalytics()
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
+  // can use
+  // const request = useVault((state) => state.request) for signing
   const sign = useVault((state) => state.sign)
   const submitTx = useVault((state) => state.submitTx)
   const constructTx = useVault((state) => state.constructTx)
@@ -68,7 +69,7 @@ export const ConfirmTransactionForm = () => {
       validUntil: '4294967295',
       fee,
       amount,
-      nonce: currentWallet.accountInfo.inferredNonce,
+      nonce: currentWallet.accountInfo['MINA'].inferredNonce, // TODO: remove hardcoded 'MINA'
       type: 'payment'
     }
     const constructedTx = await constructTx(
@@ -91,6 +92,7 @@ export const ConfirmTransactionForm = () => {
       }
     }
     if (!signedTx) return
+    // TODO: Make a util for this
     const submitTxArgs = {
       signedTransaction: signedTx as unknown as SignedLegacy<Payment>,
       kind:
@@ -117,10 +119,7 @@ export const ConfirmTransactionForm = () => {
         hash,
         expireAt: addHours(new Date(), 8).toISOString()
       })
-      await syncWallet(
-        Mina.Networks.BERKELEY,
-        currentWallet.credential.credential as GroupedCredentials
-      )
+      await syncWallet()
       track({
         event: kind === 'staking' ? 'portfolio_delegated' : 'transaction_sent',
         metadata: {
