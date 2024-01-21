@@ -44,8 +44,8 @@ export const SendForm = () => {
   }, [])
   if (accountLoading) return null
   const totalBalance =
-    accountData?.accountInfo.balance.total &&
-    accountData?.accountInfo.balance.total / 1_000_000_000
+    accountData?.accountInfo['MINA'].balance.total &&
+    accountData?.accountInfo['MINA'].balance.total / 1_000_000_000
   const setMaxAmount = async () => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]

@@ -76,7 +76,7 @@ export const TransactionSummaryView = () => {
             )}
             <MetaField label="Fee" value={`${outgoingTransaction.fee} MINA`} />
             {outgoingTransaction?.amount && (
-              <MetaField label="Total" value={`${total} MINA`} />
+              <MetaField label="Total" value={`${total} MINA`} /> // TODO: this will not always be 'MINA'
             )}
           </Card>
           <ConfirmTransactionForm />
