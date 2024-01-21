@@ -1,22 +1,22 @@
 import {
-  constructTransaction,
+  ChainSpecificArgs,
+  ChainSpecificPayload,
+  //constructTransaction,
   FromBip39MnemonicWordsProps,
-  GroupedCredentials,
+  //GroupedCredentials,
+  //MinaDerivationArgs,
   MinaPayload,
-  MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
-import { Mina } from '@palladxyz/mina-core'
-import { Multichain } from '@palladxyz/multi-chain-core'
+//import { Mina } from '@palladxyz/mina-core'
 import { act, renderHook } from '@testing-library/react'
-import Client from 'mina-signer'
-import {
-  Payment,
-  SignedLegacy
-} from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+import { expect } from 'vitest'
 
-import { KeyAgents } from '../../src'
+//import Client from 'mina-signer'
+//import { Payment, SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+import { CredentialName, KeyAgents } from '../../src'
 import { useVault } from '../../src'
+import { DEFAULT_NETWORK } from '../../src/network-info/default'
 
 const PREGENERATED_MNEMONIC = [
   'habit',
@@ -39,37 +39,33 @@ const params = {
 }
 const getPassphrase = async () => Buffer.from(params.passphrase)
 
-describe.skip('WalletTest', () => {
-  let providerConfigurations: Partial<
-    Record<Multichain.MultiChainNetworks, Multichain.MultichainProviderConfig>
-  >
+describe('WalletTest', () => {
   let agentArgs: FromBip39MnemonicWordsProps
-  const keyAgentName = 'test key agent'
+  let network: string
+  let args: ChainSpecificArgs
+  let payload: ChainSpecificPayload
+  let credentialName: CredentialName
+  let keyAgentName: string
+  let expectedAddress: string
+  let defaultNetwork: string
 
   beforeEach(async () => {
     agentArgs = {
       getPassphrase: getPassphrase,
       mnemonicWords: PREGENERATED_MNEMONIC
     }
-
-    providerConfigurations = {
-      [Mina.Networks.MAINNET]: {
-        nodeUrl: 'https://proxy.mainnet.minaexplorer.com/',
-        archiveUrl: 'https://mainnet.graphql.minaexplorer.com'
-      },
-      [Mina.Networks.DEVNET]: {
-        nodeUrl: 'https://proxy.devnet.minaexplorer.com/',
-        archiveUrl: 'https://devnet.graphql.minaexplorer.com'
-      },
-      [Mina.Networks.BERKELEY]: {
-        nodeUrl: 'https://proxy.berkeley.minaexplorer.com/',
-        archiveUrl: 'https://berkeley.graphql.minaexplorer.com'
-      },
-      [Mina.Networks.TESTWORLD]: {
-        nodeUrl: 'https://proxy.testworld.minaexplorer.com/',
-        archiveUrl: 'https://testworld.graphql.minaexplorer.com'
-      }
+    network = DEFAULT_NETWORK
+    args = {
+      network: Network.Mina,
+      accountIndex: 0,
+      addressIndex: 0,
+      networkType: 'testnet'
     }
+    payload = new MinaPayload()
+    credentialName = 'Test Suite Credential'
+    keyAgentName = 'Test Suite Key Agent'
+    expectedAddress = 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+    defaultNetwork = DEFAULT_NETWORK
   })
 
   //afterEach(() => {
@@ -81,39 +77,63 @@ describe.skip('WalletTest', () => {
 
   it('should add one key agent its first credential /0/0 and sync the network info', async () => {
     const { result } = renderHook(() => useVault())
-    // define networks
-    await act(async () => {
-      await result.current.ensureProvider(
-        'Mina BERKELEY',
-        providerConfigurations[Mina.Networks.BERKELEY]!,
-        Mina.Networks.BERKELEY
-      )
-    })
+
     // add first key agent
     await act(async () => {
-      // add first key agent
-      await result.current.initialiseKeyAgent(
+      // restore wallet
+      await result.current.restoreWallet(
+        payload,
+        args,
+        network,
+        agentArgs,
         keyAgentName,
         KeyAgents.InMemory,
-        agentArgs
+        credentialName
       )
+      // add first key agent
+      //await result.current.initialiseKeyAgent(
+      //  keyAgentName,
+      //  KeyAgents.InMemory,
+      //  agentArgs
+      //)
+      // check that key agent is in the store
+      const keyagent = result.current.getKeyAgent(keyAgentName)
+      expect(keyagent?.keyAgentType).toEqual(KeyAgents.InMemory)
+
+      // check if first credential is in the store
+      const minaCredentials = result.current.getCredentials(
+        { type: 'MinaAddress' },
+        []
+      )
+      expect(minaCredentials.length).toEqual(1)
+      expect(minaCredentials[0].address).toEqual(expectedAddress)
+
+      // check current network info is of the expected network
+      const currentNetwork = result.current.getCurrentNetwork()
+      console.log('currentNetwork: ', currentNetwork)
+      expect(currentNetwork).toEqual(defaultNetwork)
+      // check if accountInfo is in the store
+      const accountInfo = result.current.getAccountInfo(
+        defaultNetwork,
+        expectedAddress
+      )
+      console.log('current', result.current)
+      expect(accountInfo).toBeDefined()
     })
-    const keyAgent1 = result.current.keyAgents[keyAgentName]
-    expect(keyAgent1?.keyAgent).toBeDefined()
-    // derive credentials for first key agent
-    const args: MinaSpecificArgs = {
+    // add first credential
+    /*const args: ChainSpecificArgs = {
       network: Network.Mina,
       accountIndex: 0,
       addressIndex: 0,
       networkType: 'testnet'
     }
-    const payload = new MinaPayload()
-    const credential = await keyAgent1?.keyAgent!.deriveCredentials(
-      payload,
+    const credential = await result.current.createCredential(
+      keyAgentName,
+      new MinaPayload(),
       args,
-      getPassphrase,
-      true // has to be true as we're not writing the credential to the key agent's serializable data
+      getPassphrase
     )
+    
     const credentialState = {
       credentialName: 'Test Credential',
       keyAgentName: keyAgentName,
@@ -123,8 +143,10 @@ describe.skip('WalletTest', () => {
     act(() => {
       result.current.setCredential(credentialState)
     })
+    // check that credential is in the store
+    expect(result.current.credentials['Test Credential']).toEqual(credentialState)*/
 
-    // get the credential from the store & fetch network data for it
+    /*// get the credential from the store & fetch network data for it
     act(async () => {
       const storedCredential = result.current.getCredential('Test Credential')
       const provider = result.current.getProvider('Mina Devnet')
@@ -231,6 +253,6 @@ describe.skip('WalletTest', () => {
     // Note: If there is a pending transaction, this will fail -- good nonce management is needed
     const submitTxResult =
       await provider.provider?.submitTransaction(submitTxArgs)
-    console.log('submitTxResult: ', submitTxResult)
+    console.log('submitTxResult: ', submitTxResult)*/
   })
 })

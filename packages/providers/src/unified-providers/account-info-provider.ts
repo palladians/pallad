@@ -29,7 +29,7 @@ export const createAccountInfoProvider = (
 
   const healthCheck = async (): Promise<HealthCheckResponse> => {
     // Delegate the call to the underlying provider's healthCheck method
-    return underlyingProvider.healthCheck()
+    return await underlyingProvider.healthCheck()
   }
 
   return {

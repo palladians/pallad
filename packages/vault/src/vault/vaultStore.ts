@@ -119,7 +119,7 @@ export const useVault = create<
         const provider = createMinaProvider(providerConfig)
         const accountInfo = await provider.getAccountInfo({
           publicKey: publicKey,
-          tokenMap: { '1': 'MINA' }
+          tokenMap: { MINA: '1' }
         })
         setAccountInfo(
           providerConfig.networkName,
@@ -153,14 +153,14 @@ export const useVault = create<
           _syncAccountInfo,
           _syncTransactions
         } = get()
-        const publickey = getCurrentWallet()?.accountInfo['MINA']?.publicKey // todo: remove hard coded token ticker or replace with helper method to get current account public key
-        if (!publickey)
+        const publicKey = getCurrentWallet()?.credential?.credential?.address // todo: DRY this up
+        if (!publicKey)
           throw new AddressError(
             'Wallet address is undefined in _syncWallet method'
           )
         const providerConfig = getCurrentNetworkInfo()
-        _syncAccountInfo(providerConfig, publickey)
-        _syncTransactions(providerConfig, publickey)
+        await _syncAccountInfo(providerConfig, publicKey)
+        await _syncTransactions(providerConfig, publicKey)
       },
       getCurrentNetwork: () => {
         const { getCurrentNetworkInfo } = get()
@@ -179,7 +179,8 @@ export const useVault = create<
         const currentWallet = getCurrentWallet()
         if (!currentWallet)
           throw new Error('Current wallet is null, empty or undefined')
-        const publicKey = currentWallet.accountInfo['MINA']?.publicKey // todo: remove hard coded token ticker or replace with helper method to get current account public key
+        const publicKey =
+          await getCurrentWallet()?.credential?.credential?.address // todo: DRY this up
         if (!publicKey)
           throw new AddressError(
             'Wallet address is undefined in switchNetwork method'

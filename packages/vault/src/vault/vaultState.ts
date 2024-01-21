@@ -79,7 +79,7 @@ export type GlobalVaultActions = {
   restoreWallet: <T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
-    network: Multichain.MultiChainNetworks,
+    network: string,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
     keyAgentName: KeyAgentName,
     keyAgentType: KeyAgents,

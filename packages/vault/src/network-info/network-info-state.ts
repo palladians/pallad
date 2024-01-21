@@ -10,10 +10,13 @@ import { ProviderConfig } from '@palladxyz/providers'
      - this could include signing args like mina-signer's "testnet" or "mainnet" -- TODO: consider creating a new type that extends ProviderConfig
 */
 
-export type NetworkName = string
-export type NetworkInfoStore = {
+export type NetworkInfoState = {
   networkInfo: Record<NetworkName, ProviderConfig>
   currentNetworkInfo: ProviderConfig
+}
+
+export type NetworkName = string
+export type NetworkInfoActions = {
   setCurrentNetworkInfo: (networkName: NetworkName) => void
   getCurrentNetworkInfo: () => ProviderConfig
   setNetworkInfo: (
@@ -25,3 +28,5 @@ export type NetworkInfoStore = {
   allNetworkInfo: () => (ProviderConfig | undefined)[]
   clear: () => void
 }
+
+export type NetworkInfoStore = NetworkInfoState & NetworkInfoActions

@@ -2,7 +2,7 @@ import { ProviderConfig } from '@palladxyz/providers'
 
 import { NetworkName } from './network-info-state'
 
-export const DEFAULT_NETWORK = 'Mina - Mainnet'
+export const DEFAULT_NETWORK = 'Mina - Berkeley'
 
 export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
   'Mina - Berkeley': {
