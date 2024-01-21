@@ -3,6 +3,7 @@ import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import { useVault } from '../../src'
+import { DEFAULT_NETWORK_INFO } from '../../src/network-info/default'
 
 describe('CredentialStore', () => {
   let networkNameMainnet: string
@@ -46,7 +47,7 @@ describe('CredentialStore', () => {
 
   it('should create a network info store', async () => {
     const { result } = renderHook(() => useVault())
-    expect(result.current.networkInfo).toEqual({})
+    expect(result.current.networkInfo).toEqual(DEFAULT_NETWORK_INFO)
   })
 
   it('should add one network and remove one from store', async () => {
@@ -78,7 +79,7 @@ describe('CredentialStore', () => {
 
     // check total number of networks
     const networks = result.current.allNetworkInfo()
-    expect(networks.length).toEqual(2)
+    expect(networks.length).toEqual(5)
   })
   it('should add two networks and set mainnet as current network', async () => {
     const { result } = renderHook(() => useVault())

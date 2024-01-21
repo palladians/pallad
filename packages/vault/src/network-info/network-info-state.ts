@@ -5,19 +5,6 @@
 
 import { ProviderConfig } from '@palladxyz/providers'
 
-/*export type ProviderConfig = {
-  nodeEndpoint: {
-    providerName: 'mina-explorer' | 'obscura'
-    url: string
-  }
-  archiveNodeEndpoint?: {
-    providerName: 'mina-explorer' | 'obscura'
-    url: string
-  }
-  networkName: string
-  chainId: string
-}
-*/
 /* Network info store should
 - store information related to a specific network that allows a provider to connect to it
      - this could include signing args like mina-signer's "testnet" or "mainnet" -- TODO: consider creating a new type that extends ProviderConfig

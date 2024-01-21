@@ -149,9 +149,9 @@ export const useVault = create<
         // TODO: improve accountInfo store as there are now an array of accounts custom tokens
         // TODO: add a get current account public key method on wallet store
         _syncAccountInfo: async (providerConfig, publicKey) => {
-        const { setAccountInfo } = get()
+        const { setAccountInfo, getTokenIdMap } = get()
         provider = createMinaProvider(providerConfig)
-        const accountInfo = await provider?.getAccountInfo({ publicKey: publickey })
+        const accountInfo = await provider?.getAccountInfo({ publicKey: publickey, tokenIdMap: { '1': 'MINA' } }) 
         setAccountInfo(providerConfig.networkName, publickey, accountInfo)
         */
         const provider = providerManager.getProvider(network)
@@ -423,6 +423,8 @@ export const useVault = create<
           keyAgentName: keyAgentName,
           credential: derivedCredential
         }
+        // TODO: set the current network info, restore and create wallet
+        // should take some providerConfig object
         setCredential(singleCredentialState)
         setCurrentWallet({
           keyAgentName,

@@ -1,23 +1,12 @@
 import { produce } from 'immer'
 import { StateCreator } from 'zustand'
 
+import { DEFAULT_NETWORK, DEFAULT_NETWORK_INFO } from './default'
 import { NetworkInfoStore } from './network-info-state'
-/* 
-export type NetworkName = string
-export type NetworkInfoStore = {
-  networkInfo: Record<NetworkName, ProviderConfig>
-  setCurrentNetwork: (networkName: NetworkName) => void
-  setNetworkInfo: (networkName: NetworkName, providerConfig: ProviderConfig) => void
-  getNetworkInfo: (networkName: NetworkName) => ProviderConfig | undefined
-  removeNetworkInfo: (ticker: string) => void
-  allNetworkInfo: () => ProviderConfig[]
-  clear: () => void
-}
-*/
 
 export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
-  networkInfo: {},
-  currentNetworkInfo: undefined,
+  networkInfo: DEFAULT_NETWORK_INFO,
+  currentNetworkInfo: DEFAULT_NETWORK_INFO[DEFAULT_NETWORK],
   setCurrentNetworkInfo: (networkName) => {
     const { networkInfo } = get()
     set(
