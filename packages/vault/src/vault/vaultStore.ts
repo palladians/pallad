@@ -45,7 +45,9 @@ const defaultGlobalVaultState: GlobalVaultState = {
   currentAddressIndex: 0,
   chain: Network.Mina,
   walletName: '',
-  walletNetwork: Mina.Networks.BERKELEY
+  walletNetwork: Mina.Networks.BERKELEY,
+  knownAccounts: [],
+  chainIds: []
 }
 
 export const useVault = create<
@@ -71,6 +73,13 @@ export const useVault = create<
         return set(
           produce((state) => {
             state.chain = chain
+          })
+        )
+      },
+      setKnownAccounts(address) {
+        return set(
+          produce((state) => {
+            state.knownAccounts = [...state.knownAccounts, address]
           })
         )
       },
@@ -167,6 +176,7 @@ export const useVault = create<
         const network = getCurrentNetworkInfo().networkName
         return network
       },
+      // TODO: this must emit an event `chainChanged`
       switchNetwork: async (networkName) => {
         // if the network info is already stored we can just switch to it using the networkName
         //switchNetwork: async (networkName) => {
@@ -200,7 +210,7 @@ export const useVault = create<
           const { getCurrentNetworkInfo, getCurrentAccountPublicKey } = get()
           const publickey = getCurrentAccountPublicKey()
           const providerConfig = getCurrentNetworkInfo()
-          return getAccountInfo(providerConfig.networkName, publickey)
+          return getAccountInfo(providerConfig.networkName, publickey).accountInfo['MINA]
         */
         const { getCurrentWallet, getCurrentNetwork, getAccountInfo } = get()
         const currentWallet = getCurrentWallet()
@@ -221,7 +231,7 @@ export const useVault = create<
           const { getCurrentNetworkInfo, getCurrentAccountPublicKey } = get()
           const publickey = getCurrentAccountPublicKey()
           const providerConfig = getCurrentNetworkInfo()
-          return getTransactions(providerConfig.networkName, publickey)
+          return getTransactions(providerConfig.networkName, publickey).transactions['MINA]
         */
         const { getCurrentWallet, getCurrentNetwork, getTransactions } = get()
         const currentWallet = getCurrentWallet()
@@ -319,7 +329,8 @@ export const useVault = create<
           setCredential,
           setCurrentWallet,
           _syncWallet,
-          ensureAccount
+          ensureAccount,
+          setKnownAccounts
         } = get()
         const agentArgs: FromBip39MnemonicWordsProps = {
           getPassphrase: getPassphrase,
@@ -354,6 +365,13 @@ export const useVault = create<
           currentAccountIndex: derivedCredential.accountIndex,
           currentAddressIndex: derivedCredential.addressIndex
         })
+        // set the first known account
+        setKnownAccounts(derivedCredential.address)
+        // set the chainIds
+        //const providerConfig = getCurrentNetworkInfo()
+        // const provider = createMinaProvider(providerConfig)
+        // const chainId = await provider.getChainId()
+        // setChainIds(chainId)
         ensureAccount(network, derivedCredential.address)
         getSecurePersistence().setItem('foo', 'bar' as any)
         await _syncWallet()
@@ -372,6 +390,33 @@ export const useVault = create<
         removeAccount(currentNetwork as Networks, '')
         removeKeyAgent(keyAgentName)
         removeCredential(currentWallet.credential.credentialName)
+      },
+      // web provider APIs
+      getAccounts: async () => {
+        return get().knownAccounts
+      },
+      getBalance: async () => {
+        const { getCurrentWallet, getCurrentNetworkInfo, getAccountInfo } =
+          get()
+        const currentWallet = getCurrentWallet()
+        const currentNetwork = getCurrentNetworkInfo()
+        const publicKey = currentWallet.credential.credential?.address
+        if (!publicKey)
+          throw new AddressError(
+            'Wallet address is undefined in getBalance method'
+          )
+        const accountInfo = getAccountInfo(
+          currentNetwork.networkName,
+          publicKey
+        )
+        return accountInfo.accountInfo['MINA'].balance.total
+      },
+      getChainId: async () => {
+        // fetch chainId from a DaemonStatus provider
+        return 'chainId'
+      },
+      getChainIds: async () => {
+        return ['chainId1', 'chainId2']
       }
     }),
     {

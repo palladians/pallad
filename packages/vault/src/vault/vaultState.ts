@@ -42,6 +42,8 @@ export type GlobalVaultState = {
   chain: Network
   walletNetwork: Multichain.MultiChainNetworks
   walletName: string
+  knownAccounts: string[]
+  chainIds: string[]
 }
 
 type CreateWalletReturn = {
@@ -50,6 +52,7 @@ type CreateWalletReturn = {
 
 export type GlobalVaultActions = {
   setChain: (chain: Network) => void
+  setKnownAccounts: (address: string) => void
   getCurrentWallet: () => CurrentWallet
   setCurrentWallet: (payload: CurrentWalletPayload) => void
   _syncAccountInfo: (
@@ -86,6 +89,11 @@ export type GlobalVaultActions = {
     credentialName: CredentialName
   ) => Promise<void>
   restartWallet: () => void
+  // web provider APIs
+  getAccounts: () => Promise<string[]>
+  getBalance: () => Promise<number>
+  getChainId: () => Promise<string>
+  getChainIds: () => Promise<string[]>
 }
 
 export type GlobalVaultStore = GlobalVaultState & GlobalVaultActions

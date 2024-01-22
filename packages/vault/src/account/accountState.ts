@@ -43,6 +43,7 @@ export type AccountActions = {
     // ✅ this should just be a string no need for multichain & change to networkName
     network: string,
     address: ChainAddress
+    // todo: add ticker here to get the account info for a specific token
   ) => SingleAccountState
 
   getTransactions: (
