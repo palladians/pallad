@@ -409,7 +409,7 @@ export const useVault = create<
           currentNetwork.networkName,
           publicKey
         )
-        return accountInfo.accountInfo['MINA'].balance.total
+        return accountInfo.accountInfo['MINA']?.balance.total
       },
       getChainId: async () => {
         // fetch chainId from a DaemonStatus provider

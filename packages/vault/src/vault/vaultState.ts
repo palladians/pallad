@@ -91,7 +91,7 @@ export type GlobalVaultActions = {
   restartWallet: () => void
   // web provider APIs
   getAccounts: () => Promise<string[]>
-  getBalance: () => Promise<number>
+  getBalance: () => Promise<number | undefined>
   getChainId: () => Promise<string>
   getChainIds: () => Promise<string[]>
 }
