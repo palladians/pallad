@@ -21,7 +21,7 @@ export type AccountActions = {
     network: string,
     address: ChainAddress
   ) => void
-
+  // todo: this should be `setAccountsInfo` because it does multiple accounts
   setAccountInfo: (
     // ✅ this should be a string
     network: string,
@@ -38,13 +38,17 @@ export type AccountActions = {
     // but for now we only fetch MINA transactions in the chain history provider
     transactions: Record<string, Mina.TransactionBody[]>
   ) => void
-
+  getAccountsInfo: (
+    // ✅ this should just be a string no need for multichain
+    network: string,
+    address: ChainAddress
+  ) => SingleAccountState
   getAccountInfo: (
     // ✅ this should just be a string no need for multichain & change to networkName
     network: string,
-    address: ChainAddress
-    // todo: add ticker here to get the account info for a specific token
-  ) => SingleAccountState
+    address: ChainAddress,
+    ticker: string // we can add a ticker here to get the account info for a specific token
+  ) => AccountInfo
 
   getTransactions: (
     // this should just be a string no need for multichain

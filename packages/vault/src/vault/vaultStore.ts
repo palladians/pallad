@@ -102,23 +102,22 @@ export const useVault = create<
           keyAgentName,
           getCredential,
           credentialName,
-          getAccountInfo,
+          getAccountsInfo,
           getCurrentNetworkInfo
         } = get()
         const singleKeyAgentState = getKeyAgent(keyAgentName)
         const credential = getCredential(credentialName)
         const publicKey = credential.credential?.address ?? ''
         const providerConfig = getCurrentNetworkInfo()
-        const accountInfo = getAccountInfo(
+        const accountsInfo = getAccountsInfo(
           providerConfig.networkName,
           publicKey
         )
-
         return {
           singleKeyAgentState,
           credential,
-          accountInfo: accountInfo.accountInfo,
-          transactions: accountInfo.transactions
+          accountInfo: accountsInfo.accountInfo,
+          transactions: accountsInfo.transactions
         }
       },
       _syncAccountInfo: async (providerConfig, publicKey) => {
@@ -212,7 +211,7 @@ export const useVault = create<
           const providerConfig = getCurrentNetworkInfo()
           return getAccountInfo(providerConfig.networkName, publickey).accountInfo['MINA]
         */
-        const { getCurrentWallet, getCurrentNetwork, getAccountInfo } = get()
+        const { getCurrentWallet, getCurrentNetwork, getAccountsInfo } = get()
         const currentWallet = getCurrentWallet()
         _validateCurrentWallet(currentWallet.credential)
         const currentNetwork = getCurrentNetwork() as Networks
@@ -220,7 +219,7 @@ export const useVault = create<
         const walletCredential = currentWallet?.credential
           .credential as GroupedCredentials
         return (
-          getAccountInfo(currentNetwork, walletCredential?.address as string)
+          getAccountsInfo(currentNetwork, walletCredential?.address as string)
             ?.accountInfo || null
         )
       },
@@ -395,7 +394,8 @@ export const useVault = create<
       getAccounts: async () => {
         return get().knownAccounts
       },
-      getBalance: async () => {
+      getBalance: async (ticker) => {
+        if (!ticker) ticker = 'MINA'
         const { getCurrentWallet, getCurrentNetworkInfo, getAccountInfo } =
           get()
         const currentWallet = getCurrentWallet()
@@ -407,9 +407,10 @@ export const useVault = create<
           )
         const accountInfo = getAccountInfo(
           currentNetwork.networkName,
-          publicKey
+          publicKey,
+          ticker
         )
-        return accountInfo.accountInfo['MINA']?.balance.total
+        return accountInfo.balance.total
       },
       getChainId: async () => {
         // fetch chainId from a DaemonStatus provider

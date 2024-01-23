@@ -20,6 +20,7 @@ import { KeyAgentName, KeyAgents, SingleKeyAgentState } from '../keyAgent'
 import { NetworkName } from '../network-info'
 import { SearchQuery } from '../utils/utils'
 
+// Note: this is the full state of the account not just 'MINA' tokens
 type CurrentWallet = {
   singleKeyAgentState: SingleKeyAgentState | undefined
   credential: SingleCredentialState
@@ -91,7 +92,7 @@ export type GlobalVaultActions = {
   restartWallet: () => void
   // web provider APIs
   getAccounts: () => Promise<string[]>
-  getBalance: () => Promise<number | undefined>
+  getBalance: (ticker?: string) => Promise<number>
   getChainId: () => Promise<string>
   getChainIds: () => Promise<string[]>
 }

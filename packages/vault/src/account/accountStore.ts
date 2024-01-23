@@ -66,9 +66,21 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
       })
     )
   },
-  getAccountInfo: (network, address) => {
+  getAccountsInfo: (network, address) => {
     const { accounts } = get()
     return accounts[network]?.[address] || initialSingleAccountState
+  },
+  getAccountInfo: (network, address, ticker) => {
+    const { accounts } = get()
+    return (
+      accounts[network]?.[address]?.accountInfo[ticker] || {
+        balance: { total: 0 },
+        nonce: 0,
+        inferredNonce: 0,
+        delegate: '',
+        publicKey: ''
+      }
+    )
   },
   getTransactions: (network, address, ticker) => {
     const { accounts } = get()
