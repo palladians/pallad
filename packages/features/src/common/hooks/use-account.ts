@@ -13,8 +13,7 @@ export const useAccount = () => {
   const navigate = useNavigate()
   const { toast } = useToast()
   const currentWallet = useVault((state) => state.getCurrentWallet())
-  //const getAccountsInfo = useVault((state) => state.getAccountsInfo)
-  const getBalance = useVault((state) => state.getBalance)
+  const getAccountsInfo = useVault((state) => state.getAccountsInfo)
   const restartWallet = useVault((state) => state.restartWallet)
   const _syncWallet = useVault((state) => state._syncWallet)
   const network = useAppStore((state) => state.network)
@@ -23,7 +22,7 @@ export const useAccount = () => {
   )
   const fetchWallet = async () => {
     await _syncWallet()
-    return getBalance('MINA') // TODO: replace with getBalance('MINA')
+    return getAccountsInfo(network, publicKey) // TODO: replace with getBalance
   }
   const publicKey = currentWallet.credential.credential?.address as string
   const swr = useSWR(
@@ -33,7 +32,9 @@ export const useAccount = () => {
       refreshInterval: 30000
     }
   )
-  const rawMinaBalance = swr.isLoading ? 0 : swr.data ?? 0
+  const rawMinaBalance = swr.isLoading
+    ? 0
+    : swr.data?.accountInfo['MINA']?.balance?.total ?? 0 // TODO: remove hardcoded 'MINA'
   const minaBalance =
     rawMinaBalance && BigInt(rawMinaBalance) / BigInt(1_000_000_000)
   const gradientBackground = useMemo(
