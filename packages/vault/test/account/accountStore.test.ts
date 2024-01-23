@@ -65,7 +65,7 @@ describe('AccountStore', () => {
       // this fixes `TypeError: Cannot read properties of undefined`
       result.current.ensureAccount(network, address)
       result.current.setAccountInfo(network, address, accountInfo)
-      finalAccountInfo = result.current.getAccountInfo(
+      finalAccountInfo = result.current.getAccountsInfo(
         network,
         address
       ).accountInfo
@@ -97,7 +97,7 @@ describe('AccountStore', () => {
       )
     })
     expect(
-      result.current.getAccountInfo(
+      result.current.getAccountsInfo(
         network,
         'B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69e'
       )
@@ -111,7 +111,7 @@ describe('AccountStore', () => {
       result.current.addAccount(network, address)
       result.current.setAccountInfo(network, address, mockAccountInfo)
       result.current.removeAccount(network, address)
-      finalAccountInfo = result.current.getAccountInfo(network, address)
+      finalAccountInfo = result.current.getAccountsInfo(network, address)
     })
     expect(finalAccountInfo).toEqual(initialSingleAccountState)
   })
