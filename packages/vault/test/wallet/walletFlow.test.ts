@@ -113,11 +113,11 @@ describe('WalletTest', () => {
       console.log('currentNetwork: ', currentNetwork)
       expect(currentNetwork).toEqual(defaultNetwork)
       // check if accountInfo is in the store
-      const accountInfo = result.current.getAccountInfo(
+      const accountInfo = result.current.getAccountsInfo(
         defaultNetwork,
         expectedAddress
       )
-      console.log('current', result.current)
+      console.log('accountInfo', accountInfo)
       expect(accountInfo).toBeDefined()
     })
     // add first credential

@@ -25,6 +25,7 @@ import { AddressError, NetworkError, WalletError } from '../lib/Errors'
 import { getRandomAnimalName } from '../lib/utils'
 import { networkInfoSlice, NetworkInfoStore } from '../network-info'
 import { objectSlice, ObjectStore } from '../objects'
+import { tokenInfoSlice, TokenInfoStore } from '../token-info'
 import { GlobalVaultState, GlobalVaultStore } from './vaultState'
 
 const _validateCurrentWallet = (wallet: SingleCredentialState | null) => {
@@ -56,6 +57,7 @@ export const useVault = create<
     KeyAgentStore &
     ObjectStore &
     NetworkInfoStore &
+    TokenInfoStore &
     GlobalVaultStore
 >()(
   persist(
@@ -65,7 +67,7 @@ export const useVault = create<
       ...keyAgentSlice(set, get, store),
       ...objectSlice(set, get, store),
       ...networkInfoSlice(set, get, store),
-      // TODO: add token Info store
+      ...tokenInfoSlice(set, get, store),
       ...defaultGlobalVaultState,
       // This is now available in the networkInfo store
       // api.networkInfo.setCurrentNetworkInfo(networkName, providerConfigMainnet)
@@ -123,11 +125,12 @@ export const useVault = create<
       _syncAccountInfo: async (providerConfig, publicKey) => {
         // TODO: improve accountInfo store as there are now a record of custom token tickers -> account infos
         //_syncAccountInfo: async (providerConfig, publicKey) => {
-        const { setAccountInfo } = get() // TODO: add getTokenIdMap
+        const { setAccountInfo, getTokensInfo } = get() // TODO: add getTokenIdMap
         const provider = createMinaProvider(providerConfig)
+        const tokenMap = getTokensInfo(providerConfig.networkName)
         const accountInfo = await provider.getAccountInfo({
           publicKey: publicKey,
-          tokenMap: { MINA: '1' }
+          tokenMap: tokenMap
         })
         setAccountInfo(
           providerConfig.networkName,

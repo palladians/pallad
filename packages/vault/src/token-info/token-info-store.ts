@@ -1,35 +1,34 @@
 import { produce } from 'immer'
 import { StateCreator } from 'zustand'
 
+import { DEFAULT_TOKEN_INFO } from './default'
 import { TokenInfoStore } from './token-info-state'
 
 export const tokenInfoSlice: StateCreator<TokenInfoStore> = (set, get) => ({
-  tokenInfo: {},
-  setTokenInfo: (tokenInfo) => {
+  tokenInfo: DEFAULT_TOKEN_INFO,
+  setTokenInfo: (networkName, tokenInfo) => {
     const { ticker, tokenId } = tokenInfo
     set(
       produce((state) => {
-        state.tokenInfo[ticker] = tokenId
+        state.tokenInfo[networkName][ticker] = tokenId
       })
     )
   },
-  getTokenInfo: (ticker) => {
+  getTokensInfo: (networkName) => {
     const { tokenInfo } = get()
-    return { ticker: ticker, tokenId: tokenInfo[ticker] } || undefined
+    return tokenInfo[networkName] || {}
   },
-  removeTokenInfo: (ticker) => {
+  getTokenInfo: (networkName, ticker) => {
+    const { tokenInfo } = get()
+    const tokenId = tokenInfo[networkName]?.[ticker] ?? 'undefined'
+    return { ticker: ticker, tokenId: tokenId } || undefined
+  },
+  removeTokenInfo: (networkName, ticker) => {
     set(
       produce((state) => {
-        delete state.tokenInfo[ticker]
+        delete state.tokenInfo[networkName][ticker]
       })
     )
-  },
-  allTokenInfo: () => {
-    const { tokenInfo } = get()
-    return Object.keys(tokenInfo).map((ticker) => ({
-      ticker,
-      tokenId: tokenInfo[ticker]
-    }))
   },
   clear: () => {
     set(
