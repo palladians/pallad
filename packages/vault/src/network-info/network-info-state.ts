@@ -23,6 +23,7 @@ export type NetworkInfoActions = {
     networkName: NetworkName,
     providerConfig: ProviderConfig
   ) => void
+  updateChainId: (networkName: NetworkName) => void
   getNetworkInfo: (networkName: NetworkName) => ProviderConfig | undefined
   removeNetworkInfo: (ticker: string) => void
   allNetworkInfo: () => (ProviderConfig | undefined)[]

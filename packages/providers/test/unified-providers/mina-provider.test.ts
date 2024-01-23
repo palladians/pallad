@@ -79,6 +79,15 @@ describe('Mina Provider (Functional)', () => {
         expect(transaction).toHaveProperty('token')
       })
     })
+
+    describe('getDaemonStatus', () => {
+      it('should return daemon status', async () => {
+        // This test now depends on the actual response from the server
+        const response = await provider.getDaemonStatus()
+        console.log('Mina Explorer DaemonStatus Provider Response', response)
+        expect(response).toHaveProperty('chainId')
+      })
+    })
   })
 
   describe('Obscura Configuration (Mixed with Mina Explorer for Chain History)', () => {
