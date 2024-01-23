@@ -13,10 +13,15 @@ import { ProviderConfig } from './types'
 export const createChainHistoryProvider = (
   config: ProviderConfig
 ): ChainHistoryProvider => {
+  if (!config.archiveNodeEndpoint) {
+    throw new Error(
+      'Archive node endpoint is required to create a chain history provider'
+    )
+  }
   const underlyingProvider =
-    config.providerName === 'mina-explorer'
-      ? me(config.archiveUrl || config.url)
-      : ob(config.archiveUrl || config.url)
+    config.nodeEndpoint.providerName === 'mina-explorer'
+      ? me(config.archiveNodeEndpoint.url)
+      : ob(config.archiveNodeEndpoint.url)
 
   const transactionsByAddresses = async (
     args: TransactionsByAddressesArgs

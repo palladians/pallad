@@ -9,6 +9,7 @@ import { WalletInfoForm } from '../components/wallet-info-form'
 export const CreateWalletView = () => {
   const navigate = useNavigate()
   const { setMnemonic, setWalletName, setSpendingPassword } =
+    // TODO: fix this useOnboardingStore it is deprecated
     useOnboardingStore(
       (state) => ({
         setSpendingPassword: state.setSpendingPassword,

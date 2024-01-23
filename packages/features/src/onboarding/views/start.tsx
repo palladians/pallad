@@ -66,7 +66,7 @@ export const StartView = () => {
       <div className="flex flex-1 flex-col items-center justify-center gap-8 p-4 text-center">
         <img src="/intro.png" className="w-[220px]" />
         <p className="leading-7 text-muted-foreground">
-          Your gateway to Minaverse.
+          Your gateway to the Minaverse.
         </p>
       </div>
     </WizardLayout>

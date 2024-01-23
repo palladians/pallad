@@ -1,28 +1,31 @@
 import {
+  ChainAddress,
   ChainSignablePayload,
   ChainSpecificArgs,
   ChainSpecificPayload,
   FromBip39MnemonicWordsProps,
-  GroupedCredentials,
   Network
 } from '@palladxyz/key-management'
 import { GetPassphrase } from '@palladxyz/key-management'
-import { Mina, Networks, SubmitTxArgs } from '@palladxyz/mina-core'
+import { AccountInfo, Mina, SubmitTxArgs } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
+import { ProviderConfig } from '@palladxyz/providers'
 
 import {
   CredentialName,
-  SearchQuery,
   SingleCredentialState,
   StoredCredential
 } from '../credentials'
 import { KeyAgentName, KeyAgents, SingleKeyAgentState } from '../keyAgent'
+import { NetworkName } from '../network-info'
+import { SearchQuery } from '../utils/utils'
 
+// Note: this is the full state of the account not just 'MINA' tokens
 type CurrentWallet = {
   singleKeyAgentState: SingleKeyAgentState | undefined
   credential: SingleCredentialState
-  accountInfo: Multichain.MultiChainAccountInfo
-  transactions: Multichain.MultiChainTransactionBody[]
+  accountInfo: Record<string, AccountInfo> // string here is token ticker
+  transactions: Record<string, Mina.TransactionBody[]> // string here is token ticker
 }
 
 type CurrentWalletPayload = {
@@ -40,6 +43,8 @@ export type GlobalVaultState = {
   chain: Network
   walletNetwork: Multichain.MultiChainNetworks
   walletName: string
+  knownAccounts: string[]
+  chainIds: string[]
 }
 
 type CreateWalletReturn = {
@@ -48,22 +53,20 @@ type CreateWalletReturn = {
 
 export type GlobalVaultActions = {
   setChain: (chain: Network) => void
+  setKnownAccounts: (address: string) => void
   getCurrentWallet: () => CurrentWallet
   setCurrentWallet: (payload: CurrentWalletPayload) => void
   _syncAccountInfo: (
-    network: Networks,
-    derivedCredential: GroupedCredentials
+    providerConfig: ProviderConfig,
+    publicKey: ChainAddress
   ) => Promise<void>
   _syncTransactions: (
-    network: Networks,
-    derivedCredential: GroupedCredentials
+    providerConfig: ProviderConfig,
+    publicKey: ChainAddress
   ) => Promise<void>
-  _syncWallet: (
-    network: Networks,
-    derivedCredential: GroupedCredentials
-  ) => Promise<void>
-  getCurrentNetwork: () => Networks
-  switchNetwork: (network: Multichain.MultiChainNetworks) => Promise<void>
+  _syncWallet: () => Promise<void>
+  getCurrentNetwork: () => string
+  switchNetwork: (networkName: NetworkName) => Promise<void>
   getCredentials: (query: SearchQuery, props: string[]) => StoredCredential[]
   getWalletAccountInfo: () => Promise<unknown>
   getWalletTransactions: () => Promise<unknown[]>
@@ -80,13 +83,17 @@ export type GlobalVaultActions = {
   restoreWallet: <T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
-    network: Multichain.MultiChainNetworks,
+    network: string,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
     keyAgentName: KeyAgentName,
     keyAgentType: KeyAgents,
     credentialName: CredentialName
   ) => Promise<void>
   restartWallet: () => void
+  // web provider APIs
+  getAccounts: () => Promise<string[]>
+  getBalance: (ticker?: string) => Promise<number>
+  getChainId: () => Promise<string>
 }
 
 export type GlobalVaultStore = GlobalVaultState & GlobalVaultActions

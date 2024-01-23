@@ -4,6 +4,7 @@ import {
   TransactionsByAddressesArgs,
   TransactionsByIdsArgs
 } from './ChainHistoryProvider'
+import { DaemonStatus } from './daemon-status-provider'
 import { HealthCheckResponse } from './Provider'
 import { TxStatus, TxStatusArgs } from './TxStatusProvider'
 import { SubmitTxArgs, SubmitTxResult } from './TxSubmitProvider'
@@ -35,6 +36,8 @@ export interface UnifiedMinaProviderType {
   getTransaction?(
     args: TransactionsByIdsArgs
   ): Promise<TransactionBody[] | undefined>
+
+  getDaemonStatus?(): Promise<DaemonStatus>
 
   // healthCheck
   healthCheck?(): Promise<HealthCheckResponse>

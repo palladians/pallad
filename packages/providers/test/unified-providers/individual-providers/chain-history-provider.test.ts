@@ -14,9 +14,15 @@ describe('Unified Chain History Provider (Functional)', () => {
   describe('Mina Explorer Configuration', () => {
     beforeEach(() => {
       configMinaExplorer = {
-        providerName: 'mina-explorer',
+        nodeEndpoint: {
+          providerName: 'mina-explorer',
+          url: '...'
+        },
+        archiveNodeEndpoint: {
+          providerName: 'mina-explorer',
+          url: minaExplorerUrl
+        },
         networkName: 'berkeley',
-        url: minaExplorerUrl,
         chainId: '...'
       }
       provider = createChainHistoryProvider(configMinaExplorer)

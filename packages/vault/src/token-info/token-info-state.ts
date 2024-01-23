@@ -1,16 +1,23 @@
 export type TokenInfo = {
   ticker: string
   tokenId: string
+  // todo: consider adding tokenOwner contract address
 }
+
+export type TokenInfoState = {
+  tokenInfo: Record<string, Record<string, string>> // e.g. {'Mina - Berkeley' : { MINA : "1" }}
+}
+
 /**
  * Type representing the store's state and actions combined.
  * @typedef {Object} TokenInfoStore
  */
-export type TokenInfoStore = {
-  tokenInfo: Record<string, string>
-  setTokenInfo: (tokenInfo: TokenInfo) => void
-  getTokenInfo: (ticker: string) => TokenInfo | undefined
-  removeTokenInfo: (ticker: string) => void
-  allTokenInfo: () => TokenInfo[]
+export type TokenInfoActions = {
+  setTokenInfo: (networkName: string, tokenInfo: TokenInfo) => void
+  getTokenInfo: (networkName: string, ticker: string) => TokenInfo | undefined
+  getTokensInfo: (networkName: string) => Record<string, string>
+  removeTokenInfo: (networkName: string, ticker: string) => void
   clear: () => void
 }
+
+export type TokenInfoStore = TokenInfoState & TokenInfoActions

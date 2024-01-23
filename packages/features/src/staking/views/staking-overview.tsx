@@ -46,7 +46,7 @@ export const StakingOverviewView = () => {
                 <MetaField
                   label="Block Producer"
                   value={truncateString({
-                    value: accountInfo.delegate,
+                    value: accountInfo['MINA'].delegate,
                     endCharCount: 8,
                     firstCharCount: 8
                   })}

@@ -1,58 +1,81 @@
 import { ChainAddress } from '@palladxyz/key-management'
-import { Multichain } from '@palladxyz/multi-chain-core'
+import { AccountInfo, Mina } from '@palladxyz/mina-core'
 
+// TODO: remove the multichain package from this file
 export type SingleAccountState = {
-  accountInfo: Multichain.MultiChainAccountInfo
-  transactions: Multichain.MultiChainTransactionBody[]
+  accountInfo: Record<string, AccountInfo>
+  transactions: Record<string, Mina.TransactionBody[]>
 }
 
 export type ChainAddressMapping = Record<ChainAddress, SingleAccountState>
 
 export type AccountState = {
-  accounts: Record<Multichain.MultiChainNetworks, ChainAddressMapping>
+  // this should be a record Record<string, ChainAddressMapping> where the string is a network
+  accounts: Record<string, ChainAddressMapping>
 }
 
+// TODO: refactor to integrate custom tokens
 export type AccountActions = {
   ensureAccount: (
-    network: Multichain.MultiChainNetworks,
+    // ✅ this should just be a string no need for multichain
+    network: string,
     address: ChainAddress
   ) => void
-
+  // todo: this should be `setAccountsInfo` because it does multiple accounts
   setAccountInfo: (
-    network: Multichain.MultiChainNetworks,
+    // ✅ this should be a string
+    network: string,
     address: ChainAddress,
-    accountInfo: Multichain.MultiChainAccountInfo
+    // ✅ this has to be a record Record<string, AccountInfo> where the string is a ticker of a token
+    accountInfo: Record<string, AccountInfo>
   ) => void
 
   setTransactions: (
-    network: Multichain.MultiChainNetworks,
+    // ✅ this should just be a string
+    network: string,
     address: ChainAddress,
-    transactions: Multichain.MultiChainTransactionBody[]
+    // ideally this should be a record Record<string, Transaction[]> where the string is a ticker of a token
+    // but for now we only fetch MINA transactions in the chain history provider
+    transactions: Record<string, Mina.TransactionBody[]>
   ) => void
-
-  getAccountInfo: (
-    network: Multichain.MultiChainNetworks,
+  getAccountsInfo: (
+    // ✅ this should just be a string no need for multichain
+    network: string,
     address: ChainAddress
   ) => SingleAccountState
+  getAccountInfo: (
+    // ✅ this should just be a string no need for multichain & change to networkName
+    network: string,
+    address: ChainAddress,
+    ticker: string // we can add a ticker here to get the account info for a specific token
+  ) => AccountInfo
 
   getTransactions: (
-    network: Multichain.MultiChainNetworks,
-    address: ChainAddress
-  ) => Multichain.MultiChainTransactionBody[]
+    // this should just be a string no need for multichain
+    network: string,
+    address: ChainAddress,
+    ticker: string // we can add a ticker here to get the account info for a specific token
+    // remove multichain
+  ) => Mina.TransactionBody[]
 
   getTransaction: (
-    network: Multichain.MultiChainNetworks,
+    // this should just be a string no need for multichain
+    network: string,
     address: ChainAddress,
-    hash: string
-  ) => Multichain.MultiChainTransactionBody | undefined
+    hash: string,
+    ticker: string
+    // no need for multichain
+  ) => Mina.TransactionBody | undefined
 
   addAccount: (
-    network: Multichain.MultiChainNetworks,
+    // this should just be a string no need for multichain
+    network: string,
     address: ChainAddress
   ) => void
 
   removeAccount: (
-    network: Multichain.MultiChainNetworks,
+    // this should just be a string no need for multichain
+    network: string,
     address: ChainAddress
   ) => void
 

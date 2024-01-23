@@ -10,6 +10,7 @@ import {
 
 import { createAccountInfoProvider } from './account-info-provider'
 import { createChainHistoryProvider } from './chain-history-provider'
+import { createDaemonStatusProvider } from './daemon-status-provider'
 import { createTxSubmitProvider } from './tx-submit-provider'
 import { ProviderConfig } from './types'
 
@@ -32,6 +33,10 @@ export const createMinaProvider = (
     return await createTxSubmitProvider(config).submitTx(args)
   }
 
+  const getDaemonStatus = async () => {
+    return await createDaemonStatusProvider(config).getDaemonStatus()
+  }
+
   const healthCheckNode = async () => {
     return await createAccountInfoProvider(config).healthCheck()
   }
@@ -44,7 +49,7 @@ export const createMinaProvider = (
     const node = await healthCheckNode()
     let archiveResult: HealthCheckResponse = { ok: true, message: '' }
 
-    if (config.archiveUrl) {
+    if (config.archiveNodeEndpoint) {
       archiveResult = await healthCheckArchive()
     }
 
@@ -63,6 +68,7 @@ export const createMinaProvider = (
     getAccountInfo,
     getTransactions,
     submitTransaction,
+    getDaemonStatus,
     healthCheck
   }
 }

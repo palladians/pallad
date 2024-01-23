@@ -28,10 +28,15 @@ describe('Mina Provider (Functional)', () => {
   describe('Mina Provider - Mina Explorer Configuration', () => {
     beforeEach(() => {
       configMinaExplorer = {
-        providerName: 'mina-explorer',
+        nodeEndpoint: {
+          providerName: 'mina-explorer',
+          url: minaExplorerUrl
+        },
+        archiveNodeEndpoint: {
+          providerName: 'mina-explorer',
+          url: minaExplorerArchiveUrl
+        },
         networkName: 'berkeley',
-        url: minaExplorerUrl,
-        archiveUrl: minaExplorerArchiveUrl,
         chainId: '...'
       }
       provider = createMinaProvider(configMinaExplorer)
@@ -74,14 +79,29 @@ describe('Mina Provider (Functional)', () => {
         expect(transaction).toHaveProperty('token')
       })
     })
+
+    describe('getDaemonStatus', () => {
+      it('should return daemon status', async () => {
+        // This test now depends on the actual response from the server
+        const response = await provider.getDaemonStatus()
+        console.log('Mina Explorer DaemonStatus Provider Response', response)
+        expect(response).toHaveProperty('daemonStatus')
+      })
+    })
   })
 
-  describe('Obscura Configuration', () => {
+  describe('Obscura Configuration (Mixed with Mina Explorer for Chain History)', () => {
     beforeEach(() => {
       configObscura = {
-        providerName: 'obscura',
+        nodeEndpoint: {
+          providerName: 'obscura',
+          url: obscuraUrl
+        },
+        archiveNodeEndpoint: {
+          providerName: 'mina-explorer',
+          url: minaExplorerArchiveUrl
+        },
         networkName: 'berkeley',
-        url: obscuraUrl,
         chainId: '...'
       }
 

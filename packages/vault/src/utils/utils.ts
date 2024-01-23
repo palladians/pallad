@@ -19,3 +19,14 @@ export function matchesQuery(obj: any, query: any): boolean {
   }
   return true
 }
+
+export interface SearchQuery {
+  [key: string]: SearchValue
+}
+export type SearchValue =
+  | string
+  | number
+  | boolean
+  | Uint8Array
+  | any[]
+  | SearchQuery

@@ -5,19 +5,10 @@
 import { GroupedCredentials } from '@palladxyz/key-management'
 
 import { KeyAgentName } from '../keyAgent'
+import { SearchQuery } from '../utils/utils'
 
 export type CredentialName = string
 export type StoredCredential = GroupedCredentials | undefined
-export interface SearchQuery {
-  [key: string]: SearchValue
-}
-export type SearchValue =
-  | string
-  | number
-  | boolean
-  | Uint8Array
-  | any[]
-  | SearchQuery
 
 /**
  * Type representing the basic state of a credential.
