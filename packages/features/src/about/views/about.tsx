@@ -54,8 +54,24 @@ export const AboutView = () => {
                 pallad.xyz
               </a>
             </Button>
-            <Button variant="link">Terms of Service</Button>
-            <Button variant="link">Privacy Policy</Button>
+            <Button variant="link" asChild>
+              <a
+                href="https://palladians.xyz/terms"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                Terms of Service
+              </a>
+            </Button>
+            <Button variant="link" asChild>
+              <a
+                href="https://palladians.xyz/privacy"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                Privacy Policy
+              </a>
+            </Button>
           </Card>
         </div>
       </div>
