@@ -20,14 +20,29 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
     const { currentNetworkInfo } = get()
     return currentNetworkInfo
   },
-  updateChainId: (networkName) => {
+  updateChainId: async (networkName) => {
     const { networkInfo } = get()
     const providerConfig = networkInfo[networkName]
+    if (!providerConfig) {
+      throw new Error(
+        `Could not find providerConfig for ${networkName} in updateChainId`
+      )
+    }
     const provider = createMinaProvider(providerConfig)
-    const chainId = provider.getChainId()
+    if (!provider.getDaemonStatus) {
+      throw new Error(
+        `Could not getDaemonStatus for ${networkName} in updateChainId`
+      )
+    }
+    const response = await provider.getDaemonStatus()!
+    if (!response.daemonStatus.chainId) {
+      throw new Error(
+        `Could not get chainId for ${networkName} in updateChainId`
+      )
+    }
     set(
       produce((state) => {
-        state.networkInfo[networkName].chainId = chainId
+        state.networkInfo[networkName].chainId = response.daemonStatus.chainId
       })
     )
   },
@@ -48,6 +63,19 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
         delete state.networkInfo[networkName]
       })
     )
+  },
+  getChainIds: () => {
+    const { networkInfo } = get()
+    if (!networkInfo) {
+      return []
+    }
+
+    return Object.keys(networkInfo).flatMap((networkName) => {
+      const network = networkInfo[networkName]
+      return network && typeof network.chainId !== 'undefined'
+        ? [network.chainId]
+        : []
+    })
   },
   allNetworkInfo: () => {
     const { networkInfo } = get()

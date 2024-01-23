@@ -14,7 +14,7 @@ export const createDaemonStatusProvider = (
       throw new Error(result.message)
     }
 
-    const daemonStatus = result.data.daemonStatus
+    const daemonStatus = result.data
 
     return daemonStatus
   }

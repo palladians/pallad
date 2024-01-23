@@ -91,4 +91,14 @@ describe('CredentialStore', () => {
     const currentNetworkInfo = result.current.getCurrentNetworkInfo()
     expect(currentNetworkInfo).toEqual(currentNetworkInfo)
   })
+  it('should get all chainIds', async () => {
+    const { result } = renderHook(() => useVault())
+    act(() => {
+      result.current.setNetworkInfo(networkNameMainnet, providerConfigMainnet)
+      result.current.setNetworkInfo(networkNameBerkeley, providerConfigBerkeley)
+    })
+    const chainIds = result.current.getChainIds()
+    console.log('chainIds: ', chainIds)
+    expect(chainIds.length).toEqual(3)
+  })
 })

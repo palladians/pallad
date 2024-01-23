@@ -94,7 +94,6 @@ export type GlobalVaultActions = {
   getAccounts: () => Promise<string[]>
   getBalance: (ticker?: string) => Promise<number>
   getChainId: () => Promise<string>
-  getChainIds: () => Promise<string[]>
 }
 
 export type GlobalVaultStore = GlobalVaultState & GlobalVaultActions

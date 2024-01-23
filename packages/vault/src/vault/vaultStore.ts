@@ -332,7 +332,9 @@ export const useVault = create<
           setCurrentWallet,
           _syncWallet,
           ensureAccount,
-          setKnownAccounts
+          setKnownAccounts,
+          getCurrentNetworkInfo,
+          updateChainId
         } = get()
         const agentArgs: FromBip39MnemonicWordsProps = {
           getPassphrase: getPassphrase,
@@ -370,10 +372,8 @@ export const useVault = create<
         // set the first known account
         setKnownAccounts(derivedCredential.address)
         // set the chainIds
-        //const providerConfig = getCurrentNetworkInfo()
-        // const provider = createMinaProvider(providerConfig)
-        // const chainId = await provider.getChainId()
-        // setChainIds(chainId)
+        const providerConfig = getCurrentNetworkInfo()
+        updateChainId(providerConfig.networkName)
         ensureAccount(network, derivedCredential.address)
         getSecurePersistence().setItem('foo', 'bar' as any)
         await _syncWallet()
@@ -416,11 +416,11 @@ export const useVault = create<
         return accountInfo.balance.total
       },
       getChainId: async () => {
-        // fetch chainId from a DaemonStatus provider
-        return 'chainId'
-      },
-      getChainIds: async () => {
-        return ['chainId1', 'chainId2']
+        // could also fetch this from the daemon provider
+        // TODO: consider syncing the chainId on switchNetwork
+        const { getCurrentNetworkInfo } = get()
+        const currentNetwork = getCurrentNetworkInfo()
+        return currentNetwork.chainId
       }
     }),
     {

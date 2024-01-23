@@ -85,7 +85,7 @@ describe('Mina Provider (Functional)', () => {
         // This test now depends on the actual response from the server
         const response = await provider.getDaemonStatus()
         console.log('Mina Explorer DaemonStatus Provider Response', response)
-        expect(response).toHaveProperty('chainId')
+        expect(response).toHaveProperty('daemonStatus')
       })
     })
   })
