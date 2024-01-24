@@ -1,0 +1,25 @@
+{
+  "name": "@palladxyz/pals",
+  "version": "0.0.1",
+  "description": "Package for interacting with the $Pals handle service",
+  "type": "module",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:unit": "vitest run",
+    "cleanup": "rimraf node_modules dist .turbo"
+  },
+  "devDependencies": {
+    "@palladxyz/common": "^1.0.0",
+    "@types/mocha": "^10.0.6",
+    "esbuild-plugin-polyfill-node": "^0.3.0"
+  }
+}
