@@ -37,7 +37,7 @@ jobs:
       VITE_APP_MODE: web
       VITE_APP_DEFAULT_NETWORK: Berkeley
       NODE_OPTIONS: '--max_old_space_size=4096'
-      PALS_SERVER_ENDPOINT: 'http://172.17.0.2/8000'
+      PALS_SERVER_ENDPOINT: 'http:localhost:8000'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -47,7 +47,7 @@ jobs:
 
       - name: Start Docker Container
         run: docker run -d -p 8000:8000 teddyjfpender/pals:latest
-        
+
       - name: Setup env
         uses: ./.github/actions/setup
         with:
