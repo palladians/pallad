@@ -37,7 +37,7 @@ jobs:
       VITE_APP_MODE: web
       VITE_APP_DEFAULT_NETWORK: Berkeley
       NODE_OPTIONS: '--max_old_space_size=4096'
-      PALS_SERVER_ENDPOINT: 'http:localhost:8000'
+      PALS_SERVER_ENDPOINT: 'http://localhost:8000'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
