@@ -20,6 +20,7 @@
   "devDependencies": {
     "@palladxyz/common": "^1.0.0",
     "@types/mocha": "^10.0.6",
-    "esbuild-plugin-polyfill-node": "^0.3.0"
+    "esbuild-plugin-polyfill-node": "^0.3.0",
+    "msw": "^2.1.4"
   }
 }
