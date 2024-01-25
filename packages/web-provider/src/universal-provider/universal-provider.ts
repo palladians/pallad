@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 
-import { MinaProvider } from '.../mina'
+import { MinaProvider } from '../mina-network'
 import { showUserPrompt } from '../utils'
 import {
   ChainProviderOptions,
