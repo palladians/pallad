@@ -126,6 +126,7 @@ describe('Wallet Provider Test', () => {
   afterEach(() => {
     // Reset the mocks after each test
     vi.resetAllMocks()
+    vi.clearAllMocks()
   })
   describe('MinaProvider', () => {
     it('should emit connect event on successful connection when using `enable` method', async () => {
