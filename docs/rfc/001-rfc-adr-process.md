@@ -1,10 +1,9 @@
 # RFC/ADR Process Introduction
 
-| Status        | (Proposed / Accepted / Implemented / Obsolete)       |
+| Status        | Implemented                                          |
 :-------------- |:---------------------------------------------------- |
 | **Author(s)** | Tomasz Marciniak (tomek@palladians.xyz)              |
 | **Updated**   | 2024-01-24                                           |
-| **Obsoletes** | N/A                                                  |
 
 ## Objective
 
