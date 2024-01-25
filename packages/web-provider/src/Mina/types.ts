@@ -1,46 +1,21 @@
-import { MinaProvider } from './MinaProvider'
+import {
+  ProviderAccounts,
+  ProviderChainId,
+  ProviderConnectInfo,
+  ProviderEvent,
+  ProviderEventArguments,
+  ProviderMessage,
+  ProviderRpcError,
+  RequestArguments
+} from '../web-provider-types'
+import { MinaProvider } from './mina-provider'
 
-export interface ProviderRpcError extends Error {
-  message: string
-  code: number
-  data?: unknown
+export interface MinaRpcProviderMap {
+  [chainId: string]: IMinaProviderBase
 }
-
-export interface ProviderMessage {
-  type: string
-  data: unknown
-}
-
-export interface ProviderInfo {
-  chainId: string
-}
-
-export interface RequestArguments {
-  method: string
-  params?: unknown[] | object
-}
-
-export type ProviderChainId = ProviderInfo['chainId']
-
-export type ProviderAccounts = string[]
 
 export interface EIP1102Request extends RequestArguments {
   method: 'mina_requestAccounts'
-}
-// Event types and interfaces
-export type ProviderEvent =
-  | 'connect'
-  | 'disconnect'
-  | 'message'
-  | 'chainChanged'
-  | 'accountsChanged'
-
-export interface ProviderEventArguments {
-  connect: ProviderInfo
-  disconnect: ProviderRpcError
-  message: ProviderMessage
-  chainChanged: ProviderChainId
-  accountsChanged: ProviderAccounts
 }
 
 // IMinaProviderEvents interface
@@ -65,15 +40,19 @@ export interface IMinaProviderEvents {
     listener: (args: ProviderEventArguments[E]) => void
   ) => MinaProvider
 
-  emit: <E extends ProviderEvent>(
-    event: E,
-    payload: ProviderEventArguments[E]
-  ) => boolean
+  //emit: <E extends ProviderEvent>(
+  //  event: E,
+  //  payload: ProviderEventArguments[E]
+  //) => boolean
 }
 
-export interface EIP1193Provider {
+// originally the EIP1193Provider interface
+export interface IMinaProviderBase {
   // connection event
-  on(event: 'connect', listener: (info: ProviderInfo) => void): MinaProvider
+  on(
+    event: 'connect',
+    listener: (info: ProviderConnectInfo) => void
+  ): MinaProvider
   // disconnection event
   on(
     event: 'disconnect',
@@ -96,9 +75,6 @@ export interface EIP1193Provider {
   ): MinaProvider
   // make an Ethereum RPC method call.
   request(args: RequestArguments): Promise<unknown>
-}
-
-export interface IMinaProvider extends EIP1193Provider {
   // legacy alias for EIP-1102
   enable(): Promise<ProviderAccounts>
 }

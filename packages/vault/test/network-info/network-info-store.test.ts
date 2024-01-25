@@ -86,7 +86,7 @@ describe('CredentialStore', () => {
     act(() => {
       result.current.setNetworkInfo(networkNameMainnet, providerConfigMainnet)
       result.current.setNetworkInfo(networkNameBerkeley, providerConfigBerkeley)
-      result.current.setCurrentNetworkInfo(networkNameMainnet)
+      result.current.setCurrentNetworkName(networkNameMainnet)
     })
     const currentNetworkInfo = result.current.getCurrentNetworkInfo()
     expect(currentNetworkInfo).toEqual(currentNetworkInfo)

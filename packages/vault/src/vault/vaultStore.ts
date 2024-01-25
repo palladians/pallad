@@ -70,7 +70,7 @@ export const useVault = create<
       ...tokenInfoSlice(set, get, store),
       ...defaultGlobalVaultState,
       // This is now available in the networkInfo store
-      // api.networkInfo.setCurrentNetworkInfo(networkName, providerConfigMainnet)
+      // api.networkInfo.setCurrentNetworkName(networkName)
       setChain(chain) {
         return set(
           produce((state) => {
@@ -183,7 +183,7 @@ export const useVault = create<
         // if the network info is already stored we can just switch to it using the networkName
         //switchNetwork: async (networkName) => {
         const {
-          setCurrentNetworkInfo,
+          setCurrentNetworkName,
           getCurrentWallet,
           _syncWallet,
           ensureAccount
@@ -198,7 +198,7 @@ export const useVault = create<
             'Wallet address is undefined in switchNetwork method'
           )
         ensureAccount(networkName, publicKey)
-        setCurrentNetworkInfo(networkName)
+        setCurrentNetworkName(networkName)
         await _syncWallet()
       },
       getCredentials: (query, props = []) => {
@@ -324,6 +324,7 @@ export const useVault = create<
         keyAgentName,
         keyAgentType = KeyAgents.InMemory,
         credentialName = getRandomAnimalName()
+        // TODO: add providerConfig object here
       ) => {
         const {
           initialiseKeyAgent,
@@ -334,7 +335,8 @@ export const useVault = create<
           ensureAccount,
           setKnownAccounts,
           getCurrentNetworkInfo,
-          updateChainId
+          updateChainId,
+          setCurrentNetworkName
         } = get()
         const agentArgs: FromBip39MnemonicWordsProps = {
           getPassphrase: getPassphrase,
@@ -373,7 +375,8 @@ export const useVault = create<
         setKnownAccounts(derivedCredential.address)
         // set the chainIds
         const providerConfig = getCurrentNetworkInfo()
-        updateChainId(providerConfig.networkName)
+        await updateChainId(providerConfig.networkName)
+        setCurrentNetworkName(providerConfig.networkName)
         ensureAccount(network, derivedCredential.address)
         getSecurePersistence().setItem('foo', 'bar' as any)
         await _syncWallet()

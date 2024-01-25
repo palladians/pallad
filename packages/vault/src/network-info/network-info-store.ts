@@ -7,18 +7,17 @@ import { NetworkInfoStore } from './network-info-state'
 
 export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
   networkInfo: DEFAULT_NETWORK_INFO,
-  currentNetworkInfo: DEFAULT_NETWORK_INFO[DEFAULT_NETWORK] as ProviderConfig,
-  setCurrentNetworkInfo: (networkName) => {
-    const { networkInfo } = get()
+  currentNetworkName: DEFAULT_NETWORK,
+  setCurrentNetworkName: (networkName) => {
     set(
       produce((state) => {
-        state.currentNetwork = networkInfo[networkName]
+        state.currentNetwork = networkName
       })
     )
   },
   getCurrentNetworkInfo: () => {
-    const { currentNetworkInfo } = get()
-    return currentNetworkInfo
+    const { networkInfo, currentNetworkName } = get()
+    return networkInfo[currentNetworkName] as ProviderConfig
   },
   updateChainId: async (networkName) => {
     const { networkInfo } = get()
@@ -28,21 +27,30 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
         `Could not find providerConfig for ${networkName} in updateChainId`
       )
     }
+
     const provider = createMinaProvider(providerConfig)
     if (!provider.getDaemonStatus) {
       throw new Error(
         `Could not getDaemonStatus for ${networkName} in updateChainId`
       )
     }
-    const response = await provider.getDaemonStatus()!
+
+    const response = await provider.getDaemonStatus()
     if (!response.daemonStatus.chainId) {
       throw new Error(
         `Could not get chainId for ${networkName} in updateChainId`
       )
     }
+
     set(
       produce((state) => {
-        state.networkInfo[networkName].chainId = response.daemonStatus.chainId
+        if (state.networkInfo[networkName]) {
+          // Here we directly modify the chainId for the specific networkName
+          state.networkInfo[networkName] = {
+            ...state.networkInfo[networkName],
+            chainId: response.daemonStatus.chainId
+          }
+        }
       })
     )
   },
