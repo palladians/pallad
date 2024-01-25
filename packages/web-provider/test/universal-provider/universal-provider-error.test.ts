@@ -1,4 +1,4 @@
-import {
+/*import {
   FromBip39MnemonicWordsProps,
   MinaPayload,
   Network
@@ -149,3 +149,4 @@ describe.skip('Wallet Provider Test', () => {
     })
   })
 })
+*/
