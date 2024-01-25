@@ -1,4 +1,4 @@
-/*import {
+import {
   constructTransaction,
   FromBip39MnemonicWordsProps,
   MinaPayload,
@@ -11,7 +11,7 @@ import Client from 'mina-signer'
 import { vi } from 'vitest'
 
 import { RequestArguments } from '../../src'
-import { UniversalProvider } from '../../src'
+import { UniversalProvider } from '../../src/universal-provider'
 
 const PREGENERATED_MNEMONIC = [
   'habit',
@@ -252,4 +252,3 @@ describe.skip('Wallet Provider Test', () => {
     })
   })
 })
-*/

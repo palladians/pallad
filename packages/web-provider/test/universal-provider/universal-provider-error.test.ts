@@ -1,4 +1,4 @@
-/*import {
+import {
   FromBip39MnemonicWordsProps,
   MinaPayload,
   Network
@@ -8,7 +8,7 @@ import { KeyAgents, useVault } from '@palladxyz/vault'
 import { act, renderHook } from '@testing-library/react'
 import { vi } from 'vitest'
 
-import { RequestArguments } from '../../src/mina/types'
+import { RequestArguments } from '../../src'
 import { UniversalProvider } from '../../src/universal-provider'
 
 const PREGENERATED_MNEMONIC = [
@@ -149,4 +149,3 @@ describe.skip('Wallet Provider Test', () => {
     })
   })
 })
-*/
