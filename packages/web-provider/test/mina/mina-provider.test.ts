@@ -18,7 +18,7 @@ import Client from 'mina-signer'
 import { vi } from 'vitest'
 
 import { RequestArguments } from '../../src'
-import { MinaProvider } from '../../src/mina'
+import { MinaProvider } from '../../src'
 
 const PREGENERATED_MNEMONIC = [
   'habit',
