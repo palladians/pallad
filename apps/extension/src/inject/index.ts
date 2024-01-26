@@ -3,7 +3,7 @@ import { runtime } from 'webextension-polyfill'
 
 const inject = () => {
   const script = document.createElement('script')
-  script.src = runtime.getURL('/inject.js')
+  script.src = runtime.getURL('/pallad_rpc.js')
   script.type = 'module'
   document.documentElement.appendChild(script)
   console.info('[Pallad] RPC has been initialized.')
