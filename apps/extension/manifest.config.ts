@@ -37,5 +37,11 @@ export default defineManifest(async (env) => ({
       run_at: 'document_start',
       all_frames: true
     }
+  ],
+  web_accessible_resources: [
+    {
+      resources: ['pallad_rpc.js'],
+      matches: ['https://*/*']
+    }
   ]
 }))

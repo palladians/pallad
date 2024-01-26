@@ -23,7 +23,7 @@ export default defineConfig({
       input: {
         app: 'app.html',
         index: 'index.html',
-        inject: 'src/inject/script.js'
+        inject: 'public/pallad_rpc.js'
       }
     },
     commonjsOptions: {
