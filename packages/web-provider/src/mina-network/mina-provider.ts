@@ -129,7 +129,10 @@ export class MinaProvider implements IMinaProvider {
     // Implement the logic to prompt the user to connect to the wallet
     // For example, you could open a modal and wait for the user to click 'Connect'
     // Step 0: Prompt user for confirmation
-    const userConfirmed = await this.userPrompt('Do you want to connect?')
+    const userConfirmed = await this.userPrompt(
+      'Do you want to connect?',
+      'confirmation'
+    ) // Note: all user prompts should define the inputType like this 'confirmation'
     if (!userConfirmed) {
       // should this emit an error event?
       throw this.createProviderRpcError(4001, 'User Rejected Request')
@@ -326,7 +329,8 @@ export class MinaProvider implements IMinaProvider {
         }
         // TODO: handle incorrect passphrase
         return vaultService.sign(args.params as MinaSignablePayload, async () =>
-          Buffer.from(passphrase)
+          // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
+          Buffer.from(passphrase as string)
         ) as unknown as T
       }
 

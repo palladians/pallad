@@ -19,6 +19,7 @@
     "@palladxyz/features": "^0.1.0",
     "@palladxyz/key-management": "^0.0.1",
     "@palladxyz/persistence": "^1.0.0",
+    "@palladxyz/web-provider": "^0.0.1",
     "@plasmohq/messaging": "^0.6.1",
     "buffer": "^6.0.3",
     "dotenv": "^16.3.1",

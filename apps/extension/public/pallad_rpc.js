@@ -2,6 +2,7 @@
 const BROADCAST_CHANNEL_ID = 'pallad'
 const callPalladAsync = ({ method, payload }) =>
   new Promise((resolve, reject) => {
+    console.log('callPalladAsync', method, payload)
     const privateChannelId = `private-${Math.random()}`
     const channel = new BroadcastChannel(BROADCAST_CHANNEL_ID)
     const responseChannel = new BroadcastChannel(privateChannelId)
@@ -20,8 +21,24 @@ const callPalladAsync = ({ method, payload }) =>
   })
 const init = () => {
   window.mina = {
-    request: ({ method, params }) =>
-      callPalladAsync({ method, payload: params })
+    request: async ({ method, params }) =>
+      await callPalladAsync({ method, payload: params }),
+    enable: async () => {
+      const response = await callPalladAsync({
+        method: 'enable',
+        payload: {}
+      })
+      return response
+    },
+    isPallad: true,
+    isConnected: async () => {
+      const response = await callPalladAsync({
+        method: 'isConnected',
+        payload: {}
+      })
+      return response
+    },
+    
   }
 }
 init()

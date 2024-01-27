@@ -101,6 +101,9 @@ importers:
       '@palladxyz/persistence':
         specifier: ^1.0.0
         version: link:../../packages/persistence
+      '@palladxyz/web-provider':
+        specifier: ^0.0.1
+        version: link:../../packages/web-provider
       '@plasmohq/messaging':
         specifier: ^0.6.1
         version: 0.6.1(react@18.2.0)

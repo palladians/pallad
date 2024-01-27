@@ -1,4 +1,4 @@
-export async function showUserPrompt(
+/*export async function showUserPrompt(
   message: string,
   inputType: 'text' | 'password' = 'text'
 ): Promise<string | null> {
@@ -36,6 +36,45 @@ export async function showUserPrompt(
           // Handle the case where the window could not be created
           console.error('Failed to create prompt window')
           resolve(null) // Resolve with null or a default value
+        }
+      }
+    )
+  })
+}*/
+
+export async function showUserPrompt(
+  message: string,
+  inputType: 'text' | 'password' | 'confirmation' = 'text'
+): Promise<string | boolean | null> {
+  // Modified return type to include boolean and null
+  console.log('User Prompt Message:', message)
+
+  return new Promise((resolve) => {
+    chrome.windows.create(
+      {
+        url: `prompt.html?message=${encodeURIComponent(
+          message
+        )}&inputType=${inputType}`,
+        type: 'popup'
+      },
+      (newWindow) => {
+        if (newWindow) {
+          chrome.runtime.onMessage.addListener(function listener(response) {
+            if (response.windowId === newWindow.id) {
+              chrome.runtime.onMessage.removeListener(listener)
+
+              if (response.userRejected) {
+                resolve(null) // User cancelled the prompt
+              } else if (inputType === 'confirmation') {
+                resolve(response.userConfirmed) // Confirmation response (true/false)
+              } else {
+                resolve(response.userInput) // User provided text/password input
+              }
+            }
+          })
+        } else {
+          console.error('Failed to create prompt window')
+          resolve(null) // Resolve with null in case of an error
         }
       }
     )
