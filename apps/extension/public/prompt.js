@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search)
   const message = params.get('message')
   const inputType = params.get('inputType')
+  const windowId = parseInt(params.get('windowId'));
 
   document.getElementById('message').textContent = message
 
@@ -20,33 +21,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   submitButton.addEventListener('click', () => {
     chrome.runtime.sendMessage({
-      windowId: chrome.windows.WINDOW_ID_CURRENT,
+      windowId: windowId,
       userInput: userInput.value
     })
-    window.close()
+    //window.close()
   })
 
   document.getElementById('confirm-yes').addEventListener('click', () => {
     chrome.runtime.sendMessage({
-      windowId: chrome.windows.WINDOW_ID_CURRENT,
+      windowId: windowId,
       userConfirmed: true
     })
-    window.close()
+    //window.close()
   })
 
   document.getElementById('confirm-no').addEventListener('click', () => {
     chrome.runtime.sendMessage({
-      windowId: chrome.windows.WINDOW_ID_CURRENT,
+      windowId: windowId,
       userConfirmed: false
     })
-    window.close()
+    //window.close()
   })
 
   document.getElementById('cancel-button').addEventListener('click', () => {
     chrome.runtime.sendMessage({
-      windowId: chrome.windows.WINDOW_ID_CURRENT,
+      //windowId: windowId,
       userRejected: true
     })
-    window.close()
+    //window.close()
   })
 })

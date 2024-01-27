@@ -133,6 +133,7 @@ export class MinaProvider implements IMinaProvider {
       'Do you want to connect?',
       'confirmation'
     ) // Note: all user prompts should define the inputType like this 'confirmation'
+    console.log('userConfirmed:', userConfirmed)
     if (!userConfirmed) {
       // should this emit an error event?
       throw this.createProviderRpcError(4001, 'User Rejected Request')
@@ -291,7 +292,8 @@ export class MinaProvider implements IMinaProvider {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
       }
       const changeChain = await this.userPrompt(
-        `You are on the wrong chain. Do you want to switch to ${chain}?`
+        `You are on the wrong chain. Do you want to switch to ${chain}?`,
+        'confirmation'
       )
       if (changeChain) {
         // TODO: switch to the correct chain
@@ -306,7 +308,8 @@ export class MinaProvider implements IMinaProvider {
     // Prompt user for confirmation based on the method type
     // what scenarios would we need to prompt the user?
     const userConfirmed = await this.userPrompt(
-      `Do you want to execute ${args.method}?`
+      `Do you want to execute ${args.method}?`,
+      'confirmation'
     )
     if (!userConfirmed) {
       throw this.createProviderRpcError(4001, 'User Rejected Request')

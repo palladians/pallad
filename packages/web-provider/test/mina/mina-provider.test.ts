@@ -102,9 +102,17 @@ describe('Wallet Provider Test', () => {
       windows: {
         create: vi.fn((options, callback) => {
           // Simulate the creation of a window and immediately invoke the callback
-          // with a mock window ID.
-          callback({ id: 1234 })
+          // with a mock window object including a tabs array.
+          const mockWindow = {
+            id: 1234,
+            tabs: [{ id: 5678 }] // Mock tab ID
+          }
+          callback(mockWindow)
         }) as unknown as typeof chrome.windows.create
+      },
+      tabs: {
+        update: vi.fn() as unknown as typeof chrome.tabs.update
+        // ... other tab methods if needed
       },
       runtime: {
         sendMessage: vi.fn() as unknown as typeof chrome.runtime.sendMessage,
@@ -113,7 +121,8 @@ describe('Wallet Provider Test', () => {
           addListener: vi.fn((listener) => {
             const mockResponse = {
               windowId: 1234,
-              userInput: Buffer.from(params.passphrase) // This is the simulated passphrase input
+              userInput: Buffer.from(params.passphrase), // This is the simulated passphrase input
+              userConfirmed: true
             }
             listener(mockResponse)
           }),

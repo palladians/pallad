@@ -9,7 +9,15 @@ const opts = {
 }
 const provider = await MinaProvider.init(opts, [])
 
-// Register message handlers outside of the runtime.onInstalled listener
+// Does this do anything?
+runtime.onInstalled.addListener(() => {
+  onMessage('enable', async () => {
+    console.log('test enable method')
+    return await provider.enable()
+  })
+})
+
+// Register message handlers directly, not inside any other callback
 onMessage('enable', async () => {
   console.log('test enable method')
   return await provider.enable()
@@ -51,8 +59,4 @@ onMessage('mina_signTransaction', async (data) => {
 onMessage('mina_getBalance', async () => {
   console.log('test mina_getBalance method')
   return await provider.request({ method: 'mina_getBalance' })
-})
-
-runtime.onInstalled.addListener(() => {
-  console.log('Extension installed')
 })
