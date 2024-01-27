@@ -26,6 +26,7 @@ import { getRandomAnimalName } from '../lib/utils'
 import { networkInfoSlice, NetworkInfoStore } from '../network-info'
 import { objectSlice, ObjectStore } from '../objects'
 import { tokenInfoSlice, TokenInfoStore } from '../token-info'
+import { webProviderSlice, WebProviderStore } from '../web-provider'
 import { GlobalVaultState, GlobalVaultStore } from './vaultState'
 
 const _validateCurrentWallet = (wallet: SingleCredentialState | null) => {
@@ -58,6 +59,7 @@ export const useVault = create<
     ObjectStore &
     NetworkInfoStore &
     TokenInfoStore &
+    WebProviderStore &
     GlobalVaultStore
 >()(
   persist(
@@ -68,6 +70,7 @@ export const useVault = create<
       ...objectSlice(set, get, store),
       ...networkInfoSlice(set, get, store),
       ...tokenInfoSlice(set, get, store),
+      ...webProviderSlice(set, get, store),
       ...defaultGlobalVaultState,
       // This is now available in the networkInfo store
       // api.networkInfo.setCurrentNetworkName(networkName)

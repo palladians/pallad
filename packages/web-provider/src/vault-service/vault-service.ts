@@ -35,7 +35,38 @@ export class VaultService implements IVaultService {
     getPassphrase: GetPassphrase
   ): Promise<unknown> {
     const store = useVault.getState()
+    console.log('signable: ', signable)
     return store.sign(signable, getPassphrase)
+  }
+  /*
+  async sign(
+    signable: ChainSignablePayload,
+    args: ChainOperationArgs,
+    //getPassphrase: GetPassphrase
+  ): Promise<unknown> {
+    const store = useVault.getState()
+    // request needs name, credential, signable, args
+    // get current keyagent name
+    // get current crednetial
+    const currentWallet = store.getCurrentWallet()
+    const keyAgentName = currentWallet.singleKeyAgentState?.name as string
+    const credential = currentWallet.credential.credential as GroupedCredentials
+    console.log('keyAgentName: ', keyAgentName)
+    console.log('credential: ', credential)
+    console.log('signable: ', signable)
+    console.log('args: ', args)
+    return store.request(keyAgentName, credential, signable, args)
+  }
+  */
+
+  getEnabled(): boolean {
+    const store = useVault.getState()
+    return store.enabled
+  }
+
+  setEnabled(enabled: boolean): void {
+    const store = useVault.getState()
+    store.setEnabled(enabled)
   }
 
   getBalance(): number {

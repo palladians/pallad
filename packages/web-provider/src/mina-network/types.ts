@@ -1,3 +1,5 @@
+import { MinaSignablePayload } from '@palladxyz/key-management'
+
 import {
   ProviderAccounts,
   ProviderChainId,
@@ -9,6 +11,14 @@ import {
   RequestArguments
 } from '../web-provider-types'
 import { MinaProvider } from './mina-provider'
+
+export type requestSignableData = {
+  data: MinaSignablePayload
+}
+
+export type requestData = {
+  data: number[] | bigint[]
+}
 
 export interface MinaRpcProviderMap {
   [chainId: string]: IMinaProviderBase

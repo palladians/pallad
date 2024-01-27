@@ -1,4 +1,5 @@
 import { MinaSignablePayload } from '@palladxyz/key-management'
+import { Mina } from '@palladxyz/mina-core'
 import { EventEmitter } from 'events'
 
 import { showUserPrompt } from '../utils/prompts'
@@ -20,7 +21,9 @@ import {
 import {
   IMinaProviderBase,
   IMinaProviderEvents,
-  MinaRpcProviderMap
+  MinaRpcProviderMap,
+  requestData,
+  requestSignableData
 } from './types'
 
 export type RpcMethod =
@@ -55,7 +58,7 @@ export class MinaProvider implements IMinaProvider {
   public accounts: string[] = []
   public chainId: string | undefined = undefined
   public rpcProviders: MinaRpcProviderMap = {}
-  public connected = false
+  public connected = vaultService.getEnabled()
 
   private userPrompt: typeof showUserPrompt
 
@@ -204,7 +207,8 @@ export class MinaProvider implements IMinaProvider {
       // Step 3: Fetch accounts and set them.
       this.accounts = await vaultService.getAccounts()
       // Step 4: Set the connected flag.
-      this.connected = true
+      //this.connected = true // this is redundant because we're setting the connected flag in the next step
+      vaultService.setEnabled(true)
       // Step 5: Emit a 'connect' event.
       const connectInfo: ProviderConnectInfo = { chainId: this.chainId }
       //this.events.emit('connect', connectInfo)
@@ -331,10 +335,53 @@ export class MinaProvider implements IMinaProvider {
           throw new Error('User denied the request for passphrase.')
         }
         // TODO: handle incorrect passphrase
-        return vaultService.sign(args.params as MinaSignablePayload, async () =>
-          // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
-          Buffer.from(passphrase as string)
-        ) as unknown as T
+        /*
+          looks like the signable is actually of type:
+          {
+            data: { message: 'hi'},
+            id: 'mina_sign',
+            ....
+          }
+        */
+
+        if (args.method === 'mina_signFields') {
+          const requestData = args.params as requestData
+          const signable = {
+            fields: requestData.data.map((item) => {
+              // Convert to BigInt only if the item is a number
+              if (typeof item === 'number') {
+                return BigInt(item)
+              }
+              // If it's not a number, return the item as is
+              return item
+            })
+          } as MinaSignablePayload
+          const signedResponse = (await vaultService.sign(signable, async () =>
+            // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
+            Buffer.from(passphrase as string)
+          )) as Mina.SignedFields
+          // serialise the response if mina_signFields
+          const serializedResponseData = signedResponse.data.map((item) => {
+            // Convert to BigInt only if the item is a number
+            if (typeof item === 'bigint') {
+              return String(item)
+            }
+            // If it's not a number, return the item as is
+            return item
+          })
+          const seriliasedResponse = {
+            ...signedResponse,
+            data: serializedResponseData
+          }
+          return seriliasedResponse as unknown as T
+        } else {
+          const requestData = args.params as requestSignableData
+          const signable = requestData.data as MinaSignablePayload
+          return (await vaultService.sign(signable, async () =>
+            // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
+            Buffer.from(passphrase as string)
+          )) as unknown as T
+        }
       }
 
       case 'mina_getBalance':
