@@ -4,13 +4,14 @@ import useSWR from 'swr'
 import { useAppStore } from '../store/app'
 
 export const useTransaction = ({ hash }: { hash: string }) => {
+  const providerConfig = useVault((state) => state.getCurrentNetworkInfo())
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const _syncTransactions = useVault((state) => state._syncTransactions)
   const getTransaction = useVault((state) => state.getTransaction)
   const publicKey = currentWallet.credential.credential?.address as string
   const network = useAppStore((state) => state.network)
   const syncAndGetTransaction = async () => {
-    await _syncTransactions(network, currentWallet?.credential.credential)
+    await _syncTransactions(providerConfig, publicKey)
     return getTransaction(network, publicKey, hash, 'MINA') // TODO: remove hardcoded 'MINA'
   }
   return useSWR(
