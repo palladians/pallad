@@ -13,7 +13,8 @@ describe('CredentialStore', () => {
 
   beforeEach(async () => {
     networkNameMainnet = 'Mainnet'
-    networkNameBerkeley = 'Berkeley'
+    // don't use the same network name
+    networkNameBerkeley = 'Berkeley Other'
     providerConfigMainnet = {
       nodeEndpoint: {
         providerName: 'mina-explorer',
