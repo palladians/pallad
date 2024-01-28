@@ -418,22 +418,6 @@ export class MinaProvider implements IMinaProvider {
             y: serializeField(group.y)
           })
 
-          console.log('publicKey:', serializeGroup(signedResponse.publicKey))
-          console.log(
-            'public nullifier:',
-            serializeGroup(signedResponse.public.nullifier)
-          )
-          console.log('public s:', serializeField(signedResponse.public.s))
-          console.log('private c:', serializeField(signedResponse.private.c))
-          console.log(
-            'private g_r:',
-            serializeGroup(signedResponse.private.g_r)
-          )
-          console.log(
-            'private h_m_pk_r:',
-            serializeGroup(signedResponse.private.h_m_pk_r)
-          )
-
           const serializedResponseData = {
             publicKey: serializeGroup(signedResponse.publicKey),
             public: {
