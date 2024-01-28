@@ -18,7 +18,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
       - name: Run Review
-        uses: ./
+        uses: ./.github/workflows/ai-config
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.GPT_KEY }}
