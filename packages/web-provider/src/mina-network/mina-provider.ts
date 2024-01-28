@@ -1,5 +1,8 @@
-import { MinaSignablePayload } from '@palladxyz/key-management'
-import { Mina } from '@palladxyz/mina-core'
+import {
+  ChainOperationArgs,
+  MinaSignablePayload
+} from '@palladxyz/key-management'
+import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
 import { EventEmitter } from 'events'
 
 import { showUserPrompt } from '../utils/prompts'
@@ -33,6 +36,7 @@ export type RpcMethod =
   | 'mina_getBalance'
   | 'mina_sign'
   | 'mina_signTransaction'
+  | 'mina_createNullifier'
 
 export interface IMinaProvider extends IMinaProviderBase {
   connect(opts?: ConnectOps | undefined): Promise<void>
@@ -325,6 +329,7 @@ export class MinaProvider implements IMinaProvider {
       }
 
       case 'mina_sign':
+      case 'mina_createNullifier':
       case 'mina_signFields':
       case 'mina_signTransaction': {
         const passphrase = await this.userPrompt(
@@ -343,6 +348,11 @@ export class MinaProvider implements IMinaProvider {
             ....
           }
         */
+        const operationArgs: ChainOperationArgs = {
+          operation: args.method,
+          network: 'Mina',
+          networkType: 'testnet'
+        }
 
         if (args.method === 'mina_signFields') {
           const requestData = args.params as requestData
@@ -356,9 +366,12 @@ export class MinaProvider implements IMinaProvider {
               return item
             })
           } as MinaSignablePayload
-          const signedResponse = (await vaultService.sign(signable, async () =>
-            // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
-            Buffer.from(passphrase as string)
+          const signedResponse = (await vaultService.sign(
+            signable,
+            operationArgs,
+            async () =>
+              // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
+              Buffer.from(passphrase as string)
           )) as Mina.SignedFields
           // serialise the response if mina_signFields
           const serializedResponseData = signedResponse.data.map((item) => {
@@ -374,10 +387,72 @@ export class MinaProvider implements IMinaProvider {
             data: serializedResponseData
           }
           return seriliasedResponse as unknown as T
+        } else if (args.method === 'mina_createNullifier') {
+          const requestData = args.params as requestData
+          const signable = {
+            message: requestData.data.map((item) => {
+              // Convert to BigInt only if the item is a number
+              if (typeof item === 'number') {
+                return BigInt(item)
+              }
+              // If it's not a number, return the item as is
+              return item
+            })
+          } as MinaSignablePayload
+          const signedResponse = (await vaultService.sign(
+            signable,
+            operationArgs,
+            async () => Buffer.from(passphrase as string)
+          )) as BorrowedTypes.Nullifier
+          console.log('signedResponse:', signedResponse)
+          // serialise the response if mina_createNullifier
+          const serializeField = (field: BorrowedTypes.Field) => {
+            if (typeof field === 'bigint' || typeof field === 'number') {
+              return field.toString()
+            }
+            return field
+          }
+
+          const serializeGroup = (group: BorrowedTypes.Group) => ({
+            x: serializeField(group.x),
+            y: serializeField(group.y)
+          })
+
+          console.log('publicKey:', serializeGroup(signedResponse.publicKey))
+          console.log(
+            'public nullifier:',
+            serializeGroup(signedResponse.public.nullifier)
+          )
+          console.log('public s:', serializeField(signedResponse.public.s))
+          console.log('private c:', serializeField(signedResponse.private.c))
+          console.log(
+            'private g_r:',
+            serializeGroup(signedResponse.private.g_r)
+          )
+          console.log(
+            'private h_m_pk_r:',
+            serializeGroup(signedResponse.private.h_m_pk_r)
+          )
+
+          const serializedResponseData = {
+            publicKey: serializeGroup(signedResponse.publicKey),
+            public: {
+              nullifier: serializeGroup(signedResponse.public.nullifier),
+              s: serializeField(signedResponse.public.s)
+            },
+            private: {
+              c: serializeField(signedResponse.private.c),
+              g_r: serializeGroup(signedResponse.private.g_r),
+              h_m_pk_r: serializeGroup(signedResponse.private.h_m_pk_r)
+            }
+          }
+          console.log('serializedResponseData:', serializedResponseData)
+
+          return serializedResponseData as unknown as T
         } else {
           const requestData = args.params as requestSignableData
           const signable = requestData.data as MinaSignablePayload
-          return (await vaultService.sign(signable, async () =>
+          return (await vaultService.sign(signable, operationArgs, async () =>
             // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
             Buffer.from(passphrase as string)
           )) as unknown as T

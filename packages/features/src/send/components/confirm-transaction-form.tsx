@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ChainOperationArgs } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { Multichain } from '@palladxyz/multi-chain-core'
 import { useVault } from '@palladxyz/vault'
@@ -80,8 +81,13 @@ export const ConfirmTransactionForm = () => {
     )
     const getPassphrase = async () => Buffer.from(data.spendingPassword)
     let signedTx
+    const operationArgs: ChainOperationArgs = {
+      operation: 'mina_signTransaction',
+      network: 'Mina',
+      networkType: 'testnet'
+    }
     try {
-      signedTx = await sign(constructedTx as any, getPassphrase)
+      signedTx = await sign(constructedTx as any, operationArgs, getPassphrase)
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.name === 'AuthenticationError')

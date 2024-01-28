@@ -60,3 +60,11 @@ onMessage('mina_getBalance', async () => {
   console.log('test mina_getBalance method')
   return await provider.request({ method: 'mina_getBalance' })
 })
+
+onMessage('mina_createNullifier', async (data) => {
+  console.log('test mina_createNullifier method')
+  return await provider.request({
+    method: 'mina_createNullifier',
+    params: data
+  })
+})

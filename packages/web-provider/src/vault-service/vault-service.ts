@@ -1,4 +1,5 @@
 import { ChainSignablePayload, GetPassphrase } from '@palladxyz/key-management'
+import { ChainOperationArgs } from '@palladxyz/key-management'
 import { useVault } from '@palladxyz/vault'
 
 import { chainIdToNetwork } from '../utils'
@@ -32,11 +33,12 @@ export class VaultService implements IVaultService {
 
   async sign(
     signable: ChainSignablePayload,
+    args: ChainOperationArgs,
     getPassphrase: GetPassphrase
   ): Promise<unknown> {
     const store = useVault.getState()
     console.log('signable: ', signable)
-    return store.sign(signable, getPassphrase)
+    return store.sign(signable, args, getPassphrase)
   }
   /*
   async sign(

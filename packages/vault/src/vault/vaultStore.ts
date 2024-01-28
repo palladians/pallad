@@ -3,7 +3,6 @@ import {
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
   GroupedCredentials,
-  MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
 import { AccountInfo, Mina, Networks } from '@palladxyz/mina-core'
@@ -258,7 +257,7 @@ export const useVault = create<
           )
         return getTransactions(currentNetwork, walletAddress, 'MINA') || null
       },
-      sign: async (signable, getPassphrase) => {
+      sign: async (signable, args, getPassphrase) => {
         /*
           We can use the new sign api methods here and leave this
           to the key agent request method to handle the signing
@@ -286,14 +285,7 @@ export const useVault = create<
         }
         const credential = currentWallet.credential
           .credential as GroupedCredentials
-        // TODO: the `args` must be an argument to the sign method
-        const args: MinaSpecificArgs = {
-          network: Network.Mina,
-          accountIndex: 0,
-          addressIndex: 0,
-          // TODO: the network type must be an argument
-          networkType: 'testnet'
-        }
+
         const keyAgent = restoreKeyAgent(keyAgentState.name, getPassphrase)
         const signed = await keyAgent?.sign(credential, signable, args)
         return signed
