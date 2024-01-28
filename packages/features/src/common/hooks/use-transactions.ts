@@ -10,6 +10,6 @@ export const useTransactions = () => {
   const network = useAppStore((state) => state.network)
   return useSWR(
     publicKey ? [publicKey, 'transactions', network] : null,
-    async () => await getTransactions(network, publicKey, 'MINA') // TODO: remove hardcoded 'MINA'
+    () => getTransactions(network, publicKey, 'MINA') // TODO: remove hardcoded 'MINA'
   )
 }

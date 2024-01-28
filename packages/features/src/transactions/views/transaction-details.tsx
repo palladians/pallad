@@ -17,14 +17,18 @@ export const TransactionDetailsView = () => {
   const { hash } = useParams()
   if (!hash) return null
   if (!publicKey) return null
-  const { data: transactionData, isLoading: transactionLoading } =
-    useTransaction({ hash })
+  const {
+    data: transactionData,
+    isLoading: transactionLoading,
+    error
+  } = useTransaction({ hash })
   const transaction =
     transactionData &&
     structurizeTransaction({
       tx: transactionData as any,
       walletPublicKey: publicKey
     })
+  console.log('>>>TXD', transactionData, error)
   const transactionMetaFields = transaction && [
     {
       label: 'Hash',
