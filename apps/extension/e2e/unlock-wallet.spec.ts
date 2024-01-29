@@ -7,9 +7,12 @@ test('locks and unlocks existing wallet', async ({ page, extensionId }) => {
   await onboardingPom.restoreTestWallet()
   await page.getByTestId('bottomNavigation__menu').click()
   await page.getByTestId('commandMenu__lockWallet').click()
+  await page.getByTestId('unlockWallet__password').fill('Wrong Password')
+  const unlockWalletButton = page.getByTestId('unlockWallet__unlockButton')
+  expect(unlockWalletButton.isDisabled).toBeTruthy()
   await page
     .getByTestId('unlockWallet__password')
     .fill(devnetWallet.spendingPassword)
-  await page.getByTestId('unlockWallet__unlockButton').click()
+  await unlockWalletButton.click()
   expect(await onboardingPom.getMinaBalance()).toContain('MINA')
 })

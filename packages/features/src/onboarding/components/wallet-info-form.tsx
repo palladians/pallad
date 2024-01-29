@@ -80,7 +80,9 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
             className={cn(errors.walletName && 'border-destructive')}
             {...register('walletName')}
           />
-          <FormError>{errors.walletName?.message}</FormError>
+          {errors.walletName && (
+            <FormError>{errors.walletName?.message}</FormError>
+          )}
         </div>
         <div className="gap-2">
           <Label
@@ -109,7 +111,9 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
               {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
             </Button>
           </div>
-          <FormError>{errors.spendingPassword?.message}</FormError>
+          {errors.spendingPassword && (
+            <FormError>{errors.spendingPassword?.message}</FormError>
+          )}
         </div>
         <div className="flex items-center">
           <Checkbox
