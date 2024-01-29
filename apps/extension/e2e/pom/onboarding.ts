@@ -1,3 +1,4 @@
+import { expect } from '../extension'
 import { devnetWallet } from '../fixtures'
 import { BasePom } from './base'
 
@@ -52,6 +53,10 @@ export class OnboardingPom extends BasePom {
   async goNext() {
     const nextButton = this.page.getByTestId(TestId.NEXT_BUTTON)
     return nextButton.click()
+  }
+  async assertNextDisabled() {
+    const nextButton = this.page.getByTestId(TestId.NEXT_BUTTON)
+    expect(nextButton.isDisabled).toBeTruthy()
   }
   async goBack() {
     const backButton = this.page.getByTestId(TestId.BACK_BUTTON)
