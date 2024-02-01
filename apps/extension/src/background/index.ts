@@ -23,6 +23,27 @@ onMessage('enable', async () => {
   return await provider.enable()
 })
 
+onMessage('mina_setState', async () => {
+  console.log('test mina_setState method')
+  //return await provider.request({ method: 'mina_setState', params: data })
+  return 'TODO: implement mina_setState'
+})
+
+onMessage('mina_getState', async () => {
+  console.log('test mina_getState method')
+  //return await provider.request({ method: 'mina_getState' })
+  return {
+    credential: {
+      name: 'Pallad',
+      proof: {
+        publicInputs: [1],
+        publicOutputs: [100],
+        proof: '1hjdjf83...fjf'
+      }
+    }
+  }
+})
+
 onMessage('isConnected', async () => {
   console.log('test isConnected method')
   return await provider.isConnected()
