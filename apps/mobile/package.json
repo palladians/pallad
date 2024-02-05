@@ -1,0 +1,53 @@
+{
+  "name": "@palladxyz/mobile",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@palladxyz/common": "^1.0.0",
+    "@palladxyz/features": "^0.1.0",
+    "@palladxyz/key-management": "^0.0.1",
+    "@palladxyz/persistence": "^1.0.0",
+    "@tauri-apps/api": "^2.0.0-beta.0",
+    "@tauri-apps/plugin-shell": "^2.0.0-beta.0",
+    "@tauri-apps/plugin-store": "2.0.0-beta.0",
+    "buffer": "^6.0.3",
+    "dotenv": "^16.3.1",
+    "next-themes": "^0.2.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss-animate": "^1.0.7",
+    "vite-plugin-node-stdlib-browser": "^0.2.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+    "@originjs/vite-plugin-commonjs": "^1.0.3",
+    "@tauri-apps/cli": "^2.0.0-beta.0",
+    "@total-typescript/ts-reset": "^0.5.1",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "internal-ip": "^7.0.0",
+    "path": "^0.12.7",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "rollup-plugin-polyfill-node": "^0.12.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.5.1",
+    "vite-plugin-commonjs": "^0.10.1",
+    "vite-plugin-node-polyfills": "^0.17.0",
+    "vite-plugin-require-transform": "^1.0.21",
+    "vite-plugin-svgr": "^3.2.0",
+    "vite-plugin-top-level-await": "^1.4.1",
+    "vite-plugin-wasm": "^3.3.0"
+  }
+}
