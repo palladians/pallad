@@ -1,5 +1,3 @@
-import { useJitsu } from '@jitsu/jitsu-react'
-
 import { useAppStore } from '../store/app'
 
 type Event =
@@ -14,11 +12,10 @@ type TrackProps = {
 }
 
 export const useAnalytics = () => {
-  const { analytics } = useJitsu()
   const canTrack = useAppStore((state) => state.shareData)
-  const track = ({ event, metadata }: TrackProps) => {
+  const track = (_props: TrackProps) => {
     if (!canTrack) return
-    return analytics.track(event, metadata)
+    console.log(_props)
   }
   return { track }
 }

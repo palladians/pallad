@@ -19,6 +19,9 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\" && pnpm lint:fix",
     "cleanup": "turbo run cleanup && rimraf node_modules",
     "prepare": "husky install",
+    "docs:dev": "vocs dev",
+    "docs:build": "vocs build",
+    "docs:preview": "vocs preview",
     "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
@@ -47,7 +50,8 @@
     "turbo": "^1.11.2",
     "turbowatch": "^2.29.4",
     "typescript": "^5.3.3",
-    "vitest": "^1.1.0"
+    "vitest": "^1.1.0",
+    "vocs": "1.0.0-alpha.34"
   },
   "packageManager": "pnpm@8.12.1"
 }

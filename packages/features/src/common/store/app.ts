@@ -3,6 +3,8 @@ import { DEFAULT_NETWORK } from '@palladxyz/vault'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
+console.log(persist)
+
 import { VaultState } from '../lib/const'
 
 // TODO: Make network a generic type that can support networks other than just Mina
@@ -62,7 +64,9 @@ export const useAppStore = create<AppStore>()(
     }),
     {
       name: 'PalladApp',
-      storage: createJSONStorage(getLocalPersistence)
+      storage: import.meta.env['VITE_APP_LADLE']
+        ? undefined
+        : createJSONStorage(getLocalPersistence)
     }
   )
 )
