@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
-    "@jitsu/jitsu-react": "^1.7.2",
     "@palladxyz/key-management": "^0.0.1",
     "@palladxyz/mina-core": "^0.0.1",
     "@palladxyz/mina-graphql": "^0.0.1",
@@ -97,7 +96,7 @@
     "tsup": "^8.0.1",
     "webextension-polyfill": "^0.10.0",
     "zod": "^3.22.4",
-    "zustand": "^4.4.7"
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@chialab/esbuild-plugin-commonjs": "^0.17.2",
@@ -114,6 +113,7 @@
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "@types/webextension-polyfill": "^0.10.7",
+    "@vitejs/plugin-react-swc": "^3.5.0",
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "esbuild-plugin-svgr": "2.0.0",
     "graphql-request": "^6.1.0",

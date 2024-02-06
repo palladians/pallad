@@ -47,8 +47,8 @@ export const useAccount = () => {
     [publicKey]
   )
   const stakeDelegated =
-    currentWallet.accountInfo['MINA'].publicKey !==
-    currentWallet.accountInfo['MINA'].delegate
+    currentWallet.accountInfo['MINA']?.publicKey !==
+    currentWallet.accountInfo['MINA']?.delegate
   const copyWalletAddress = async () => {
     await navigator.clipboard.writeText(publicKey ?? '')
     toast({

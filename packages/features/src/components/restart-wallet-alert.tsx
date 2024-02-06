@@ -1,5 +1,4 @@
 import { useVault } from '@palladxyz/vault'
-import { storage } from 'webextension-polyfill'
 
 import {
   AlertDialog,
@@ -23,9 +22,12 @@ export const RestartWalletAlert = ({
 }: RestartWalletAlertProps) => {
   const confirm = async () => {
     useVault.persist.clearStorage()
-    await storage.local.clear()
-    await storage.session.clear()
-    await storage.sync.clear()
+    if (import.meta.env['VITE_APP_LADLE'] !== 'true') {
+      const { storage } = await import('webextension-polyfill')
+      await storage.local.clear()
+      await storage.session.clear()
+      await storage.sync.clear()
+    }
     setOpen(false)
     window.close()
   }
