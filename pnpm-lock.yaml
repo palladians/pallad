@@ -214,6 +214,121 @@ importers:
         specifier: ^7.9.0
         version: 7.9.0
 
+  apps/mobile:
+    dependencies:
+      '@palladxyz/common':
+        specifier: ^1.0.0
+        version: link:../../packages/common
+      '@palladxyz/features':
+        specifier: ^0.1.0
+        version: link:../../packages/features
+      '@palladxyz/key-management':
+        specifier: ^0.0.1
+        version: link:../../packages/key-management
+      '@palladxyz/persistence':
+        specifier: ^1.0.0
+        version: link:../../packages/persistence
+      '@tauri-apps/api':
+        specifier: ^2.0.0-beta.0
+        version: 2.0.0-beta.0
+      '@tauri-apps/plugin-shell':
+        specifier: ^2.0.0-beta.0
+        version: 2.0.0-beta.0
+      '@tauri-apps/plugin-store':
+        specifier: 2.0.0-beta.0
+        version: 2.0.0-beta.0
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
+      next-themes:
+        specifier: ^0.2.1
+        version: 0.2.1(next@14.0.4)(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      tailwindcss-animate:
+        specifier: ^1.0.7
+        version: 1.0.7(tailwindcss@3.4.0)
+      vite-plugin-node-stdlib-browser:
+        specifier: ^0.2.1
+        version: 0.2.1(node-stdlib-browser@1.2.0)(rollup@3.29.4)(vite@4.5.1)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@esbuild-plugins/node-globals-polyfill':
+        specifier: ^0.2.3
+        version: 0.2.3(esbuild@0.19.11)
+      '@esbuild-plugins/node-modules-polyfill':
+        specifier: ^0.2.2
+        version: 0.2.2(esbuild@0.19.11)
+      '@originjs/vite-plugin-commonjs':
+        specifier: ^1.0.3
+        version: 1.0.3
+      '@tauri-apps/cli':
+        specifier: ^2.0.0-beta.0
+        version: 2.0.0-beta.1
+      '@total-typescript/ts-reset':
+        specifier: ^0.5.1
+        version: 0.5.1
+      '@types/react':
+        specifier: ^18.2.15
+        version: 18.2.46
+      '@types/react-dom':
+        specifier: ^18.2.7
+        version: 18.2.18
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.15.0
+        version: 6.17.0(@typescript-eslint/parser@6.17.0)(eslint@8.56.0)(typescript@5.3.3)
+      '@typescript-eslint/parser':
+        specifier: ^6.15.0
+        version: 6.17.0(eslint@8.56.0)(typescript@5.3.3)
+      '@vitejs/plugin-react-swc':
+        specifier: ^3.5.0
+        version: 3.5.0(vite@4.5.1)
+      internal-ip:
+        specifier: ^7.0.0
+        version: 7.0.0
+      path:
+        specifier: ^0.12.7
+        version: 0.12.7
+      rollup-plugin-node-polyfills:
+        specifier: ^0.2.1
+        version: 0.2.1
+      rollup-plugin-polyfill-node:
+        specifier: ^0.12.0
+        version: 0.12.0(rollup@3.29.4)
+      typescript:
+        specifier: ^5.0.2
+        version: 5.3.3
+      vite:
+        specifier: ^4.5.1
+        version: 4.5.1(@types/node@20.10.6)
+      vite-plugin-commonjs:
+        specifier: ^0.10.1
+        version: 0.10.1
+      vite-plugin-node-polyfills:
+        specifier: ^0.17.0
+        version: 0.17.0(rollup@3.29.4)(vite@4.5.1)
+      vite-plugin-require-transform:
+        specifier: ^1.0.21
+        version: 1.0.21
+      vite-plugin-svgr:
+        specifier: ^3.2.0
+        version: 3.3.0(rollup@3.29.4)(typescript@5.3.3)(vite@4.5.1)
+      vite-plugin-top-level-await:
+        specifier: ^1.4.1
+        version: 1.4.1(rollup@3.29.4)(vite@4.5.1)
+      vite-plugin-wasm:
+        specifier: ^3.3.0
+        version: 3.3.0(vite@4.5.1)
+
   packages/_template:
     devDependencies:
       '@palladxyz/common':
@@ -683,25 +798,19 @@ importers:
 
   packages/persistence:
     dependencies:
-      '@capacitor/preferences':
-        specifier: ^5.0.6
-        version: 5.0.6(@capacitor/core@5.6.0)
-      '@capacitor/storage':
-        specifier: ^1.2.5
-        version: 1.2.5(@capacitor/core@5.6.0)
       '@plasmohq/storage':
         specifier: ^1.9.0
         version: 1.9.0(react@18.2.0)
-      capacitor-secure-storage-plugin:
-        specifier: ^0.9.0
-        version: 0.9.0(@capacitor/core@5.6.0)
+      '@tauri-apps/plugin-store':
+        specifier: 2.0.0-beta.0
+        version: 2.0.0-beta.0
+      '@tauri-apps/plugin-stronghold':
+        specifier: 2.0.0-beta.0
+        version: 2.0.0-beta.0
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
     devDependencies:
-      '@capacitor/core':
-        specifier: ^5.6.0
-        version: 5.6.0
       '@palladxyz/common':
         specifier: ^1.0.0
         version: link:../common
@@ -2280,28 +2389,6 @@ packages:
     dependencies:
       statuses: 2.0.1
     dev: true
-
-  /@capacitor/core@5.6.0:
-    resolution: {integrity: sha512-xJhCOUGPHw0QYDA3YH+CmL6qiV9DH4Ij3yPxSenymjrtLuXI197u9ddCZwGEwgVIkh9kGZBBKzsNkn89SZ2gdQ==}
-    dependencies:
-      tslib: 2.6.2
-
-  /@capacitor/preferences@5.0.6(@capacitor/core@5.6.0):
-    resolution: {integrity: sha512-aDe4wGTVSAIue6XXdUFgyz7SGszxK/Ptt/iWTydMpzc1PlZXw1XTTnciM+S+SLLNZFzXlkpXT3wMnh9t0DojUA==}
-    peerDependencies:
-      '@capacitor/core': ^5.0.0
-    dependencies:
-      '@capacitor/core': 5.6.0
-    dev: false
-
-  /@capacitor/storage@1.2.5(@capacitor/core@5.6.0):
-    resolution: {integrity: sha512-pWhnw4U7wN/zFV4lA4BLMypSufTktCbk548Yk4whSb0KAq3R0mLfSubRIHkGdcPqQWCsM6g/zUuszurhz6ncWQ==}
-    deprecated: package has been renamed to @capacitor/preferences
-    peerDependencies:
-      '@capacitor/core': ^3.0.0
-    dependencies:
-      '@capacitor/core': 5.6.0
-    dev: false
 
   /@chialab/cjs-to-esm@0.17.11:
     resolution: {integrity: sha512-yzIKx1J7ykDoKm+CQXw/gkI0B3YbGDUAkkz70ohoPVI9stSeNwdvXMNcNwMQMndQleJkTS8aOi4j3JRrBbVAng==}
@@ -5388,6 +5475,136 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
+  /@tauri-apps/api@2.0.0-beta.0:
+    resolution: {integrity: sha512-WLoh/Vk8cgY7XrJV7Vpb6PssReBZWQCATfYBb1aCRDk+sp0NyPwumx6fZ2ECAKzAcs3OeanluwZcajruIW4CPQ==}
+    engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+    dev: false
+
+  /@tauri-apps/cli-darwin-arm64@2.0.0-beta.1:
+    resolution: {integrity: sha512-d71utEr9H3fXAI6nKPaPuINpnvMQn+UIscOTzTMcrmIDqptOO0ix8z6C3HSvNxV0OjtlxzNJGWwOb24U0OYrgw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-darwin-x64@2.0.0-beta.1:
+    resolution: {integrity: sha512-bzsWZjQt5NG1uhbDTGw8Hmvm+J1d+9J7HXMMMwQc4E3kBns95sr4bIoXvgIq3cZYS4uyZOvdhEdjkSGg1c65Lg==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-arm-gnueabihf@2.0.0-beta.1:
+    resolution: {integrity: sha512-FMnZpk4a5D9QgZKkT00P3f4CHEZFpn/b+pWfZJ7vxCdir+Cc1eKOHiqhvmMBEeLlYlQFBaYeAK0EaZWnN82ZJA==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-arm64-gnu@2.0.0-beta.1:
+    resolution: {integrity: sha512-0kE65P+6ppeAOFsJV6av5VhkjDv1dcHkObErpjJHpwYowuC3aqaCCnH3biR9gNvcoVUXsCwmMA/BkxUpq9W9/g==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-arm64-musl@2.0.0-beta.1:
+    resolution: {integrity: sha512-Wsj1eSrrAVeuFQWJq1gVIA78I8JM50fEsxbrMAOf89ZXpCYxJTNCJkyRQyLB+yHhv9nmhA3a1Mmr5ubhRETy1Q==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-x64-gnu@2.0.0-beta.1:
+    resolution: {integrity: sha512-LkzLJWg+ud2gWuq8yAWJ3Sahrp79Vbd2Cotbm/RbfMi7RbRV8TQYj4zfUhyFJVnk4nF89kTnwfNxLdTw67CAOw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-x64-musl@2.0.0-beta.1:
+    resolution: {integrity: sha512-Ro3PuLSNEZAw9/Rc2CP3k9P7LaUQ2TOFXJeW6G4aCXrd0MlJwlGhhjdZuLbmgzD1rda4dSpZGJPhbYvu8YD7eQ==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-win32-arm64-msvc@2.0.0-beta.1:
+    resolution: {integrity: sha512-SWNF+5B+lBbW/Kq1wTMVG9x97PqJUOo8eWAr/nlMm3J0lYbTWAa8/ScibaPjq82HiPhv8WCJXlcO6FEqWCoJ2A==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-win32-ia32-msvc@2.0.0-beta.1:
+    resolution: {integrity: sha512-NvfP16fSlfq6GLHJH+gAxEsJn+Jvz3HoxMTLxAg7Ra0ycMODFu4xbNn6Hp7Djn297qTHHLYDva4Np6Whw5DUlQ==}
+    engines: {node: '>= 10'}
+    cpu: [ia32]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-win32-x64-msvc@2.0.0-beta.1:
+    resolution: {integrity: sha512-9TKbDQyVHW0p1a7aXQEKg+MhCyFMpzD26puLKOxbTPiTcRUR4lUFq5Bhf1VR5ihoqnZNhJEtuR1mA16ZrIkuKQ==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli@2.0.0-beta.1:
+    resolution: {integrity: sha512-u3AcZPdHsg9qT3e9PSD0H2IVZetQvWuBOyF81CN7/sY+AJGOli7i2d38Bj4wJs50tuMotoseiMcxuyxTlAdBnw==}
+    engines: {node: '>= 10'}
+    hasBin: true
+    optionalDependencies:
+      '@tauri-apps/cli-darwin-arm64': 2.0.0-beta.1
+      '@tauri-apps/cli-darwin-x64': 2.0.0-beta.1
+      '@tauri-apps/cli-linux-arm-gnueabihf': 2.0.0-beta.1
+      '@tauri-apps/cli-linux-arm64-gnu': 2.0.0-beta.1
+      '@tauri-apps/cli-linux-arm64-musl': 2.0.0-beta.1
+      '@tauri-apps/cli-linux-x64-gnu': 2.0.0-beta.1
+      '@tauri-apps/cli-linux-x64-musl': 2.0.0-beta.1
+      '@tauri-apps/cli-win32-arm64-msvc': 2.0.0-beta.1
+      '@tauri-apps/cli-win32-ia32-msvc': 2.0.0-beta.1
+      '@tauri-apps/cli-win32-x64-msvc': 2.0.0-beta.1
+    dev: true
+
+  /@tauri-apps/plugin-shell@2.0.0-beta.0:
+    resolution: {integrity: sha512-AADGPuGP+YM5Ar48XfA8o9k9jtlSBpEVcsbOEwWdifi0oAiVOBXgiy9C1Icsub/tlD3YjK7oT8vDcOXLGYBhUg==}
+    dependencies:
+      '@tauri-apps/api': 2.0.0-beta.0
+    dev: false
+
+  /@tauri-apps/plugin-store@2.0.0-beta.0:
+    resolution: {integrity: sha512-DT3pzMyNcgO90hDgmnN7j5fYQIaaD54gbi0oKi7n4Nwa6y5GqHsgpnzot9IBSOTS6kYy6D8yrN43XN/xwG4vUg==}
+    dependencies:
+      '@tauri-apps/api': 2.0.0-beta.0
+    dev: false
+
+  /@tauri-apps/plugin-stronghold@2.0.0-beta.0:
+    resolution: {integrity: sha512-8eN9D7pIZZfp3oPcB+3LIU7st3k7AW9zE2klPnn+hDfkhtPbaY830tDGoVIvQZCMG9NH+i0lqy1Av4XJOQruKw==}
+    dependencies:
+      '@tauri-apps/api': 2.0.0-beta.0
+    dev: false
+
   /@testing-library/dom@9.3.3:
     resolution: {integrity: sha512-fB0R+fa3AUqbLHWyxXa2kGVtf1Fe1ZZFr0Zp6AIbIAzXb2mKbEXl+PCQNUOaq5lbTab5tfctfXRNsWXxa2f7Aw==}
     engines: {node: '>=14'}
@@ -6925,14 +7142,6 @@ packages:
   /caniuse-lite@1.0.30001572:
     resolution: {integrity: sha512-1Pbh5FLmn5y4+QhNyJE9j3/7dK44dGB83/ZMjv/qJk86TvDbjk0LosiZo0i0WB0Vx607qMX9jYrn1VLHCkN4rw==}
 
-  /capacitor-secure-storage-plugin@0.9.0(@capacitor/core@5.6.0):
-    resolution: {integrity: sha512-P5fiC94opcLHu41vceo9weXH+20g0SPYKkeAx+qm9eKNcVFqpcuI4dqwivXlGXYNMDygyjSQuAaFwZ4gW0Y91Q==}
-    peerDependencies:
-      '@capacitor/core': ^5.0.0
-    dependencies:
-      '@capacitor/core': 5.6.0
-    dev: false
-
   /caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
     dev: true
@@ -7760,6 +7969,13 @@ packages:
       default-browser-id: 3.0.0
       execa: 7.2.0
       titleize: 3.0.0
+    dev: true
+
+  /default-gateway@6.0.3:
+    resolution: {integrity: sha512-fwSOJsbbNzZ/CUFpqFBqYfYNLj1NbMPm8MMCIzHjC83iSJRBEGmDUxU+WP661BaBQImeC2yHwXtz+P/O9o+XEg==}
+    engines: {node: '>= 10'}
+    dependencies:
+      execa: 5.1.1
     dev: true
 
   /defaults@1.0.4:
@@ -10036,6 +10252,16 @@ packages:
       wrap-ansi: 6.2.0
     dev: true
 
+  /internal-ip@7.0.0:
+    resolution: {integrity: sha512-qE4TeD4brqC45Vq/+VASeMiS1KRyfBkR6HT2sh9pZVVCzSjPkaCEfKFU+dL0PRv7NHJtvoKN2r82G6wTfzorkw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      default-gateway: 6.0.3
+      ipaddr.js: 2.1.0
+      is-ip: 3.1.0
+      p-event: 4.2.0
+    dev: true
+
   /internal-slot@1.0.6:
     resolution: {integrity: sha512-Xj6dv+PsbtwyPpEflsejS+oIZxmMlV44zAhG479uYu89MsjcYOhCFnNyKrkJrihbsiasQyY0afoCl/9BLR65bg==}
     engines: {node: '>= 0.4'}
@@ -10061,12 +10287,22 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /ip-regex@4.3.0:
+    resolution: {integrity: sha512-B9ZWJxHHOHUhUjCPrMpLD4xEq35bUTClHM1S6CBU5ixQnkZmwipwgc96vAd7AAGM9TGHvJR+Uss+/Ak6UphK+Q==}
+    engines: {node: '>=8'}
+    dev: true
+
   /ip@1.1.8:
     resolution: {integrity: sha512-PuExPYUiu6qMBQb4l06ecm6T6ujzhmh+MeJcW9wa89PoAz5pvd4zPgN5WJV104mb6S2T1AwNIAaB70JNrLQWhg==}
     dev: true
 
   /ip@2.0.0:
     resolution: {integrity: sha512-WKa+XuLG1A1R0UWhl2+1XQSi+fZWMsYKffMZTTYsiZaUD8k2yDAj5atimTUD2TZkyCkNEeYE5NhFZmupOGtjYQ==}
+    dev: true
+
+  /ipaddr.js@2.1.0:
+    resolution: {integrity: sha512-LlbxQ7xKzfBusov6UMi4MFpEg0m+mAm9xyNGEduwXMEDuf4WfzB/RZwMVYEd7IKGvh4IUkEXYxtAVu9T3OelJQ==}
+    engines: {node: '>= 10'}
     dev: true
 
   /is-absolute@0.1.7:
@@ -10213,6 +10449,13 @@ packages:
   /is-interactive@1.0.0:
     resolution: {integrity: sha512-2HvIEKRoqS62guEC+qBjpvRubdX910WCMuJTZ+I9yvqKU2/12eSL549HMwtabb4oupdj2sMP50k+XJfB/8JE6w==}
     engines: {node: '>=8'}
+    dev: true
+
+  /is-ip@3.1.0:
+    resolution: {integrity: sha512-35vd5necO7IitFPjd/YBeqwWnyDWbuLH9ZXQdMfDA8TEo7pv5X8yfrvVO3xbJbLUlERCMvf6X0hTUamQxCYJ9Q==}
+    engines: {node: '>=8'}
+    dependencies:
+      ip-regex: 4.3.0
     dev: true
 
   /is-lower-case@1.1.3:
@@ -12272,6 +12515,18 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
+  /p-event@4.2.0:
+    resolution: {integrity: sha512-KXatOjCRXXkSePPb1Nbi0p0m+gQAwdlbhi4wQKJPI1HsMQS9g+Sqp2o+QHziPr7eYJyOZet836KoHEVM1mwOrQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      p-timeout: 3.2.0
+    dev: true
+
+  /p-finally@1.0.0:
+    resolution: {integrity: sha512-LICb2p9CB7FS+0eR1oqWnHhp0FljGLZCWBE9aix0Uye9W8LTQPwMTYVGWQWIw9RdQiDg4+epXQODwIYJtSJaow==}
+    engines: {node: '>=4'}
+    dev: true
+
   /p-is-promise@2.1.0:
     resolution: {integrity: sha512-Y3W0wlRPK8ZMRbNq97l4M5otioeA5lm1z7bkNkxCka8HSPjR0xRWmpCmc9utiaLP9Jb1eD8BgeIxTW4AIF45Pg==}
     engines: {node: '>=6'}
@@ -12307,6 +12562,13 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       aggregate-error: 3.1.0
+    dev: true
+
+  /p-timeout@3.2.0:
+    resolution: {integrity: sha512-rhIwUycgwwKcP9yTOOFK/AKsAopjjCakVqLHePO3CC6Mir1Z99xT+R63jZxAT5lFZLa2inS5h+ZS2GvR99/FBg==}
+    engines: {node: '>=8'}
+    dependencies:
+      p-finally: 1.0.0
     dev: true
 
   /pac-proxy-agent@7.0.1:
@@ -15170,7 +15432,7 @@ packages:
       mlly: 1.4.2
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 4.5.1(@types/node@20.10.6)
+      vite: 5.0.10(@types/node@20.10.6)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -15435,7 +15697,7 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.5.1
       tinypool: 0.7.0
-      vite: 4.5.1(@types/node@20.10.6)
+      vite: 5.0.10(@types/node@20.10.6)
       vite-node: 0.34.6(@types/node@20.10.6)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
