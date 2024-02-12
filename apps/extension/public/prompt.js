@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
       windowId: windowId,
       userInput: userInput.value
     })
-    //window.close()
+    window.close()
   })
 
   document.getElementById('confirm-yes').addEventListener('click', () => {
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
       windowId: windowId,
       userConfirmed: true
     })
-    //window.close()
+    window.close()
   })
 
   document.getElementById('confirm-no').addEventListener('click', () => {
@@ -40,14 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
       windowId: windowId,
       userConfirmed: false
     })
-    //window.close()
+    window.close()
   })
 
   document.getElementById('cancel-button').addEventListener('click', () => {
     chrome.runtime.sendMessage({
-      //windowId: windowId,
+      windowId: windowId,
       userRejected: true
     })
-    //window.close()
+    window.close()
   })
 })

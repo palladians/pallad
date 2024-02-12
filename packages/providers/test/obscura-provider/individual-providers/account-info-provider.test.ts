@@ -7,7 +7,8 @@ const nodeUrl =
   'https://mina-berkeley.obscura.build/v1/bfce6350-4f7a-4b63-be9b-8981dec92050/graphql'
 const publicKey =
   process.env['PUBLIC_KEY'] ||
-  'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+  'B62qmHMUwiyNfv81NNTumW7Hv8SfRAGLXceGK3ZpyzXgmg2FLqmVhmA'
+//'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
 
 describe('Obscura Account Info Provider (Functional)', () => {
   let provider: ReturnType<typeof Obscura.createAccountInfoProvider>
@@ -16,7 +17,8 @@ describe('Obscura Account Info Provider (Functional)', () => {
   beforeEach(() => {
     provider = Obscura.createAccountInfoProvider(nodeUrl)
     tokenMap = {
-      MINA: '1'
+      MINA: '1',
+      WETH: 'xaU5YZyGmvztCyXRFXnfrsp5E8wUVXmtyXBYrw5PF4WXGwPvme'
     }
   })
 
