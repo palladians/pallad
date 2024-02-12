@@ -1,6 +1,6 @@
 # @palladxyz/web-extension
 
-🚧 This package is a WIP 🚧
+🚧 This package is a WIP & implementation of RFC-0008/-0009 🚧
 
 This package has been heavily inspired by the [WalletConnect Monorepo](https://github.com/WalletConnect/walletconnect-monorepo).
 
