@@ -36,7 +36,7 @@ export const UnlockWalletView = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, dirtyFields },
     setError
   } = useForm({
     defaultValues: {
@@ -86,6 +86,7 @@ export const UnlockWalletView = () => {
           className="flex-1 group gap-2 animate-in slide-in-from-bottom-4 fade-in delay-100 fill-mode-both"
           form="unlockWalletForm"
           data-testid="unlockWallet__unlockButton"
+          disabled={!dirtyFields.spendingPassword}
         >
           <span>Unlock</span>
           <ButtonArrow />

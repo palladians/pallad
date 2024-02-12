@@ -6,7 +6,7 @@ export const getAccountUrl = ({
 }: {
   network: string
   publicKey: string
-}) => `${MINAVERSE_URL}/${network}/accounts/${publicKey}`
+}) => `${MINAVERSE_URL}/${network.toLowerCase()}/accounts/${publicKey}`
 
 export const getTransactionUrl = ({
   network,
@@ -14,4 +14,4 @@ export const getTransactionUrl = ({
 }: {
   network: string
   hash: string
-}) => `${MINAVERSE_URL}/${network}/transactions/${hash}`
+}) => `${MINAVERSE_URL}/${network.toLowerCase()}/transactions/${hash}`
