@@ -37,7 +37,6 @@ export class VaultService implements IVaultService {
     getPassphrase: GetPassphrase
   ): Promise<unknown> {
     const store = useVault.getState()
-    console.log('signable: ', signable)
     return store.sign(signable, args, getPassphrase)
   }
   /*

@@ -2,7 +2,6 @@
 const BROADCAST_CHANNEL_ID = 'pallad'
 const callPalladAsync = ({ method, payload }) =>
   new Promise((resolve, reject) => {
-    console.log('callPalladAsync', method, payload)
     const privateChannelId = `private-${Math.random()}`
     const channel = new BroadcastChannel(BROADCAST_CHANNEL_ID)
     const responseChannel = new BroadcastChannel(privateChannelId)
