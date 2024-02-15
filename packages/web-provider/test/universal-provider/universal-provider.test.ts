@@ -120,7 +120,7 @@ describe.skip('Wallet Provider Test', () => {
       // Assert that the connect event was emitted
       expect(connectListener).toHaveBeenCalledWith({
         chainId:
-          '3c41383994b87449625df91769dff7b507825c064287d30fada9286f3f1cb15e'
+          'fd7d111973bf5a9e3e87384f560fdead2f272589ca00b6d9e357fca9839631da'
       })
       expect(provider.isConnected()).toBeTruthy()
     })
@@ -135,7 +135,7 @@ describe.skip('Wallet Provider Test', () => {
       const chainId = await provider.request(requestArgs)
       console.log('chainId in test: ', chainId)
       expect(chainId).toEqual(
-        '3c41383994b87449625df91769dff7b507825c064287d30fada9286f3f1cb15e'
+        'fd7d111973bf5a9e3e87384f560fdead2f272589ca00b6d9e357fca9839631da'
       )
     })
 

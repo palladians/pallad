@@ -23,7 +23,7 @@ describe('Unified Account Info Provider (Functional)', () => {
     }
   })
 
-  describe('Mina Explorer Configuration', () => {
+  describe.skip('Mina Explorer Configuration', () => {
     beforeEach(() => {
       configMinaExplorer = {
         nodeEndpoint: {

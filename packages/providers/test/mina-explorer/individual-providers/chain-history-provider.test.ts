@@ -6,7 +6,7 @@ const nodeUrl =
   process.env['ARCHIVE_NODE_URL'] || 'https://berkeley.graphql.minaexplorer.com'
 const publicKey =
   process.env['PUBLIC_KEY'] ||
-  'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
+  'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
 
 describe('Mina Explorer Chain History Provider (Functional)', () => {
   let provider: ReturnType<typeof MinaExplorer.createChainHistoryProvider>
@@ -35,9 +35,7 @@ describe('Mina Explorer Chain History Provider (Functional)', () => {
       const transaction = response[0]
       console.log('Mina Explorer Chain History Provider Response', transaction)
 
-      expect(response).toEqual([])
-
-      /*expect(transaction).toHaveProperty('amount')
+      expect(transaction).toHaveProperty('amount')
       expect(transaction).toHaveProperty('blockHeight')
       expect(transaction).toHaveProperty('dateTime')
       expect(transaction).toHaveProperty('failureReason')
@@ -47,7 +45,7 @@ describe('Mina Explorer Chain History Provider (Functional)', () => {
       expect(transaction).toHaveProperty('isDelegation')
       expect(transaction).toHaveProperty('kind')
       expect(transaction).toHaveProperty('to')
-      expect(transaction).toHaveProperty('token')*/
+      expect(transaction).toHaveProperty('token')
     })
   })
 
