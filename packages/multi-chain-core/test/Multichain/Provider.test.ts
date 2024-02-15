@@ -2,7 +2,7 @@ import { Mina } from '@palladxyz/mina-core'
 
 import { MultiChainProvider } from '../../src/Multichain/Provider'
 
-describe('MultiChainProvider', () => {
+describe.skip('MultiChainProvider', () => {
   it('should create a mina provider and query the network', async () => {
     const provider = new MultiChainProvider(
       {

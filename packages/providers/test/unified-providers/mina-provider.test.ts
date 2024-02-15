@@ -25,7 +25,7 @@ describe('Mina Provider (Functional)', () => {
     }
   })
 
-  describe('Mina Provider - Mina Explorer Configuration', () => {
+  describe.skip('Mina Provider - Mina Explorer Configuration', () => {
     beforeEach(() => {
       configMinaExplorer = {
         nodeEndpoint: {

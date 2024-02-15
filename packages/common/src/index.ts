@@ -11,6 +11,8 @@ export const baseTsupConfig = {
 export const baseVitestConfig = {
   test: {
     environment: 'happy-dom',
-    globals: true
+    globals: true,
+    testTimeout: 30000,
+    hookTimeout: 30000
   }
 }

@@ -100,6 +100,15 @@ describe('WalletTest', () => {
       const keyagent = result.current.getKeyAgent(keyAgentName)
       expect(keyagent?.keyAgentType).toEqual(KeyAgents.InMemory)
 
+      // check if chainId has been set and not '...'
+      const chainId = await result.current.getChainId()
+      console.log('chainId: ', chainId)
+      const networkInfos = await result.current.getNetworkInfo(defaultNetwork)
+      console.log('networkInfos: ', networkInfos)
+      const currentNetworkInfo = await result.current.getCurrentNetworkInfo()
+      console.log('currentNetworkInfo: ', currentNetworkInfo)
+      expect(chainId).not.toEqual('...')
+
       // check if first credential is in the store
       const minaCredentials = result.current.getCredentials(
         { type: 'MinaAddress' },

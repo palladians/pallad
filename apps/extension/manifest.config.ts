@@ -40,8 +40,12 @@ export default defineManifest(async (env) => ({
   ],
   web_accessible_resources: [
     {
-      resources: ['pallad_rpc.js'],
+      resources: ['pallad_rpc.js', 'prompt.html', 'prompt.js'],
       matches: ['https://*/*']
     }
+  ],
+  host_permissions: [
+    'https://*/*'
+    // Add other URLs or patterns as needed
   ]
 }))

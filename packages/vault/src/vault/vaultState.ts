@@ -1,5 +1,6 @@
 import {
   ChainAddress,
+  ChainOperationArgs,
   ChainSignablePayload,
   ChainSpecificArgs,
   ChainSpecificPayload,
@@ -72,6 +73,7 @@ export type GlobalVaultActions = {
   getWalletTransactions: () => Promise<unknown[]>
   sign: (
     signable: ChainSignablePayload,
+    args: ChainOperationArgs,
     getPassphrase: GetPassphrase
   ) => Promise<unknown>
   constructTx: (

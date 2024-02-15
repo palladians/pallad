@@ -1,3 +1,5 @@
+import { Mina } from '@palladxyz/mina-core'
+
 import { createChainHistoryProvider, ProviderConfig } from '../../../src'
 
 const minaExplorerUrl =
@@ -5,7 +7,7 @@ const minaExplorerUrl =
 
 const publicKey =
   process.env['PUBLIC_KEY'] ||
-  'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
+  'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
 
 describe('Unified Chain History Provider (Functional)', () => {
   let provider: ReturnType<typeof createChainHistoryProvider>
@@ -38,11 +40,15 @@ describe('Unified Chain History Provider (Functional)', () => {
     describe('transactionsByAddresses', () => {
       it('should return transaction history for a valid public key', async () => {
         // This test now depends on the actual response from the server
-        const response = await provider.transactionsByAddresses({
+        const response = (await provider.transactionsByAddresses({
           addresses: [publicKey]
-        })
+        })) as Mina.TransactionBody[]
         console.log('Mina Explorer Chain History Provider Response', response)
         const transaction = response[0]
+        console.log(
+          'Mina Explorer Chain History Provider Response',
+          transaction
+        )
 
         expect(transaction).toHaveProperty('amount')
         expect(transaction).toHaveProperty('blockHeight')

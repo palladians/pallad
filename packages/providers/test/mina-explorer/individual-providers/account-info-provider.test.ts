@@ -7,8 +7,8 @@ const nodeUrl =
 const publicKey =
   process.env['PUBLIC_KEY'] ||
   'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
-
-describe('Mina Explorer Account Info Provider (Functional)', () => {
+// TODO: change this to local network
+describe.skip('Mina Explorer Account Info Provider (Functional)', () => {
   let provider: ReturnType<typeof MinaExplorer.createAccountInfoProvider>
   let tokenMap: TokenIdMap
 

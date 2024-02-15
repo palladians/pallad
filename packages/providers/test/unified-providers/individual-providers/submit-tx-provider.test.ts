@@ -7,7 +7,7 @@ import {
   MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
-import { Mina, TokenIdMap } from '@palladxyz/mina-core'
+import { AccountInfo, Mina, TokenIdMap } from '@palladxyz/mina-core'
 import {
   Payment,
   SignedLegacy
@@ -19,8 +19,9 @@ import {
   ProviderConfig
 } from '../../../src'
 
-const minaExplorerUrl =
-  process.env['NODE_URL'] || 'https://proxy.berkeley.minaexplorer.com/'
+const obscuraUrl =
+  process.env['OBSCURA_URL'] ||
+  'https://mina-berkeley.obscura.build/v1/bfce6350-4f7a-4b63-be9b-8981dec92050/graphql'
 
 const publicKey =
   process.env['PUBLIC_KEY'] ||
@@ -44,8 +45,8 @@ describe('Unified Submit Transaction Provider (Functional)', () => {
   beforeEach(() => {
     configMinaExplorer = {
       nodeEndpoint: {
-        providerName: 'mina-explorer',
-        url: minaExplorerUrl
+        providerName: 'obscura',
+        url: obscuraUrl
       },
       networkName: 'berkeley',
       chainId: '...'
@@ -101,10 +102,10 @@ describe('Unified Submit Transaction Provider (Functional)', () => {
   describe('submitTx', () => {
     it('should return the submitted transaction response', async () => {
       // fetch account info
-      const accountInfo = await accountInfoProvider.getAccountInfo({
+      const accountInfo = (await accountInfoProvider.getAccountInfo({
         publicKey,
         tokenMap
-      })
+      })) as Record<string, AccountInfo>
       console.log('Account Info', accountInfo)
       // construct transaction, sign, and submit
       const amount = 1 * 1e9

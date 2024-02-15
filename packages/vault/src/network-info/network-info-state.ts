@@ -12,12 +12,12 @@ import { ProviderConfig } from '@palladxyz/providers'
 
 export type NetworkInfoState = {
   networkInfo: Record<NetworkName, ProviderConfig>
-  currentNetworkInfo: ProviderConfig
+  currentNetworkName: NetworkName
 }
 
 export type NetworkName = string
 export type NetworkInfoActions = {
-  setCurrentNetworkInfo: (networkName: NetworkName) => void
+  setCurrentNetworkName: (networkName: NetworkName) => void
   getCurrentNetworkInfo: () => ProviderConfig
   setNetworkInfo: (
     networkName: NetworkName,

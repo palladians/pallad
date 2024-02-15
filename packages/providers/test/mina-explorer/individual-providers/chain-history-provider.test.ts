@@ -6,7 +6,7 @@ const nodeUrl =
   process.env['ARCHIVE_NODE_URL'] || 'https://berkeley.graphql.minaexplorer.com'
 const publicKey =
   process.env['PUBLIC_KEY'] ||
-  'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
+  'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
 
 describe('Mina Explorer Chain History Provider (Functional)', () => {
   let provider: ReturnType<typeof MinaExplorer.createChainHistoryProvider>
@@ -33,6 +33,7 @@ describe('Mina Explorer Chain History Provider (Functional)', () => {
       console.log('Mina Explorer Chain History Provider Response', response)
       // TODO: investigate pagination
       const transaction = response[0]
+      console.log('Mina Explorer Chain History Provider Response', transaction)
 
       expect(transaction).toHaveProperty('amount')
       expect(transaction).toHaveProperty('blockHeight')
