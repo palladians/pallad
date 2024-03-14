@@ -20,12 +20,12 @@ const callPalladAsync = ({ method, payload }) =>
   })
 const init = () => {
   window.mina = {
-    request: async ({ method, params }) =>
-      await callPalladAsync({ method, payload: params }),
+    request: ({ method, params }) =>
+      callPalladAsync({ method, payload: params }),
     enable: async () => {
       const response = await callPalladAsync({
         method: 'enable',
-        payload: {}
+        payload: { origin: window.location.origin }
       })
       return response
     },
@@ -33,11 +33,10 @@ const init = () => {
     isConnected: async () => {
       const response = await callPalladAsync({
         method: 'isConnected',
-        payload: {}
+        payload: { origin: window.location.origin }
       })
       return response
-    },
-    
+    }
   }
 }
 init()

@@ -1,26 +1,27 @@
 import { produce } from 'immer'
 import { StateCreator } from 'zustand'
 
-import { WebProviderStore } from './web-provider-state'
+import { WebProviderState, WebProviderStore } from './web-provider-state'
 
-export const webProviderSlice: StateCreator<WebProviderStore> = (set, get) => ({
-  enabled: false,
-  setEnabled: (enabled) => {
-    set(
+const initialState: WebProviderState = {
+  authorized: {}
+}
+
+export const webProviderSlice: StateCreator<WebProviderStore> = (set) => ({
+  ...initialState,
+  mutateZkAppPermission: ({ origin, authorizationState }) => {
+    return set(
       produce((state) => {
-        state.enabled = enabled
+        state.authorized[origin] = authorizationState
       })
     )
   },
-  getEnabled: () => {
-    const { enabled } = get()
-    return enabled
-  },
-  clear: () => {
-    set(
+  removeZkAppPermission: ({ origin }) => {
+    return set(
       produce((state) => {
-        state.tokenInfo = {}
+        delete state.authorized[origin]
       })
     )
-  }
+  },
+  reset: () => set({ ...initialState })
 })

@@ -5,6 +5,13 @@ import { useVault } from '@palladxyz/vault'
 import { chainIdToNetwork } from '../utils'
 import { IVaultService } from './types'
 
+export enum AuthorizationState {
+  ALLOWED = 'ALLOWED',
+  BLOCKED = 'BLOCKED'
+}
+
+export type ZkAppUrl = string
+
 export class VaultService implements IVaultService {
   private static instance: VaultService
 
@@ -26,9 +33,7 @@ export class VaultService implements IVaultService {
     const addresses = Object.values(credentials).map(
       (cred) => cred?.credential?.address
     )
-    return addresses.filter(
-      (address): address is string => address !== undefined
-    )
+    return addresses.filter((address) => address !== undefined) as string[]
   }
 
   async sign(
@@ -60,14 +65,18 @@ export class VaultService implements IVaultService {
   }
   */
 
-  getEnabled(): boolean {
+  getEnabled({ origin }: { origin: ZkAppUrl }): boolean {
     const store = useVault.getState()
-    return store.enabled
+    // FIXME
+    return store.authorized[origin] === AuthorizationState.ALLOWED
   }
 
-  setEnabled(enabled: boolean): void {
+  setEnabled({ origin }: { origin: ZkAppUrl }): void {
     const store = useVault.getState()
-    store.setEnabled(enabled)
+    store.mutateZkAppPermission({
+      origin,
+      authorizationState: AuthorizationState.ALLOWED
+    })
   }
 
   getBalance(): number {

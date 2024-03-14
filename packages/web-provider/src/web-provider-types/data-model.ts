@@ -50,6 +50,7 @@ export interface ChainRpcConfig {
   projectId: string
 }
 export interface ConnectOps {
+  origin: string
   chains?: number[]
   optionalChains?: number[]
   rpcMap?: ChainRpcMap

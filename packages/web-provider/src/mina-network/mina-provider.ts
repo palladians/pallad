@@ -62,7 +62,6 @@ export class MinaProvider implements IMinaProvider {
   public accounts: string[] = []
   public chainId: string | undefined = undefined
   public rpcProviders: MinaRpcProviderMap = {}
-  public connected = vaultService.getEnabled()
 
   private userPrompt: typeof showUserPrompt
 
@@ -132,7 +131,7 @@ export class MinaProvider implements IMinaProvider {
     }
   }
   // TODO: add ConnectOps as an optional parameter
-  public async enable(): Promise<string[]> {
+  public async enable({ origin }: { origin: string }): Promise<string[]> {
     // Implement the logic to prompt the user to connect to the wallet
     // For example, you could open a modal and wait for the user to click 'Connect'
     // Step 0: Prompt user for confirmation
@@ -145,9 +144,9 @@ export class MinaProvider implements IMinaProvider {
       // should this emit an error event?
       throw this.createProviderRpcError(4001, 'User Rejected Request')
     }
-    await this.connect()
+    await this.connect({ origin })
     // TODO: perform 'mina_requestAccounts' method
-    return this.accounts
+    return vaultService.getAccounts()
   }
   // these are the methods that are called by the dapp to interact/listen to the wallet
   public on: IMinaProviderEvents['on'] = (event, listener) => {
@@ -189,14 +188,14 @@ export class MinaProvider implements IMinaProvider {
     return this
   }
 
-  public async connect(opts?: ConnectOps): Promise<void> {
+  public async connect(opts: ConnectOps): Promise<void> {
     try {
       // Step 1: Check if already connected.
-      if (this.connected) {
+      if (vaultService.getEnabled({ origin: opts.origin })) {
         throw new Error('Already connected.')
       }
       // Step 2: Attempt to connect to a chain.
-      if (!opts) {
+      if (!opts.chains) {
         // Try to connect to the default chain -- this is actually the current chain the wallet is connected to not the default chain
         const defaultChainId = await vaultService.getChainId()
         if (!defaultChainId) {
@@ -208,11 +207,9 @@ export class MinaProvider implements IMinaProvider {
       } else {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
       }
-      // Step 3: Fetch accounts and set them.
-      this.accounts = await vaultService.getAccounts()
       // Step 4: Set the connected flag.
       //this.connected = true // this is redundant because we're setting the connected flag in the next step
-      vaultService.setEnabled(true)
+      vaultService.setEnabled({ origin: opts.origin })
       // Step 5: Emit a 'connect' event.
       const connectInfo: ProviderConnectInfo = { chainId: this.chainId }
       //this.events.emit('connect', connectInfo)
@@ -232,13 +229,13 @@ export class MinaProvider implements IMinaProvider {
     return this.accounts
   }
 
-  public isConnected(): boolean {
-    return this.connected
+  public isConnected({ origin }: { origin: string }): boolean {
+    return vaultService.getEnabled({ origin })
   }
 
-  public async disconnect(): Promise<void> {
+  public async disconnect({ origin }: { origin: string }): Promise<void> {
     // Check if it's connected in the first place
-    if (!this.isConnected()) {
+    if (!this.isConnected({ origin })) {
       // Emit a 'disconnect' event with an error only if disconnected
       if (this.externalEmitter) {
         this.externalEmitter.emit(
@@ -257,7 +254,7 @@ export class MinaProvider implements IMinaProvider {
       // ...
 
       // Update the connected status
-      this.connected = false
+      // this.connected = false
 
       // Reset accounts
       this.accounts = []
@@ -313,21 +310,20 @@ export class MinaProvider implements IMinaProvider {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
       }
     }
-    // Prompt user for confirmation based on the method type
-    // what scenarios would we need to prompt the user?
-    const userConfirmed = await this.userPrompt(
-      `Do you want to execute ${args.method}?`,
-      'confirmation'
-    )
-    if (!userConfirmed) {
-      throw this.createProviderRpcError(4001, 'User Rejected Request')
-    }
+    // TODO: Add prompt confirmation for signing and broadcasting
+    // // Prompt user for confirmation based on the method type
+    // // what scenarios would we need to prompt the user?
+    // const userConfirmed = await this.userPrompt(
+    //   `Do you want to execute ${args.method}?`,
+    //   'confirmation'
+    // )
+    // if (!userConfirmed) {
+    //   throw this.createProviderRpcError(4001, 'User Rejected Request')
+    // }
 
     switch (args.method) {
-      case 'mina_accounts': {
+      case 'mina_accounts':
         return vaultService.getAccounts() as unknown as T
-      }
-
       case 'mina_sign':
       case 'mina_createNullifier':
       case 'mina_signFields':
@@ -442,15 +438,10 @@ export class MinaProvider implements IMinaProvider {
           )) as unknown as T
         }
       }
-
       case 'mina_getBalance':
+        return vaultService.getBalance() as unknown as T
       case 'mina_chainId': {
-        if (!userConfirmed) {
-          throw this.createProviderRpcError(4001, 'User Rejected Request')
-        }
-        return args.method === 'mina_getBalance'
-          ? (vaultService.getBalance() as unknown as T)
-          : (this.chainId as unknown as T)
+        return this.chainId as unknown as T
       }
 
       default:

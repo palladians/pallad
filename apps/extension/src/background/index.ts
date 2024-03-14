@@ -1,6 +1,5 @@
 import { MinaProvider } from '@palladxyz/web-provider'
 import { onMessage } from 'webext-bridge/background'
-import { runtime } from 'webextension-polyfill'
 
 // options should be defined by user
 const opts = {
@@ -9,18 +8,10 @@ const opts = {
 }
 const provider = await MinaProvider.init(opts, [])
 
-// Does this do anything?
-runtime.onInstalled.addListener(() => {
-  onMessage('enable', async () => {
-    console.log('test enable method')
-    return await provider.enable()
-  })
-})
-
-// Register message handlers directly, not inside any other callback
-onMessage('enable', async () => {
-  console.log('test enable method')
-  return await provider.enable()
+onMessage('enable', async (payload) => {
+  console.log('test enable method', payload.data)
+  const data = payload.data as { origin: string }
+  return await provider.enable({ origin: data.origin })
 })
 
 onMessage('mina_setState', async () => {
@@ -44,9 +35,10 @@ onMessage('mina_getState', async () => {
   }
 })
 
-onMessage('isConnected', async () => {
+onMessage('isConnected', async (payload) => {
   console.log('test isConnected method')
-  return await provider.isConnected()
+  const data = payload.data as { origin: string }
+  return await provider.isConnected({ origin: data.origin })
 })
 
 onMessage('mina_chainId', async () => {

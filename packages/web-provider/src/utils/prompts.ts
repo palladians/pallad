@@ -54,7 +54,19 @@ export async function showUserPrompt(
         url: 'prompt.html', // Initial placeholder URL
         type: 'popup'
       },
-      (newWindow) => {
+      async (newWindow) => {
+        const listener = (response: any) => {
+          if (response.windowId === newWindow?.id) {
+            chrome.runtime.onMessage.removeListener(listener)
+            if (response.userRejected) {
+              resolve(null) // User cancelled the prompt
+            } else if (inputType === 'confirmation') {
+              resolve(response.userConfirmed) // Confirmation response (true/false)
+            } else {
+              resolve(response.userInput) // User provided text/password input
+            }
+          }
+        }
         if (newWindow && newWindow.tabs && newWindow.tabs.length > 0) {
           // Ensure newWindow and newWindow.tabs are defined and not empty
           const tabId = newWindow.tabs![0]!.id!
@@ -63,21 +75,8 @@ export async function showUserPrompt(
             const fullUrl = `prompt.html?message=${encodeURIComponent(
               message
             )}&inputType=${inputType}&windowId=${newWindow.id}`
-            chrome.tabs.update(tabId, { url: fullUrl })
-
-            chrome.runtime.onMessage.addListener(function listener(response) {
-              if (response.windowId === newWindow.id) {
-                chrome.runtime.onMessage.removeListener(listener)
-
-                if (response.userRejected) {
-                  resolve(null) // User cancelled the prompt
-                } else if (inputType === 'confirmation') {
-                  resolve(response.userConfirmed) // Confirmation response (true/false)
-                } else {
-                  resolve(response.userInput) // User provided text/password input
-                }
-              }
-            })
+            await chrome.tabs.update(tabId, { url: fullUrl })
+            chrome.runtime.onMessage.addListener(listener)
           } else {
             console.error('Failed to retrieve tab ID')
             resolve(null)

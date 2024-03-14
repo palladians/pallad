@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search)
   const message = params.get('message')
   const inputType = params.get('inputType')
-  const windowId = parseInt(params.get('windowId'));
+  const windowId = parseInt(params.get('windowId'))
 
   document.getElementById('message').textContent = message
 
@@ -19,35 +19,37 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmSection.style.display = 'flex' // Show confirmation section
   }
 
-  submitButton.addEventListener('click', () => {
-    chrome.runtime.sendMessage({
+  submitButton.addEventListener('click', async () => {
+    await chrome.runtime.sendMessage({
       windowId: windowId,
       userInput: userInput.value
     })
     window.close()
   })
 
-  document.getElementById('confirm-yes').addEventListener('click', () => {
-    chrome.runtime.sendMessage({
+  document.getElementById('confirm-yes').addEventListener('click', async () => {
+    await chrome.runtime.sendMessage({
       windowId: windowId,
       userConfirmed: true
     })
     window.close()
   })
 
-  document.getElementById('confirm-no').addEventListener('click', () => {
-    chrome.runtime.sendMessage({
+  document.getElementById('confirm-no').addEventListener('click', async () => {
+    await chrome.runtime.sendMessage({
       windowId: windowId,
       userConfirmed: false
     })
     window.close()
   })
 
-  document.getElementById('cancel-button').addEventListener('click', () => {
-    chrome.runtime.sendMessage({
-      windowId: windowId,
-      userRejected: true
+  document
+    .getElementById('cancel-button')
+    .addEventListener('click', async () => {
+      await chrome.runtime.sendMessage({
+        windowId: windowId,
+        userRejected: true
+      })
+      window.close()
     })
-    window.close()
-  })
 })
