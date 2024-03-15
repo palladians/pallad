@@ -34,11 +34,11 @@ export class AccountInfoGraphQLProvider implements AccountInfoProvider {
     })
   }
 
-  public async destroy(): Promise<void> {
+  public destroy(): void {
     console.log('Destroying AccountInfoGraphQLProvider...')
   }
 
-  async changeNetwork(minaGql: string): Promise<void> {
+  changeNetwork(minaGql: string): void {
     this.graphqlClient = new GraphQLClient(
       minaGql,
       this.graphqlClient.requestConfig

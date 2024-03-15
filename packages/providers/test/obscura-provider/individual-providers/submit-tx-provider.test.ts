@@ -26,7 +26,8 @@ const publicKey =
 const params = {
   passphrase: 'passphrase'
 }
-const getPassphrase = async () => Buffer.from(params.passphrase)
+const getPassphrase = () =>
+  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
 describe('Mina Explorer Submit Transaction Provider (Functional)', () => {
   let provider: ReturnType<typeof Obscura.createTxSubmitProvider>

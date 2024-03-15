@@ -79,7 +79,10 @@ export const ConfirmTransactionForm = () => {
         ? Mina.TransactionKind.STAKE_DELEGATION
         : Mina.TransactionKind.PAYMENT
     )
-    const getPassphrase = async () => Buffer.from(data.spendingPassword)
+    const getPassphrase = () =>
+      new Promise<Uint8Array>((resolve) =>
+        resolve(Buffer.from(data.spendingPassword))
+      )
     let signedTx
     const operationArgs: ChainOperationArgs = {
       operation: 'mina_signTransaction',

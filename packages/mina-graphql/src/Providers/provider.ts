@@ -49,25 +49,25 @@ export class MinaProvider implements ProviderNode {
     this.providerUrl = ''
   }
 
-  public async getAccountInfo(
+  public getAccountInfo(
     args: AccountInfoArgs
   ): Promise<AccountInfo | undefined> {
-    return this.accountInfoProvider?.getAccountInfo(args)
+    return this.accountInfoProvider!.getAccountInfo(args)
   }
 
-  public async getTransactionStatus(
+  public getTransactionStatus(
     args: TxStatusArgs
   ): Promise<TxStatus | undefined> {
-    return this.txStatusProvider?.checkTxStatus(args)
+    return this.txStatusProvider!.checkTxStatus(args)
   }
 
-  public async submitTransaction(
+  public submitTransaction(
     args: SubmitTxArgs
   ): Promise<SubmitTxResult | undefined> {
-    return this.txSubmitProvider?.submitTx(args)
+    return this.txSubmitProvider!.submitTx(args)
   }
 
-  public async healthCheck(): Promise<HealthCheckResponse | undefined> {
-    return this.accountInfoProvider?.healthCheck()
+  public healthCheck(): Promise<HealthCheckResponse | undefined> {
+    return this.accountInfoProvider!.healthCheck()
   }
 }

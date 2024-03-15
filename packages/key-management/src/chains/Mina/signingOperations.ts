@@ -10,11 +10,11 @@ import {
   MinaSpecificArgs
 } from './types'
 
-export async function MinaSigningOperations<T extends MinaSignablePayload>(
+export function MinaSigningOperations<T extends MinaSignablePayload>(
   payload: T,
   args: MinaSpecificArgs | ChainOperationArgs,
   privateKey: string
-): Promise<MinaSignatureResult> {
+): MinaSignatureResult {
   if (!args.networkType) {
     throw new Error('networkType undefined in MinaSigningOperations.')
   }

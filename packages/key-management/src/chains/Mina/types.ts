@@ -1,7 +1,6 @@
 import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
 
 import { ChainSpecificPayload, Network } from '../../types'
-import { ChainPublicKey } from '../../types'
 import { deriveMinaPublicKey } from './credentialDerivation'
 import { deriveMinaPrivateKey } from './keyDerivation'
 
@@ -58,17 +57,15 @@ export type MinaSignablePayload =
 export class MinaPayload implements ChainSpecificPayload {
   network = Network.Mina
 
-  async derivePublicKey(
-    privateKey: string,
-    args: MinaSpecificArgs
-  ): Promise<ChainPublicKey> {
-    return deriveMinaPublicKey(args, privateKey)
+  derivePublicKey(privateKey: string, args: MinaSpecificArgs) {
+    return new Promise<string>((resolve) =>
+      resolve(deriveMinaPublicKey(args, privateKey))
+    )
   }
-  async derivePrivateKey(
-    decryptedSeedBytes: Uint8Array,
-    args: MinaSpecificArgs
-  ): Promise<string> {
-    return deriveMinaPrivateKey(args, decryptedSeedBytes)
+  derivePrivateKey(decryptedSeedBytes: Uint8Array, args: MinaSpecificArgs) {
+    return new Promise<string>((resolve) =>
+      resolve(deriveMinaPrivateKey(args, decryptedSeedBytes))
+    )
   }
 }
 

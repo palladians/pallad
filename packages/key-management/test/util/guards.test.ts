@@ -59,7 +59,7 @@ describe('Guard functions tests', () => {
     expect(isFields(invalidPayload)).not.toBeFalsy()
   })
 
-  test('should validate zkAppCommand correctly', async () => {
+  test('should validate zkAppCommand correctly', () => {
     const zkAppCommand: Mina.SignableZkAppCommand = {
       command: {
         zkappCommand: {

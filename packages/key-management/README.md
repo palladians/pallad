@@ -70,7 +70,9 @@ const mnemonicWords = [
   'alert',
   'like'
 ]
-const getPassphrase = async () => Buffer.from('passphrase')
+const getPassphrase = new Promise<Uint8Array>((resolve) =>
+  resolve(Buffer.from('passphrase'))
+)
 
 const agent = await InMemoryKeyAgent.fromMnemonicWords({
   mnemonicWords,

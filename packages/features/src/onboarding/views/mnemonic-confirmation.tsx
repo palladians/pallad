@@ -71,7 +71,10 @@ export const MnemonicConfirmationView = () => {
         DEFAULT_NETWORK,
         {
           mnemonicWords: mnemonic.split(' '),
-          getPassphrase: async () => Buffer.from(spendingPassword)
+          getPassphrase: () =>
+            new Promise<Uint8Array>((resolve) =>
+              resolve(Buffer.from(spendingPassword))
+            )
         },
         walletName,
         KeyAgents.InMemory,

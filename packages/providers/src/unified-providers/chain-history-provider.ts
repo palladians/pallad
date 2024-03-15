@@ -41,7 +41,7 @@ export const createChainHistoryProvider = (
     )) as Mina.TransactionBody[]
   }
 
-  const healthCheck = async (): Promise<HealthCheckResponse> => {
+  const healthCheck = (): Promise<HealthCheckResponse> => {
     // Delegate the call to the underlying provider's healthCheck method
     return underlyingProvider.healthCheck()
   }

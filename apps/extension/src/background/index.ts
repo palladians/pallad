@@ -14,13 +14,13 @@ onMessage('enable', async (payload) => {
   return await provider.enable({ origin: data.origin })
 })
 
-onMessage('mina_setState', async () => {
+onMessage('mina_setState', () => {
   console.log('test mina_setState method')
   //return await provider.request({ method: 'mina_setState', params: data })
   return 'TODO: implement mina_setState'
 })
 
-onMessage('mina_getState', async () => {
+onMessage('mina_getState', () => {
   console.log('test mina_getState method')
   //return await provider.request({ method: 'mina_getState' })
   return {

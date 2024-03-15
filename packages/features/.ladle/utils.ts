@@ -21,7 +21,10 @@ export const useStoriesWallet = () => {
         Mina.Networks.BERKELEY,
         {
           mnemonicWords: MNEMONIC.split(' '),
-          getPassphrase: async () => Buffer.from('passphrase')
+          getPassphrase: () =>
+            new Promise<Uint8Array>((resolve) =>
+              resolve(Buffer.from('passphrase'))
+            )
         },
         'Pallad',
         KeyAgents.InMemory,

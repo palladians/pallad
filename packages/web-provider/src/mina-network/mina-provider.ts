@@ -12,7 +12,6 @@ import {
   ChainRpcConfig,
   ConnectOps,
   ProviderConnectInfo,
-  ProviderRpcError,
   RequestArguments
 } from '../web-provider-types'
 import {
@@ -42,10 +41,7 @@ export interface IMinaProvider extends IMinaProviderBase {
   connect(opts?: ConnectOps | undefined): Promise<void>
 }
 
-export function getRpcUrl(
-  chainId: string,
-  rpc: ChainRpcConfig
-): string | undefined {
+export function getRpcUrl(chainId: string, rpc: ChainRpcConfig) {
   let rpcUrl: string | undefined
   if (rpc.rpcMap) {
     rpcUrl = rpc.rpcMap[getMinaChainId([chainId])]
@@ -53,7 +49,7 @@ export function getRpcUrl(
   return rpcUrl
 }
 
-export function getMinaChainId(chains: string[]): number {
+export function getMinaChainId(chains: string[]) {
   return Number(chains[0]?.split(':')[1])
 }
 
@@ -87,7 +83,7 @@ export class MinaProvider implements IMinaProvider {
     opts: ChainProviderOptions,
     authorizedMethods: string[] = REQUIRED_METHODS,
     externalEmitter?: EventEmitter
-  ): Promise<MinaProvider> {
+  ) {
     const provider = new MinaProvider(opts, externalEmitter)
     await provider.initialize(opts, authorizedMethods)
     return provider
@@ -119,10 +115,7 @@ export class MinaProvider implements IMinaProvider {
     // TODO:
     //this.rpcProviders = vaultService.getChainIds() ?? {}
   }
-  private createProviderRpcError(
-    code: number,
-    message: string
-  ): ProviderRpcError {
+  private createProviderRpcError(code: number, message: string) {
     return {
       name: 'ProviderRpcError',
       message,
@@ -131,7 +124,7 @@ export class MinaProvider implements IMinaProvider {
     }
   }
   // TODO: add ConnectOps as an optional parameter
-  public async enable({ origin }: { origin: string }): Promise<string[]> {
+  public async enable({ origin }: { origin: string }) {
     // Implement the logic to prompt the user to connect to the wallet
     // For example, you could open a modal and wait for the user to click 'Connect'
     // Step 0: Prompt user for confirmation
@@ -188,7 +181,7 @@ export class MinaProvider implements IMinaProvider {
     return this
   }
 
-  public async connect(opts: ConnectOps): Promise<void> {
+  public async connect(opts: ConnectOps) {
     try {
       // Step 1: Check if already connected.
       if (vaultService.getEnabled({ origin: opts.origin })) {
@@ -225,15 +218,15 @@ export class MinaProvider implements IMinaProvider {
     }
   }
 
-  public requestAccounts(): string[] {
+  public requestAccounts() {
     return this.accounts
   }
 
-  public isConnected({ origin }: { origin: string }): boolean {
+  public isConnected({ origin }: { origin: string }) {
     return vaultService.getEnabled({ origin })
   }
 
-  public async disconnect({ origin }: { origin: string }): Promise<void> {
+  public disconnect({ origin }: { origin: string }) {
     // Check if it's connected in the first place
     if (!this.isConnected({ origin })) {
       // Emit a 'disconnect' event with an error only if disconnected
@@ -291,7 +284,7 @@ export class MinaProvider implements IMinaProvider {
       // TODO: prompt the user they're on the wrong chain and ask if they want to switch
       // maybe this error should be handled in the universal-provider?
       // check if the chain is supported by Pallad
-      const chains = (await vaultService.getChainIds()) ?? []
+      const chains = vaultService.getChainIds() ?? []
       const validChain = chains?.includes(chain)
       if (!validChain) {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
@@ -365,9 +358,11 @@ export class MinaProvider implements IMinaProvider {
           const signedResponse = (await vaultService.sign(
             signable,
             operationArgs,
-            async () =>
-              // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
-              Buffer.from(passphrase as string)
+            () =>
+              new Promise<Uint8Array>((resolve) =>
+                // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
+                resolve(Buffer.from(passphrase as string))
+              )
           )) as Mina.SignedFields
           // serialise the response if mina_signFields
           const serializedResponseData = signedResponse.data.map((item) => {
@@ -398,7 +393,10 @@ export class MinaProvider implements IMinaProvider {
           const signedResponse = (await vaultService.sign(
             signable,
             operationArgs,
-            async () => Buffer.from(passphrase as string)
+            () =>
+              new Promise<Uint8Array>((resolve) =>
+                resolve(Buffer.from(passphrase as string))
+              )
           )) as BorrowedTypes.Nullifier
           console.log('signedResponse:', signedResponse)
           // serialise the response if mina_createNullifier
@@ -432,9 +430,14 @@ export class MinaProvider implements IMinaProvider {
         } else {
           const requestData = args.params as requestSignableData
           const signable = requestData.data as MinaSignablePayload
-          return (await vaultService.sign(signable, operationArgs, async () =>
-            // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
-            Buffer.from(passphrase as string)
+          return (await vaultService.sign(
+            signable,
+            operationArgs,
+            () =>
+              new Promise<Uint8Array>((resolve) =>
+                // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
+                resolve(Buffer.from(passphrase as string))
+              )
           )) as unknown as T
         }
       }
@@ -449,7 +452,7 @@ export class MinaProvider implements IMinaProvider {
     }
   }
 
-  private onChainChanged(chainId: string): void {
+  private onChainChanged(chainId: string) {
     // updated the chainId
     this.chainId = chainId
     if (this.externalEmitter) {
@@ -474,7 +477,7 @@ export class MinaProvider implements IMinaProvider {
     }
   }*/
 
-  protected getRpcConfig(ops: ChainProviderOptions): ChainRpcConfig {
+  protected getRpcConfig(ops: ChainProviderOptions) {
     return {
       chains: ops.chains || [],
       optionalChains: ops.optionalChains || [],
@@ -488,7 +491,7 @@ export class MinaProvider implements IMinaProvider {
     }
   }
 
-  protected getRpcUrl(chainId: string /*, projectId?: string*/): string {
+  protected getRpcUrl(chainId: string /*, projectId?: string*/) {
     const providedRpc = this.rpc.rpcMap?.[chainId]
     return providedRpc!
   }

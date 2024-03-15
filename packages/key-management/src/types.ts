@@ -84,7 +84,7 @@ export type ChainAddress = Mina.PublicKey | string
 /**
  * @returns passphrase used to decrypt private keys
  */
-export type GetPassphrase = (noCache?: true) => Promise<Uint8Array>
+export type GetPassphrase = (noCache?: boolean) => Promise<Uint8Array>
 
 export interface AccountKeyDerivationPath {
   account_ix: number

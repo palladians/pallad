@@ -7,7 +7,7 @@ enum MinaChainId {
   // TODO: testworld chainId
 }
 
-export function chainIdToNetwork(chainId: string): Networks | undefined {
+export function chainIdToNetwork(chainId: string) {
   switch (chainId) {
     case MinaChainId.MAINNET:
       return 'mainnet' as Networks

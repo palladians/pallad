@@ -68,13 +68,17 @@ export const MnemonicInputView = () => {
     }
     try {
       setRestoring(true)
+      console.log('>>>WOOT99')
       await restoreWallet(
         new MinaPayload(),
         restoreArgs,
         DEFAULT_NETWORK,
         {
           mnemonicWords: data.mnemonic,
-          getPassphrase: async () => Buffer.from(spendingPassword)
+          getPassphrase: () =>
+            new Promise<Uint8Array>((resolve) =>
+              resolve(Buffer.from(spendingPassword))
+            )
         },
         walletName,
         KeyAgents.InMemory,

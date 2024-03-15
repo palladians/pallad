@@ -42,10 +42,10 @@
   })
 }*/
 
-export async function showUserPrompt(
+export function showUserPrompt(
   message: string,
   inputType: 'text' | 'password' | 'confirmation' = 'text'
-): Promise<string | boolean | null> {
+) {
   console.log('User Prompt Message:', message)
 
   return new Promise((resolve) => {

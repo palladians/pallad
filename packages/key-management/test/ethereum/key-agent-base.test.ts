@@ -19,7 +19,8 @@ import * as util from '../../src/util/bip39'
 const params = {
   passphrase: 'passphrase'
 }
-const getPassphrase = async () => Buffer.from(params.passphrase)
+const getPassphrase = () =>
+  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
 describe('KeyAgentBase (Ethereum Functionality)', () => {
   class KeyAgentBaseInstance extends KeyAgentBase {
@@ -211,7 +212,7 @@ describe('KeyAgentBase (Ethereum Functionality)', () => {
         expectedGroupedCredentials.address.toLowerCase()
       )
 
-      const message: string = 'Hello, Bob!'
+      const message = 'Hello, Bob!'
 
       const signedMessage = await instance.sign(
         groupedCredential,

@@ -19,14 +19,14 @@ export class VaultService implements IVaultService {
     console.log('exampleArg: ', exampleArg)
   }
 
-  public static getInstance(): VaultService {
+  public static getInstance() {
     if (!VaultService.instance) {
       VaultService.instance = new VaultService()
     }
     return VaultService.instance
   }
 
-  getAccounts(): string[] {
+  getAccounts() {
     // TODO: handle errors
     const store = useVault.getState()
     const credentials = store.credentials
@@ -36,11 +36,11 @@ export class VaultService implements IVaultService {
     return addresses.filter((address) => address !== undefined) as string[]
   }
 
-  async sign(
+  sign(
     signable: ChainSignablePayload,
     args: ChainOperationArgs,
     getPassphrase: GetPassphrase
-  ): Promise<unknown> {
+  ) {
     const store = useVault.getState()
     return store.sign(signable, args, getPassphrase)
   }
@@ -65,13 +65,13 @@ export class VaultService implements IVaultService {
   }
   */
 
-  getEnabled({ origin }: { origin: ZkAppUrl }): boolean {
+  getEnabled({ origin }: { origin: ZkAppUrl }) {
     const store = useVault.getState()
     // FIXME
     return store.authorized[origin] === AuthorizationState.ALLOWED
   }
 
-  setEnabled({ origin }: { origin: ZkAppUrl }): void {
+  setEnabled({ origin }: { origin: ZkAppUrl }) {
     const store = useVault.getState()
     store.mutateZkAppPermission({
       origin,
@@ -79,24 +79,24 @@ export class VaultService implements IVaultService {
     })
   }
 
-  getBalance(): number {
+  getBalance() {
     const store = useVault.getState()
     return Number(
       store.getCurrentWallet().accountInfo['MINA']!.balance.total / 1e9
     ) as number
   }
 
-  async getChainId(): Promise<string | undefined> {
+  getChainId() {
     const store = useVault.getState()
     return store.getChainId()
   }
 
-  async getChainIds(): Promise<string[] | undefined> {
+  getChainIds() {
     const store = useVault.getState()
     return store.getChainIds()
   }
 
-  switchNetwork(network: string): Promise<void> {
+  switchNetwork(network: string) {
     const store = useVault.getState()
     // map chainId to network
     const networkName = chainIdToNetwork(network)

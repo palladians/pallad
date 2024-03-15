@@ -37,7 +37,8 @@ const PREGENERATED_MNEMONIC = [
 const params = {
   passphrase: 'passphrase'
 }
-const getPassphrase = async () => Buffer.from(params.passphrase)
+const getPassphrase = () =>
+  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
 describe('WalletTest', () => {
   let agentArgs: FromBip39MnemonicWordsProps
@@ -49,7 +50,7 @@ describe('WalletTest', () => {
   let expectedAddress: string
   let defaultNetwork: string
 
-  beforeEach(async () => {
+  beforeEach(() => {
     agentArgs = {
       getPassphrase: getPassphrase,
       mnemonicWords: PREGENERATED_MNEMONIC
@@ -101,11 +102,11 @@ describe('WalletTest', () => {
       expect(keyagent?.keyAgentType).toEqual(KeyAgents.InMemory)
 
       // check if chainId has been set and not '...'
-      const chainId = await result.current.getChainId()
+      const chainId = result.current.getChainId()
       console.log('chainId: ', chainId)
-      const networkInfos = await result.current.getNetworkInfo(defaultNetwork)
+      const networkInfos = result.current.getNetworkInfo(defaultNetwork)
       console.log('networkInfos: ', networkInfos)
-      const currentNetworkInfo = await result.current.getCurrentNetworkInfo()
+      const currentNetworkInfo = result.current.getCurrentNetworkInfo()
       console.log('currentNetworkInfo: ', currentNetworkInfo)
       expect(chainId).not.toEqual('...')
 
@@ -115,7 +116,7 @@ describe('WalletTest', () => {
         []
       )
       expect(minaCredentials.length).toEqual(1)
-      expect(minaCredentials[0].address).toEqual(expectedAddress)
+      expect(minaCredentials[0]?.address).toEqual(expectedAddress)
 
       // check current network info is of the expected network
       const currentNetwork = result.current.getCurrentNetwork()
@@ -142,7 +143,7 @@ describe('WalletTest', () => {
       args,
       getPassphrase
     )
-    
+
     const credentialState = {
       credentialName: 'Test Credential',
       keyAgentName: keyAgentName,

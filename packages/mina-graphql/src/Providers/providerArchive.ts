@@ -33,15 +33,15 @@ export class MinaArchiveProvider implements ProviderArchive {
     this.providerUrl = ''
   }
 
-  public async getTransactions(
+  public getTransactions(
     args: TransactionsByAddressesArgs
   ): Promise<Mina.Paginated<Mina.TransactionBody> | undefined> {
-    return this.chainHistoryProvider?.transactionsByAddresses(args)
+    return this.chainHistoryProvider!.transactionsByAddresses(args)
   }
 
-  public async getTransaction(
+  public getTransaction(
     args: TransactionsByIdsArgs
   ): Promise<Mina.TransactionBody[] | undefined> {
-    return this.chainHistoryProvider?.transactionsByHashes(args)
+    return this.chainHistoryProvider!.transactionsByHashes(args)
   }
 }

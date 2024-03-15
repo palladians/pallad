@@ -38,7 +38,7 @@ export const SettingsView = () => {
       }`
     })
   }
-  const handleThemeSwitch = async (value: string) => {
+  const handleThemeSwitch = (value: string) => {
     setTheme(value)
     toast({
       title: `Theme has been changed.`

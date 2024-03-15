@@ -12,6 +12,6 @@ export interface IVaultService {
     getPassphrase: GetPassphrase
   ): Promise<unknown>
   getBalance(): number
-  getChainId(): Promise<string | undefined>
+  getChainId(): string | undefined
   // Add other method signatures as needed
 }

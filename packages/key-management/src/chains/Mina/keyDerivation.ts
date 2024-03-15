@@ -6,10 +6,10 @@ import { Buffer } from 'buffer'
 import { reverseBytes } from './keyDerivationUtils'
 import { MinaDerivationArgs, MinaKeyConst, MinaSpecificArgs } from './types'
 
-export async function deriveMinaPrivateKey(
+export function deriveMinaPrivateKey(
   args: MinaSpecificArgs | MinaDerivationArgs,
   decryptedSeedBytes: Uint8Array
-): Promise<string> {
+) {
   const { accountIndex, addressIndex } = args
 
   // Create an HDKey from the root private key

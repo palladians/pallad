@@ -14,7 +14,7 @@ export const RestoreWalletView = () => {
     }),
     shallow
   )
-  const onSubmit = async ({
+  const onSubmit = ({
     spendingPassword,
     walletName
   }: {

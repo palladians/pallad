@@ -20,7 +20,8 @@ const sandbox = sinon.createSandbox()
 const params = {
   passphrase: 'passphrase'
 }
-const getPassphrase = async () => Buffer.from(params.passphrase)
+const getPassphrase = () =>
+  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
 describe('Mina InMemoryKeyAgent', () => {
   let agent: InMemoryKeyAgent
@@ -69,7 +70,7 @@ describe('Mina InMemoryKeyAgent', () => {
     sandbox.restore()
   })
 
-  it('should create an agent with given properties', async () => {
+  it('should create an agent with given properties', () => {
     expect(agent).to.be.instanceOf(InMemoryKeyAgent)
   })
   it('should export root private key', async () => {

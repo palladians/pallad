@@ -11,7 +11,7 @@ const [major, minor, patch, label = '0'] = version
   // split into version parts
   .split(/[.-]/)
 
-export default defineManifest(async (env) => ({
+export default defineManifest((env) => ({
   manifest_version: 3,
   name: env.mode === 'DEVELOPMENT' ? '[DEV] Pallad' : 'Pallad',
   description:

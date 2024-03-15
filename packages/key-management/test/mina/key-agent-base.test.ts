@@ -23,7 +23,8 @@ import { constructTransaction } from '../../src/util/Transactions/buildMinaTx'
 const params = {
   passphrase: 'passphrase'
 }
-const getPassphrase = async () => Buffer.from(params.passphrase)
+const getPassphrase = () =>
+  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
 describe('KeyAgentBase (Mina Functionality)', () => {
   class KeyAgentBaseInstance extends KeyAgentBase {

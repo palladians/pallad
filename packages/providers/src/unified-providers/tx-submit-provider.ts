@@ -22,7 +22,7 @@ export const createTxSubmitProvider = (
     return await underlyingProvider.submitTx(args)
   }
 
-  const healthCheck = async (): Promise<HealthCheckResponse> => {
+  const healthCheck = (): Promise<HealthCheckResponse> => {
     // Delegate the call to the underlying provider's healthCheck method
     return underlyingProvider.healthCheck()
   }

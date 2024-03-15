@@ -1,4 +1,4 @@
-import { ChainPublicKey, ChainSpecificPayload, Network } from '../../types'
+import { ChainPrivateKey, ChainSpecificPayload, Network } from '../../types'
 import { deriveStarknetPublicAddress } from './credentialDerivation'
 import { deriveStarknetPrivateKey } from './keyDerivation'
 
@@ -33,15 +33,16 @@ export type StarknetGroupedCredentials = {
 export class StarknetPayload implements ChainSpecificPayload {
   network = Network.Starknet
 
-  async derivePublicKey(privateKey: Uint8Array): Promise<ChainPublicKey> {
-    return deriveStarknetPublicAddress(privateKey)
+  derivePublicKey(privateKey: Uint8Array) {
+    return new Promise<string>((resolve) =>
+      resolve(deriveStarknetPublicAddress(privateKey))
+    )
   }
 
-  async derivePrivateKey(
-    decryptedSeedBytes: Uint8Array,
-    args: StarknetSpecificArgs
-  ): Promise<Uint8Array> {
-    const privateKey = await deriveStarknetPrivateKey(args, decryptedSeedBytes)
-    return new Uint8Array(Buffer.from(privateKey, 'hex'))
+  derivePrivateKey(decryptedSeedBytes: Uint8Array, args: StarknetSpecificArgs) {
+    const privateKey = deriveStarknetPrivateKey(args, decryptedSeedBytes)
+    return new Promise<ChainPrivateKey>((resolve) =>
+      resolve(new Uint8Array(Buffer.from(privateKey, 'hex')))
+    )
   }
 }

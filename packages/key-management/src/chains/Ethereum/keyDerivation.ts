@@ -6,10 +6,10 @@ import {
   EthereumSpecificArgs
 } from './types'
 
-export async function deriveEthereumPrivateKey(
+export function deriveEthereumPrivateKey(
   args: EthereumSpecificArgs | EthereumDerivationArgs,
   decryptedSeedBytes: Uint8Array
-): Promise<string> {
+): string {
   const { accountIndex, addressIndex } = args
 
   // Create an HDKey from the root private key

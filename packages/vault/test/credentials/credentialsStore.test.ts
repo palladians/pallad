@@ -18,7 +18,7 @@ describe('CredentialStore', () => {
   let credentialStateTwo: SingleCredentialState
   let credentialTwo: object
 
-  beforeEach(async () => {
+  beforeEach(() => {
     credential = {
       '@context': ['https://w3id.org/wallet/v1'],
       id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
@@ -78,12 +78,12 @@ describe('CredentialStore', () => {
     act(() => result.current.clear())
   })
 
-  it('should create an credential store', async () => {
+  it('should create an credential store', () => {
     const { result } = renderHook(() => useVault())
     expect(result.current.credentials).toEqual({})
   })
 
-  it('should add one Grouped Credentials and remove one from store', async () => {
+  it('should add one Grouped Credentials and remove one from store', () => {
     let storedCredential: SingleCredentialState | undefined
     const { result } = renderHook(() => useVault())
     act(() => {
@@ -99,7 +99,7 @@ describe('CredentialStore', () => {
     expect(storedCredential?.credential).toBeUndefined()
   })
 
-  it('should add two Grouped Credentials and search for both separately', async () => {
+  it('should add two Grouped Credentials and search for both separately', () => {
     let storedCredentials: StoredCredential[] | undefined
     let storedCredentialsTwo: StoredCredential[] | undefined
     let storedCredentialsThree: StoredCredential[] | undefined
@@ -144,7 +144,7 @@ describe('CredentialStore', () => {
     expect(storedCredentialsThree).toBeDefined()
     expect(storedCredentialsThree?.length).toEqual(1)
   })
-  it('should add two Grouped Credentials and search for Mina addresses and return them as an array not as a credential object', async () => {
+  it('should add two Grouped Credentials and search for Mina addresses and return them as an array not as a credential object', () => {
     let storedCredentials: StoredCredential[] | undefined
     // search for first credential
     const searchQuery = {
