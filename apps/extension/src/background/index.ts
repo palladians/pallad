@@ -35,10 +35,10 @@ onMessage('mina_getState', () => {
   }
 })
 
-onMessage('isConnected', async (payload) => {
+onMessage('isConnected', (payload) => {
   console.log('test isConnected method')
   const data = payload.data as { origin: string }
-  return await provider.isConnected({ origin: data.origin })
+  return provider.isConnected({ origin: data.origin })
 })
 
 onMessage('mina_chainId', async () => {

@@ -885,6 +885,9 @@ importers:
       vitest:
         specifier: ^1.1.0
         version: 1.1.1(@types/node@20.10.6)(happy-dom@12.10.3)
+      webextension-polyfill:
+        specifier: ^0.10.0
+        version: 0.10.0
     devDependencies:
       '@palladxyz/common':
         specifier: ^1.0.0
@@ -901,6 +904,9 @@ importers:
       '@types/node':
         specifier: ^20.10.5
         version: 20.10.6
+      '@types/webextension-polyfill':
+        specifier: ^0.10.7
+        version: 0.10.7
 
 packages:
 

@@ -40,7 +40,7 @@ export default defineManifest((env) => ({
   ],
   web_accessible_resources: [
     {
-      resources: ['pallad_rpc.js', 'prompt.html', 'prompt.js'],
+      resources: ['pallad_rpc.js'],
       matches: ['https://*/*']
     }
   ],

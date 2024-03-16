@@ -24,13 +24,15 @@
     "@palladxyz/multi-chain-core": "^0.0.1",
     "@palladxyz/vault": "^0.0.1",
     "mina-signer": "^2.1.1",
-    "vitest": "^1.1.0"
+    "vitest": "^1.1.0",
+    "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {
     "@palladxyz/common": "^1.0.0",
     "@testing-library/react": "^14.1.2",
     "@types/chrome": "^0.0.254",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.10.5"
+    "@types/node": "^20.10.5",
+    "@types/webextension-polyfill": "^0.10.7"
   }
 }
