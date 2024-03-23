@@ -1,9 +1,9 @@
 # RFC Template
 
-| Status        | (Proposed / Accepted / Implemented / Obsolete)       |
-:-------------- |:---------------------------------------------------- |
-| **Author(s)** | John Doe (john@doe.com)                              |
-| **Updated**   | 2024-01-25                                           |
+| Status        | (Proposed / Accepted / Implemented / Obsolete) |
+| :------------ | :--------------------------------------------- |
+| **Author(s)** | John Doe (john@doe.com)                        |
+| **Updated**   | 2024-01-25                                     |
 
 ## Objective
 

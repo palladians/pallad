@@ -11,7 +11,7 @@ While these providers can be used individually, they are more functional in natu
 ### Provider Sources
 
 The following is a list of APIs there are providers for:
+
 - Mina Explorer
 - Obscura
 - OpenMina Node
-

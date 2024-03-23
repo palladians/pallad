@@ -1,9 +1,9 @@
 # RFC/ADR Process
 
-| Status        | Implemented                                          |
-:-------------- |:---------------------------------------------------- |
-| **Author(s)** | Tomasz Marciniak (tomek@palladians.xyz)              |
-| **Updated**   | 2024-01-25                                           |
+| Status        | Implemented                             |
+| :------------ | :-------------------------------------- |
+| **Author(s)** | Tomasz Marciniak (tomek@palladians.xyz) |
+| **Updated**   | 2024-01-25                              |
 
 ## Context and Problem Statement
 

@@ -1,7 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { runtime } from 'webextension-polyfill'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 const ConfirmationForm = ({ windowId }: { windowId: number }) => {
   const confirm = async () => {

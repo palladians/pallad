@@ -465,17 +465,17 @@ export class MinaProvider implements IMinaProvider {
   // 1. adds a new account
   // 2. removes an account
   // We can listen to the vaultService for changes to the accounts
-  /*private onAccountsChanged(): void {
-    // listen to the vaultService for changes to the accounts
-    // e.g. vaultService.events.on('accountsChanged', this.updateAccounts)
-    const accounts = vaultService.getAccounts()
-    this.accounts = accounts
-    if (this.externalEmitter) {
-      this.externalEmitter.emit('accountsChanged', accounts)
-    } else {
-      this.events.emit('accountsChanged', accounts)
-    }
-  }*/
+  // private onAccountsChanged(): void {
+  //   // listen to the vaultService for changes to the accounts
+  //   // e.g. vaultService.events.on('accountsChanged', this.updateAccounts)
+  //   const accounts = vaultService.getAccounts()
+  //   this.accounts = accounts
+  //   if (this.externalEmitter) {
+  //     this.externalEmitter.emit('accountsChanged', accounts)
+  //   } else {
+  //     this.events.emit('accountsChanged', accounts)
+  //   }
+  // }
 
   protected getRpcConfig(ops: ChainProviderOptions) {
     return {

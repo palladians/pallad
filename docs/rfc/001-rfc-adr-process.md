@@ -1,9 +1,9 @@
 # RFC/ADR Process Introduction
 
-| Status        | Implemented                                          |
-:-------------- |:---------------------------------------------------- |
-| **Author(s)** | Tomasz Marciniak (tomek@palladians.xyz)              |
-| **Updated**   | 2024-01-24                                           |
+| Status        | Implemented                             |
+| :------------ | :-------------------------------------- |
+| **Author(s)** | Tomasz Marciniak (tomek@palladians.xyz) |
+| **Updated**   | 2024-01-24                              |
 
 ## Objective
 
@@ -20,7 +20,6 @@ The benefit would be to get a product that users want to use, not a product that
 ## Design Proposal
 
 We propose a Request For Comments and Architectural Decision Record flow that consists of asking the community for their feedback when starting to consider a particular feature or component for Pallad. Once we agree on a specific approach, we document the decision made in a separate ADR.
-
 
 ### Alternatives Considered
 

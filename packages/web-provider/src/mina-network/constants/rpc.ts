@@ -11,8 +11,7 @@ export const OPTIONAL_METHODS = [
 ]
 export const REQUIRED_EVENTS = ['chainChanged', 'accountsChanged']
 export const OPTIONAL_EVENTS = [
-  'chainChanged',
-  'accountsChanged',
+  ...REQUIRED_EVENTS,
   'message',
   'disconnect',
   'connect'
