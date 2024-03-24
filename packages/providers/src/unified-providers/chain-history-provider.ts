@@ -6,7 +6,7 @@ import {
   TransactionsByIdsArgs
 } from '@palladxyz/mina-core'
 
-import { createChainHistoryProvider as me } from '../mina-explorer'
+import { createChainHistoryProvider as mn } from '../mina-node'
 import { createChainHistoryProvider as ob } from '../obscura-provider'
 import { ProviderConfig } from './types'
 
@@ -19,8 +19,8 @@ export const createChainHistoryProvider = (
     )
   }
   const underlyingProvider =
-    config.nodeEndpoint.providerName === 'mina-explorer'
-      ? me(config.archiveNodeEndpoint.url)
+    config.nodeEndpoint.providerName === 'mina-node'
+      ? mn(config.archiveNodeEndpoint.url)
       : ob(config.archiveNodeEndpoint.url)
 
   const transactionsByAddresses = async (

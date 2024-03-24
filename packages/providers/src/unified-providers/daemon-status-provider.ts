@@ -4,7 +4,7 @@ import {
   HealthCheckResponse
 } from '@palladxyz/mina-core'
 
-import { createDaemonStatusProvider as me } from '../mina-explorer'
+import { createDaemonStatusProvider as mn } from '../mina-node'
 import { createDaemonStatusProvider as ob } from '../obscura-provider'
 import { ProviderConfig } from './types'
 
@@ -12,8 +12,8 @@ export const createDaemonStatusProvider = (
   config: ProviderConfig
 ): DaemonStatusProvider => {
   const underlyingProvider =
-    config.nodeEndpoint.providerName === 'mina-explorer'
-      ? me(config.nodeEndpoint.url)
+    config.nodeEndpoint.providerName === 'mina-node'
+      ? mn(config.nodeEndpoint.url)
       : ob(config.nodeEndpoint.url)
 
   const getDaemonStatus = async (): Promise<DaemonStatus> => {

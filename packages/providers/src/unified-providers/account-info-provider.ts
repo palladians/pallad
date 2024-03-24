@@ -5,7 +5,7 @@ import {
   HealthCheckResponse
 } from '@palladxyz/mina-core'
 
-import { createAccountInfoProvider as me } from '../mina-explorer'
+import { createAccountInfoProvider as mn } from '../mina-node'
 import { createAccountInfoProvider as ob } from '../obscura-provider'
 import { ProviderConfig } from './types'
 
@@ -13,8 +13,8 @@ export const createAccountInfoProvider = (
   config: ProviderConfig
 ): AccountInfoProvider => {
   const underlyingProvider =
-    config.nodeEndpoint.providerName === 'mina-explorer'
-      ? me(config.nodeEndpoint.url)
+    config.nodeEndpoint.providerName === 'mina-node'
+      ? mn(config.nodeEndpoint.url)
       : ob(config.nodeEndpoint.url)
 
   const getAccountInfo = async (
