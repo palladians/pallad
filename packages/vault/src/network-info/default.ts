@@ -11,10 +11,18 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
       url: 'https://mina-berkeley.obscura.build/v1/bfce6350-4f7a-4b63-be9b-8981dec92050/graphql'
     },
     archiveNodeEndpoint: {
-      providerName: 'mina-explorer',
+      providerName: 'mina-node',
       url: 'https://berkeley.graphql.minaexplorer.com'
     },
     networkName: 'Berkeley',
+    chainId: '...' // todo: fetch chainId from a provider
+  },
+  ZekoDevNet: {
+    nodeEndpoint: {
+      providerName: 'mina-node',
+      url: 'http://sequencer-zeko-dev.dcspark.io/graphql'
+    },
+    networkName: 'Zeko Devnet',
     chainId: '...' // todo: fetch chainId from a provider
   }
 }
