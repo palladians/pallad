@@ -8,6 +8,7 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { Mina, TokenIdMap } from '@palladxyz/mina-core'
+import Client from 'mina-signer'
 import {
   Payment,
   SignedLegacy
@@ -89,11 +90,14 @@ describe('Zeko Sequencer Submit Transaction Provider (Functional)', () => {
 
   // TODO: use different mnemonic for this test -- else there are two duplicate transactions
   describe('submitTx', () => {
-    /*it('Send Mina on Zeko to Known Account', async () => {
-      const client = new Client({ network: 'testnet' });
+    // this test sends Mina on Zeko Dev Net to a known Pallad address that is used in test suites
+    // if the `submitTx` tests are failing please check if the fee-payer has funds to spend
+    // when there is no fee payer funds please unskip this test to send funds to the known account
+    it.skip('Send Mina on Zeko to Known Account', async () => {
+      const client = new Client({ network: 'testnet' })
       const payment = {
-        to: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
-        from: "B62qoereGLPUg5RWuoTEGu5CSKnN7AAirwwA2h6J1JHH3RF6wbThXmr",
+        to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        from: 'B62qoereGLPUg5RWuoTEGu5CSKnN7AAirwwA2h6J1JHH3RF6wbThXmr',
         fee: 2e9,
         nonce: 0
       }
@@ -112,7 +116,7 @@ describe('Zeko Sequencer Submit Transaction Provider (Functional)', () => {
       const signedTx = client.signPayment(
         transaction as Payment,
         'EKDrzVoQTqv6gBrvF81QHYteTYjf4NkzgHbY2JHop4XVH3NbbZWY'
-      );
+      )
 
       const submitTxArgs = {
         signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>
@@ -132,8 +136,7 @@ describe('Zeko Sequencer Submit Transaction Provider (Functional)', () => {
         'Zeko Sequencer Submit Transaction Provider Response',
         response
       )
-
-    })*/
+    })
     it('should return the submitted transaction response', async () => {
       // fetch account info
       const accountInfo = await accountInfoProvider.getAccountInfo({
