@@ -59,7 +59,7 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
   }
 
   return {
-    healthCheck: () => healthCheckOptimism(), //healthCheck(url),
+    healthCheck: () => healthCheckOptimism(url),
     getAccountInfo
   }
 }
