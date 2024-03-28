@@ -80,7 +80,7 @@ describe('CredentialStore', () => {
 
     // check total number of networks
     const networks = result.current.allNetworkInfo()
-    expect(networks.length).toEqual(3)
+    expect(networks.length).toEqual(4)
   })
   it('should add two networks and set mainnet as current network', async () => {
     const { result } = renderHook(() => useVault())
@@ -100,6 +100,6 @@ describe('CredentialStore', () => {
     })
     const chainIds = result.current.getChainIds()
     console.log('chainIds: ', chainIds)
-    expect(chainIds.length).toEqual(3)
+    expect(chainIds.length).toEqual(4)
   })
 })

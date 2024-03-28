@@ -1,10 +1,10 @@
 export type ProviderConfig = {
   nodeEndpoint: {
-    providerName: 'mina-explorer' | 'obscura'
+    providerName: 'mina-node' | 'obscura'
     url: string
   }
   archiveNodeEndpoint?: {
-    providerName: 'mina-explorer' | 'obscura'
+    providerName: 'mina-node' | 'obscura'
     url: string
   }
   networkName: string

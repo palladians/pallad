@@ -17,11 +17,11 @@ describe('Unified Chain History Provider (Functional)', () => {
     beforeEach(() => {
       configMinaExplorer = {
         nodeEndpoint: {
-          providerName: 'mina-explorer',
+          providerName: 'mina-node',
           url: '...'
         },
         archiveNodeEndpoint: {
-          providerName: 'mina-explorer',
+          providerName: 'mina-node',
           url: minaExplorerUrl
         },
         networkName: 'berkeley',
