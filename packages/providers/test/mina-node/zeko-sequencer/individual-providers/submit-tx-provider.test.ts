@@ -2,19 +2,20 @@ import {
   ChainOperationArgs,
   constructTransaction,
   FromBip39MnemonicWordsProps,
+  GroupedCredentials,
   InMemoryKeyAgent,
   MinaPayload,
   MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
-import { Mina, TokenIdMap } from '@palladxyz/mina-core'
-import Client from 'mina-signer'
+import { AccountInfo, Mina, TokenIdMap } from '@palladxyz/mina-core'
 import {
   Payment,
   SignedLegacy
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 
-import { MinaExplorer } from '../../../../src'
+import { MinaNode } from '../../../../src'
+import { sendMinaOnZeko } from './util'
 
 const nodeUrl =
   process.env['NODE_URL'] || 'http://sequencer-zeko-dev.dcspark.io/graphql'
@@ -30,18 +31,16 @@ const getPassphrase = async () => Buffer.from(params.passphrase)
 // TODO: change this to local network
 // TODO: use different mnemonic for this test -- else there are two duplicate transactions with the unified provider tests
 describe('Zeko Sequencer Submit Transaction Provider (Functional)', () => {
-  let provider: ReturnType<typeof MinaExplorer.createTxSubmitProvider>
-  let accountInfoProvider: ReturnType<
-    typeof MinaExplorer.createAccountInfoProvider
-  >
+  let provider: ReturnType<typeof MinaNode.createTxSubmitProvider>
+  let accountInfoProvider: ReturnType<typeof MinaNode.createAccountInfoProvider>
   let tokenMap: TokenIdMap
   let networkType: Mina.NetworkType
   let agent: InMemoryKeyAgent
   let mnemonic: string[]
 
   beforeEach(() => {
-    provider = MinaExplorer.createTxSubmitProvider(nodeUrl)
-    accountInfoProvider = MinaExplorer.createAccountInfoProvider(nodeUrl)
+    provider = MinaNode.createTxSubmitProvider(nodeUrl)
+    accountInfoProvider = MinaNode.createAccountInfoProvider(nodeUrl)
     tokenMap = {
       MINA: '1'
     }
@@ -90,60 +89,17 @@ describe('Zeko Sequencer Submit Transaction Provider (Functional)', () => {
 
   // TODO: use different mnemonic for this test -- else there are two duplicate transactions
   describe('submitTx', () => {
-    // this test sends Mina on Zeko Dev Net to a known Pallad address that is used in test suites
-    // if the `submitTx` tests are failing please check if the fee-payer has funds to spend
-    // when there is no fee payer funds please unskip this test to send funds to the known account
-    it.skip('Send Mina on Zeko to Known Account', async () => {
-      const client = new Client({ network: 'testnet' })
-      const payment = {
-        to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-        from: 'B62qoereGLPUg5RWuoTEGu5CSKnN7AAirwwA2h6J1JHH3RF6wbThXmr',
-        fee: 2e9,
-        nonce: 0
-      }
-
-      const transaction: Mina.TransactionBody = {
-        to: payment.to,
-        from: payment.from,
-        fee: 1 * 1e9,
-        amount: 990_000_000_000,
-        nonce: Number(0),
-        memo: 'test suite',
-        type: 'payment',
-        validUntil: 4294967295
-      }
-
-      const signedTx = client.signPayment(
-        transaction as Payment,
-        'EKDrzVoQTqv6gBrvF81QHYteTYjf4NkzgHbY2JHop4XVH3NbbZWY'
-      )
-
-      const submitTxArgs = {
-        signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>
-        kind: Mina.TransactionKind.PAYMENT,
-        transactionDetails: {
-          fee: transaction.fee,
-          to: transaction.to,
-          from: transaction.from,
-          nonce: transaction.nonce,
-          memo: transaction.memo,
-          amount: transaction.amount,
-          validUntil: transaction.validUntil
-        }
-      }
-      const response = await provider.submitTx(submitTxArgs)
-      console.log(
-        'Zeko Sequencer Submit Transaction Provider Response',
-        response
-      )
-    })
     it('should return the submitted transaction response', async () => {
       // fetch account info
-      const accountInfo = await accountInfoProvider.getAccountInfo({
+      const accountInfo = (await accountInfoProvider.getAccountInfo({
         publicKey,
         tokenMap
-      })
+      })) as Record<string, AccountInfo>
       console.log('Account Info', accountInfo)
+
+      if (accountInfo['MINA']?.balance.total === 0) {
+        await sendMinaOnZeko(nodeUrl)
+      }
       // construct transaction, sign, and submit
       const amount = 1 * 1e9
       const inferredNonce = accountInfo['MINA']?.inferredNonce ?? 0
@@ -161,7 +117,8 @@ describe('Zeko Sequencer Submit Transaction Provider (Functional)', () => {
         transaction,
         Mina.TransactionKind.PAYMENT
       )
-      const credential = agent.serializableData.credentialSubject.contents[0]
+      const credential = agent.serializableData.credentialSubject
+        .contents[0] as GroupedCredentials
       const args: ChainOperationArgs = {
         operation: 'mina_signTransaction',
         network: 'Mina',
