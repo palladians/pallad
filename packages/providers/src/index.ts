@@ -1,4 +1,5 @@
 export * as MinaExplorer from './mina-explorer'
 export * as MinaNode from './mina-node'
 export * as Obscura from './obscura-provider'
+export * as Optimism from './optimism'
 export * from './unified-providers'
