@@ -14,25 +14,16 @@ onMessage('enable', async (payload) => {
   return await provider.enable({ origin: data.origin })
 })
 
-onMessage('mina_setState', () => {
+onMessage('mina_setState', async (data) => {
   console.log('test mina_setState method')
   //return await provider.request({ method: 'mina_setState', params: data })
-  return 'TODO: implement mina_setState'
+  return await provider.request({ method: 'mina_setState', params: data })
 })
 
-onMessage('mina_getState', () => {
+onMessage('mina_getState', async (data) => {
   console.log('test mina_getState method')
   //return await provider.request({ method: 'mina_getState' })
-  return {
-    credential: {
-      name: 'Pallad',
-      proof: {
-        publicInputs: [1],
-        publicOutputs: [100],
-        proof: '1hjdjf83...fjf'
-      }
-    }
-  }
+  return await provider.request({ method: 'mina_getState', params: data })
 })
 
 onMessage('isConnected', (payload) => {

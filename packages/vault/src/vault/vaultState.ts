@@ -19,6 +19,7 @@ import {
 } from '../credentials'
 import { KeyAgentName, KeyAgents, SingleKeyAgentState } from '../keyAgent'
 import { NetworkName } from '../network-info'
+import { SingleObjectState, StoredObject } from '../objects'
 import { SearchQuery } from '../utils/utils'
 
 // Note: this is the full state of the account not just 'MINA' tokens
@@ -96,6 +97,8 @@ export type GlobalVaultActions = {
   getAccounts: () => string[]
   getBalance: (ticker?: string) => number
   getChainId: () => string
+  searchObjs(query: SearchQuery, props?: string[]): StoredObject[]
+  setObj: (objectState: SingleObjectState) => void
 }
 
 export type GlobalVaultStore = GlobalVaultState & GlobalVaultActions

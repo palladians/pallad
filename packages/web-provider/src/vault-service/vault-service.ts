@@ -1,9 +1,11 @@
 import { ChainSignablePayload, GetPassphrase } from '@palladxyz/key-management'
 import { ChainOperationArgs } from '@palladxyz/key-management'
-import { useVault } from '@palladxyz/vault'
+import { SearchQuery, useVault } from '@palladxyz/vault'
+import { SingleObjectState } from '@palladxyz/vault'
 
 import { chainIdToNetwork } from '../utils'
 import { IVaultService } from './types'
+//import { SingleObjectState } from '@palladxyz/vault'
 
 export enum AuthorizationState {
   ALLOWED = 'ALLOWED',
@@ -44,26 +46,36 @@ export class VaultService implements IVaultService {
     const store = useVault.getState()
     return store.sign(signable, args, getPassphrase)
   }
-  /*
-  async sign(
-    signable: ChainSignablePayload,
-    args: ChainOperationArgs,
-    //getPassphrase: GetPassphrase
-  ): Promise<unknown> {
+
+  getState(params: SearchQuery, props?: string[]) {
     const store = useVault.getState()
-    // request needs name, credential, signable, args
-    // get current keyagent name
-    // get current crednetial
-    const currentWallet = store.getCurrentWallet()
-    const keyAgentName = currentWallet.singleKeyAgentState?.name as string
-    const credential = currentWallet.credential.credential as GroupedCredentials
-    console.log('keyAgentName: ', keyAgentName)
-    console.log('credential: ', credential)
-    console.log('signable: ', signable)
-    console.log('args: ', args)
-    return store.request(keyAgentName, credential, signable, args)
+    /*
+    // the searchObjects method operates with
+    // storedObjects = result.current.searchObjects(searchQuery, props)
+    // the search query can contain expected properties of the object
+    // and the optional props is the required output field
+    // for example:
+    
+      const searchQuery = {
+        type: 'KYCCredential',
+        chain: Network.Mina
+      }
+      // return props
+      const props = ['proof']
+    // this will return the KYC credential's `proof` field and nothing else
+    */
+    if (props === undefined) {
+      return store.searchObjs(params)
+    } else {
+      return store.searchObjs(params, props)
+    }
   }
-  */
+
+  setState(state: SingleObjectState) {
+    const store = useVault.getState()
+    // add the given object to the store
+    store.setObj(state)
+  }
 
   getEnabled({ origin }: { origin: ZkAppUrl }) {
     const store = useVault.getState()

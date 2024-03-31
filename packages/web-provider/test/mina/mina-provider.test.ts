@@ -303,6 +303,16 @@ describe('Wallet Provider Test', () => {
       expect(balance).toBeGreaterThan(0)
     })
 
+    it.skip('should retrieve a state (credential) from the wallet', async () => {
+      const getStateRequestArgs: RequestArguments = {
+        method: 'mina_getState',
+        params: { issuer: 'Example Issuer' }
+      }
+
+      const state = await provider.request(getStateRequestArgs)
+      expect(state).not.toBe(undefined)
+    })
+
     // TODO: fix this test -- this is likely failing because the chainId is not known
     it.skip('should switch the network successfully when requesting the balance of another chain id', async () => {
       // Listen to the chains changed event

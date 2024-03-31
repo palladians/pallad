@@ -23,7 +23,7 @@ import { KeyAgents, keyAgentSlice, KeyAgentStore } from '../keyAgent'
 import { AddressError, NetworkError, WalletError } from '../lib/Errors'
 import { getRandomAnimalName } from '../lib/utils'
 import { networkInfoSlice, NetworkInfoStore } from '../network-info'
-import { objectSlice, ObjectStore } from '../objects'
+import { objectSlice, ObjectStore, SingleObjectState } from '../objects'
 import { tokenInfoSlice, TokenInfoStore } from '../token-info'
 import { webProviderSlice, WebProviderStore } from '../web-provider'
 import { GlobalVaultState, GlobalVaultStore } from './vaultState'
@@ -421,6 +421,14 @@ export const useVault = create<
         const { getCurrentNetworkInfo } = get()
         const currentNetwork = getCurrentNetworkInfo()
         return currentNetwork.chainId
+      },
+      searchObjs: (query, props) => {
+        const { searchObjects } = get()
+        return searchObjects(query, props)
+      },
+      setObj: (objectState: SingleObjectState) => {
+        const { setObject } = get()
+        setObject(objectState)
       }
     }),
     {

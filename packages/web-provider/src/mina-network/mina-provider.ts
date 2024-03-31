@@ -3,8 +3,10 @@ import {
   MinaSignablePayload
 } from '@palladxyz/key-management'
 import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
+import { SearchQuery } from '@palladxyz/vault'
 import { EventEmitter } from 'events'
 
+import { hasObjectProps, hasQueryAndProps } from '../utils'
 import { showUserPrompt } from '../utils/prompts'
 import { vaultService } from '../vault-service'
 import {
@@ -25,6 +27,7 @@ import {
   IMinaProviderEvents,
   MinaRpcProviderMap,
   requestData,
+  requestingStateData,
   requestSignableData
 } from './types'
 
@@ -36,6 +39,8 @@ export type RpcMethod =
   | 'mina_sign'
   | 'mina_signTransaction'
   | 'mina_createNullifier'
+  | 'mina_getState'
+  | 'mina_setState'
 
 export interface IMinaProvider extends IMinaProviderBase {
   connect(opts?: ConnectOps | undefined): Promise<void>
@@ -443,6 +448,55 @@ export class MinaProvider implements IMinaProvider {
       }
       case 'mina_getBalance':
         return vaultService.getBalance() as unknown as T
+
+      case 'mina_getState': {
+        const passphrase = await this.userPrompt(
+          'Enter your passphrase:',
+          'password'
+        )
+        if (passphrase === null) {
+          throw new Error('User denied the request for passphrase.')
+        }
+        // TODO: handle incorrect passphrase
+        const requestData = args.params as requestingStateData
+        if (
+          !requestData.data ||
+          !hasQueryAndProps(requestData.data)
+        ) {
+          // Handle the case where the necessary properties do not exist
+          console.log('the args are:', requestData)
+          return {} as unknown as T
+        }
+        const { query, props } = requestData.data as unknown as {
+          query: SearchQuery
+          props: string[]
+        }
+        return vaultService.getState(query, props) as unknown as T
+      }
+
+      case 'mina_setState': {
+        const passphrase = await this.userPrompt(
+          'Enter your passphrase:',
+          'password'
+        )
+        if (passphrase === null) {
+          throw new Error('User denied the request for passphrase.')
+        }
+        const requestData = args.params as requestingStateData
+        if (
+          !requestData.data ||
+          !hasObjectProps(requestData.data)
+        ) {
+          console.log('the args are:', requestData)
+          // Handle the case where the necessary properties do not exist
+          return false as unknown as T
+        }
+
+        //major change
+
+        return vaultService.setState(requestData.data) as unknown as T
+      }
+
       case 'mina_chainId': {
         return this.chainId as unknown as T
       }
