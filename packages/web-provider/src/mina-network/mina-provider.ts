@@ -459,10 +459,7 @@ export class MinaProvider implements IMinaProvider {
         }
         // TODO: handle incorrect passphrase
         const requestData = args.params as requestingStateData
-        if (
-          !requestData.data ||
-          !hasQueryAndProps(requestData.data)
-        ) {
+        if (!requestData.data || !hasQueryAndProps(requestData.data)) {
           // Handle the case where the necessary properties do not exist
           console.log('the args are:', requestData)
           return {} as unknown as T
@@ -483,10 +480,7 @@ export class MinaProvider implements IMinaProvider {
           throw new Error('User denied the request for passphrase.')
         }
         const requestData = args.params as requestingStateData
-        if (
-          !requestData.data ||
-          !hasObjectProps(requestData.data)
-        ) {
+        if (!requestData.data || !hasObjectProps(requestData.data)) {
           console.log('the args are:', requestData)
           // Handle the case where the necessary properties do not exist
           return false as unknown as T
