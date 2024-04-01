@@ -1,4 +1,4 @@
-import { createMinaProvider, ProviderConfig } from '@palladxyz/providers'
+import { ProviderConfig } from '@palladxyz/providers'
 import { produce } from 'immer'
 import { StateCreator } from 'zustand'
 
@@ -19,7 +19,8 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
     const { networkInfo, currentNetworkName } = get()
     return networkInfo[currentNetworkName] as ProviderConfig
   },
-  updateChainId: async (networkName) => {
+  updateChainId: (networkName, response) => {
+    /*
     const { networkInfo } = get()
     const providerConfig = networkInfo[networkName]
     if (!providerConfig) {
@@ -40,7 +41,7 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
       throw new Error(
         `Could not get chainId for ${networkName} in updateChainId`
       )
-    }
+    }*/
 
     set(
       produce((state) => {

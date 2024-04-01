@@ -25,7 +25,12 @@ import { getRandomAnimalName } from '../lib/utils'
 import { networkInfoSlice, NetworkInfoStore } from '../network-info'
 import { objectSlice, ObjectStore, SingleObjectState } from '../objects'
 import { tokenInfoSlice, TokenInfoStore } from '../token-info'
-import { webProviderSlice, WebProviderStore } from '../web-provider'
+import {
+  AuthorizationState,
+  webProviderSlice,
+  WebProviderStore,
+  ZkAppUrl
+} from '../web-provider'
 import { GlobalVaultState, GlobalVaultStore } from './vaultState'
 
 const _validateCurrentWallet = (wallet: SingleCredentialState | null) => {
@@ -109,9 +114,25 @@ export const useVault = create<
           getAccountsInfo,
           getCurrentNetworkInfo
         } = get()
+        if (keyAgentName === '') {
+          throw new WalletError(
+            'keyAgentName is still blank in getCurrentWallet (has not been set yet)'
+          )
+        }
         const singleKeyAgentState = getKeyAgent(keyAgentName)
+        if (credentialName === '') {
+          throw new WalletError(
+            'credentialName is still blank in getCurrentWallet (has not been set yet)'
+          )
+        }
         const credential = getCredential(credentialName)
+        console.log('>>> Credential in getCurrentWallet', credential)
         const publicKey = credential.credential?.address ?? ''
+        if (publicKey === '') {
+          throw new WalletError(
+            'publicKey is undefined blank in getCurrentWallet (has not been set yet)'
+          )
+        }
         const providerConfig = getCurrentNetworkInfo()
         const accountsInfo = getAccountsInfo(
           providerConfig.networkName,
@@ -163,15 +184,37 @@ export const useVault = create<
         const {
           getCurrentNetworkInfo,
           getCurrentWallet,
+          updateChainId,
           _syncAccountInfo,
           _syncTransactions
         } = get()
+        // when the wallet bricks this public key is undefined.
         const publicKey = getCurrentWallet()?.credential?.credential?.address // todo: DRY this up
         if (!publicKey)
           throw new AddressError(
             'Wallet address is undefined in _syncWallet method'
           )
         const providerConfig = getCurrentNetworkInfo()
+        // set the chainIds
+        if (!providerConfig) {
+          throw new Error(
+            `Could not find providerConfig for ${providerConfig} in _syncWallet`
+          )
+        }
+        const provider = createMinaProvider(providerConfig)
+        if (!provider.getDaemonStatus) {
+          throw new Error(
+            `Could not getDaemonStatus for ${providerConfig} in updateChainId`
+          )
+        }
+
+        const response = await provider.getDaemonStatus()
+        if (!response.daemonStatus.chainId) {
+          throw new Error(
+            `Could not get chainId for ${providerConfig} in updateChainId`
+          )
+        }
+        updateChainId(providerConfig.networkName, response)
         await _syncAccountInfo(providerConfig, publicKey)
         await _syncTransactions(providerConfig, publicKey)
       },
@@ -208,14 +251,6 @@ export const useVault = create<
         return searchCredentials(query, props)
       },
       getWalletAccountInfo: () => {
-        /*
-          // TODO: add a get current account public key method on wallet store
-          getWalletAccountInfo: async () => {
-          const { getCurrentNetworkInfo, getCurrentAccountPublicKey } = get()
-          const publickey = getCurrentAccountPublicKey()
-          const providerConfig = getCurrentNetworkInfo()
-          return getAccountInfo(providerConfig.networkName, publickey).accountInfo['MINA]
-        */
         const { getCurrentWallet, getCurrentNetwork, getAccountsInfo } = get()
         const currentWallet = getCurrentWallet()
         _validateCurrentWallet(currentWallet.credential)
@@ -229,14 +264,6 @@ export const useVault = create<
         )
       },
       getWalletTransactions: () => {
-        /*
-          // TODO: add a get current account public key method on wallet store
-          getWalletTransactions: async () => {
-          const { getCurrentNetworkInfo, getCurrentAccountPublicKey } = get()
-          const publickey = getCurrentAccountPublicKey()
-          const providerConfig = getCurrentNetworkInfo()
-          return getTransactions(providerConfig.networkName, publickey).transactions['MINA]
-        */
         const { getCurrentWallet, getCurrentNetwork, getTransactions } = get()
         const currentWallet = getCurrentWallet()
         if (!currentWallet)
@@ -258,16 +285,6 @@ export const useVault = create<
         return getTransactions(currentNetwork, walletAddress, 'MINA') || null
       },
       sign: async (signable, args, getPassphrase) => {
-        /*
-          We can use the new sign api methods here and leave this
-          to the key agent request method to handle the signing
-          // TODO add the networkType here too, maybe a util on the ProviderConfig object could work
-          sign: async (signable, args, getPassphrase) => {
-          const { getKeyAgent, getCurrentCredential } = get()
-          const keyAgent = getKeyAgent()
-          const credential = getCurrentCredential()
-          return keyAgent?.request(keyAgent.keyAgentName, credential, signable, args)
-        */
         const { getCurrentWallet, restoreKeyAgent } = get()
         const currentWallet = getCurrentWallet()
         // use current wallet to sign
@@ -343,7 +360,8 @@ export const useVault = create<
         // TODO: this should be a key agent method? can we simplify this?
         await initialiseKeyAgent(keyAgentName, keyAgentType, agentArgs)
         const keyAgent = restoreKeyAgent(keyAgentName, getPassphrase)
-        // TODO: we can derive credential direct from the key Agent Store
+        if (!keyAgent)
+          throw new WalletError('keyAgent is undefined in restoreWallet method') // TODO: we can derive credential direct from the key Agent Store
         const derivedCredential = await keyAgent?.deriveCredentials(
           payload,
           args,
@@ -372,7 +390,26 @@ export const useVault = create<
         setKnownAccounts(derivedCredential.address)
         // set the chainIds
         const providerConfig = getCurrentNetworkInfo()
-        updateChainId(providerConfig.networkName)
+        if (!providerConfig) {
+          throw new Error(
+            `Could not find providerConfig for ${providerConfig} in updateChainId`
+          )
+        }
+
+        const provider = createMinaProvider(providerConfig)
+        if (!provider.getDaemonStatus) {
+          throw new Error(
+            `Could not getDaemonStatus for ${providerConfig} in updateChainId`
+          )
+        }
+
+        const response = await provider.getDaemonStatus()
+        if (!response.daemonStatus.chainId) {
+          throw new Error(
+            `Could not get chainId for ${providerConfig} in updateChainId`
+          )
+        }
+        updateChainId(providerConfig.networkName, response)
         setCurrentNetworkName(providerConfig.networkName)
         ensureAccount(network, derivedCredential.address)
         getSecurePersistence().setItem('foo', 'bar' as any)
@@ -429,6 +466,23 @@ export const useVault = create<
       setObj: (objectState: SingleObjectState) => {
         const { setObject } = get()
         setObject(objectState)
+      },
+      setzkAppPermission: ({
+        origin,
+        authorizationState
+      }: {
+        origin: ZkAppUrl
+        authorizationState: AuthorizationState
+      }) => {
+        const { mutateZkAppPermission } = get()
+        mutateZkAppPermission({
+          origin,
+          authorizationState
+        })
+      },
+      removezkAppPermission: (obj) => {
+        const { removeZkAppPermission } = get()
+        removeZkAppPermission(obj)
       }
     }),
     {

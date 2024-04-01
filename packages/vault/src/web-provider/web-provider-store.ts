@@ -1,10 +1,16 @@
 import { produce } from 'immer'
-import { StateCreator } from 'zustand'
+import { create, StateCreator } from 'zustand'
 
-import { WebProviderState, WebProviderStore } from './web-provider-state'
+import {
+  //AuthorizationState,
+  WebProviderState,
+  WebProviderStore
+} from './web-provider-state'
 
 const initialState: WebProviderState = {
-  authorized: {}
+  authorized: {
+    //'https://palladians.github.io': AuthorizationState.ALLOWED
+  }
 }
 
 export const webProviderSlice: StateCreator<WebProviderStore> = (set) => ({
@@ -25,3 +31,5 @@ export const webProviderSlice: StateCreator<WebProviderStore> = (set) => ({
   },
   reset: () => set({ ...initialState })
 })
+
+export const useWebProviderVault = create<WebProviderStore>(webProviderSlice)

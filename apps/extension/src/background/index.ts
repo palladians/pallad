@@ -6,6 +6,8 @@ const opts = {
   projectId: 'test',
   chains: ['Mina - Berkeley']
 }
+
+//const store = useVault((state) => state)
 const provider = await MinaProvider.init(opts, [])
 
 onMessage('enable', async (payload) => {

@@ -1,11 +1,15 @@
 import { ChainSignablePayload, GetPassphrase } from '@palladxyz/key-management'
 import { ChainOperationArgs } from '@palladxyz/key-management'
-import { SearchQuery, useVault } from '@palladxyz/vault'
-import { SingleObjectState } from '@palladxyz/vault'
+import {
+  SearchQuery,
+  SingleObjectState,
+  useObjectVault,
+  useVault,
+  useWebProviderVault
+} from '@palladxyz/vault'
 
 import { chainIdToNetwork } from '../utils'
 import { IVaultService } from './types'
-//import { SingleObjectState } from '@palladxyz/vault'
 
 export enum AuthorizationState {
   ALLOWED = 'ALLOWED',
@@ -48,7 +52,7 @@ export class VaultService implements IVaultService {
   }
 
   getState(params: SearchQuery, props?: string[]) {
-    const store = useVault.getState()
+    const store = useObjectVault.getState()
     /*
     // the searchObjects method operates with
     // storedObjects = result.current.searchObjects(searchQuery, props)
@@ -65,26 +69,26 @@ export class VaultService implements IVaultService {
     // this will return the KYC credential's `proof` field and nothing else
     */
     if (props === undefined) {
-      return store.searchObjs(params)
+      return store.searchObjects(params)
     } else {
-      return store.searchObjs(params, props)
+      return store.searchObjects(params, props)
     }
   }
 
   setState(state: SingleObjectState) {
-    const store = useVault.getState()
+    const store = useObjectVault.getState()
     // add the given object to the store
-    store.setObj(state)
+    store.setObject(state)
   }
 
   getEnabled({ origin }: { origin: ZkAppUrl }) {
-    const store = useVault.getState()
+    const store = useWebProviderVault.getState()
     // FIXME
     return store.authorized[origin] === AuthorizationState.ALLOWED
   }
 
   setEnabled({ origin }: { origin: ZkAppUrl }) {
-    const store = useVault.getState()
+    const store = useWebProviderVault.getState()
     store.mutateZkAppPermission({
       origin,
       authorizationState: AuthorizationState.ALLOWED

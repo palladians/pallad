@@ -21,6 +21,7 @@ import { KeyAgentName, KeyAgents, SingleKeyAgentState } from '../keyAgent'
 import { NetworkName } from '../network-info'
 import { SingleObjectState, StoredObject } from '../objects'
 import { SearchQuery } from '../utils/utils'
+import { AuthorizationState, ZkAppUrl } from '../web-provider'
 
 // Note: this is the full state of the account not just 'MINA' tokens
 type CurrentWallet = {
@@ -99,6 +100,16 @@ export type GlobalVaultActions = {
   getChainId: () => string
   searchObjs(query: SearchQuery, props?: string[]): StoredObject[]
   setObj: (objectState: SingleObjectState) => void
+  setzkAppPermission: ({
+    origin,
+    authorizationState
+  }: {
+    origin: ZkAppUrl
+    authorizationState: AuthorizationState
+  }) => void
+  removezkAppPermission: ({ origin }: { origin: ZkAppUrl }) => void
+  // await MinaProvider.init(opts, [])
+  //getProvider: (opts: ChainProviderOptions, authorizedMethods?: string[] | undefined, externalEmitter?: EventEmitter | undefined) => Promise<MinaProvider>
 }
 
 export type GlobalVaultStore = GlobalVaultState & GlobalVaultActions
