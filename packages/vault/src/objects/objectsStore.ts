@@ -2,10 +2,11 @@ import { produce } from 'immer'
 import { create, StateCreator } from 'zustand'
 
 import { matchesQuery } from '../utils/utils'
+import { DEFAULT_OBJECTS } from './default'
 import { initialObjectState, ObjectStore } from './objectsState'
 
 export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
-  objects: {},
+  objects: DEFAULT_OBJECTS,
   ensureObject: (objectName) => {
     set(
       produce((state) => {

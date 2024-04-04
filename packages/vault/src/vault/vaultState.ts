@@ -19,7 +19,13 @@ import {
 } from '../credentials'
 import { KeyAgentName, KeyAgents, SingleKeyAgentState } from '../keyAgent'
 import { NetworkName } from '../network-info'
-import { SingleObjectState, StoredObject } from '../objects'
+import {
+  initialObjectState,
+  ObjectName,
+  ObjectsStore,
+  SingleObjectState,
+  StoredObject
+} from '../objects'
 import { SearchQuery } from '../utils/utils'
 import { AuthorizationState, ZkAppUrl } from '../web-provider'
 
@@ -48,6 +54,7 @@ export type GlobalVaultState = {
   walletName: string
   knownAccounts: string[]
   chainIds: string[]
+  objects: ObjectsStore
 }
 
 type CreateWalletReturn = {
@@ -98,8 +105,10 @@ export type GlobalVaultActions = {
   getAccounts: () => string[]
   getBalance: (ticker?: string) => number
   getChainId: () => string
+  getObject: (name: ObjectName) => StoredObject | typeof initialObjectState
   searchObjs(query: SearchQuery, props?: string[]): StoredObject[]
   setObj: (objectState: SingleObjectState) => void
+  removeObject: (name: ObjectName) => void
   setzkAppPermission: ({
     origin,
     authorizationState

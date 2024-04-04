@@ -3,7 +3,6 @@ import { ChainOperationArgs } from '@palladxyz/key-management'
 import {
   SearchQuery,
   SingleObjectState,
-  useObjectVault,
   useVault,
   useWebProviderVault
 } from '@palladxyz/vault'
@@ -52,7 +51,7 @@ export class VaultService implements IVaultService {
   }
 
   getState(params: SearchQuery, props?: string[]) {
-    const store = useObjectVault.getState()
+    const store = useVault.getState()
     /*
     // the searchObjects method operates with
     // storedObjects = result.current.searchObjects(searchQuery, props)
@@ -68,17 +67,18 @@ export class VaultService implements IVaultService {
       const props = ['proof']
     // this will return the KYC credential's `proof` field and nothing else
     */
+    // TODO: we can also implement getObjects instead of searchObjs if necessary
     if (props === undefined) {
-      return store.searchObjects(params)
+      return store.searchObjs(params)
     } else {
-      return store.searchObjects(params, props)
+      return store.searchObjs(params, props)
     }
   }
 
   setState(state: SingleObjectState) {
-    const store = useObjectVault.getState()
+    const store = useVault.getState()
     // add the given object to the store
-    store.setObject(state)
+    store.setObj(state)
   }
 
   getEnabled({ origin }: { origin: ZkAppUrl }) {

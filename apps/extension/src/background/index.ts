@@ -17,7 +17,7 @@ onMessage('enable', async (payload) => {
 })
 
 onMessage('mina_setState', async (data) => {
-  console.log('test mina_setState method')
+  console.log('test mina_setState method', data)
   //return await provider.request({ method: 'mina_setState', params: data })
   return await provider.request({ method: 'mina_setState', params: data })
 })

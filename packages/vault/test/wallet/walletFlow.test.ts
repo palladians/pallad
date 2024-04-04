@@ -17,6 +17,7 @@ import { expect } from 'vitest'
 import { CredentialName, KeyAgents } from '../../src'
 import { useVault } from '../../src'
 import { DEFAULT_NETWORK } from '../../src/network-info/default'
+import { EXAMPLE_CREDENTIAL } from '../../src/objects/default'
 
 const PREGENERATED_MNEMONIC = [
   'habit',
@@ -76,7 +77,7 @@ describe('WalletTest', () => {
   //  act(() => current.clear())
   //})
 
-  it('should add one key agent its first credential /0/0 and sync the network info', async () => {
+  it('should (1.) add one key agent its first credential /0/0 (2.) sync the network info (3.) add a credential (4.) check if key agent name has been overwritten', async () => {
     const { result } = renderHook(() => useVault())
 
     // add first key agent
@@ -129,6 +130,22 @@ describe('WalletTest', () => {
       )
       console.log('accountInfo', accountInfo)
       expect(accountInfo).toBeDefined()
+
+      result.current.setObj({
+        objectName: 'example credential',
+        object: EXAMPLE_CREDENTIAL
+      })
+
+      const allObjects = result.current.searchObjs(
+        { issuer: 'University of Example' },
+        []
+      )
+      expect(allObjects.length).toEqual(2)
+      console.log('all credentials', allObjects)
+      // get keyAgentName
+      const currentKeyAgentName = result.current.keyAgentName
+      console.log('keyAgentName', currentKeyAgentName)
+      expect(currentKeyAgentName).toBe(keyAgentName)
     })
     // add first credential
     /*const args: ChainSpecificArgs = {
