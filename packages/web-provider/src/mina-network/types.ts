@@ -20,6 +20,10 @@ export type requestData = {
   data: number[] | bigint[]
 }
 
+export type requestingStateData = {
+  data: RequestArguments
+}
+
 export interface MinaRpcProviderMap {
   [chainId: string]: IMinaProviderBase
 }

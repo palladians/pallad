@@ -34,6 +34,7 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
       mnemonic2ndFactorPassphrase: ''
     }
     const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
+    console.log('>>> KeyAgent in keyAgentStore initialiseKeyAgent', keyAgent)
     ensureKeyAgent(name)
     return set(
       produce((state) => {
