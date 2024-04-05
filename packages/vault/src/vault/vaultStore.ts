@@ -23,20 +23,9 @@ import { KeyAgents, keyAgentSlice, KeyAgentStore } from '../keyAgent'
 import { AddressError, NetworkError, WalletError } from '../lib/Errors'
 import { getRandomAnimalName } from '../lib/utils'
 import { networkInfoSlice, NetworkInfoStore } from '../network-info'
-import {
-  DEFAULT_OBJECTS,
-  initialObjectState,
-  ObjectName,
-  SingleObjectState
-} from '../objects'
+import { objectSlice, ObjectStore } from '../objects'
 import { tokenInfoSlice, TokenInfoStore } from '../token-info'
-import { matchesQuery } from '../utils'
-import {
-  AuthorizationState,
-  webProviderSlice,
-  WebProviderStore,
-  ZkAppUrl
-} from '../web-provider'
+import { webProviderSlice, WebProviderStore } from '../web-provider'
 import { GlobalVaultState, GlobalVaultStore } from './vaultState'
 
 const _validateCurrentWallet = (wallet: SingleCredentialState | null) => {
@@ -59,15 +48,14 @@ const defaultGlobalVaultState: GlobalVaultState = {
   walletName: '',
   walletNetwork: Mina.Networks.BERKELEY,
   knownAccounts: [],
-  chainIds: [],
-  objects: DEFAULT_OBJECTS
+  chainIds: []
 }
 
 export const useVault = create<
   AccountStore &
     CredentialStore &
     KeyAgentStore &
-    //ObjectStore &
+    ObjectStore &
     NetworkInfoStore &
     TokenInfoStore &
     WebProviderStore &
@@ -78,7 +66,7 @@ export const useVault = create<
       ...accountSlice(set, get, store),
       ...credentialSlice(set, get, store),
       ...keyAgentSlice(set, get, store),
-      //...objectSlice(set, get, store),
+      ...objectSlice(set, get, store),
       ...networkInfoSlice(set, get, store),
       ...tokenInfoSlice(set, get, store),
       ...webProviderSlice(set, get, store),
@@ -465,79 +453,6 @@ export const useVault = create<
         const { getCurrentNetworkInfo } = get()
         const currentNetwork = getCurrentNetworkInfo()
         return currentNetwork.chainId
-      },
-      searchObjs: (query, props) => {
-        const { objects } = get()
-        const objectsStatesArray = Object.values(objects)
-        const objectsArray = objectsStatesArray.map((obj) => obj.object)
-        const filteredObjects = objectsArray.filter((object) => {
-          if (!object) {
-            return false
-          }
-          return matchesQuery(object, query)
-        })
-        if (props && props.length) {
-          const arrayOfArrays = filteredObjects.map((objects) => {
-            return props
-              .filter((prop) => objects && prop in objects)
-              .map((prop) => (objects as unknown as Record<string, any>)[prop])
-          })
-          return arrayOfArrays.flat()
-        } else {
-          return filteredObjects
-        }
-      },
-      setObj: (objectState: SingleObjectState) => {
-        const { objectName } = objectState
-        set((current) => {
-          // Logging the previous state
-          console.log('Previous State:', current)
-
-          // Logging the action being performed
-          console.log('Action:', 'setObj', objectState)
-
-          // Performing the state update
-          const updatedState = produce(current, (draft) => {
-            draft.objects = {
-              ...draft.objects,
-              [objectName]: { ...draft.objects[objectName], ...objectState }
-            }
-          })
-
-          // Logging the next state
-          console.log('Next State:', updatedState)
-
-          // Returning the updated state
-          return updatedState
-        })
-      },
-      getObject: (name: ObjectName) => {
-        const { objects } = get()
-        return objects[name] || initialObjectState
-      },
-      removeObject: (name) => {
-        set(
-          produce((state) => {
-            delete state.objects[name]
-          })
-        )
-      },
-      setzkAppPermission: ({
-        origin,
-        authorizationState
-      }: {
-        origin: ZkAppUrl
-        authorizationState: AuthorizationState
-      }) => {
-        const { mutateZkAppPermission } = get()
-        mutateZkAppPermission({
-          origin,
-          authorizationState
-        })
-      },
-      removezkAppPermission: (obj) => {
-        const { removeZkAppPermission } = get()
-        removeZkAppPermission(obj)
       }
     }),
     {

@@ -1,11 +1,6 @@
 import { ChainSignablePayload, GetPassphrase } from '@palladxyz/key-management'
 import { ChainOperationArgs } from '@palladxyz/key-management'
-import {
-  SearchQuery,
-  SingleObjectState,
-  useVault,
-  useWebProviderVault
-} from '@palladxyz/vault'
+import { SearchQuery, SingleObjectState, useVault } from '@palladxyz/vault'
 
 import { chainIdToNetwork } from '../utils'
 import { IVaultService } from './types'
@@ -31,7 +26,8 @@ export class VaultService implements IVaultService {
     return VaultService.instance
   }
 
-  getAccounts() {
+  async getAccounts() {
+    await useVault.persist.rehydrate()
     // TODO: handle errors
     const store = useVault.getState()
     const credentials = store.credentials
@@ -41,16 +37,18 @@ export class VaultService implements IVaultService {
     return addresses.filter((address) => address !== undefined) as string[]
   }
 
-  sign(
+  async sign(
     signable: ChainSignablePayload,
     args: ChainOperationArgs,
     getPassphrase: GetPassphrase
   ) {
+    await useVault.persist.rehydrate()
     const store = useVault.getState()
     return store.sign(signable, args, getPassphrase)
   }
 
-  getState(params: SearchQuery, props?: string[]) {
+  async getState(params: SearchQuery, props?: string[]) {
+    await useVault.persist.rehydrate()
     const store = useVault.getState()
     /*
     // the searchObjects method operates with
@@ -69,50 +67,58 @@ export class VaultService implements IVaultService {
     */
     // TODO: we can also implement getObjects instead of searchObjs if necessary
     if (props === undefined) {
-      return store.searchObjs(params)
+      return store.searchObjects(params)
     } else {
-      return store.searchObjs(params, props)
+      return store.searchObjects(params, props)
     }
   }
 
-  setState(state: SingleObjectState) {
+  async setState(state: SingleObjectState) {
+    // TODO: do we need to rehydrate before each of these?
+    await useVault.persist.rehydrate()
     const store = useVault.getState()
     // add the given object to the store
-    store.setObj(state)
+    store.setObject(state)
   }
 
-  getEnabled({ origin }: { origin: ZkAppUrl }) {
-    const store = useWebProviderVault.getState()
+  async getEnabled({ origin }: { origin: ZkAppUrl }) {
+    await useVault.persist.rehydrate()
+    const store = useVault.getState()
     // FIXME
     return store.authorized[origin] === AuthorizationState.ALLOWED
   }
 
-  setEnabled({ origin }: { origin: ZkAppUrl }) {
-    const store = useWebProviderVault.getState()
+  async setEnabled({ origin }: { origin: ZkAppUrl }) {
+    await useVault.persist.rehydrate()
+    const store = useVault.getState()
     store.mutateZkAppPermission({
       origin,
       authorizationState: AuthorizationState.ALLOWED
     })
   }
 
-  getBalance() {
+  async getBalance() {
+    await useVault.persist.rehydrate()
     const store = useVault.getState()
     return Number(
       store.getCurrentWallet().accountInfo['MINA']!.balance.total / 1e9
     ) as number
   }
 
-  getChainId() {
+  async getChainId() {
+    await useVault.persist.rehydrate()
     const store = useVault.getState()
     return store.getChainId()
   }
 
-  getChainIds() {
+  async getChainIds() {
+    await useVault.persist.rehydrate()
     const store = useVault.getState()
     return store.getChainIds()
   }
 
-  switchNetwork(network: string) {
+  async switchNetwork(network: string) {
+    await useVault.persist.rehydrate()
     const store = useVault.getState()
     // map chainId to network
     const networkName = chainIdToNetwork(network)
