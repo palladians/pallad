@@ -121,7 +121,6 @@ export const useVault = create<
           )
         }
         const credential = getCredential(credentialName)
-        console.log('>>> Credential in getCurrentWallet', credential)
         const publicKey = credential.credential?.address ?? ''
         if (publicKey === '') {
           throw new WalletError(

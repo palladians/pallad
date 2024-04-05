@@ -40,7 +40,46 @@ const init = () => {
         payload: { origin: window.location.origin }
       })
       return response
-    }
+    },
+    otherOn: async () => {
+      return "hello world!"
+    },
+    /*
+    Note: `listenerId` is used as a placeholder to identify listener functions. 
+    Since functions can't be serialized over postMessage, you need to implement 
+    a system in your background script to manage listeners and associate them with 
+    IDs. When an event occurs, you can then send a message back to the content 
+    script to invoke the appropriate listener by ID.
+    */
+   // I don't think we need listenerId for `on`, `once`
+    on: async (event, listenerId) => {
+      const response = await callPalladAsync({
+        method: 'on',
+        payload: { event, listenerId }
+      })
+      return response
+    },
+    /*once: async (event, listenerId) => {
+      const response = await callPalladAsync({
+        method: 'once',
+        payload: { event, listenerId }
+      })
+      return response
+    },
+    removeListener: async (event, listenerId) => {
+      const response = await callPalladAsync({
+        method: 'removeListener',
+        payload: { event, listenerId }
+      })
+      return response
+    },*/
+    off: async (event, listenerId) => {
+      const response = await callPalladAsync({
+        method: 'off',
+        payload: { event, listenerId }
+      })
+      return response
+    },
   }
 }
 init()

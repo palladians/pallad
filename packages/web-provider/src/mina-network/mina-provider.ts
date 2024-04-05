@@ -89,13 +89,13 @@ export class MinaProvider implements IMinaProvider {
   static async init(
     opts: ChainProviderOptions,
     authorizedMethods: string[] = REQUIRED_METHODS,
-    externalEmitter?: EventEmitter
+    externalEmitter: EventEmitter = new EventEmitter()
   ) {
     const provider = new MinaProvider(opts, externalEmitter)
     await provider.initialize(opts, authorizedMethods)
     return provider
   }
-  // why is this async?
+
   private async initialize(
     opts: ChainProviderOptions,
     unauthorizedMethods: string[] = []

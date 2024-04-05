@@ -1,5 +1,6 @@
-import { MinaProvider } from '@palladxyz/web-provider'
-import { onMessage } from 'webext-bridge/background'
+import { MinaProvider, ProviderEvent } from '@palladxyz/web-provider'
+import { onMessage, sendMessage } from 'webext-bridge/background'
+//import { sendMessage } from 'webext-bridge/content-script'
 
 // options should be defined by user
 const opts = {
@@ -7,13 +8,73 @@ const opts = {
   chains: ['Mina - Berkeley']
 }
 
-//const store = useVault((state) => state)
 const provider = await MinaProvider.init(opts, [])
+
+// Example structure for listenerRegistry
+type ListenerFunction = (args: any) => void // Adjust the 'any' type based on actual event arguments
+
+interface ListenerRegistration {
+  event: ProviderEvent
+  listener: ListenerFunction
+}
+
+interface OnMessageData {
+  listenerId: string
+}
+
+interface OnEventData {
+  event: ProviderEvent
+  context: any // Can be more specific type based on our context structure
+}
+
+const listenerRegistry: Record<string, ListenerRegistration> = {}
+
+function generateListenerId(): string {
+  return Math.random().toString(36).substring(2, 15)
+}
+
+function registerListener(event: ProviderEvent /*, context: string*/): string {
+  const listenerId = generateListenerId()
+  const listener: ListenerFunction = (args) => {
+    // Adjusting sendMessage call to match its signature
+    sendMessage('eventTriggered', { listenerId, event, args }) // Assuming context is handled elsewhere or not needed
+  }
+
+  listenerRegistry[listenerId] = { event, listener }
+
+  // Register with MinaProvider
+  provider.on(event, listener)
+
+  return listenerId
+}
+
+function removeListener(listenerId: string): void {
+  const registration = listenerRegistry[listenerId]
+  if (registration) {
+    const { event, listener } = registration
+    provider.off(event, listener)
+    delete listenerRegistry[listenerId]
+  }
+}
 
 onMessage('enable', async (payload) => {
   console.log('test enable method', payload.data)
   const data = payload.data as { origin: string }
   return await provider.enable({ origin: data.origin })
+})
+
+onMessage('on', ({ data }) => {
+  const { event /*, context*/ } = data as unknown as OnEventData
+  const listenerId = registerListener(event /*, context*/)
+  console.log('test emitted event', event)
+  return { success: true, listenerId }
+})
+
+onMessage('off', ({ data }) => {
+  const { listenerId } = data as unknown as OnMessageData
+  removeListener(listenerId)
+
+  return { success: true }
 })
 
 onMessage('mina_setState', async (data) => {
