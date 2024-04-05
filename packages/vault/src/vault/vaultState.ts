@@ -96,7 +96,6 @@ export type GlobalVaultActions = {
   getAccounts: () => string[]
   getBalance: (ticker?: string) => number
   getChainId: () => string
-  //getProvider: (opts: ChainProviderOptions, authorizedMethods?: string[] | undefined, externalEmitter?: EventEmitter | undefined) => Promise<MinaProvider>
 }
 
 export type GlobalVaultStore = GlobalVaultState & GlobalVaultActions

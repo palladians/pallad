@@ -122,6 +122,26 @@ export class MinaProvider implements IMinaProvider {
     // TODO:
     //this.rpcProviders = vaultService.getChainIds() ?? {}
   }
+
+  async unlockWallet() {
+    const passphrase = await this.userPrompt(
+      'Enter your passphrase to unlock the wallet:',
+      'password'
+    )
+    if (passphrase === null) {
+      throw new Error('User denied the request for passphrase.')
+    }
+    await this.vault.persistRehydrate(passphrase as string)
+  }
+
+  async checkAndUnlock() {
+    const locked = await this.vault.isLocked()
+    console.log('isLocked', locked)
+    if (locked === true) {
+      await this.unlockWallet()
+    }
+  }
+
   private createProviderRpcError(code: number, message: string) {
     return {
       name: 'ProviderRpcError',
@@ -132,6 +152,8 @@ export class MinaProvider implements IMinaProvider {
   }
   // TODO: add ConnectOps as an optional parameter
   public async enable({ origin }: { origin: string }) {
+    // check if wallet is locked first
+    await this.checkAndUnlock()
     // Implement the logic to prompt the user to connect to the wallet
     // For example, you could open a modal and wait for the user to click 'Connect'
     // Step 0: Prompt user for confirmation
@@ -278,6 +300,8 @@ export class MinaProvider implements IMinaProvider {
     args: RequestArguments,
     chain?: string | undefined
   ): Promise<T> {
+    // check if wallet is locked first
+    await this.checkAndUnlock()
     if (
       // when the provider is initialized, the rpc methods are set to the required methods
       // this can be the set of authorized methods the user has given permission for the zkApp to use
@@ -331,6 +355,8 @@ export class MinaProvider implements IMinaProvider {
       case 'mina_createNullifier':
       case 'mina_signFields':
       case 'mina_signTransaction': {
+        // check if wallet is locked first
+        await this.checkAndUnlock()
         const passphrase = await this.userPrompt(
           'Enter your passphrase:',
           'password'
@@ -455,6 +481,8 @@ export class MinaProvider implements IMinaProvider {
         return (await this.vault.getBalance()) as unknown as T
 
       case 'mina_getState': {
+        // check if wallet is locked first
+        await this.checkAndUnlock()
         const passphrase = await this.userPrompt(
           'Enter your passphrase:',
           'password'
@@ -477,6 +505,8 @@ export class MinaProvider implements IMinaProvider {
       }
 
       case 'mina_setState': {
+        // check if wallet is locked first
+        await this.checkAndUnlock()
         const passphrase = await this.userPrompt(
           'Enter your passphrase:',
           'password'

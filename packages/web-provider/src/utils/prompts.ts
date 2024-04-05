@@ -4,8 +4,6 @@ export function showUserPrompt(
   message: string,
   inputType: 'text' | 'password' | 'confirmation' = 'text'
 ) {
-  console.log('User Prompt Message:', message)
-
   return new Promise((resolve) => {
     windows
       .create({

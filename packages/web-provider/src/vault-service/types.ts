@@ -21,5 +21,6 @@ export interface IVaultService {
   getEnabled({ origin }: { origin: ZkAppUrl }): Promise<boolean>
   setEnabled({ origin }: { origin: ZkAppUrl }): Promise<void>
   switchNetwork(network: string): Promise<void>
+  isLocked(): Promise<boolean>
   // Add other method signatures as needed
 }

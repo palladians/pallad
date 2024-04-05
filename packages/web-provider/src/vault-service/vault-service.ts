@@ -1,5 +1,9 @@
 import { ChainSignablePayload, GetPassphrase } from '@palladxyz/key-management'
 import { ChainOperationArgs } from '@palladxyz/key-management'
+import {
+  getSecurePersistence,
+  getSessionPersistence
+} from '@palladxyz/persistence'
 import { SearchQuery, SingleObjectState, useVault } from '@palladxyz/vault'
 
 import { chainIdToNetwork } from '../utils'
@@ -126,6 +130,22 @@ export class VaultService implements IVaultService {
       throw new Error(`Invalid chain id: ${network}`)
     }
     return store.switchNetwork(networkName)
+  }
+
+  async isLocked() {
+    await useVault.persist.rehydrate()
+    const authenticated =
+      (await getSecurePersistence().getItem('foo')) === 'bar'
+    return authenticated
+  }
+
+  async persistRehydrate(spendingPassword: string) {
+    await getSessionPersistence().setItem('spendingPassword', spendingPassword)
+    await useVault.persist.rehydrate()
+    const locked = await this.isLocked()
+    if (locked === true) {
+      console.error('incorrect password.')
+    }
   }
 }
 
