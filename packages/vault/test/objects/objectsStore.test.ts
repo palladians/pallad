@@ -3,6 +3,7 @@ import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import {
+  DEFAULT_OBJECTS,
   ObjectName,
   SingleObjectState,
   StoredObject,
@@ -75,7 +76,7 @@ describe('ObjectStore', () => {
 
   it('should create an objects store', () => {
     const { result } = renderHook(() => useVault())
-    expect(result.current.objects).toEqual({})
+    expect(result.current.objects).toEqual(DEFAULT_OBJECTS)
   })
 
   it('should add one object and remove one from store', () => {

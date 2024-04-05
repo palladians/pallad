@@ -147,7 +147,7 @@ export class MinaProvider implements IMinaProvider {
     }
     this.connect({ origin })
     // TODO: perform 'mina_requestAccounts' method
-    return this.vault.getAccounts()
+    return await this.vault.getAccounts()
   }
   // these are the methods that are called by the dapp to interact/listen to the wallet
   public on: IMinaProviderEvents['on'] = (event, listener) => {
@@ -189,16 +189,16 @@ export class MinaProvider implements IMinaProvider {
     return this
   }
 
-  public connect(opts: ConnectOps) {
+  public async connect(opts: ConnectOps) {
     try {
       // Step 1: Check if already connected.
-      if (this.vault.getEnabled({ origin: opts.origin })) {
+      if (await this.vault.getEnabled({ origin: opts.origin })) {
         throw new Error('Already connected.')
       }
       // Step 2: Attempt to connect to a chain.
       if (!opts.chains) {
         // Try to connect to the default chain -- this is actually the current chain the wallet is connected to not the default chain
-        const defaultChainId = this.vault.getChainId()
+        const defaultChainId = await this.vault.getChainId()
         console.log('line 199, default chain id:', defaultChainId)
         if (!defaultChainId) {
           throw new Error('Unable to connect: Default chain ID is undefined.')
@@ -212,7 +212,7 @@ export class MinaProvider implements IMinaProvider {
       }
       // Step 4: Set the connected flag.
       //this.connected = true // this is redundant because we're setting the connected flag in the next step
-      this.vault.setEnabled({ origin: opts.origin })
+      await this.vault.setEnabled({ origin: opts.origin })
       // Step 5: Emit a 'connect' event.
       const connectInfo: ProviderConnectInfo = { chainId: this.chainId }
       //this.events.emit('connect', connectInfo)
@@ -232,8 +232,8 @@ export class MinaProvider implements IMinaProvider {
     return this.accounts
   }
 
-  public isConnected({ origin }: { origin: string }) {
-    return this.vault.getEnabled({ origin })
+  public async isConnected({ origin }: { origin: string }) {
+    return await this.vault.getEnabled({ origin })
   }
 
   public disconnect({ origin }: { origin: string }) {
@@ -294,7 +294,7 @@ export class MinaProvider implements IMinaProvider {
       // TODO: prompt the user they're on the wrong chain and ask if they want to switch
       // maybe this error should be handled in the universal-provider?
       // check if the chain is supported by Pallad
-      const chains = this.vault.getChainIds() ?? []
+      const chains = (await this.vault.getChainIds()) ?? []
       const validChain = chains?.includes(chain)
       if (!validChain) {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
@@ -305,7 +305,7 @@ export class MinaProvider implements IMinaProvider {
       )
       if (changeChain) {
         // TODO: switch to the correct chain
-        this.vault.switchNetwork(chain)
+        await this.vault.switchNetwork(chain)
         this.chainId = chain
         this.onChainChanged(chain!)
       } else {
@@ -326,7 +326,7 @@ export class MinaProvider implements IMinaProvider {
 
     switch (args.method) {
       case 'mina_accounts':
-        return this.vault.getAccounts() as unknown as T
+        return (await this.vault.getAccounts()) as unknown as T
       case 'mina_sign':
       case 'mina_createNullifier':
       case 'mina_signFields':
@@ -452,7 +452,7 @@ export class MinaProvider implements IMinaProvider {
         }
       }
       case 'mina_getBalance':
-        return this.vault.getBalance() as unknown as T
+        return (await this.vault.getBalance()) as unknown as T
 
       case 'mina_getState': {
         const passphrase = await this.userPrompt(
@@ -473,7 +473,7 @@ export class MinaProvider implements IMinaProvider {
           query: SearchQuery
           props: string[]
         }
-        return this.vault.getState(query, props) as unknown as T
+        return (await this.vault.getState(query, props)) as unknown as T
       }
 
       case 'mina_setState': {
@@ -491,7 +491,7 @@ export class MinaProvider implements IMinaProvider {
           return false as unknown as T
         }
 
-        return this.vault.setState(requestData.data) as unknown as T
+        return (await this.vault.setState(requestData.data)) as unknown as T
       }
 
       case 'mina_chainId': {
