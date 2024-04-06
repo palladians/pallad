@@ -5,6 +5,7 @@ import {
 import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
 import { SearchQuery } from '@palladxyz/vault'
 import { EventEmitter } from 'events'
+import superjson from 'superjson'
 
 import { hasObjectProps, hasQueryAndProps } from '../utils'
 import { showUserPrompt } from '../utils/prompts'
@@ -124,10 +125,9 @@ export class MinaProvider implements IMinaProvider {
   }
 
   async unlockWallet() {
-    const passphrase = await this.userPrompt(
-      'Enter your passphrase to unlock the wallet:',
-      'password'
-    )
+    const passphrase = await this.userPrompt('password', {
+      title: 'Unlock your wallet'
+    })
     if (passphrase === null) {
       throw new Error('User denied the request for passphrase.')
     }
@@ -157,10 +157,10 @@ export class MinaProvider implements IMinaProvider {
     // For example, you could open a modal and wait for the user to click 'Connect'
     // Step 0: Prompt user for confirmation
     // Note: all user prompts should define the inputType like this 'confirmation'
-    const userConfirmed = await this.userPrompt(
-      'Do you want to connect?',
-      'confirmation'
-    )
+    const userConfirmed = await this.userPrompt('confirmation', {
+      title: 'Do you want to connect?',
+      payload: superjson.stringify({ origin })
+    })
     console.log('userConfirmed:', userConfirmed)
     if (!userConfirmed) {
       // should this emit an error event?
@@ -220,12 +220,10 @@ export class MinaProvider implements IMinaProvider {
       if (!opts.chains) {
         // Try to connect to the default chain -- this is actually the current chain the wallet is connected to not the default chain
         const defaultChainId = await this.vault.getChainId()
-        console.log('line 199, default chain id:', defaultChainId)
         if (!defaultChainId) {
           throw new Error('Unable to connect: Default chain ID is undefined.')
         }
         this.chainId = defaultChainId
-        console.log('line 204, this.chainId', this.chainId)
       } else if (opts.chains && opts.chains.length > 0) {
         this.chainId = String(opts.chains[0])
       } else {
@@ -322,10 +320,9 @@ export class MinaProvider implements IMinaProvider {
       if (!validChain) {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
       }
-      const changeChain = await this.userPrompt(
-        `You are on the wrong chain. Do you want to switch to ${chain}?`,
-        'confirmation'
-      )
+      const changeChain = await this.userPrompt('confirmation', {
+        title: `You are on the wrong chain. Do you want to switch to ${chain}?`
+      })
       if (changeChain) {
         // TODO: switch to the correct chain
         await this.vault.switchNetwork(chain)
@@ -355,10 +352,10 @@ export class MinaProvider implements IMinaProvider {
       case 'mina_signFields':
       case 'mina_signTransaction': {
         // check if wallet is locked first
-        const passphrase = await this.userPrompt(
-          'Enter your passphrase:',
-          'password'
-        )
+        const passphrase = await this.userPrompt('password', {
+          title: 'Confirm your transaction',
+          payload: superjson.stringify(args.params)
+        })
         if (passphrase === null) {
           throw new Error('User denied the request for passphrase.')
         }
@@ -480,10 +477,10 @@ export class MinaProvider implements IMinaProvider {
 
       case 'mina_getState': {
         // check if wallet is locked first
-        const passphrase = await this.userPrompt(
-          'Enter your passphrase:',
-          'password'
-        )
+        const passphrase = await this.userPrompt('password', {
+          title: 'Confirm proof request',
+          payload: superjson.stringify(args.params)
+        })
         if (passphrase === null) {
           throw new Error('User denied the request for passphrase.')
         }
@@ -503,10 +500,10 @@ export class MinaProvider implements IMinaProvider {
 
       case 'mina_setState': {
         // check if wallet is locked first
-        const passphrase = await this.userPrompt(
-          'Enter your passphrase:',
-          'password'
-        )
+        const passphrase = await this.userPrompt('password', {
+          title: 'Confirm incoming proof',
+          payload: superjson.stringify(args.params)
+        })
         if (passphrase === null) {
           throw new Error('User denied the request for passphrase.')
         }

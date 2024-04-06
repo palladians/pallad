@@ -64,7 +64,8 @@ const InputForm = ({
 
 export const WebConnector = () => {
   const params = new URLSearchParams(window.location.search)
-  const message = params.get('message')
+  const title = params.get('title')
+  const payload = params.get('payload')
   const inputType = params.get('inputType')
   const rawWindowId = params.get('windowId')
   if (!rawWindowId) return null
@@ -72,7 +73,8 @@ export const WebConnector = () => {
   if (!inputType) return null
   return (
     <div className="flex-1 bg-background">
-      <p>{message}</p>
+      <p>{title}</p>
+      <p>{payload}</p>
       {inputType === 'confirmation' && <ConfirmationForm windowId={windowId} />}
       {['text', 'password'].includes(inputType) && (
         <InputForm inputType={inputType} windowId={windowId} />

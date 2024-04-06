@@ -1,8 +1,8 @@
 import { windows } from 'webextension-polyfill'
 
 export function showUserPrompt(
-  message: string,
-  inputType: 'text' | 'password' | 'confirmation' = 'text'
+  inputType: 'text' | 'password' | 'confirmation' = 'text',
+  metadata: { title: string; payload?: string }
 ) {
   return new Promise((resolve) => {
     windows
@@ -31,8 +31,10 @@ export function showUserPrompt(
           const tabId = newWindow.tabs![0]!.id!
           if (typeof tabId === 'number') {
             // If tabId is a number, construct the full URL and update the tab
-            const fullUrl = `prompt.html?message=${encodeURIComponent(
-              message
+            const fullUrl = `prompt.html?title=${encodeURIComponent(
+              metadata.title
+            )}&payload=${encodeURIComponent(
+              metadata.payload ?? ''
             )}&inputType=${inputType}&windowId=${newWindow.id}`
             await chrome.tabs.update(tabId, { url: fullUrl })
             chrome.runtime.onMessage.addListener(listener)
