@@ -159,6 +159,8 @@ export const useVault = create<
         // TODO: remove providerManager
         //_syncTransactions: async (providerConfig, publicKey) => {
         const { setTransactions } = get()
+        // TODO: add condition where archive node is unavailable then transactions
+        // are simply []
         const provider = createMinaProvider(providerConfig)
         const transactions = await provider.getTransactions({
           addresses: [publicKey]

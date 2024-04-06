@@ -5,7 +5,7 @@ import {
   TxSubmitProvider
 } from '@palladxyz/mina-core'
 
-import { createTxSubmitProvider as me } from '../mina-explorer'
+import { createTxSubmitProvider as mn } from '../mina-node'
 import { createTxSubmitProvider as ob } from '../obscura-provider'
 import { ProviderConfig } from './types'
 
@@ -13,8 +13,8 @@ export const createTxSubmitProvider = (
   config: ProviderConfig
 ): TxSubmitProvider => {
   const underlyingProvider =
-    config.nodeEndpoint.providerName === 'mina-explorer'
-      ? me(config.nodeEndpoint.url)
+    config.nodeEndpoint.providerName === 'mina-node'
+      ? mn(config.nodeEndpoint.url)
       : ob(config.nodeEndpoint.url)
 
   const submitTx = async (args: SubmitTxArgs): Promise<SubmitTxResult> => {
