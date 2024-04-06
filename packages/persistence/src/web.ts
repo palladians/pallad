@@ -31,10 +31,12 @@ export const securePersistence: PersistStorage<any> = {
   getItem: async (name): Promise<any | null> => {
     await setVaultSpendingPassword()
     const value = await secureStorage.get(name)
+    if (!value || value === 'undefined') return
     return superjson.parse(value)
   },
   setItem: async (name, value) => {
     await setVaultSpendingPassword()
+    if (!value) return
     await secureStorage.set(name, superjson.stringify(value))
   },
   removeItem: async (name) => {

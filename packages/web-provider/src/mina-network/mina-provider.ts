@@ -131,12 +131,11 @@ export class MinaProvider implements IMinaProvider {
     if (passphrase === null) {
       throw new Error('User denied the request for passphrase.')
     }
-    await this.vault.persistRehydrate(passphrase as string)
+    await this.vault.unlockWallet(passphrase as string)
   }
 
   async checkAndUnlock() {
     const locked = await this.vault.isLocked()
-    console.log('isLocked', locked)
     if (locked === true) {
       await this.unlockWallet()
     }
@@ -356,7 +355,6 @@ export class MinaProvider implements IMinaProvider {
       case 'mina_signFields':
       case 'mina_signTransaction': {
         // check if wallet is locked first
-        await this.checkAndUnlock()
         const passphrase = await this.userPrompt(
           'Enter your passphrase:',
           'password'
@@ -482,7 +480,6 @@ export class MinaProvider implements IMinaProvider {
 
       case 'mina_getState': {
         // check if wallet is locked first
-        await this.checkAndUnlock()
         const passphrase = await this.userPrompt(
           'Enter your passphrase:',
           'password'
@@ -506,7 +503,6 @@ export class MinaProvider implements IMinaProvider {
 
       case 'mina_setState': {
         // check if wallet is locked first
-        await this.checkAndUnlock()
         const passphrase = await this.userPrompt(
           'Enter your passphrase:',
           'password'

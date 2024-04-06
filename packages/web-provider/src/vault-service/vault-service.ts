@@ -31,7 +31,7 @@ export class VaultService implements IVaultService {
   }
 
   async getAccounts() {
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     // TODO: handle errors
     const store = useVault.getState()
     const credentials = store.credentials
@@ -46,13 +46,13 @@ export class VaultService implements IVaultService {
     args: ChainOperationArgs,
     getPassphrase: GetPassphrase
   ) {
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const store = useVault.getState()
     return store.sign(signable, args, getPassphrase)
   }
 
   async getState(params: SearchQuery, props?: string[]) {
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const store = useVault.getState()
     /*
     // the searchObjects method operates with
@@ -60,7 +60,7 @@ export class VaultService implements IVaultService {
     // the search query can contain expected properties of the object
     // and the optional props is the required output field
     // for example:
-    
+
       const searchQuery = {
         type: 'KYCCredential',
         chain: Network.Mina
@@ -78,22 +78,21 @@ export class VaultService implements IVaultService {
   }
 
   async setState(state: SingleObjectState) {
-    // TODO: do we need to rehydrate before each of these?
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const store = useVault.getState()
     // add the given object to the store
     store.setObject(state)
   }
 
   async getEnabled({ origin }: { origin: ZkAppUrl }) {
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const store = useVault.getState()
     // FIXME
     return store.authorized[origin] === AuthorizationState.ALLOWED
   }
 
   async setEnabled({ origin }: { origin: ZkAppUrl }) {
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const store = useVault.getState()
     store.mutateZkAppPermission({
       origin,
@@ -102,7 +101,7 @@ export class VaultService implements IVaultService {
   }
 
   async getBalance() {
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const store = useVault.getState()
     return Number(
       store.getCurrentWallet().accountInfo['MINA']!.balance.total / 1e9
@@ -110,19 +109,19 @@ export class VaultService implements IVaultService {
   }
 
   async getChainId() {
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const store = useVault.getState()
     return store.getChainId()
   }
 
   async getChainIds() {
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const store = useVault.getState()
     return store.getChainIds()
   }
 
   async switchNetwork(network: string) {
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const store = useVault.getState()
     // map chainId to network
     const networkName = chainIdToNetwork(network)
@@ -133,19 +132,23 @@ export class VaultService implements IVaultService {
   }
 
   async isLocked() {
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const authenticated =
       (await getSecurePersistence().getItem('foo')) === 'bar'
-    return authenticated
+    return !authenticated
   }
 
-  async persistRehydrate(spendingPassword: string) {
+  async unlockWallet(spendingPassword: string) {
     await getSessionPersistence().setItem('spendingPassword', spendingPassword)
-    await useVault.persist.rehydrate()
+    await this.rehydrate()
     const locked = await this.isLocked()
     if (locked === true) {
       console.error('incorrect password.')
     }
+  }
+
+  rehydrate() {
+    return useVault.persist.rehydrate()
   }
 }
 

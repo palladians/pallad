@@ -58,7 +58,6 @@ function removeListener(listenerId: string): void {
 }
 
 onMessage('enable', async (payload) => {
-  console.log('test enable method', payload.data)
   const data = payload.data as { origin: string }
   return await provider.enable({ origin: data.origin })
 })
@@ -89,10 +88,10 @@ onMessage('mina_getState', async (data) => {
   return await provider.request({ method: 'mina_getState', params: data })
 })
 
-onMessage('isConnected', async (payload) => {
+onMessage('isConnected', (payload) => {
   console.log('test isConnected method')
   const data = payload.data as { origin: string }
-  return await provider.isConnected({ origin: data.origin })
+  return provider.isConnected({ origin: data.origin })
 })
 
 onMessage('mina_chainId', async () => {
