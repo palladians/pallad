@@ -16,6 +16,10 @@ export type requestSignableData = {
   data: MinaSignablePayload
 }
 
+export type requestSignableTransaction = {
+  data: { transaction: MinaSignablePayload }
+}
+
 export type requestData = {
   data: number[] | bigint[]
 }

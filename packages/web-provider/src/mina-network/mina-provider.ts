@@ -29,8 +29,10 @@ import {
   MinaRpcProviderMap,
   requestData,
   requestingStateData,
-  requestSignableData
+  requestSignableData,
+  requestSignableTransaction
 } from './types'
+import { serializeField, serializeGroup, serializeTransaction } from './utils'
 
 export type RpcMethod =
   | 'mina_sendTransaction'
@@ -431,17 +433,6 @@ export class MinaProvider implements IMinaProvider {
           )) as BorrowedTypes.Nullifier
           console.log('signedResponse:', signedResponse)
           // serialise the response if mina_createNullifier
-          const serializeField = (field: BorrowedTypes.Field) => {
-            if (typeof field === 'bigint' || typeof field === 'number') {
-              return field.toString()
-            }
-            return field
-          }
-
-          const serializeGroup = (group: BorrowedTypes.Group) => ({
-            x: serializeField(group.x),
-            y: serializeField(group.y)
-          })
 
           const serializedResponseData = {
             publicKey: serializeGroup(signedResponse.publicKey),
@@ -458,6 +449,20 @@ export class MinaProvider implements IMinaProvider {
           console.log('serializedResponseData:', serializedResponseData)
 
           return serializedResponseData as unknown as T
+        } else if (args.method === 'mina_signTransaction') {
+          const requestData = args.params as requestSignableTransaction
+          const signable = serializeTransaction(
+            requestData.data.transaction
+          ) as MinaSignablePayload
+          return (await this.vault.sign(
+            signable,
+            operationArgs,
+            () =>
+              new Promise<Uint8Array>((resolve) =>
+                // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
+                resolve(Buffer.from(passphrase as string))
+              )
+          )) as unknown as T
         } else {
           const requestData = args.params as requestSignableData
           const signable = requestData.data as MinaSignablePayload

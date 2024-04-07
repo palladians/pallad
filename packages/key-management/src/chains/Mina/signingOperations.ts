@@ -20,7 +20,6 @@ export function MinaSigningOperations<T extends MinaSignablePayload>(
   }
   // Mina network client.
   const minaClient = new Client({ network: args.networkType })
-
   try {
     // Perform the specific signing action
     if (args.operation) {
@@ -34,7 +33,9 @@ export function MinaSigningOperations<T extends MinaSignablePayload>(
           } else if (util.isZkAppTransaction(payload)) {
             return minaClient.signZkappCommand(payload.command, privateKey)
           } else {
-            throw new Error('Invalid constructed transaction')
+            throw new Error(
+              `Invalid constructed transaction, the payload is: ${payload}`
+            )
           }
         }
 
