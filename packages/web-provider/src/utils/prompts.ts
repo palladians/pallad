@@ -1,11 +1,9 @@
-import { windows } from 'webextension-polyfill'
-
 export function showUserPrompt(
   inputType: 'text' | 'password' | 'confirmation' = 'text',
   metadata: { title: string; payload?: string }
 ) {
   return new Promise((resolve) => {
-    windows
+    chrome.windows
       .create({
         url: 'prompt.html',
         type: 'popup',

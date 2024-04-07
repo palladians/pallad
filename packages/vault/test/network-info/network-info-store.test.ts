@@ -80,7 +80,7 @@ describe('CredentialStore', () => {
 
     // check total number of networks
     const networks = result.current.allNetworkInfo()
-    expect(networks.length).toEqual(3)
+    expect(networks.length).toEqual(4)
   })
   it('should add two networks and set mainnet as current network', () => {
     const { result } = renderHook(() => useVault())
