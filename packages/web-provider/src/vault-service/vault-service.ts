@@ -144,11 +144,19 @@ export class VaultService implements IVaultService {
     const locked = await this.isLocked()
     if (locked === true) {
       console.error('incorrect password.')
+    } else {
+      await this.syncWallet()
     }
   }
 
-  rehydrate() {
-    return useVault.persist.rehydrate()
+  async rehydrate() {
+    return await useVault.persist.rehydrate()
+  }
+
+  async syncWallet() {
+    await this.rehydrate()
+    const store = useVault.getState()
+    await store._syncWallet()
   }
 }
 

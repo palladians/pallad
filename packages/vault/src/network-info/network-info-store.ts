@@ -20,29 +20,6 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
     return networkInfo[currentNetworkName] as ProviderConfig
   },
   updateChainId: (networkName, response) => {
-    /*
-    const { networkInfo } = get()
-    const providerConfig = networkInfo[networkName]
-    if (!providerConfig) {
-      throw new Error(
-        `Could not find providerConfig for ${networkName} in updateChainId`
-      )
-    }
-
-    const provider = createMinaProvider(providerConfig)
-    if (!provider.getDaemonStatus) {
-      throw new Error(
-        `Could not getDaemonStatus for ${networkName} in updateChainId`
-      )
-    }
-
-    const response = await provider.getDaemonStatus()
-    if (!response.daemonStatus.chainId) {
-      throw new Error(
-        `Could not get chainId for ${networkName} in updateChainId`
-      )
-    }*/
-
     set(
       produce((state) => {
         if (state.networkInfo[networkName]) {
@@ -50,6 +27,19 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
           state.networkInfo[networkName] = {
             ...state.networkInfo[networkName],
             chainId: response.daemonStatus.chainId
+          }
+        }
+      })
+    )
+  },
+  updateNetworkInfo: (networkName, updates) => {
+    set((current) =>
+      produce(current, (draft) => {
+        // Ensure the network exists before trying to update it
+        if (draft.networkInfo[networkName]) {
+          draft.networkInfo[networkName] = {
+            ...draft.networkInfo[networkName],
+            ...updates
           }
         }
       })

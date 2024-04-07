@@ -180,7 +180,7 @@ export const useVault = create<
         const {
           getCurrentNetworkInfo,
           getCurrentWallet,
-          updateChainId,
+          updateNetworkInfo,
           _syncAccountInfo,
           _syncTransactions
         } = get()
@@ -210,7 +210,9 @@ export const useVault = create<
             `Could not get chainId for ${providerConfig} in updateChainId`
           )
         }
-        updateChainId(providerConfig.networkName, response)
+        updateNetworkInfo(providerConfig.networkName, {
+          chainId: response.daemonStatus.chainId
+        })
         await _syncAccountInfo(providerConfig, publicKey)
         await _syncTransactions(providerConfig, publicKey)
       },
@@ -345,7 +347,7 @@ export const useVault = create<
           ensureAccount,
           setKnownAccounts,
           getCurrentNetworkInfo,
-          updateChainId,
+          updateNetworkInfo,
           setCurrentNetworkName
         } = get()
         const agentArgs: FromBip39MnemonicWordsProps = {
@@ -405,7 +407,9 @@ export const useVault = create<
             `Could not get chainId for ${providerConfig} in updateChainId`
           )
         }
-        updateChainId(providerConfig.networkName, response)
+        updateNetworkInfo(providerConfig.networkName, {
+          chainId: response.daemonStatus.chainId
+        })
         setCurrentNetworkName(providerConfig.networkName)
         ensureAccount(network, derivedCredential.address)
         getSecurePersistence().setItem('foo', 'bar' as any)
