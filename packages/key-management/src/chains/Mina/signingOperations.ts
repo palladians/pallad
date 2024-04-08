@@ -67,20 +67,7 @@ export function MinaSigningOperations<T extends MinaSignablePayload>(
           throw new Error('Unsupported private key operation')
       }
     } else {
-      if (util.isConstructedTransaction(payload)) {
-        return minaClient.signTransaction(payload, privateKey)
-      } else if (util.isMessageBody(payload)) {
-        return minaClient.signMessage(payload.message, privateKey)
-      } else if (util.isFields(payload)) {
-        return minaClient.signFields(payload.fields, privateKey)
-      } else if (util.isZkAppTransaction(payload)) {
-        return minaClient.signZkappCommand(payload.command, privateKey)
-      } else if (util.isNullifier(payload)) {
-        // WARNING: this payload.message is a collision with the payload.message from the signMessage type
-        return minaClient.createNullifier(payload.message, privateKey)
-      } else {
-        throw new Error('Unsupported payload type.')
-      }
+      throw new Error('Unsupported payload type.')
     }
   } catch (err) {
     const errorMessage = errors.getRealErrorMsg(err) || 'Signing action failed.'

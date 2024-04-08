@@ -48,13 +48,7 @@ export async function EthereumSigningOperations<
           throw new Error('Unsupported private key operation')
       }
     } else {
-      if (util.isTransaction(payload)) {
-        result = await wallet.signTransaction(payload)
-      } else if (util.isMessage(payload)) {
-        result = await wallet.signMessage(payload)
-      } else {
-        throw new Error('Unsupported payload type.')
-      }
+      throw new Error('Unsupported payload type.')
     }
   } catch (err) {
     const errorMessage = errors.getRealErrorMsg(err) || 'Signing action failed.'
