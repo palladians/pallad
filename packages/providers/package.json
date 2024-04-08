@@ -1,7 +1,7 @@
 {
   "name": "@palladxyz/providers",
   "version": "0.0.1",
-  "description": "Proivder Package SDK for Pallad, the next generation of the `@palladxyz/mina-graphql` package.",
+  "description": "Proivder Package SDK for Pallad.",
   "type": "module",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
