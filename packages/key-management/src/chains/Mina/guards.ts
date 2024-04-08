@@ -23,7 +23,19 @@ export function isFields(payload: any): payload is Mina.SignableFields {
 export function isZkAppTransaction(
   payload: any
 ): payload is Mina.SignableZkAppCommand {
-  return payload && typeof payload === 'object' && 'command' in payload
+  console.log('payload', payload)
+  console.log("typeof payload === 'object'", typeof payload === 'object')
+  console.log("'command' in payload", 'command' in payload)
+  console.log(
+    "'zkappCommand' in payload.command",
+    'zkappCommand' in payload.command
+  )
+  return (
+    payload &&
+    typeof payload === 'object' &&
+    'command' in payload &&
+    'zkappCommand' in payload.command
+  )
 }
 
 export function isNullifier(payload: any): payload is Mina.CreatableNullifer {

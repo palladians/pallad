@@ -8,6 +8,7 @@ import { emip3encrypt } from '../../src/emip3'
 import { getPassphraseRethrowTypedError } from '../../src/InMemoryKeyAgent'
 import { KeyAgentBase } from '../../src/KeyAgentBase'
 import {
+  ChainOperationArgs,
   GetPassphrase,
   KeyAgentType,
   Network,
@@ -217,7 +218,10 @@ describe('KeyAgentBase (Ethereum Functionality)', () => {
       const signedMessage = await instance.sign(
         groupedCredential,
         message, // why is this erroring?
-        args
+        {
+          network: Network.Ethereum,
+          operation: 'eth_signMessage'
+        } as ChainOperationArgs
       )
 
       // Recover the address from the signature
