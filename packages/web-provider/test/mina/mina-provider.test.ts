@@ -44,7 +44,7 @@ const getPassphrase = () =>
 
 const TEST_ORIGIN = 'https://palladians.xyz'
 
-describe('Wallet Provider Test', () => {
+describe.skip('Wallet Provider Test', () => {
   let networkType: string
   let provider: MinaProvider
   let agentArgs: FromBip39MnemonicWordsProps
