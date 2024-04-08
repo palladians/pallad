@@ -3,16 +3,16 @@ import * as nativePersistence from './mobile'
 import * as webPersistence from './web'
 
 export const getLocalPersistence = () =>
-  VITE_APP_MODE === 'web'
-    ? webPersistence.localPersistence
-    : nativePersistence.localPersistence
+  VITE_APP_MODE === 'mobile'
+    ? nativePersistence.localPersistence
+    : webPersistence.localPersistence
 
 export const getSessionPersistence = () =>
-  VITE_APP_MODE === 'web'
-    ? webPersistence.sessionPersistence
-    : nativePersistence.sessionPersistence
+  VITE_APP_MODE === 'mobile'
+    ? nativePersistence.sessionPersistence
+    : webPersistence.sessionPersistence
 
 export const getSecurePersistence = () =>
-  VITE_APP_MODE === 'web'
-    ? webPersistence.securePersistence
-    : nativePersistence.securePersistence
+  VITE_APP_MODE === 'mobile'
+    ? nativePersistence.securePersistence
+    : webPersistence.securePersistence

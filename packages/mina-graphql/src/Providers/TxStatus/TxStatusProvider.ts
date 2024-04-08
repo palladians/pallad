@@ -53,11 +53,11 @@ export class TxStatusGraphQLProvider implements TxStatusProvider {
     throw new Error('Error processing GraphQL request')
   }
 
-  public async destroy(): Promise<void> {
+  public destroy(): void {
     console.log('Destroying TxStatusGraphQLProvider...')
   }
 
-  async changeNetwork(minaGql: string): Promise<void> {
+  changeNetwork(minaGql: string): void {
     this.graphqlClient = new GraphQLClient(
       minaGql,
       this.graphqlClient.requestConfig

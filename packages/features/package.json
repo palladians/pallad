@@ -94,7 +94,6 @@
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7",
-    "tsup": "^8.0.1",
     "webextension-polyfill": "^0.10.0",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"

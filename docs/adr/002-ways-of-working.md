@@ -1,9 +1,9 @@
 # Ways of Working
 
-| Status        | Implemented                                          |
-:-------------- |:---------------------------------------------------- |
-| **Author(s)** | Tomasz Marciniak (tomek@palladians.xyz)              |
-| **Updated**   | 2024-01-26                                           |
+| Status        | Implemented                             |
+| :------------ | :-------------------------------------- |
+| **Author(s)** | Tomasz Marciniak (tomek@palladians.xyz) |
+| **Updated**   | 2024-01-26                              |
 
 ## Context and Problem Statement
 
@@ -22,6 +22,7 @@ The merging process in all modern software projects can turn into a never-ending
 #### Code delivery stages
 
 We use these phases to deliver the code:
+
 - `To Do`
 - `In Progress`
 - `Done`

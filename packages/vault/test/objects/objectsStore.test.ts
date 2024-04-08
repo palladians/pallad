@@ -3,6 +3,7 @@ import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import {
+  DEFAULT_OBJECTS,
   ObjectName,
   SingleObjectState,
   StoredObject,
@@ -16,7 +17,7 @@ describe('ObjectStore', () => {
   let objectStateTwo: SingleObjectState
   let objectTwo: object
 
-  beforeEach(async () => {
+  beforeEach(() => {
     object = {
       '@context': ['https://w3id.org/wallet/v1'],
       id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
@@ -73,12 +74,12 @@ describe('ObjectStore', () => {
     act(() => result.current.clear())
   })
 
-  it('should create an objects store', async () => {
+  it('should create an objects store', () => {
     const { result } = renderHook(() => useVault())
-    expect(result.current.objects).toEqual({})
+    expect(result.current.objects).toEqual(DEFAULT_OBJECTS)
   })
 
-  it('should add one object and remove one from store', async () => {
+  it('should add one object and remove one from store', () => {
     let storedObject: SingleObjectState | undefined
     const { result } = renderHook(() => useVault())
     act(() => {
@@ -93,7 +94,7 @@ describe('ObjectStore', () => {
     // check that object is removed
     expect(storedObject?.object).toBeUndefined()
   })
-  it('should add two objects and search for Mina addresses and return them as an array not as a credential object', async () => {
+  it('should add two objects and search for Mina addresses and return them as an array not as a credential object', () => {
     let storedObjects: StoredObject[] | undefined
     // search for first credential
     const searchQuery = {

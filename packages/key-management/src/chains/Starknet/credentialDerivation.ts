@@ -6,9 +6,7 @@ import {
   StarknetSpecificPayload
 } from './types'
 
-export async function deriveStarknetPublicAddress(
-  privateKey: Uint8Array
-): Promise<string> {
+export function deriveStarknetPublicAddress(privateKey: Uint8Array) {
   const hexPrivateKey = Buffer.from(privateKey).toString('hex')
   const starkKey = starknet.getStarkKey(hexPrivateKey)
   return starkKey

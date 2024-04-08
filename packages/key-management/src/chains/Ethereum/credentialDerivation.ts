@@ -8,9 +8,7 @@ import {
   EthereumSpecificArgs
 } from './types'
 
-export async function deriveEthereumPublicAddress(
-  privateKey: Uint8Array
-): Promise<string> {
+export function deriveEthereumPublicAddress(privateKey: Uint8Array): string {
   return Address.fromPrivateKey(privateKey)
 }
 

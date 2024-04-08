@@ -11,7 +11,7 @@ describe('CredentialStore', () => {
   let providerConfigMainnet: ProviderConfig
   let providerConfigBerkeley: ProviderConfig
 
-  beforeEach(async () => {
+  beforeEach(() => {
     networkNameMainnet = 'Mainnet'
     // don't use the same network name
     networkNameBerkeley = 'Berkeley Other'
@@ -46,12 +46,12 @@ describe('CredentialStore', () => {
     act(() => result.current.clear())
   })
 
-  it('should create a network info store', async () => {
+  it('should create a network info store', () => {
     const { result } = renderHook(() => useVault())
     expect(result.current.networkInfo).toEqual(DEFAULT_NETWORK_INFO)
   })
 
-  it('should add one network and remove one from store', async () => {
+  it('should add one network and remove one from store', () => {
     let providerConfig: ProviderConfig | undefined
     const { result } = renderHook(() => useVault())
     act(() => {
@@ -66,7 +66,7 @@ describe('CredentialStore', () => {
     expect(providerConfig).toBeUndefined()
   })
 
-  it('should add two networks', async () => {
+  it('should add two networks', () => {
     let providerConfig: ProviderConfig | undefined
     const { result } = renderHook(() => useVault())
     act(() => {
@@ -82,7 +82,7 @@ describe('CredentialStore', () => {
     const networks = result.current.allNetworkInfo()
     expect(networks.length).toEqual(4)
   })
-  it('should add two networks and set mainnet as current network', async () => {
+  it('should add two networks and set mainnet as current network', () => {
     const { result } = renderHook(() => useVault())
     act(() => {
       result.current.setNetworkInfo(networkNameMainnet, providerConfigMainnet)
@@ -92,7 +92,7 @@ describe('CredentialStore', () => {
     const currentNetworkInfo = result.current.getCurrentNetworkInfo()
     expect(currentNetworkInfo).toEqual(currentNetworkInfo)
   })
-  it('should get all chainIds', async () => {
+  it('should get all chainIds', () => {
     const { result } = renderHook(() => useVault())
     act(() => {
       result.current.setNetworkInfo(networkNameMainnet, providerConfigMainnet)

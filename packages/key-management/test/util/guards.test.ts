@@ -59,7 +59,7 @@ describe('Guard functions tests', () => {
     expect(isFields(invalidPayload)).not.toBeFalsy()
   })
 
-  test('should validate zkAppCommand correctly', async () => {
+  test('should validate zkAppCommand correctly', () => {
     const zkAppCommand: Mina.SignableZkAppCommand = {
       command: {
         zkappCommand: {
@@ -89,7 +89,10 @@ describe('Guard functions tests', () => {
       // missing 'command'
     }
 
-    expect(isZkAppTransaction(zkAppCommand)).toBeTruthy()
-    expect(isZkAppTransaction(invalidPayload)).not.toBeTruthy()
+    const a = isZkAppTransaction(zkAppCommand)
+    console.log('a which is expected to be true is:', a)
+
+    expect(isZkAppTransaction(zkAppCommand)).toBe(true)
+    expect(isZkAppTransaction(invalidPayload)).toBe(false)
   })
 })

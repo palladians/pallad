@@ -42,32 +42,32 @@ export class UnifiedMinaProvider implements ProviderNode, ProviderArchive {
   }
 
   // Methods related to MinaProvider
-  public async getAccountInfo(
+  public getAccountInfo(
     args: AccountInfoArgs
   ): Promise<AccountInfo | undefined> {
     return this.nodeProvider.getAccountInfo(args)
   }
 
-  public async getTransactionStatus(
+  public getTransactionStatus(
     args: TxStatusArgs
   ): Promise<TxStatus | undefined> {
     return this.nodeProvider.getTransactionStatus(args)
   }
 
-  public async submitTransaction(
+  public submitTransaction(
     args: SubmitTxArgs
   ): Promise<SubmitTxResult | undefined> {
     return this.nodeProvider.submitTransaction(args)
   }
 
   // Methods related to MinaArchiveProvider
-  public async getTransactions(
+  public getTransactions(
     args: TransactionsByAddressesArgs
   ): Promise<Mina.Paginated<Mina.TransactionBody> | undefined> {
     return this.archiveProvider.getTransactions(args)
   }
 
-  public async getTransaction(
+  public getTransaction(
     args: TransactionsByIdsArgs
   ): Promise<Mina.TransactionBody[] | undefined> {
     return this.archiveProvider.getTransaction(args)

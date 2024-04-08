@@ -3,12 +3,16 @@
 import { emip3decrypt } from './emip3'
 import * as errors from './errors'
 import { getPassphraseRethrowTypedError } from './InMemoryKeyAgent'
-import { EncryptedKeyPropertyName, SerializableKeyAgentData } from './types'
+import {
+  EncryptedKeyPropertyName,
+  GetPassphrase,
+  SerializableKeyAgentData
+} from './types'
 
 export class KeyDecryptor {
   private getPassphrase: (noCache?: true) => Promise<Uint8Array>
 
-  constructor(getPassphrase: () => Promise<Uint8Array>) {
+  constructor(getPassphrase: GetPassphrase) {
     this.getPassphrase = getPassphrase
   }
 
@@ -34,10 +38,7 @@ export class KeyDecryptor {
     return decryptedKeyBytes
   }
 
-  async decryptSeedBytes(
-    serializableData: SerializableKeyAgentData,
-    noCache?: true
-  ) {
+  decryptSeedBytes(serializableData: SerializableKeyAgentData, noCache?: true) {
     return this.decryptSeed(
       'encryptedSeedBytes',
       serializableData,

@@ -1,28 +1,30 @@
 import { produce } from 'immer'
-import { StateCreator } from 'zustand'
+import { create, StateCreator } from 'zustand'
 
 import { matchesQuery } from '../utils/utils'
+import { DEFAULT_OBJECTS } from './default'
 import { initialObjectState, ObjectStore } from './objectsState'
 
 export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
-  objects: {},
+  objects: DEFAULT_OBJECTS,
   ensureObject: (objectName) => {
     set(
-      produce((state) => {
-        if (!state.objects?.[objectName]) {
-          state.objects[objectName] = {
-            ...initialObjectState,
-            objectName: objectName
-          }
+      produce((draft) => {
+        draft.objects[objectName] = draft.objects[objectName] || {
+          ...initialObjectState,
+          objectName
         }
       })
     )
   },
   setObject: (objectState) => {
     const { objectName } = objectState
-    set(
-      produce((state) => {
-        state.objects[objectName] = objectState
+    set((current) =>
+      produce(current, (draft) => {
+        draft.objects[objectName] = {
+          ...draft.objects[objectName],
+          ...objectState
+        }
       })
     )
   },
@@ -32,12 +34,13 @@ export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
   },
   removeObject: (objectName) => {
     set(
-      produce((state) => {
-        delete state.objects[objectName]
+      produce((draft) => {
+        delete draft.objects[objectName]
       })
     )
   },
   searchObjects: (query, props) => {
+    // TODO: improve
     const { objects } = get()
     const objectsStatesArray = Object.values(objects)
     const objectsArray = objectsStatesArray.map((obj) => obj.object)
@@ -60,9 +63,11 @@ export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
   },
   clear: () => {
     set(
-      produce((state) => {
-        state.objects = {}
+      produce((draft) => {
+        draft.objects = {}
       })
     )
   }
 })
+
+export const useObjectVault = create<ObjectStore>(objectSlice)

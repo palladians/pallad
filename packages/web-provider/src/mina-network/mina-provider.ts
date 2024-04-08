@@ -3,16 +3,18 @@ import {
   MinaSignablePayload
 } from '@palladxyz/key-management'
 import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
+import { SearchQuery } from '@palladxyz/vault'
 import { EventEmitter } from 'events'
+import superjson from 'superjson'
 
+import { hasObjectProps, hasQueryAndProps } from '../utils'
 import { showUserPrompt } from '../utils/prompts'
-import { vaultService } from '../vault-service'
+import { VaultService, vaultService } from '../vault-service'
 import {
   ChainProviderOptions,
   ChainRpcConfig,
   ConnectOps,
   ProviderConnectInfo,
-  ProviderRpcError,
   RequestArguments
 } from '../web-provider-types'
 import {
@@ -26,8 +28,11 @@ import {
   IMinaProviderEvents,
   MinaRpcProviderMap,
   requestData,
-  requestSignableData
+  requestingStateData,
+  requestSignableData,
+  requestSignableTransaction
 } from './types'
+import { serializeField, serializeGroup, serializeTransaction } from './utils'
 
 export type RpcMethod =
   | 'mina_sendTransaction'
@@ -37,15 +42,14 @@ export type RpcMethod =
   | 'mina_sign'
   | 'mina_signTransaction'
   | 'mina_createNullifier'
+  | 'mina_getState'
+  | 'mina_setState'
 
 export interface IMinaProvider extends IMinaProviderBase {
-  connect(opts?: ConnectOps | undefined): Promise<void>
+  connect(opts?: ConnectOps | undefined): void
 }
 
-export function getRpcUrl(
-  chainId: string,
-  rpc: ChainRpcConfig
-): string | undefined {
+export function getRpcUrl(chainId: string, rpc: ChainRpcConfig) {
   let rpcUrl: string | undefined
   if (rpc.rpcMap) {
     rpcUrl = rpc.rpcMap[getMinaChainId([chainId])]
@@ -53,7 +57,7 @@ export function getRpcUrl(
   return rpcUrl
 }
 
-export function getMinaChainId(chains: string[]): number {
+export function getMinaChainId(chains: string[]) {
   return Number(chains[0]?.split(':')[1])
 }
 
@@ -62,7 +66,7 @@ export class MinaProvider implements IMinaProvider {
   public accounts: string[] = []
   public chainId: string | undefined = undefined
   public rpcProviders: MinaRpcProviderMap = {}
-  public connected = vaultService.getEnabled()
+  private vault: VaultService
 
   private userPrompt: typeof showUserPrompt
 
@@ -74,6 +78,7 @@ export class MinaProvider implements IMinaProvider {
   ) {
     // Initialization logic
     this.rpc = {} as ChainRpcConfig
+    this.vault = vaultService
 
     // Use provided userPrompt function or default to the actual implementation
     if (opts.showUserPrompt) {
@@ -87,13 +92,13 @@ export class MinaProvider implements IMinaProvider {
   static async init(
     opts: ChainProviderOptions,
     authorizedMethods: string[] = REQUIRED_METHODS,
-    externalEmitter?: EventEmitter
-  ): Promise<MinaProvider> {
+    externalEmitter: EventEmitter = new EventEmitter()
+  ) {
     const provider = new MinaProvider(opts, externalEmitter)
     await provider.initialize(opts, authorizedMethods)
     return provider
   }
-  // why is this async?
+
   private async initialize(
     opts: ChainProviderOptions,
     unauthorizedMethods: string[] = []
@@ -114,16 +119,31 @@ export class MinaProvider implements IMinaProvider {
     }
 
     // get the wallet's current chain id
-    const chainId = await vaultService.getChainId()
+    const chainId = await this.vault.getChainId()
     this.chainId = chainId
     // set the rpc provider
     // TODO:
     //this.rpcProviders = vaultService.getChainIds() ?? {}
   }
-  private createProviderRpcError(
-    code: number,
-    message: string
-  ): ProviderRpcError {
+
+  async unlockWallet() {
+    const passphrase = await this.userPrompt('password', {
+      title: 'Unlock your wallet'
+    })
+    if (passphrase === null) {
+      throw new Error('User denied the request for passphrase.')
+    }
+    await this.vault.unlockWallet(passphrase as string)
+  }
+
+  async checkAndUnlock() {
+    const locked = await this.vault.isLocked()
+    if (locked === true) {
+      await this.unlockWallet()
+    }
+  }
+
+  private createProviderRpcError(code: number, message: string) {
     return {
       name: 'ProviderRpcError',
       message,
@@ -132,22 +152,25 @@ export class MinaProvider implements IMinaProvider {
     }
   }
   // TODO: add ConnectOps as an optional parameter
-  public async enable(): Promise<string[]> {
+  public async enable({ origin }: { origin: string }) {
+    // check if wallet is locked first
+    await this.checkAndUnlock()
     // Implement the logic to prompt the user to connect to the wallet
     // For example, you could open a modal and wait for the user to click 'Connect'
     // Step 0: Prompt user for confirmation
-    const userConfirmed = await this.userPrompt(
-      'Do you want to connect?',
-      'confirmation'
-    ) // Note: all user prompts should define the inputType like this 'confirmation'
+    // Note: all user prompts should define the inputType like this 'confirmation'
+    const userConfirmed = await this.userPrompt('confirmation', {
+      title: 'Do you want to connect?',
+      payload: superjson.stringify({ origin })
+    })
     console.log('userConfirmed:', userConfirmed)
     if (!userConfirmed) {
       // should this emit an error event?
       throw this.createProviderRpcError(4001, 'User Rejected Request')
     }
-    await this.connect()
+    this.connect({ origin })
     // TODO: perform 'mina_requestAccounts' method
-    return this.accounts
+    return await this.vault.getAccounts()
   }
   // these are the methods that are called by the dapp to interact/listen to the wallet
   public on: IMinaProviderEvents['on'] = (event, listener) => {
@@ -189,16 +212,16 @@ export class MinaProvider implements IMinaProvider {
     return this
   }
 
-  public async connect(opts?: ConnectOps): Promise<void> {
+  public async connect(opts: ConnectOps) {
     try {
       // Step 1: Check if already connected.
-      if (this.connected) {
+      if (await this.vault.getEnabled({ origin: opts.origin })) {
         throw new Error('Already connected.')
       }
       // Step 2: Attempt to connect to a chain.
-      if (!opts) {
+      if (!opts.chains) {
         // Try to connect to the default chain -- this is actually the current chain the wallet is connected to not the default chain
-        const defaultChainId = await vaultService.getChainId()
+        const defaultChainId = await this.vault.getChainId()
         if (!defaultChainId) {
           throw new Error('Unable to connect: Default chain ID is undefined.')
         }
@@ -208,11 +231,9 @@ export class MinaProvider implements IMinaProvider {
       } else {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
       }
-      // Step 3: Fetch accounts and set them.
-      this.accounts = await vaultService.getAccounts()
       // Step 4: Set the connected flag.
       //this.connected = true // this is redundant because we're setting the connected flag in the next step
-      vaultService.setEnabled(true)
+      await this.vault.setEnabled({ origin: opts.origin })
       // Step 5: Emit a 'connect' event.
       const connectInfo: ProviderConnectInfo = { chainId: this.chainId }
       //this.events.emit('connect', connectInfo)
@@ -228,17 +249,17 @@ export class MinaProvider implements IMinaProvider {
     }
   }
 
-  public requestAccounts(): string[] {
+  public requestAccounts() {
     return this.accounts
   }
 
-  public isConnected(): boolean {
-    return this.connected
+  public async isConnected({ origin }: { origin: string }) {
+    return await this.vault.getEnabled({ origin })
   }
 
-  public async disconnect(): Promise<void> {
+  public disconnect({ origin }: { origin: string }) {
     // Check if it's connected in the first place
-    if (!this.isConnected()) {
+    if (!this.isConnected({ origin })) {
       // Emit a 'disconnect' event with an error only if disconnected
       if (this.externalEmitter) {
         this.externalEmitter.emit(
@@ -257,7 +278,7 @@ export class MinaProvider implements IMinaProvider {
       // ...
 
       // Update the connected status
-      this.connected = false
+      // this.connected = false
 
       // Reset accounts
       this.accounts = []
@@ -278,6 +299,8 @@ export class MinaProvider implements IMinaProvider {
     args: RequestArguments,
     chain?: string | undefined
   ): Promise<T> {
+    // check if wallet is locked first
+    await this.checkAndUnlock()
     if (
       // when the provider is initialized, the rpc methods are set to the required methods
       // this can be the set of authorized methods the user has given permission for the zkApp to use
@@ -294,18 +317,17 @@ export class MinaProvider implements IMinaProvider {
       // TODO: prompt the user they're on the wrong chain and ask if they want to switch
       // maybe this error should be handled in the universal-provider?
       // check if the chain is supported by Pallad
-      const chains = (await vaultService.getChainIds()) ?? []
+      const chains = (await this.vault.getChainIds()) ?? []
       const validChain = chains?.includes(chain)
       if (!validChain) {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
       }
-      const changeChain = await this.userPrompt(
-        `You are on the wrong chain. Do you want to switch to ${chain}?`,
-        'confirmation'
-      )
+      const changeChain = await this.userPrompt('confirmation', {
+        title: `You are on the wrong chain. Do you want to switch to ${chain}?`
+      })
       if (changeChain) {
         // TODO: switch to the correct chain
-        vaultService.switchNetwork(chain)
+        await this.vault.switchNetwork(chain)
         this.chainId = chain
         this.onChainChanged(chain!)
       } else {
@@ -313,29 +335,29 @@ export class MinaProvider implements IMinaProvider {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
       }
     }
-    // Prompt user for confirmation based on the method type
-    // what scenarios would we need to prompt the user?
-    const userConfirmed = await this.userPrompt(
-      `Do you want to execute ${args.method}?`,
-      'confirmation'
-    )
-    if (!userConfirmed) {
-      throw this.createProviderRpcError(4001, 'User Rejected Request')
-    }
+    // TODO: Add prompt confirmation for signing and broadcasting
+    // // Prompt user for confirmation based on the method type
+    // // what scenarios would we need to prompt the user?
+    // const userConfirmed = await this.userPrompt(
+    //   `Do you want to execute ${args.method}?`,
+    //   'confirmation'
+    // )
+    // if (!userConfirmed) {
+    //   throw this.createProviderRpcError(4001, 'User Rejected Request')
+    // }
 
     switch (args.method) {
-      case 'mina_accounts': {
-        return vaultService.getAccounts() as unknown as T
-      }
-
+      case 'mina_accounts':
+        return (await this.vault.getAccounts()) as unknown as T
       case 'mina_sign':
       case 'mina_createNullifier':
       case 'mina_signFields':
       case 'mina_signTransaction': {
-        const passphrase = await this.userPrompt(
-          'Enter your passphrase:',
-          'password'
-        )
+        // check if wallet is locked first
+        const passphrase = await this.userPrompt('password', {
+          title: 'Confirm your transaction',
+          payload: superjson.stringify(args.params)
+        })
         if (passphrase === null) {
           throw new Error('User denied the request for passphrase.')
         }
@@ -366,12 +388,14 @@ export class MinaProvider implements IMinaProvider {
               return item
             })
           } as MinaSignablePayload
-          const signedResponse = (await vaultService.sign(
+          const signedResponse = (await this.vault.sign(
             signable,
             operationArgs,
-            async () =>
-              // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
-              Buffer.from(passphrase as string)
+            () =>
+              new Promise<Uint8Array>((resolve) =>
+                // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
+                resolve(Buffer.from(passphrase as string))
+              )
           )) as Mina.SignedFields
           // serialise the response if mina_signFields
           const serializedResponseData = signedResponse.data.map((item) => {
@@ -399,24 +423,16 @@ export class MinaProvider implements IMinaProvider {
               return item
             })
           } as MinaSignablePayload
-          const signedResponse = (await vaultService.sign(
+          const signedResponse = (await this.vault.sign(
             signable,
             operationArgs,
-            async () => Buffer.from(passphrase as string)
+            () =>
+              new Promise<Uint8Array>((resolve) =>
+                resolve(Buffer.from(passphrase as string))
+              )
           )) as BorrowedTypes.Nullifier
           console.log('signedResponse:', signedResponse)
           // serialise the response if mina_createNullifier
-          const serializeField = (field: BorrowedTypes.Field) => {
-            if (typeof field === 'bigint' || typeof field === 'number') {
-              return field.toString()
-            }
-            return field
-          }
-
-          const serializeGroup = (group: BorrowedTypes.Group) => ({
-            x: serializeField(group.x),
-            y: serializeField(group.y)
-          })
 
           const serializedResponseData = {
             publicKey: serializeGroup(signedResponse.publicKey),
@@ -433,24 +449,81 @@ export class MinaProvider implements IMinaProvider {
           console.log('serializedResponseData:', serializedResponseData)
 
           return serializedResponseData as unknown as T
+        } else if (args.method === 'mina_signTransaction') {
+          const requestData = args.params as requestSignableTransaction
+          const signable = serializeTransaction(
+            requestData.data.transaction
+          ) as MinaSignablePayload
+          return (await this.vault.sign(
+            signable,
+            operationArgs,
+            () =>
+              new Promise<Uint8Array>((resolve) =>
+                // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
+                resolve(Buffer.from(passphrase as string))
+              )
+          )) as unknown as T
         } else {
           const requestData = args.params as requestSignableData
           const signable = requestData.data as MinaSignablePayload
-          return (await vaultService.sign(signable, operationArgs, async () =>
-            // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
-            Buffer.from(passphrase as string)
+          return (await this.vault.sign(
+            signable,
+            operationArgs,
+            () =>
+              new Promise<Uint8Array>((resolve) =>
+                // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
+                resolve(Buffer.from(passphrase as string))
+              )
           )) as unknown as T
         }
       }
-
       case 'mina_getBalance':
-      case 'mina_chainId': {
-        if (!userConfirmed) {
-          throw this.createProviderRpcError(4001, 'User Rejected Request')
+        return (await this.vault.getBalance()) as unknown as T
+
+      case 'mina_getState': {
+        // check if wallet is locked first
+        const passphrase = await this.userPrompt('password', {
+          title: 'Confirm proof request',
+          payload: superjson.stringify(args.params)
+        })
+        if (passphrase === null) {
+          throw new Error('User denied the request for passphrase.')
         }
-        return args.method === 'mina_getBalance'
-          ? (vaultService.getBalance() as unknown as T)
-          : (this.chainId as unknown as T)
+        // TODO: handle incorrect passphrase
+        const requestData = args.params as requestingStateData
+        if (!requestData.data || !hasQueryAndProps(requestData.data)) {
+          // Handle the case where the necessary properties do not exist
+          console.log('the args are:', requestData)
+          return {} as unknown as T
+        }
+        const { query, props } = requestData.data as unknown as {
+          query: SearchQuery
+          props: string[]
+        }
+        return (await this.vault.getState(query, props)) as unknown as T
+      }
+
+      case 'mina_setState': {
+        // check if wallet is locked first
+        const passphrase = await this.userPrompt('password', {
+          title: 'Confirm incoming proof',
+          payload: superjson.stringify(args.params)
+        })
+        if (passphrase === null) {
+          throw new Error('User denied the request for passphrase.')
+        }
+        const requestData = args.params as requestingStateData
+        if (!requestData.data || !hasObjectProps(requestData.data)) {
+          console.log('the args are:', requestData)
+          // Handle the case where the necessary properties do not exist
+          return false as unknown as T
+        }
+
+        return (await this.vault.setState(requestData.data)) as unknown as T
+      }
+
+      case 'mina_chainId': {
+        return this.chainId as unknown as T
       }
 
       default:
@@ -458,7 +531,7 @@ export class MinaProvider implements IMinaProvider {
     }
   }
 
-  private onChainChanged(chainId: string): void {
+  private onChainChanged(chainId: string) {
     // updated the chainId
     this.chainId = chainId
     if (this.externalEmitter) {
@@ -471,19 +544,19 @@ export class MinaProvider implements IMinaProvider {
   // 1. adds a new account
   // 2. removes an account
   // We can listen to the vaultService for changes to the accounts
-  /*private onAccountsChanged(): void {
-    // listen to the vaultService for changes to the accounts
-    // e.g. vaultService.events.on('accountsChanged', this.updateAccounts)
-    const accounts = vaultService.getAccounts()
-    this.accounts = accounts
-    if (this.externalEmitter) {
-      this.externalEmitter.emit('accountsChanged', accounts)
-    } else {
-      this.events.emit('accountsChanged', accounts)
-    }
-  }*/
+  // private onAccountsChanged(): void {
+  //   // listen to the vaultService for changes to the accounts
+  //   // e.g. vaultService.events.on('accountsChanged', this.updateAccounts)
+  //   const accounts = vaultService.getAccounts()
+  //   this.accounts = accounts
+  //   if (this.externalEmitter) {
+  //     this.externalEmitter.emit('accountsChanged', accounts)
+  //   } else {
+  //     this.events.emit('accountsChanged', accounts)
+  //   }
+  // }
 
-  protected getRpcConfig(ops: ChainProviderOptions): ChainRpcConfig {
+  protected getRpcConfig(ops: ChainProviderOptions) {
     return {
       chains: ops.chains || [],
       optionalChains: ops.optionalChains || [],
@@ -497,7 +570,7 @@ export class MinaProvider implements IMinaProvider {
     }
   }
 
-  protected getRpcUrl(chainId: string /*, projectId?: string*/): string {
+  protected getRpcUrl(chainId: string /*, projectId?: string*/) {
     const providedRpc = this.rpc.rpcMap?.[chainId]
     return providedRpc!
   }

@@ -3,6 +3,7 @@
  * @typedef {Object} NetworkInfoStore
  */
 
+import { DaemonStatus } from '@palladxyz/mina-core'
 import { ProviderConfig } from '@palladxyz/providers'
 
 /* Network info store should
@@ -23,11 +24,12 @@ export type NetworkInfoActions = {
     networkName: NetworkName,
     providerConfig: ProviderConfig
   ) => void
-  updateChainId: (networkName: NetworkName) => void
+  updateChainId: (networkName: NetworkName, response: DaemonStatus) => void
   getNetworkInfo: (networkName: NetworkName) => ProviderConfig | undefined
   removeNetworkInfo: (ticker: string) => void
   allNetworkInfo: () => (ProviderConfig | undefined)[]
   getChainIds: () => string[]
+  updateNetworkInfo: (networkName: NetworkName, update: any) => void
   clear: () => void
 }
 

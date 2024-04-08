@@ -18,7 +18,7 @@ export const CreateWalletView = () => {
       }),
       shallow
     )
-  const onSubmit = async ({
+  const onSubmit = ({
     spendingPassword,
     walletName
   }: {

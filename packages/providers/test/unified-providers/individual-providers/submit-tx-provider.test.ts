@@ -30,7 +30,8 @@ const publicKey =
 const params = {
   passphrase: 'passphrase'
 }
-const getPassphrase = async () => Buffer.from(params.passphrase)
+const getPassphrase = () =>
+  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
 describe('Unified Submit Transaction Provider (Functional)', () => {
   let provider: ReturnType<typeof createTxSubmitProvider>
@@ -131,7 +132,7 @@ describe('Unified Submit Transaction Provider (Functional)', () => {
         networkType: networkType
       }
       console.log('Credential', credential)
-      const signedTx = await agent.sign(credential, constructedTx, args)
+      const signedTx = await agent.sign(credential!, constructedTx, args)
       const submitTxArgs = {
         signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>
         kind: Mina.TransactionKind.PAYMENT,

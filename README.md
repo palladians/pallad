@@ -15,6 +15,7 @@
 
 ⚠️ Work in progress ⚠️
 🚨 Now in Beta 🚨
+
 </div>
 
 Welcome to Pallad an experimental and progressive Mina Protocol wallet!
@@ -23,7 +24,6 @@ In the vast and evolving world of Web3, a wallet is not just a tool; it's the ga
 
 Pallad is at the frontier, leading the way in innovation and user-centric design. We're not just building a wallet; we're crafting the cornerstone of zero-knowledge application interaction design. With Pallad, you're stepping into the future.
 
-
 ## Getting Started 🚀
 
 ### Prerequisite 📌
@@ -31,7 +31,7 @@ Pallad is at the frontier, leading the way in innovation and user-centric design
 - [NVM](https://github.com/nvm-sh/nvm)
 - pnpm
 
-### Installation  💻
+### Installation 💻
 
 Make sure you're on the right Node.js version, and you got pnpm installed.
 

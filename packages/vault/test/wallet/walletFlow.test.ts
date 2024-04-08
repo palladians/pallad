@@ -17,6 +17,7 @@ import { expect } from 'vitest'
 import { CredentialName, KeyAgents } from '../../src'
 import { useVault } from '../../src'
 import { DEFAULT_NETWORK } from '../../src/network-info/default'
+import { EXAMPLE_CREDENTIAL } from '../../src/objects/default'
 
 const PREGENERATED_MNEMONIC = [
   'habit',
@@ -37,7 +38,8 @@ const PREGENERATED_MNEMONIC = [
 const params = {
   passphrase: 'passphrase'
 }
-const getPassphrase = async () => Buffer.from(params.passphrase)
+const getPassphrase = () =>
+  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
 describe('WalletTest', () => {
   let agentArgs: FromBip39MnemonicWordsProps
@@ -49,7 +51,7 @@ describe('WalletTest', () => {
   let expectedAddress: string
   let defaultNetwork: string
 
-  beforeEach(async () => {
+  beforeEach(() => {
     agentArgs = {
       getPassphrase: getPassphrase,
       mnemonicWords: PREGENERATED_MNEMONIC
@@ -75,7 +77,7 @@ describe('WalletTest', () => {
   //  act(() => current.clear())
   //})
 
-  it('should add one key agent its first credential /0/0 and sync the network info', async () => {
+  it('should (1.) add one key agent its first credential /0/0 (2.) sync the network info (3.) add a credential (4.) check if key agent name has been overwritten', async () => {
     const { result } = renderHook(() => useVault())
 
     // add first key agent
@@ -90,178 +92,61 @@ describe('WalletTest', () => {
         KeyAgents.InMemory,
         credentialName
       )
-      // add first key agent
-      //await result.current.initialiseKeyAgent(
-      //  keyAgentName,
-      //  KeyAgents.InMemory,
-      //  agentArgs
-      //)
-      // check that key agent is in the store
-      const keyagent = result.current.getKeyAgent(keyAgentName)
-      expect(keyagent?.keyAgentType).toEqual(KeyAgents.InMemory)
-
-      // check if chainId has been set and not '...'
-      const chainId = await result.current.getChainId()
-      console.log('chainId: ', chainId)
-      const networkInfos = await result.current.getNetworkInfo(defaultNetwork)
-      console.log('networkInfos: ', networkInfos)
-      const currentNetworkInfo = await result.current.getCurrentNetworkInfo()
-      console.log('currentNetworkInfo: ', currentNetworkInfo)
-      expect(chainId).not.toEqual('...')
-
-      // check if first credential is in the store
-      const minaCredentials = result.current.getCredentials(
-        { type: 'MinaAddress' },
-        []
-      )
-      expect(minaCredentials.length).toEqual(1)
-      expect(minaCredentials[0].address).toEqual(expectedAddress)
-
-      // check current network info is of the expected network
-      const currentNetwork = result.current.getCurrentNetwork()
-      console.log('currentNetwork: ', currentNetwork)
-      expect(currentNetwork).toEqual(defaultNetwork)
-      // check if accountInfo is in the store
-      const accountInfo = result.current.getAccountsInfo(
-        defaultNetwork,
-        expectedAddress
-      )
-      console.log('accountInfo', accountInfo)
-      expect(accountInfo).toBeDefined()
     })
-    // add first credential
-    /*const args: ChainSpecificArgs = {
-      network: Network.Mina,
-      accountIndex: 0,
-      addressIndex: 0,
-      networkType: 'testnet'
-    }
-    const credential = await result.current.createCredential(
-      keyAgentName,
-      new MinaPayload(),
-      args,
-      getPassphrase
+    // add first key agent
+    //await result.current.initialiseKeyAgent(
+    //  keyAgentName,
+    //  KeyAgents.InMemory,
+    //  agentArgs
+    //)
+    // check that key agent is in the store
+    const keyagent = result.current.getKeyAgent(keyAgentName)
+    expect(keyagent?.keyAgentType).toEqual(KeyAgents.InMemory)
+
+    // check if chainId has been set and not '...'
+    const chainId = result.current.getChainId()
+    console.log('chainId: ', chainId)
+    const networkInfos = result.current.getNetworkInfo(defaultNetwork)
+    console.log('networkInfos: ', networkInfos)
+    const currentNetworkInfo = result.current.getCurrentNetworkInfo()
+    console.log('currentNetworkInfo: ', currentNetworkInfo)
+    expect(chainId).not.toEqual('...')
+
+    // check if first credential is in the store
+    const minaCredentials = result.current.getCredentials(
+      { type: 'MinaAddress' },
+      []
     )
-    
-    const credentialState = {
-      credentialName: 'Test Credential',
-      keyAgentName: keyAgentName,
-      credential: credential
-    }
-    // add credential to credential store
+    expect(minaCredentials.length).toEqual(1)
+    expect(minaCredentials[0]?.address).toEqual(expectedAddress)
+
+    // check current network info is of the expected network
+    const currentNetwork = result.current.getCurrentNetwork()
+    console.log('currentNetwork: ', currentNetwork)
+    expect(currentNetwork).toEqual(defaultNetwork)
+    // check if accountInfo is in the store
+    const accountInfo = result.current.getAccountsInfo(
+      defaultNetwork,
+      expectedAddress
+    )
+    console.log('accountInfo', accountInfo)
+    expect(accountInfo).toBeDefined()
     act(() => {
-      result.current.setCredential(credentialState)
-    })
-    // check that credential is in the store
-    expect(result.current.credentials['Test Credential']).toEqual(credentialState)*/
-
-    /*// get the credential from the store & fetch network data for it
-    act(async () => {
-      const storedCredential = result.current.getCredential('Test Credential')
-      const provider = result.current.getProvider('Mina Devnet')
-      const accountInfo = await provider.provider?.getAccountInfo({
-        publicKey: storedCredential?.credential?.address as string
+      result.current.setObject({
+        objectName: 'example credential',
+        object: EXAMPLE_CREDENTIAL
       })
-      const transactionHistory = await provider.provider?.getTransactions({
-        addresses: [storedCredential?.credential?.address as string]
-      })
-      result.current.ensureAccount(Mina.Networks.BERKELEY, credential?.address)
-      result.current.setAccountInfo(
-        Mina.Networks.BERKELEY,
-        storedCredential?.credential?.address as string,
-        accountInfo as Multichain.MultiChainAccountInfo
-      )
-      result.current.setTransactions(
-        Mina.Networks.BERKELEY,
-        storedCredential?.credential?.address as string,
-        transactionHistory?.pageResults as Multichain.MultiChainTransactionBody[]
-      )
     })
-    // check that all data is in the store
-    const provider = result.current.getProvider('Mina Devnet')
-    const accountInfo = await provider.provider?.getAccountInfo({
-      publicKey: credential?.address as string
-    })
-    console.log('account info result: ', accountInfo)
-    expect(result.current.credentials['Test Credential']).toBeDefined()
-    expect(
-      result.current.getAccountInfo(Mina.Networks.BERKELEY, credential?.address)
-    ).toBeDefined()
-    expect(
-      result.current.getTransactions(
-        Mina.Networks.BERKELEY,
-        credential?.address
-      )
-    ).toBeDefined()
-    const groupedCredential = result.current.credentials['Test Credential']
-    console.log('credential: ', groupedCredential)
-    console.log(
-      'account info: ',
-      result.current.getAccountInfo(Mina.Networks.BERKELEY, credential?.address)
-    )
-    console.log(
-      'transactions: ',
-      result.current.getTransactions(
-        Mina.Networks.BERKELEY,
-        credential?.address
-      )
-    )
-    // construct transaction, sign, and submit
-    const amount = 1 * 1e9
-    const inferredNonce = accountInfo?.inferredNonce ?? 0
-    const transaction: Mina.TransactionBody = {
-      to: groupedCredential!.credential!.address,
-      from: groupedCredential!.credential!.address,
-      fee: 1 * 1e9,
-      amount: amount,
-      nonce: Number(inferredNonce),
-      memo: 'hello Bob',
-      type: 'payment',
-      validUntil: 4294967295
-    }
-    const constructedTx: Mina.ConstructedTransaction = constructTransaction(
-      transaction,
-      Mina.TransactionKind.PAYMENT
-    )
 
-    // get key agent
-    const instance = keyAgent1?.keyAgent
-    const signedTx = await instance!.sign(
-      groupedCredential?.credential as GroupedCredentials,
-      constructedTx,
-      args
+    const allObjects = result.current.searchObjects(
+      { issuer: 'University of Example' },
+      []
     )
-
-    const minaClient = new Client({ network: args.networkType })
-    const paymentIsVerified = minaClient.verifyPayment(
-      signedTx as SignedLegacy<Payment>
-    )
-    console.log('paymentIsVerified: ', paymentIsVerified)
-    expect(paymentIsVerified).toBeTruthy()
-    const isVerified = minaClient.verifyTransaction(
-      signedTx as Mina.SignedTransaction
-    )
-    expect(isVerified).toBeTruthy()
-    console.log('isVerified: ', isVerified)
-    console.log('signedTx: ', signedTx)
-
-    // submit transaction
-    const submitTxArgs = {
-      signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>
-      kind: Mina.TransactionKind.PAYMENT,
-      transactionDetails: {
-        fee: transaction.fee,
-        to: transaction.to,
-        from: transaction.from,
-        nonce: transaction.nonce,
-        memo: transaction.memo,
-        amount: transaction.amount,
-        validUntil: transaction.validUntil
-      }
-    }
-    // Note: If there is a pending transaction, this will fail -- good nonce management is needed
-    const submitTxResult =
-      await provider.provider?.submitTransaction(submitTxArgs)
-    console.log('submitTxResult: ', submitTxResult)*/
+    expect(allObjects.length).toEqual(2)
+    console.log('all credentials', allObjects)
+    // get keyAgentName
+    const currentKeyAgentName = result.current.keyAgentName
+    console.log('keyAgentName', currentKeyAgentName)
+    expect(currentKeyAgentName).toBe(keyAgentName)
   })
 })

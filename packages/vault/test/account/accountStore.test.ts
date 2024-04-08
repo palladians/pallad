@@ -11,7 +11,7 @@ describe('AccountStore', () => {
   let mockAccountInfo: Record<string, AccountInfo>
   let mockTransactions: Record<string, Mina.TransactionBody[]>
 
-  beforeEach(async () => {
+  beforeEach(() => {
     address = 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
     network = 'berkeley'
     mockAccountInfo = {
@@ -51,12 +51,12 @@ describe('AccountStore', () => {
     act(() => result.current.clear())
   })
 
-  it('should create a new accountStore', async () => {
+  it('should create a new accountStore', () => {
     const { result } = renderHook(() => useVault())
     expect(result.current.accounts).toEqual({})
   })
 
-  it('should create a new accountStore with initial state', async () => {
+  it('should create a new accountStore with initial state', () => {
     let finalAccountInfo
     const { result } = renderHook(() => useVault())
     const accountInfo = mockAccountInfo
@@ -74,7 +74,7 @@ describe('AccountStore', () => {
     expect(finalAccountInfo).toEqual(accountInfo)
   })
 
-  it('should set and get transactions', async () => {
+  it('should set and get transactions', () => {
     let finalTransactions
     const { result } = renderHook(() => useVault())
     act(() => {

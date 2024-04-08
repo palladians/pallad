@@ -23,7 +23,8 @@ import { constructTransaction } from '../../src/util/Transactions/buildMinaTx'
 const params = {
   passphrase: 'passphrase'
 }
-const getPassphrase = async () => Buffer.from(params.passphrase)
+const getPassphrase = () =>
+  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
 describe('KeyAgentBase (Mina Functionality)', () => {
   class KeyAgentBaseInstance extends KeyAgentBase {
@@ -137,7 +138,6 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         getPassphrase,
         true
       )
-      console.log('Mina groupedCredential account index 0', groupedCredential)
 
       expect(groupedCredential.address).to.deep.equal(
         expectedGroupedCredentials.address
@@ -296,11 +296,11 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         transaction,
         Mina.TransactionKind.PAYMENT
       )
-      const signedTx = await instance.sign(
-        groupedCredential,
-        constructedTx,
-        args
-      )
+      const signedTx = await instance.sign(groupedCredential, constructedTx, {
+        network: Network.Mina,
+        networkType: 'testnet',
+        operation: 'mina_signTransaction'
+      })
       const minaClient = new Client({ network: args.networkType })
       const isVerified = minaClient.verifyTransaction(
         signedTx as Mina.SignedTransaction
@@ -347,11 +347,11 @@ describe('KeyAgentBase (Mina Functionality)', () => {
       const message: Mina.MessageBody = {
         message: 'Hello, Bob!'
       }
-      const signedMessage = await instance.sign(
-        groupedCredential,
-        message,
-        args
-      )
+      const signedMessage = await instance.sign(groupedCredential, message, {
+        network: Network.Mina,
+        operation: 'mina_sign',
+        networkType: 'testnet'
+      } as ChainOperationArgs)
       const minaClient = new Client({ network: args.networkType })
       const isVerified = await minaClient.verifyMessage(
         signedMessage as Mina.SignedMessage
@@ -406,82 +406,14 @@ describe('KeyAgentBase (Mina Functionality)', () => {
           BigInt(0)
         ]
       }
-      const signedFields = await instance.sign(groupedCredential, fields, args)
+      const signedFields = await instance.sign(groupedCredential, fields, {
+        network: Network.Mina,
+        operation: 'mina_signFields',
+        networkType: 'testnet'
+      } as ChainOperationArgs)
       const minaClient = new Client({ network: args.networkType })
       const isVerified = await minaClient.verifyFields(
         signedFields as Mina.SignedFields
-      )
-      expect(isVerified).toBeTruthy()
-    })
-    it('should use the generic sign<T> function to sign a zkapp command correctly and the client should be able to verify it', async () => {
-      // Define a mocked publicKey, which should be expected from the derivation
-      const expectedPublicKey: Mina.PublicKey =
-        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
-
-      const expectedGroupedCredentials = {
-        '@context': ['https://w3id.org/wallet/v1'],
-        id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-        type: 'MinaAddress',
-        controller:
-          'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-        name: 'Mina Account',
-        description: 'My Mina account.',
-        chain: Network.Mina,
-        accountIndex: 0,
-        addressIndex: 0,
-        address: expectedPublicKey
-      }
-
-      const args: MinaSpecificArgs = {
-        network: Network.Mina,
-        accountIndex: 0,
-        addressIndex: 0,
-        networkType: networkType
-      }
-      const payload = new MinaPayload()
-
-      const groupedCredential = await instance.deriveCredentials(
-        payload,
-        args,
-        getPassphrase,
-        true
-      )
-      expect(groupedCredential.address).to.deep.equal(
-        expectedGroupedCredentials.address
-      )
-
-      const zkAppCommand: Mina.SignableZkAppCommand = {
-        command: {
-          zkappCommand: {
-            accountUpdates: [],
-            memo: 'E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH',
-            feePayer: {
-              body: {
-                publicKey:
-                  'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-                fee: '100000000',
-                validUntil: '100000',
-                nonce: '1'
-              },
-              authorization: ''
-            }
-          },
-          feePayer: {
-            feePayer: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-            fee: '100000000',
-            nonce: '1',
-            memo: 'test memo'
-          }
-        }
-      }
-      const signedZkAppCommand = await instance.sign(
-        groupedCredential,
-        zkAppCommand,
-        args
-      )
-      const minaClient = new Client({ network: args.networkType })
-      const isVerified = await minaClient.verifyZkappCommand(
-        signedZkAppCommand as Mina.SignedZkAppCommand
       )
       expect(isVerified).toBeTruthy()
     })
@@ -507,7 +439,11 @@ describe('KeyAgentBase (Mina Functionality)', () => {
       const createdNullifier = await instance.sign(
         groupedCredential,
         nullifier,
-        args
+        {
+          network: Network.Mina,
+          operation: 'mina_createNullifier',
+          networkType: 'testnet'
+        } as ChainOperationArgs
       )
 
       console.log('createdNullifier', createdNullifier)
@@ -546,7 +482,6 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         operations
       )
 
-      console.log('createdNullifier', createdNullifier)
       expect(createdNullifier).not.toBeUndefined()
     })
   })

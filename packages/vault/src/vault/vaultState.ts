@@ -69,8 +69,8 @@ export type GlobalVaultActions = {
   getCurrentNetwork: () => string
   switchNetwork: (networkName: NetworkName) => Promise<void>
   getCredentials: (query: SearchQuery, props: string[]) => StoredCredential[]
-  getWalletAccountInfo: () => Promise<unknown>
-  getWalletTransactions: () => Promise<unknown[]>
+  getWalletAccountInfo: () => unknown
+  getWalletTransactions: () => unknown[]
   sign: (
     signable: ChainSignablePayload,
     args: ChainOperationArgs,
@@ -79,9 +79,9 @@ export type GlobalVaultActions = {
   constructTx: (
     transaction: Mina.TransactionBody,
     kind: Mina.TransactionKind
-  ) => Promise<unknown>
+  ) => unknown
   submitTx: (submitTxArgs: SubmitTxArgs) => Promise<unknown>
-  createWallet: (strength?: number) => Promise<CreateWalletReturn>
+  createWallet: (strength?: number) => CreateWalletReturn
   restoreWallet: <T extends ChainSpecificPayload>(
     payload: T,
     args: ChainSpecificArgs,
@@ -93,9 +93,9 @@ export type GlobalVaultActions = {
   ) => Promise<void>
   restartWallet: () => void
   // web provider APIs
-  getAccounts: () => Promise<string[]>
-  getBalance: (ticker?: string) => Promise<number>
-  getChainId: () => Promise<string>
+  getAccounts: () => string[]
+  getBalance: (ticker?: string) => number
+  getChainId: () => string
 }
 
 export type GlobalVaultStore = GlobalVaultState & GlobalVaultActions

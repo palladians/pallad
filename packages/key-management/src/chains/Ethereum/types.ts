@@ -1,6 +1,6 @@
 import { TransactionRequest } from 'ethers'
 
-import { ChainPublicKey, ChainSpecificPayload, Network } from '../../types'
+import { ChainSpecificPayload, Network } from '../../types'
 import { deriveEthereumPublicAddress } from './credentialDerivation'
 import { deriveEthereumPrivateKey } from './keyDerivation'
 
@@ -43,14 +43,15 @@ export type EthereumGroupedCredentials = {
 export class EthereumPayload implements ChainSpecificPayload {
   network = Network.Ethereum
 
-  async derivePublicKey(privateKey: Uint8Array): Promise<ChainPublicKey> {
-    return deriveEthereumPublicAddress(privateKey)
+  derivePublicKey(privateKey: Uint8Array) {
+    return new Promise<string>((resolve) =>
+      resolve(deriveEthereumPublicAddress(privateKey))
+    )
   }
-  async derivePrivateKey(
-    decryptedSeedBytes: Uint8Array,
-    args: EthereumSpecificArgs
-  ): Promise<string> {
-    return deriveEthereumPrivateKey(args, decryptedSeedBytes)
+  derivePrivateKey(decryptedSeedBytes: Uint8Array, args: EthereumSpecificArgs) {
+    return new Promise<string>((resolve) =>
+      resolve(deriveEthereumPrivateKey(args, decryptedSeedBytes))
+    )
   }
 }
 

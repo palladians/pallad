@@ -33,7 +33,8 @@ const PREGENERATED_MNEMONIC = [
 const params = {
   passphrase: 'passphrase'
 }
-const getPassphrase = async () => Buffer.from(params.passphrase)
+const getPassphrase = () =>
+  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
 describe('KeyAgentStore', () => {
   let randomMnemonic: string[]
@@ -42,7 +43,7 @@ describe('KeyAgentStore', () => {
   const keyAgentName = 'test key agent'
   const keyAgentName2 = 'test key agent 2'
 
-  beforeEach(async () => {
+  beforeEach(() => {
     randomMnemonic = generateMnemonicWords()
     agentArgs = {
       getPassphrase: getPassphrase,
@@ -61,7 +62,7 @@ describe('KeyAgentStore', () => {
     act(() => current.clear())
   })
 
-  it('should create an keyAgent store', async () => {
+  it('should create an keyAgent store', () => {
     const { result } = renderHook(() => useVault())
     expect(result.current.keyAgents).toEqual({})
   })
@@ -99,7 +100,7 @@ describe('KeyAgentStore', () => {
       keyAgentName,
       getPassphrase
     )
-    expect(restoredKeyAgent.serializableData).toEqual(
+    expect(restoredKeyAgent?.serializableData).toEqual(
       keyAgent?.serializableData
     )
   })

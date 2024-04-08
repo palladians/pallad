@@ -1,9 +1,20 @@
 import { ChainSignablePayload, GetPassphrase } from '@palladxyz/key-management'
 import { ChainOperationArgs } from '@palladxyz/key-management'
-import { useVault } from '@palladxyz/vault'
+import {
+  getSecurePersistence,
+  getSessionPersistence
+} from '@palladxyz/persistence'
+import { SearchQuery, SingleObjectState, useVault } from '@palladxyz/vault'
 
 import { chainIdToNetwork } from '../utils'
 import { IVaultService } from './types'
+
+export enum AuthorizationState {
+  ALLOWED = 'ALLOWED',
+  BLOCKED = 'BLOCKED'
+}
+
+export type ZkAppUrl = string
 
 export class VaultService implements IVaultService {
   private static instance: VaultService
@@ -12,82 +23,105 @@ export class VaultService implements IVaultService {
     console.log('exampleArg: ', exampleArg)
   }
 
-  public static getInstance(): VaultService {
+  public static getInstance() {
     if (!VaultService.instance) {
       VaultService.instance = new VaultService()
     }
     return VaultService.instance
   }
 
-  getAccounts(): string[] {
+  async getAccounts() {
+    await this.rehydrate()
     // TODO: handle errors
     const store = useVault.getState()
     const credentials = store.credentials
     const addresses = Object.values(credentials).map(
       (cred) => cred?.credential?.address
     )
-    return addresses.filter(
-      (address): address is string => address !== undefined
-    )
+    return addresses.filter((address) => address !== undefined) as string[]
   }
 
   async sign(
     signable: ChainSignablePayload,
     args: ChainOperationArgs,
     getPassphrase: GetPassphrase
-  ): Promise<unknown> {
+  ) {
+    await this.rehydrate()
     const store = useVault.getState()
     return store.sign(signable, args, getPassphrase)
   }
-  /*
-  async sign(
-    signable: ChainSignablePayload,
-    args: ChainOperationArgs,
-    //getPassphrase: GetPassphrase
-  ): Promise<unknown> {
-    const store = useVault.getState()
-    // request needs name, credential, signable, args
-    // get current keyagent name
-    // get current crednetial
-    const currentWallet = store.getCurrentWallet()
-    const keyAgentName = currentWallet.singleKeyAgentState?.name as string
-    const credential = currentWallet.credential.credential as GroupedCredentials
-    console.log('keyAgentName: ', keyAgentName)
-    console.log('credential: ', credential)
-    console.log('signable: ', signable)
-    console.log('args: ', args)
-    return store.request(keyAgentName, credential, signable, args)
-  }
-  */
 
-  getEnabled(): boolean {
+  async getState(params: SearchQuery, props?: string[]) {
+    await this.rehydrate()
     const store = useVault.getState()
-    return store.enabled
-  }
+    /*
+    // the searchObjects method operates with
+    // storedObjects = result.current.searchObjects(searchQuery, props)
+    // the search query can contain expected properties of the object
+    // and the optional props is the required output field
+    // for example:
 
-  setEnabled(enabled: boolean): void {
-    const store = useVault.getState()
-    store.setEnabled(enabled)
+      const searchQuery = {
+        type: 'KYCCredential',
+        chain: Network.Mina
+      }
+      // return props
+      const props = ['proof']
+    // this will return the KYC credential's `proof` field and nothing else
+    */
+    // TODO: we can also implement getObjects instead of searchObjs if necessary
+    if (props === undefined) {
+      return store.searchObjects(params)
+    } else {
+      return store.searchObjects(params, props)
+    }
   }
 
-  getBalance(): number {
+  async setState(state: SingleObjectState) {
+    await this.rehydrate()
+    const store = useVault.getState()
+    // add the given object to the store
+    store.setObject(state)
+  }
+
+  async getEnabled({ origin }: { origin: ZkAppUrl }) {
+    await this.rehydrate()
+    const store = useVault.getState()
+    // FIXME
+    return store.authorized[origin] === AuthorizationState.ALLOWED
+  }
+
+  async setEnabled({ origin }: { origin: ZkAppUrl }) {
+    await this.rehydrate()
+    const store = useVault.getState()
+    store.mutateZkAppPermission({
+      origin,
+      authorizationState: AuthorizationState.ALLOWED
+    })
+  }
+
+  async getBalance() {
+    await this.rehydrate()
     const store = useVault.getState()
     return Number(
       store.getCurrentWallet().accountInfo['MINA']!.balance.total / 1e9
     ) as number
   }
 
-  async getChainId(): Promise<string | undefined> {
+  async getChainId() {
+    await this.rehydrate()
     const store = useVault.getState()
     return store.getChainId()
   }
 
-  async getChainIds(): Promise<string[] | undefined> {
+  async getChainIds() {
+    await this.rehydrate()
     const store = useVault.getState()
     return store.getChainIds()
   }
 
-  switchNetwork(network: string): Promise<void> {
+  async switchNetwork(network: string) {
+    await this.rehydrate()
     const store = useVault.getState()
     // map chainId to network
     const networkName = chainIdToNetwork(network)
@@ -95,6 +129,34 @@ export class VaultService implements IVaultService {
       throw new Error(`Invalid chain id: ${network}`)
     }
     return store.switchNetwork(networkName)
+  }
+
+  async isLocked() {
+    await this.rehydrate()
+    const authenticated =
+      (await getSecurePersistence().getItem('foo')) === 'bar'
+    return !authenticated
+  }
+
+  async unlockWallet(spendingPassword: string) {
+    await getSessionPersistence().setItem('spendingPassword', spendingPassword)
+    await this.rehydrate()
+    const locked = await this.isLocked()
+    if (locked === true) {
+      console.error('incorrect password.')
+    } else {
+      await this.syncWallet()
+    }
+  }
+
+  async rehydrate() {
+    return await useVault.persist.rehydrate()
+  }
+
+  async syncWallet() {
+    await this.rehydrate()
+    const store = useVault.getState()
+    await store._syncWallet()
   }
 }
 

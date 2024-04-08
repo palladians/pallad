@@ -7,9 +7,11 @@ This package has been heavily inspired by the [WalletConnect Monorepo](https://g
 This is a typescript package that allows applications to interact with the wallet.
 
 ## Current Design (POC)
+
 `UniversalProvider` is a more generic class that allows users to interact with a specific chain-provider, currently there is only `MinaProvider` which is an EIP-1193-like provider for Pallad and abstracts over the `vault` using `VaultService` that can fetch wallet or network information but also help perform wallet specific operations (like signing) all with prompting the user for permission.
 
 ### Example Flow
+
 `UniversalProvider` --> `{chain}Provider` --> `VaultService` or `MinaProvider` --> `VaultService`.
 
 ## Features
@@ -31,22 +33,23 @@ Create an instance of `MinaProvider`:
 
 ```typescript
 const providerOptions = {
-      projectId: '1234',
-      chains: ['Mina Devnet']
-    }
-const minaProvider = MinaProvider.init(providerOptions);
+  projectId: '1234',
+  chains: ['Mina Devnet']
+}
+const minaProvider = MinaProvider.init(providerOptions)
 ```
 
 Users can also initialize this provider with a set of unauthorized methods if they desire to limit the specific methods to a zkApp can access.
 
 To do this:
+
 ```typescript
 const providerOptions = {
-      projectId: '1234',
-      chains: ['Mina Devnet']
-    }
+  projectId: '1234',
+  chains: ['Mina Devnet']
+}
 const unauthorizedMethods = ['mina_SignFields']
-const minaProvider = MinaProvider.init(providerOptions, unauthorizedMethods);
+const minaProvider = MinaProvider.init(providerOptions, unauthorizedMethods)
 ```
 
 ### Connecting to the Wallet
@@ -54,7 +57,7 @@ const minaProvider = MinaProvider.init(providerOptions, unauthorizedMethods);
 To connect to the wallet's provider:
 
 ```typescript
-await minaProvider.enable();
+await minaProvider.enable()
 ```
 
 ### Account Handling
@@ -62,7 +65,7 @@ await minaProvider.enable();
 Retrieve accounts:
 
 ```typescript
-const accounts = minaProvider.requestAccounts();
+const accounts = minaProvider.requestAccounts()
 ```
 
 ### Signing Transactions
@@ -70,8 +73,13 @@ const accounts = minaProvider.requestAccounts();
 To sign a transaction:
 
 ```typescript
-const transactionPayload = { /* ... */ };
-const signedTransaction = await minaProvider.request({ method: 'mina_signTransaction', params: transactionPayload });
+const transactionPayload = {
+  /* ... */
+}
+const signedTransaction = await minaProvider.request({
+  method: 'mina_signTransaction',
+  params: transactionPayload
+})
 ```
 
 ### Listening to Events
@@ -80,8 +88,8 @@ Listen to wallet events:
 
 ```typescript
 minaProvider.on('connect', (info) => {
-  console.log('Connected to chain:', info.chainId);
-});
+  console.log('Connected to chain:', info.chainId)
+})
 ```
 
 ## Error Handling
@@ -90,8 +98,8 @@ Handle errors gracefully during operations:
 
 ```typescript
 try {
-  await minaProvider.connect();
+  await minaProvider.connect()
 } catch (error) {
-  console.error('Connection error:', error.message);
+  console.error('Connection error:', error.message)
 }
 ```

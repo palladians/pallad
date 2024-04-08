@@ -16,8 +16,16 @@ export type requestSignableData = {
   data: MinaSignablePayload
 }
 
+export type requestSignableTransaction = {
+  data: { transaction: MinaSignablePayload }
+}
+
 export type requestData = {
   data: number[] | bigint[]
+}
+
+export type requestingStateData = {
+  data: RequestArguments
 }
 
 export interface MinaRpcProviderMap {
@@ -86,5 +94,5 @@ export interface IMinaProviderBase {
   // make an Ethereum RPC method call.
   request(args: RequestArguments): Promise<unknown>
   // legacy alias for EIP-1102
-  enable(): Promise<ProviderAccounts>
+  enable({ origin }: { origin: string }): Promise<ProviderAccounts>
 }

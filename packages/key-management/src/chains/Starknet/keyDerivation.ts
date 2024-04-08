@@ -3,10 +3,10 @@ import * as starknet from 'micro-starknet'
 
 import { StarknetSpecificArgs } from './types'
 
-export async function deriveStarknetPrivateKey(
+export function deriveStarknetPrivateKey(
   args: StarknetSpecificArgs,
   decryptedSeedBytes: Uint8Array
-): Promise<string> {
+) {
   const { addressIndex, ethAddress, layer, application } = args
   // Create an HDKey from the root private key
   const rootKey = HDKey.fromMasterSeed(decryptedSeedBytes)
