@@ -89,7 +89,10 @@ describe('Guard functions tests', () => {
       // missing 'command'
     }
 
-    expect(isZkAppTransaction(zkAppCommand)).toBeTruthy()
-    expect(isZkAppTransaction(invalidPayload)).not.toBeTruthy()
+    const a = isZkAppTransaction(zkAppCommand)
+    console.log('a which is expected to be true is:', a)
+
+    expect(isZkAppTransaction(zkAppCommand)).toBe(true)
+    expect(isZkAppTransaction(invalidPayload)).toBe(false)
   })
 })

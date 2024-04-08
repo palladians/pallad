@@ -296,11 +296,11 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         transaction,
         Mina.TransactionKind.PAYMENT
       )
-      const signedTx = await instance.sign(
-        groupedCredential,
-        constructedTx,
-        args
-      )
+      const signedTx = await instance.sign(groupedCredential, constructedTx, {
+        network: Network.Mina,
+        networkType: 'testnet',
+        operation: 'mina_signTransaction'
+      })
       const minaClient = new Client({ network: args.networkType })
       const isVerified = minaClient.verifyTransaction(
         signedTx as Mina.SignedTransaction
