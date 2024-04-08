@@ -1,4 +1,4 @@
-import { Multichain } from '@palladxyz/multi-chain-core'
+import { Mina } from '@palladxyz/mina-core'
 
 import { useAccount } from '@/common/hooks/use-account'
 
@@ -6,8 +6,7 @@ import { structurizeTransactions } from '../utils/structurize-transactions'
 import { TxTile } from './tx-tile'
 
 interface TransactionsListProps {
-  // TODO: Refactor to not use multichain package and use new signing args
-  transactions: Multichain.MultiChainTransactionBody[]
+  transactions: Mina.TransactionBody[]
 }
 
 export const TransactionsList = ({ transactions }: TransactionsListProps) => {

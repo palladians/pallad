@@ -6,7 +6,6 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { AccountInfo, Mina, Networks } from '@palladxyz/mina-core'
-import { Multichain } from '@palladxyz/multi-chain-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { createMinaProvider } from '@palladxyz/providers'
 import { produce } from 'immer'
@@ -33,9 +32,7 @@ const _validateCurrentWallet = (wallet: SingleCredentialState | null) => {
   if (!wallet || !credential?.address)
     throw new WalletError('Invalid current wallet or address')
 }
-const _validateCurrentNetwork = (
-  network: Multichain.MultiChainNetworks | null
-) => {
+const _validateCurrentNetwork = (network: Network.Mina | null) => {
   if (!network) throw new NetworkError('Invalid current network')
 }
 
@@ -252,8 +249,8 @@ export const useVault = create<
         const { getCurrentWallet, getCurrentNetwork, getAccountsInfo } = get()
         const currentWallet = getCurrentWallet()
         _validateCurrentWallet(currentWallet.credential)
-        const currentNetwork = getCurrentNetwork() as Networks
-        _validateCurrentNetwork(currentNetwork)
+        const currentNetwork = getCurrentNetwork()
+        _validateCurrentNetwork(currentNetwork as Network.Mina)
         const walletCredential = currentWallet?.credential
           .credential as GroupedCredentials
         return (

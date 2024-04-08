@@ -242,9 +242,6 @@ importers:
       '@palladxyz/mina-graphql':
         specifier: ^0.0.1
         version: link:../mina-graphql
-      '@palladxyz/multi-chain-core':
-        specifier: ^0.0.1
-        version: link:../multi-chain-core
       '@palladxyz/offchain-data':
         specifier: ^1.0.0
         version: link:../offchain-data
@@ -637,25 +634,6 @@ importers:
         specifier: ^2.0.11
         version: 2.0.11(typescript@5.3.3)
 
-  packages/multi-chain-core:
-    dependencies:
-      '@palladxyz/mina-core':
-        specifier: ^0.0.1
-        version: link:../mina-core
-      '@palladxyz/mina-graphql':
-        specifier: ^0.0.1
-        version: link:../mina-graphql
-      '@palladxyz/util':
-        specifier: ^0.0.1
-        version: link:../util
-    devDependencies:
-      '@palladxyz/common':
-        specifier: ^1.0.0
-        version: link:../common
-      '@types/mocha':
-        specifier: ^10.0.6
-        version: 10.0.6
-
   packages/offchain-data:
     dependencies:
       swr:
@@ -806,9 +784,6 @@ importers:
       '@palladxyz/mina-graphql':
         specifier: '*'
         version: link:../mina-graphql
-      '@palladxyz/multi-chain-core':
-        specifier: '*'
-        version: link:../multi-chain-core
       '@palladxyz/persistence':
         specifier: '*'
         version: link:../persistence
@@ -876,9 +851,6 @@ importers:
       '@palladxyz/mina-graphql':
         specifier: ^0.0.1
         version: link:../mina-graphql
-      '@palladxyz/multi-chain-core':
-        specifier: ^0.0.1
-        version: link:../multi-chain-core
       '@palladxyz/persistence':
         specifier: '*'
         version: link:../persistence

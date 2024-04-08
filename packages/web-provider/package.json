@@ -21,7 +21,6 @@
     "@palladxyz/key-management": "^0.0.1",
     "@palladxyz/mina-core": "^0.0.1",
     "@palladxyz/mina-graphql": "^0.0.1",
-    "@palladxyz/multi-chain-core": "^0.0.1",
     "@palladxyz/persistence": "*",
     "@palladxyz/vault": "^0.0.1",
     "mina-signer": "^2.1.1",
