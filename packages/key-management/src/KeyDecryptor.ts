@@ -1,5 +1,3 @@
-// KeyDecryptor.ts
-
 import { emip3decrypt } from './emip3'
 import * as errors from './errors'
 import { getPassphraseRethrowTypedError } from './InMemoryKeyAgent'
