@@ -9,7 +9,6 @@ import {
 } from '@palladxyz/key-management'
 import { GetPassphrase } from '@palladxyz/key-management'
 import { AccountInfo, Mina, SubmitTxArgs } from '@palladxyz/mina-core'
-import { Multichain } from '@palladxyz/multi-chain-core'
 import { ProviderConfig } from '@palladxyz/providers'
 
 import {
@@ -42,7 +41,7 @@ export type GlobalVaultState = {
   currentAccountIndex: number
   currentAddressIndex: number
   chain: Network
-  walletNetwork: Multichain.MultiChainNetworks
+  walletNetwork: Mina.Networks
   walletName: string
   knownAccounts: string[]
   chainIds: string[]

@@ -37,8 +37,6 @@
     "@jitsu/jitsu-react": "^1.7.2",
     "@palladxyz/key-management": "^0.0.1",
     "@palladxyz/mina-core": "^0.0.1",
-    "@palladxyz/mina-graphql": "^0.0.1",
-    "@palladxyz/multi-chain-core": "^0.0.1",
     "@palladxyz/offchain-data": "^1.0.0",
     "@palladxyz/persistence": "^1.0.0",
     "@palladxyz/vault": "^0.0.1",

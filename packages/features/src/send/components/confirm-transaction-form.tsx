@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChainOperationArgs } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
-import { Multichain } from '@palladxyz/multi-chain-core'
 import { useVault } from '@palladxyz/vault'
 import { addHours } from 'date-fns'
 import { Loader2Icon } from 'lucide-react'
@@ -28,7 +27,6 @@ import { cn } from '@/lib/utils'
 import { ConfirmTransactionSchema } from './confirm-transaction-form.schema'
 
 type ConfirmTransactionData = z.infer<typeof ConfirmTransactionSchema>
-// TODO: Refactor to not use multichain package and use new signing args
 export const ConfirmTransactionForm = () => {
   const { track } = useAnalytics()
   const [submitting, setSubmitting] = useState(false)
@@ -63,7 +61,7 @@ export const ConfirmTransactionForm = () => {
   const amount = BigInt(rawAmount * 1_000_000_000).toString()
   const fee = BigInt(rawFee * 1_000_000_000).toString()
   const onSubmit: SubmitHandler<ConfirmTransactionData> = async (data) => {
-    const transaction: Multichain.MultiChainTransactionBody = {
+    const transaction: Mina.TransactionBody = {
       to: outgoingTransaction.to,
       from: publicKey,
       memo: outgoingTransaction.memo,

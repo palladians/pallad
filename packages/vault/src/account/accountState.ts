@@ -1,7 +1,6 @@
 import { ChainAddress } from '@palladxyz/key-management'
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 
-// TODO: remove the multichain package from this file
 export type SingleAccountState = {
   accountInfo: Record<string, AccountInfo>
   transactions: Record<string, Mina.TransactionBody[]>
@@ -16,11 +15,7 @@ export type AccountState = {
 
 // TODO: refactor to integrate custom tokens
 export type AccountActions = {
-  ensureAccount: (
-    // ✅ this should just be a string no need for multichain
-    network: string,
-    address: ChainAddress
-  ) => void
+  ensureAccount: (network: string, address: ChainAddress) => void
   // todo: this should be `setAccountsInfo` because it does multiple accounts
   setAccountInfo: (
     // ✅ this should be a string
@@ -39,45 +34,31 @@ export type AccountActions = {
     transactions: Record<string, Mina.TransactionBody[]>
   ) => void
   getAccountsInfo: (
-    // ✅ this should just be a string no need for multichain
     network: string,
     address: ChainAddress
   ) => SingleAccountState
   getAccountInfo: (
-    // ✅ this should just be a string no need for multichain & change to networkName
     network: string,
     address: ChainAddress,
     ticker: string // we can add a ticker here to get the account info for a specific token
   ) => AccountInfo
 
   getTransactions: (
-    // this should just be a string no need for multichain
     network: string,
     address: ChainAddress,
     ticker: string // we can add a ticker here to get the account info for a specific token
-    // remove multichain
   ) => Mina.TransactionBody[]
 
   getTransaction: (
-    // this should just be a string no need for multichain
     network: string,
     address: ChainAddress,
     hash: string,
     ticker: string
-    // no need for multichain
   ) => Mina.TransactionBody | undefined
 
-  addAccount: (
-    // this should just be a string no need for multichain
-    network: string,
-    address: ChainAddress
-  ) => void
+  addAccount: (network: string, address: ChainAddress) => void
 
-  removeAccount: (
-    // this should just be a string no need for multichain
-    network: string,
-    address: ChainAddress
-  ) => void
+  removeAccount: (network: string, address: ChainAddress) => void
 
   clear: () => void
 }

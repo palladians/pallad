@@ -53,7 +53,7 @@ jobs:
       - name: Wait for Mina Network readiness
         uses: o1-labs/wait-for-mina-network-action@v1
         with:
-          mina-graphql-port: 8080
+          mina-graphql-port: 3085
 
       - name: Check Mina Accounts Manager readiness
         run: |
@@ -77,31 +77,17 @@ jobs:
                 "variables": { "publicKey": "'"${PUBLIC_KEY}"'" }
               }' \
               $NODE_URL
-
-      - name: Fetch Transactions and Set Environment Variables
-        env:
-          PUBLIC_KEY: ${{ env.PUBLIC_KEY }}
-          ARCHIVE_NODE_URL: http://localhost:8282
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-              --data '{ 
-                "query": "query Transactions($address: String!, $limit: Int) { transactions(query: { canonical: true, OR: [{ to: $address }, { from: $address }] } limit: $limit sortBy: DATETIME_DESC) { amount to token kind isDelegation hash from fee failureReason dateTime blockHeight } }",
-                "variables": { "address": "'"${PUBLIC_KEY}"'", "limit": 1 }
-              }' \
-              $ARCHIVE_NODE_URL
-
             
       - name: Run Account Provider Tests
         env:
           PUBLIC_KEY: ${{ env.PUBLIC_KEY }}
           NODE_URL: http://127.0.0.1:8080/graphql
-          ARCHIVE_NODE_URL:  http://127.0.0.1:8282/graphql
           TX_HASH:  ${{ env.TX_HASH }}
           TX_ID:  ${{ env.TX_ID }}
           
         run: |
-          cd packages/mina-graphql
-          pnpm test:unit test/Providers/AccountInfoProvider.test.ts
+          cd packages/providers/test/mina-node/l1-mina-node/individual-providers
+          pnpm test:unit account-info-provider.test.ts 
 
       - name: Upload Mina logs
         if: always()

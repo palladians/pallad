@@ -1,4 +1,4 @@
-import { Multichain } from '@palladxyz/multi-chain-core'
+import { Mina } from '@palladxyz/mina-core'
 import dayjs from 'dayjs'
 import { groupBy, map, pipe } from 'rambda'
 
@@ -13,8 +13,7 @@ export const structurizeTransaction = ({
   tx,
   walletPublicKey
 }: {
-  // TODO: remove the multichain package from this file
-  tx: Multichain.MultiChainTransactionBody
+  tx: Mina.TransactionBody
   walletPublicKey: string
 }) => ({
   ...tx,
@@ -30,11 +29,11 @@ export const structurizeTransaction = ({
 })
 
 export const structurizeTransactions = ([txs, walletPublicKey]: [
-  Multichain.MultiChainTransactionBody[],
+  Mina.TransactionBody[],
   string
 ]) =>
   pipe(
-    map((tx: Multichain.MultiChainTransactionBody) =>
+    map((tx: Mina.TransactionBody) =>
       structurizeTransaction({ tx, walletPublicKey })
     ),
     groupBy((tx) => tx.date)
