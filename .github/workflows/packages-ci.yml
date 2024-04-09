@@ -86,7 +86,7 @@ jobs:
           TX_ID:  ${{ env.TX_ID }}
           
         run: |
-          cd packages/providers/test/mina-node/individual-providers
+          cd packages/providers/test/mina-node/l1-mina-node/individual-providers
           pnpm test:unit account-info-provider.test.ts 
 
       - name: Upload Mina logs
