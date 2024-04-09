@@ -78,7 +78,7 @@ jobs:
               }' \
               $NODE_URL
 
-      - name: Fetch Transactions and Set Environment Variables
+      - name: Fetch Transactions and Set Environment Variables (this doesn't work, 8282 is not an archive node)
         env:
           PUBLIC_KEY: ${{ env.PUBLIC_KEY }}
           ARCHIVE_NODE_URL: http://localhost:8282
@@ -100,8 +100,8 @@ jobs:
           TX_ID:  ${{ env.TX_ID }}
           
         run: |
-          cd packages/mina-graphql
-          pnpm test:unit test/Providers/AccountInfoProvider.test.ts
+          cd packages/providers/test/mina-node/individual-providers
+          pnpm test:unit account-info-provider.test.ts 
 
       - name: Upload Mina logs
         if: always()
