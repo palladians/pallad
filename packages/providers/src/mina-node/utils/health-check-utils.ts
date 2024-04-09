@@ -15,6 +15,8 @@ export const healthCheck = async (
   url: string,
   query: string = healthCheckQuery
 ): Promise<{ ok: boolean; message: string }> => {
+  if (url === '') return { ok: true, message: 'No url provided.' }
+
   const request = createGraphQLRequest(url)
 
   const result = await request(query)

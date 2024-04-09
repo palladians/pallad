@@ -22,6 +22,10 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
       providerName: 'mina-node',
       url: 'http://sequencer-zeko-dev.dcspark.io/graphql'
     },
+    archiveNodeEndpoint: {
+      providerName: 'mina-node',
+      url: ''
+    },
     networkName: 'Zeko Devnet',
     chainId: '...' // todo: fetch chainId from a provider
   }
