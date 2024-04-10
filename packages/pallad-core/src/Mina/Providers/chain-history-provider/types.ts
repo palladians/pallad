@@ -1,14 +1,15 @@
+import { Mina } from '@palladxyz/mina-core'
 import { Range } from '@palladxyz/util'
 
-import { Mina, Provider } from '../..'
+import { Provider } from '../..'
 
 export interface TransactionsByAddressesArgs {
   addresses: Mina.PaymentAddress[]
   pagination?: Mina.PaginationArgs
-  blockRange?: Range<Mina.BlockNo>
+  blockRange?: Range<typeof Mina.BlockNo>
 }
 
-export type TransactionsByIdsArgs = { ids: Mina.TransactionId[] }
+export type TransactionsByIdsArgs = { ids: Mina.TxId[] }
 export type PaginatedTransaction = Mina.Paginated<Mina.TransactionBody>
 
 export interface ChainHistoryProvider extends Provider {
@@ -30,7 +31,7 @@ export interface ChainHistoryProvider extends Provider {
   /**
    * Gets the transactions matching the provided hashes.
    *
-   * @param {Mina.TransactionId[]} ids array of transaction ids
+   * @param {Mina.TxId[]} ids array of transaction ids
    * @returns {Mina.TransactionBody[]} an array of transactions
    */
   transactionsByHashes: (

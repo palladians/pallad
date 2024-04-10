@@ -1,11 +1,12 @@
-import { Paginated, TransactionBody } from '../Mina'
+import { Mina } from '@palladxyz/mina-core'
+
 import { AccountInfo, AccountInfoArgs } from './account-info-provider'
 import {
   TransactionsByAddressesArgs,
   TransactionsByIdsArgs
 } from './chain-history-provider'
 import { DaemonStatus } from './daemon-status-provider'
-import { HealthCheckResponse } from './Provider'
+import { HealthCheckResponse } from './provider'
 import { TxStatus, TxStatusArgs } from './tx-status-provider'
 import { SubmitTxArgs, SubmitTxResult } from './tx-submit-provider'
 
@@ -31,11 +32,11 @@ export interface UnifiedMinaProviderType {
   getTransactions(
     args: TransactionsByAddressesArgs
   ):
-    | Promise<Paginated<TransactionBody> | undefined>
-    | Promise<TransactionBody[] | undefined>
+    | Promise<Mina.Paginated<Mina.TransactionBody> | undefined>
+    | Promise<Mina.TransactionBody[] | undefined>
   getTransaction?(
     args: TransactionsByIdsArgs
-  ): Promise<TransactionBody[] | undefined>
+  ): Promise<Mina.TransactionBody[] | undefined>
 
   getDaemonStatus?(): Promise<DaemonStatus>
 

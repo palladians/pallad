@@ -1,4 +1,4 @@
-import { BorrowedTypes } from '../../'
+import { BorrowedTypes } from '..'
 
 export type SignedZkAppCommand =
   BorrowedTypes.Signed<BorrowedTypes.ZkappCommand>

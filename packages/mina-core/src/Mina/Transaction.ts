@@ -1,6 +1,6 @@
 import { InvalidStringError, OpaqueString } from '@palladxyz/util'
 
-import { BorrowedTypes } from '../../'
+import { BorrowedTypes } from '..'
 
 /**
  * Represents the body of a transaction.
@@ -54,17 +54,17 @@ export type SignedTransaction =
 /**
  * transaction hash as base64 string
  */
-export type TransactionId = OpaqueString<'TransactionId'>
+export type TxId = OpaqueString<'TransactionId'>
 
 /**
  * @param {string} value transaction hash as base64 string
  * @throws InvalidStringError
  */
-export const TransactionId = (value: string): TransactionId => {
+export const TransactionId = (value: string): TxId => {
   if (!isBase64(value)) {
     throw new InvalidStringError('Not a valid base64 string')
   }
-  return value as TransactionId
+  return value as TxId
 }
 
 function isBase64(value: string): boolean {

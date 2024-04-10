@@ -1,4 +1,4 @@
-import { BorrowedTypes } from '../../'
+import { BorrowedTypes } from '../..'
 import { TransactionBody, TransactionKind } from '../../Mina'
 import { Provider } from '../Provider'
 

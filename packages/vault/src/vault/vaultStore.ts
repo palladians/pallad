@@ -5,7 +5,7 @@ import {
   GroupedCredentials,
   Network
 } from '@palladxyz/key-management'
-import { AccountInfo, Mina, Networks } from '@palladxyz/mina-core'
+import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { createMinaProvider } from '@palladxyz/providers'
 import { produce } from 'immer'
@@ -272,7 +272,7 @@ export const useVault = create<
           throw new AddressError(
             'Wallet address is undefined in getTransactions method'
           )
-        const currentNetwork = getCurrentNetwork() as Networks
+        const currentNetwork = getCurrentNetwork() as Mina.Networks
         if (!currentNetwork)
           throw new NetworkError(
             'Current network is null, empty or undefined in getTransactions method'
@@ -423,7 +423,7 @@ export const useVault = create<
         } = get()
         const currentWallet = getCurrentWallet()
         const currentNetwork = getCurrentNetwork()
-        removeAccount(currentNetwork as Networks, '')
+        removeAccount(currentNetwork as Mina.Networks, '')
         removeKeyAgent(keyAgentName)
         removeCredential(currentWallet.credential.credentialName)
       },
