@@ -18,9 +18,9 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
+    "@palladxyz/key-management": "^0.0.1",
     "@palladxyz/mina-core": "^0.0.1",
     "@palladxyz/util": "^0.0.1",
-    "@palladxyz/key-management": "^0.0.1",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "events": "^3.3.0",
@@ -29,6 +29,7 @@
     "json-bigint": "^1.0.0",
     "mina-signer": "^2.1.1",
     "subscriptions-transport-ws": "^0.11.0",
+    "viem": "^2.9.15",
     "ws": "^8.15.1"
   },
   "devDependencies": {
