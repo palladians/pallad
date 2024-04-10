@@ -31,7 +31,7 @@ describe.skip('Obscura Chain History Provider (Functional)', () => {
         addresses: [publicKey]
       })) as Mina.TransactionBody[]
       // TODO: check why pageResults is undefined
-      console.log('Obscura Chain History Provider Response', response)
+
       // TODO: investigate pagination
       const transaction = response[0]
 

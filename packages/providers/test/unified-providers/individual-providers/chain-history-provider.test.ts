@@ -43,12 +43,8 @@ describe('Unified Chain History Provider (Functional)', () => {
         const response = (await provider.transactionsByAddresses({
           addresses: [publicKey]
         })) as Mina.TransactionBody[]
-        console.log('Mina Explorer Chain History Provider Response', response)
+
         const transaction = response[0]
-        console.log(
-          'Mina Explorer Chain History Provider Response',
-          transaction
-        )
 
         expect(transaction).toHaveProperty('amount')
         expect(transaction).toHaveProperty('blockHeight')
