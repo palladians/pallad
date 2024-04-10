@@ -68,7 +68,6 @@ export const MnemonicInputView = () => {
     }
     try {
       setRestoring(true)
-      console.log('>>>WOOT99')
       await restoreWallet(
         new MinaPayload(),
         restoreArgs,

@@ -139,8 +139,8 @@ importers:
         version: 3.22.4
     devDependencies:
       '@crxjs/vite-plugin':
-        specifier: ^2.0.0-beta.21
-        version: 2.0.0-beta.21
+        specifier: ^2.0.0-beta.23
+        version: 2.0.0-beta.23
       '@esbuild-plugins/node-globals-polyfill':
         specifier: ^0.2.3
         version: 0.2.3(esbuild@0.20.2)
@@ -2268,8 +2268,8 @@ packages:
     engines: {node: '>=13'}
     dev: true
 
-  /@crxjs/vite-plugin@2.0.0-beta.21:
-    resolution: {integrity: sha512-kSXgHHqCXASqJ8NmY94+KLGVwdtkJ0E7KsRQ+vbMpRliJ5ze0xnSk0l41p4txlUysmEoqaeo4Xb7rEFdcU2zjQ==}
+  /@crxjs/vite-plugin@2.0.0-beta.23:
+    resolution: {integrity: sha512-AO+VYhtNZ1fITq/sc54FZpTtFvHR+gJwFGiWTGKs07bwYzzZFdF0sYeiFgZiEjaNkddkAzuM4F4lgOmCm69YUw==}
     dependencies:
       '@rollup/pluginutils': 4.2.1
       '@webcomponents/custom-elements': 1.6.0

@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && node scripts/append-oninstall.cjs",
     "build:firefox": "web-ext build --source-dir=dist",
     "build:safari": "xcrun safari-web-extension-converter dist --app-name Pallad --bundle-identifier xyz.pallad.app --swift --no-prompt --force --macos-only --no-open",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -33,7 +33,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "^2.0.0-beta.21",
+    "@crxjs/vite-plugin": "^2.0.0-beta.23",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
