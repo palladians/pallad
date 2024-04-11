@@ -24,6 +24,7 @@ export default defineConfig({
         app: 'app.html',
         index: 'index.html',
         prompt: 'prompt.html',
+        welcome: 'welcome.html',
         inject: 'public/pallad_rpc.js'
       }
     },
