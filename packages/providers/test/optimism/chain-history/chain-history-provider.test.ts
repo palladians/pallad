@@ -1,6 +1,8 @@
 import { Optimism } from '../../../src'
 
-const nodeUrl = process.env['ARCHIVE_NODE_URL'] || 'https://sepolia.optimism.io'
+const nodeUrl =
+  process.env['OPTIMISM_ARCHIVE_NODE_URL'] ||
+  'wss://optimism-sepolia-rpc.publicnode.com'
 const transactionHash =
   process.env['TX_HASH'] ||
   '0x105bf755a57f5f1e70784dd2ce811795e44a443608879e499d459098fb80f560'

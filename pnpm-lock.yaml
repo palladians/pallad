@@ -693,8 +693,8 @@ importers:
         specifier: ^0.11.0
         version: 0.11.0(graphql@16.8.1)
       viem:
-        specifier: ^2.9.15
-        version: 2.9.15(typescript@5.3.3)
+        specifier: ^2.9.16
+        version: 2.9.16(typescript@5.3.3)
       ws:
         specifier: ^8.15.1
         version: 8.16.0
@@ -15696,8 +15696,8 @@ packages:
       d3-timer: 3.0.1
     dev: false
 
-  /viem@2.9.15(typescript@5.3.3):
-    resolution: {integrity: sha512-7kcmHqybc3JhpjL8gKY7YxBYpZt1//qhoTZIU5Ez9JdyRCnYMMnJu20s7wd7Gv6a3zPbq8jV8dCp94a/NLJJcA==}
+  /viem@2.9.16(typescript@5.3.3):
+    resolution: {integrity: sha512-FQRfN4G7uKEUs5DYvVrH/kZmTkwcSDpTBxnadpwG1EEP8nHm57WDpSaGN7PwSPVgJ6rMo5MENT5hgnqaNTlb2w==}
     peerDependencies:
       typescript: '>=5.0.4'
     peerDependenciesMeta:

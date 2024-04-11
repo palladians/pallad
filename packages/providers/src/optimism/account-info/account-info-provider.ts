@@ -5,11 +5,12 @@ import {
 } from '@palladxyz/mina-core'
 import {
   Address,
+  Chain,
   createPublicClient,
   formatEther,
   GetBalanceParameters,
   GetTransactionCountParameters,
-  http
+  webSocket
 } from 'viem'
 import { optimismSepolia } from 'viem/chains'
 
@@ -20,8 +21,8 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
     args: AccountInfoArgs
   ): Promise<Record<string, AccountInfo>> => {
     const client = createPublicClient({
-      chain: optimismSepolia,
-      transport: http(url)
+      chain: optimismSepolia as Chain,
+      transport: webSocket(url)
     })
 
     const balanceVariables: GetBalanceParameters = {

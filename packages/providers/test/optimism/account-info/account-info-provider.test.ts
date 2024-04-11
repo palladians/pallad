@@ -1,10 +1,8 @@
-import { createPublicClient, http } from 'viem'
-import { mainnet } from 'viem/chains'
-
 import { Optimism } from '../../../src'
 
 const nodeUrl =
-  process.env['NODE_URL'] || 'https://optimism-sepolia-rpc.publicnode.com'
+  process.env['OPTIMISM_NODE_URL'] ||
+  'wss://optimism-sepolia-rpc.publicnode.com'
 const publicKey =
   process.env['PUBLIC_KEY'] || '0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9'
 
@@ -25,17 +23,9 @@ describe('Optimism Account Info Provider (Functional)', () => {
   })
 
   describe('getAccountInfo', () => {
-    it('should fetch data with viem', async () => {
-      const client = createPublicClient({
-        chain: mainnet,
-        transport: http()
-      })
-
-      const blockNumber = await client.getBlockNumber()
-      console.log('blocknumber', blockNumber)
-    })
     it('should return account info for a valid public key', async () => {
       // This test now depends on the actual response from the server
+      console.log(`Making request to URL: ${nodeUrl}`)
       const response = await provider.getAccountInfo({ publicKey })
       console.log('Optimism AccountInfo Provider Response', response)
       expect(response).toHaveProperty('ETH')

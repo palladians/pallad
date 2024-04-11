@@ -4,7 +4,13 @@ import {
   TransactionsByAddressesArgs,
   TransactionsByIdsArgs
 } from '@palladxyz/mina-core'
-import { createPublicClient, GetTransactionParameters, Hash, http } from 'viem'
+import {
+  Chain,
+  createPublicClient,
+  GetTransactionParameters,
+  Hash,
+  webSocket
+} from 'viem'
 import { optimismSepolia } from 'viem/chains'
 
 import { healthCheckOptimism } from '../utils'
@@ -27,8 +33,8 @@ export const createChainHistoryProvider = (
     args: TransactionsByIdsArgs
   ): Promise<Mina.TransactionBody[]> => {
     const client = createPublicClient({
-      chain: optimismSepolia,
-      transport: http(url)
+      chain: optimismSepolia as Chain,
+      transport: webSocket(url)
     })
     const transactionArgs: GetTransactionParameters = {
       hash: args.ids[0] as Hash

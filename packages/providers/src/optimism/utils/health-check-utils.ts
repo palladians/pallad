@@ -1,12 +1,12 @@
-import { createPublicClient, http } from 'viem'
+import { Chain, createPublicClient, webSocket } from 'viem'
 import { optimismSepolia } from 'viem/chains'
 
 export const healthCheckOptimism = async (
   url: string
 ): Promise<{ ok: boolean; message: string }> => {
   const client = createPublicClient({
-    chain: optimismSepolia,
-    transport: http(url)
+    chain: optimismSepolia as Chain,
+    transport: webSocket(url)
   })
 
   const result = await client.getChainId()
