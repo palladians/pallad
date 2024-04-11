@@ -13,7 +13,7 @@ export default defineConfig({
     crx({ manifest }),
     topLevelAwait(),
     nodePolyfills({ protocolImports: true, globals: { Buffer: true } }),
-    svgr({ exportAsDefault: true })
+    svgr()
   ],
   define: {
     'global.browser': {}
