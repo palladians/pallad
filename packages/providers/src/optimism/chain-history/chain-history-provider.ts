@@ -15,6 +15,7 @@ import { optimismSepolia } from 'viem/chains'
 
 import { healthCheckOptimism } from '../utils'
 
+// TODO: remove Mina types from providers & make viem providers in pallad-core
 export const createChainHistoryProvider = (
   url: string
 ): ChainHistoryProvider => {
