@@ -8,9 +8,9 @@ import { DEFAULT_NETWORK, KeyAgents, useVault } from '@palladxyz/vault'
 import { Loader2Icon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useMixpanel } from 'react-mixpanel-browser'
 import { useNavigate } from 'react-router-dom'
 
-import { useAnalytics } from '@/common/hooks/use-analytics'
 import { useAppStore } from '@/common/store/app'
 import { useOnboardingStore } from '@/common/store/onboarding'
 import { ButtonArrow } from '@/components/button-arrow'
@@ -25,7 +25,7 @@ const getConfirmationIndex = () => {
 }
 
 export const MnemonicConfirmationView = () => {
-  const { track } = useAnalytics()
+  const mixpanel = useMixpanel()
   const [restoring, setRestoring] = useState(false)
   const restoreWallet = useVault((state) => state.restoreWallet)
   const [confirmationIndex] = useState(getConfirmationIndex())
@@ -80,7 +80,7 @@ export const MnemonicConfirmationView = () => {
         KeyAgents.InMemory,
         'Test' // TODO: make this a configurable credential name or random if not provided
       )
-      track({ event: 'wallet_created' })
+      mixpanel.track('WalletCreated')
       setVaultStateInitialized()
       return navigate('/onboarding/finish')
     } finally {
