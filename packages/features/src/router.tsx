@@ -1,6 +1,6 @@
-import { JitsuProvider } from '@jitsu/jitsu-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { MixpanelProvider } from 'react-mixpanel-browser'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import { Toaster } from '@/components/ui/toaster'
@@ -33,10 +33,15 @@ import { TransactionsView } from './transactions/views/transactions'
 
 dayjs.extend(relativeTime)
 
+const mixpanelConfig = {
+  track_pageview: true
+}
+
 export const Router = () => {
   return (
-    <JitsuProvider
-      options={{ host: 'https://clqo22gsb00003b6m2sj92p38.d.jitsu.com' }}
+    <MixpanelProvider
+      config={mixpanelConfig}
+      token="ee1f7980362645f72b80bfdd0c7be4a8"
     >
       <TooltipProvider>
         <div className="flex flex-1 pointer">
@@ -101,6 +106,6 @@ export const Router = () => {
           <Toaster />
         </div>
       </TooltipProvider>
-    </JitsuProvider>
+    </MixpanelProvider>
   )
 }
