@@ -2,7 +2,7 @@ import {
   AccountInfo,
   AccountInfoArgs,
   AccountInfoProvider
-} from '@palladxyz/mina-core'
+} from '@palladxyz/pallad-core'
 import {
   Address,
   Chain,
@@ -12,7 +12,6 @@ import {
   GetTransactionCountParameters,
   webSocket
 } from 'viem'
-import { optimismSepolia } from 'viem/chains'
 
 import { healthCheckOptimism } from '../utils'
 
@@ -20,8 +19,13 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
   const getAccountInfo = async (
     args: AccountInfoArgs
   ): Promise<Record<string, AccountInfo>> => {
+    if (args.chainInfo === undefined) {
+      throw new Error(
+        'chainInfo must be defined in `@palladxyz/pallad-core` Optimism createAccountInfoProvider'
+      )
+    }
     const client = createPublicClient({
-      chain: optimismSepolia as Chain,
+      chain: args.chainInfo as Chain,
       transport: webSocket(url)
     })
 
@@ -34,8 +38,6 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
       address: args.publicKey as Address
     }
     const nonce = await client.getTransactionCount(nonceVariables)
-
-    console.log('The balance in ETH is', balanceETH)
 
     const accountsInfo: Record<string, AccountInfo> = {}
 

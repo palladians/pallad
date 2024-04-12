@@ -18,11 +18,12 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/util": "^0.0.1",
     "@palladxyz/mina-core": "^0.0.1",
+    "@palladxyz/util": "^0.0.1",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
-    "mina-signer": "^2.1.1"
+    "mina-signer": "^2.1.1",
+    "viem": "^2.9.16"
   },
   "devDependencies": {
     "@palladxyz/common": "^1.0.0",

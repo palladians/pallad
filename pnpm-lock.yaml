@@ -600,6 +600,9 @@ importers:
       mina-signer:
         specifier: ^2.1.1
         version: 2.1.1
+      viem:
+        specifier: ^2.9.16
+        version: 2.9.16(typescript@5.3.3)
     devDependencies:
       '@palladxyz/common':
         specifier: ^1.0.0
@@ -665,6 +668,9 @@ importers:
       '@palladxyz/mina-core':
         specifier: ^0.0.1
         version: link:../mina-core
+      '@palladxyz/pallad-core':
+        specifier: ^0.0.1
+        version: link:../pallad-core
       '@palladxyz/util':
         specifier: ^0.0.1
         version: link:../util

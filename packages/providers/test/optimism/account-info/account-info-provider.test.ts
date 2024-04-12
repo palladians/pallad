@@ -1,3 +1,6 @@
+import { AccountInfoArgs } from '@palladxyz/pallad-core'
+import { optimismSepolia } from 'viem/chains'
+
 import { Optimism } from '../../../src'
 
 const nodeUrl =
@@ -25,8 +28,11 @@ describe('Optimism Account Info Provider (Functional)', () => {
   describe('getAccountInfo', () => {
     it('should return account info for a valid public key', async () => {
       // This test now depends on the actual response from the server
-      console.log(`Making request to URL: ${nodeUrl}`)
-      const response = await provider.getAccountInfo({ publicKey })
+      const args: AccountInfoArgs = {
+        publicKey: publicKey,
+        chainInfo: optimismSepolia
+      }
+      const response = await provider.getAccountInfo(args)
       console.log('Optimism AccountInfo Provider Response', response)
       expect(response).toHaveProperty('ETH')
     })

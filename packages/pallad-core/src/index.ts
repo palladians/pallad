@@ -1,1 +1,1 @@
-export * as Mina from './Mina'
+export * from './Pallad'
