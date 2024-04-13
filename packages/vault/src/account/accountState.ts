@@ -1,9 +1,9 @@
 import { ChainAddress } from '@palladxyz/key-management'
-import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import { AccountInfo, Tx } from '@palladxyz/pallad-core'
 
 export type SingleAccountState = {
   accountInfo: Record<string, AccountInfo>
-  transactions: Record<string, Mina.TransactionBody[]>
+  transactions: Record<string, Tx[]>
 }
 
 export type ChainAddressMapping = Record<ChainAddress, SingleAccountState>
@@ -31,7 +31,7 @@ export type AccountActions = {
     address: ChainAddress,
     // ideally this should be a record Record<string, Transaction[]> where the string is a ticker of a token
     // but for now we only fetch MINA transactions in the chain history provider
-    transactions: Record<string, Mina.TransactionBody[]>
+    transactions: Record<string, Tx[]>
   ) => void
   getAccountsInfo: (
     network: string,
@@ -47,14 +47,14 @@ export type AccountActions = {
     network: string,
     address: ChainAddress,
     ticker: string // we can add a ticker here to get the account info for a specific token
-  ) => Mina.TransactionBody[]
+  ) => Tx[]
 
   getTransaction: (
     network: string,
     address: ChainAddress,
     hash: string,
     ticker: string
-  ) => Mina.TransactionBody | undefined
+  ) => Tx | undefined
 
   addAccount: (network: string, address: ChainAddress) => void
 

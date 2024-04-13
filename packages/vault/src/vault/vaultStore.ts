@@ -2,11 +2,13 @@ import {
   constructTransaction,
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
-  GroupedCredentials,
-  Network
+  GroupedCredentials
 } from '@palladxyz/key-management'
-// TODO: replace `mina-core` with `pallad-core`
-import { AccountInfo, Mina } from '@palladxyz/mina-core'
+import {
+  PalladNetworkNames,
+  PalladNetworkTypes,
+  Tx
+} from '@palladxyz/pallad-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
 import { createChainProvider } from '@palladxyz/providers'
 import { produce } from 'immer'
@@ -33,7 +35,7 @@ const _validateCurrentWallet = (wallet: SingleCredentialState | null) => {
   if (!wallet || !credential?.address)
     throw new WalletError('Invalid current wallet or address')
 }
-const _validateCurrentNetwork = (network: Network.Mina | null) => {
+const _validateCurrentNetwork = (network: PalladNetworkTypes.MINA | null) => {
   if (!network) throw new NetworkError('Invalid current network')
 }
 
@@ -42,9 +44,9 @@ const defaultGlobalVaultState: GlobalVaultState = {
   credentialName: '',
   currentAccountIndex: 0,
   currentAddressIndex: 0,
-  chain: Network.Mina,
+  chain: PalladNetworkTypes.MINA,
   walletName: '',
-  walletNetwork: Mina.Networks.BERKELEY,
+  walletNetwork: PalladNetworkNames.MINA_BERKELEY,
   knownAccounts: [],
   chainIds: []
 }
@@ -147,11 +149,10 @@ export const useVault = create<
           publicKey: publicKey,
           tokenMap: tokenMap
         })
-        setAccountInfo(
-          providerConfig.networkName,
-          publicKey,
-          accountInfo as Record<string, AccountInfo>
-        ) // TODO: remove cast
+        if (accountInfo === undefined) {
+          throw new Error('accountInfo is undefined in _syncAccountInfo')
+        }
+        setAccountInfo(providerConfig.networkName, publicKey, accountInfo) // TODO: remove cast
       },
       _syncTransactions: async (providerConfig, publicKey) => {
         // TODO: remove providerManager
@@ -160,11 +161,11 @@ export const useVault = create<
         // TODO: add condition where archive node is unavailable then transactions
         // are simply []
         const provider = createChainProvider(providerConfig)
-        const transactions = await provider.getTransactions({
+        const transactions = (await provider.getTransactions({
           addresses: [publicKey]
-        })
+        })) as Tx[]
         const transactionsRecord = {
-          MINA: transactions as Mina.TransactionBody[]
+          MINA: transactions
         } // TODO: replace with util using tokeId map to map transactions to tokens
         setTransactions(
           providerConfig.networkName,
@@ -251,7 +252,9 @@ export const useVault = create<
         const currentWallet = getCurrentWallet()
         _validateCurrentWallet(currentWallet.credential)
         const currentNetwork = getCurrentNetwork()
-        _validateCurrentNetwork(currentNetwork as Network.Mina)
+        _validateCurrentNetwork(
+          currentNetwork as unknown as typeof PalladNetworkTypes.MINA
+        )
         const walletCredential = currentWallet?.credential
           .credential as GroupedCredentials
         return (
@@ -273,7 +276,7 @@ export const useVault = create<
           throw new AddressError(
             'Wallet address is undefined in getTransactions method'
           )
-        const currentNetwork = getCurrentNetwork() as Mina.Networks
+        const currentNetwork = getCurrentNetwork() as PalladNetworkNames
         if (!currentNetwork)
           throw new NetworkError(
             'Current network is null, empty or undefined in getTransactions method'
@@ -304,6 +307,7 @@ export const useVault = create<
         return signed
       },
       constructTx: (transaction, kind) => {
+        // TODO: agnostic construct transaction Util that takes any transaction type
         return constructTransaction(transaction, kind)
       },
       submitTx: async (submitTxArgs) => {
@@ -424,7 +428,7 @@ export const useVault = create<
         } = get()
         const currentWallet = getCurrentWallet()
         const currentNetwork = getCurrentNetwork()
-        removeAccount(currentNetwork as Mina.Networks, '')
+        removeAccount(currentNetwork as PalladNetworkNames, '')
         removeKeyAgent(keyAgentName)
         removeCredential(currentWallet.credential.credentialName)
       },

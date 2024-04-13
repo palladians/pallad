@@ -20,6 +20,7 @@
   "dependencies": {
     "@palladxyz/key-management": "*",
     "@palladxyz/mina-core": "*",
+    "@palladxyz/pallad-core": "*",
     "@palladxyz/persistence": "*",
     "@palladxyz/providers": "*",
     "@palladxyz/util": "*",

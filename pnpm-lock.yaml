@@ -585,6 +585,9 @@ importers:
 
   packages/pallad-core:
     dependencies:
+      '@palladxyz/key-management':
+        specifier: ^0.0.1
+        version: link:../key-management
       '@palladxyz/mina-core':
         specifier: ^0.0.1
         version: link:../mina-core
@@ -757,6 +760,9 @@ importers:
       '@palladxyz/mina-core':
         specifier: '*'
         version: link:../mina-core
+      '@palladxyz/pallad-core':
+        specifier: '*'
+        version: link:../pallad-core
       '@palladxyz/persistence':
         specifier: '*'
         version: link:../persistence

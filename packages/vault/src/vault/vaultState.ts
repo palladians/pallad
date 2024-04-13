@@ -8,7 +8,15 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { GetPassphrase } from '@palladxyz/key-management'
-import { AccountInfo, Mina, SubmitTxArgs } from '@palladxyz/mina-core'
+// can remove mina-core when there exists an agnostic construct tx function
+import { Mina } from '@palladxyz/mina-core'
+import {
+  AccountInfo,
+  PalladNetworkNames,
+  PalladNetworkTypes,
+  SubmitTxArgs,
+  Tx
+} from '@palladxyz/pallad-core'
 import { ProviderConfig } from '@palladxyz/providers'
 
 import {
@@ -25,7 +33,7 @@ type CurrentWallet = {
   singleKeyAgentState: SingleKeyAgentState | undefined
   credential: SingleCredentialState
   accountInfo: Record<string, AccountInfo> // string here is token ticker
-  transactions: Record<string, Mina.TransactionBody[]> // string here is token ticker
+  transactions: Record<string, Tx[]> // string here is token ticker
 }
 
 type CurrentWalletPayload = {
@@ -40,8 +48,8 @@ export type GlobalVaultState = {
   credentialName: string
   currentAccountIndex: number
   currentAddressIndex: number
-  chain: Network
-  walletNetwork: Mina.Networks
+  chain: PalladNetworkTypes
+  walletNetwork: PalladNetworkNames
   walletName: string
   knownAccounts: string[]
   chainIds: string[]
