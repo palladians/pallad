@@ -1,24 +1,25 @@
 import {
-  DaemonStatus,
-  DaemonStatusProvider,
-  HealthCheckResponse
-} from '@palladxyz/mina-core'
+  HealthCheckResponse,
+  NodeStatus,
+  NodeStatusProvider
+} from '@palladxyz/pallad-core'
 
-import { createDaemonStatusProvider as mn } from '../mina-node'
-import { createDaemonStatusProvider as ob } from '../obscura-provider'
+import { createNodeStatusProvider as mn } from '../mina-node'
+import { createNodeStatusProvider as ob } from '../obscura-provider'
 import { ProviderConfig } from './types'
 
-export const createDaemonStatusProvider = (
+export const createNodeStatusProvider = (
   config: ProviderConfig
-): DaemonStatusProvider => {
+): NodeStatusProvider => {
+  // TODO: make the underlyingProvider creation a util function
   const underlyingProvider =
     config.nodeEndpoint.providerName === 'mina-node'
       ? mn(config.nodeEndpoint.url)
       : ob(config.nodeEndpoint.url)
 
-  const getDaemonStatus = async (): Promise<DaemonStatus> => {
+  const getNodeStatus = async (): Promise<NodeStatus> => {
     // Delegate the call to the underlying provider's getAccountInfo method
-    return (await underlyingProvider.getDaemonStatus()) as DaemonStatus
+    return (await underlyingProvider.getNodeStatus()) as NodeStatus
   }
 
   const healthCheck = async (): Promise<HealthCheckResponse> => {
@@ -27,7 +28,7 @@ export const createDaemonStatusProvider = (
   }
 
   return {
-    getDaemonStatus,
+    getNodeStatus,
     healthCheck
   }
 }

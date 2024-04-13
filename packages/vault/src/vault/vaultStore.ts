@@ -5,9 +5,10 @@ import {
   GroupedCredentials,
   Network
 } from '@palladxyz/key-management'
+// TODO: replace `mina-core` with `pallad-core`
 import { AccountInfo, Mina } from '@palladxyz/mina-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
-import { createMinaProvider } from '@palladxyz/providers'
+import { createChainProvider } from '@palladxyz/providers'
 import { produce } from 'immer'
 import { create } from 'zustand'
 import { persist, PersistStorage } from 'zustand/middleware'
@@ -140,7 +141,7 @@ export const useVault = create<
         // TODO: improve accountInfo store as there are now a record of custom token tickers -> account infos
         //_syncAccountInfo: async (providerConfig, publicKey) => {
         const { setAccountInfo, getTokensInfo } = get() // TODO: add getTokenIdMap
-        const provider = createMinaProvider(providerConfig)
+        const provider = createChainProvider(providerConfig)
         const tokenMap = getTokensInfo(providerConfig.networkName)
         const accountInfo = await provider.getAccountInfo({
           publicKey: publicKey,
@@ -158,7 +159,7 @@ export const useVault = create<
         const { setTransactions } = get()
         // TODO: add condition where archive node is unavailable then transactions
         // are simply []
-        const provider = createMinaProvider(providerConfig)
+        const provider = createChainProvider(providerConfig)
         const transactions = await provider.getTransactions({
           addresses: [publicKey]
         })
@@ -194,14 +195,14 @@ export const useVault = create<
             `Could not find providerConfig for ${providerConfig} in _syncWallet`
           )
         }
-        const provider = createMinaProvider(providerConfig)
-        if (!provider.getDaemonStatus) {
+        const provider = createChainProvider(providerConfig)
+        if (!provider.getNodeStatus) {
           throw new Error(
-            `Could not getDaemonStatus for ${providerConfig} in updateChainId`
+            `Could not getNodeStatus for ${providerConfig} in updateChainId`
           )
         }
 
-        const response = await provider.getDaemonStatus()
+        const response = await provider.getNodeStatus()
         if (!response.daemonStatus.chainId) {
           throw new Error(
             `Could not get chainId for ${providerConfig} in updateChainId`
@@ -309,7 +310,7 @@ export const useVault = create<
         const { getCurrentNetworkInfo, getCurrentWallet, _syncTransactions } =
           get()
         const providerConfig = getCurrentNetworkInfo()
-        const provider = createMinaProvider(providerConfig)
+        const provider = createChainProvider(providerConfig)
         const publicKey = getCurrentWallet().credential.credential?.address
         if (!publicKey)
           throw new AddressError(
@@ -391,14 +392,14 @@ export const useVault = create<
           )
         }
 
-        const provider = createMinaProvider(providerConfig)
-        if (!provider.getDaemonStatus) {
+        const provider = createChainProvider(providerConfig)
+        if (!provider.getNodeStatus) {
           throw new Error(
-            `Could not getDaemonStatus for ${providerConfig} in updateChainId`
+            `Could not getNodeStatus for ${providerConfig} in updateChainId`
           )
         }
 
-        const response = await provider.getDaemonStatus()
+        const response = await provider.getNodeStatus()
         if (!response.daemonStatus.chainId) {
           throw new Error(
             `Could not get chainId for ${providerConfig} in updateChainId`

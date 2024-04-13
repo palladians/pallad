@@ -7,7 +7,7 @@ const transactionHash =
   process.env['TX_HASH'] ||
   '0x105bf755a57f5f1e70784dd2ce811795e44a443608879e499d459098fb80f560'
 
-describe.skip('Optimism Chain History Provider (Functional)', () => {
+describe('Optimism Chain History Provider (Functional)', () => {
   let provider: ReturnType<typeof Optimism.createChainHistoryProvider>
 
   beforeEach(() => {

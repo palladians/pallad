@@ -9,7 +9,7 @@ const obscuraUrl =
   'https://mina-berkeley.obscura.build/v1/bfce6350-4f7a-4b63-be9b-8981dec92050/graphql'
 const publicKey =
   process.env['PUBLIC_KEY'] ||
-  'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
+  'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
 
 describe('Unified Account Info Provider (Functional)', () => {
   let provider: ReturnType<typeof createAccountInfoProvider>
@@ -27,7 +27,7 @@ describe('Unified Account Info Provider (Functional)', () => {
     beforeEach(() => {
       configMinaExplorer = {
         nodeEndpoint: {
-          providerName: 'mina-explorer',
+          providerName: 'mina-node',
           url: minaExplorerUrl
         },
         networkName: 'berkeley',

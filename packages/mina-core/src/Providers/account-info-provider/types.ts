@@ -26,5 +26,5 @@ export interface AccountInfoProvider extends Provider {
    */
   getAccountInfo: (
     args: AccountInfoArgs
-  ) => Promise<AccountInfo> | Promise<Record<string, AccountInfo>>
+  ) => Promise<Record<string, AccountInfo>>
 }

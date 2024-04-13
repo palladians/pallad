@@ -1,13 +1,11 @@
-import { DaemonStatus, DaemonStatusProvider } from '@palladxyz/mina-core'
+import { NodeStatus, NodeStatusProvider } from '@palladxyz/pallad-core'
 
 import { createGraphQLRequest } from '../utils/fetch-utils'
 import { healthCheck } from '../utils/health-check-utils'
 import { getDaemonStatusQuery } from './queries'
 
-export const createDaemonStatusProvider = (
-  url: string
-): DaemonStatusProvider => {
-  const getDaemonStatus = async (): Promise<DaemonStatus> => {
+export const createNodeStatusProvider = (url: string): NodeStatusProvider => {
+  const getNodeStatus = async (): Promise<NodeStatus> => {
     const fetchGraphQL = createGraphQLRequest(url)
     const result = await fetchGraphQL(getDaemonStatusQuery)
 
@@ -22,6 +20,6 @@ export const createDaemonStatusProvider = (
 
   return {
     healthCheck: () => healthCheck(url),
-    getDaemonStatus
+    getNodeStatus
   }
 }

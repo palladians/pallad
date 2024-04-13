@@ -23,9 +23,7 @@ export interface ChainHistoryProvider extends Provider {
    */
   transactionsByAddresses: (
     args: TransactionsByAddressesArgs
-  ) =>
-    | Promise<Mina.Paginated<Mina.TransactionBody>>
-    | Promise<Mina.TransactionBody[]>
+  ) => Promise<Mina.TransactionBody[]>
 
   /**
    * Gets the transactions matching the provided hashes.

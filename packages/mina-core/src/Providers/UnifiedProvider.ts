@@ -1,4 +1,4 @@
-import { Paginated, TransactionBody } from '../Mina'
+import { TransactionBody } from '../Mina'
 import { AccountInfo, AccountInfoArgs } from './account-info-provider'
 import {
   TransactionsByAddressesArgs,
@@ -21,18 +21,14 @@ export interface UnifiedMinaProviderType {
   // Methods related to ProviderNode
   getAccountInfo(
     args: AccountInfoArgs
-  ):
-    | Promise<AccountInfo | undefined>
-    | Promise<Record<string, AccountInfo> | undefined>
+  ): Promise<Record<string, AccountInfo> | undefined>
   getTransactionStatus?(args: TxStatusArgs): Promise<TxStatus | undefined>
   submitTransaction(args: SubmitTxArgs): Promise<SubmitTxResult | undefined>
 
   // Methods related to ProviderArchive
   getTransactions(
     args: TransactionsByAddressesArgs
-  ):
-    | Promise<Paginated<TransactionBody> | undefined>
-    | Promise<TransactionBody[] | undefined>
+  ): Promise<TransactionBody[] | undefined>
   getTransaction?(
     args: TransactionsByIdsArgs
   ): Promise<TransactionBody[] | undefined>

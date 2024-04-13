@@ -3,7 +3,7 @@ import {
   AccountInfoArgs,
   AccountInfoProvider,
   HealthCheckResponse
-} from '@palladxyz/mina-core'
+} from '@palladxyz/pallad-core'
 
 import { createAccountInfoProvider as mn } from '../mina-node'
 import { createAccountInfoProvider as ob } from '../obscura-provider'
@@ -12,6 +12,7 @@ import { ProviderConfig } from './types'
 export const createAccountInfoProvider = (
   config: ProviderConfig
 ): AccountInfoProvider => {
+  // TODO: make the underlyingProvider creation a util function
   const underlyingProvider =
     config.nodeEndpoint.providerName === 'mina-node'
       ? mn(config.nodeEndpoint.url)

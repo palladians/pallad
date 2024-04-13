@@ -1,21 +1,20 @@
-import { Mina } from '@palladxyz/mina-core'
-
 import { AccountInfo, AccountInfoArgs } from './account-info-provider'
 import {
   TransactionsByAddressesArgs,
-  TransactionsByIdsArgs
+  TransactionsByHashesArgs
 } from './chain-history-provider'
-import { DaemonStatus } from './daemon-status-provider'
+import { NodeStatus } from './node-status-provider'
 import { HealthCheckResponse } from './provider'
 import { TxStatus, TxStatusArgs } from './tx-status-provider'
 import { SubmitTxArgs, SubmitTxResult } from './tx-submit-provider'
+import { Tx } from './types'
 
-export type UnifiedMinaProviderConfig = {
+export type UnifiedChainProviderConfig = {
   nodeUrl: string
   archiveUrl: string
 }
 
-export interface UnifiedMinaProviderType {
+export interface UnifiedChainProviderType {
   changeNetwork?(nodeUrl: string, archiveUrl: string): Promise<void>
   destroy?(): Promise<void>
 
@@ -27,17 +26,13 @@ export interface UnifiedMinaProviderType {
   submitTransaction(args: SubmitTxArgs): Promise<SubmitTxResult | undefined>
 
   // Methods related to ProviderArchive
-  getTransactions(
-    args: TransactionsByAddressesArgs
-  ): Promise<Mina.TransactionBody[] | undefined>
-  getTransaction?(
-    args: TransactionsByIdsArgs
-  ): Promise<Mina.TransactionBody[] | undefined>
+  getTransactions(args: TransactionsByAddressesArgs): Promise<Tx[] | undefined>
+  getTransaction?(args: TransactionsByHashesArgs): Promise<Tx[] | undefined>
 
-  getDaemonStatus?(): Promise<DaemonStatus>
+  getNodeStatus(): Promise<NodeStatus>
 
   // healthCheck
-  healthCheck?(): Promise<HealthCheckResponse>
+  healthCheck(): Promise<HealthCheckResponse>
 
-  provider?: UnifiedMinaProviderType
+  provider?: UnifiedChainProviderConfig
 }

@@ -2,21 +2,21 @@ import {
   AccountInfo,
   AccountInfoArgs,
   HealthCheckResponse,
-  Mina,
   SubmitTxArgs,
   TransactionsByAddressesArgs,
-  UnifiedMinaProviderType
-} from '@palladxyz/mina-core'
+  Tx,
+  UnifiedChainProviderType
+} from '@palladxyz/pallad-core'
 
 import { createAccountInfoProvider } from './account-info-provider'
 import { createChainHistoryProvider } from './chain-history-provider'
-import { createDaemonStatusProvider } from './daemon-status-provider'
+import { createNodeStatusProvider } from './node-status-provider'
 import { createTxSubmitProvider } from './tx-submit-provider'
 import { ProviderConfig } from './types'
 
-export const createMinaProvider = (
+export const createChainProvider = (
   config: ProviderConfig
-): UnifiedMinaProviderType => {
+): UnifiedChainProviderType => {
   const getAccountInfo = async (args: AccountInfoArgs) => {
     return (await createAccountInfoProvider(config).getAccountInfo(
       args
@@ -26,15 +26,15 @@ export const createMinaProvider = (
   const getTransactions = async (args: TransactionsByAddressesArgs) => {
     return (await createChainHistoryProvider(config).transactionsByAddresses(
       args
-    )) as Mina.TransactionBody[]
+    )) as Tx[]
   }
 
   const submitTransaction = async (args: SubmitTxArgs) => {
     return await createTxSubmitProvider(config).submitTx(args)
   }
 
-  const getDaemonStatus = async () => {
-    return await createDaemonStatusProvider(config).getDaemonStatus()
+  const getNodeStatus = async () => {
+    return await createNodeStatusProvider(config).getNodeStatus()
   }
 
   const healthCheckNode = async () => {
@@ -68,7 +68,7 @@ export const createMinaProvider = (
     getAccountInfo,
     getTransactions,
     submitTransaction,
-    getDaemonStatus,
+    getNodeStatus,
     healthCheck
   }
 }

@@ -1,17 +1,15 @@
 import {
   ChainHistoryProvider,
-  Mina,
   TransactionsByAddressesArgs,
-  TransactionsByIdsArgs
-} from '@palladxyz/mina-core'
+  TransactionsByHashesArgs,
+  Tx
+} from '@palladxyz/pallad-core'
 import {
-  Chain,
   createPublicClient,
   GetTransactionParameters,
   Hash,
   webSocket
 } from 'viem'
-import { optimismSepolia } from 'viem/chains'
 
 import { healthCheckOptimism } from '../utils'
 
@@ -21,7 +19,7 @@ export const createChainHistoryProvider = (
 ): ChainHistoryProvider => {
   const transactionsByAddresses = async (
     args: TransactionsByAddressesArgs
-  ): Promise<Mina.TransactionBody[]> => {
+  ): Promise<Tx[]> => {
     // need an explorer or other third-party API to fetch transaction history
     console.log('the args are:', args)
     await new Promise((resolve) => setTimeout(resolve, 100))
@@ -31,10 +29,10 @@ export const createChainHistoryProvider = (
 
   // TODO: decouple Mina from these providers, maybe `@palladxyz/otpimism-core` ?
   const transactionsByHashes = async (
-    args: TransactionsByIdsArgs
-  ): Promise<Mina.TransactionBody[]> => {
+    args: TransactionsByHashesArgs
+  ): Promise<Tx[]> => {
     const client = createPublicClient({
-      chain: optimismSepolia as Chain,
+      chain: args.chainInfo,
       transport: webSocket(url)
     })
     const transactionArgs: GetTransactionParameters = {

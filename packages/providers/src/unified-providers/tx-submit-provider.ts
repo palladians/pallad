@@ -3,7 +3,7 @@ import {
   SubmitTxArgs,
   SubmitTxResult,
   TxSubmitProvider
-} from '@palladxyz/mina-core'
+} from '@palladxyz/pallad-core'
 
 import { createTxSubmitProvider as mn } from '../mina-node'
 import { createTxSubmitProvider as ob } from '../obscura-provider'
@@ -12,6 +12,7 @@ import { ProviderConfig } from './types'
 export const createTxSubmitProvider = (
   config: ProviderConfig
 ): TxSubmitProvider => {
+  // TODO: make the underlyingProvider creation a util function
   const underlyingProvider =
     config.nodeEndpoint.providerName === 'mina-node'
       ? mn(config.nodeEndpoint.url)
