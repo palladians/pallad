@@ -7,9 +7,12 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ViewHeading } from '@/components/view-heading'
 
-export const AssetList = () => {
+type AssetListProps = {
+  account: ReturnType<typeof useAccount>
+}
+
+export const AssetList = ({ account }: AssetListProps) => {
   const navigate = useNavigate()
-  const { isLoading: accountLoading, minaBalance } = useAccount()
   return (
     <div className="flex flex-col flex-1">
       <ViewHeading
@@ -21,7 +24,7 @@ export const AssetList = () => {
         }}
         noHorizontalPadding
       />
-      {accountLoading ? (
+      {account.isLoading ? (
         <Skeleton className="w-full h-8" />
       ) : (
         <div className="flex items-center gap-4">
@@ -31,7 +34,7 @@ export const AssetList = () => {
             </AvatarFallback>
           </Avatar>
           <p className="flex-1 font-semibold">MINA</p>
-          <p>{minaBalance?.toString()}</p>
+          <p>{account.minaBalance?.toString()}</p>
         </div>
       )}
     </div>

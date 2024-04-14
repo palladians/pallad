@@ -1,7 +1,6 @@
 import { PlusIcon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 
-import { useAddressBookStore } from '@/common/store/address-book'
+import { Contact } from '@/common/types'
 import { AppLayout } from '@/components/app-layout'
 import { ViewHeading } from '@/components/view-heading'
 
@@ -12,9 +11,15 @@ const DonatePallad = {
   address: 'B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS'
 }
 
-export const AddressBookView = () => {
-  const navigate = useNavigate()
-  const contacts = useAddressBookStore((state) => state.contacts)
+type AddressBookViewProps = {
+  contacts: Contact[]
+  onAddClicked: () => void
+}
+
+export const AddressBookView = ({
+  contacts,
+  onAddClicked
+}: AddressBookViewProps) => {
   return (
     <AppLayout>
       <div className="flex flex-col flex-1">
@@ -27,7 +32,7 @@ export const AddressBookView = () => {
                 Add Address
               </div>
             ),
-            onClick: () => navigate('/contacts/new'),
+            onClick: onAddClicked,
             testId: 'addressBook__addAddressButton'
           }}
         />

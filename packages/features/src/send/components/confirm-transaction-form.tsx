@@ -103,7 +103,7 @@ export const ConfirmTransactionForm = () => {
     const submitTxArgs = {
       signedTransaction: signedTx as unknown as SignedLegacy<Payment>,
       kind:
-        kind === 'staking'
+        kind === ('staking' as Mina.TransactionKind)
           ? Mina.TransactionKind.STAKE_DELEGATION
           : Mina.TransactionKind.PAYMENT,
       transactionDetails: {
@@ -128,11 +128,13 @@ export const ConfirmTransactionForm = () => {
       })
       await syncWallet()
       mixpanel.track(
-        kind === 'staking' ? 'PortfolioDelegated' : 'TransactionSent',
+        kind === ('staking' as Mina.TransactionKind)
+          ? 'PortfolioDelegated'
+          : 'TransactionSent',
         {
           amount: transaction.amount,
           fee: transaction.fee,
-          to: kind === 'staking' && transaction.to
+          to: kind === ('staking' as Mina.TransactionKind) && transaction.to
         }
       )
       navigate('/transactions/success', {
