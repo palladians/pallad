@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
-    "@jitsu/jitsu-react": "^1.7.2",
     "@palladxyz/key-management": "^0.0.1",
     "@palladxyz/mina-core": "^0.0.1",
     "@palladxyz/offchain-data": "^1.0.0",
@@ -84,6 +83,7 @@
     "react-day-picker": "^8.9.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.2",
+    "react-mixpanel-browser": "^4.1.0",
     "react-qr-code": "^2.0.12",
     "react-router": "^6.21.0",
     "react-router-dom": "^6.21.0",
@@ -97,8 +97,6 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "@chialab/esbuild-plugin-commonjs": "^0.17.2",
-    "@hyrious/esbuild-plugin-commonjs": "^0.2.2",
     "@ladle/react": "^4.0.2",
     "@palladxyz/common": "^1.0.0",
     "@svgr/plugin-jsx": "^8.0.1",
@@ -106,7 +104,7 @@
     "@testing-library/react": "^14.1.2",
     "@trpc/server": "^10.44.1",
     "@tsconfig/recommended": "^1.0.3",
-    "@tsconfig/vite-react": "^3.0.0",
+    "@tsconfig/vite-react": "^3.0.2",
     "@types/mocha": "^10.0.6",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
@@ -116,9 +114,9 @@
     "graphql-request": "^6.1.0",
     "mina-signer": "^2.1.1",
     "swr": "^2.2.4",
-    "vite": "^4.5.1",
+    "vite": "^5.2.8",
     "vite-plugin-node-polyfills": "^0.17.0",
-    "vite-plugin-svgr": "^3.2.0",
+    "vite-plugin-svgr": "^4.2.0",
     "vite-plugin-top-level-await": "^1.4.1"
   },
   "peerDependencies": {

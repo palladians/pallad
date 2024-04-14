@@ -338,8 +338,6 @@ export const useVault = create<
         credentialName = getRandomAnimalName()
         // TODO: add providerConfig object here
       ) => {
-        console.log('>>>WOOT1')
-        console.log('>>>PPR1', getPassphrase)
         const {
           initialiseKeyAgent,
           restoreKeyAgent,

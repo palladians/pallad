@@ -10,11 +10,11 @@ import {
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useMixpanel } from 'react-mixpanel-browser'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 import { useAccount } from '@/common/hooks/use-account'
-import { useAnalytics } from '@/common/hooks/use-analytics'
 import { usePendingTransactionStore } from '@/common/store/pending-transactions'
 import { useTransactionStore } from '@/common/store/transaction'
 import { ButtonArrow } from '@/components/button-arrow'
@@ -28,7 +28,7 @@ import { ConfirmTransactionSchema } from './confirm-transaction-form.schema'
 
 type ConfirmTransactionData = z.infer<typeof ConfirmTransactionSchema>
 export const ConfirmTransactionForm = () => {
-  const { track } = useAnalytics()
+  const mixpanel = useMixpanel()
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
   // can use
@@ -129,14 +129,14 @@ export const ConfirmTransactionForm = () => {
         expireAt: addHours(new Date(), 8).toISOString()
       })
       await syncWallet()
-      track({
-        event: kind === 'staking' ? 'portfolio_delegated' : 'transaction_sent',
-        metadata: {
+      mixpanel.track(
+        kind === 'staking' ? 'PortfolioDelegated' : 'TransactionSent',
+        {
           amount: transaction.amount,
           fee: transaction.fee,
           to: kind === 'staking' && transaction.to
         }
-      })
+      )
       navigate('/transactions/success', {
         state: {
           hash

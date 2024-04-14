@@ -25,7 +25,14 @@ export default defineManifest((env) => ({
   version: `${major}.${minor}.${patch}.${label}`,
   version_name: version,
   action: { default_popup: 'index.html' },
-  permissions: ['storage', 'notifications', 'activeTab', 'offscreen'],
+  permissions: [
+    'storage',
+    'notifications',
+    'activeTab',
+    'offscreen',
+    'tabs',
+    'background'
+  ],
   background: {
     service_worker: 'src/background/index.ts',
     type: 'module'
@@ -47,5 +54,16 @@ export default defineManifest((env) => ({
   host_permissions: [
     'https://*/*'
     // Add other URLs or patterns as needed
-  ]
+  ],
+  commands: {
+    _execute_action: {
+      suggested_key: {
+        windows: 'Alt+Shift+P',
+        mac: 'Alt+Shift+P',
+        chromeos: 'Alt+Shift+P',
+        linux: 'Alt+Shift+P'
+      },
+      description: 'Open the Pallad extension'
+    }
+  }
 }))

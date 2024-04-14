@@ -10,10 +10,10 @@ import { DEFAULT_NETWORK, KeyAgents, useVault } from '@palladxyz/vault'
 import { Loader2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useMixpanel } from 'react-mixpanel-browser'
 import { useNavigate } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
-import { useAnalytics } from '@/common/hooks/use-analytics'
 import { useAppStore } from '@/common/store/app'
 import { useOnboardingStore } from '@/common/store/onboarding'
 import { Autocomplete } from '@/components/autocomplete'
@@ -35,7 +35,7 @@ const mnemonicIterator = Array.from(
 )
 
 export const MnemonicInputView = () => {
-  const { track } = useAnalytics()
+  const mixpanel = useMixpanel()
   const [restoring, setRestoring] = useState(false)
   const restoreWallet = useVault((state) => state.restoreWallet)
   const navigate = useNavigate()
@@ -68,7 +68,6 @@ export const MnemonicInputView = () => {
     }
     try {
       setRestoring(true)
-      console.log('>>>WOOT99')
       await restoreWallet(
         new MinaPayload(),
         restoreArgs,
@@ -84,7 +83,7 @@ export const MnemonicInputView = () => {
         KeyAgents.InMemory,
         'Test' // TODO: make this a configurable credential name or random if not provided
       )
-      track({ event: 'wallet_restored' })
+      mixpanel.track('WalletRestored')
       setVaultStateInitialized()
       return navigate('/onboarding/finish')
     } finally {

@@ -13,7 +13,7 @@ export default defineConfig({
     crx({ manifest }),
     topLevelAwait(),
     nodePolyfills({ protocolImports: true, globals: { Buffer: true } }),
-    svgr({ exportAsDefault: true })
+    svgr()
   ],
   define: {
     'global.browser': {}
@@ -24,6 +24,7 @@ export default defineConfig({
         app: 'app.html',
         index: 'index.html',
         prompt: 'prompt.html',
+        welcome: 'welcome.html',
         inject: 'public/pallad_rpc.js'
       }
     },
