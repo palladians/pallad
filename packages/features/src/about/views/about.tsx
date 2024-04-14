@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom'
-
 import Logo from '@/common/assets/logo.svg'
 import { AppLayout } from '@/components/app-layout'
 import { MetaField } from '@/components/meta-field'
@@ -20,15 +18,15 @@ const AppMeta = [
   }
 ]
 
-export const AboutView = () => {
-  const navigate = useNavigate()
+type AboutViewProps = {
+  onGoBack: () => void
+}
+
+export const AboutView = ({ onGoBack }: AboutViewProps) => {
   return (
     <AppLayout>
       <div className="flex flex-col flex-1">
-        <ViewHeading
-          title="About"
-          backButton={{ onClick: () => navigate(-1) }}
-        />
+        <ViewHeading title="About" backButton={{ onClick: onGoBack }} />
         <div className="flex flex-col gap-4 flex-1 p-4">
           <Card className="flex gap-4 p-4 justify-between rounded-[1rem]">
             <div className="flex items-center gap-4">

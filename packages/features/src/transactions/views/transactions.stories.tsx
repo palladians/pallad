@@ -1,11 +1,16 @@
 import { StoryDefault } from '@ladle/react'
 
-import { useStoriesWallet } from '../../../.ladle/utils'
 import { TransactionsView } from './transactions'
 
 export const View = () => {
-  useStoriesWallet()
-  return <TransactionsView />
+  return (
+    <TransactionsView
+      loading={false}
+      onGoBack={() => console.log('go back')}
+      onlyPendingTransactions={[]}
+      transactions={[]}
+    />
+  )
 }
 
 export default {

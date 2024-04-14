@@ -110,20 +110,20 @@ export const useVault = create<
           getCurrentNetworkInfo
         } = get()
         if (keyAgentName === '') {
-          throw new WalletError(
+          console.error(
             'keyAgentName is still blank in getCurrentWallet (has not been set yet)'
           )
         }
         const singleKeyAgentState = getKeyAgent(keyAgentName)
         if (credentialName === '') {
-          throw new WalletError(
+          console.error(
             'credentialName is still blank in getCurrentWallet (has not been set yet)'
           )
         }
         const credential = getCredential(credentialName)
         const publicKey = credential.credential?.address ?? ''
         if (publicKey === '') {
-          throw new WalletError(
+          console.error(
             'publicKey is undefined blank in getCurrentWallet (has not been set yet)'
           )
         }

@@ -1,17 +1,16 @@
+import { Mina } from '@palladxyz/mina-core'
 import { create } from 'zustand'
 
 import { OutgoingTransaction } from '../types'
 
-type TxKind = 'transaction' | 'staking'
-
 type TransactionState = {
   outgoingTransaction: OutgoingTransaction | null
-  kind: TxKind
+  kind: Mina.TransactionKind
 }
 
 type TransactionMutators = {
   set: (outgoingTransaction: OutgoingTransaction) => void
-  setKind: (kind: TxKind) => void
+  setKind: (kind: Mina.TransactionKind) => void
 }
 
 type TransactionStore = TransactionState & TransactionMutators
@@ -22,7 +21,7 @@ const initialState = {
 
 export const useTransactionStore = create<TransactionStore>()((set) => ({
   ...initialState,
-  kind: 'transaction',
+  kind: Mina.TransactionKind.PAYMENT,
   set(outgoingTransaction) {
     return set({ outgoingTransaction })
   },

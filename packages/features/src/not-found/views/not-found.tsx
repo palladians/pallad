@@ -1,23 +1,25 @@
-import { useNavigate } from 'react-router-dom'
-
 import { AppLayout } from '@/components/app-layout'
 import { Button } from '@/components/ui/button'
 import { ViewHeading } from '@/components/view-heading'
 
-export const NotFoundView = () => {
-  const navigate = useNavigate()
+type NotFoundViewProps = {
+  onGoToDashboard: () => void
+  onGoBack: () => void
+}
+
+export const NotFoundView = ({
+  onGoBack,
+  onGoToDashboard
+}: NotFoundViewProps) => {
   return (
     <AppLayout>
       <div className="flex flex-col flex-1">
-        <ViewHeading
-          title="Not Found"
-          backButton={{ onClick: () => navigate(-1) }}
-        />
+        <ViewHeading title="Not Found" backButton={{ onClick: onGoBack }} />
         <div className="flex flex-col flex-1 gap-4 p-4">
           <div className="flex flex-1 justify-center items-center">
             <div>Sorry, but we couldn't find this page</div>
           </div>
-          <Button onClick={() => navigate('/')}>Go to Dashboard</Button>
+          <Button onClick={onGoToDashboard}>Go to Dashboard</Button>
         </div>
       </div>
     </AppLayout>

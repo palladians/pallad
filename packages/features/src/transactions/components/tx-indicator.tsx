@@ -7,7 +7,7 @@ import {
   RepeatIcon
 } from 'lucide-react'
 
-import { TxKind, TxSide } from '@/common/types'
+import { TxSide } from '@/common/types'
 
 interface TxSideIndicatorProps {
   side: TxSide
@@ -21,14 +21,14 @@ export const TxIndicator = ({ kind, side, from, to }: TxSideIndicatorProps) => {
 
   let icon
 
-  if (kind === TxKind.PAYMENT) {
+  if (kind === Mina.TransactionKind.PAYMENT) {
     if (isSentToSelf) {
       icon = <RepeatIcon />
     } else {
       icon =
         side === TxSide.INCOMING ? <ArrowDownLeftIcon /> : <ArrowUpRightIcon />
     }
-  } else if (kind === TxKind.STAKE_DELEGATION) {
+  } else if (kind === Mina.TransactionKind.STAKE_DELEGATION) {
     icon = <BeefIcon />
   } else {
     icon = <CoinsIcon />
