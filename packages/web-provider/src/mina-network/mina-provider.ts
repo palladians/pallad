@@ -160,7 +160,7 @@ export class MinaProvider implements IMinaProvider {
     // Step 0: Prompt user for confirmation
     // Note: all user prompts should define the inputType like this 'confirmation'
     const userConfirmed = await this.userPrompt('confirmation', {
-      title: 'Do you want to connect?',
+      title: 'Connection request.',
       payload: superjson.stringify({ origin })
     })
     console.log('userConfirmed:', userConfirmed)
@@ -483,7 +483,8 @@ export class MinaProvider implements IMinaProvider {
       case 'mina_getState': {
         // check if wallet is locked first
         const passphrase = await this.userPrompt('password', {
-          title: 'Confirm proof request',
+          title:
+            'The application is requesting to a credential from Pallad. Please review the request before deciding whether to confirm.',
           payload: superjson.stringify(args.params)
         })
         if (passphrase === null) {
@@ -506,7 +507,8 @@ export class MinaProvider implements IMinaProvider {
       case 'mina_setState': {
         // check if wallet is locked first
         const passphrase = await this.userPrompt('password', {
-          title: 'Confirm incoming proof',
+          title:
+            'The application is requesting Pallad to store a credential. Please review the incoming credential before deciding whether to confirm.',
           payload: superjson.stringify(args.params)
         })
         if (passphrase === null) {
@@ -514,7 +516,6 @@ export class MinaProvider implements IMinaProvider {
         }
         const requestData = args.params as requestingStateData
         if (!requestData.data || !hasObjectProps(requestData.data)) {
-          console.log('the args are:', requestData)
           // Handle the case where the necessary properties do not exist
           return false as unknown as T
         }
