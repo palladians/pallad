@@ -306,9 +306,9 @@ export const useVault = create<
         const signed = await keyAgent?.sign(credential, signable, args)
         return signed
       },
-      constructTx: (transaction, kind) => {
+      constructTx: (args) => {
         // TODO: agnostic construct transaction Util that takes any transaction type
-        return constructTransaction(transaction, kind)
+        return constructTransaction(args.transaction, args.transactionKind)
       },
       submitTx: async (submitTxArgs) => {
         const { getCurrentNetworkInfo, getCurrentWallet, _syncTransactions } =

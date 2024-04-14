@@ -8,8 +8,8 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { GetPassphrase } from '@palladxyz/key-management'
+import { constructTxArgs } from '@palladxyz/key-management'
 // can remove mina-core when there exists an agnostic construct tx function
-import { Mina } from '@palladxyz/mina-core'
 import {
   AccountInfo,
   PalladNetworkNames,
@@ -83,10 +83,7 @@ export type GlobalVaultActions = {
     args: ChainOperationArgs,
     getPassphrase: GetPassphrase
   ) => Promise<unknown>
-  constructTx: (
-    transaction: Mina.TransactionBody,
-    kind: Mina.TransactionKind
-  ) => unknown
+  constructTx: (args: constructTxArgs) => unknown
   submitTx: (submitTxArgs: SubmitTxArgs) => Promise<unknown>
   createWallet: (strength?: number) => CreateWalletReturn
   restoreWallet: <T extends ChainSpecificPayload>(
