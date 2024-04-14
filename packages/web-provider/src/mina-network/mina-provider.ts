@@ -523,7 +523,7 @@ export class MinaProvider implements IMinaProvider {
       }
 
       case 'mina_chainId': {
-        return this.chainId as unknown as T
+        return (await this.vault.getChainId()) as unknown as T
       }
 
       default:
