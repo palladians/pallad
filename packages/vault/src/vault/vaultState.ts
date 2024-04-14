@@ -29,7 +29,7 @@ import { NetworkName } from '../network-info'
 import { SearchQuery } from '../utils/utils'
 
 // Note: this is the full state of the account not just 'MINA' tokens
-type CurrentWallet = {
+export type CurrentWallet = {
   singleKeyAgentState: SingleKeyAgentState | undefined
   credential: SingleCredentialState
   accountInfo: Record<string, AccountInfo> // string here is token ticker

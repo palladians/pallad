@@ -68,7 +68,7 @@ export const ConfirmTransactionForm = () => {
       validUntil: '4294967295',
       fee,
       amount,
-      nonce: currentWallet.accountInfo['MINA'].inferredNonce, // TODO: remove hardcoded 'MINA'
+      nonce: currentWallet.accountInfo['MINA'].inferredNonce, // need a util for this whole `onSubmit` to remove Mina dependency
       type: 'payment'
     }
     const constructTxArgs = {

@@ -1,5 +1,5 @@
 import { getSessionPersistence } from '@palladxyz/persistence'
-import { useVault } from '@palladxyz/vault'
+import { getPublicKey, isDelegated, useVault } from '@palladxyz/vault'
 import easyMeshGradient from 'easy-mesh-gradient'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -24,7 +24,7 @@ export const useAccount = () => {
     await _syncWallet()
     return getAccountsInfo(network, publicKey) // TODO: replace with getBalance
   }
-  const publicKey = currentWallet.credential.credential?.address as string
+  const publicKey = getPublicKey(currentWallet)
   const swr = useSWR(
     publicKey ? [publicKey, 'account', network] : null,
     async () => await fetchWallet(),
@@ -46,9 +46,7 @@ export const useAccount = () => {
       }),
     [publicKey]
   )
-  const stakeDelegated =
-    currentWallet.accountInfo['MINA'].publicKey !==
-    currentWallet.accountInfo['MINA'].delegate
+  const stakeDelegated = isDelegated(currentWallet)
   const copyWalletAddress = async () => {
     await navigator.clipboard.writeText(publicKey ?? '')
     toast({
