@@ -20,11 +20,11 @@ export const useAccount = () => {
   const setVaultStateUninitialized = useAppStore(
     (state) => state.setVaultStateUninitialized
   )
+  const publicKey = currentWallet.credential.credential?.address as string
   const fetchWallet = async () => {
     await _syncWallet()
     return getAccountsInfo(network, publicKey) // TODO: replace with getBalance
   }
-  const publicKey = currentWallet.credential.credential?.address as string
   const swr = useSWR(
     publicKey ? [publicKey, 'account', network] : null,
     async () => await fetchWallet(),
@@ -47,8 +47,8 @@ export const useAccount = () => {
     [publicKey]
   )
   const stakeDelegated =
-    currentWallet.accountInfo['MINA'].publicKey !==
-    currentWallet.accountInfo['MINA'].delegate
+    currentWallet.accountInfo['MINA']?.publicKey !==
+    currentWallet.accountInfo['MINA']?.delegate
   const copyWalletAddress = async () => {
     await navigator.clipboard.writeText(publicKey ?? '')
     toast({
