@@ -1,11 +1,11 @@
 import { StoryDefault } from '@ladle/react'
 
-import { useStoriesWallet } from '../../../.ladle/utils'
 import { OverviewView } from './overview'
 
 export const View = () => {
-  useStoriesWallet()
-  return <OverviewView />
+  return (
+    <OverviewView account={{ publicKey: 'B62XXX' } as any} fiatBalance={1337} />
+  )
 }
 
 export default {

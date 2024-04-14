@@ -1,7 +1,6 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { Mina } from '@palladxyz/mina-core'
 
-import { useAccount } from '@/common/hooks/use-account'
-import { useTransaction } from '@/common/hooks/use-transaction'
+import { TxSide } from '@/common/types'
 import { AppLayout } from '@/components/app-layout'
 import { MetaField } from '@/components/meta-field'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -9,31 +8,35 @@ import { ViewHeading } from '@/components/view-heading'
 import { getAccountUrl, getTransactionUrl } from '@/lib/explorer'
 
 import { TxIndicator } from '../components/tx-indicator'
-import { structurizeTransaction } from '../utils/structurize-transactions'
 
-export const TransactionDetailsView = () => {
-  const { publicKey, network } = useAccount()
-  const navigate = useNavigate()
-  const { hash } = useParams()
-  if (!hash) return null
-  if (!publicKey) return null
-  const {
-    data: transactionData,
-    isLoading: transactionLoading,
-    error
-  } = useTransaction({ hash })
-  const transaction =
-    transactionData &&
-    structurizeTransaction({
-      tx: transactionData as any,
-      walletPublicKey: publicKey
-    })
-  console.log('>>>TXD', transactionData, error)
+type TransactionData = {
+  side: TxSide
+  kind?: Mina.TransactionKind
+  minaAmount: string
+  hash: string
+  from: string
+  to: string
+  dateTime: string
+}
+
+type TransactionDetailsView = {
+  onGoBack: () => void
+  loading: boolean
+  transaction: TransactionData
+  network: string
+}
+
+export const TransactionDetailsView = ({
+  onGoBack,
+  loading,
+  transaction,
+  network
+}: TransactionDetailsView) => {
   const transactionMetaFields = transaction && [
     {
       label: 'Hash',
       value: transaction.hash,
-      url: getTransactionUrl({ network, hash })
+      url: getTransactionUrl({ network, hash: transaction.hash })
     },
     { label: 'Amount', value: `${transaction.minaAmount} MINA` },
     {
@@ -52,10 +55,10 @@ export const TransactionDetailsView = () => {
       <div className="flex flex-col flex-1">
         <ViewHeading
           title="Transaction Details"
-          backButton={{ onClick: () => navigate(-1) }}
+          backButton={{ onClick: onGoBack }}
         />
         <div className="flex flex-col gap-4 p-4">
-          {transactionLoading ? (
+          {loading ? (
             <Skeleton className="w-full h-8" />
           ) : (
             transaction && (

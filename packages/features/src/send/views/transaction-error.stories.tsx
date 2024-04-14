@@ -2,7 +2,9 @@ import { StoryDefault } from '@ladle/react'
 
 import { TransactionErrorView } from './transaction-error'
 
-export const View = () => <TransactionErrorView />
+export const View = () => (
+  <TransactionErrorView onGoBack={() => console.log('go back')} />
+)
 
 export default {
   title: 'Dashboard / Send / Error'

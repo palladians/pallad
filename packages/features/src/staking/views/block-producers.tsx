@@ -1,37 +1,34 @@
-import { useNavigate } from 'react-router-dom'
-
 import { AppLayout } from '@/components/app-layout'
 import { Button } from '@/components/ui/button'
 import { ViewHeading } from '@/components/view-heading'
 
 import { BlockProducerTile } from '../components/block-producer-tile'
 
-const MOCKED_PRODUCERS = [
-  {
-    name: 'Pallad',
-    publicKey: 'B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS',
-    stake: 24000,
-    delegatorsCount: 6000
-  },
-  {
-    name: 'Pallad 2',
-    publicKey: 'B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS',
-    stake: 12000,
-    delegatorsCount: 3000
-  }
-]
+type BlockProducer = {
+  name: string
+  publicKey: string
+  stake: number
+  delegatorsCount: number
+}
 
-export const BlockProducersView = () => {
-  const navigate = useNavigate()
+type BlockProducersViewProps = {
+  onGoBack: () => void
+  blockProducers: BlockProducer[]
+}
+
+export const BlockProducersView = ({
+  onGoBack,
+  blockProducers
+}: BlockProducersViewProps) => {
   return (
     <AppLayout>
       <div className="flex flex-col flex-1 gap-4">
         <ViewHeading
           title="Find Producers"
-          backButton={{ onClick: () => navigate(-1) }}
+          backButton={{ onClick: onGoBack }}
         />
         <div className="flex flex-col gap-3">
-          {MOCKED_PRODUCERS.map((producer, i) => (
+          {blockProducers.map((producer, i) => (
             <BlockProducerTile key={i} producer={producer} />
           ))}
           <Button variant="link">Add Your Pool</Button>

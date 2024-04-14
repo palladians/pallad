@@ -6,30 +6,30 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
-import { AboutView } from './about/views/about'
-import { AddressBookView } from './address-book/views/address-book'
-import { NewAddressView } from './address-book/views/new-address'
-import { UnlockWalletView } from './lock/views/unlock-wallet'
-import { NotFoundView } from './not-found/views/not-found'
-import { CreateWalletView } from './onboarding/views/create-wallet'
-import { MnemonicConfirmationView } from './onboarding/views/mnemonic-confirmation'
-import { MnemonicInputView } from './onboarding/views/mnemonic-input'
-import { MnemonicWritedownView } from './onboarding/views/mnemonic-writedown'
-import { RestoreWalletView } from './onboarding/views/restore-wallet'
-import { StartView } from './onboarding/views/start'
-import { StayConnectedView } from './onboarding/views/stay-connected'
-import { OverviewView } from './overview/views/overview'
-import { ReceiveView } from './receive/views/receive'
-import { SendView } from './send/views/send'
-import { TransactionErrorView } from './send/views/transaction-error'
-import { TransactionSuccessView } from './send/views/transaction-success'
-import { TransactionSummaryView } from './send/views/transaction-summary'
-import { SettingsView } from './settings/views/settings'
-import { BlockProducersView } from './staking/views/block-producers'
-import { DelegateView } from './staking/views/delegate'
-import { StakingOverviewView } from './staking/views/staking-overview'
-import { TransactionDetailsView } from './transactions/views/transaction-details'
-import { TransactionsView } from './transactions/views/transactions'
+import { AboutRoute } from './about/routes/about'
+import { AddressBookRoute } from './address-book/routes/address-book'
+import { NewAddressRoute } from './address-book/routes/new-address'
+import { UnlockWalletRoute } from './lock/routes/unlock-wallet'
+import { NotFoundRoute } from './not-found/routes/not-found'
+import { CreateWalletRoute } from './onboarding/routes/create-wallet'
+import { MnemonicConfirmationRoute } from './onboarding/routes/mnemonic-confirmation'
+import { MnemonicInputRoute } from './onboarding/routes/mnemonic-input'
+import { MnemonicWritedownRoute } from './onboarding/routes/mnemonic-writedown'
+import { RestoreWalletRoute } from './onboarding/routes/restore-wallet'
+import { StartRoute } from './onboarding/routes/start'
+import { StayConnectedRoute } from './onboarding/routes/stay-connected'
+import { OverviewRoute } from './overview/routes/overview'
+import { ReceiveRoute } from './receive/routes/receive'
+import { SendRoute } from './send/routes/send'
+import { TransactionErrorRoute } from './send/routes/transaction-error'
+import { TransactionSuccessRoute } from './send/routes/transaction-success'
+import { TransactionSummaryRoute } from './send/routes/transaction-summary'
+import { SettingsRoute } from './settings/routes/settings'
+import { BlockProducersRoute } from './staking/routes/block-producers'
+import { DelegateRoute } from './staking/routes/delegate'
+import { StakingOverviewRoute } from './staking/routes/staking-overview'
+import { TransactionDetailsRoute } from './transactions/routes/transaction-details'
+import { TransactionsRoute } from './transactions/routes/transactions'
 
 dayjs.extend(relativeTime)
 
@@ -47,60 +47,63 @@ export const Router = () => {
         <div className="flex flex-1 pointer">
           <MemoryRouter>
             <Routes>
-              <Route path="/" element={<StartView />} />
-              <Route path="/dashboard" element={<OverviewView />} />
-              <Route path="/send" element={<SendView />} />
-              <Route path="/receive" element={<ReceiveView />} />
+              <Route path="/" element={<StartRoute />} />
+              <Route path="/dashboard" element={<OverviewRoute />} />
+              <Route path="/send" element={<SendRoute />} />
+              <Route path="/receive" element={<ReceiveRoute />} />
               <Route
                 path="/transactions/summary"
-                element={<TransactionSummaryView />}
+                element={<TransactionSummaryRoute />}
               />
               <Route
                 path="/transactions/success"
-                element={<TransactionSuccessView />}
+                element={<TransactionSuccessRoute />}
               />
               <Route
                 path="/transactions/error"
-                element={<TransactionErrorView />}
+                element={<TransactionErrorRoute />}
               />
               <Route
                 path="/transactions/:hash"
-                element={<TransactionDetailsView />}
+                element={<TransactionDetailsRoute />}
               />
-              <Route path="/transactions" element={<TransactionsView />} />
-              <Route path="/staking" element={<StakingOverviewView />} />
-              <Route path="/staking/delegate" element={<DelegateView />} />
+              <Route path="/transactions" element={<TransactionsRoute />} />
+              <Route path="/staking" element={<StakingOverviewRoute />} />
+              <Route path="/staking/delegate" element={<DelegateRoute />} />
               <Route
                 path="/staking/producers"
-                element={<BlockProducersView />}
+                element={<BlockProducersRoute />}
               />
-              <Route path="/contacts" element={<AddressBookView />} />
-              <Route path="/contacts/new" element={<NewAddressView />} />
-              <Route path="/onboarding/create" element={<CreateWalletView />} />
+              <Route path="/contacts" element={<AddressBookRoute />} />
+              <Route path="/contacts/new" element={<NewAddressRoute />} />
+              <Route
+                path="/onboarding/create"
+                element={<CreateWalletRoute />}
+              />
               <Route
                 path="/onboarding/restore"
-                element={<RestoreWalletView />}
+                element={<RestoreWalletRoute />}
               />
-              <Route path="/unlock" element={<UnlockWalletView />} />
+              <Route path="/unlock" element={<UnlockWalletRoute />} />
               <Route
                 path="/onboarding/writedown"
-                element={<MnemonicWritedownView />}
+                element={<MnemonicWritedownRoute />}
               />
               <Route
                 path="/onboarding/confirmation"
-                element={<MnemonicConfirmationView />}
+                element={<MnemonicConfirmationRoute />}
               />
               <Route
                 path="/onboarding/mnemonic"
-                element={<MnemonicInputView />}
+                element={<MnemonicInputRoute />}
               />
               <Route
                 path="/onboarding/finish"
-                element={<StayConnectedView />}
+                element={<StayConnectedRoute />}
               />
-              <Route path="/settings" element={<SettingsView />} />
-              <Route path="/about" element={<AboutView />} />
-              <Route path="/*" element={<NotFoundView />} />
+              <Route path="/settings" element={<SettingsRoute />} />
+              <Route path="/about" element={<AboutRoute />} />
+              <Route path="/*" element={<NotFoundRoute />} />
             </Routes>
           </MemoryRouter>
           <Toaster />

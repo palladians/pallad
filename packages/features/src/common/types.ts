@@ -6,11 +6,6 @@ type Epoch = number
 type ChainId = string
 type PublicKey = string
 
-export enum TxKind {
-  STAKE_DELEGATION = 'STAKE_DELEGATION',
-  PAYMENT = 'PAYMENT'
-}
-
 export enum TxSide {
   INCOMING = 'INCOMING',
   OUTGOING = 'OUTGOING'

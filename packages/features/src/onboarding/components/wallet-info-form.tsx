@@ -14,9 +14,11 @@ import { Label } from '@/components/ui/label'
 import { WizardLayout } from '@/components/wizard-layout'
 import { cn } from '@/lib/utils'
 
+import { WalletInfoData } from '../types'
+
 interface WalletInfoFormProps {
   title: string
-  onSubmit: (data: { spendingPassword: string; walletName: string }) => void
+  onSubmit: (data: WalletInfoData) => void
 }
 
 const formSchema = z.object({

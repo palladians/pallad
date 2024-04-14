@@ -1,14 +1,19 @@
 import { ClockIcon } from 'lucide-react'
-import { useLocation, useNavigate } from 'react-router-dom'
 import colors from 'tailwindcss/colors' // eslint-disable-line
 
 import { AppLayout } from '@/components/app-layout'
 
 import { TransactionResult } from '../components/transaction-result'
 
-export const TransactionSuccessView = () => {
-  const navigate = useNavigate()
-  const { state } = useLocation()
+type TransactionSuccessViewProps = {
+  hash: string
+  onGoToTransactions: () => void
+}
+
+export const TransactionSuccessView = ({
+  hash,
+  onGoToTransactions
+}: TransactionSuccessViewProps) => {
   return (
     <AppLayout>
       <TransactionResult
@@ -17,11 +22,11 @@ export const TransactionSuccessView = () => {
           icon: ClockIcon,
           iconColor: colors.sky['500'],
           label: 'Pending Transaction Hash',
-          content: state.hash
+          content: hash
         }}
         button={{
           label: 'View Transactions',
-          onClick: () => navigate(`/transactions`)
+          onClick: onGoToTransactions
         }}
       />
     </AppLayout>
