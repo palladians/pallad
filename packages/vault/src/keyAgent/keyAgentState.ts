@@ -8,11 +8,9 @@ import {
   ChainSignatureResult,
   ChainSpecificArgs,
   ChainSpecificPayload,
-  GetPassphrase,
-  GroupedCredentials
-} from '@palladxyz/key-management'
-import {
   FromBip39MnemonicWordsProps,
+  GetPassphrase,
+  GroupedCredentials,
   InMemoryKeyAgent,
   SerializableInMemoryKeyAgentData
 } from '@palladxyz/key-management'

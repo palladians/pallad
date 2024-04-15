@@ -95,7 +95,6 @@ describe.skip('Mina Explorer Submit Transaction Provider (Functional)', () => {
         publicKey,
         tokenMap
       })
-      console.log('Account Info', accountInfo)
       // construct transaction, sign, and submit
       const amount = 1 * 1e9
       const inferredNonce = accountInfo['MINA']?.inferredNonce ?? 0
@@ -119,7 +118,6 @@ describe.skip('Mina Explorer Submit Transaction Provider (Functional)', () => {
         network: 'Mina',
         networkType: networkType
       }
-      console.log('Credential', credential)
       const signedTx = await agent.sign(credential, constructedTx, args)
       const submitTxArgs = {
         signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>

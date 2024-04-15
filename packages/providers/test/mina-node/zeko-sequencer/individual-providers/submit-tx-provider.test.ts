@@ -96,7 +96,6 @@ describe('Zeko Sequencer Submit Transaction Provider (Functional)', () => {
         publicKey,
         tokenMap
       })) as Record<string, AccountInfo>
-      console.log('Account Info', accountInfo)
 
       if (accountInfo['MINA']?.balance.total === 0) {
         await sendMinaOnZeko(nodeUrl)
@@ -125,7 +124,7 @@ describe('Zeko Sequencer Submit Transaction Provider (Functional)', () => {
         network: 'Mina',
         networkType: networkType
       }
-      console.log('Credential', credential)
+
       const signedTx = await agent.sign(credential, constructedTx, args)
       const submitTxArgs = {
         signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>

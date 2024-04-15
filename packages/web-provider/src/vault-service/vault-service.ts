@@ -152,6 +152,13 @@ export class VaultService implements IVaultService {
   async rehydrate() {
     return await useVault.persist.rehydrate()
   }
+  /*
+  TODO: add checkPassword function for methods that requrie password
+  async checkPassword(password) {
+    const correctPassword = getSessionPersistence().getItem('spendingPassword')
+    return correctPassword === password
+  }
+  */
 
   async syncWallet() {
     await this.rehydrate()

@@ -30,10 +30,9 @@ describe('Mina Explorer Chain History Provider (Functional)', () => {
         addresses: [publicKey]
       })) as Mina.TransactionBody[]
       // TODO: check why pageResults is undefined
-      console.log('Mina Explorer Chain History Provider Response', response)
+
       // TODO: investigate pagination
       const transaction = response[0]
-      console.log('Mina Explorer Chain History Provider Response', transaction)
 
       expect(transaction).toHaveProperty('amount')
       expect(transaction).toHaveProperty('blockHeight')

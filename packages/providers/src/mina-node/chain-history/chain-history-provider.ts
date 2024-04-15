@@ -1,9 +1,9 @@
 import {
   ChainHistoryProvider,
-  Mina,
   TransactionsByAddressesArgs,
-  TransactionsByIdsArgs
-} from '@palladxyz/mina-core'
+  TransactionsByHashesArgs,
+  Tx
+} from '@palladxyz/pallad-core'
 
 import { createGraphQLRequest } from '../utils/fetch-utils'
 import {
@@ -17,10 +17,10 @@ export const createChainHistoryProvider = (
 ): ChainHistoryProvider => {
   const transactionsByAddresses = async (
     args: TransactionsByAddressesArgs
-  ): Promise<Mina.TransactionBody[]> => {
+  ): Promise<Tx[]> => {
     // if archive url is not available, simply pass '' and the chain history will not be called
     if (url === '') return []
-    const { startAt, limit } = args.pagination || { startAt: 0, limit: 10 }
+    const { startAt, limit } = { startAt: 0, limit: 10 }
     // TODO: remove array of addresses from TransactionsByAddressesArgs
     const variables = { address: args.addresses[0], limit, offset: startAt }
     const query = transactionsByAddressesQuery
@@ -37,8 +37,8 @@ export const createChainHistoryProvider = (
   }
 
   const transactionsByHashes = async (
-    args: TransactionsByIdsArgs
-  ): Promise<Mina.TransactionBody[]> => {
+    args: TransactionsByHashesArgs
+  ): Promise<Tx[]> => {
     if (url === '') return []
     const variables = { ids: args.ids }
     const query = transactionsByAddressesQuery

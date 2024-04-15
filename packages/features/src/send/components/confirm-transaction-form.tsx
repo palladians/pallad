@@ -68,15 +68,17 @@ export const ConfirmTransactionForm = () => {
       validUntil: '4294967295',
       fee,
       amount,
-      nonce: currentWallet.accountInfo['MINA'].inferredNonce, // TODO: remove hardcoded 'MINA'
+      nonce: currentWallet.accountInfo['MINA'].inferredNonce, // need a util for this whole `onSubmit` to remove Mina dependency
       type: 'payment'
     }
-    const constructedTx = await constructTx(
-      transaction,
-      kind === 'staking'
-        ? Mina.TransactionKind.STAKE_DELEGATION
-        : Mina.TransactionKind.PAYMENT
-    )
+    const constructTxArgs = {
+      transaction: transaction,
+      transactionKind:
+        kind === 'staking'
+          ? Mina.TransactionKind.STAKE_DELEGATION
+          : Mina.TransactionKind.PAYMENT
+    }
+    const constructedTx = await constructTx(constructTxArgs)
     const getPassphrase = () =>
       new Promise<Uint8Array>((resolve) =>
         resolve(Buffer.from(data.spendingPassword))
