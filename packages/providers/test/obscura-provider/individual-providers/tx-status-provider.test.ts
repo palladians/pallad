@@ -28,7 +28,7 @@ describe('Obscura Transaction Status Provider (Functional)', () => {
     it('should return the status of a transaction', async () => {
       // This test now depends on the actual response from the server
       const response = await provider.checkTxStatus({ ID: txId })
-      console.log('Obscura Tx Status Provider Response', response)
+
       // TODO: Check why the query always returns "UNKNOWN"
       expect(response).toBe(TxStatus.UNKNOWN)
     })

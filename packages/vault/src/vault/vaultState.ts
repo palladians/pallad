@@ -8,7 +8,15 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { GetPassphrase } from '@palladxyz/key-management'
-import { AccountInfo, Mina, SubmitTxArgs } from '@palladxyz/mina-core'
+import { constructTxArgs } from '@palladxyz/key-management'
+// can remove mina-core when there exists an agnostic construct tx function
+import {
+  AccountInfo,
+  PalladNetworkNames,
+  PalladNetworkTypes,
+  SubmitTxArgs,
+  Tx
+} from '@palladxyz/pallad-core'
 import { ProviderConfig } from '@palladxyz/providers'
 
 import {
@@ -21,11 +29,11 @@ import { NetworkName } from '../network-info'
 import { SearchQuery } from '../utils/utils'
 
 // Note: this is the full state of the account not just 'MINA' tokens
-type CurrentWallet = {
+export type CurrentWallet = {
   singleKeyAgentState: SingleKeyAgentState | undefined
   credential: SingleCredentialState
   accountInfo: Record<string, AccountInfo> // string here is token ticker
-  transactions: Record<string, Mina.TransactionBody[]> // string here is token ticker
+  transactions: Record<string, Tx[]> // string here is token ticker
 }
 
 type CurrentWalletPayload = {
@@ -40,8 +48,8 @@ export type GlobalVaultState = {
   credentialName: string
   currentAccountIndex: number
   currentAddressIndex: number
-  chain: Network
-  walletNetwork: Mina.Networks
+  chain: PalladNetworkTypes
+  walletNetwork: PalladNetworkNames
   walletName: string
   knownAccounts: string[]
   chainIds: string[]
@@ -75,10 +83,7 @@ export type GlobalVaultActions = {
     args: ChainOperationArgs,
     getPassphrase: GetPassphrase
   ) => Promise<unknown>
-  constructTx: (
-    transaction: Mina.TransactionBody,
-    kind: Mina.TransactionKind
-  ) => unknown
+  constructTx: (args: constructTxArgs) => unknown
   submitTx: (submitTxArgs: SubmitTxArgs) => Promise<unknown>
   createWallet: (strength?: number) => CreateWalletReturn
   restoreWallet: <T extends ChainSpecificPayload>(

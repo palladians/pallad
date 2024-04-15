@@ -1,5 +1,5 @@
 export * from './account-info'
 export * from './chain-history'
-export * from './daemon-status'
+export * from './node-status'
 export * from './tx-submit'
 export * from './types'

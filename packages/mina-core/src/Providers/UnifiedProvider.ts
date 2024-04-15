@@ -1,13 +1,13 @@
-import { Paginated, TransactionBody } from '../Mina'
-import { AccountInfo, AccountInfoArgs } from './AccountInfoProvider'
+import { TransactionBody } from '../Mina'
+import { AccountInfo, AccountInfoArgs } from './account-info-provider'
 import {
   TransactionsByAddressesArgs,
   TransactionsByIdsArgs
-} from './ChainHistoryProvider'
+} from './chain-history-provider'
 import { DaemonStatus } from './daemon-status-provider'
 import { HealthCheckResponse } from './Provider'
-import { TxStatus, TxStatusArgs } from './TxStatusProvider'
-import { SubmitTxArgs, SubmitTxResult } from './TxSubmitProvider'
+import { TxStatus, TxStatusArgs } from './tx-status-provider'
+import { SubmitTxArgs, SubmitTxResult } from './tx-submit-provider'
 
 export type UnifiedMinaProviderConfig = {
   nodeUrl: string
@@ -21,18 +21,14 @@ export interface UnifiedMinaProviderType {
   // Methods related to ProviderNode
   getAccountInfo(
     args: AccountInfoArgs
-  ):
-    | Promise<AccountInfo | undefined>
-    | Promise<Record<string, AccountInfo> | undefined>
+  ): Promise<Record<string, AccountInfo> | undefined>
   getTransactionStatus?(args: TxStatusArgs): Promise<TxStatus | undefined>
   submitTransaction(args: SubmitTxArgs): Promise<SubmitTxResult | undefined>
 
   // Methods related to ProviderArchive
   getTransactions(
     args: TransactionsByAddressesArgs
-  ):
-    | Promise<Paginated<TransactionBody> | undefined>
-    | Promise<TransactionBody[] | undefined>
+  ): Promise<TransactionBody[] | undefined>
   getTransaction?(
     args: TransactionsByIdsArgs
   ): Promise<TransactionBody[] | undefined>

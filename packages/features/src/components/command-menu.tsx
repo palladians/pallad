@@ -22,16 +22,18 @@ import {
   CommandList
 } from '@/components/ui/command'
 
-import { useAccount } from '../common/hooks/use-account'
-
 interface CommandMenuProps {
   open: boolean
   setOpen: (open: boolean) => void
+  lockWallet: () => void
 }
 
-export const CommandMenu = ({ open, setOpen }: CommandMenuProps) => {
+export const CommandMenu = ({
+  open,
+  setOpen,
+  lockWallet
+}: CommandMenuProps) => {
   const navigate = useNavigate()
-  const { lockWallet } = useAccount()
 
   const COMMAND_GROUPS = [
     {

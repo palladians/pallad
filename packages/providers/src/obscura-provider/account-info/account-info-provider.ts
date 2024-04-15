@@ -2,7 +2,7 @@ import {
   AccountInfo,
   AccountInfoArgs,
   AccountInfoProvider
-} from '@palladxyz/mina-core'
+} from '@palladxyz/pallad-core'
 
 import { fetchGraphQL } from '../utils/fetch-utils'
 import { healthCheck } from '../utils/health-check-utils'

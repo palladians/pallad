@@ -8,7 +8,6 @@
     "build": "turbo run build",
     "b": "pnpm build",
     "build:extension": "turbo run build --filter=@palladxyz/extension...",
-    "build:website": "turbo run build --filter=@palladxyz/website...",
     "build:features": "turbo run build --filter=@palladxyz/features...",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
     "dev:extension": "turbowatch extension.turbowatch.ts",
@@ -17,6 +16,7 @@
     "test:unit": "turbo run test:unit",
     "test:e2e:extension": "turbo run test:e2e --filter=@palladxyz/extension",
     "format": "prettier --write \"**/*.{ts,tsx,md}\" && pnpm lint:fix",
+    "f": "pnpm format",
     "cleanup": "turbo run cleanup && rimraf node_modules",
     "prepare": "husky install",
     "preinstall": "npx only-allow pnpm"
@@ -49,5 +49,5 @@
     "typescript": "^5.3.3",
     "vitest": "^1.1.0"
   },
-  "packageManager": "pnpm@8.12.1"
+  "packageManager": "pnpm@8.15.6"
 }

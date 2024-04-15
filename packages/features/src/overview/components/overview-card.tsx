@@ -1,6 +1,4 @@
-import { useFiatPrice } from '@palladxyz/offchain-data'
 import { CopyIcon, MoveUpRightIcon, QrCodeIcon } from 'lucide-react'
-import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAccount } from '@/common/hooks/use-account'
@@ -15,31 +13,22 @@ import {
 
 import { AvatarMenu } from './avatar-menu'
 
-export const OverviewCard = () => {
+type OverviewCardProps = {
+  account: ReturnType<typeof useAccount>
+  fiatBalance: number
+}
+
+export const OverviewCard = ({ account, fiatBalance }: OverviewCardProps) => {
   const navigate = useNavigate()
-  const {
-    minaBalance,
-    gradientBackground,
-    publicKey,
-    copyWalletAddress,
-    network
-  } = useAccount()
-  const { data: fiatPriceData } = useFiatPrice()
-  const fiatBalance = useMemo(() => {
-    if (!minaBalance) return
-    const rawFiatPrice = fiatPriceData?.['mina-protocol']?.usd || 0
-    if (!rawFiatPrice) return
-    return Number(minaBalance) * rawFiatPrice
-  }, [minaBalance, fiatPriceData])
-  if (!publicKey) return null
+  if (!account.publicKey) return null
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[16px] gap-4 p-[2px] relative"
-      style={{ backgroundImage: gradientBackground }}
+      style={{ backgroundImage: account.gradientBackground }}
     >
       <div
         className="absolute h-full w-full opacity-25 rounded-[14px] pointer-events-none"
-        style={{ backgroundImage: gradientBackground }}
+        style={{ backgroundImage: account.gradientBackground }}
       />
       <div className="flex flex-col flex-1 w-full gap-4 bg-background rounded-[14px] py-4 px-4 backdrop-blur-2xl">
         <div className="flex flex-1">
@@ -48,7 +37,7 @@ export const OverviewCard = () => {
               className="text-lg font-semibold"
               data-testid="dashboard__minaBalance"
             >
-              {minaBalance?.toString()} MINA
+              {account.minaBalance?.toString()} MINA
             </div>
             <div className="text-sm font-semibold">
               ~{fiatBalance?.toFixed(4)} USD
@@ -61,9 +50,9 @@ export const OverviewCard = () => {
             className="text-sm font-semibold dark:text-blue-400 text-blue-600"
             data-testid="dashboard__addressTruncated"
           >
-            {publicKey &&
+            {account.publicKey &&
               truncateString({
-                value: publicKey,
+                value: account.publicKey,
                 firstCharCount: 8,
                 endCharCount: 8
               })}
@@ -72,7 +61,7 @@ export const OverviewCard = () => {
             <TooltipTrigger asChild>
               <Button
                 variant="link"
-                onClick={copyWalletAddress}
+                onClick={account.copyWalletAddress}
                 className="!p-0 !h-auto"
               >
                 <CopyIcon size={16} />
@@ -83,7 +72,7 @@ export const OverviewCard = () => {
             </TooltipContent>
           </Tooltip>
           <Badge variant="outline" className="capitalize">
-            {network}
+            {account.network}
           </Badge>
         </div>
         <div className="flex gap-2">

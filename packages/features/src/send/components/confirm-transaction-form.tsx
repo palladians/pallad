@@ -10,11 +10,11 @@ import {
 } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useMixpanel } from 'react-mixpanel-browser'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 import { useAccount } from '@/common/hooks/use-account'
-import { useAnalytics } from '@/common/hooks/use-analytics'
 import { usePendingTransactionStore } from '@/common/store/pending-transactions'
 import { useTransactionStore } from '@/common/store/transaction'
 import { ButtonArrow } from '@/components/button-arrow'
@@ -28,7 +28,7 @@ import { ConfirmTransactionSchema } from './confirm-transaction-form.schema'
 
 type ConfirmTransactionData = z.infer<typeof ConfirmTransactionSchema>
 export const ConfirmTransactionForm = () => {
-  const { track } = useAnalytics()
+  const mixpanel = useMixpanel()
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
   // can use
@@ -68,15 +68,17 @@ export const ConfirmTransactionForm = () => {
       validUntil: '4294967295',
       fee,
       amount,
-      nonce: currentWallet.accountInfo['MINA'].inferredNonce, // TODO: remove hardcoded 'MINA'
+      nonce: currentWallet.accountInfo['MINA'].inferredNonce, // need a util for this whole `onSubmit` to remove Mina dependency
       type: 'payment'
     }
-    const constructedTx = await constructTx(
-      transaction,
-      kind === 'staking'
-        ? Mina.TransactionKind.STAKE_DELEGATION
-        : Mina.TransactionKind.PAYMENT
-    )
+    const constructTxArgs = {
+      transaction: transaction,
+      transactionKind:
+        kind === 'staking'
+          ? Mina.TransactionKind.STAKE_DELEGATION
+          : Mina.TransactionKind.PAYMENT
+    }
+    const constructedTx = await constructTx(constructTxArgs)
     const getPassphrase = () =>
       new Promise<Uint8Array>((resolve) =>
         resolve(Buffer.from(data.spendingPassword))
@@ -103,7 +105,7 @@ export const ConfirmTransactionForm = () => {
     const submitTxArgs = {
       signedTransaction: signedTx as unknown as SignedLegacy<Payment>,
       kind:
-        kind === 'staking'
+        kind === ('staking' as Mina.TransactionKind)
           ? Mina.TransactionKind.STAKE_DELEGATION
           : Mina.TransactionKind.PAYMENT,
       transactionDetails: {
@@ -127,14 +129,16 @@ export const ConfirmTransactionForm = () => {
         expireAt: addHours(new Date(), 8).toISOString()
       })
       await syncWallet()
-      track({
-        event: kind === 'staking' ? 'portfolio_delegated' : 'transaction_sent',
-        metadata: {
+      mixpanel.track(
+        kind === ('staking' as Mina.TransactionKind)
+          ? 'PortfolioDelegated'
+          : 'TransactionSent',
+        {
           amount: transaction.amount,
           fee: transaction.fee,
-          to: kind === 'staking' && transaction.to
+          to: kind === ('staking' as Mina.TransactionKind) && transaction.to
         }
-      })
+      )
       navigate('/transactions/success', {
         state: {
           hash

@@ -31,7 +31,6 @@ describe.skip('Mina Explorer Account Info Provider (Functional)', () => {
     it('should return account info for a valid public key', async () => {
       // This test now depends on the actual response from the server
       const response = await provider.getAccountInfo({ publicKey, tokenMap })
-      console.log('Mina Explorer AccountInfo Provider Response', response)
       expect(response).toHaveProperty('MINA')
     })
   })

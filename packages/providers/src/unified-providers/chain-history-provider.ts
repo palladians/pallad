@@ -1,10 +1,10 @@
 import {
   ChainHistoryProvider,
   HealthCheckResponse,
-  Mina,
   TransactionsByAddressesArgs,
-  TransactionsByIdsArgs
-} from '@palladxyz/mina-core'
+  TransactionsByHashesArgs,
+  Tx
+} from '@palladxyz/pallad-core'
 
 import { createChainHistoryProvider as mn } from '../mina-node'
 import { createChainHistoryProvider as ob } from '../obscura-provider'
@@ -13,6 +13,7 @@ import { ProviderConfig } from './types'
 export const createChainHistoryProvider = (
   config: ProviderConfig
 ): ChainHistoryProvider => {
+  // TODO: make the underlyingProvider creation a util function
   const underlyingProvider =
     config.nodeEndpoint.providerName === 'mina-node'
       ? mn(config.archiveNodeEndpoint.url)
@@ -20,20 +21,16 @@ export const createChainHistoryProvider = (
 
   const transactionsByAddresses = async (
     args: TransactionsByAddressesArgs
-  ): Promise<Mina.TransactionBody[]> => {
+  ): Promise<Tx[]> => {
     // Delegate the call to the underlying provider's getAccountInfo method
-    return (await underlyingProvider.transactionsByAddresses(
-      args
-    )) as Mina.TransactionBody[]
+    return await underlyingProvider.transactionsByAddresses(args)
   }
 
   const transactionsByHashes = async (
-    args: TransactionsByIdsArgs
-  ): Promise<Mina.TransactionBody[]> => {
+    args: TransactionsByHashesArgs
+  ): Promise<Tx[]> => {
     // Delegate the call to the underlying provider's getAccountInfo method
-    return (await underlyingProvider.transactionsByHashes(
-      args
-    )) as Mina.TransactionBody[]
+    return await underlyingProvider.transactionsByHashes(args)
   }
 
   const healthCheck = (): Promise<HealthCheckResponse> => {

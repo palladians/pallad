@@ -1,7 +1,8 @@
+import { Mina } from '@palladxyz/mina-core'
 import { useFiatPrice } from '@palladxyz/offchain-data'
 import { useNavigate } from 'react-router-dom'
 
-import { StructurizedTransaction, TxKind, TxSide } from '@/common/types'
+import { StructurizedTransaction, TxSide } from '@/common/types'
 import { MinaIcon } from '@/components/mina-icon'
 
 import { TxIndicator } from './tx-indicator'
@@ -16,8 +17,9 @@ const fiatTxValue = (amount, fiatValue) => {
 }
 
 const getTransactionLabel = (tx) => {
-  if (tx.kind === TxKind.STAKE_DELEGATION) return 'Delegation'
-  if (tx.from === tx.to && tx.kind === TxKind.PAYMENT) return 'Sent to Self'
+  if (tx.kind === Mina.TransactionKind.STAKE_DELEGATION) return 'Delegation'
+  if (tx.from === tx.to && tx.kind === TransactionKind.PAYMENT)
+    return 'Sent to Self'
   return tx.side === TxSide.INCOMING ? 'Received' : 'Sent'
 }
 

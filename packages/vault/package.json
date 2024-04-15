@@ -20,6 +20,7 @@
   "dependencies": {
     "@palladxyz/key-management": "*",
     "@palladxyz/mina-core": "*",
+    "@palladxyz/pallad-core": "*",
     "@palladxyz/persistence": "*",
     "@palladxyz/providers": "*",
     "@palladxyz/util": "*",
@@ -39,6 +40,6 @@
     "@types/secp256k1": "^4.0.3",
     "mina-signer": "^2.1.1",
     "msw": "^1.2.2",
-    "vite": "^4.5.1"
+    "vite": "^5.2.8"
   }
 }
