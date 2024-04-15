@@ -1,10 +1,10 @@
 import {
   MinaPayload,
-  MinaSpecificArgs,
   Network,
   validateMnemonic,
   wordlist
 } from '@palladxyz/key-management'
+import { MinaDerivationArgs } from '@palladxyz/key-management'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { DEFAULT_NETWORK, KeyAgents, useVault } from '@palladxyz/vault'
 import { useState } from 'react'
@@ -44,11 +44,11 @@ export const MnemonicInputRoute = () => {
     if (!spendingPassword) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
     await useVault.persist.rehydrate()
-    const restoreArgs: MinaSpecificArgs = {
+    // TODO: make chainAgnostic using ChainDerivationArgs
+    const restoreArgs: MinaDerivationArgs = {
       network: Network.Mina,
       accountIndex: 0,
-      addressIndex: 0,
-      networkType: 'testnet' // TODO: make this configurable if the user restores to mainnet it needs to be 'mainnet
+      addressIndex: 0
     }
     try {
       setRestoring(true)

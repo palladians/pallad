@@ -1,5 +1,5 @@
 import {
-  ChainSpecificArgs,
+  ChainDerivationArgs,
   ChainSpecificPayload,
   //constructTransaction,
   FromBip39MnemonicWordsProps,
@@ -44,7 +44,7 @@ const getPassphrase = () =>
 describe('WalletTest', () => {
   let agentArgs: FromBip39MnemonicWordsProps
   let network: string
-  let args: ChainSpecificArgs
+  let args: ChainDerivationArgs
   let payload: ChainSpecificPayload
   let credentialName: CredentialName
   let keyAgentName: string
@@ -60,8 +60,7 @@ describe('WalletTest', () => {
     args = {
       network: Network.Mina,
       accountIndex: 0,
-      addressIndex: 0,
-      networkType: 'testnet'
+      addressIndex: 0
     }
     payload = new MinaPayload()
     credentialName = 'Test Suite Credential'

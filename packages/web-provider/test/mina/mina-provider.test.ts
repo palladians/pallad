@@ -1,5 +1,5 @@
 import {
-  ChainSpecificArgs,
+  ChainDerivationArgs,
   ChainSpecificPayload,
   constructTransaction,
   FromBip39MnemonicWordsProps,
@@ -49,7 +49,7 @@ describe.skip('Wallet Provider Test', () => {
   let provider: MinaProvider
   let agentArgs: FromBip39MnemonicWordsProps
   let network: string
-  let args: ChainSpecificArgs
+  let args: ChainDerivationArgs
   let payload: ChainSpecificPayload
   let credentialName: CredentialName
   let keyAgentName: string
@@ -67,8 +67,7 @@ describe.skip('Wallet Provider Test', () => {
     args = {
       network: Network.Mina,
       accountIndex: 0,
-      addressIndex: 0,
-      networkType: networkType as Mina.NetworkType
+      addressIndex: 0
     }
     payload = new MinaPayload()
     credentialName = 'Test Suite Credential'

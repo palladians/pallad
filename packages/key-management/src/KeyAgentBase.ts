@@ -8,12 +8,12 @@ import * as errors from './errors'
 import { getPassphraseRethrowTypedError } from './InMemoryKeyAgent'
 import { KeyDecryptor } from './KeyDecryptor'
 import {
+  ChainDerivationArgs,
   ChainKeyPair,
   ChainOperationArgs,
   ChainPrivateKey,
   ChainSignablePayload,
   ChainSignatureResult,
-  ChainSpecificArgs,
   ChainSpecificPayload,
   credentialDerivers,
   credentialMatchers,
@@ -66,7 +66,7 @@ export abstract class KeyAgentBase implements KeyAgent {
 
   async deriveCredentials<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs,
+    args: ChainDerivationArgs,
     getPassphrase: GetPassphrase,
     pure?: boolean
   ): Promise<GroupedCredentials> {
@@ -115,7 +115,7 @@ export abstract class KeyAgentBase implements KeyAgent {
 
   async deriveKeyPair<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs,
+    args: ChainDerivationArgs,
     passphrase: Uint8Array
   ): Promise<ChainKeyPair> {
     // Generate the private key
@@ -139,7 +139,7 @@ export abstract class KeyAgentBase implements KeyAgent {
   async sign<T extends GroupedCredentials>(
     payload: T,
     signable: ChainSignablePayload,
-    args: ChainSpecificArgs | ChainOperationArgs
+    args: ChainOperationArgs
   ): Promise<ChainSignatureResult> {
     const encryptedPrivateKeyBytes = payload.encryptedPrivateKeyBytes
     const decryptedKeyBytes = await this.keyDecryptor.decryptChildPrivateKey(
@@ -179,7 +179,7 @@ export abstract class KeyAgentBase implements KeyAgent {
 
   async #generatePrivateKeyFromSeed<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs
+    args: ChainDerivationArgs
   ): Promise<ChainPrivateKey> {
     // Decrypt your seed
     const decryptedSeedBytes = await this.decryptSeed()

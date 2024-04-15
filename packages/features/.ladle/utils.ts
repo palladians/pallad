@@ -16,7 +16,6 @@ export const useStoriesWallet = () => {
           network: Network.Mina,
           accountIndex: 0,
           addressIndex: 0,
-          networkType: 'testnet'
         },
         Mina.Networks.BERKELEY,
         {

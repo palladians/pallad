@@ -1,8 +1,8 @@
 import {
   ChainAddress,
+  ChainDerivationArgs,
   ChainOperationArgs,
   ChainSignablePayload,
-  ChainSpecificArgs,
   ChainSpecificPayload,
   FromBip39MnemonicWordsProps,
   Network
@@ -88,7 +88,7 @@ export type GlobalVaultActions = {
   createWallet: (strength?: number) => CreateWalletReturn
   restoreWallet: <T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs,
+    args: ChainDerivationArgs,
     network: string,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
     keyAgentName: KeyAgentName,

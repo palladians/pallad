@@ -4,9 +4,9 @@ import {
   generateMnemonicWords,
   GroupedCredentials,
   MinaPayload,
-  MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
+import { MinaDerivationArgs } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { act, renderHook } from '@testing-library/react'
 import { expect } from 'vitest'
@@ -173,11 +173,10 @@ describe('KeyAgentStore', () => {
       address: expectedPublicKey
     }
 
-    const args: MinaSpecificArgs = {
+    const args: MinaDerivationArgs = {
       network: Network.Mina,
       accountIndex: 0,
-      addressIndex: 0,
-      networkType: 'testnet'
+      addressIndex: 0
     }
     const payload = new MinaPayload()
     await act(async () => {
@@ -202,11 +201,10 @@ describe('KeyAgentStore', () => {
         agentArgs
       )
       // create credential
-      const args: MinaSpecificArgs = {
+      const args: MinaDerivationArgs = {
         network: Network.Mina,
         accountIndex: 0,
-        addressIndex: 0,
-        networkType: 'testnet'
+        addressIndex: 0
       }
       const payload = new MinaPayload()
       const groupedCredential = await result.current.createCredential(

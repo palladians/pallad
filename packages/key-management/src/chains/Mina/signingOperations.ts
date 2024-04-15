@@ -4,15 +4,11 @@ import Client from 'mina-signer'
 import * as errors from '../../errors'
 import { ChainOperationArgs } from '../../types'
 import * as util from './guards'
-import {
-  MinaSignablePayload,
-  MinaSignatureResult,
-  MinaSpecificArgs
-} from './types'
+import { MinaSignablePayload, MinaSignatureResult } from './types'
 
 export function MinaSigningOperations<T extends MinaSignablePayload>(
   payload: T,
-  args: MinaSpecificArgs | ChainOperationArgs,
+  args: ChainOperationArgs,
   privateKey: string
 ): MinaSignatureResult {
   if (!args.networkType) {

@@ -44,7 +44,6 @@ export type MinaGroupedCredentials = {
   accountIndex: number
   address: Mina.PublicKey
   encryptedPrivateKeyBytes: Uint8Array
-  // TODO: make these credentials unique per Mina network using Mina.Networks
 }
 
 export type MinaSignablePayload =
@@ -57,9 +56,9 @@ export type MinaSignablePayload =
 export class MinaPayload implements ChainSpecificPayload {
   network = Network.Mina
 
-  derivePublicKey(privateKey: string, args: MinaSpecificArgs) {
+  derivePublicKey(privateKey: string) {
     return new Promise<string>((resolve) =>
-      resolve(deriveMinaPublicKey(args, privateKey))
+      resolve(deriveMinaPublicKey(privateKey))
     )
   }
   derivePrivateKey(decryptedSeedBytes: Uint8Array, args: MinaSpecificArgs) {

@@ -3,7 +3,7 @@ import { wordlist } from '@scure/bip39/wordlists/english'
 import * as errors from './errors'
 import { KeyAgentBase } from './KeyAgentBase'
 import {
-  ChainSpecificArgs,
+  ChainDerivationArgs,
   ChainSpecificPayload,
   GetPassphrase,
   KeyAgent,
@@ -76,7 +76,7 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
 
   async restoreKeyAgent<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs,
+    args: ChainDerivationArgs,
     getPassphrase: GetPassphrase
   ): Promise<InMemoryKeyAgent> {
     await this.deriveCredentials(payload, args, getPassphrase, false)

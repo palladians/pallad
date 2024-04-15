@@ -5,6 +5,7 @@ import {
   isEthereumCredential
 } from './chains/Ethereum/credentialDerivation'
 import {
+  EthereumDerivationArgs,
   EthereumGroupedCredentials,
   EthereumSignablePayload,
   EthereumSignatureResult,
@@ -15,20 +16,13 @@ import {
   isMinaCredential
 } from './chains/Mina/credentialDerivation'
 import {
+  MinaDerivationArgs,
   MinaGroupedCredentials,
   MinaKeyConst,
   MinaSignablePayload,
   MinaSignatureResult,
   MinaSpecificArgs
 } from './chains/Mina/types'
-import {
-  deriveStarknetCredentials,
-  isStarknetCredential
-} from './chains/Starknet/credentialDerivation'
-import {
-  StarknetGroupedCredentials,
-  StarknetSpecificArgs
-} from './chains/Starknet/types'
 
 export type ChainKeyConst = MinaKeyConst
 export type PayloadTypes = 'transaction' | 'message' | 'fields'
@@ -64,18 +58,16 @@ export type SerializableKeyAgentData = SerializableInMemoryKeyAgentData
 
 export type GroupedCredentials =
   | MinaGroupedCredentials
-  | StarknetGroupedCredentials
   | EthereumGroupedCredentials
 
-export type CredentialMatcher<T extends ChainSpecificArgs> = (
+export type CredentialMatcher<T extends ChainDerivationArgs> = (
   credential: GroupedCredentials,
   args: T
 ) => boolean
 
 export const credentialMatchers: Record<Network, CredentialMatcher<any>> = {
-  Mina: isMinaCredential as CredentialMatcher<MinaSpecificArgs>,
-  Starknet: isStarknetCredential as CredentialMatcher<StarknetSpecificArgs>,
-  Ethereum: isEthereumCredential as CredentialMatcher<EthereumSpecificArgs>
+  Mina: isMinaCredential as CredentialMatcher<MinaDerivationArgs>,
+  Ethereum: isEthereumCredential as CredentialMatcher<EthereumDerivationArgs>
   // Add more as needed...
 }
 
@@ -103,19 +95,19 @@ export interface KeyAgent {
   sign<T extends GroupedCredentials>(
     payload: T,
     signable: ChainSignablePayload,
-    args: ChainSpecificArgs,
+    args: ChainOperationArgs,
     getPassphrase: GetPassphrase
   ): Promise<ChainSignatureResult>
 
   deriveKeyPair<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs,
+    args: ChainDerivationArgs,
     passphrase: Uint8Array
   ): Promise<ChainKeyPair>
 
   deriveCredentials<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs,
+    args: ChainDerivationArgs,
     getPassphrase: GetPassphrase,
     pure?: boolean
   ): Promise<GroupedCredentials>
@@ -135,19 +127,17 @@ export enum Network {
    * Ethereum network option
    */
 
-  Ethereum = 'Ethereum',
+  Ethereum = 'Ethereum'
 
   /**
    * Starknet network option
    */
-  Starknet = 'Starknet'
+  //Starknet = 'Starknet'
 }
 
-// TODO: Change this to a ChainDerivationArgs
-export type ChainSpecificArgs =
-  | MinaSpecificArgs
-  | StarknetSpecificArgs
-  | EthereumSpecificArgs
+export type ChainDerivationArgs = MinaDerivationArgs | EthereumDerivationArgs
+
+export type ChainSpecificArgs = MinaSpecificArgs | EthereumSpecificArgs
 
 export type ChainOperationArgs = {
   operation: string
@@ -159,11 +149,11 @@ export interface ChainSpecificPayload {
   network: Network
   derivePublicKey(
     privateKey: ChainPrivateKey,
-    args: ChainSpecificArgs
+    args: ChainDerivationArgs
   ): Promise<ChainPublicKey>
   derivePrivateKey(
     decryptedSeedBytes: Uint8Array,
-    args: ChainSpecificArgs
+    args: ChainDerivationArgs
   ): Promise<ChainPrivateKey>
 }
 
@@ -178,7 +168,7 @@ export type ChainKeyPair = {
   encryptedPrivateKeyBytes: Uint8Array
 }
 
-export type DeriveCredentialFunction<T extends ChainSpecificArgs> = (
+export type DeriveCredentialFunction<T extends ChainDerivationArgs> = (
   args: T,
   publicKey: ChainPublicKey,
   encryptedPrivateKeyBytes: Uint8Array
@@ -189,13 +179,12 @@ export const credentialDerivers: Record<
   DeriveCredentialFunction<any>
 > = {
   Mina: deriveMinaCredentials,
-  Starknet: deriveStarknetCredentials,
   Ethereum: deriveEthereumCredentials
   // Add more as needed...
 }
 
 export type ChainSigningFunction = (
-  args: ChainSpecificArgs,
+  args: ChainOperationArgs, // TODO: chain
   privateKey: ChainPrivateKey
 ) => Promise<ChainSignatureResult>
 
