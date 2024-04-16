@@ -18,10 +18,10 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/key-management": "^0.0.1",
-    "@palladxyz/mina-core": "^0.0.1",
-    "@palladxyz/pallad-core": "^0.0.1",
-    "@palladxyz/util": "^0.0.1",
+    "@palladxyz/key-management": "workspace:*",
+    "@palladxyz/mina-core": "workspace:*",
+    "@palladxyz/pallad-core": "workspace:*",
+    "@palladxyz/util": "workspace:*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "events": "^3.3.0",
@@ -34,7 +34,7 @@
     "ws": "^8.15.1"
   },
   "devDependencies": {
-    "@palladxyz/common": "^1.0.0",
+    "@palladxyz/common": "workspace:*",
     "@types/events": "^3.0.3",
     "@types/json-bigint": "^1.0.4",
     "@types/mocha": "^10.0.6",

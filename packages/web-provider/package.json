@@ -18,17 +18,17 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/key-management": "^0.0.1",
-    "@palladxyz/mina-core": "^0.0.1",
-    "@palladxyz/persistence": "*",
-    "@palladxyz/vault": "^0.0.1",
+    "@palladxyz/key-management": "workspace:*",
+    "@palladxyz/mina-core": "workspace:*",
+    "@palladxyz/persistence": "workspace:*",
+    "@palladxyz/vault": "workspace:*",
     "mina-signer": "^2.1.1",
     "superjson": "^2.2.1",
     "vitest": "^1.1.0",
     "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {
-    "@palladxyz/common": "^1.0.0",
+    "@palladxyz/common": "workspace:*",
     "@testing-library/react": "^14.1.2",
     "@types/chrome": "^0.0.254",
     "@types/mocha": "^10.0.6",

@@ -18,6 +18,6 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "devDependencies": {
-    "@palladxyz/common": "*"
+    "@palladxyz/common": "workspace:*"
   }
 }

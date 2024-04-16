@@ -7,8 +7,8 @@ import { MnemonicWritedownView } from '../views/mnemonic-writedown'
 
 export const MnemonicWritedownRoute = () => {
   const navigate = useNavigate()
-  const mnemonicWords = useOnboardingStore(
-    (state) => state.mnemonic?.split(' ')
+  const mnemonicWords = useOnboardingStore((state) =>
+    state.mnemonic?.split(' ')
   )
   const [safetyConfirmed, setSafetyConfirmed] = useState(false)
   const [mnemonicWritten, setMnemonicWritten] = useState(false)

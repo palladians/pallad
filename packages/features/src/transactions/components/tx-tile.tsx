@@ -18,7 +18,7 @@ const fiatTxValue = (amount, fiatValue) => {
 
 const getTransactionLabel = (tx) => {
   if (tx.kind === Mina.TransactionKind.STAKE_DELEGATION) return 'Delegation'
-  if (tx.from === tx.to && tx.kind === TransactionKind.PAYMENT)
+  if (tx.from === tx.to && tx.kind === Mina.TransactionKind.PAYMENT)
     return 'Sent to Self'
   return tx.side === TxSide.INCOMING ? 'Received' : 'Sent'
 }
