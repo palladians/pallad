@@ -24,7 +24,7 @@
     "ts-custom-error": "^3.3.1"
   },
   "devDependencies": {
-    "@palladxyz/common": "^1.0.0",
+    "@palladxyz/common": "workspace:*",
     "@types/mocha": "^10.0.6",
     "@types/secp256k1": "^4.0.6"
   }
