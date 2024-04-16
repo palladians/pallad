@@ -329,7 +329,6 @@ export const useVault = create<
         return { mnemonic }
       },
       restoreWallet: async (
-        payload,
         args,
         network,
         { mnemonicWords, getPassphrase },
@@ -361,7 +360,6 @@ export const useVault = create<
         if (!keyAgent)
           throw new WalletError('keyAgent is undefined in restoreWallet method') // TODO: we can derive credential direct from the key Agent Store
         const derivedCredential = await keyAgent?.deriveCredentials(
-          payload,
           args,
           getPassphrase,
           true // has to be true

@@ -4,7 +4,6 @@ import * as errors from './errors'
 import { KeyAgentBase } from './KeyAgentBase'
 import {
   ChainDerivationArgs,
-  ChainSpecificPayload,
   GetPassphrase,
   KeyAgent,
   KeyAgentType,
@@ -74,12 +73,11 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     )
   }
 
-  async restoreKeyAgent<T extends ChainSpecificPayload>(
-    payload: T,
+  async restoreKeyAgent(
     args: ChainDerivationArgs,
     getPassphrase: GetPassphrase
   ): Promise<InMemoryKeyAgent> {
-    await this.deriveCredentials(payload, args, getPassphrase, false)
+    await this.deriveCredentials(args, getPassphrase, false)
     return this
   }
 

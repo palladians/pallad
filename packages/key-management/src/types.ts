@@ -9,7 +9,8 @@ import {
   EthereumGroupedCredentials,
   EthereumSignablePayload,
   EthereumSignatureResult,
-  EthereumSpecificArgs
+  EthereumSpecificArgs,
+  ethKeyPairDerivationOperations
 } from './chains/Ethereum/types'
 import {
   deriveMinaCredentials,
@@ -19,10 +20,28 @@ import {
   MinaDerivationArgs,
   MinaGroupedCredentials,
   MinaKeyConst,
+  minaKeyPairDerivationOperations,
   MinaSignablePayload,
   MinaSignatureResult,
   MinaSpecificArgs
 } from './chains/Mina/types'
+
+export enum Network {
+  /**
+   * Mina network option
+   */
+  Mina = 'Mina',
+
+  /**
+   * Ethereum network option
+   */
+  Ethereum = 'Ethereum'
+
+  /**
+   * Starknet network option
+   */
+  //Starknet = 'Starknet'
+}
 
 export type ChainKeyConst = MinaKeyConst
 export type PayloadTypes = 'transaction' | 'message' | 'fields'
@@ -71,6 +90,57 @@ export const credentialMatchers: Record<Network, CredentialMatcher<any>> = {
   // Add more as needed...
 }
 
+// other new ones that work
+export interface KeyPairDerivationOperations<T> {
+  derivePublicKey: (privateKey: Uint8Array | string) => Promise<string>
+  derivePrivateKey: (
+    decryptedSeedBytes: Uint8Array,
+    args: T
+  ) => Promise<Uint8Array | string>
+}
+
+export const createChainDerivationOperationsProvider = (
+  args: ChainDerivationArgs
+) => {
+  const derivePublicKey = (privateKey: Uint8Array | string) => {
+    if (args.network === Network.Mina) {
+      return minaKeyPairDerivationOperations.derivePublicKey(privateKey)
+    } else if (args.network === Network.Ethereum) {
+      return ethKeyPairDerivationOperations.derivePublicKey(privateKey)
+    } else {
+      throw new Error(`Unsupported network in args: ${args}`)
+    }
+  }
+
+  const derivePrivateKey = (decryptedSeedBytes: Uint8Array) => {
+    if (args.network === Network.Mina) {
+      return minaKeyPairDerivationOperations.derivePrivateKey(
+        decryptedSeedBytes,
+        args
+      )
+    } else if (args.network === Network.Ethereum) {
+      return ethKeyPairDerivationOperations.derivePrivateKey(
+        decryptedSeedBytes,
+        args
+      )
+    } else {
+      throw new Error(`Unsupported network in args: ${args}`)
+    }
+  }
+
+  return {
+    derivePublicKey,
+    derivePrivateKey
+  }
+}
+
+export function isDerivationArgsForNetwork<T extends ChainDerivationArgs>(
+  args: ChainDerivationArgs,
+  network: Network
+): args is T {
+  return args.network === network
+}
+
 export type ChainAddress = Mina.PublicKey | string
 
 /**
@@ -99,14 +169,12 @@ export interface KeyAgent {
     getPassphrase: GetPassphrase
   ): Promise<ChainSignatureResult>
 
-  deriveKeyPair<T extends ChainSpecificPayload>(
-    payload: T,
+  deriveKeyPair(
     args: ChainDerivationArgs,
     passphrase: Uint8Array
   ): Promise<ChainKeyPair>
 
-  deriveCredentials<T extends ChainSpecificPayload>(
-    payload: T,
+  deriveCredentials(
     args: ChainDerivationArgs,
     getPassphrase: GetPassphrase,
     pure?: boolean
@@ -115,24 +183,6 @@ export interface KeyAgent {
   exportRootPrivateKey(): Promise<Uint8Array>
 
   decryptSeed(): Promise<Uint8Array>
-}
-
-export enum Network {
-  /**
-   * Mina network option
-   */
-  Mina = 'Mina',
-
-  /**
-   * Ethereum network option
-   */
-
-  Ethereum = 'Ethereum'
-
-  /**
-   * Starknet network option
-   */
-  //Starknet = 'Starknet'
 }
 
 export type ChainDerivationArgs = MinaDerivationArgs | EthereumDerivationArgs

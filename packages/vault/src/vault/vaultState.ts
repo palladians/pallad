@@ -3,7 +3,6 @@ import {
   ChainDerivationArgs,
   ChainOperationArgs,
   ChainSignablePayload,
-  ChainSpecificPayload,
   FromBip39MnemonicWordsProps,
   Network
 } from '@palladxyz/key-management'
@@ -86,8 +85,7 @@ export type GlobalVaultActions = {
   constructTx: (args: constructTxArgs) => unknown
   submitTx: (submitTxArgs: SubmitTxArgs) => Promise<unknown>
   createWallet: (strength?: number) => CreateWalletReturn
-  restoreWallet: <T extends ChainSpecificPayload>(
-    payload: T,
+  restoreWallet: (
     args: ChainDerivationArgs,
     network: string,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,

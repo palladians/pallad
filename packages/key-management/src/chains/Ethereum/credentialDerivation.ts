@@ -8,7 +8,9 @@ import {
   EthereumSpecificArgs
 } from './types'
 
-export function deriveEthereumPublicAddress(privateKey: Uint8Array): string {
+export function deriveEthereumPublicAddress(
+  privateKey: Uint8Array | string
+): string {
   return Address.fromPrivateKey(privateKey)
 }
 

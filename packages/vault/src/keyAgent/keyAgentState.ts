@@ -7,7 +7,6 @@ import {
   ChainOperationArgs,
   ChainSignablePayload,
   ChainSignatureResult,
-  ChainSpecificPayload,
   FromBip39MnemonicWordsProps,
   GetPassphrase,
   GroupedCredentials,
@@ -70,7 +69,6 @@ export type KeyAgentStore = {
   ) => Promise<ChainSignatureResult | undefined>
   createCredential: (
     name: KeyAgentName,
-    payload: ChainSpecificPayload,
     args: ChainDerivationArgs,
     passphrase: GetPassphrase
   ) => Promise<GroupedCredentials | undefined>

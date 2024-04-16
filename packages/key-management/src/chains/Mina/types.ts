@@ -1,6 +1,10 @@
 import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
 
-import { ChainSpecificPayload, Network } from '../../types'
+import {
+  ChainSpecificPayload,
+  KeyPairDerivationOperations,
+  Network
+} from '../../types'
 import { deriveMinaPublicKey } from './credentialDerivation'
 import { deriveMinaPrivateKey } from './keyDerivation'
 
@@ -67,6 +71,21 @@ export class MinaPayload implements ChainSpecificPayload {
     )
   }
 }
+// new functional implementation of MinaPayload
+export const minaKeyPairDerivationOperations: KeyPairDerivationOperations<MinaDerivationArgs> =
+  {
+    derivePublicKey: (privateKey: Uint8Array | string) => {
+      if (typeof privateKey === 'string') {
+        return Promise.resolve(deriveMinaPublicKey(privateKey))
+      } else {
+        throw new Error('Invalid type for privateKey; string required.')
+      }
+    },
+    derivePrivateKey: (
+      decryptedSeedBytes: Uint8Array,
+      args: MinaDerivationArgs
+    ) => Promise.resolve(deriveMinaPrivateKey(args, decryptedSeedBytes))
+  }
 
 export const enum MinaKeyConst {
   /**

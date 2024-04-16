@@ -2,10 +2,7 @@ import * as bip32 from '@scure/bip32'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
-import {
-  EthereumPayload,
-  EthereumSpecificArgs
-} from '../../src/chains/Ethereum'
+import { EthereumSpecificArgs } from '../../src/chains/Ethereum'
 //import { emip3encrypt } from '../src/emip3'
 import {
   FromBip39MnemonicWordsProps,
@@ -117,18 +114,11 @@ describe('InMemoryKeyAgent', () => {
         addressIndex: 0
       }
 
-      const payload = new EthereumPayload()
-
-      await agent.restoreKeyAgent(payload, args, getPassphrase)
+      await agent.restoreKeyAgent(args, getPassphrase)
       expect(agent).to.be.instanceOf(InMemoryKeyAgent)
       expect(
         agent.serializableData.credentialSubject.contents[0]?.address
       ).to.deep.equal(expectedGroupedCredentials.address)
-
-      //await agent.deriveCredentials(ethPayload, ethArgs, getPassphrase, false)
-      //expect(
-      //  agent.serializableData.credentialSubject.contents[1]?.address
-      //).to.deep.equal(expectedEthGroupedCredentials.address)
     })
   })
 })

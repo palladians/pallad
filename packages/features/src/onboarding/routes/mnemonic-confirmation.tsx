@@ -1,4 +1,4 @@
-import { MinaPayload, Network } from '@palladxyz/key-management'
+import { Network } from '@palladxyz/key-management'
 import { MinaDerivationArgs } from '@palladxyz/key-management'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { DEFAULT_NETWORK, KeyAgents, useVault } from '@palladxyz/vault'
@@ -57,7 +57,6 @@ export const MnemonicConfirmationRoute = () => {
     try {
       setRestoring(true)
       await restoreWallet(
-        new MinaPayload(),
         restoreArgs,
         DEFAULT_NETWORK,
         {

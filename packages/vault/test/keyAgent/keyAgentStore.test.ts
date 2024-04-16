@@ -3,7 +3,6 @@ import {
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
   GroupedCredentials,
-  MinaPayload,
   Network
 } from '@palladxyz/key-management'
 import { MinaDerivationArgs } from '@palladxyz/key-management'
@@ -178,10 +177,8 @@ describe('KeyAgentStore', () => {
       accountIndex: 0,
       addressIndex: 0
     }
-    const payload = new MinaPayload()
     await act(async () => {
       const derivedCredential = await keyAgent1?.keyAgent?.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true // has to be true as we're not writing the credential to the key agent's serializable data
@@ -206,10 +203,8 @@ describe('KeyAgentStore', () => {
         accountIndex: 0,
         addressIndex: 0
       }
-      const payload = new MinaPayload()
       const groupedCredential = await result.current.createCredential(
         keyAgentName,
-        payload,
         args,
         getPassphrase
       )

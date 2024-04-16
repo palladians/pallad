@@ -3,7 +3,6 @@ import {
   constructTransaction,
   FromBip39MnemonicWordsProps,
   InMemoryKeyAgent,
-  MinaPayload,
   MinaSpecificArgs,
   Network
 } from '@palladxyz/key-management'
@@ -87,9 +86,8 @@ describe('Unified Submit Transaction Provider (Functional)', () => {
       addressIndex: 0,
       networkType: networkType
     }
-    const payload = new MinaPayload()
 
-    await agent.restoreKeyAgent(payload, args, getPassphrase)
+    await agent.restoreKeyAgent(args, getPassphrase)
   })
 
   describe('healthCheck', () => {
