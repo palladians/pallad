@@ -74,7 +74,7 @@ export const ConfirmTransactionForm = () => {
     const constructTxArgs = {
       transaction: transaction,
       transactionKind:
-        kind === 'staking'
+        kind === ('staking' as Mina.TransactionKind)
           ? Mina.TransactionKind.STAKE_DELEGATION
           : Mina.TransactionKind.PAYMENT
     }

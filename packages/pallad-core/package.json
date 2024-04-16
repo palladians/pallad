@@ -18,16 +18,16 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/mina-core": "^0.0.1",
-    "@palladxyz/key-management": "^0.0.1",
-    "@palladxyz/util": "^0.0.1",
+    "@palladxyz/mina-core": "workspace:*",
+    "@palladxyz/key-management": "workspace:*",
+    "@palladxyz/util": "workspace:*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "mina-signer": "^2.1.1",
     "viem": "^2.9.16"
   },
   "devDependencies": {
-    "@palladxyz/common": "^1.0.0",
+    "@palladxyz/common": "workspace:*",
     "@types/mocha": "^10.0.6",
     "@types/secp256k1": "^4.0.6"
   }

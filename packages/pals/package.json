@@ -18,7 +18,7 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "devDependencies": {
-    "@palladxyz/common": "^1.0.0",
+    "@palladxyz/common": "workspace:*",
     "@types/mocha": "^10.0.6",
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "msw": "^2.1.4"
