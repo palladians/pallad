@@ -1,6 +1,10 @@
 import { TransactionRequest } from 'ethers'
 
-import { ChainSpecificPayload, Network } from '../../types'
+import {
+  ChainSpecificPayload,
+  KeyPairDerivationOperations,
+  Network
+} from '../../types'
 import { deriveEthereumPublicAddress } from './credentialDerivation'
 import { deriveEthereumPrivateKey } from './keyDerivation'
 
@@ -54,6 +58,18 @@ export class EthereumPayload implements ChainSpecificPayload {
     )
   }
 }
+
+// new functional implementation of EthereumPayload
+export const ethKeyPairDerivationOperations: KeyPairDerivationOperations<EthereumDerivationArgs> =
+  {
+    derivePublicKey: (privateKey: Uint8Array | string) => {
+      return Promise.resolve(deriveEthereumPublicAddress(privateKey))
+    },
+    derivePrivateKey: (
+      decryptedSeedBytes: Uint8Array,
+      args: EthereumDerivationArgs
+    ) => Promise.resolve(deriveEthereumPrivateKey(args, decryptedSeedBytes))
+  }
 
 export const enum EthereumKeyConst {
   /**

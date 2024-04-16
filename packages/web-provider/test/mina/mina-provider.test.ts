@@ -1,9 +1,7 @@
 import {
-  ChainSpecificArgs,
-  ChainSpecificPayload,
+  ChainDerivationArgs,
   constructTransaction,
   FromBip39MnemonicWordsProps,
-  MinaPayload,
   Network
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
@@ -49,8 +47,7 @@ describe.skip('Wallet Provider Test', () => {
   let provider: MinaProvider
   let agentArgs: FromBip39MnemonicWordsProps
   let network: string
-  let args: ChainSpecificArgs
-  let payload: ChainSpecificPayload
+  let args: ChainDerivationArgs
   let credentialName: CredentialName
   let keyAgentName: string
   //let expectedAddress: string
@@ -67,10 +64,8 @@ describe.skip('Wallet Provider Test', () => {
     args = {
       network: Network.Mina,
       accountIndex: 0,
-      addressIndex: 0,
-      networkType: networkType as Mina.NetworkType
+      addressIndex: 0
     }
-    payload = new MinaPayload()
     credentialName = 'Test Suite Credential'
     keyAgentName = 'Test Suite Key Agent'
     //expectedAddress = 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
@@ -81,7 +76,6 @@ describe.skip('Wallet Provider Test', () => {
     // restore wallet
     await act(async () => {
       await result.current.restoreWallet(
-        payload,
         args,
         network,
         agentArgs,

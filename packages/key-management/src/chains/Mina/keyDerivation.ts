@@ -4,10 +4,10 @@ import { HDKey } from '@scure/bip32'
 import { Buffer } from 'buffer'
 
 import { reverseBytes } from './keyDerivationUtils'
-import { MinaDerivationArgs, MinaKeyConst, MinaSpecificArgs } from './types'
+import { MinaDerivationArgs, MinaKeyConst } from './types'
 
 export function deriveMinaPrivateKey(
-  args: MinaSpecificArgs | MinaDerivationArgs,
+  args: MinaDerivationArgs,
   decryptedSeedBytes: Uint8Array
 ) {
   const { accountIndex, addressIndex } = args

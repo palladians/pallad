@@ -84,10 +84,11 @@ export const ConfirmTransactionForm = () => {
         resolve(Buffer.from(data.spendingPassword))
       )
     let signedTx
+    // TODO: make chain agnostic depending on the currentWallet chain and it's corresponding operation e.g. 'eth_signTransaction' vs 'mina_signTransaction'
     const operationArgs: ChainOperationArgs = {
       operation: 'mina_signTransaction',
       network: 'Mina',
-      networkType: 'testnet'
+      networkType: 'testnet' // TODO: make configurable for 'mainnet' and 'testnet'
     }
     try {
       signedTx = await sign(constructedTx as any, operationArgs, getPassphrase)

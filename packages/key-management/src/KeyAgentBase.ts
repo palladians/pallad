@@ -8,13 +8,13 @@ import * as errors from './errors'
 import { getPassphraseRethrowTypedError } from './InMemoryKeyAgent'
 import { KeyDecryptor } from './KeyDecryptor'
 import {
+  ChainDerivationArgs,
   ChainKeyPair,
   ChainOperationArgs,
   ChainPrivateKey,
   ChainSignablePayload,
   ChainSignatureResult,
-  ChainSpecificArgs,
-  ChainSpecificPayload,
+  createChainDerivationOperationsProvider,
   credentialDerivers,
   credentialMatchers,
   GetPassphrase
@@ -64,35 +64,31 @@ export abstract class KeyAgentBase implements KeyAgent {
     }
   }
 
-  async deriveCredentials<T extends ChainSpecificPayload>(
-    payload: T,
-    args: ChainSpecificArgs,
+  async deriveCredentials(
+    args: ChainDerivationArgs,
     getPassphrase: GetPassphrase,
     pure?: boolean
   ): Promise<GroupedCredentials> {
     const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
-    const matcher = credentialMatchers[payload.network]
+    console.log('network (should be ethereum):', args.network)
+    const matcher = credentialMatchers[args.network]
     if (!matcher) {
-      throw new Error(`Unsupported network: ${payload.network}`)
+      throw new Error(`Unsupported network: ${args.network}`)
     }
 
     const knownCredential =
       this.serializableData.credentialSubject.contents.find((credential) =>
-        matcher(credential, payload)
+        matcher(credential, args)
       )
 
     if (knownCredential) return knownCredential
 
-    const derivedKeyPair = await this.deriveKeyPair<ChainSpecificPayload>(
-      payload,
-      args,
-      passphrase
-    )
+    const derivedKeyPair = await this.deriveKeyPair(args, passphrase)
 
     try {
-      const deriveFunction = credentialDerivers[payload.network]
+      const deriveFunction = credentialDerivers[args.network]
       if (!deriveFunction) {
-        throw new Error(`Unsupported network: ${payload.network}`)
+        throw new Error(`Unsupported network: ${args.network}`)
       }
       const groupedCredential = deriveFunction(
         args,
@@ -113,20 +109,21 @@ export abstract class KeyAgentBase implements KeyAgent {
     }
   }
 
-  async deriveKeyPair<T extends ChainSpecificPayload>(
-    payload: T,
-    args: ChainSpecificArgs,
+  async deriveKeyPair(
+    args: ChainDerivationArgs,
     passphrase: Uint8Array
   ): Promise<ChainKeyPair> {
     // Generate the private key
-    const privateKey = await this.#generatePrivateKeyFromSeed(payload, args)
+    const privateKey = await this.#generatePrivateKeyFromSeed(args)
     const encryptedPrivateKeyBytes = await emip3encrypt(
       Buffer.from(privateKey),
       passphrase
     )
+    const provider = createChainDerivationOperationsProvider(args)
+
     try {
       const keyPair = {
-        publicKey: await payload.derivePublicKey(privateKey, args),
+        publicKey: await provider.derivePublicKey(privateKey),
         encryptedPrivateKeyBytes
       }
       return keyPair
@@ -139,7 +136,7 @@ export abstract class KeyAgentBase implements KeyAgent {
   async sign<T extends GroupedCredentials>(
     payload: T,
     signable: ChainSignablePayload,
-    args: ChainSpecificArgs | ChainOperationArgs
+    args: ChainOperationArgs
   ): Promise<ChainSignatureResult> {
     const encryptedPrivateKeyBytes = payload.encryptedPrivateKeyBytes
     const decryptedKeyBytes = await this.keyDecryptor.decryptChildPrivateKey(
@@ -177,9 +174,9 @@ export abstract class KeyAgentBase implements KeyAgent {
     }
   }
 
-  async #generatePrivateKeyFromSeed<T extends ChainSpecificPayload>(
+  /*async #generatePrivateKeyFromSeed<T extends ChainSpecificPayload>(
     payload: T,
-    args: ChainSpecificArgs
+    args: ChainDerivationArgs
   ): Promise<ChainPrivateKey> {
     // Decrypt your seed
     const decryptedSeedBytes = await this.decryptSeed()
@@ -191,5 +188,15 @@ export abstract class KeyAgentBase implements KeyAgent {
       console.error(error)
       throw error
     }
+  }*/
+  // new functional generatePrivateKeyFromSeed
+  async #generatePrivateKeyFromSeed<T extends ChainDerivationArgs>(
+    args: T
+  ): Promise<ChainPrivateKey> {
+    // Decrypt your seed
+    const decryptedSeedBytes = await this.decryptSeed()
+    const provider = createChainDerivationOperationsProvider(args)
+
+    return provider.derivePrivateKey(decryptedSeedBytes)
   }
 }

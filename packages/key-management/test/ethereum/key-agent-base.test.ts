@@ -3,7 +3,7 @@ import { verifyMessage } from 'ethers'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
-import { EthereumPayload, EthereumSpecificArgs } from '../../src'
+import { EthereumSpecificArgs } from '../../src'
 import { emip3encrypt } from '../../src/emip3'
 import { getPassphraseRethrowTypedError } from '../../src/InMemoryKeyAgent'
 import { KeyAgentBase } from '../../src/KeyAgentBase'
@@ -119,10 +119,8 @@ describe('KeyAgentBase (Ethereum Functionality)', () => {
         accountIndex: 0,
         addressIndex: 0
       }
-      const payload = new EthereumPayload()
 
       const groupedCredential = await instance.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true
@@ -136,7 +134,7 @@ describe('KeyAgentBase (Ethereum Functionality)', () => {
         '0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9',
         '0xeDdE271242f7551Ac212B1E254A4987B91F49A2b'
       ]
-      const payload = new EthereumPayload()
+
       const expectedGroupedCredentialsArray = mockedPublicKeys.map(
         (publicKey, index) => ({
           '@context': ['https://w3id.org/wallet/v1'],
@@ -160,7 +158,6 @@ describe('KeyAgentBase (Ethereum Functionality)', () => {
         }
         // when pure is false it will store the credentials
         const result = await instance.deriveCredentials(
-          payload,
           args,
           getPassphrase,
           false
@@ -201,10 +198,8 @@ describe('KeyAgentBase (Ethereum Functionality)', () => {
         accountIndex: 0,
         addressIndex: 0
       }
-      const payload = new EthereumPayload()
 
       const groupedCredential = await instance.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true

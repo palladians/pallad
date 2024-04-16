@@ -3,7 +3,7 @@ import Client from 'mina-signer'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
-import { MinaPayload, MinaSpecificArgs } from '../../src/chains/Mina'
+import { MinaSpecificArgs } from '../../src/chains/Mina'
 import { emip3encrypt } from '../../src/emip3'
 import { getPassphraseRethrowTypedError } from '../../src/InMemoryKeyAgent'
 import { KeyAgentBase } from '../../src/KeyAgentBase'
@@ -117,10 +117,8 @@ describe('KeyAgentBase (Mina zkApp Functionality)', () => {
         addressIndex: 0,
         networkType: networkType
       }
-      const payload = new MinaPayload()
 
       const groupedCredential = await instance.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true

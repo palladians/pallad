@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { MinaPayload, Network } from '@palladxyz/key-management'
+import { Network } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { KeyAgents, useVault } from '@palladxyz/vault'
 
@@ -11,12 +11,10 @@ export const useStoriesWallet = () => {
   useEffect(() => {
     const restore = async () => {
       await restoreWallet(
-        new MinaPayload(),
         {
           network: Network.Mina,
           accountIndex: 0,
           addressIndex: 0,
-          networkType: 'testnet'
         },
         Mina.Networks.BERKELEY,
         {

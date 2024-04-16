@@ -3,7 +3,7 @@ import * as bip32 from '@scure/bip32'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
-import { MinaPayload, MinaSpecificArgs } from '../../src/chains/Mina'
+import { MinaSpecificArgs } from '../../src/chains/Mina'
 //import { emip3encrypt } from '../src/emip3'
 import {
   FromBip39MnemonicWordsProps,
@@ -120,9 +120,8 @@ describe('Mina InMemoryKeyAgent', () => {
         addressIndex: 0,
         networkType: networkType
       }
-      const payload = new MinaPayload()
 
-      await agent.restoreKeyAgent(payload, args, getPassphrase)
+      await agent.restoreKeyAgent(args, getPassphrase)
       expect(agent).to.be.instanceOf(InMemoryKeyAgent)
       expect(
         agent.serializableData.credentialSubject.contents[0]?.address

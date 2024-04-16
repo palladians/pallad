@@ -4,7 +4,7 @@ import Client from 'mina-signer'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
-import { MinaPayload, MinaSpecificArgs } from '../../src/chains/Mina'
+import { MinaSpecificArgs } from '../../src/chains/Mina'
 import { reverseBytes } from '../../src/chains/Mina/keyDerivationUtils'
 import { emip3encrypt } from '../../src/emip3'
 import { getPassphraseRethrowTypedError } from '../../src/InMemoryKeyAgent'
@@ -130,10 +130,8 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         addressIndex: 0,
         networkType: networkType
       }
-      const payload = new MinaPayload()
 
       const groupedCredential = await instance.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true
@@ -169,10 +167,8 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         addressIndex: 0,
         networkType: networkType
       }
-      const payload = new MinaPayload()
 
       const groupedCredential = await instance.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true
@@ -187,7 +183,6 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
         'B62qnhgMG71bvPDvAn3x8dEpXB2sXKCWukj2B6hFKACCHp6uVTCt6HB'
       ]
-      const payload = new MinaPayload()
 
       const expectedGroupedCredentialsArray = mockedPublicKeys.map(
         (publicKey, index) => ({
@@ -215,7 +210,6 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         }
         // when pure is false it will store the credentials
         const result = await instance.deriveCredentials(
-          payload,
           args,
           getPassphrase,
           false
@@ -269,10 +263,8 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         addressIndex: 0,
         networkType: networkType
       }
-      const payload = new MinaPayload()
 
       const groupedCredential = await instance.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true
@@ -332,10 +324,8 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         addressIndex: 0,
         networkType: networkType
       }
-      const payload = new MinaPayload()
 
       const groupedCredential = await instance.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true
@@ -383,10 +373,8 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         addressIndex: 0,
         networkType: networkType
       }
-      const payload = new MinaPayload()
 
       const groupedCredential = await instance.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true
@@ -424,10 +412,8 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         addressIndex: 0,
         networkType: networkType
       }
-      const payload = new MinaPayload()
 
       const groupedCredential = await instance.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true
@@ -457,10 +443,8 @@ describe('KeyAgentBase (Mina Functionality)', () => {
         networkType: networkType,
         operation: 'mina_createNullifier'
       }
-      const payload = new MinaPayload()
 
       const groupedCredential = await instance.deriveCredentials(
-        payload,
         args,
         getPassphrase,
         true
