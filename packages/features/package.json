@@ -36,6 +36,7 @@
     "@hookform/resolvers": "^3.3.2",
     "@palladxyz/key-management": "workspace:*",
     "@palladxyz/mina-core": "workspace:*",
+    "@palladxyz/pallad-core": "workspace:*",
     "@palladxyz/offchain-data": "workspace:*",
     "@palladxyz/persistence": "workspace:*",
     "@palladxyz/vault": "workspace:*",

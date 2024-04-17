@@ -3,12 +3,12 @@ import { TokenIdMap } from '@palladxyz/mina-core'
 import { MinaExplorer } from '../../../../src'
 
 const nodeUrl =
-  process.env['NODE_URL'] || 'https://proxy.berkeley.minaexplorer.com/'
+  process.env['NODE_URL'] || 'https://api.minascan.io/node/berkeley/v1/graphql'
 const publicKey =
   process.env['PUBLIC_KEY'] ||
   'B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq'
 // TODO: change this to local network
-describe.skip('Mina Explorer Account Info Provider (Functional)', () => {
+describe.skip('Blockberry Account Info Provider (Functional)', () => {
   let provider: ReturnType<typeof MinaExplorer.createAccountInfoProvider>
   let tokenMap: TokenIdMap
 

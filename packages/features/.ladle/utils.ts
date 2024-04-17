@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Network } from '@palladxyz/key-management'
+import { Network } from '@palladxyz/pallad-core'
 import { Mina } from '@palladxyz/mina-core'
 import { KeyAgents, useVault } from '@palladxyz/vault'
 

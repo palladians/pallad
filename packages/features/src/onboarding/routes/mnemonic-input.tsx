@@ -1,5 +1,6 @@
-import { Network, validateMnemonic, wordlist } from '@palladxyz/key-management'
+import { validateMnemonic, wordlist } from '@palladxyz/key-management'
 import { MinaDerivationArgs } from '@palladxyz/key-management'
+import { Network } from '@palladxyz/pallad-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { DEFAULT_NETWORK, KeyAgents, useVault } from '@palladxyz/vault'
 import { useState } from 'react'

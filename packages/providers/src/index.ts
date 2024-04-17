@@ -1,3 +1,4 @@
+export * as Blockberry from './blockberry-provider'
 export * as MinaExplorer from './mina-explorer'
 export * as MinaNode from './mina-node'
 export * as Obscura from './obscura-provider'

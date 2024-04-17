@@ -1,4 +1,5 @@
 import { Mina } from '@palladxyz/mina-core'
+import { constructTransaction } from '@palladxyz/pallad-core'
 import { test } from 'vitest'
 
 import {
@@ -7,7 +8,6 @@ import {
   isMessageBody,
   isZkAppTransaction
 } from '../../src/chains/Mina/guards'
-import { constructTransaction } from '../../src/util/Transactions/buildMinaTx'
 
 describe('Guard functions tests', () => {
   test('isConstructedTransaction', () => {

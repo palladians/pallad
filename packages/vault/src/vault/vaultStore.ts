@@ -5,8 +5,8 @@ import {
 } from '@palladxyz/key-management'
 import {
   constructTransaction,
+  Network,
   PalladNetworkNames,
-  PalladNetworkTypes,
   Tx
 } from '@palladxyz/pallad-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
@@ -35,7 +35,7 @@ const _validateCurrentWallet = (wallet: SingleCredentialState | null) => {
   if (!wallet || !credential?.address)
     throw new WalletError('Invalid current wallet or address')
 }
-const _validateCurrentNetwork = (network: PalladNetworkTypes.MINA | null) => {
+const _validateCurrentNetwork = (network: Network.Mina | null) => {
   if (!network) throw new NetworkError('Invalid current network')
 }
 
@@ -44,7 +44,7 @@ const defaultGlobalVaultState: GlobalVaultState = {
   credentialName: '',
   currentAccountIndex: 0,
   currentAddressIndex: 0,
-  chain: PalladNetworkTypes.MINA,
+  chain: Network.Mina,
   walletName: '',
   walletNetwork: PalladNetworkNames.MINA_BERKELEY,
   knownAccounts: [],
@@ -253,7 +253,7 @@ export const useVault = create<
         _validateCurrentWallet(currentWallet.credential)
         const currentNetwork = getCurrentNetwork()
         _validateCurrentNetwork(
-          currentNetwork as unknown as typeof PalladNetworkTypes.MINA
+          currentNetwork as unknown as typeof Network.Mina
         )
         const walletCredential = currentWallet?.credential
           .credential as GroupedCredentials

@@ -1,10 +1,7 @@
+import { Network } from '@palladxyz/pallad-core'
 import { TransactionRequest } from 'ethers'
 
-import {
-  ChainSpecificPayload,
-  KeyPairDerivationOperations,
-  Network
-} from '../../types'
+import { ChainSpecificPayload, KeyPairDerivationOperations } from '../../types'
 import { deriveEthereumPublicAddress } from './credentialDerivation'
 import { deriveEthereumPrivateKey } from './keyDerivation'
 
