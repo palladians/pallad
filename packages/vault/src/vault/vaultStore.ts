@@ -1,10 +1,10 @@
 import {
-  constructTransaction,
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
   GroupedCredentials
 } from '@palladxyz/key-management'
 import {
+  constructTransaction,
   PalladNetworkNames,
   PalladNetworkTypes,
   Tx

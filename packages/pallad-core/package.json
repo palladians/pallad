@@ -18,12 +18,13 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/mina-core": "workspace:*",
     "@palladxyz/key-management": "workspace:*",
+    "@palladxyz/mina-core": "workspace:*",
     "@palladxyz/util": "workspace:*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
     "mina-signer": "^2.1.1",
+    "sinon": "^17.0.1",
     "viem": "^2.9.16"
   },
   "devDependencies": {

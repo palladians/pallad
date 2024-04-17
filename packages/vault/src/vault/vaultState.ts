@@ -7,10 +7,9 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { GetPassphrase } from '@palladxyz/key-management'
-import { constructTxArgs } from '@palladxyz/key-management'
-// can remove mina-core when there exists an agnostic construct tx function
 import {
   AccountInfo,
+  constructTxArgs,
   PalladNetworkNames,
   PalladNetworkTypes,
   SubmitTxArgs,
