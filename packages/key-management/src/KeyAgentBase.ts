@@ -70,7 +70,6 @@ export abstract class KeyAgentBase implements KeyAgent {
     pure?: boolean
   ): Promise<GroupedCredentials> {
     const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
-    console.log('network (should be ethereum):', args.network)
     const matcher = credentialMatchers[args.network]
     if (!matcher) {
       throw new Error(`Unsupported network: ${args.network}`)

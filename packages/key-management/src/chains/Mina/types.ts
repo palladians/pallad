@@ -1,10 +1,7 @@
 import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
+import { Network } from '@palladxyz/pallad-core'
 
-import {
-  ChainSpecificPayload,
-  KeyPairDerivationOperations,
-  Network
-} from '../../types'
+import { ChainSpecificPayload, KeyPairDerivationOperations } from '../../types'
 import { deriveMinaPublicKey } from './credentialDerivation'
 import { deriveMinaPrivateKey } from './keyDerivation'
 

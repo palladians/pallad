@@ -3,16 +3,14 @@ import {
   ChainDerivationArgs,
   ChainOperationArgs,
   ChainSignablePayload,
-  FromBip39MnemonicWordsProps,
-  Network
+  FromBip39MnemonicWordsProps
 } from '@palladxyz/key-management'
 import { GetPassphrase } from '@palladxyz/key-management'
-import { constructTxArgs } from '@palladxyz/key-management'
-// can remove mina-core when there exists an agnostic construct tx function
 import {
   AccountInfo,
+  constructTxArgs,
+  Network,
   PalladNetworkNames,
-  PalladNetworkTypes,
   SubmitTxArgs,
   Tx
 } from '@palladxyz/pallad-core'
@@ -47,7 +45,7 @@ export type GlobalVaultState = {
   credentialName: string
   currentAccountIndex: number
   currentAddressIndex: number
-  chain: PalladNetworkTypes
+  chain: Network
   walletNetwork: PalladNetworkNames
   walletName: string
   knownAccounts: string[]

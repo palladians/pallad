@@ -1,3 +1,4 @@
+import { Network } from '@palladxyz/pallad-core'
 import * as bip32 from '@scure/bip32'
 import sinon from 'sinon'
 import { expect } from 'vitest'
@@ -9,7 +10,6 @@ import {
   //getPassphraseRethrowTypedError,
   InMemoryKeyAgent
 } from '../../src/InMemoryKeyAgent'
-import { Network } from '../../src/types'
 import * as bip39 from '../../src/util/bip39'
 
 // Create a sandbox for managing and restoring stubs

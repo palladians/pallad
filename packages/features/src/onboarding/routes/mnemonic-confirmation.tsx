@@ -1,5 +1,5 @@
-import { Network } from '@palladxyz/key-management'
 import { MinaDerivationArgs } from '@palladxyz/key-management'
+import { Network } from '@palladxyz/pallad-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { DEFAULT_NETWORK, KeyAgents, useVault } from '@palladxyz/vault'
 import { useMemo, useState } from 'react'

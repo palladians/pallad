@@ -1,5 +1,7 @@
 import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
 
+// Low-level Mina constructTx API for spending Mina only.
+
 /**
  * Constructs a payment transaction object.
  * @param payment The payment transaction body.

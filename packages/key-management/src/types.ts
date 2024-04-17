@@ -1,4 +1,5 @@
 import { Mina } from '@palladxyz/mina-core'
+import { Network } from '@palladxyz/pallad-core'
 
 import {
   deriveEthereumCredentials,
@@ -25,23 +26,6 @@ import {
   MinaSignatureResult,
   MinaSpecificArgs
 } from './chains/Mina/types'
-
-export enum Network {
-  /**
-   * Mina network option
-   */
-  Mina = 'Mina',
-
-  /**
-   * Ethereum network option
-   */
-  Ethereum = 'Ethereum'
-
-  /**
-   * Starknet network option
-   */
-  //Starknet = 'Starknet'
-}
 
 export type ChainKeyConst = MinaKeyConst
 export type PayloadTypes = 'transaction' | 'message' | 'fields'

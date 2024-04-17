@@ -1,4 +1,3 @@
-import { Network } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
 import { Address, GetTransactionReturnType, Hash } from 'viem'
 
@@ -6,9 +5,9 @@ export type TransactionHash = Mina.TxId[] | Hash[]
 export type TxHash = Mina.TxId[] | Hash[]
 export type Tx = Mina.TransactionBody | GetTransactionReturnType
 export type ChainAddress = Mina.PublicKey | Address
-export enum PalladNetworkTypes {
-  MINA = Network.Mina,
-  EVM = Network.Ethereum
+export enum Network {
+  Mina = 'Mina',
+  Ethereum = 'Ethereum'
 }
 export enum PalladNetworkNames {
   MINA_BERKELEY = 'berkeley',

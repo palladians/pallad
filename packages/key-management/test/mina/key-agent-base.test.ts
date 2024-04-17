@@ -1,4 +1,6 @@
 import { Mina } from '@palladxyz/mina-core'
+import { constructTransaction } from '@palladxyz/pallad-core'
+import { Network } from '@palladxyz/pallad-core'
 import * as bip32 from '@scure/bip32'
 import Client from 'mina-signer'
 import sinon from 'sinon'
@@ -13,11 +15,9 @@ import {
   ChainOperationArgs,
   GetPassphrase,
   KeyAgentType,
-  Network,
   SerializableKeyAgentData
 } from '../../src/types'
 import * as util from '../../src/util/bip39'
-import { constructTransaction } from '../../src/util/Transactions/buildMinaTx'
 
 // Provide the passphrase for testing purposes
 const params = {
