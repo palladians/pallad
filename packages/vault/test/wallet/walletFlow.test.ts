@@ -1,11 +1,11 @@
 import {
   ChainDerivationArgs,
   //constructTransaction,
-  FromBip39MnemonicWordsProps,
+  FromBip39MnemonicWordsProps
   //GroupedCredentials,
   //MinaDerivationArgs,
-  Network
 } from '@palladxyz/key-management'
+import { Network } from '@palladxyz/pallad-core'
 //import { Mina } from '@palladxyz/mina-core'
 import { act, renderHook } from '@testing-library/react'
 import { expect } from 'vitest'

@@ -1,4 +1,5 @@
-import { GroupedCredentials, Network } from '@palladxyz/key-management'
+import { GroupedCredentials } from '@palladxyz/key-management'
+import { Network } from '@palladxyz/pallad-core'
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 

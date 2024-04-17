@@ -1,4 +1,5 @@
 import { Mina } from '@palladxyz/mina-core'
+import { Network } from '@palladxyz/pallad-core'
 import Client from 'mina-signer'
 import sinon from 'sinon'
 import { expect } from 'vitest'
@@ -11,7 +12,6 @@ import {
   ChainOperationArgs,
   GetPassphrase,
   KeyAgentType,
-  Network,
   SerializableKeyAgentData
 } from '../../src/types'
 import * as util from '../../src/util/bip39'

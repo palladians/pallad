@@ -2,11 +2,11 @@ import {
   ChainOperationArgs,
   FromBip39MnemonicWordsProps,
   generateMnemonicWords,
-  GroupedCredentials,
-  Network
+  GroupedCredentials
 } from '@palladxyz/key-management'
 import { MinaDerivationArgs } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
+import { Network } from '@palladxyz/pallad-core'
 import { act, renderHook } from '@testing-library/react'
 import { expect } from 'vitest'
 

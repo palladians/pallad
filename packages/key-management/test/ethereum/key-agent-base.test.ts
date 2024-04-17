@@ -1,3 +1,4 @@
+import { Network } from '@palladxyz/pallad-core'
 import * as bip32 from '@scure/bip32'
 import { verifyMessage } from 'ethers'
 import sinon from 'sinon'
@@ -11,7 +12,6 @@ import {
   ChainOperationArgs,
   GetPassphrase,
   KeyAgentType,
-  Network,
   SerializableKeyAgentData
 } from '../../src/types'
 import * as util from '../../src/util/bip39'
