@@ -17,6 +17,9 @@ export default {
         '2xl': '1400px'
       }
     },
+    fontFamily: {
+      'work-sans': ['Work Sans', 'sans-serif']
+    },
     extend: {
       colors: {
         border: 'hsl(var(--border))',
@@ -31,6 +34,14 @@ export default {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))'
+        },
+        tertiary: {
+          DEFAULT: 'hsl(var(--tertiary))',
+          foreground: 'hsl(var(--tertiary-foreground))'
+        },
+        quaternary: {
+          DEFAULT: 'hsl(var(--quaternary))',
+          foreground: 'hsl(var(--quaternary-foreground))'
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',

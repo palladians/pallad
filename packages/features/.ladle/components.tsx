@@ -20,20 +20,8 @@ export const Provider: GlobalProvider = ({ children }) => {
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <TooltipProvider>
         <MemoryRouter>
-          <div
-            style={{
-              maxWidth: 371,
-              width: '100%',
-              maxHeight: 600,
-              height: '100%',
-              display: 'flex',
-              overflowX: 'hidden',
-              overflowY: 'scroll'
-            }}
-          >
-            {children}
-            <Toaster />
-          </div>
+          {children}
+          <Toaster />
         </MemoryRouter>
       </TooltipProvider>
     </ThemeProvider>

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,28 +24,32 @@
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 224 71.4% 4.1%;
-    --radius: 2rem;
+    --radius: 1rem;
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 210 20% 98%;
-    --primary-foreground: 220.9 39.3% 11%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
+    --background: 249.2 22% 11.6%;
+    --foreground: 30 66.7% 98.8%;
+    --card: 245.2 24.7% 18.2%;
+    --card-foreground: 30 66.7% 98.8%;
+    --popover: 245.2 24.7% 18.2%;
+    --popover-foreground: 30 66.7% 98.8%;
+    --primary: 35 87.6% 71.6%;
+    --primary-foreground: 245.2 24.7% 18.2%;
+    --secondary: 245.2 24.7% 18.2%;
+    --secondary-foreground: 245.2 24.7% 18.2%;
+    --tertiary: 267.2 74.4% 83.1%;
+    --tertiary-foreground: 245.2 24.7% 18.2%;
+    --quaternary: 188.3 54.6% 76.7%;
+    --quaternary-foreground: 245.2 24.7% 18.2%;
+    --muted: 245.2 24.7% 18.2%;
+    --muted-foreground: 245.3 14.7% 54.5%;
     --accent: 215 27.9% 16.9%;
     --accent-foreground: 210 20% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
+    --border: 245.2 24.7% 18.2%;
+    --input: 245.2 24.7% 18.2%;
     --ring: 216 12.2% 83.9%;
   }
 }
@@ -55,6 +60,6 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-work-sans;
   }
 }
