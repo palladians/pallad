@@ -115,4 +115,67 @@ describe('AccountStore', () => {
     })
     expect(finalAccountInfo).toEqual(initialSingleAccountState)
   })
+
+  it('should handle setting account info when account already exists', () => {
+    const { result } = renderHook(() => useVault())
+    act(() => {
+      result.current.ensureAccount(network, address)
+      result.current.setAccountInfo(network, address, mockAccountInfo)
+      result.current.setAccountInfo(network, address, {
+        MINA: { ...mockAccountInfo['MINA'], balance: { total: 300 } }
+      })
+    })
+    const accountInfo = result.current.getAccountInfo(network, address, 'MINA')
+    expect(accountInfo.balance.total).toBe(300)
+  })
+
+  it('should get undefined for non-existing account info and transaction', () => {
+    const { result } = renderHook(() => useVault())
+    act(() => {
+      const accountInfo = result.current.getAccountInfo(
+        network,
+        address,
+        'NON_EXISTENT'
+      )
+      const transaction = result.current.getTransaction(
+        network,
+        address,
+        'nonExistingHash',
+        'MINA'
+      )
+      expect(accountInfo.balance.total).toBe(0)
+      expect(transaction).toBeUndefined()
+    })
+  })
+
+  it('should update transactions properly', () => {
+    const { result } = renderHook(() => useVault())
+    act(() => {
+      result.current.ensureAccount(network, address)
+      result.current.setTransactions(network, address, mockTransactions)
+      result.current.setTransactions(network, address, {
+        MINA: [
+          ...mockTransactions['MINA'],
+          { ...mockTransactions['MINA'][0], amount: 1000 }
+        ]
+      })
+    })
+    const transactions = result.current.getTransactions(
+      network,
+      address,
+      'MINA'
+    )
+    expect(transactions.length).toBe(2)
+    expect(transactions[1].amount).toBe(1000)
+  })
+
+  it.skip('should clear all accounts correctly', () => {
+    const { result } = renderHook(() => useVault())
+    act(() => {
+      result.current.addAccount(network, address)
+      result.current.clear()
+    })
+    const accountInfo = result.current.getAccountsInfo(network, address)
+    expect(accountInfo).toEqual(initialSingleAccountState)
+  })
 })

@@ -72,6 +72,7 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
   clear: () => {
     set((current) =>
       produce(current, (draft) => {
+        // TODO: fix this method it doesn't work
         draft.networkInfo = {}
       })
     )
