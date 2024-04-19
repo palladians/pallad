@@ -37,8 +37,8 @@ export const ConfirmTransactionForm = () => {
   const submitTx = useVault((state) => state.submitTx)
   const constructTx = useVault((state) => state.constructTx)
   const syncWallet = useVault((state) => state._syncWallet)
-  const currentWallet = useVault((state) => state.getCurrentWallet())
-  const { publicKey } = useAccount()
+  //const currentWallet = useVault((state) => state.getCurrentWallet())
+  const { publicKey, data: accountProperties } = useAccount()
   const {
     register,
     handleSubmit,
@@ -68,7 +68,7 @@ export const ConfirmTransactionForm = () => {
       validUntil: '4294967295',
       fee,
       amount,
-      nonce: currentWallet.accountInfo['MINA'].inferredNonce, // need a util for this whole `onSubmit` to remove Mina dependency
+      nonce: accountProperties.inferredNonce, // need a util for this whole `onSubmit` to remove Mina dependency
       type: 'payment'
     }
     const constructTxArgs = {

@@ -1,3 +1,4 @@
+import { getAccountProperties } from '@palladxyz/pallad-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { getPublicKey, isDelegated, useVault } from '@palladxyz/vault'
 import easyMeshGradient from 'easy-mesh-gradient'
@@ -22,7 +23,10 @@ export const useAccount = () => {
   )
   const fetchWallet = async () => {
     await _syncWallet()
-    return getAccountsInfo(network, publicKey) // TODO: replace with getBalance
+    const accountInfo = getAccountsInfo(network, publicKey)
+    const chain = currentWallet.credential.credential.chain
+    const props = getAccountProperties(accountInfo.accountInfo, chain)
+    return props
   }
   const publicKey = getPublicKey(currentWallet)
   const swr = useSWR(
@@ -32,9 +36,7 @@ export const useAccount = () => {
       refreshInterval: 30000
     }
   )
-  const rawMinaBalance = swr.isLoading
-    ? 0
-    : swr.data?.accountInfo['MINA']?.balance?.total ?? 0 // TODO: remove hardcoded 'MINA'
+  const rawMinaBalance = swr.isLoading ? 0 : swr.data.balance ?? 0
   const minaBalance =
     rawMinaBalance && BigInt(rawMinaBalance) / BigInt(1_000_000_000)
   const gradientBackground = useMemo(

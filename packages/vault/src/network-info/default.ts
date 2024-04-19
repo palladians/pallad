@@ -2,7 +2,7 @@ import { ProviderConfig } from '@palladxyz/providers'
 
 import { NetworkName } from './network-info-state'
 
-export const DEFAULT_NETWORK = 'Berkeley'
+export const DEFAULT_NETWORK = 'Berkeley' //'Berkeley'
 
 export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
   Berkeley: {
@@ -17,6 +17,18 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
     networkName: 'Berkeley',
     chainId: '...' // todo: fetch chainId from a provider
   },
+  /*Mainnet: {
+    nodeEndpoint: {
+      providerName: 'mina-node',
+      url: 'https://proxy.minaexplorer.com/graphql'
+    },
+    archiveNodeEndpoint: {
+      providerName: 'mina-node',
+      url: 'https://graphql.minaexplorer.com'
+    },
+    networkName: 'Berkeley',
+    chainId: '...' // todo: fetch chainId from a provider
+  },*/
   ZekoDevNet: {
     nodeEndpoint: {
       providerName: 'mina-node',
@@ -29,4 +41,16 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
     networkName: 'Zeko Devnet',
     chainId: '...' // todo: fetch chainId from a provider
   }
+  /*Optimism: {
+    nodeEndpoint: {
+      providerName: 'mina-node',
+      url: 'wss://optimism-sepolia-rpc.publicnode.com'
+    },
+    archiveNodeEndpoint: {
+      providerName: 'mina-node',
+      url: ''
+    },
+    networkName: 'Zeko Devnet',
+    chainId: '...' // todo: fetch chainId from a provider
+  }*/
 }

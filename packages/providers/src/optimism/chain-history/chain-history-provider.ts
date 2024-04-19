@@ -45,7 +45,9 @@ export const createChainHistoryProvider = (
     return data.result
   }
 
-  const transactionsByHashes = (args: TransactionsByHashesArgs): Tx[] => {
+  const transactionsByHashes = async (
+    args: TransactionsByHashesArgs
+  ): Promise<Tx[]> => {
     // TODO: make dependency on etherscan
     /*const client = createPublicClient({
       chain: args.chainInfo,
@@ -57,8 +59,9 @@ export const createChainHistoryProvider = (
     const transactions = await client.getTransaction(transactionArgs)
 
     return transactions as any*/
+    await new Promise((resolve) => setTimeout(resolve, 500))
     console.log('args', args)
-    return []
+    return [] as Tx[]
   }
 
   return {
