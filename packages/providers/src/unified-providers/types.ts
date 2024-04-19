@@ -8,5 +8,6 @@ export type ProviderConfig = {
     url: string
   }
   networkName: string
+  networkType: 'testnet' | 'mainnet'
   chainId: string
 }

@@ -9,28 +9,15 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
   networkInfo: DEFAULT_NETWORK_INFO,
   currentNetworkName: DEFAULT_NETWORK,
   setCurrentNetworkName: (networkName) => {
-    set(
-      produce((state) => {
-        state.currentNetwork = networkName
+    set((current) =>
+      produce(current, (draft) => {
+        draft.currentNetworkName = networkName
       })
     )
   },
   getCurrentNetworkInfo: () => {
     const { networkInfo, currentNetworkName } = get()
     return networkInfo[currentNetworkName] as ProviderConfig
-  },
-  updateChainId: (networkName, response) => {
-    set(
-      produce((state) => {
-        if (state.networkInfo[networkName]) {
-          // Here we directly modify the chainId for the specific networkName
-          state.networkInfo[networkName] = {
-            ...state.networkInfo[networkName],
-            chainId: response.daemonStatus.chainId
-          }
-        }
-      })
-    )
   },
   updateNetworkInfo: (networkName, updates) => {
     set((current) =>
@@ -46,9 +33,9 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
     )
   },
   setNetworkInfo: (networkName, providerConfig) => {
-    set(
-      produce((state) => {
-        state.networkInfo[networkName] = providerConfig
+    set((current) =>
+      produce(current, (draft) => {
+        draft.networkInfo[networkName] = providerConfig
       })
     )
   },
@@ -57,9 +44,9 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
     return networkInfo[networkName] || undefined
   },
   removeNetworkInfo: (networkName) => {
-    set(
-      produce((state) => {
-        delete state.networkInfo[networkName]
+    set((current) =>
+      produce(current, (draft) => {
+        delete draft.networkInfo[networkName]
       })
     )
   },
@@ -83,9 +70,9 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
     )
   },
   clear: () => {
-    set(
-      produce((state) => {
-        state.tokenInfo = {}
+    set((current) =>
+      produce(current, (draft) => {
+        draft.networkInfo = {}
       })
     )
   }

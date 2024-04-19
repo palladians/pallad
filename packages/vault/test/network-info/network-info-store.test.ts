@@ -11,6 +11,9 @@ describe('CredentialStore', () => {
   let providerConfigMainnet: ProviderConfig
   let providerConfigBerkeley: ProviderConfig
 
+  const mockUrl = 'https://...'
+  const networkType = 'testnet'
+
   beforeEach(() => {
     networkNameMainnet = 'Mainnet'
     // don't use the same network name
@@ -18,25 +21,27 @@ describe('CredentialStore', () => {
     providerConfigMainnet = {
       nodeEndpoint: {
         providerName: 'mina-node',
-        url: 'https://graphql.minaexplorer.com/'
+        url: mockUrl
       },
       archiveNodeEndpoint: {
         providerName: 'mina-explorer',
-        url: 'https://graphql.minaexplorer.com/'
+        url: mockUrl
       },
       networkName: networkNameMainnet,
+      networkType: networkType,
       chainId: '...'
     }
     providerConfigBerkeley = {
       nodeEndpoint: {
         providerName: 'mina-node',
-        url: 'https://graphql.minaexplorer.com/'
+        url: mockUrl
       },
       archiveNodeEndpoint: {
         providerName: 'mina-node',
-        url: 'https://graphql.minaexplorer.com/'
+        url: mockUrl
       },
       networkName: networkNameBerkeley,
+      networkType: networkType,
       chainId: '...'
     }
   })
