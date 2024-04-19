@@ -21,6 +21,7 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
     }
 
     const accountsData = result.data
+    console.log('accountsData', accountsData)
     const accountsInfo: Record<string, AccountInfo> = {}
 
     for (const [key, account] of Object.entries(accountsData)) {

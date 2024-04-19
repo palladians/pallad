@@ -165,6 +165,7 @@ export const useVault = create<
           addresses: [publicKey]
         })) as Tx[]
         const transactionsRecord = {
+          // TODO: remove 'MINA' as the key
           MINA: transactions
         } // TODO: replace with util using tokeId map to map transactions to tokens
         setTransactions(
@@ -184,7 +185,8 @@ export const useVault = create<
           _syncTransactions
         } = get()
         // when the wallet bricks this public key is undefined.
-        const publicKey = getCurrentWallet()?.credential?.credential?.address // todo: DRY this up
+        const currentwallet = getCurrentWallet()
+        const publicKey = currentwallet?.credential?.credential?.address // todo: DRY this up
         if (!publicKey)
           throw new AddressError(
             'Wallet address is undefined in _syncWallet method'

@@ -19,7 +19,9 @@ export const TransactionSummaryRoute = () => {
     () =>
       outgoingTransaction?.amount &&
       outgoingTransaction?.fee &&
-      outgoingTransaction.amount + outgoingTransaction.fee,
+      String(
+        Number(outgoingTransaction.amount) + Number(outgoingTransaction.fee)
+      ),
     []
   )
   return (

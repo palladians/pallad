@@ -4,34 +4,52 @@ import {
   TransactionsByHashesArgs,
   Tx
 } from '@palladxyz/pallad-core'
-import {
+
+/*import {
   createPublicClient,
   GetTransactionParameters,
   Hash,
   webSocket
-} from 'viem'
-
+} from 'viem'*/
 import { healthCheckOptimism } from '../utils'
 
-// TODO: remove Mina types from providers & make viem providers in pallad-core
 export const createChainHistoryProvider = (
-  url: string
+  url: string,
+  apiKey = ''
 ): ChainHistoryProvider => {
   const transactionsByAddresses = async (
     args: TransactionsByAddressesArgs
   ): Promise<Tx[]> => {
-    // need an explorer or other third-party API to fetch transaction history
-    console.log('the args are:', args)
-    await new Promise((resolve) => setTimeout(resolve, 100))
+    const { addresses } = args
+    const page = 1
+    const offset = 20
+    const sort = 'asc'
+    const baseEtherscanUrl = `${url}api?module=account&action=txlistinternal&apikey=${apiKey}`
 
-    return []
+    // Fetch transactions for each address (handle only the first address for simplification here)
+    if (addresses.length === 0) {
+      return []
+    }
+    const address = addresses[0] // Simplification: only process the first address
+    const fullUrl = `${baseEtherscanUrl}&address=${address}&page=${page}&offset=${offset}&sort=${sort}`
+    console.log('fullUrl', fullUrl)
+
+    const response = await fetch(fullUrl)
+    const data = await response.json()
+
+    if (data.status !== '1') {
+      throw new Error(`Failed to fetch transactions: ${data.message}`)
+    }
+
+    // Map Etherscan response to Tx[]
+    return data.result
   }
 
-  // TODO: decouple Mina from these providers, maybe `@palladxyz/otpimism-core` ?
   const transactionsByHashes = async (
     args: TransactionsByHashesArgs
   ): Promise<Tx[]> => {
-    const client = createPublicClient({
+    // TODO: make dependency on etherscan
+    /*const client = createPublicClient({
       chain: args.chainInfo,
       transport: webSocket(url)
     })
@@ -40,7 +58,10 @@ export const createChainHistoryProvider = (
     }
     const transactions = await client.getTransaction(transactionArgs)
 
-    return transactions as any
+    return transactions as any*/
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    console.log('args', args)
+    return [] as Tx[]
   }
 
   return {

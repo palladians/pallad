@@ -104,6 +104,7 @@ export class VaultService implements IVaultService {
     await this.rehydrate()
     const store = useVault.getState()
     return Number(
+      // TODO: this doesn't have to be 'MINA'
       store.getCurrentWallet().accountInfo['MINA']!.balance.total / 1e9
     ) as number
   }

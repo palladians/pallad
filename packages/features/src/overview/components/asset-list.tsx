@@ -33,7 +33,9 @@ export const AssetList = ({ account }: AssetListProps) => {
               <MinaIcon stroke="8" />
             </AvatarFallback>
           </Avatar>
-          <p className="flex-1 font-semibold">MINA</p>
+          <p className="flex-1 font-semibold">
+            {account.data!.symbol?.toString()}
+          </p>
           <p>{account.minaBalance?.toString()}</p>
         </div>
       )}

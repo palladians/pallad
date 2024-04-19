@@ -1,5 +1,5 @@
 import { validateMnemonic, wordlist } from '@palladxyz/key-management'
-import { MinaDerivationArgs } from '@palladxyz/key-management'
+import { ChainDerivationArgs } from '@palladxyz/key-management'
 import { Network } from '@palladxyz/pallad-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { DEFAULT_NETWORK, KeyAgents, useVault } from '@palladxyz/vault'
@@ -34,15 +34,16 @@ export const MnemonicInputRoute = () => {
   const [safetyConfirmed, onSafetyConfirmed] = useState(false)
   const mnemonicInputForm = useForm<MnemonicInputData>()
   const mnemonic = mnemonicInputForm.watch('mnemonic')
+  const chain = Network.Mina // TODO: useForm<ChainInputData>()
   const mnemonicValid = validateMnemonic(mnemonic?.join(' '), wordlist)
   const onSubmit: SubmitHandler<MnemonicInputData> = async (data) => {
     if (!walletName) return
     if (!spendingPassword) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
     await useVault.persist.rehydrate()
-    // TODO: make chainAgnostic using ChainDerivationArgs
-    const restoreArgs: MinaDerivationArgs = {
-      network: Network.Mina,
+
+    const restoreArgs: ChainDerivationArgs = {
+      network: chain,
       accountIndex: 0,
       addressIndex: 0
     }

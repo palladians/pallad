@@ -58,13 +58,13 @@ export const StakingOverviewView = ({
               <MetaField
                 label="Block Producer"
                 value={truncateString({
-                  value: account.accountInfo['MINA'].delegate,
+                  value: account.data.delegate, //TODO: Change to util
                   endCharCount: 8,
                   firstCharCount: 8
                 })}
                 url={getAccountUrl({
                   network: account.network,
-                  publicKey: account.accountInfo.delegate.publicKey
+                  publicKey: account.data.publicKey
                 })}
               />
             </div>

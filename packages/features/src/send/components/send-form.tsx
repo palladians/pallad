@@ -22,7 +22,7 @@ export const SendForm = () => {
   const location = useLocation()
   const setTransactionDetails = useTransactionStore((state) => state.set)
   const setKind = useTransactionStore((state) => state.setKind)
-  const { data: accountData, isLoading: accountLoading } = useAccount()
+  const { data: accountProperties, isLoading: accountLoading } = useAccount()
   const {
     register,
     handleSubmit,
@@ -44,8 +44,7 @@ export const SendForm = () => {
   }, [])
   if (accountLoading) return null
   const totalBalance =
-    accountData?.accountInfo['MINA'].balance.total &&
-    accountData?.accountInfo['MINA'].balance.total / 1_000_000_000
+    accountProperties.balance && accountProperties.balance / 1_000_000_000
   const setMaxAmount = async () => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]

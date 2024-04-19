@@ -17,7 +17,7 @@ describe('CredentialStore', () => {
     networkNameBerkeley = 'Berkeley Other'
     providerConfigMainnet = {
       nodeEndpoint: {
-        providerName: 'mina-explorer',
+        providerName: 'mina-node',
         url: 'https://graphql.minaexplorer.com/'
       },
       archiveNodeEndpoint: {
@@ -29,11 +29,11 @@ describe('CredentialStore', () => {
     }
     providerConfigBerkeley = {
       nodeEndpoint: {
-        providerName: 'mina-explorer',
+        providerName: 'mina-node',
         url: 'https://graphql.minaexplorer.com/'
       },
       archiveNodeEndpoint: {
-        providerName: 'mina-explorer',
+        providerName: 'mina-node',
         url: 'https://graphql.minaexplorer.com/'
       },
       networkName: networkNameBerkeley,
@@ -80,7 +80,9 @@ describe('CredentialStore', () => {
 
     // check total number of networks
     const networks = result.current.allNetworkInfo()
-    expect(networks.length).toEqual(4)
+    expect(networks.length).toEqual(
+      Object.keys(DEFAULT_NETWORK_INFO).length + 2
+    )
   })
   it('should add two networks and set mainnet as current network', () => {
     const { result } = renderHook(() => useVault())
@@ -99,7 +101,8 @@ describe('CredentialStore', () => {
       result.current.setNetworkInfo(networkNameBerkeley, providerConfigBerkeley)
     })
     const chainIds = result.current.getChainIds()
-    console.log('chainIds: ', chainIds)
-    expect(chainIds.length).toEqual(4)
+    expect(chainIds.length).toEqual(
+      Object.keys(DEFAULT_NETWORK_INFO).length + 2
+    )
   })
 })
