@@ -37,7 +37,9 @@ export const OverviewCard = ({ account, fiatBalance }: OverviewCardProps) => {
               className="text-lg font-semibold"
               data-testid="dashboard__minaBalance"
             >
-              {account.minaBalance?.toString()} MINA
+              {account.minaBalance?.toString() +
+                ' ' +
+                account.data!.symbol?.toString()}
             </div>
             <div className="text-sm font-semibold">
               ~{fiatBalance?.toFixed(4)} USD

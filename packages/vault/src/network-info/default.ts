@@ -3,7 +3,9 @@ import { ProviderConfig } from '@palladxyz/providers'
 import { NetworkName } from './network-info-state'
 
 export const DEFAULT_NETWORK = 'Berkeley' //'Berkeley'
-
+/*
+Note: it is good practice to match the key with the networkName.
+*/
 export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
   Berkeley: {
     nodeEndpoint: {
@@ -38,19 +40,19 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
       providerName: 'mina-node',
       url: ''
     },
-    networkName: 'Zeko Devnet',
+    networkName: 'ZekoDevNet',
     chainId: '...' // todo: fetch chainId from a provider
-  }
-  /*Optimism: {
+  },
+  OptimismSepolia: {
     nodeEndpoint: {
-      providerName: 'mina-node',
+      providerName: 'evm-rpc',
       url: 'wss://optimism-sepolia-rpc.publicnode.com'
     },
     archiveNodeEndpoint: {
-      providerName: 'mina-node',
-      url: ''
+      providerName: 'evm-explorer',
+      url: 'https://api-sepolia-optimism.etherscan.io/'
     },
-    networkName: 'Zeko Devnet',
+    networkName: 'OptimismSepolia',
     chainId: '...' // todo: fetch chainId from a provider
-  }*/
+  }
 }

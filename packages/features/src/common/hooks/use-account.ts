@@ -1,4 +1,4 @@
-import { getAccountProperties } from '@palladxyz/pallad-core'
+import { getAccountProperties, Network } from '@palladxyz/pallad-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { getPublicKey, isDelegated, useVault } from '@palladxyz/vault'
 import easyMeshGradient from 'easy-mesh-gradient'
@@ -36,9 +36,15 @@ export const useAccount = () => {
       refreshInterval: 30000
     }
   )
-  const rawMinaBalance = swr.isLoading ? 0 : swr.data.balance ?? 0
-  const minaBalance =
-    rawMinaBalance && BigInt(rawMinaBalance) / BigInt(1_000_000_000)
+  const rawBalance = swr.isLoading ? 0 : swr.data.balance ?? 0
+  let minaBalance: bigint | number | 0
+  if (currentWallet.credential.credential.chain == Network.Mina) {
+    minaBalance = rawBalance && BigInt(rawBalance) / BigInt(1_000_000_000) // TODO: adjust this for other chains and their decimal conversion
+  } else if (currentWallet.credential.credential.chain == Network.Ethereum) {
+    minaBalance = rawBalance
+  } else {
+    throw new Error('chain is not supported in useAccount')
+  }
   const gradientBackground = useMemo(
     () =>
       publicKey &&

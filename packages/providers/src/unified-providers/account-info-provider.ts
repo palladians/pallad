@@ -7,16 +7,21 @@ import {
 
 import { createAccountInfoProvider as mn } from '../mina-node'
 import { createAccountInfoProvider as ob } from '../obscura-provider'
+import { createAccountInfoProvider as op } from '../optimism'
 import { ProviderConfig } from './types'
 
 export const createAccountInfoProvider = (
   config: ProviderConfig
 ): AccountInfoProvider => {
   // TODO: make the underlyingProvider creation a util function
-  const underlyingProvider =
-    config.nodeEndpoint.providerName === 'mina-node'
-      ? mn(config.nodeEndpoint.url)
-      : ob(config.nodeEndpoint.url)
+  let underlyingProvider: AccountInfoProvider
+  if (config.nodeEndpoint.providerName === 'mina-node') {
+    underlyingProvider = mn(config.nodeEndpoint.url)
+  } else if (config.nodeEndpoint.providerName === 'obscura') {
+    underlyingProvider = ob(config.nodeEndpoint.url)
+  } else {
+    underlyingProvider = op(config.nodeEndpoint.url)
+  }
 
   const getAccountInfo = async (
     args: AccountInfoArgs

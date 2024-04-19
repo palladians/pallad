@@ -5,6 +5,7 @@ export type AccountProperties = {
   inferredNonce: number
   delegate: string
   publicKey: string
+  symbol: string
 }
 
 export function getAccountProperties(
@@ -15,17 +16,20 @@ export function getAccountProperties(
   let inferredNonce: number
   let delegate: string
   let publicKey: string
+  let symbol: string
   if (chain === Network.Mina) {
     balance = data['MINA']?.balance?.total ?? 0
     inferredNonce = data['MINA']?.inferredNonce ?? 0
     delegate = data['MINA']?.delegate ?? ''
     publicKey = data['MINA']?.publicKey ?? ''
+    symbol = 'MINA'
   } else {
     balance = data['ETH']?.balance?.total ?? 0
     inferredNonce = data['ETH']?.inferredNonce ?? 0
     delegate = data['ETH']?.delegate ?? ''
     publicKey = data['ETH']?.publicKey ?? ''
+    symbol = 'ETH'
   }
 
-  return { balance, inferredNonce, delegate, publicKey }
+  return { balance, inferredNonce, delegate, publicKey, symbol }
 }

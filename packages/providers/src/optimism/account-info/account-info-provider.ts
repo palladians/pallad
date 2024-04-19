@@ -19,11 +19,11 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
   const getAccountInfo = async (
     args: AccountInfoArgs
   ): Promise<Record<string, AccountInfo>> => {
-    if (args.chainInfo === undefined) {
+    /*if (args.chainInfo === undefined) {
       throw new Error(
         'chainInfo must be defined in `@palladxyz/pallad-core` Optimism createAccountInfoProvider'
       )
-    }
+    }*/
     const client = createPublicClient({
       chain: args.chainInfo as Chain,
       transport: webSocket(url)

@@ -1,4 +1,4 @@
-import { MinaDerivationArgs } from '@palladxyz/key-management'
+import { ChainDerivationArgs } from '@palladxyz/key-management'
 import { Network } from '@palladxyz/pallad-core'
 import { getSessionPersistence } from '@palladxyz/persistence'
 import { DEFAULT_NETWORK, KeyAgents, useVault } from '@palladxyz/vault'
@@ -49,7 +49,7 @@ export const MnemonicConfirmationRoute = () => {
     if (!mnemonic) return
     getSessionPersistence().setItem('spendingPassword', spendingPassword)
     await useVault.persist.rehydrate()
-    const restoreArgs: MinaDerivationArgs = {
+    const restoreArgs: ChainDerivationArgs = {
       network: Network.Mina,
       accountIndex: 0,
       addressIndex: 0

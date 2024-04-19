@@ -8,16 +8,21 @@ import {
 
 import { createChainHistoryProvider as mn } from '../mina-node'
 import { createChainHistoryProvider as ob } from '../obscura-provider'
+import { createChainHistoryProvider as op } from '../optimism'
 import { ProviderConfig } from './types'
 
 export const createChainHistoryProvider = (
   config: ProviderConfig
 ): ChainHistoryProvider => {
   // TODO: make the underlyingProvider creation a util function
-  const underlyingProvider =
-    config.nodeEndpoint.providerName === 'mina-node'
-      ? mn(config.archiveNodeEndpoint.url)
-      : ob(config.archiveNodeEndpoint.url)
+  let underlyingProvider: ChainHistoryProvider
+  if (config.nodeEndpoint.providerName === 'mina-node') {
+    underlyingProvider = mn(config.archiveNodeEndpoint.url)
+  } else if (config.nodeEndpoint.providerName === 'obscura') {
+    underlyingProvider = ob(config.archiveNodeEndpoint.url)
+  } else {
+    underlyingProvider = op(config.archiveNodeEndpoint.url)
+  }
 
   const transactionsByAddresses = async (
     args: TransactionsByAddressesArgs
