@@ -336,6 +336,10 @@ export class MinaProvider implements IMinaProvider {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
       }
     }
+    const enabled = await this.vault.getEnabled({ origin })
+    if (!enabled) {
+      await this.enable({ origin })
+    }
     // TODO: Add prompt confirmation for signing and broadcasting
     // // Prompt user for confirmation based on the method type
     // // what scenarios would we need to prompt the user?
@@ -566,13 +570,13 @@ export class MinaProvider implements IMinaProvider {
 
       case 'mina_getState': {
         // check if wallet is locked first
-        const passphrase = await this.userPrompt('password', {
+        const confirmation = await this.userPrompt('confirmation', {
           title:
             'The application is requesting to a credential from Pallad. Please review the request before deciding whether to confirm.',
           payload: superjson.stringify(args.params)
         })
-        if (passphrase === null) {
-          throw new Error('User denied the request for passphrase.')
+        if (!confirmation) {
+          throw this.createProviderRpcError(4001, 'User Rejected Request')
         }
         // TODO: handle incorrect passphrase
         const requestData = args.params as requestingStateData
@@ -589,14 +593,13 @@ export class MinaProvider implements IMinaProvider {
       }
 
       case 'mina_setState': {
-        // check if wallet is locked first
-        const passphrase = await this.userPrompt('password', {
+        const confirmation = await this.userPrompt('confirmation', {
           title:
             'The application is requesting Pallad to store a credential. Please review the incoming credential before deciding whether to confirm.',
           payload: superjson.stringify(args.params)
         })
-        if (passphrase === null) {
-          throw new Error('User denied the request for passphrase.')
+        if (!confirmation) {
+          throw this.createProviderRpcError(4001, 'User Rejected Request')
         }
         const requestData = args.params as requestingStateData
         if (!requestData.data || !hasObjectProps(requestData.data)) {
