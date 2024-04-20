@@ -839,6 +839,9 @@ importers:
       '@palladxyz/persistence':
         specifier: workspace:*
         version: link:../persistence
+      '@palladxyz/providers':
+        specifier: workspace:*
+        version: link:../providers
       '@palladxyz/vault':
         specifier: workspace:*
         version: link:../vault

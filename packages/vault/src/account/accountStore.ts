@@ -95,6 +95,7 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
   clear: () => {
     set(
       produce((state) => {
+        // TODO: fix this it doesn't work
         state.accounts = {} as never
       })
     )

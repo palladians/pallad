@@ -1,43 +1,37 @@
-import {
-  FromBip39MnemonicWordsProps,
-  generateMnemonicWords,
-  GroupedCredentials
-} from '@palladxyz/key-management'
+import { generateMnemonicWords } from '@palladxyz/key-management'
 import {
   constructTransaction,
   Network,
-  PalladNetworkNames,
-  Tx
+  PalladNetworkNames
 } from '@palladxyz/pallad-core'
 import { getSecurePersistence } from '@palladxyz/persistence'
-import { createChainProvider } from '@palladxyz/providers'
 import { produce } from 'immer'
 import { create } from 'zustand'
 import { persist, PersistStorage } from 'zustand/middleware'
 
 import { accountSlice, AccountStore } from '../account'
-import {
-  credentialSlice,
-  CredentialStore,
-  SingleCredentialState
-} from '../credentials'
+import { credentialSlice, CredentialStore } from '../credentials'
 import { KeyAgents, keyAgentSlice, KeyAgentStore } from '../keyAgent'
-import { AddressError, NetworkError, WalletError } from '../lib/Errors'
 import { getRandomAnimalName } from '../lib/utils'
 import { networkInfoSlice, NetworkInfoStore } from '../network-info'
 import { objectSlice, ObjectStore } from '../objects'
 import { tokenInfoSlice, TokenInfoStore } from '../token-info'
 import { webProviderSlice, WebProviderStore } from '../web-provider'
+import {
+  getBalanceHelper,
+  getCurrentWalletHelper,
+  getWalletAccountInfoHelper,
+  getWalletTransactionsHelper,
+  restartWalletHelper,
+  restoreWalletHelper,
+  signHelper,
+  submitTxHelper,
+  switchNetworkHelper,
+  syncAccountHelper,
+  syncTransactionHelper,
+  syncWalletnHelper
+} from './utils'
 import { GlobalVaultState, GlobalVaultStore } from './vaultState'
-
-const _validateCurrentWallet = (wallet: SingleCredentialState | null) => {
-  const credential = wallet?.credential as GroupedCredentials
-  if (!wallet || !credential?.address)
-    throw new WalletError('Invalid current wallet or address')
-}
-const _validateCurrentNetwork = (network: Network.Mina | null) => {
-  if (!network) throw new NetworkError('Invalid current network')
-}
 
 const defaultGlobalVaultState: GlobalVaultState = {
   keyAgentName: '',
@@ -98,124 +92,18 @@ export const useVault = create<
           })
         )
       },
-      // TODO: simplify this method
       // the credential doesn't need to be returned, nor does the transactions, nor the singleKeyAgentState
       getCurrentWallet() {
-        const {
-          getKeyAgent,
-          keyAgentName,
-          getCredential,
-          credentialName,
-          getAccountsInfo,
-          getCurrentNetworkInfo
-        } = get()
-        if (keyAgentName === '') {
-          console.error(
-            'keyAgentName is still blank in getCurrentWallet (has not been set yet)'
-          )
-        }
-        const singleKeyAgentState = getKeyAgent(keyAgentName)
-        if (credentialName === '') {
-          console.error(
-            'credentialName is still blank in getCurrentWallet (has not been set yet)'
-          )
-        }
-        const credential = getCredential(credentialName)
-        const publicKey = credential.credential?.address ?? ''
-        if (publicKey === '') {
-          console.error(
-            'publicKey is undefined blank in getCurrentWallet (has not been set yet)'
-          )
-        }
-        const providerConfig = getCurrentNetworkInfo()
-        const accountsInfo = getAccountsInfo(
-          providerConfig.networkName,
-          publicKey
-        )
-        return {
-          singleKeyAgentState,
-          credential,
-          accountInfo: accountsInfo.accountInfo,
-          transactions: accountsInfo.transactions
-        }
+        return getCurrentWalletHelper(get)
       },
       _syncAccountInfo: async (providerConfig, publicKey) => {
-        // TODO: improve accountInfo store as there are now a record of custom token tickers -> account infos
-        //_syncAccountInfo: async (providerConfig, publicKey) => {
-        const { setAccountInfo, getTokensInfo } = get() // TODO: add getTokenIdMap
-        const provider = createChainProvider(providerConfig)
-        const tokenMap = getTokensInfo(providerConfig.networkName)
-        const accountInfo = await provider.getAccountInfo({
-          publicKey: publicKey,
-          tokenMap: tokenMap
-        })
-        if (accountInfo === undefined) {
-          throw new Error('accountInfo is undefined in _syncAccountInfo')
-        }
-        setAccountInfo(providerConfig.networkName, publicKey, accountInfo) // TODO: remove cast
+        await syncAccountHelper(get, providerConfig, publicKey)
       },
       _syncTransactions: async (providerConfig, publicKey) => {
-        // TODO: remove providerManager
-        //_syncTransactions: async (providerConfig, publicKey) => {
-        const { setTransactions } = get()
-        // TODO: add condition where archive node is unavailable then transactions
-        // are simply []
-        const provider = createChainProvider(providerConfig)
-        const transactions = (await provider.getTransactions({
-          addresses: [publicKey]
-        })) as Tx[]
-        const transactionsRecord = {
-          // TODO: remove 'MINA' as the key
-          MINA: transactions
-        } // TODO: replace with util using tokeId map to map transactions to tokens
-        setTransactions(
-          providerConfig.networkName,
-          publicKey,
-          transactionsRecord
-        ) // note: there is no pagination now
+        await syncTransactionHelper(get, providerConfig, publicKey)
       },
-      _syncWallet: async () => {
-        // TODO: add a get current account public key method on wallet store
-        // _syncWallet: async () => {
-        const {
-          getCurrentNetworkInfo,
-          getCurrentWallet,
-          updateNetworkInfo,
-          _syncAccountInfo,
-          _syncTransactions
-        } = get()
-        // when the wallet bricks this public key is undefined.
-        const currentwallet = getCurrentWallet()
-        const publicKey = currentwallet?.credential?.credential?.address // todo: DRY this up
-        if (!publicKey)
-          throw new AddressError(
-            'Wallet address is undefined in _syncWallet method'
-          )
-        const providerConfig = getCurrentNetworkInfo()
-        // set the chainIds
-        if (!providerConfig) {
-          throw new Error(
-            `Could not find providerConfig for ${providerConfig} in _syncWallet`
-          )
-        }
-        const provider = createChainProvider(providerConfig)
-        if (!provider.getNodeStatus) {
-          throw new Error(
-            `Could not getNodeStatus for ${providerConfig} in updateChainId`
-          )
-        }
-
-        const response = await provider.getNodeStatus()
-        if (!response.daemonStatus.chainId) {
-          throw new Error(
-            `Could not get chainId for ${providerConfig} in updateChainId`
-          )
-        }
-        updateNetworkInfo(providerConfig.networkName, {
-          chainId: response.daemonStatus.chainId
-        })
-        await _syncAccountInfo(providerConfig, publicKey)
-        await _syncTransactions(providerConfig, publicKey)
+      _syncWallet: async (networkName) => {
+        await syncWalletnHelper(get, networkName)
       },
       getCurrentNetwork: () => {
         const { getCurrentNetworkInfo } = get()
@@ -224,107 +112,27 @@ export const useVault = create<
       },
       // TODO: this must emit an event `chainChanged`
       switchNetwork: async (networkName) => {
-        // if the network info is already stored we can just switch to it using the networkName
-        //switchNetwork: async (networkName) => {
-        const {
-          setCurrentNetworkName,
-          getCurrentWallet,
-          _syncWallet,
-          ensureAccount
-        } = get()
-        const currentWallet = getCurrentWallet()
-        if (!currentWallet)
-          throw new Error('Current wallet is null, empty or undefined')
-        const publicKey =
-          await getCurrentWallet()?.credential?.credential?.address // todo: DRY this up
-        if (!publicKey)
-          throw new AddressError(
-            'Wallet address is undefined in switchNetwork method'
-          )
-        ensureAccount(networkName, publicKey)
-        setCurrentNetworkName(networkName)
-        await _syncWallet()
+        await switchNetworkHelper(get, networkName)
       },
       getCredentials: (query, props = []) => {
         const { searchCredentials } = get()
         return searchCredentials(query, props)
       },
       getWalletAccountInfo: () => {
-        const { getCurrentWallet, getCurrentNetwork, getAccountsInfo } = get()
-        const currentWallet = getCurrentWallet()
-        _validateCurrentWallet(currentWallet.credential)
-        const currentNetwork = getCurrentNetwork()
-        _validateCurrentNetwork(
-          currentNetwork as unknown as typeof Network.Mina
-        )
-        const walletCredential = currentWallet?.credential
-          .credential as GroupedCredentials
-        return (
-          getAccountsInfo(currentNetwork, walletCredential?.address as string)
-            ?.accountInfo || null
-        )
+        getWalletAccountInfoHelper(get)
       },
       getWalletTransactions: () => {
-        const { getCurrentWallet, getCurrentNetwork, getTransactions } = get()
-        const currentWallet = getCurrentWallet()
-        if (!currentWallet)
-          throw new WalletError(
-            'Current wallet is null, empty or undefined in getTransactions method'
-          )
-        const walletCredential = currentWallet.credential
-          .credential as GroupedCredentials
-        const walletAddress = walletCredential?.address
-        if (!walletAddress)
-          throw new AddressError(
-            'Wallet address is undefined in getTransactions method'
-          )
-        const currentNetwork = getCurrentNetwork() as PalladNetworkNames
-        if (!currentNetwork)
-          throw new NetworkError(
-            'Current network is null, empty or undefined in getTransactions method'
-          )
-        return getTransactions(currentNetwork, walletAddress, 'MINA') || null
+        return getWalletTransactionsHelper(get)
       },
       sign: async (signable, args, getPassphrase) => {
-        const { getCurrentWallet, restoreKeyAgent } = get()
-        const currentWallet = getCurrentWallet()
-        // use current wallet to sign
-        if (!currentWallet?.credential) {
-          throw new WalletError(
-            'Current wallet is null, empty or undefined in sign method'
-          )
-        }
-        if (!currentWallet.singleKeyAgentState) {
-          throw new WalletError('Key agent state is not set')
-        }
-        const keyAgentState = currentWallet.singleKeyAgentState
-        if (keyAgentState === null) {
-          throw new WalletError('Key agent state is undefined in sign method')
-        }
-        const credential = currentWallet.credential
-          .credential as GroupedCredentials
-
-        const keyAgent = restoreKeyAgent(keyAgentState.name, getPassphrase)
-        const signed = await keyAgent?.sign(credential, signable, args)
-        return signed
+        return await signHelper(get, signable, args, getPassphrase)
       },
       constructTx: (args) => {
         // TODO: agnostic construct transaction Util that takes any transaction type
         return constructTransaction(args.transaction, args.transactionKind)
       },
       submitTx: async (submitTxArgs) => {
-        const { getCurrentNetworkInfo, getCurrentWallet, _syncTransactions } =
-          get()
-        const providerConfig = getCurrentNetworkInfo()
-        const provider = createChainProvider(providerConfig)
-        const publicKey = getCurrentWallet().credential.credential?.address
-        if (!publicKey)
-          throw new AddressError(
-            'Wallet address is undefined in submitTx method'
-          )
-        const txResult = await provider.submitTransaction(submitTxArgs)
-        await _syncTransactions(providerConfig, publicKey)
-        return txResult
+        return await submitTxHelper(get, submitTxArgs)
       },
       createWallet: (strength = 128) => {
         const mnemonic = generateMnemonicWords(strength)
@@ -339,118 +147,25 @@ export const useVault = create<
         credentialName = getRandomAnimalName()
         // TODO: add providerConfig object here
       ) => {
-        const {
-          initialiseKeyAgent,
-          restoreKeyAgent,
-          setCredential,
-          setCurrentWallet,
-          _syncWallet,
-          ensureAccount,
-          setKnownAccounts,
-          getCurrentNetworkInfo,
-          updateNetworkInfo,
-          setCurrentNetworkName
-        } = get()
-        const agentArgs: FromBip39MnemonicWordsProps = {
-          getPassphrase: getPassphrase,
-          mnemonicWords: mnemonicWords,
-          mnemonic2ndFactorPassphrase: ''
-        }
-        // TODO: this should be a key agent method? can we simplify this?
-        await initialiseKeyAgent(keyAgentName, keyAgentType, agentArgs)
-        const keyAgent = restoreKeyAgent(keyAgentName, getPassphrase)
-        if (!keyAgent)
-          throw new WalletError('keyAgent is undefined in restoreWallet method') // TODO: we can derive credential direct from the key Agent Store
-        const derivedCredential = await keyAgent?.deriveCredentials(
+        await restoreWalletHelper(
+          get,
           args,
-          getPassphrase,
-          true // has to be true
-        )
-        if (!derivedCredential)
-          throw new WalletError(
-            'Derived credential is undefined in restoreWallet method'
-          )
-        const singleCredentialState: SingleCredentialState = {
-          credentialName: credentialName,
-          keyAgentName: keyAgentName,
-          credential: derivedCredential
-        }
-        // TODO: set the current network info, restore and create wallet
-        // should take some providerConfig object
-        setCredential(singleCredentialState)
-        setCurrentWallet({
+          network,
+          { mnemonicWords, getPassphrase },
           keyAgentName,
-          credentialName,
-          currentAccountIndex: derivedCredential.accountIndex,
-          currentAddressIndex: derivedCredential.addressIndex
-        })
-        // set the first known account
-        setKnownAccounts(derivedCredential.address)
-        // set the chainIds
-        const providerConfig = getCurrentNetworkInfo()
-        if (!providerConfig) {
-          throw new Error(
-            `Could not find providerConfig for ${providerConfig} in updateChainId`
-          )
-        }
-
-        const provider = createChainProvider(providerConfig)
-        if (!provider.getNodeStatus) {
-          throw new Error(
-            `Could not getNodeStatus for ${providerConfig} in updateChainId`
-          )
-        }
-
-        const response = await provider.getNodeStatus()
-        if (!response.daemonStatus.chainId) {
-          throw new Error(
-            `Could not get chainId for ${providerConfig} in updateChainId`
-          )
-        }
-        updateNetworkInfo(providerConfig.networkName, {
-          chainId: response.daemonStatus.chainId
-        })
-        setCurrentNetworkName(providerConfig.networkName)
-        ensureAccount(network, derivedCredential.address)
-        getSecurePersistence().setItem('foo', 'bar' as any)
-        await _syncWallet()
+          keyAgentType,
+          credentialName
+        )
       },
       restartWallet: () => {
-        const {
-          getCurrentWallet,
-          keyAgentName,
-          getCurrentNetwork,
-          removeKeyAgent,
-          removeAccount,
-          removeCredential
-        } = get()
-        const currentWallet = getCurrentWallet()
-        const currentNetwork = getCurrentNetwork()
-        removeAccount(currentNetwork as PalladNetworkNames, '')
-        removeKeyAgent(keyAgentName)
-        removeCredential(currentWallet.credential.credentialName)
+        restartWalletHelper(get)
       },
       // web provider APIs
       getAccounts: () => {
         return get().knownAccounts
       },
       getBalance: (ticker) => {
-        if (!ticker) ticker = 'MINA'
-        const { getCurrentWallet, getCurrentNetworkInfo, getAccountInfo } =
-          get()
-        const currentWallet = getCurrentWallet()
-        const currentNetwork = getCurrentNetworkInfo()
-        const publicKey = currentWallet.credential.credential?.address
-        if (!publicKey)
-          throw new AddressError(
-            'Wallet address is undefined in getBalance method'
-          )
-        const accountInfo = getAccountInfo(
-          currentNetwork.networkName,
-          publicKey,
-          ticker
-        )
-        return accountInfo.balance.total
+        return getBalanceHelper(get, ticker)
       },
       getChainId: () => {
         // could also fetch this from the daemon provider

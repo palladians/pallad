@@ -17,6 +17,7 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
       url: 'https://berkeley.graphql.minaexplorer.com'
     },
     networkName: 'Berkeley',
+    networkType: 'testnet',
     chainId: '...' // todo: fetch chainId from a provider
   },
   /*Mainnet: {
@@ -28,7 +29,8 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
       providerName: 'mina-node',
       url: 'https://graphql.minaexplorer.com'
     },
-    networkName: 'Berkeley',
+    networkName: 'Mainnet',
+    networkType: 'mainnet',
     chainId: '...' // todo: fetch chainId from a provider
   },*/
   ZekoDevNet: {
@@ -41,6 +43,7 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
       url: ''
     },
     networkName: 'ZekoDevNet',
+    networkType: 'testnet',
     chainId: '...' // todo: fetch chainId from a provider
   },
   OptimismSepolia: {
@@ -53,6 +56,7 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
       url: 'https://api-sepolia-optimism.etherscan.io/'
     },
     networkName: 'OptimismSepolia',
+    networkType: 'testnet',
     chainId: '...' // todo: fetch chainId from a provider
   }
 }

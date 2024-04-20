@@ -43,6 +43,50 @@ test('enable window.mina and handle pop-up on a specific webpage', async ({
   )
   expect(responseBalance.result).not.toBe(undefined)
 
+  const responseRequestNetwork = await page.evaluate(() =>
+    window.mina.request({ method: 'mina_requestNetwork' })
+  )
+  console.log('responseRequestNetwork:', responseRequestNetwork)
+  expect(responseRequestNetwork.result.chainId).not.toBe(undefined)
+
+  const responseAddChain = await page.evaluate(() =>
+    window.mina.request({
+      method: 'mina_addChain',
+      params: {
+        nodeEndpoint: {
+          providerName: 'mina-node',
+          url: 'https://sequencer-zeko-dev.dcspark.io/graphql'
+        },
+        archiveNodeEndpoint: {
+          providerName: 'mina-node',
+          url: ''
+        },
+        networkName: 'ZekoDevNet',
+        networkType: 'testnet',
+        chainId: '69420'
+      }
+    })
+  )
+  console.log('responseAddChain:', responseAddChain)
+  expect(responseAddChain.result.networkName).toBe('ZekoDevNet')
+
+  const responseSwitchChain = await page.evaluate(() =>
+    window.mina.request({
+      method: 'mina_switchChain',
+      params: {
+        chainId: '69420'
+      }
+    })
+  )
+  console.log('responseSwitchChain:', responseSwitchChain)
+  expect(responseSwitchChain.result.networkName).toBe('ZekoDevNet')
+
+  const responseBalanceZeko = await page.evaluate(() =>
+    window.mina.request({ method: 'mina_getBalance' })
+  )
+  console.log('responseBalanceZeko:', responseBalanceZeko)
+  expect(responseBalanceZeko.result).not.toBe(0)
+
   await page.evaluate(() =>
     window.mina.request({
       method: 'mina_setState',

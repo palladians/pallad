@@ -3,7 +3,7 @@ import { TokenIdMap } from '@palladxyz/mina-core'
 import { MinaExplorer } from '../../../../src'
 
 const nodeUrl =
-  process.env['NODE_URL'] || 'http://sequencer-zeko-dev.dcspark.io/graphql'
+  process.env['NODE_URL'] || 'https://sequencer-zeko-dev.dcspark.io/graphql'
 const publicKey =
   process.env['PUBLIC_KEY'] ||
   'B62qoereGLPUg5RWuoTEGu5CSKnN7AAirwwA2h6J1JHH3RF6wbThXmr'

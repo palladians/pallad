@@ -82,6 +82,21 @@ onMessage('mina_setState', async (data) => {
   return await provider.request({ method: 'mina_setState', params: data })
 })
 
+onMessage('mina_addChain', async (data) => {
+  console.log('test mina_addChain method', data)
+  return await provider.request({ method: 'mina_addChain', params: data })
+})
+
+onMessage('mina_requestNetwork', async (data) => {
+  console.log('test mina_requestNetwork method', data)
+  return await provider.request({ method: 'mina_requestNetwork', params: data })
+})
+
+onMessage('mina_switchChain', async (data) => {
+  console.log('test mina_switchChain method', data)
+  return await provider.request({ method: 'mina_switchChain', params: data })
+})
+
 onMessage('mina_getState', async (data) => {
   console.log('test mina_getState method')
   //return await provider.request({ method: 'mina_getState' })

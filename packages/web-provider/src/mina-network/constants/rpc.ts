@@ -7,7 +7,11 @@ export const OPTIONAL_METHODS = [
   'mina_signFields',
   'mina_getBalance',
   'mina_sendTransaction',
-  'mina_chainId'
+  'mina_chainId',
+  // new methods
+  'mina_addChain',
+  'mina_requestNetwork',
+  'mina_switchChain'
 ]
 export const REQUIRED_EVENTS = ['chainChanged', 'accountsChanged']
 export const OPTIONAL_EVENTS = [

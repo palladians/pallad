@@ -34,7 +34,6 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
       mnemonic2ndFactorPassphrase: ''
     }
     const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
-    console.log('>>> KeyAgent in keyAgentStore initialiseKeyAgent', keyAgent)
     ensureKeyAgent(name)
     return set(
       produce((state) => {
@@ -47,7 +46,7 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
       })
     )
   },
-  // TODO: this should take a password too.
+  // This isn't used anywhere but is a nice abstraction over signing
   async request(name, credential, signable, args) {
     const { keyAgents } = get()
     const keyAgent = keyAgents[name]

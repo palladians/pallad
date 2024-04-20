@@ -27,10 +27,12 @@ import {
   IMinaProviderBase,
   IMinaProviderEvents,
   MinaRpcProviderMap,
+  requestAddChain,
   requestData,
   requestingStateData,
   requestSignableData,
-  requestSignableTransaction
+  requestSignableTransaction,
+  requestSwitchChain
 } from './types'
 import { serializeField, serializeGroup, serializeTransaction } from './utils'
 
@@ -163,7 +165,6 @@ export class MinaProvider implements IMinaProvider {
       title: 'Connection request.',
       payload: superjson.stringify({ origin })
     })
-    console.log('userConfirmed:', userConfirmed)
     if (!userConfirmed) {
       // should this emit an error event?
       throw this.createProviderRpcError(4001, 'User Rejected Request')
@@ -335,6 +336,10 @@ export class MinaProvider implements IMinaProvider {
         throw this.createProviderRpcError(4901, 'Chain Disconnected')
       }
     }
+    const enabled = await this.vault.getEnabled({ origin })
+    if (!enabled) {
+      await this.enable({ origin })
+    }
     // TODO: Add prompt confirmation for signing and broadcasting
     // // Prompt user for confirmation based on the method type
     // // what scenarios would we need to prompt the user?
@@ -349,6 +354,91 @@ export class MinaProvider implements IMinaProvider {
     switch (args.method) {
       case 'mina_accounts':
         return (await this.vault.getAccounts()) as unknown as T
+      case 'mina_addChain': {
+        const userConfirmed = await this.userPrompt('confirmation', {
+          title: 'Request to add a new Mina chain.',
+          payload: superjson.stringify(args.params)
+        })
+
+        if (!userConfirmed) {
+          // should this emit an error event?
+          throw this.createProviderRpcError(4001, 'User Rejected Request')
+        }
+
+        /*
+            should recieve params of type:
+              "params":
+                  {
+                    "chainId": "abc",
+                    "chainName": "Zeko",
+                    "nodeUrl": "https://rpc.zeko.com",
+                    "nativeCurrency": {
+                      "name": "MINA",
+                      "symbol": "MINA",
+                      "decimals": 18
+                    },
+                    "archiveNodeUrl": "https://zeko-explorer.com/"
+                  }
+                
+          */
+        const data = args.params as requestAddChain
+        const addChainResponse = await this.vault.addChain(data.data)
+        return addChainResponse as unknown as T
+      }
+      case 'mina_switchChain': {
+        {
+          const userConfirmed = await this.userPrompt('confirmation', {
+            title: 'Request to switch to a different Mina chain.',
+            payload: superjson.stringify(args.params)
+          })
+
+          if (!userConfirmed) {
+            // should this emit an error event?
+            throw this.createProviderRpcError(4001, 'User Rejected Request')
+          }
+
+          /*
+            should recieve params of type:
+              "params":
+                  {
+                    "chainId": "abc",
+                  }
+                
+          */
+          const data = args.params as requestSwitchChain
+          if (!data.data.chainId) {
+            throw new Error('chainId is undefined in switchChain')
+          }
+          const addChainResponse = await this.vault.switchChain(
+            data.data.chainId
+          )
+          return addChainResponse as unknown as T
+        }
+      }
+      case 'mina_requestNetwork': {
+        {
+          const userConfirmed = await this.userPrompt('confirmation', {
+            title: 'Request to current Mina network information.',
+            payload: superjson.stringify(args.params)
+          })
+
+          if (!userConfirmed) {
+            // should this emit an error event?
+            throw this.createProviderRpcError(4001, 'User Rejected Request')
+          }
+
+          /*
+            should recieve params of type:
+              "params":
+                  {
+                    "chainId": "abc",
+                  }
+                
+          */
+          const requestNetworkResponse = await this.vault.requestNetwork()
+          return requestNetworkResponse as unknown as T
+        }
+      }
       case 'mina_sign':
       case 'mina_createNullifier':
       case 'mina_signFields':
@@ -431,9 +521,7 @@ export class MinaProvider implements IMinaProvider {
                 resolve(Buffer.from(passphrase as string))
               )
           )) as BorrowedTypes.Nullifier
-          console.log('signedResponse:', signedResponse)
           // serialise the response if mina_createNullifier
-
           const serializedResponseData = {
             publicKey: serializeGroup(signedResponse.publicKey),
             public: {
@@ -446,7 +534,6 @@ export class MinaProvider implements IMinaProvider {
               h_m_pk_r: serializeGroup(signedResponse.private.h_m_pk_r)
             }
           }
-          console.log('serializedResponseData:', serializedResponseData)
 
           return serializedResponseData as unknown as T
         } else if (args.method === 'mina_signTransaction') {
@@ -482,19 +569,18 @@ export class MinaProvider implements IMinaProvider {
 
       case 'mina_getState': {
         // check if wallet is locked first
-        const passphrase = await this.userPrompt('password', {
+        const confirmation = await this.userPrompt('confirmation', {
           title:
             'The application is requesting to a credential from Pallad. Please review the request before deciding whether to confirm.',
           payload: superjson.stringify(args.params)
         })
-        if (passphrase === null) {
-          throw new Error('User denied the request for passphrase.')
+        if (!confirmation) {
+          throw this.createProviderRpcError(4001, 'User Rejected Request')
         }
         // TODO: handle incorrect passphrase
         const requestData = args.params as requestingStateData
         if (!requestData.data || !hasQueryAndProps(requestData.data)) {
           // Handle the case where the necessary properties do not exist
-          console.log('the args are:', requestData)
           return {} as unknown as T
         }
         const { query, props } = requestData.data as unknown as {
@@ -505,14 +591,13 @@ export class MinaProvider implements IMinaProvider {
       }
 
       case 'mina_setState': {
-        // check if wallet is locked first
-        const passphrase = await this.userPrompt('password', {
+        const confirmation = await this.userPrompt('confirmation', {
           title:
             'The application is requesting Pallad to store a credential. Please review the incoming credential before deciding whether to confirm.',
           payload: superjson.stringify(args.params)
         })
-        if (passphrase === null) {
-          throw new Error('User denied the request for passphrase.')
+        if (!confirmation) {
+          throw this.createProviderRpcError(4001, 'User Rejected Request')
         }
         const requestData = args.params as requestingStateData
         if (!requestData.data || !hasObjectProps(requestData.data)) {
