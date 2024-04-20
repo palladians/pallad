@@ -12,6 +12,10 @@ export async function syncAccountHelper(
     publicKey: publicKey,
     tokenMap: tokenMap
   })
+  console.log(
+    `accountInfo for ${providerConfig.networkName} is:`,
+    accountInfo.accountInfo
+  )
   if (accountInfo === undefined) {
     throw new Error('accountInfo is undefined in _syncAccountInfo')
   }

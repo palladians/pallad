@@ -9,14 +9,23 @@ export async function switchNetworkHelper(get: any, networkName: string) {
     ensureAccount
   } = get()
   const currentWallet = getCurrentWallet()
+  console.log('got current wallet...', currentWallet)
   if (!currentWallet)
     throw new Error('Current wallet is null, empty or undefined')
   const publicKey = await getCurrentWallet()?.credential?.credential?.address // todo: DRY this up
+  console.log('got current wallet public key...', publicKey)
+
   if (!publicKey)
     throw new AddressError(
       'Wallet address is undefined in switchNetwork method'
     )
+  console.log(
+    `ensuring account ${publicKey} on network ${networkName} exists...`
+  )
   ensureAccount(networkName, publicKey)
-  setCurrentNetworkName(networkName)
-  await _syncWallet()
+  console.log('ensured account')
+  await setCurrentNetworkName(networkName)
+  console.log('set current network to', networkName)
+  console.log('syncing wallet...')
+  await _syncWallet(networkName)
 }

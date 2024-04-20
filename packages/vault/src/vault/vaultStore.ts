@@ -102,8 +102,8 @@ export const useVault = create<
       _syncTransactions: async (providerConfig, publicKey) => {
         await syncTransactionHelper(get, providerConfig, publicKey)
       },
-      _syncWallet: async () => {
-        await syncWalletnHelper(get)
+      _syncWallet: async (networkName) => {
+        await syncWalletnHelper(get, networkName)
       },
       getCurrentNetwork: () => {
         const { getCurrentNetworkInfo } = get()

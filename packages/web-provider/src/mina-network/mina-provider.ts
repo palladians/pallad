@@ -402,6 +402,10 @@ export class MinaProvider implements IMinaProvider {
                 
           */
           const data = args.params as requestSwitchChain
+          console.log('chainId in switchChain request', data.data.chainId)
+          if (!data.data.chainId) {
+            throw new Error('chainId is undefined in switchChain')
+          }
           const addChainResponse = await this.vault.switchChain(
             data.data.chainId
           )

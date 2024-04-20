@@ -69,7 +69,7 @@ export type GlobalVaultActions = {
     providerConfig: ProviderConfig,
     publicKey: ChainAddress
   ) => Promise<void>
-  _syncWallet: () => Promise<void>
+  _syncWallet: (networkName?: NetworkName) => Promise<void>
   getCurrentNetwork: () => string
   switchNetwork: (networkName: NetworkName) => Promise<void>
   getCredentials: (query: SearchQuery, props: string[]) => StoredCredential[]

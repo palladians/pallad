@@ -104,6 +104,7 @@ export class VaultService implements IVaultService {
   async getBalance() {
     await this.rehydrate()
     const store = useVault.getState()
+    console.log('store.getCurrentWallet().accountInfo', store.accounts)
     return Number(
       // TODO: this doesn't have to be 'MINA'
       store.getCurrentWallet().accountInfo['MINA']!.balance.total / 1e9
@@ -128,6 +129,7 @@ export class VaultService implements IVaultService {
     if (allChains.includes(chainId)) {
       // get the networkName if the chainId exists
       const allNetworks = store.allNetworkInfo()
+      console.log('all network configs', allNetworks)
       const networkConfig = allNetworks.find(
         (network) => network!.chainId === chainId
       )
@@ -136,7 +138,7 @@ export class VaultService implements IVaultService {
           `Network Configuration is not defined for the chainId: ${chainId}`
         )
       }
-      store.switchNetwork(networkConfig!.networkName)
+      await store.switchNetwork(networkConfig!.networkName)
       return { chainId: chainId, networkName: networkConfig!.networkName }
     } else {
       throw new Error(

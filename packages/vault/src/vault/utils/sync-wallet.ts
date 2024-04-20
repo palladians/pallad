@@ -1,10 +1,15 @@
 import { createChainProvider } from '@palladxyz/providers'
+import { ProviderConfig } from '@palladxyz/providers'
 
 import { AddressError } from '../../lib/Errors'
 
-export async function syncWalletnHelper(get: any) {
+export async function syncWalletnHelper(
+  get: any,
+  networkName: string | undefined
+) {
   const {
     getCurrentNetworkInfo,
+    getNetworkInfo,
     getCurrentWallet,
     updateNetworkInfo,
     _syncAccountInfo,
@@ -15,29 +20,35 @@ export async function syncWalletnHelper(get: any) {
   const publicKey = currentwallet?.credential?.credential?.address // todo: DRY this up
   if (!publicKey)
     throw new AddressError('Wallet address is undefined in _syncWallet method')
-  const providerConfig = getCurrentNetworkInfo()
+  let syncProviderConfig: ProviderConfig
+  if (!networkName) {
+    syncProviderConfig = getCurrentNetworkInfo()
+  } else {
+    syncProviderConfig = getNetworkInfo(networkName)
+  }
   // set the chainIds
-  if (!providerConfig) {
+  if (!syncProviderConfig) {
     throw new Error(
-      `Could not find providerConfig for ${providerConfig} in _syncWallet`
+      `Could not find providerConfig for ${syncProviderConfig} in _syncWallet`
     )
   }
-  const provider = createChainProvider(providerConfig)
+  const provider = createChainProvider(syncProviderConfig)
   if (!provider.getNodeStatus) {
     throw new Error(
-      `Could not getNodeStatus for ${providerConfig} in updateChainId`
+      `Could not getNodeStatus for ${syncProviderConfig} in updateChainId`
     )
   }
 
   const response = await provider.getNodeStatus()
   if (!response.daemonStatus.chainId) {
     throw new Error(
-      `Could not get chainId for ${providerConfig} in updateChainId`
+      `Could not get chainId for ${syncProviderConfig} in updateChainId`
     )
   }
-  updateNetworkInfo(providerConfig.networkName, {
+  console.log(`in sync wallet the providerconfig is`, syncProviderConfig)
+  updateNetworkInfo(syncProviderConfig.networkName, {
     chainId: response.daemonStatus.chainId
   })
-  await _syncAccountInfo(providerConfig, publicKey)
-  await _syncTransactions(providerConfig, publicKey)
+  await _syncAccountInfo(syncProviderConfig, publicKey)
+  await _syncTransactions(syncProviderConfig, publicKey)
 }
