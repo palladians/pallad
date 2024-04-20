@@ -45,7 +45,6 @@ export async function syncWalletnHelper(
       `Could not get chainId for ${syncProviderConfig} in updateChainId`
     )
   }
-  console.log(`in sync wallet the providerconfig is`, syncProviderConfig)
   updateNetworkInfo(syncProviderConfig.networkName, {
     chainId: response.daemonStatus.chainId
   })

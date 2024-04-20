@@ -32,7 +32,6 @@ export const createChainHistoryProvider = (
     }
     const address = addresses[0] // Simplification: only process the first address
     const fullUrl = `${baseEtherscanUrl}&address=${address}&page=${page}&offset=${offset}&sort=${sort}`
-    console.log('fullUrl', fullUrl)
 
     const response = await fetch(fullUrl)
     const data = await response.json()

@@ -68,7 +68,6 @@ export const createStakePoolProvider = (baseUrl: string): StakePoolProvider => {
     }).toString()
 
     const fullUrl = `${baseUrl}v1/validators?${queryParams}`
-    console.log('fullUrl', fullUrl)
     const headers = {
       accept: 'application/json',
       'x-api-key': args.apiKey

@@ -406,7 +406,6 @@ export class MinaProvider implements IMinaProvider {
                 
           */
           const data = args.params as requestSwitchChain
-          console.log('chainId in switchChain request', data.data.chainId)
           if (!data.data.chainId) {
             throw new Error('chainId is undefined in switchChain')
           }
@@ -582,7 +581,6 @@ export class MinaProvider implements IMinaProvider {
         const requestData = args.params as requestingStateData
         if (!requestData.data || !hasQueryAndProps(requestData.data)) {
           // Handle the case where the necessary properties do not exist
-          console.log('the args are:', requestData)
           return {} as unknown as T
         }
         const { query, props } = requestData.data as unknown as {
