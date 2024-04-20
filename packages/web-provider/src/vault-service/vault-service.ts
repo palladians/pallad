@@ -4,6 +4,7 @@ import {
   getSecurePersistence,
   getSessionPersistence
 } from '@palladxyz/persistence'
+import { ProviderConfig } from '@palladxyz/providers'
 import { SearchQuery, SingleObjectState, useVault } from '@palladxyz/vault'
 
 import { chainIdToNetwork } from '../utils'
@@ -109,6 +110,63 @@ export class VaultService implements IVaultService {
     ) as number
   }
 
+  async addChain(providerConfig: ProviderConfig) {
+    await this.rehydrate()
+    const store = useVault.getState()
+    store.setNetworkInfo(providerConfig.networkName, providerConfig)
+    return {
+      networkName: providerConfig.networkName,
+      chainId: providerConfig.chainId
+    }
+  }
+
+  async switchChain(chainId: string) {
+    await this.rehydrate()
+    const store = useVault.getState()
+    // check if chainId is in the store
+    const allChains = store.getChainIds()
+    if (allChains.includes(chainId)) {
+      // get the networkName if the chainId exists
+      const allNetworks = store.allNetworkInfo()
+      const networkConfig = allNetworks.find(
+        (network) => network!.chainId === chainId
+      )
+      if (!networkConfig || !networkConfig.networkName) {
+        throw new Error(
+          `Network Configuration is not defined for the chainId: ${chainId}`
+        )
+      }
+      store.switchNetwork(networkConfig!.networkName)
+      return { chainId: chainId, networkName: networkConfig!.networkName }
+    } else {
+      throw new Error(
+        'chainId does not exist in the store, please use `addChain` first.'
+      )
+    }
+  }
+
+  async requestNetwork() {
+    await this.rehydrate()
+    const store = useVault.getState()
+    // check if chainId is in the store
+    const chainId = store.getChainId()
+    if (chainId !== '...') {
+      // get the networkName if the chainId exists
+      const allNetworks = store.allNetworkInfo()
+      const networkConfig = allNetworks.find(
+        (network) => network!.chainId === chainId
+      )
+      if (!networkConfig || !networkConfig.networkName) {
+        throw new Error(
+          `Network Configuration is not defined for the chainId: ${chainId}`
+        )
+      }
+      return { chainId: chainId, networkName: networkConfig!.networkName }
+    } else {
+      throw new Error('Something went wrong!')
+    }
+  }
+
   async getChainId() {
     await this.rehydrate()
     const store = useVault.getState()
@@ -120,7 +178,7 @@ export class VaultService implements IVaultService {
     const store = useVault.getState()
     return store.getChainIds()
   }
-
+  // TODO: deprecate this method
   async switchNetwork(network: string) {
     await this.rehydrate()
     const store = useVault.getState()

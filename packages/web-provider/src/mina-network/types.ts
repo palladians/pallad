@@ -1,4 +1,5 @@
 import { MinaSignablePayload } from '@palladxyz/key-management'
+import { ProviderConfig } from '@palladxyz/providers'
 
 import {
   ProviderAccounts,
@@ -22,6 +23,14 @@ export type requestSignableTransaction = {
 
 export type requestData = {
   data: number[] | bigint[]
+}
+
+export type requestAddChain = {
+  data: ProviderConfig
+}
+
+export type requestSwitchChain = {
+  data: { chainId: string }
 }
 
 export type requestingStateData = {

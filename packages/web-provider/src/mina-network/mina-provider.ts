@@ -27,10 +27,12 @@ import {
   IMinaProviderBase,
   IMinaProviderEvents,
   MinaRpcProviderMap,
+  requestAddChain,
   requestData,
   requestingStateData,
   requestSignableData,
-  requestSignableTransaction
+  requestSignableTransaction,
+  requestSwitchChain
 } from './types'
 import { serializeField, serializeGroup, serializeTransaction } from './utils'
 
@@ -163,7 +165,6 @@ export class MinaProvider implements IMinaProvider {
       title: 'Connection request.',
       payload: superjson.stringify({ origin })
     })
-    console.log('userConfirmed:', userConfirmed)
     if (!userConfirmed) {
       // should this emit an error event?
       throw this.createProviderRpcError(4001, 'User Rejected Request')
@@ -349,6 +350,88 @@ export class MinaProvider implements IMinaProvider {
     switch (args.method) {
       case 'mina_accounts':
         return (await this.vault.getAccounts()) as unknown as T
+      case 'mina_addChain': {
+        const userConfirmed = await this.userPrompt('confirmation', {
+          title: 'Request to add a new Mina chain.',
+          payload: superjson.stringify(args.params)
+        })
+
+        if (!userConfirmed) {
+          // should this emit an error event?
+          throw this.createProviderRpcError(4001, 'User Rejected Request')
+        }
+
+        /*
+            should recieve params of type:
+              "params":
+                  {
+                    "chainId": "abc",
+                    "chainName": "Zeko",
+                    "nodeUrl": "https://rpc.zeko.com",
+                    "nativeCurrency": {
+                      "name": "MINA",
+                      "symbol": "MINA",
+                      "decimals": 18
+                    },
+                    "archiveNodeUrl": "https://zeko-explorer.com/"
+                  }
+                
+          */
+        const data = args.params as requestAddChain
+        const addChainResponse = await this.vault.addChain(data.data)
+        return addChainResponse as unknown as T
+      }
+      case 'mina_switchChain': {
+        {
+          const userConfirmed = await this.userPrompt('confirmation', {
+            title: 'Request to switch to a different Mina chain.',
+            payload: superjson.stringify(args.params)
+          })
+
+          if (!userConfirmed) {
+            // should this emit an error event?
+            throw this.createProviderRpcError(4001, 'User Rejected Request')
+          }
+
+          /*
+            should recieve params of type:
+              "params":
+                  {
+                    "chainId": "abc",
+                  }
+                
+          */
+          const data = args.params as requestSwitchChain
+          const addChainResponse = await this.vault.switchChain(
+            data.data.chainId
+          )
+          return addChainResponse as unknown as T
+        }
+      }
+      case 'mina_requestNetwork': {
+        {
+          const userConfirmed = await this.userPrompt('confirmation', {
+            title: 'Request to current Mina network information.',
+            payload: superjson.stringify(args.params)
+          })
+
+          if (!userConfirmed) {
+            // should this emit an error event?
+            throw this.createProviderRpcError(4001, 'User Rejected Request')
+          }
+
+          /*
+            should recieve params of type:
+              "params":
+                  {
+                    "chainId": "abc",
+                  }
+                
+          */
+          const requestNetworkResponse = await this.vault.requestNetwork()
+          return requestNetworkResponse as unknown as T
+        }
+      }
       case 'mina_sign':
       case 'mina_createNullifier':
       case 'mina_signFields':
@@ -431,9 +514,7 @@ export class MinaProvider implements IMinaProvider {
                 resolve(Buffer.from(passphrase as string))
               )
           )) as BorrowedTypes.Nullifier
-          console.log('signedResponse:', signedResponse)
           // serialise the response if mina_createNullifier
-
           const serializedResponseData = {
             publicKey: serializeGroup(signedResponse.publicKey),
             public: {
@@ -446,7 +527,6 @@ export class MinaProvider implements IMinaProvider {
               h_m_pk_r: serializeGroup(signedResponse.private.h_m_pk_r)
             }
           }
-          console.log('serializedResponseData:', serializedResponseData)
 
           return serializedResponseData as unknown as T
         } else if (args.method === 'mina_signTransaction') {
