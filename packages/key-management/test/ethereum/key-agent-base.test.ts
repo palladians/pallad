@@ -168,7 +168,6 @@ describe('KeyAgentBase (Ethereum Functionality)', () => {
       expect(instance.knownCredentials[0]?.address.toLowerCase()).to.deep.equal(
         expectedGroupedCredentialsArray[0]?.address.toLowerCase()
       )
-      console.log('instance.knownCredentials', instance.knownCredentials)
       expect(instance.knownCredentials[1]?.address).to.deep.equal(
         expectedGroupedCredentialsArray[1]?.address
       )

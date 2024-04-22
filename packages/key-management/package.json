@@ -15,6 +15,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test:unit": "vitest run",
+    "coverage": "vitest run --coverage",
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
@@ -40,6 +41,7 @@
     "@palladxyz/common": "workspace:*",
     "@types/mocha": "^10.0.6",
     "@types/secp256k1": "^4.0.6",
-    "@types/sinon": "^17.0.2"
+    "@types/sinon": "^17.0.2",
+    "@vitest/coverage-v8": "^1.5.0"
   }
 }

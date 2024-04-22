@@ -1,8 +1,10 @@
 import { Network } from '@palladxyz/pallad-core'
 import * as bip32 from '@scure/bip32'
+import { ethers, hashMessage, recoverAddress, SignatureLike } from 'ethers'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
+import { ChainOperationArgs, ChainSignablePayload } from '../../src'
 import { EthereumSpecificArgs } from '../../src/chains/Ethereum'
 //import { emip3encrypt } from '../src/emip3'
 import {
@@ -119,6 +121,108 @@ describe('InMemoryKeyAgent', () => {
       expect(
         agent.serializableData.credentialSubject.contents[0]?.address
       ).to.deep.equal(expectedGroupedCredentials.address)
+    })
+  })
+  describe('KeyAgent signing', () => {
+    it('should sign a message', async () => {
+      const args: EthereumSpecificArgs = {
+        network: Network.Ethereum,
+        accountIndex: 0,
+        addressIndex: 0
+      }
+
+      await agent.restoreKeyAgent(args, getPassphrase)
+
+      const signable: ChainSignablePayload = 'hi bob'
+      const operationArsg: ChainOperationArgs = {
+        operation: 'eth_signMessage',
+        network: 'Ethereum'
+      }
+
+      const signedMessage = await agent.sign(
+        agent.serializableData.credentialSubject.contents[0]!,
+        signable,
+        operationArsg
+      )
+      const signerAddress = recoverAddress(
+        hashMessage(signable),
+        signedMessage as SignatureLike
+      )
+      expect(signerAddress).toBe('0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9')
+    })
+    // todo: replace ethers signers with micro-eth-signer
+    it.skip('should sign a transaction', async () => {
+      const args: EthereumSpecificArgs = {
+        network: Network.Ethereum,
+        accountIndex: 0,
+        addressIndex: 0
+      }
+
+      await agent.restoreKeyAgent(args, getPassphrase)
+
+      // Creating a mock transaction object
+      const transaction: ethers.TransactionRequest = {
+        to: '0x1234567890abcdef1234567890abcdef12345678',
+        value: ethers.parseUnits('0.1', 'ether'), // Sending 0.1 ether
+        data: '0x', // No additional data
+        chainId: 1, // Ethereum mainnet
+        nonce: 0 // Assume this is the first transaction
+      }
+
+      const operationArgs: ChainOperationArgs = {
+        operation: 'eth_signTransaction',
+        network: 'Ethereum'
+      }
+
+      // Signing the transaction
+      const signedTx = await agent.sign(
+        agent.serializableData.credentialSubject.contents[0]!,
+        transaction,
+        operationArgs
+      )
+
+      const signerAddress = recoverAddress(
+        hashMessage(String(transaction)),
+        signedTx as SignatureLike
+      )
+
+      expect(signerAddress).toBe('0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9')
+    })
+
+    it('should throw on invalid operation', async () => {
+      const args: EthereumSpecificArgs = {
+        network: Network.Ethereum,
+        accountIndex: 0,
+        addressIndex: 0
+      }
+
+      await agent.restoreKeyAgent(args, getPassphrase)
+
+      // Creating a mock transaction object
+      const transaction: ethers.TransactionRequest = {
+        to: '0x1234567890abcdef1234567890abcdef12345678',
+        value: ethers.parseUnits('0.1', 'ether'), // Sending 0.1 ether
+        data: '0x', // No additional data
+        chainId: 1, // Ethereum mainnet
+        nonce: 0 // Assume this is the first transaction
+      }
+
+      const operationArgs: ChainOperationArgs = {
+        operation: 'eth_NotAMethod',
+        network: 'Ethereum'
+      }
+
+      // Signing the transaction
+      try {
+        await agent.sign(
+          agent.serializableData.credentialSubject.contents[0]!,
+          transaction,
+          operationArgs
+        )
+        fail('Expected an error but did not get one.')
+      } catch (error) {
+        expect(error.message).toContain('Unsupported private key operation')
+      }
     })
   })
 })

@@ -2,7 +2,8 @@ import {
   ChainOperationArgs,
   ChainSignablePayload,
   GetPassphrase,
-  GroupedCredentials
+  GroupedCredentials,
+  InMemoryKeyAgent
 } from '@palladxyz/key-management'
 
 import { WalletError } from '../../lib/Errors'
@@ -30,7 +31,9 @@ export async function signHelper(
   }
   const credential = currentWallet.credential.credential as GroupedCredentials
 
-  const keyAgent = restoreKeyAgent(keyAgentState.name, getPassphrase)
+  let keyAgent: InMemoryKeyAgent | undefined | null
+  keyAgent = restoreKeyAgent(keyAgentState.name, getPassphrase)
   const signed = await keyAgent?.sign(credential, signable, args)
+  keyAgent = null
   return signed
 }

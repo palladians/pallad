@@ -164,9 +164,9 @@ export interface KeyAgent {
     pure?: boolean
   ): Promise<GroupedCredentials>
 
-  exportRootPrivateKey(): Promise<Uint8Array>
+  exportRootPrivateKey(getPassphrase: GetPassphrase): Promise<Uint8Array>
 
-  decryptSeed(): Promise<Uint8Array>
+  decryptSeed(getPassphrase: GetPassphrase): Promise<Uint8Array>
 }
 
 export type ChainDerivationArgs = MinaDerivationArgs | EthereumDerivationArgs

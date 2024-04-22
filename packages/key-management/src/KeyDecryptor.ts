@@ -1,5 +1,3 @@
-// KeyDecryptor.ts
-
 import { emip3decrypt } from './emip3'
 import * as errors from './errors'
 import { getPassphraseRethrowTypedError } from './InMemoryKeyAgent'
@@ -10,10 +8,10 @@ import {
 } from './types'
 
 export class KeyDecryptor {
-  private getPassphrase: (noCache?: true) => Promise<Uint8Array>
+  #getPassphrase: (noCache?: true) => Promise<Uint8Array>
 
   constructor(getPassphrase: GetPassphrase) {
-    this.getPassphrase = getPassphrase
+    this.#getPassphrase = getPassphrase
   }
 
   async decryptChildPrivateKey(
@@ -21,7 +19,7 @@ export class KeyDecryptor {
     noCache?: true
   ): Promise<Uint8Array> {
     const passphrase = await getPassphraseRethrowTypedError(() =>
-      this.getPassphrase(noCache)
+      this.#getPassphrase(noCache)
     )
     let decryptedKeyBytes: Uint8Array
     try {
@@ -54,7 +52,7 @@ export class KeyDecryptor {
     noCache?: true
   ) {
     const passphrase = await getPassphraseRethrowTypedError(() =>
-      this.getPassphrase(noCache)
+      this.#getPassphrase(noCache)
     )
     let decryptedKeyBytes: Uint8Array
     try {
