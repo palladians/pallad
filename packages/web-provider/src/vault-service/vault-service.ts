@@ -92,6 +92,13 @@ export class VaultService implements IVaultService {
     return store.authorized[origin] === AuthorizationState.ALLOWED
   }
 
+  async isBlocked({ origin }: { origin: ZkAppUrl }) {
+    await this.rehydrate()
+    const store = useVault.getState()
+
+    return store.authorized[origin] === AuthorizationState.BLOCKED
+  }
+
   async setEnabled({ origin }: { origin: ZkAppUrl }) {
     await this.rehydrate()
     const store = useVault.getState()

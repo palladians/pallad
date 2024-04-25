@@ -300,6 +300,13 @@ export class MinaProvider implements IMinaProvider {
     args: RequestArguments,
     chain?: string | undefined
   ): Promise<T> {
+    // Step 1: Check if request instantiator is in blocked list.
+    if (await this.vault.isBlocked({ origin: origin })) {
+      throw this.createProviderRpcError(
+        4100,
+        'Unauthorized - The requested method and/or account has not been authorized for the requests origin by the user.'
+      )
+    }
     // check if wallet is locked first
     await this.checkAndUnlock()
     if (

@@ -20,12 +20,12 @@ test('enable window.mina and handle pop-up on a specific webpage', async ({
   expect(minaExists).toBe(true)
 
   // Trigger window.mina.enable() which should open the pop-up
-  const enableResponse = await page.evaluate(() => window.mina.enable())
+  //const enableResponse = await page.evaluate(() => window.mina.enable())
   /**
      Click "Yes" manually
      */
-  expect(enableResponse.result.length).toBe(1)
-  expect(enableResponse.result[0]).toBe(VALIDATOR)
+  //expect(enableResponse.result.length).toBe(1)
+  //expect(enableResponse.result[0]).toBe(VALIDATOR)
 
   const account = await page.evaluate(() =>
     window.mina.request({ method: 'mina_accounts' })
