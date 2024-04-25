@@ -1,10 +1,12 @@
 import { Mina } from '@palladxyz/mina-core'
 import { Network } from '@palladxyz/pallad-core'
+import { constructTransaction } from '@palladxyz/pallad-core'
 import * as bip32 from '@scure/bip32'
+import Client from 'mina-signer'
 import sinon from 'sinon'
 import { expect } from 'vitest'
 
-import { MinaSpecificArgs } from '../../src/chains/Mina'
+import { MinaDerivationArgs, MinaSpecificArgs } from '../../src/chains/Mina'
 //import { emip3encrypt } from '../src/emip3'
 import {
   FromBip39MnemonicWordsProps,
@@ -73,6 +75,11 @@ describe('Mina InMemoryKeyAgent', () => {
   it('should create an agent with given properties', () => {
     expect(agent).to.be.instanceOf(InMemoryKeyAgent)
   })
+  it('should create an agent with given properties and return the getSeralizableData', () => {
+    expect(agent).to.be.instanceOf(InMemoryKeyAgent)
+    console.log()
+    expect(agent.getSeralizableData()).not.toBe(undefined)
+  })
   it('should export root private key', async () => {
     const result = await agent.exportRootPrivateKey()
     expect(result).to.deep.equal(rootKeyBytes)
@@ -126,6 +133,82 @@ describe('Mina InMemoryKeyAgent', () => {
       expect(
         agent.serializableData.credentialSubject.contents[0]?.address
       ).to.deep.equal(expectedGroupedCredentials.address)
+    })
+    it('should throw on invalid operation', async () => {
+      const args: MinaDerivationArgs = {
+        network: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0
+      }
+
+      const groupedCredential = await agent.deriveCredentials(
+        args,
+        getPassphrase,
+        true
+      )
+      const transaction: Mina.TransactionBody = {
+        to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        from: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        fee: 1,
+        amount: 100,
+        nonce: 0,
+        memo: 'hello Bob',
+        validUntil: 321,
+        type: 'payment'
+      }
+      const constructedTx: Mina.ConstructedTransaction = constructTransaction(
+        transaction,
+        Mina.TransactionKind.PAYMENT
+      )
+
+      try {
+        await agent.sign(groupedCredential, constructedTx, {
+          network: Network.Mina,
+          networkType: 'testnet',
+          operation: 'mina_signNotATransaction'
+        })
+        fail('Expected an error but did not get one.')
+      } catch (error) {
+        expect(error.message).toContain('Unsupported private key operation')
+      }
+    })
+    it('should throw on invalid operation', async () => {
+      const args: MinaDerivationArgs = {
+        network: Network.Mina,
+        accountIndex: 0,
+        addressIndex: 0
+      }
+
+      const groupedCredential = await agent.deriveCredentials(
+        args,
+        getPassphrase,
+        true
+      )
+      const transaction: Mina.TransactionBody = {
+        to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        from: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        fee: 1,
+        amount: 100,
+        nonce: 0,
+        memo: 'hello Bob',
+        validUntil: 321,
+        type: 'payment'
+      }
+      const constructedTx: Mina.ConstructedTransaction = constructTransaction(
+        transaction,
+        Mina.TransactionKind.PAYMENT
+      )
+
+      const signedTx = await agent.sign(groupedCredential, constructedTx, {
+        network: Network.Mina,
+        networkType: 'testnet',
+        operation: 'mina_signTransaction'
+      })
+      const minaClient = new Client({ network: 'testnet' })
+      const isVerified = minaClient.verifyTransaction(
+        signedTx as Mina.SignedTransaction
+      )
+      expect(isVerified).toBeTruthy()
     })
   })
 })

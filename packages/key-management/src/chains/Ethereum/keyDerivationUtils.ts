@@ -1,4 +1,5 @@
-import { Network } from '../../types'
+import { Network } from '@palladxyz/pallad-core'
+
 import { EthereumDerivationArgs } from './types'
 
 export function isEthereumDerivation(args: EthereumDerivationArgs): boolean {

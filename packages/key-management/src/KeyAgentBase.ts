@@ -113,7 +113,8 @@ export abstract class KeyAgentBase implements KeyAgent {
     passphrase: Uint8Array
   ): Promise<ChainKeyPair> {
     // Generate the private key
-    const privateKey = await this.#generatePrivateKeyFromSeed(args)
+    let privateKey: ChainPrivateKey | null
+    privateKey = await this.#generatePrivateKeyFromSeed(args)
     const encryptedPrivateKeyBytes = await emip3encrypt(
       Buffer.from(privateKey),
       passphrase
@@ -125,8 +126,17 @@ export abstract class KeyAgentBase implements KeyAgent {
         publicKey: await provider.derivePublicKey(privateKey),
         encryptedPrivateKeyBytes
       }
+      // Overwrite and nullify the privateKey
+      privateKey = '0'.repeat(privateKey.length)
+      privateKey = null
+
       return keyPair
     } catch (error) {
+      // Overwrite and nullify the privateKey
+      if (privateKey) {
+        privateKey = '0'.repeat(privateKey.length)
+        privateKey = null
+      }
       console.error(error)
       throw error
     }
@@ -168,31 +178,19 @@ export abstract class KeyAgentBase implements KeyAgent {
 
       return result
     } catch (error) {
+      // Overwrite and nullify the privateKey
+      if (privateKey) {
+        privateKey = '0'.repeat(privateKey.length)
+        privateKey = null
+      }
       console.error(error)
       throw error
     }
   }
 
-  /*async #generatePrivateKeyFromSeed<T extends ChainSpecificPayload>(
-    payload: T,
-    args: ChainDerivationArgs
-  ): Promise<ChainPrivateKey> {
-    // Decrypt your seed
-    const decryptedSeedBytes = await this.decryptSeed()
-
-    // Perform the specific derivation
-    try {
-      return await payload.derivePrivateKey(decryptedSeedBytes, args)
-    } catch (error) {
-      console.error(error)
-      throw error
-    }
-  }*/
-  // new functional generatePrivateKeyFromSeed
   async #generatePrivateKeyFromSeed<T extends ChainDerivationArgs>(
     args: T
   ): Promise<ChainPrivateKey> {
-    // Decrypt your seed
     const decryptedSeedBytes = await this.decryptSeed()
     const provider = createChainDerivationOperationsProvider(args)
 
