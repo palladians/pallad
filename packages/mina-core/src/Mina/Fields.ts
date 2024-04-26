@@ -1,4 +1,4 @@
-import { BorrowedTypes } from '..'
+import type { BorrowedTypes } from ".."
 
 /*
  * represents the signed message - SignedLegacy<MessageBody>

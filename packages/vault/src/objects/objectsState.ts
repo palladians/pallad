@@ -1,7 +1,7 @@
 /**
  * @file Represents the state definitions related to objects (for example issued credentials).
  */
-import { SearchQuery } from '../utils/utils'
+import type { SearchQuery } from "../utils/utils"
 export type ObjectName = string
 export type StoredObject = undefined | object
 
@@ -20,8 +20,8 @@ export type SingleObjectState = {
  * @typedef {Object}
  */
 export const initialObjectState: SingleObjectState = {
-  objectName: '',
-  object: undefined
+  objectName: "",
+  object: undefined,
 }
 
 export type ObjectsStore = Record<ObjectName, SingleObjectState>
@@ -34,7 +34,7 @@ export type ObjectStore = {
   ensureObject: (objectName: ObjectName) => void
   setObject: (objectState: SingleObjectState) => void
   getObject: (
-    objectName: ObjectName
+    objectName: ObjectName,
   ) => SingleObjectState | typeof initialObjectState
   removeObject: (name: ObjectName) => void
   searchObjects(query: SearchQuery, props?: string[]): StoredObject[]

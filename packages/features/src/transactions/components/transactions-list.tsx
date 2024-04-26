@@ -1,9 +1,9 @@
-import { Mina } from '@palladxyz/mina-core'
+import type { Mina } from "@palladxyz/mina-core"
 
-import { useAccount } from '@/common/hooks/use-account'
+import { useAccount } from "@/common/hooks/use-account"
 
-import { structurizeTransactions } from '../utils/structurize-transactions'
-import { TxTile } from './tx-tile'
+import { structurizeTransactions } from "../utils/structurize-transactions"
+import { TxTile } from "./tx-tile"
 
 interface TransactionsListProps {
   transactions: Mina.TransactionBody[]

@@ -1,32 +1,29 @@
-import {
+import type {
   ChainAddress,
+  ChainDerivationArgs,
   ChainOperationArgs,
   ChainSignablePayload,
-  ChainSpecificArgs,
-  ChainSpecificPayload,
   FromBip39MnemonicWordsProps,
-  Network
-} from '@palladxyz/key-management'
-import { GetPassphrase } from '@palladxyz/key-management'
-import { constructTxArgs } from '@palladxyz/key-management'
-// can remove mina-core when there exists an agnostic construct tx function
-import {
+} from "@palladxyz/key-management"
+import type { GetPassphrase } from "@palladxyz/key-management"
+import type {
   AccountInfo,
+  Network,
   PalladNetworkNames,
-  PalladNetworkTypes,
   SubmitTxArgs,
-  Tx
-} from '@palladxyz/pallad-core'
-import { ProviderConfig } from '@palladxyz/providers'
+  Tx,
+  constructTxArgs,
+} from "@palladxyz/pallad-core"
+import type { ProviderConfig } from "@palladxyz/providers"
 
-import {
+import type {
   CredentialName,
   SingleCredentialState,
-  StoredCredential
-} from '../credentials'
-import { KeyAgentName, KeyAgents, SingleKeyAgentState } from '../keyAgent'
-import { NetworkName } from '../network-info'
-import { SearchQuery } from '../utils/utils'
+  StoredCredential,
+} from "../credentials"
+import type { KeyAgentName, KeyAgents, SingleKeyAgentState } from "../keyAgent"
+import type { NetworkName } from "../network-info"
+import type { SearchQuery } from "../utils/utils"
 
 // Note: this is the full state of the account not just 'MINA' tokens
 export type CurrentWallet = {
@@ -48,7 +45,7 @@ export type GlobalVaultState = {
   credentialName: string
   currentAccountIndex: number
   currentAddressIndex: number
-  chain: PalladNetworkTypes
+  chain: Network
   walletNetwork: PalladNetworkNames
   walletName: string
   knownAccounts: string[]
@@ -66,13 +63,13 @@ export type GlobalVaultActions = {
   setCurrentWallet: (payload: CurrentWalletPayload) => void
   _syncAccountInfo: (
     providerConfig: ProviderConfig,
-    publicKey: ChainAddress
+    publicKey: ChainAddress,
   ) => Promise<void>
   _syncTransactions: (
     providerConfig: ProviderConfig,
-    publicKey: ChainAddress
+    publicKey: ChainAddress,
   ) => Promise<void>
-  _syncWallet: () => Promise<void>
+  _syncWallet: (networkName?: NetworkName) => Promise<void>
   getCurrentNetwork: () => string
   switchNetwork: (networkName: NetworkName) => Promise<void>
   getCredentials: (query: SearchQuery, props: string[]) => StoredCredential[]
@@ -81,19 +78,18 @@ export type GlobalVaultActions = {
   sign: (
     signable: ChainSignablePayload,
     args: ChainOperationArgs,
-    getPassphrase: GetPassphrase
+    getPassphrase: GetPassphrase,
   ) => Promise<unknown>
   constructTx: (args: constructTxArgs) => unknown
   submitTx: (submitTxArgs: SubmitTxArgs) => Promise<unknown>
   createWallet: (strength?: number) => CreateWalletReturn
-  restoreWallet: <T extends ChainSpecificPayload>(
-    payload: T,
-    args: ChainSpecificArgs,
+  restoreWallet: (
+    args: ChainDerivationArgs,
     network: string,
     { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
     keyAgentName: KeyAgentName,
     keyAgentType: KeyAgents,
-    credentialName: CredentialName
+    credentialName: CredentialName,
   ) => Promise<void>
   restartWallet: () => void
   // web provider APIs

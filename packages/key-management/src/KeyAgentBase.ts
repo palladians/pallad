@@ -1,25 +1,32 @@
-import { HDKey } from '@scure/bip32'
+import { HDKey } from "@scure/bip32"
 
-import { EthereumSignablePayload, EthereumSigningOperations } from './chains'
-import { MinaSignablePayload } from './chains/Mina'
-import { MinaSigningOperations } from './chains/Mina/signingOperations'
-import { emip3encrypt } from './emip3'
-import * as errors from './errors'
-import { getPassphraseRethrowTypedError } from './InMemoryKeyAgent'
-import { KeyDecryptor } from './KeyDecryptor'
+import { getPassphraseRethrowTypedError } from "./InMemoryKeyAgent"
+import { KeyDecryptor } from "./KeyDecryptor"
 import {
-  ChainKeyPair,
-  ChainOperationArgs,
-  ChainPrivateKey,
-  ChainSignablePayload,
-  ChainSignatureResult,
-  ChainSpecificArgs,
-  ChainSpecificPayload,
+  type EthereumSignablePayload,
+  EthereumSigningOperations,
+} from "./chains"
+import type { MinaSignablePayload } from "./chains/Mina"
+import { MinaSigningOperations } from "./chains/Mina/signingOperations"
+import { emip3encrypt } from "./emip3"
+import * as errors from "./errors"
+import {
+  type ChainDerivationArgs,
+  type ChainKeyPair,
+  type ChainOperationArgs,
+  type ChainPrivateKey,
+  type ChainSignablePayload,
+  type ChainSignatureResult,
+  type GetPassphrase,
+  createChainDerivationOperationsProvider,
   credentialDerivers,
   credentialMatchers,
-  GetPassphrase
-} from './types'
-import { GroupedCredentials, KeyAgent, SerializableKeyAgentData } from './types'
+} from "./types"
+import type {
+  GroupedCredentials,
+  KeyAgent,
+  SerializableKeyAgentData,
+} from "./types"
 
 export abstract class KeyAgentBase implements KeyAgent {
   readonly serializableData: SerializableKeyAgentData
@@ -35,7 +42,7 @@ export abstract class KeyAgentBase implements KeyAgent {
 
   constructor(
     serializableData: SerializableKeyAgentData,
-    getPassphrase: GetPassphrase
+    getPassphrase: GetPassphrase,
   ) {
     this.serializableData = serializableData
     this.keyDecryptor = new KeyDecryptor(getPassphrase)
@@ -58,52 +65,47 @@ export abstract class KeyAgentBase implements KeyAgent {
       return rootKey.privateKey ? rootKey.privateKey : new Uint8Array([])
     } catch (error) {
       throw new errors.AuthenticationError(
-        'Failed to export root private key',
-        error
+        "Failed to export root private key",
+        error,
       )
     }
   }
 
-  async deriveCredentials<T extends ChainSpecificPayload>(
-    payload: T,
-    args: ChainSpecificArgs,
+  async deriveCredentials(
+    args: ChainDerivationArgs,
     getPassphrase: GetPassphrase,
-    pure?: boolean
+    pure?: boolean,
   ): Promise<GroupedCredentials> {
     const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
-    const matcher = credentialMatchers[payload.network]
+    const matcher = credentialMatchers[args.network]
     if (!matcher) {
-      throw new Error(`Unsupported network: ${payload.network}`)
+      throw new Error(`Unsupported network: ${args.network}`)
     }
 
     const knownCredential =
       this.serializableData.credentialSubject.contents.find((credential) =>
-        matcher(credential, payload)
+        matcher(credential, args),
       )
 
     if (knownCredential) return knownCredential
 
-    const derivedKeyPair = await this.deriveKeyPair<ChainSpecificPayload>(
-      payload,
-      args,
-      passphrase
-    )
+    const derivedKeyPair = await this.deriveKeyPair(args, passphrase)
 
     try {
-      const deriveFunction = credentialDerivers[payload.network]
+      const deriveFunction = credentialDerivers[args.network]
       if (!deriveFunction) {
-        throw new Error(`Unsupported network: ${payload.network}`)
+        throw new Error(`Unsupported network: ${args.network}`)
       }
       const groupedCredential = deriveFunction(
         args,
         derivedKeyPair.publicKey,
-        derivedKeyPair.encryptedPrivateKeyBytes
+        derivedKeyPair.encryptedPrivateKeyBytes,
       )
 
       if (!pure) {
         this.serializableData.credentialSubject.contents = [
           ...this.serializableData.credentialSubject.contents,
-          groupedCredential
+          groupedCredential,
         ]
       }
       return groupedCredential
@@ -113,24 +115,35 @@ export abstract class KeyAgentBase implements KeyAgent {
     }
   }
 
-  async deriveKeyPair<T extends ChainSpecificPayload>(
-    payload: T,
-    args: ChainSpecificArgs,
-    passphrase: Uint8Array
+  async deriveKeyPair(
+    args: ChainDerivationArgs,
+    passphrase: Uint8Array,
   ): Promise<ChainKeyPair> {
     // Generate the private key
-    const privateKey = await this.#generatePrivateKeyFromSeed(payload, args)
+    let privateKey: ChainPrivateKey | null
+    privateKey = await this.#generatePrivateKeyFromSeed(args)
     const encryptedPrivateKeyBytes = await emip3encrypt(
       Buffer.from(privateKey),
-      passphrase
+      passphrase,
     )
+    const provider = createChainDerivationOperationsProvider(args)
+
     try {
       const keyPair = {
-        publicKey: await payload.derivePublicKey(privateKey, args),
-        encryptedPrivateKeyBytes
+        publicKey: await provider.derivePublicKey(privateKey),
+        encryptedPrivateKeyBytes,
       }
+      // Overwrite and nullify the privateKey
+      privateKey = "0".repeat(privateKey.length)
+      privateKey = null
+
       return keyPair
     } catch (error) {
+      // Overwrite and nullify the privateKey
+      if (privateKey) {
+        privateKey = "0".repeat(privateKey.length)
+        privateKey = null
+      }
       console.error(error)
       throw error
     }
@@ -139,57 +152,55 @@ export abstract class KeyAgentBase implements KeyAgent {
   async sign<T extends GroupedCredentials>(
     payload: T,
     signable: ChainSignablePayload,
-    args: ChainSpecificArgs | ChainOperationArgs
+    args: ChainOperationArgs,
   ): Promise<ChainSignatureResult> {
     const encryptedPrivateKeyBytes = payload.encryptedPrivateKeyBytes
     const decryptedKeyBytes = await this.keyDecryptor.decryptChildPrivateKey(
-      encryptedPrivateKeyBytes
+      encryptedPrivateKeyBytes,
     )
 
     let privateKey: string | null = Buffer.from(decryptedKeyBytes).toString()
 
     try {
       let result
-      if (args.network === 'Mina') {
+      if (args.network === "Mina") {
         result = MinaSigningOperations(
           signable as MinaSignablePayload,
           args,
-          privateKey
+          privateKey,
         )
-      } else if (args.network === 'Ethereum') {
+      } else if (args.network === "Ethereum") {
         result = EthereumSigningOperations(
           signable as EthereumSignablePayload,
           args,
-          privateKey
+          privateKey,
         )
       } else {
-        throw new Error('Unsupported network')
+        throw new Error("Unsupported network")
       }
 
       // Overwrite and nullify the privateKey
-      privateKey = '0'.repeat(privateKey.length)
+      privateKey = "0".repeat(privateKey.length)
       privateKey = null
 
       return result
     } catch (error) {
+      // Overwrite and nullify the privateKey
+      if (privateKey) {
+        privateKey = "0".repeat(privateKey.length)
+        privateKey = null
+      }
       console.error(error)
       throw error
     }
   }
 
-  async #generatePrivateKeyFromSeed<T extends ChainSpecificPayload>(
-    payload: T,
-    args: ChainSpecificArgs
+  async #generatePrivateKeyFromSeed<T extends ChainDerivationArgs>(
+    args: T,
   ): Promise<ChainPrivateKey> {
-    // Decrypt your seed
     const decryptedSeedBytes = await this.decryptSeed()
+    const provider = createChainDerivationOperationsProvider(args)
 
-    // Perform the specific derivation
-    try {
-      return await payload.derivePrivateKey(decryptedSeedBytes, args)
-    } catch (error) {
-      console.error(error)
-      throw error
-    }
+    return provider.derivePrivateKey(decryptedSeedBytes)
   }
 }

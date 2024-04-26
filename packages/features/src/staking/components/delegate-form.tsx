@@ -1,20 +1,20 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
+import { useLocation, useNavigate } from "react-router-dom"
 
-import { TransactionFee } from '@/common/lib/const'
-import { useTransactionStore } from '@/common/store/transaction'
-import { OutgoingTransaction } from '@/common/types'
-import { ButtonArrow } from '@/components/button-arrow'
-import { FormError } from '@/components/form-error'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { cn } from '@/lib/utils'
+import { TransactionFee } from "@/common/lib/const"
+import { useTransactionStore } from "@/common/store/transaction"
+import type { OutgoingTransaction } from "@/common/types"
+import { ButtonArrow } from "@/components/button-arrow"
+import { FormError } from "@/components/form-error"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { cn } from "@/lib/utils"
 
-import { DelegateFormSchema } from './delegate-form.schema'
+import { DelegateFormSchema } from "./delegate-form.schema"
 
 export const DelegateForm = () => {
   const location = useLocation()
@@ -26,28 +26,29 @@ export const DelegateForm = () => {
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(DelegateFormSchema),
     defaultValues: {
-      to: '',
-      fee: 'default',
-      memo: ''
-    }
+      to: "",
+      fee: "default",
+      memo: "",
+    },
   })
   const onSubmit = (payload: OutgoingTransaction) => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
-    setKind('staking')
+    setKind("staking")
     setTransactionDetails({
       to: payload.to,
       fee: String(currentFee),
-      memo: payload.memo
+      memo: payload.memo,
     })
-    navigate('/transactions/summary')
+    navigate("/transactions/summary")
   }
+  // biome-ignore lint: only first render
   useEffect(() => {
-    setValue('to', location.state?.address || '')
+    setValue("to", location.state?.address || "")
   }, [])
   return (
     <form
@@ -57,7 +58,7 @@ export const DelegateForm = () => {
       <div className="flex flex-col gap-2">
         <Label
           htmlFor="blockProducer"
-          className={cn(errors.to && 'text-destructive')}
+          className={cn(errors.to && "text-destructive")}
         >
           Block Producer
         </Label>
@@ -65,30 +66,30 @@ export const DelegateForm = () => {
           id="blockProducer"
           placeholder="Receiver Address"
           autoFocus
-          className={errors.to && 'border-destructive'}
+          className={errors.to && "border-destructive"}
           data-testid="delegate__to"
-          {...register('to')}
+          {...register("to")}
         />
         <FormError>{errors.to?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="memo" className={cn(errors.memo && 'text-destructive')}>
+        <Label htmlFor="memo" className={cn(errors.memo && "text-destructive")}>
           Memo
         </Label>
         <Input
           id="memo"
           placeholder="Memo"
-          className={errors.memo && 'border-destructive'}
+          className={errors.memo && "border-destructive"}
           data-testid="delegate__memo"
-          {...register('memo')}
+          {...register("memo")}
         />
         <FormError>{errors.memo?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2 flex-1">
-        <Label className={cn(errors.fee && 'text-destructive')}>Fee</Label>
+        <Label className={cn(errors.fee && "text-destructive")}>Fee</Label>
         <RadioGroup
           defaultValue="default"
-          onValueChange={(value) => setValue('fee', value)}
+          onValueChange={(value) => setValue("fee", value)}
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="slow" id="feeSlow" />

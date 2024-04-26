@@ -1,5 +1,5 @@
-import { Pie, PieChart, ResponsiveContainer } from 'recharts'
-import colors from 'tailwindcss/colors' // eslint-disable-line
+import { Pie, PieChart, ResponsiveContainer } from "recharts"
+import colors from "tailwindcss/colors"
 
 interface EpochProgressChartProps {
   progress: number
@@ -11,8 +11,8 @@ export const EpochProgressChart = ({ progress }: EpochProgressChartProps) => {
   const data = [
     {
       progress: 1,
-      fill: colors.sky['500']
-    }
+      fill: colors.sky["500"],
+    },
   ]
   return (
     <ResponsiveContainer height={32} width={32}>

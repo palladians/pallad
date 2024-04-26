@@ -1,6 +1,6 @@
 export enum AuthorizationState {
-  ALLOWED = 'ALLOWED',
-  BLOCKED = 'BLOCKED'
+  ALLOWED = "ALLOWED",
+  BLOCKED = "BLOCKED",
 }
 
 export type ZkAppUrl = string
@@ -17,7 +17,7 @@ export type WebProviderState = {
 export type WebProviderActions = {
   mutateZkAppPermission: ({
     origin,
-    authorizationState
+    authorizationState,
   }: {
     origin: ZkAppUrl
     authorizationState: AuthorizationState

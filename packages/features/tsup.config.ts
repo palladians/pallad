@@ -1,10 +1,10 @@
-import { baseTsupConfig } from '@palladxyz/common'
-import svgJsx from '@svgr/plugin-jsx'
-import { polyfillNode } from 'esbuild-plugin-polyfill-node'
-import svgr from 'esbuild-plugin-svgr'
-import { defineConfig } from 'tsup' // eslint-disable-line import/no-extraneous-dependencies
+import { baseTsupConfig } from "@palladxyz/common"
+import svgJsx from "@svgr/plugin-jsx"
+import { polyfillNode } from "esbuild-plugin-polyfill-node"
+import svgr from "esbuild-plugin-svgr"
+import { defineConfig } from "tsup"
 
-import packageJson from './package.json'
+import packageJson from "./package.json"
 
 export default defineConfig([
   {
@@ -13,11 +13,11 @@ export default defineConfig([
     esbuildPlugins: [
       polyfillNode({
         polyfills: { crypto: true },
-        globals: { process: true }
+        globals: { process: true },
       }),
-      svgr({ plugins: [svgJsx] })
+      svgr({ plugins: [svgJsx] }),
     ],
-    external: ['swr'],
-    treeshake: true
-  }
+    external: ["swr"],
+    treeshake: true,
+  },
 ])

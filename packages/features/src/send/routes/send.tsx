@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom"
 
-import { SendView } from '../views/send'
+import { SendView } from "../views/send"
 
 export const SendRoute = () => {
   const navigate = useNavigate()

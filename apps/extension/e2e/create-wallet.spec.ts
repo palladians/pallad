@@ -1,8 +1,8 @@
-import { expect, test } from './extension'
-import { devnetWallet } from './fixtures'
-import { OnboardingPom } from './pom/onboarding'
+import { expect, test } from "./extension"
+import { devnetWallet } from "./fixtures"
+import { OnboardingPom } from "./pom/onboarding"
 
-test('create new wallet', async ({ page, extensionId }) => {
+test("create new wallet", async ({ page, extensionId }) => {
   const onboardingPom = new OnboardingPom({ page, extensionId })
   await onboardingPom.goto()
   await onboardingPom.startCreating()
@@ -17,22 +17,22 @@ test('create new wallet', async ({ page, extensionId }) => {
   const confirmationIndex = await onboardingPom.getMnemonicConfirmationIndex()
   await onboardingPom.fillMnemonicConfirmation(mnemonicWords[confirmationIndex])
   await onboardingPom.goNext()
-  const pageTitle = page.getByText('Stay Connected')
+  const pageTitle = page.getByText("Stay Connected")
   await pageTitle.waitFor()
   await onboardingPom.goNext()
-  expect(await onboardingPom.getMinaBalance()).toContain('MINA')
+  expect(await onboardingPom.getMinaBalance()).toContain("MINA")
 })
 
-test('validates create wallet data', async ({ page, extensionId }) => {
+test("validates create wallet data", async ({ page, extensionId }) => {
   const onboardingPom = new OnboardingPom({ page, extensionId })
   await onboardingPom.goto()
   await onboardingPom.startCreating()
   await onboardingPom.assertNextDisabled()
   await onboardingPom.fillWalletName(devnetWallet.walletName)
-  await onboardingPom.fillSpendingPassword('ASD')
+  await onboardingPom.fillSpendingPassword("ASD")
   await onboardingPom.toggleTos()
   await onboardingPom.goNext()
-  const errors = await page.getByTestId('form__error').all()
+  const errors = await page.getByTestId("form__error").all()
   expect(errors.length).toEqual(1)
   await onboardingPom.fillSpendingPassword(devnetWallet.spendingPassword)
   await onboardingPom.goNext()
@@ -40,6 +40,6 @@ test('validates create wallet data', async ({ page, extensionId }) => {
   await onboardingPom.assertNextDisabled()
   await onboardingPom.toggleMnemonicWritten()
   await onboardingPom.goNext()
-  await onboardingPom.fillMnemonicConfirmation('boots')
+  await onboardingPom.fillMnemonicConfirmation("boots")
   await onboardingPom.assertNextDisabled()
 })

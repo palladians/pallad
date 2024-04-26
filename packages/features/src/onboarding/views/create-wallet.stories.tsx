@@ -1,11 +1,11 @@
-import { StoryDefault } from '@ladle/react'
+import type { StoryDefault } from "@ladle/react"
 
-import { CreateWalletView } from './create-wallet'
+import { CreateWalletView } from "./create-wallet"
 
 export const View = () => (
   <CreateWalletView onSubmit={(data) => console.log(data)} />
 )
 
 export default {
-  title: 'Onboarding / Create Wallet'
+  title: "Onboarding / Create Wallet",
 } satisfies StoryDefault

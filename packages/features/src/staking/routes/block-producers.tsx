@@ -1,20 +1,20 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom"
 
-import { BlockProducersView } from '../views/block-producers'
+import { BlockProducersView } from "../views/block-producers"
 
 const MOCKED_PRODUCERS = [
   {
-    name: 'Pallad',
-    publicKey: 'B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS',
+    name: "Pallad",
+    publicKey: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
     stake: 24000,
-    delegatorsCount: 6000
+    delegatorsCount: 6000,
   },
   {
-    name: 'Pallad 2',
-    publicKey: 'B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS',
+    name: "Pallad 2",
+    publicKey: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
     stake: 12000,
-    delegatorsCount: 3000
-  }
+    delegatorsCount: 3000,
+  },
 ]
 
 export const BlockProducersRoute = () => {

@@ -1,4 +1,4 @@
-import { ChokidarWatcher, defineConfig } from 'turbowatch'
+import { ChokidarWatcher, defineConfig } from "turbowatch"
 
 export default defineConfig({
   project: __dirname,
@@ -6,14 +6,14 @@ export default defineConfig({
   triggers: [
     {
       expression: [
-        'allof',
-        ['not', ['dirname', 'node_modules']],
-        ['match', '*.ts', 'basename']
+        "allof",
+        ["not", ["dirname", "node_modules"]],
+        ["match", "*.ts", "basename"],
       ],
-      name: 'build',
+      name: "build",
       onChange: async ({ spawn }) => {
         await spawn`pnpm build:extension`
-      }
-    }
-  ]
+      },
+    },
+  ],
 })

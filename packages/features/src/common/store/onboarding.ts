@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 
 type Mnemonic = string | null
 
@@ -28,5 +28,5 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   },
   setWalletName(walletName: string | null) {
     return set({ walletName })
-  }
+  },
 }))

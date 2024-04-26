@@ -1,9 +1,9 @@
-import { useAccount } from '@/common/hooks/use-account'
-import { AppLayout } from '@/components/app-layout'
-import { Skeleton } from '@/components/ui/skeleton'
+import type { useAccount } from "@/common/hooks/use-account"
+import { AppLayout } from "@/components/app-layout"
+import { Skeleton } from "@/components/ui/skeleton"
 
-import { AssetList } from '../components/asset-list'
-import { OverviewCard } from '../components/overview-card'
+import { AssetList } from "../components/asset-list"
+import { OverviewCard } from "../components/overview-card"
 
 type OverviewViewProps = {
   account: ReturnType<typeof useAccount>

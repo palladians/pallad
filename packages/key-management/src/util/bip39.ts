@@ -1,15 +1,15 @@
-import * as bip39 from '@scure/bip39'
-import { wordlist } from '@scure/bip39/wordlists/english'
+import * as bip39 from "@scure/bip39"
+import { wordlist } from "@scure/bip39/wordlists/english"
 
-import { emip3encrypt } from '../emip3'
+import { emip3encrypt } from "../emip3"
 
 /**
  * A wrapper around the bip39 package function, with default strength applied to produce 24 words
  */
-export const mnemonicToWords = (mnemonic: string) => mnemonic.split(' ')
+export const mnemonicToWords = (mnemonic: string) => mnemonic.split(" ")
 export const generateMnemonicWords = (strength = 256) =>
   mnemonicToWords(bip39.generateMnemonic(wordlist, strength))
-export const joinMnemonicWords = (mnenomic: string[]) => mnenomic.join(' ')
+export const joinMnemonicWords = (mnenomic: string[]) => mnenomic.join(" ")
 export const entropyToMnemonicWords = (entropy: Uint8Array) =>
   mnemonicToWords(bip39.entropyToMnemonic(entropy, wordlist))
 export const mnemonicWordsToEntropy = (mnenonic: string[]) =>
@@ -43,7 +43,7 @@ export const entropyToSeed = (entropy: Uint8Array, passphrase?: string) => {
 export const mnemonicWordsToEncryptedSeed = async (
   mnemonicWords: string[],
   passphrase: Uint8Array,
-  mnemonic2ndFactorPassphrase: string
+  mnemonic2ndFactorPassphrase: string,
 ) => {
   // get seed from mnemonic
   const seed = mnemonicToSeed(mnemonicWords, mnemonic2ndFactorPassphrase)

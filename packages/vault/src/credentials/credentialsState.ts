@@ -2,10 +2,10 @@
  * @file Represents the state definitions related to credentials specific to keyAgents & accounts.
  */
 
-import { GroupedCredentials } from '@palladxyz/key-management'
+import type { GroupedCredentials } from "@palladxyz/key-management"
 
-import { KeyAgentName } from '../keyAgent'
-import { SearchQuery } from '../utils/utils'
+import type { KeyAgentName } from "../keyAgent"
+import type { SearchQuery } from "../utils/utils"
 
 export type CredentialName = string
 export type StoredCredential = GroupedCredentials | undefined
@@ -25,9 +25,9 @@ export type SingleCredentialState = {
  * @typedef {Object}
  */
 export const initialCredentialState: SingleCredentialState = {
-  credentialName: '',
-  keyAgentName: '',
-  credential: undefined
+  credentialName: "",
+  keyAgentName: "",
+  credential: undefined,
 }
 
 /**
@@ -38,11 +38,11 @@ export type CredentialStore = {
   credentials: Record<CredentialName, SingleCredentialState>
   ensureCredential: (
     credentialName: CredentialName,
-    keyAgentName: KeyAgentName
+    keyAgentName: KeyAgentName,
   ) => void
   setCredential: (credentialState: SingleCredentialState) => void
   getCredential: (
-    credentialName: CredentialName
+    credentialName: CredentialName,
   ) => SingleCredentialState | typeof initialCredentialState
   removeCredential: (name: KeyAgentName) => void
   searchCredentials(query: SearchQuery, props?: string[]): StoredCredential[]

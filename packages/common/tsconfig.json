@@ -4,11 +4,8 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noPropertyAccessFromIndexSignature": false
   },
-  "exclude": [
-    "dist",
-    "node_modules",
-    ".turbo"
-  ]
+  "exclude": ["dist", "node_modules", ".turbo"]
 }

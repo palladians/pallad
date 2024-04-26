@@ -1,12 +1,12 @@
-import { CustomError } from 'ts-custom-error'
+import { CustomError } from "ts-custom-error"
 
 const formatMessage = (detail?: string) => {
-  const messageDetail = detail ? `: ${detail}` : ''
+  const messageDetail = detail ? `: ${detail}` : ""
   return `Authentication failure${messageDetail}`
 }
 
 export const formatErrorMessage = (reason: string, detail?: string) =>
-  reason + (detail ? ` (${detail})` : '')
+  reason + (detail ? ` (${detail})` : "")
 
 interface ErrorLike {
   message: string
@@ -24,8 +24,8 @@ interface WithInnerError {
  */
 const isWithInnerError = (error: unknown): error is WithInnerError =>
   error !== null &&
-  typeof error === 'object' &&
-  'innerError' in (error as never)
+  typeof error === "object" &&
+  "innerError" in (error as never)
 
 /**
  * This type check works as an "error instanceof Error" check, but it let pass also those objects
@@ -38,14 +38,14 @@ const isWithInnerError = (error: unknown): error is WithInnerError =>
 const isErrorLike = (error: unknown): error is ErrorLike => {
   if (
     !error ||
-    typeof error !== 'object' ||
-    !('message' in (error as never) && 'stack' in (error as never))
+    typeof error !== "object" ||
+    !("message" in (error as never) && "stack" in (error as never))
   )
     return false
 
   const { message, stack } = error as ErrorLike
 
-  return typeof message === 'string' && typeof stack === 'string'
+  return typeof message === "string" && typeof stack === "string"
 }
 
 /**
@@ -57,7 +57,7 @@ export const stripStackTrace = (error: unknown) => {
   if (!error) return
 
   if (isErrorLike(error)) {
-    delete (error as Error).stack
+    ;(error as Error).stack = ""
   }
 
   if (isWithInnerError(error)) {
@@ -66,26 +66,26 @@ export const stripStackTrace = (error: unknown) => {
 }
 
 export class ComposableError<InnerError = unknown> extends CustomError {
-  private static stackDelimiter = '\n    at '
+  private static stackDelimiter = "\n    at "
 
   constructor(
     message: string,
-    public innerError?: InnerError
+    public innerError?: InnerError,
   ) {
-    let firstLineOfInnerErrorStack = ''
+    let firstLineOfInnerErrorStack = ""
     let innerErrorStack: string[] = []
 
     if (isErrorLike(innerError) && innerError.stack) {
       const innerErrorStackPieces = innerError.stack.split(
-        ComposableError.stackDelimiter
+        ComposableError.stackDelimiter,
       )
-      firstLineOfInnerErrorStack = innerErrorStackPieces.shift() || ''
+      firstLineOfInnerErrorStack = innerErrorStackPieces.shift() || ""
       innerErrorStack = innerErrorStackPieces
 
       message = `${message} due to\n ${firstLineOfInnerErrorStack}`
     }
 
-    if (typeof innerError === 'string')
+    if (typeof innerError === "string")
       message = `${message} due to\n ${innerError}`
 
     super(message)
@@ -94,17 +94,17 @@ export class ComposableError<InnerError = unknown> extends CustomError {
 
     const [firstLineOfStack] = this.stack.split(ComposableError.stackDelimiter)
 
-    Object.defineProperty(this, 'stack', {
+    Object.defineProperty(this, "stack", {
       configurable: true,
       value: `${firstLineOfStack}${innerErrorStack.join(
-        ComposableError.stackDelimiter
-      )}`
+        ComposableError.stackDelimiter,
+      )}`,
     })
   }
 }
 
 export class InvalidStringError<
-  InnerError = unknown
+  InnerError = unknown,
 > extends ComposableError<InnerError> {
   constructor(expectation: string, innerError?: InnerError) {
     super(`Invalid string: "${expectation}"`, innerError)
@@ -144,7 +144,7 @@ export class InvalidStateError extends CustomError {
 }
 
 export class AuthenticationError<
-  InnerError = unknown
+  InnerError = unknown,
 > extends ComposableError<InnerError> {
   constructor(detail?: string, innerError?: InnerError) {
     super(formatMessage(detail), innerError)

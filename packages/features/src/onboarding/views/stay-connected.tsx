@@ -1,10 +1,10 @@
-import { Link2Icon, TwitterIcon } from 'lucide-react'
+import { Link2Icon, TwitterIcon } from "lucide-react"
 
-import { Button } from '@/components/ui/button'
-import { WizardLayout } from '@/components/wizard-layout'
+import { Button } from "@/components/ui/button"
+import { WizardLayout } from "@/components/wizard-layout"
 
-const DISCORD_URL = 'https://discord.gg/ExzzfTGUnB'
-const TWITTER_URL = 'https://twitter.com/pallad_'
+const DISCORD_URL = "https://discord.gg/ExzzfTGUnB"
+const TWITTER_URL = "https://twitter.com/pallad_"
 
 type StayConnectedRoute = {
   onGoToDashboard: () => void
@@ -31,13 +31,23 @@ export const StayConnectedView = ({ onGoToDashboard }: StayConnectedRoute) => (
       </div>
       <div className="flex gap-2">
         <Button size="lg" variant="outline" asChild className="flex-1">
-          <a href={DISCORD_URL} className="flex gap-2" target="_blank">
+          <a
+            href={DISCORD_URL}
+            className="flex gap-2"
+            target="_blank"
+            rel="noreferrer"
+          >
             <Link2Icon size={16} />
             Discord
           </a>
         </Button>
         <Button size="lg" variant="outline" asChild className="flex-1">
-          <a href={TWITTER_URL} className="flex gap-2" target="_blank">
+          <a
+            href={TWITTER_URL}
+            className="flex gap-2"
+            target="_blank"
+            rel="noreferrer"
+          >
             <TwitterIcon size={16} />
             Twitter
           </a>

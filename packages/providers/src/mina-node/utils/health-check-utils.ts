@@ -1,6 +1,6 @@
-import { createGraphQLRequest } from './fetch-utils'
+import { createGraphQLRequest } from "./fetch-utils"
 
-export const healthCheckQuery = `{ syncStatus }`
+export const healthCheckQuery = "{ syncStatus }"
 export const healthCheckQueryArchive = `
   {
     __schema {
@@ -13,9 +13,9 @@ export const healthCheckQueryArchive = `
 
 export const healthCheck = async (
   url: string,
-  query: string = healthCheckQuery
+  query: string = healthCheckQuery,
 ): Promise<{ ok: boolean; message: string }> => {
-  if (url === '') return { ok: true, message: 'No url provided.' }
+  if (url === "") return { ok: true, message: "No url provided." }
 
   const request = createGraphQLRequest(url)
 
@@ -24,7 +24,7 @@ export const healthCheck = async (
   if (!result.ok) {
     return {
       ok: false,
-      message: result.message || 'Health check failed'
+      message: result.message || "Health check failed",
     }
   }
 
@@ -32,10 +32,10 @@ export const healthCheck = async (
   const syncStatus = result.data?.syncStatus
   if (syncStatus !== undefined) {
     return {
-      ok: syncStatus === 'SYNCED',
+      ok: syncStatus === "SYNCED",
       message: syncStatus
         ? `Sync status: ${syncStatus}`
-        : 'No sync status data available'
+        : "No sync status data available",
     }
   }
 
@@ -44,13 +44,13 @@ export const healthCheck = async (
   if (schemaTypes) {
     return {
       ok: true,
-      message: 'Schema types available'
+      message: "Schema types available",
     }
   }
 
   // If neither response is found
   return {
     ok: false,
-    message: 'Unexpected response format'
+    message: "Unexpected response format",
   }
 }

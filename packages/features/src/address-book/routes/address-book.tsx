@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom"
 
-import { useAddressBookStore } from '@/common/store/address-book'
+import { useAddressBookStore } from "@/common/store/address-book"
 
-import { AddressBookView } from '../views/address-book'
+import { AddressBookView } from "../views/address-book"
 
 export const AddressBookRoute = () => {
   const navigate = useNavigate()
@@ -10,7 +10,7 @@ export const AddressBookRoute = () => {
   return (
     <AddressBookView
       contacts={contacts}
-      onAddClicked={() => navigate('/contacts/new')}
+      onAddClicked={() => navigate("/contacts/new")}
     />
   )
 }

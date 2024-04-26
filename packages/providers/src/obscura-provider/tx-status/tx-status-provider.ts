@@ -1,11 +1,15 @@
-import { TxStatus, TxStatusArgs, TxStatusProvider } from '@palladxyz/mina-core'
+import {
+  TxStatus,
+  type TxStatusArgs,
+  type TxStatusProvider,
+} from "@palladxyz/mina-core"
 
-import { fetchGraphQL } from '../utils/fetch-utils'
-import { healthCheck } from '../utils/health-check-utils'
-import { transactionStatus as transactionStatusQuery } from './queries'
+import { fetchGraphQL } from "../utils/fetch-utils"
+import { healthCheck } from "../utils/health-check-utils"
+import { transactionStatus as transactionStatusQuery } from "./queries"
 
 export const createTransactionStatusProvider = (
-  url: string
+  url: string,
 ): TxStatusProvider => {
   const checkTxStatus = async (args: TxStatusArgs): Promise<TxStatus> => {
     const variables = { id: args.ID }
@@ -24,6 +28,6 @@ export const createTransactionStatusProvider = (
 
   return {
     healthCheck: () => healthCheck(url),
-    checkTxStatus
+    checkTxStatus,
   }
 }

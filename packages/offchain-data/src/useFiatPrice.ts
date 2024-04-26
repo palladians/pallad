@@ -1,10 +1,10 @@
-import useSWR from 'swr'
+import useSWR from "swr"
 
-import { MINA_FIAT_PRICE_URL } from './const'
-import { fetcher } from './utils'
+import { MINA_FIAT_PRICE_URL } from "./const"
+import { fetcher } from "./utils"
 
 interface FiatPriceResponse {
-  'mina-protocol': {
+  "mina-protocol": {
     eur: number
     usd: number
     gbp: number

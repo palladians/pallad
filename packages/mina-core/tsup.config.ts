@@ -1,11 +1,11 @@
-import { baseTsupConfig } from '@palladxyz/common'
-import { defineConfig } from 'tsup' // eslint-disable-line import/no-extraneous-dependencies
+import { baseTsupConfig } from "@palladxyz/common"
+import { defineConfig } from "tsup"
 
-import packageJson from './package.json'
+import packageJson from "./package.json"
 
 export default defineConfig([
   {
     ...baseTsupConfig,
-    name: packageJson.name
-  }
+    name: packageJson.name,
+  },
 ])

@@ -41,7 +41,7 @@ type StatsSyncResponse = Array<StatsSyncData>
 
 export async function localNodeSyncStats(
   url: string,
-  queryParams?: string | ''
+  queryParams?: string | "",
 ): Promise<StatsSyncResponse> {
   try {
     const response = await fetch(`${url}/stats/sync${queryParams}`)
@@ -51,7 +51,7 @@ export async function localNodeSyncStats(
     const data: StatsSyncResponse = await response.json()
     return data
   } catch (error) {
-    console.error('Error fetching stats sync data:', error)
+    console.error("Error fetching stats sync data:", error)
     throw error
   }
 }

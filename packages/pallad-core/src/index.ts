@@ -1,1 +1,1 @@
-export * from './Pallad'
+export * from "./Pallad"

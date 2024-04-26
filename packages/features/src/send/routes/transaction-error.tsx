@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom"
 
-import { TransactionErrorView } from '../views/transaction-error'
+import { TransactionErrorView } from "../views/transaction-error"
 
 export const TransactionErrorRoute = () => {
   const navigate = useNavigate()

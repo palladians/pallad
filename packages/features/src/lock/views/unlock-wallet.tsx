@@ -1,19 +1,19 @@
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
-import { UseFormReturn } from 'react-hook-form'
+import { EyeIcon, EyeOffIcon } from "lucide-react"
+import type { UseFormReturn } from "react-hook-form"
 
-import { ButtonArrow } from '@/components/button-arrow'
-import { FormError } from '@/components/form-error'
-import { RestartWalletAlert } from '@/components/restart-wallet-alert'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { ButtonArrow } from "@/components/button-arrow"
+import { FormError } from "@/components/form-error"
+import { RestartWalletAlert } from "@/components/restart-wallet-alert"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
-import { WizardLayout } from '@/components/wizard-layout'
-import { cn } from '@/lib/utils'
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { WizardLayout } from "@/components/wizard-layout"
+import { cn } from "@/lib/utils"
 
 type UnlockWalletData = {
   spendingPassword: string
@@ -34,7 +34,7 @@ export const UnlockWalletView = ({
   form,
   onSubmit,
   showPassword,
-  togglePassword
+  togglePassword,
 }: UnlockWalletViewProps) => (
   <WizardLayout
     title="Unlock Wallet"
@@ -56,7 +56,7 @@ export const UnlockWalletView = ({
       setOpen={setRestartAlertVisible}
     />
     <div className="animate-in slide-in-from-bottom-4 flex flex-col flex-1 items-center gap-12 p-4">
-      <img src="/lock.png" className="w-[160px]" />
+      <img src="/lock.png" className="w-[160px]" alt="Wallet locked" />
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-2 w-full"
@@ -65,8 +65,8 @@ export const UnlockWalletView = ({
         <Label
           htmlFor="spendingPassword"
           className={cn(
-            'cursor-pointer',
-            form.formState.errors.spendingPassword && 'text-destructive'
+            "cursor-pointer",
+            form.formState.errors.spendingPassword && "text-destructive",
           )}
         >
           Spending Password
@@ -75,13 +75,13 @@ export const UnlockWalletView = ({
           <div className="flex w-full relative">
             <Input
               id="spendingPassword"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               data-testid="unlockWallet__password"
               className={cn(
-                form.formState.errors.spendingPassword && 'border-destructive'
+                form.formState.errors.spendingPassword && "border-destructive",
               )}
               autoFocus
-              {...form.register('spendingPassword')}
+              {...form.register("spendingPassword")}
             />
             <Tooltip>
               <TooltipTrigger>
@@ -101,7 +101,7 @@ export const UnlockWalletView = ({
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{showPassword ? 'Hide password' : 'Show password'}</p>
+                <p>{showPassword ? "Hide password" : "Show password"}</p>
               </TooltipContent>
             </Tooltip>
           </div>

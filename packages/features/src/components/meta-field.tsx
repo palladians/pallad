@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils"
 
 interface MetaFieldProps {
   label: string
@@ -11,7 +11,7 @@ export const MetaField = ({
   label,
   value,
   url,
-  capitalize = false
+  capitalize = false,
 }: MetaFieldProps) => {
   return (
     <div className="flex flex-col">
@@ -20,7 +20,7 @@ export const MetaField = ({
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className={cn('leading-8 break-all', capitalize && 'capitalize')}
+        className={cn("leading-8 break-all", capitalize && "capitalize")}
       >
         {value}
       </a>

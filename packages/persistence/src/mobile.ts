@@ -1,6 +1,6 @@
-import { Preferences } from '@capacitor/preferences'
-import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin'
-import { StateStorage } from 'zustand/middleware'
+import { Preferences } from "@capacitor/preferences"
+import { SecureStoragePlugin } from "capacitor-secure-storage-plugin"
+import type { StateStorage } from "zustand/middleware"
 
 const sessionData = new Map()
 
@@ -13,7 +13,7 @@ export const sessionPersistence: StateStorage = {
   },
   removeItem: async (name) => {
     await sessionData.delete(name)
-  }
+  },
 }
 
 export const localPersistence: StateStorage = {
@@ -25,7 +25,7 @@ export const localPersistence: StateStorage = {
   },
   removeItem: async (name) => {
     await Preferences.remove({ key: name })
-  }
+  },
 }
 
 export const securePersistence: StateStorage = {
@@ -37,5 +37,5 @@ export const securePersistence: StateStorage = {
   },
   removeItem: async (name) => {
     await SecureStoragePlugin.remove({ key: name })
-  }
+  },
 }

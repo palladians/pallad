@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom"
 
-import { DelegateView } from '../views/delegate'
+import { DelegateView } from "../views/delegate"
 
 export const DelegateRoute = () => {
   const navigate = useNavigate()

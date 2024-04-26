@@ -1,11 +1,11 @@
-import { MinaProvider, ProviderEvent } from '@palladxyz/web-provider'
-import { onMessage, sendMessage } from 'webext-bridge/background'
+import { MinaProvider, type ProviderEvent } from "@palladxyz/web-provider"
+import { onMessage, sendMessage } from "webext-bridge/background"
 //import { sendMessage } from 'webext-bridge/content-script'
 
 // options should be defined by user
 const opts = {
-  projectId: 'test',
-  chains: ['Mina - Berkeley']
+  projectId: "test",
+  chains: ["Mina - Berkeley"],
 }
 
 const provider = await MinaProvider.init(opts, [])
@@ -37,7 +37,7 @@ function registerListener(event: ProviderEvent /*, context: string*/): string {
   const listenerId = generateListenerId()
   const listener: ListenerFunction = (args) => {
     // Adjusting sendMessage call to match its signature
-    sendMessage('eventTriggered', { listenerId, event, args }) // Assuming context is handled elsewhere or not needed
+    sendMessage("eventTriggered", { listenerId, event, args }) // Assuming context is handled elsewhere or not needed
   }
 
   listenerRegistry[listenerId] = { event, listener }
@@ -57,80 +57,95 @@ function removeListener(listenerId: string): void {
   }
 }
 
-onMessage('enable', async (payload) => {
+onMessage("enable", async (payload) => {
   const data = payload.data as { origin: string }
   return await provider.enable({ origin: data.origin })
 })
 
-onMessage('on', ({ data }) => {
+onMessage("on", ({ data }) => {
   const { event /*, context*/ } = data as unknown as OnEventData
   const listenerId = registerListener(event /*, context*/)
-  console.log('test emitted event', event)
+  console.log("test emitted event", event)
   return { success: true, listenerId }
 })
 
-onMessage('off', ({ data }) => {
+onMessage("off", ({ data }) => {
   const { listenerId } = data as unknown as OnMessageData
   removeListener(listenerId)
 
   return { success: true }
 })
 
-onMessage('mina_setState', async (data) => {
-  console.log('test mina_setState method', data)
+onMessage("mina_setState", async (data) => {
+  console.log("test mina_setState method", data)
   //return await provider.request({ method: 'mina_setState', params: data })
-  return await provider.request({ method: 'mina_setState', params: data })
+  return await provider.request({ method: "mina_setState", params: data })
 })
 
-onMessage('mina_getState', async (data) => {
-  console.log('test mina_getState method')
+onMessage("mina_addChain", async (data) => {
+  console.log("test mina_addChain method", data)
+  return await provider.request({ method: "mina_addChain", params: data })
+})
+
+onMessage("mina_requestNetwork", async (data) => {
+  console.log("test mina_requestNetwork method", data)
+  return await provider.request({ method: "mina_requestNetwork", params: data })
+})
+
+onMessage("mina_switchChain", async (data) => {
+  console.log("test mina_switchChain method", data)
+  return await provider.request({ method: "mina_switchChain", params: data })
+})
+
+onMessage("mina_getState", async (data) => {
+  console.log("test mina_getState method")
   //return await provider.request({ method: 'mina_getState' })
-  return await provider.request({ method: 'mina_getState', params: data })
+  return await provider.request({ method: "mina_getState", params: data })
 })
 
-onMessage('isConnected', (payload) => {
-  console.log('test isConnected method')
+onMessage("isConnected", (payload) => {
+  console.log("test isConnected method")
   const data = payload.data as { origin: string }
   return provider.isConnected({ origin: data.origin })
 })
 
-onMessage('mina_chainId', async () => {
-  console.log('test mina_chainId method')
-  return await provider.request({ method: 'mina_chainId' })
+onMessage("mina_chainId", async () => {
+  console.log("test mina_chainId method")
+  return await provider.request({ method: "mina_chainId" })
 })
 
-onMessage('mina_accounts', async () => {
-  console.log('test mina_accounts method')
-  return await provider.request({ method: 'mina_accounts' })
+onMessage("mina_accounts", async () => {
+  console.log("test mina_accounts method")
+  return await provider.request({ method: "mina_accounts" })
 })
 
-onMessage('mina_sign', async (data) => {
-  console.log('test mina_sign method')
-  return await provider.request({ method: 'mina_sign', params: data })
+onMessage("mina_sign", async (data) => {
+  console.log("test mina_sign method")
+  return await provider.request({ method: "mina_sign", params: data })
 })
 
-onMessage('mina_signFields', async (data) => {
-  console.log('test mina_signFields method')
-  return await provider.request({ method: 'mina_signFields', params: data })
+onMessage("mina_signFields", async (data) => {
+  console.log("test mina_signFields method")
+  return await provider.request({ method: "mina_signFields", params: data })
 })
 
-onMessage('mina_signTransaction', async (data) => {
-  console.log('test mina_signTransaction method')
+onMessage("mina_signTransaction", async (data) => {
+  console.log("test mina_signTransaction method")
   return await provider.request({
-    method: 'mina_signTransaction',
-    params: data
+    method: "mina_signTransaction",
+    params: data,
   })
 })
 
-onMessage('mina_getBalance', async () => {
-  console.log('test mina_getBalance method')
-  return await provider.request({ method: 'mina_getBalance' })
+onMessage("mina_getBalance", async () => {
+  console.log("test mina_getBalance method")
+  return await provider.request({ method: "mina_getBalance" })
 })
 
-onMessage('mina_createNullifier', async (data) => {
-  console.log('test mina_createNullifier method')
+onMessage("mina_createNullifier", async (data) => {
+  console.log("test mina_createNullifier method")
   return await provider.request({
-    method: 'mina_createNullifier',
-    params: data
+    method: "mina_createNullifier",
+    params: data,
   })
 })

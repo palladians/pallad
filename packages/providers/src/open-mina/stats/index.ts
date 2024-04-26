@@ -1,1 +1,1 @@
-export * from './sync-provider'
+export * from "./sync-provider"

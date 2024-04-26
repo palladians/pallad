@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom"
 
-import { useAccount } from '@/common/hooks/use-account'
-import { useBlockchainSummary } from '@/common/hooks/use-blockchain-summary'
+import { useAccount } from "@/common/hooks/use-account"
+import { useBlockchainSummary } from "@/common/hooks/use-blockchain-summary"
 
-import { StakingOverviewView } from '../views/staking-overview'
+import { StakingOverviewView } from "../views/staking-overview"
 
 export const StakingOverviewRoute = () => {
   const blockchainSummary = useBlockchainSummary()
@@ -13,7 +13,7 @@ export const StakingOverviewRoute = () => {
     <StakingOverviewView
       account={account}
       blockchainSummary={blockchainSummary}
-      onChangePool={() => navigate('/staking/delegate')}
+      onChangePool={() => navigate("/staking/delegate")}
       stakeDelegated={account.stakeDelegated}
     />
   )

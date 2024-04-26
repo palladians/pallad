@@ -1,19 +1,19 @@
-import {
+import type {
   ChainHistoryProvider,
   TransactionsByAddressesArgs,
   TransactionsByHashesArgs,
-  Tx
-} from '@palladxyz/pallad-core'
+  Tx,
+} from "@palladxyz/pallad-core"
 
-import { fetchGraphQL } from '../utils/fetch-utils'
-import { healthCheck } from '../utils/health-check-utils'
-import { transactionsByAddressesQuery } from './queries'
+import { fetchGraphQL } from "../utils/fetch-utils"
+import { healthCheck } from "../utils/health-check-utils"
+import { transactionsByAddressesQuery } from "./queries"
 
 export const createChainHistoryProvider = (
-  url: string
+  url: string,
 ): ChainHistoryProvider => {
   const transactionsByAddresses = async (
-    args: TransactionsByAddressesArgs
+    args: TransactionsByAddressesArgs,
   ): Promise<Tx[]> => {
     const { startAt, limit } = { startAt: 0, limit: 10 }
     // TODO: remove array of addresses from TransactionsByAddressesArgs
@@ -31,7 +31,7 @@ export const createChainHistoryProvider = (
   }
 
   const transactionsByHashes = async (
-    args: TransactionsByHashesArgs
+    args: TransactionsByHashesArgs,
   ): Promise<Tx[]> => {
     const variables = { ids: args.ids }
     const query = transactionsByAddressesQuery
@@ -49,6 +49,6 @@ export const createChainHistoryProvider = (
   return {
     healthCheck: () => healthCheck(url),
     transactionsByAddresses,
-    transactionsByHashes
+    transactionsByHashes,
   }
 }

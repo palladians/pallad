@@ -1,6 +1,6 @@
-import { AppLayout } from '@/components/app-layout'
-import { Button } from '@/components/ui/button'
-import { ViewHeading } from '@/components/view-heading'
+import { AppLayout } from "@/components/app-layout"
+import { Button } from "@/components/ui/button"
+import { ViewHeading } from "@/components/view-heading"
 
 type NotFoundViewProps = {
   onGoToDashboard: () => void
@@ -9,7 +9,7 @@ type NotFoundViewProps = {
 
 export const NotFoundView = ({
   onGoBack,
-  onGoToDashboard
+  onGoToDashboard,
 }: NotFoundViewProps) => {
   return (
     <AppLayout>

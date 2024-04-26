@@ -1,23 +1,22 @@
-import { wordlist } from '@scure/bip39/wordlists/english'
+import { wordlist } from "@scure/bip39/wordlists/english"
 
-import * as errors from './errors'
-import { KeyAgentBase } from './KeyAgentBase'
+import { KeyAgentBase } from "./KeyAgentBase"
+import * as errors from "./errors"
 import {
-  ChainSpecificArgs,
-  ChainSpecificPayload,
-  GetPassphrase,
-  KeyAgent,
+  type ChainDerivationArgs,
+  type GetPassphrase,
+  type KeyAgent,
   KeyAgentType,
-  SerializableInMemoryKeyAgentData
-} from './types'
+  type SerializableInMemoryKeyAgentData,
+} from "./types"
 import {
   joinMnemonicWords,
   mnemonicWordsToEncryptedSeed,
-  validateMnemonic
-} from './util'
+  validateMnemonic,
+} from "./util"
 
 export interface InMemoryKeyAgentProps
-  extends Omit<SerializableInMemoryKeyAgentData, '__typename'> {
+  extends Omit<SerializableInMemoryKeyAgentData, "__typename"> {
   getPassphrase: GetPassphrase
 }
 
@@ -28,19 +27,19 @@ export interface FromBip39MnemonicWordsProps {
 }
 
 export const getPassphraseRethrowTypedError = async (
-  getPassphrase: GetPassphrase
+  getPassphrase: GetPassphrase,
 ) => {
   try {
     return await getPassphrase()
   } catch (error) {
-    throw new errors.AuthenticationError('Failed to enter passphrase', error)
+    throw new errors.AuthenticationError("Failed to enter passphrase", error)
   }
 }
 export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
   static async fromMnemonicWords({
     getPassphrase,
     mnemonicWords,
-    mnemonic2ndFactorPassphrase = ''
+    mnemonic2ndFactorPassphrase = "",
   }: FromBip39MnemonicWordsProps): Promise<InMemoryKeyAgent> {
     const mnemonic = joinMnemonicWords(mnemonicWords)
     const validMnemonic = validateMnemonic(mnemonic, wordlist)
@@ -50,42 +49,41 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     const encryptedSeedBytes = await mnemonicWordsToEncryptedSeed(
       mnemonicWords,
       passphrase,
-      mnemonic2ndFactorPassphrase
+      mnemonic2ndFactorPassphrase,
     )
 
     return new InMemoryKeyAgent({
       encryptedSeedBytes,
       type: [], // to rename
-      id: '',
-      issuer: '',
-      issuanceDate: '',
+      id: "",
+      issuer: "",
+      issuanceDate: "",
       credentialSubject: {
-        id: '',
-        contents: []
+        id: "",
+        contents: [],
       },
-      getPassphrase
+      getPassphrase,
     })
   }
 
   constructor({ getPassphrase, ...serializableData }: InMemoryKeyAgentProps) {
     super(
       { ...serializableData, __typename: KeyAgentType.InMemory },
-      getPassphrase
+      getPassphrase,
     )
   }
 
-  async restoreKeyAgent<T extends ChainSpecificPayload>(
-    payload: T,
-    args: ChainSpecificArgs,
-    getPassphrase: GetPassphrase
+  async restoreKeyAgent(
+    args: ChainDerivationArgs,
+    getPassphrase: GetPassphrase,
   ): Promise<InMemoryKeyAgent> {
-    await this.deriveCredentials(payload, args, getPassphrase, false)
+    await this.deriveCredentials(args, getPassphrase, false)
     return this
   }
 
   getSeralizableData(): SerializableInMemoryKeyAgentData {
     return {
-      ...this.serializableData
+      ...this.serializableData,
     }
   }
 }

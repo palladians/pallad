@@ -1,13 +1,13 @@
-import { showUserPrompt } from '../utils'
+import type { showUserPrompt } from "../utils"
 
 export type NamespacesParams = {
-  chains: ChainRpcConfig['chains']
-  optionalChains: ChainRpcConfig['optionalChains']
-  methods?: ChainRpcConfig['methods']
-  optionalMethods?: ChainRpcConfig['methods']
-  events?: ChainRpcConfig['events']
-  rpcMap: ChainRpcConfig['rpcMap']
-  optionalEvents?: ChainRpcConfig['events']
+  chains: ChainRpcConfig["chains"]
+  optionalChains: ChainRpcConfig["optionalChains"]
+  methods?: ChainRpcConfig["methods"]
+  optionalMethods?: ChainRpcConfig["methods"]
+  events?: ChainRpcConfig["events"]
+  rpcMap: ChainRpcConfig["rpcMap"]
+  optionalEvents?: ChainRpcConfig["events"]
 }
 
 export interface ChainProviderOptions {
@@ -20,11 +20,11 @@ export interface ChainProviderOptions {
 }
 
 export type RpcEvent =
-  | 'accountsChanged'
-  | 'chainChanged'
-  | 'message'
-  | 'disconnect'
-  | 'connect'
+  | "accountsChanged"
+  | "chainChanged"
+  | "message"
+  | "disconnect"
+  | "connect"
 
 export interface ChainRpcMap {
   [chainId: string]: string
@@ -77,7 +77,7 @@ export interface RequestArguments {
   params?: unknown[] | Record<string, unknown> | object | undefined
 }
 
-export type ProviderChainId = ProviderConnectInfo['chainId']
+export type ProviderChainId = ProviderConnectInfo["chainId"]
 
 export interface ProviderInfo {
   chainId: string
@@ -87,11 +87,11 @@ export type ProviderAccounts = string[]
 
 // Event types and interfaces
 export type ProviderEvent =
-  | 'connect'
-  | 'disconnect'
-  | 'message'
-  | 'chainChanged'
-  | 'accountsChanged'
+  | "connect"
+  | "disconnect"
+  | "message"
+  | "chainChanged"
+  | "accountsChanged"
 
 export interface ProviderEventArguments {
   connect: ProviderConnectInfo

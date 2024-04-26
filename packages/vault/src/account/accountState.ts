@@ -1,5 +1,5 @@
-import { ChainAddress } from '@palladxyz/key-management'
-import { AccountInfo, Tx } from '@palladxyz/pallad-core'
+import type { ChainAddress } from "@palladxyz/key-management"
+import type { AccountInfo, Tx } from "@palladxyz/pallad-core"
 
 export type SingleAccountState = {
   accountInfo: Record<string, AccountInfo>
@@ -9,51 +9,43 @@ export type SingleAccountState = {
 export type ChainAddressMapping = Record<ChainAddress, SingleAccountState>
 
 export type AccountState = {
-  // this should be a record Record<string, ChainAddressMapping> where the string is a network
   accounts: Record<string, ChainAddressMapping>
 }
 
-// TODO: refactor to integrate custom tokens
 export type AccountActions = {
   ensureAccount: (network: string, address: ChainAddress) => void
-  // todo: this should be `setAccountsInfo` because it does multiple accounts
   setAccountInfo: (
-    // ✅ this should be a string
     network: string,
     address: ChainAddress,
-    // ✅ this has to be a record Record<string, AccountInfo> where the string is a ticker of a token
-    accountInfo: Record<string, AccountInfo>
+    accountInfo: Record<string, AccountInfo>,
   ) => void
 
   setTransactions: (
-    // ✅ this should just be a string
     network: string,
     address: ChainAddress,
-    // ideally this should be a record Record<string, Transaction[]> where the string is a ticker of a token
-    // but for now we only fetch MINA transactions in the chain history provider
-    transactions: Record<string, Tx[]>
+    transactions: Record<string, Tx[]>,
   ) => void
   getAccountsInfo: (
     network: string,
-    address: ChainAddress
+    address: ChainAddress,
   ) => SingleAccountState
   getAccountInfo: (
     network: string,
     address: ChainAddress,
-    ticker: string // we can add a ticker here to get the account info for a specific token
+    ticker: string,
   ) => AccountInfo
 
   getTransactions: (
     network: string,
     address: ChainAddress,
-    ticker: string // we can add a ticker here to get the account info for a specific token
+    ticker: string,
   ) => Tx[]
 
   getTransaction: (
     network: string,
     address: ChainAddress,
     hash: string,
-    ticker: string
+    ticker: string,
   ) => Tx | undefined
 
   addAccount: (network: string, address: ChainAddress) => void
