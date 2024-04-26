@@ -1,7 +1,7 @@
-import { Mina } from '@palladxyz/mina-core'
-import { Address, Chain } from 'viem'
+import type { Mina } from "@palladxyz/mina-core"
+import type { Address, Chain } from "viem"
 
-import { Provider } from '../'
+import type { Provider } from "../"
 
 export interface TokenIdMap {
   [alias: string]: string
@@ -29,6 +29,6 @@ export interface AccountInfoProvider extends Provider {
    * @returns {AccountInfo} - An object with balance and account information
    */
   getAccountInfo: (
-    args: AccountInfoArgs
+    args: AccountInfoArgs,
   ) => Promise<Record<string, AccountInfo>>
 }

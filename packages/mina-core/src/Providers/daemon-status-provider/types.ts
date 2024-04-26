@@ -1,4 +1,4 @@
-import { Provider } from '../..'
+import type { Provider } from "../.."
 
 export interface DaemonStatus {
   daemonStatus: {

@@ -1,1 +1,1 @@
-export type ErrorPolicy = 'none' | 'ignore' | 'all'
+export type ErrorPolicy = "none" | "ignore" | "all"

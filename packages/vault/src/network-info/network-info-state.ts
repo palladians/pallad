@@ -3,7 +3,7 @@
  * @typedef {Object} NetworkInfoStore
  */
 
-import { ProviderConfig } from '@palladxyz/providers'
+import type { ProviderConfig } from "@palladxyz/providers"
 
 export type NetworkInfoState = {
   networkInfo: Record<NetworkName, ProviderConfig>
@@ -16,7 +16,7 @@ export type NetworkInfoActions = {
   getCurrentNetworkInfo: () => ProviderConfig
   setNetworkInfo: (
     networkName: NetworkName,
-    providerConfig: ProviderConfig
+    providerConfig: ProviderConfig,
   ) => void
   getNetworkInfo: (networkName: NetworkName) => ProviderConfig | undefined
   removeNetworkInfo: (ticker: string) => void

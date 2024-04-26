@@ -1,8 +1,8 @@
-import { AppLayout } from '@/components/app-layout'
-import { Button } from '@/components/ui/button'
-import { ViewHeading } from '@/components/view-heading'
+import { AppLayout } from "@/components/app-layout"
+import { Button } from "@/components/ui/button"
+import { ViewHeading } from "@/components/view-heading"
 
-import { BlockProducerTile } from '../components/block-producer-tile'
+import { BlockProducerTile } from "../components/block-producer-tile"
 
 type BlockProducer = {
   name: string
@@ -18,7 +18,7 @@ type BlockProducersViewProps = {
 
 export const BlockProducersView = ({
   onGoBack,
-  blockProducers
+  blockProducers,
 }: BlockProducersViewProps) => {
   return (
     <AppLayout>
@@ -29,6 +29,7 @@ export const BlockProducersView = ({
         />
         <div className="flex flex-col gap-3">
           {blockProducers.map((producer, i) => (
+            // biome-ignore lint: hardcoded for now
             <BlockProducerTile key={i} producer={producer} />
           ))}
           <Button variant="link">Add Your Pool</Button>

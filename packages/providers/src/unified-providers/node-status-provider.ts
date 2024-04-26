@@ -1,22 +1,22 @@
-import {
+import type {
   HealthCheckResponse,
   NodeStatus,
-  NodeStatusProvider
-} from '@palladxyz/pallad-core'
+  NodeStatusProvider,
+} from "@palladxyz/pallad-core"
 
-import { createNodeStatusProvider as mn } from '../mina-node'
-import { createNodeStatusProvider as ob } from '../obscura-provider'
-import { createNodeStatusProvider as op } from '../optimism'
-import { ProviderConfig } from './types'
+import { createNodeStatusProvider as mn } from "../mina-node"
+import { createNodeStatusProvider as ob } from "../obscura-provider"
+import { createNodeStatusProvider as op } from "../optimism"
+import type { ProviderConfig } from "./types"
 
 export const createNodeStatusProvider = (
-  config: ProviderConfig
+  config: ProviderConfig,
 ): NodeStatusProvider => {
   // TODO: make the underlyingProvider creation a util function
   let underlyingProvider: NodeStatusProvider
-  if (config.nodeEndpoint.providerName === 'mina-node') {
+  if (config.nodeEndpoint.providerName === "mina-node") {
     underlyingProvider = mn(config.nodeEndpoint.url)
-  } else if (config.nodeEndpoint.providerName === 'obscura') {
+  } else if (config.nodeEndpoint.providerName === "obscura") {
     underlyingProvider = ob(config.nodeEndpoint.url)
   } else {
     underlyingProvider = op(config.nodeEndpoint.url)
@@ -34,6 +34,6 @@ export const createNodeStatusProvider = (
 
   return {
     getNodeStatus,
-    healthCheck
+    healthCheck,
   }
 }

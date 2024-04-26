@@ -1,4 +1,4 @@
-import { Mina } from '@palladxyz/mina-core'
+import type { Mina } from "@palladxyz/mina-core"
 
 type TokenId = number
 type Nonce = number
@@ -7,8 +7,8 @@ type ChainId = string
 type PublicKey = string
 
 export enum TxSide {
-  INCOMING = 'INCOMING',
-  OUTGOING = 'OUTGOING'
+  INCOMING = "INCOMING",
+  OUTGOING = "OUTGOING",
 }
 
 export type StructurizedTransaction = Mina.TransactionBody & {

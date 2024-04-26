@@ -1,30 +1,30 @@
-import { Network } from '@palladxyz/pallad-core'
-import * as bip32 from '@scure/bip32'
-import { ethers, hashMessage, recoverAddress, SignatureLike } from 'ethers'
-import sinon from 'sinon'
-import { expect } from 'vitest'
+import { Network } from "@palladxyz/pallad-core"
+import * as bip32 from "@scure/bip32"
+import { type SignatureLike, ethers, hashMessage, recoverAddress } from "ethers"
+import sinon from "sinon"
+import { expect } from "vitest"
 
-import { ChainOperationArgs, ChainSignablePayload } from '../../src'
-import { EthereumSpecificArgs } from '../../src/chains/Ethereum'
+import type { ChainOperationArgs, ChainSignablePayload } from "../../src"
 //import { emip3encrypt } from '../src/emip3'
 import {
-  FromBip39MnemonicWordsProps,
+  type FromBip39MnemonicWordsProps,
   //getPassphraseRethrowTypedError,
-  InMemoryKeyAgent
-} from '../../src/InMemoryKeyAgent'
-import * as bip39 from '../../src/util/bip39'
+  InMemoryKeyAgent,
+} from "../../src/InMemoryKeyAgent"
+import type { EthereumSpecificArgs } from "../../src/chains/Ethereum"
+import * as bip39 from "../../src/util/bip39"
 
 // Create a sandbox for managing and restoring stubs
 const sandbox = sinon.createSandbox()
 
 // Provide the passphrase for testing purposes
 const params = {
-  passphrase: 'passphrase'
+  passphrase: "passphrase",
 }
 const getPassphrase = () =>
   new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
-describe('InMemoryKeyAgent', () => {
+describe("InMemoryKeyAgent", () => {
   let agent: InMemoryKeyAgent
   let rootKeyBytes: Uint8Array
   let mnemonic: string[]
@@ -34,21 +34,21 @@ describe('InMemoryKeyAgent', () => {
   beforeEach(async () => {
     // Create keys for testing purposes
     mnemonic = [
-      'habit',
-      'hope',
-      'tip',
-      'crystal',
-      'because',
-      'grunt',
-      'nation',
-      'idea',
-      'electric',
-      'witness',
-      'alert',
-      'like'
+      "habit",
+      "hope",
+      "tip",
+      "crystal",
+      "because",
+      "grunt",
+      "nation",
+      "idea",
+      "electric",
+      "witness",
+      "alert",
+      "like",
     ]
     //bip39.generateMnemonicWords(strength)
-    seed = bip39.mnemonicToSeed(mnemonic, '')
+    seed = bip39.mnemonicToSeed(mnemonic, "")
     // Create root node from seed
     root = bip32.HDKey.fromMasterSeed(seed)
     // unencrypted root key bytes
@@ -58,7 +58,7 @@ describe('InMemoryKeyAgent', () => {
     const agentArgs: FromBip39MnemonicWordsProps = {
       getPassphrase: getPassphrase,
       mnemonicWords: mnemonic,
-      mnemonic2ndFactorPassphrase: ''
+      mnemonic2ndFactorPassphrase: "",
     }
     agent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
   })
@@ -68,14 +68,14 @@ describe('InMemoryKeyAgent', () => {
     sandbox.restore()
   })
 
-  it('should create an agent with given properties', () => {
+  it("should create an agent with given properties", () => {
     expect(agent).to.be.instanceOf(InMemoryKeyAgent)
   })
-  it('should export root private key', async () => {
+  it("should export root private key", async () => {
     const result = await agent.exportRootPrivateKey()
     expect(result).to.deep.equal(rootKeyBytes)
   })
-  describe('Restore InMemory KeyAgent', () => {
+  describe("Restore InMemory KeyAgent", () => {
     /*
     // Need to fix this test
     it('should throw error when decrypting root private key fails', async () => {
@@ -94,122 +94,122 @@ describe('InMemoryKeyAgent', () => {
         });
         await expect(agentFromBip39.decryptCoinTypePrivateKey()).rejects.toThrow('Failed to decrypt coin type private key');
       });*/
-    it('should restore an agent that has Ethereum credentials at initialisation', async () => {
-      const expectedPublicKey = '0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9'
+    it("should restore an agent that has Ethereum credentials at initialisation", async () => {
+      const expectedPublicKey = "0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9"
 
       const expectedGroupedCredentials = {
-        '@context': ['https://w3id.org/wallet/v1'],
-        id: 'did:ethr:0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9',
-        type: 'EthereumAddress',
-        controller: 'did:ethr:0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9',
-        name: 'Ethereum Account',
-        description: 'My Ethereum account.',
+        "@context": ["https://w3id.org/wallet/v1"],
+        id: "did:ethr:0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9",
+        type: "EthereumAddress",
+        controller: "did:ethr:0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9",
+        name: "Ethereum Account",
+        description: "My Ethereum account.",
         chain: Network.Ethereum,
         accountIndex: 0,
         addressIndex: 0,
-        address: expectedPublicKey
+        address: expectedPublicKey,
       }
 
       const args: EthereumSpecificArgs = {
         network: Network.Ethereum,
         accountIndex: 0,
-        addressIndex: 0
+        addressIndex: 0,
       }
 
       await agent.restoreKeyAgent(args, getPassphrase)
       expect(agent).to.be.instanceOf(InMemoryKeyAgent)
       expect(
-        agent.serializableData.credentialSubject.contents[0]?.address
+        agent.serializableData.credentialSubject.contents[0]?.address,
       ).to.deep.equal(expectedGroupedCredentials.address)
     })
   })
-  describe('KeyAgent signing', () => {
-    it('should sign a message', async () => {
+  describe("KeyAgent signing", () => {
+    it("should sign a message", async () => {
       const args: EthereumSpecificArgs = {
         network: Network.Ethereum,
         accountIndex: 0,
-        addressIndex: 0
+        addressIndex: 0,
       }
 
       await agent.restoreKeyAgent(args, getPassphrase)
 
-      const signable: ChainSignablePayload = 'hi bob'
+      const signable: ChainSignablePayload = "hi bob"
       const operationArsg: ChainOperationArgs = {
-        operation: 'eth_signMessage',
-        network: 'Ethereum'
+        operation: "eth_signMessage",
+        network: "Ethereum",
       }
 
       const signedMessage = await agent.sign(
         agent.serializableData.credentialSubject.contents[0]!,
         signable,
-        operationArsg
+        operationArsg,
       )
       const signerAddress = recoverAddress(
         hashMessage(signable),
-        signedMessage as SignatureLike
+        signedMessage as SignatureLike,
       )
-      expect(signerAddress).toBe('0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9')
+      expect(signerAddress).toBe("0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9")
     })
     // todo: replace ethers signers with micro-eth-signer
-    it.skip('should sign a transaction', async () => {
+    it.skip("should sign a transaction", async () => {
       const args: EthereumSpecificArgs = {
         network: Network.Ethereum,
         accountIndex: 0,
-        addressIndex: 0
+        addressIndex: 0,
       }
 
       await agent.restoreKeyAgent(args, getPassphrase)
 
       // Creating a mock transaction object
       const transaction: ethers.TransactionRequest = {
-        to: '0x1234567890abcdef1234567890abcdef12345678',
-        value: ethers.parseUnits('0.1', 'ether'), // Sending 0.1 ether
-        data: '0x', // No additional data
+        to: "0x1234567890abcdef1234567890abcdef12345678",
+        value: ethers.parseUnits("0.1", "ether"), // Sending 0.1 ether
+        data: "0x", // No additional data
         chainId: 1, // Ethereum mainnet
-        nonce: 0 // Assume this is the first transaction
+        nonce: 0, // Assume this is the first transaction
       }
 
       const operationArgs: ChainOperationArgs = {
-        operation: 'eth_signTransaction',
-        network: 'Ethereum'
+        operation: "eth_signTransaction",
+        network: "Ethereum",
       }
 
       // Signing the transaction
       const signedTx = await agent.sign(
         agent.serializableData.credentialSubject.contents[0]!,
         transaction,
-        operationArgs
+        operationArgs,
       )
 
       const signerAddress = recoverAddress(
         hashMessage(String(transaction)),
-        signedTx as SignatureLike
+        signedTx as SignatureLike,
       )
 
-      expect(signerAddress).toBe('0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9')
+      expect(signerAddress).toBe("0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9")
     })
 
-    it('should throw on invalid operation', async () => {
+    it("should throw on invalid operation", async () => {
       const args: EthereumSpecificArgs = {
         network: Network.Ethereum,
         accountIndex: 0,
-        addressIndex: 0
+        addressIndex: 0,
       }
 
       await agent.restoreKeyAgent(args, getPassphrase)
 
       // Creating a mock transaction object
       const transaction: ethers.TransactionRequest = {
-        to: '0x1234567890abcdef1234567890abcdef12345678',
-        value: ethers.parseUnits('0.1', 'ether'), // Sending 0.1 ether
-        data: '0x', // No additional data
+        to: "0x1234567890abcdef1234567890abcdef12345678",
+        value: ethers.parseUnits("0.1", "ether"), // Sending 0.1 ether
+        data: "0x", // No additional data
         chainId: 1, // Ethereum mainnet
-        nonce: 0 // Assume this is the first transaction
+        nonce: 0, // Assume this is the first transaction
       }
 
       const operationArgs: ChainOperationArgs = {
-        operation: 'eth_NotAMethod',
-        network: 'Ethereum'
+        operation: "eth_NotAMethod",
+        network: "Ethereum",
       }
 
       // Signing the transaction
@@ -217,11 +217,11 @@ describe('InMemoryKeyAgent', () => {
         await agent.sign(
           agent.serializableData.credentialSubject.contents[0]!,
           transaction,
-          operationArgs
+          operationArgs,
         )
-        fail('Expected an error but did not get one.')
+        fail("Expected an error but did not get one.")
       } catch (error) {
-        expect(error.message).toContain('Unsupported private key operation')
+        expect(error.message).toContain("Unsupported private key operation")
       }
     })
   })

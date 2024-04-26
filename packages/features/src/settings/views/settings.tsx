@@ -1,13 +1,13 @@
-import { Mina } from '@palladxyz/mina-core'
-import { AlertCircleIcon } from 'lucide-react'
+import { Mina } from "@palladxyz/mina-core"
+import { AlertCircleIcon } from "lucide-react"
 
-import { AppLayout } from '@/components/app-layout'
-import { RestartWalletAlert } from '@/components/restart-wallet-alert'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Switch } from '@/components/ui/switch'
-import { ViewHeading } from '@/components/view-heading'
+import { AppLayout } from "@/components/app-layout"
+import { RestartWalletAlert } from "@/components/restart-wallet-alert"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Switch } from "@/components/ui/switch"
+import { ViewHeading } from "@/components/view-heading"
 
 type SettingsViewProps = {
   onGoBack: () => void
@@ -28,7 +28,7 @@ export const SettingsView = ({
   theme,
   setTheme,
   shareData,
-  setShareData
+  setShareData,
 }: SettingsViewProps) => (
   <AppLayout>
     <RestartWalletAlert
@@ -63,17 +63,17 @@ export const SettingsView = ({
               />
               <Label htmlFor="networkBerkeley">Berkeley</Label>
             </div>
-            {/* <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value={
-                    Mina.Networks[
-                      Mina.Networks.TESTWORLD.toUpperCase() as keyof typeof Mina.Networks
-                    ]
-                  }
-                  id="networkBerkeley"
-                />
-                <Label htmlFor="networkBerkeley">TestWorld 2.0</Label>
-              </div> */}
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem
+                value={
+                  Mina.Networks[
+                    Mina.Networks.TESTWORLD.toUpperCase() as keyof typeof Mina.Networks
+                  ]
+                }
+                id="networkBerkeley"
+              />
+              <Label htmlFor="networkBerkeley">TestWorld 2.0</Label>
+            </div>
           </RadioGroup>
         </div>
         <div className="flex flex-col gap-2">

@@ -1,3 +1,3 @@
-import JSONbig from 'json-bigint'
+import JSONbig from "json-bigint"
 
 export const defaultJsonSerializer = JSONbig({ useNativeBigInt: true })

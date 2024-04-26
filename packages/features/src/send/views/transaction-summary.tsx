@@ -1,12 +1,12 @@
-import { ArrowDownLeftIcon } from 'lucide-react'
+import { ArrowDownLeftIcon } from "lucide-react"
 
-import { truncateString } from '@/common/lib/string'
-import { AppLayout } from '@/components/app-layout'
-import { MetaField } from '@/components/meta-field'
-import { Card } from '@/components/ui/card'
-import { ViewHeading } from '@/components/view-heading'
+import { truncateString } from "@/common/lib/string"
+import { AppLayout } from "@/components/app-layout"
+import { MetaField } from "@/components/meta-field"
+import { Card } from "@/components/ui/card"
+import { ViewHeading } from "@/components/view-heading"
 
-import { ConfirmTransactionForm } from '../components/confirm-transaction-form'
+import { ConfirmTransactionForm } from "../components/confirm-transaction-form"
 
 type TransactionSummaryViewProps = {
   onGoBack: () => void
@@ -22,7 +22,7 @@ type TransactionSummaryViewProps = {
 
 export const TransactionSummaryView = ({
   onGoBack,
-  transaction
+  transaction,
 }: TransactionSummaryViewProps) => (
   <AppLayout>
     <div className="flex flex-1 flex-col">
@@ -42,9 +42,9 @@ export const TransactionSummaryView = ({
                 truncateString({
                   value: transaction.from,
                   endCharCount: 8,
-                  firstCharCount: 8
+                  firstCharCount: 8,
                 })) ||
-              ''
+              ""
             }
           />
           <MetaField
@@ -54,9 +54,9 @@ export const TransactionSummaryView = ({
                 truncateString({
                   value: transaction.to,
                   endCharCount: 8,
-                  firstCharCount: 8
+                  firstCharCount: 8,
                 })) ||
-              ''
+              ""
             }
           />
         </Card>

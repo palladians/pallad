@@ -1,7 +1,7 @@
-import { getPublicKey, useVault } from '@palladxyz/vault'
-import useSWR from 'swr'
+import { getPublicKey, useVault } from "@palladxyz/vault"
+import useSWR from "swr"
 
-import { useAppStore } from '../store/app'
+import { useAppStore } from "../store/app"
 
 export const useTransactions = () => {
   const currentWallet = useVault((state) => state.getCurrentWallet())
@@ -9,7 +9,7 @@ export const useTransactions = () => {
   const publicKey = getPublicKey(currentWallet)
   const network = useAppStore((state) => state.network)
   return useSWR(
-    publicKey ? [publicKey, 'transactions', network] : null,
-    () => getTransactions(network, publicKey, 'MINA') // TODO: remove hardcoded 'MINA'
+    publicKey ? [publicKey, "transactions", network] : null,
+    () => getTransactions(network, publicKey, "MINA"), // TODO: remove hardcoded 'MINA'
   )
 }

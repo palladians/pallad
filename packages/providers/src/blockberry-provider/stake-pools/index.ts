@@ -1,1 +1,1 @@
-export * from './stake-pools-provider'
+export * from "./stake-pools-provider"

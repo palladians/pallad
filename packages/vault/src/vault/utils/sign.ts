@@ -1,33 +1,33 @@
-import {
+import type {
   ChainOperationArgs,
   ChainSignablePayload,
   GetPassphrase,
   GroupedCredentials,
-  InMemoryKeyAgent
-} from '@palladxyz/key-management'
+  InMemoryKeyAgent,
+} from "@palladxyz/key-management"
 
-import { WalletError } from '../../lib/Errors'
+import { WalletError } from "../../lib/Errors"
 
 export async function signHelper(
   get: any,
   signable: ChainSignablePayload,
   args: ChainOperationArgs,
-  getPassphrase: GetPassphrase
+  getPassphrase: GetPassphrase,
 ) {
   const { getCurrentWallet, restoreKeyAgent } = get()
   const currentWallet = getCurrentWallet()
   // use current wallet to sign
   if (!currentWallet?.credential) {
     throw new WalletError(
-      'Current wallet is null, empty or undefined in sign method'
+      "Current wallet is null, empty or undefined in sign method",
     )
   }
   if (!currentWallet.singleKeyAgentState) {
-    throw new WalletError('Key agent state is not set')
+    throw new WalletError("Key agent state is not set")
   }
   const keyAgentState = currentWallet.singleKeyAgentState
   if (keyAgentState === null) {
-    throw new WalletError('Key agent state is undefined in sign method')
+    throw new WalletError("Key agent state is undefined in sign method")
   }
   const credential = currentWallet.credential.credential as GroupedCredentials
 

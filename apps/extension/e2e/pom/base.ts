@@ -1,5 +1,5 @@
 // https://playwright.dev/docs/pom
-import { Page } from '@playwright/test'
+import type { Page } from "@playwright/test"
 
 export class BasePom {
   readonly page: Page

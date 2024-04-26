@@ -1,14 +1,14 @@
-import { getAccountProperties, Network } from '@palladxyz/pallad-core'
-import { getSessionPersistence } from '@palladxyz/persistence'
-import { getPublicKey, isDelegated, useVault } from '@palladxyz/vault'
-import easyMeshGradient from 'easy-mesh-gradient'
-import { useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
-import useSWR from 'swr'
+import { Network, getAccountProperties } from "@palladxyz/pallad-core"
+import { getSessionPersistence } from "@palladxyz/persistence"
+import { getPublicKey, isDelegated, useVault } from "@palladxyz/vault"
+import easyMeshGradient from "easy-mesh-gradient"
+import { useMemo } from "react"
+import { useNavigate } from "react-router-dom"
+import useSWR from "swr"
 
-import { useToast } from '@/components/ui/use-toast'
+import { useToast } from "@/components/ui/use-toast"
 
-import { useAppStore } from '../store/app'
+import { useAppStore } from "../store/app"
 
 export const useAccount = () => {
   const navigate = useNavigate()
@@ -19,7 +19,7 @@ export const useAccount = () => {
   const _syncWallet = useVault((state) => state._syncWallet)
   const network = useAppStore((state) => state.network)
   const setVaultStateUninitialized = useAppStore(
-    (state) => state.setVaultStateUninitialized
+    (state) => state.setVaultStateUninitialized,
   )
   const fetchWallet = async () => {
     await _syncWallet()
@@ -30,46 +30,46 @@ export const useAccount = () => {
   }
   const publicKey = getPublicKey(currentWallet)
   const swr = useSWR(
-    publicKey ? [publicKey, 'account', network] : null,
+    publicKey ? [publicKey, "account", network] : null,
     async () => await fetchWallet(),
     {
-      refreshInterval: 30000
-    }
+      refreshInterval: 30000,
+    },
   )
   const rawBalance = swr.isLoading ? 0 : swr.data.balance ?? 0
   let minaBalance: bigint | number | 0
-  if (currentWallet.credential.credential.chain == Network.Mina) {
+  if (currentWallet.credential.credential.chain === Network.Mina) {
     minaBalance = rawBalance && BigInt(rawBalance) / BigInt(1_000_000_000) // TODO: adjust this for other chains and their decimal conversion
-  } else if (currentWallet.credential.credential.chain == Network.Ethereum) {
+  } else if (currentWallet.credential.credential.chain === Network.Ethereum) {
     minaBalance = rawBalance
   } else {
-    throw new Error('chain is not supported in useAccount')
+    throw new Error("chain is not supported in useAccount")
   }
   const gradientBackground = useMemo(
     () =>
       publicKey &&
       easyMeshGradient({
         seed: publicKey,
-        hueRange: [180, 240]
+        hueRange: [180, 240],
       }),
-    [publicKey]
+    [publicKey],
   )
   const stakeDelegated = isDelegated(currentWallet)
   const copyWalletAddress = async () => {
-    await navigator.clipboard.writeText(publicKey ?? '')
+    await navigator.clipboard.writeText(publicKey ?? "")
     toast({
-      title: 'Wallet address was copied.'
+      title: "Wallet address was copied.",
     })
   }
   const lockWallet = async () => {
-    await getSessionPersistence().setItem('spendingPassword', '')
+    await getSessionPersistence().setItem("spendingPassword", "")
     await useVault.persist.rehydrate()
-    return navigate('/unlock')
+    return navigate("/unlock")
   }
   const restartCurrentWallet = () => {
     restartWallet()
     setVaultStateUninitialized()
-    return navigate('/')
+    return navigate("/")
   }
   return {
     ...swr,
@@ -81,6 +81,6 @@ export const useAccount = () => {
     lockWallet,
     restartCurrentWallet,
     network,
-    stakeDelegated
+    stakeDelegated,
   }
 }

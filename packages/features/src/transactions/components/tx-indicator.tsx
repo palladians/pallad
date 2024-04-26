@@ -1,13 +1,13 @@
-import { Mina } from '@palladxyz/mina-core'
+import { Mina } from "@palladxyz/mina-core"
 import {
   ArrowDownLeftIcon,
   ArrowUpRightIcon,
   BeefIcon,
   CoinsIcon,
-  RepeatIcon
-} from 'lucide-react'
+  RepeatIcon,
+} from "lucide-react"
 
-import { TxSide } from '@/common/types'
+import { TxSide } from "@/common/types"
 
 interface TxSideIndicatorProps {
   side: TxSide

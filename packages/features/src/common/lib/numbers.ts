@@ -3,6 +3,6 @@ interface FormatCurrencyProps {
 }
 
 export const formatCompact = ({ value }: FormatCurrencyProps) => {
-  const currencyFormatter = Intl.NumberFormat('en', { notation: 'compact' })
+  const currencyFormatter = Intl.NumberFormat("en", { notation: "compact" })
   return currencyFormatter.format(value)
 }

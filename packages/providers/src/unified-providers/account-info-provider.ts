@@ -1,30 +1,30 @@
-import {
+import type {
   AccountInfo,
   AccountInfoArgs,
   AccountInfoProvider,
-  HealthCheckResponse
-} from '@palladxyz/pallad-core'
+  HealthCheckResponse,
+} from "@palladxyz/pallad-core"
 
-import { createAccountInfoProvider as mn } from '../mina-node'
-import { createAccountInfoProvider as ob } from '../obscura-provider'
-import { createAccountInfoProvider as op } from '../optimism'
-import { ProviderConfig } from './types'
+import { createAccountInfoProvider as mn } from "../mina-node"
+import { createAccountInfoProvider as ob } from "../obscura-provider"
+import { createAccountInfoProvider as op } from "../optimism"
+import type { ProviderConfig } from "./types"
 
 export const createAccountInfoProvider = (
-  config: ProviderConfig
+  config: ProviderConfig,
 ): AccountInfoProvider => {
   // TODO: make the underlyingProvider creation a util function
   let underlyingProvider: AccountInfoProvider
-  if (config.nodeEndpoint.providerName === 'mina-node') {
+  if (config.nodeEndpoint.providerName === "mina-node") {
     underlyingProvider = mn(config.nodeEndpoint.url)
-  } else if (config.nodeEndpoint.providerName === 'obscura') {
+  } else if (config.nodeEndpoint.providerName === "obscura") {
     underlyingProvider = ob(config.nodeEndpoint.url)
   } else {
     underlyingProvider = op(config.nodeEndpoint.url)
   }
 
   const getAccountInfo = async (
-    args: AccountInfoArgs
+    args: AccountInfoArgs,
   ): Promise<Record<string, AccountInfo>> => {
     // Delegate the call to the underlying provider's getAccountInfo method
     return (await underlyingProvider.getAccountInfo(args)) as Record<
@@ -40,6 +40,6 @@ export const createAccountInfoProvider = (
 
   return {
     getAccountInfo,
-    healthCheck
+    healthCheck,
   }
 }

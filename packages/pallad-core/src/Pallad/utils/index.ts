@@ -1,1 +1,1 @@
-export * from './fetch-account-properties'
+export * from "./fetch-account-properties"

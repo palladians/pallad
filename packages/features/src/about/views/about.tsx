@@ -1,21 +1,21 @@
-import Logo from '@/common/assets/logo.svg'
-import { AppLayout } from '@/components/app-layout'
-import { MetaField } from '@/components/meta-field'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { ViewHeading } from '@/components/view-heading'
+import Logo from "@/common/assets/logo.svg"
+import { AppLayout } from "@/components/app-layout"
+import { MetaField } from "@/components/meta-field"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { ViewHeading } from "@/components/view-heading"
 
-import packageJson from '../../../package.json'
+import packageJson from "../../../package.json"
 
 const AppMeta = [
   {
-    label: 'Current Version',
-    value: packageJson.version
+    label: "Current Version",
+    value: packageJson.version,
   },
   {
-    label: 'Commit Hash',
-    value: '9iufgds239803nf'
-  }
+    label: "Commit Hash",
+    value: "9iufgds239803nf",
+  },
 ]
 
 type AboutViewProps = {

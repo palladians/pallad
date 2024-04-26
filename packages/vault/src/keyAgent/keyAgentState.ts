@@ -2,7 +2,7 @@
  * @file Represents the state definitions related to keyAgents.
  */
 
-import {
+import type {
   ChainDerivationArgs,
   ChainOperationArgs,
   ChainSignablePayload,
@@ -11,14 +11,14 @@ import {
   GetPassphrase,
   GroupedCredentials,
   InMemoryKeyAgent,
-  SerializableInMemoryKeyAgentData
-} from '@palladxyz/key-management'
+  SerializableInMemoryKeyAgentData,
+} from "@palladxyz/key-management"
 
 export type KeyAgentName = string
 export enum KeyAgents {
-  InMemory = 'IN_MEMORY_KEY_AGENT',
-  Ledger = 'LEDGER_KEY_AGENT',
-  Trezor = 'TREZOR_KEY_AGENT'
+  InMemory = "IN_MEMORY_KEY_AGENT",
+  Ledger = "LEDGER_KEY_AGENT",
+  Trezor = "TREZOR_KEY_AGENT",
 }
 /**
  * Type representing the basic state of a keyAgent.
@@ -34,10 +34,10 @@ export type SingleKeyAgentState = {
  * Constant representing the initial key agent state
  */
 export const initialKeyAgentState: SingleKeyAgentState = {
-  name: '',
+  name: "",
   serializableData: undefined,
   keyAgentType: undefined,
-  keyAgent: undefined
+  keyAgent: undefined,
 }
 
 /**
@@ -54,23 +54,23 @@ export type KeyAgentStore = {
   initialiseKeyAgent: (
     name: KeyAgentName,
     keyAgentType: KeyAgents,
-    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps
+    { mnemonicWords, getPassphrase }: FromBip39MnemonicWordsProps,
   ) => Promise<void>
   restoreKeyAgent: (
     name: KeyAgentName,
-    passphrase: GetPassphrase
+    passphrase: GetPassphrase,
   ) => InMemoryKeyAgent | undefined
   // example of a request method
   request: (
     name: KeyAgentName,
     credential: GroupedCredentials,
     signable: ChainSignablePayload,
-    args: ChainOperationArgs
+    args: ChainOperationArgs,
   ) => Promise<ChainSignatureResult | undefined>
   createCredential: (
     name: KeyAgentName,
     args: ChainDerivationArgs,
-    passphrase: GetPassphrase
+    passphrase: GetPassphrase,
   ) => Promise<GroupedCredentials | undefined>
   getKeyAgent: (name: KeyAgentName) => SingleKeyAgentState | undefined
   removeKeyAgent: (name: KeyAgentName) => void

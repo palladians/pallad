@@ -1,11 +1,11 @@
-import { ClockIcon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { ClockIcon } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
-import { useAccount } from '@/common/hooks/use-account'
-import { MinaIcon } from '@/components/mina-icon'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Skeleton } from '@/components/ui/skeleton'
-import { ViewHeading } from '@/components/view-heading'
+import type { useAccount } from "@/common/hooks/use-account"
+import { MinaIcon } from "@/components/mina-icon"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ViewHeading } from "@/components/view-heading"
 
 type AssetListProps = {
   account: ReturnType<typeof useAccount>
@@ -18,9 +18,9 @@ export const AssetList = ({ account }: AssetListProps) => {
       <ViewHeading
         title="Assets"
         button={{
-          label: 'See Transactions',
-          onClick: () => navigate('/transactions'),
-          icon: <ClockIcon size={16} />
+          label: "See Transactions",
+          onClick: () => navigate("/transactions"),
+          icon: <ClockIcon size={16} />,
         }}
         noHorizontalPadding
       />
@@ -34,7 +34,7 @@ export const AssetList = ({ account }: AssetListProps) => {
             </AvatarFallback>
           </Avatar>
           <p className="flex-1 font-semibold">
-            {account.data!.symbol?.toString()}
+            {account.data?.symbol?.toString()}
           </p>
           <p>{account.minaBalance?.toString()}</p>
         </div>

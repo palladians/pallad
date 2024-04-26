@@ -1,29 +1,29 @@
-import { Storage } from '@plasmohq/storage'
-import { SecureStorage } from '@plasmohq/storage/secure'
-import superjson from 'superjson'
-import { PersistStorage, StateStorage } from 'zustand/middleware'
+import { Storage } from "@plasmohq/storage"
+import { SecureStorage } from "@plasmohq/storage/secure"
+import superjson from "superjson"
+import type { PersistStorage, StateStorage } from "zustand/middleware"
 
 superjson.registerCustom<Buffer, number[]>(
   {
     isApplicable: (v): v is Buffer => v instanceof Buffer,
     serialize: (v) => [...v],
-    deserialize: (v) => Buffer.from(v)
+    deserialize: (v) => Buffer.from(v),
   },
-  'buffer'
+  "buffer",
 )
 
-const localData = new Storage({ area: 'local' })
+const localData = new Storage({ area: "local" })
 
 const sessionData = new Storage({
-  area: 'session'
+  area: "session",
 })
 
 const secureStorage = new SecureStorage({
-  area: 'local'
+  area: "local",
 })
 
 const setVaultSpendingPassword = async () => {
-  const spendingPassword = await sessionData.get('spendingPassword')
+  const spendingPassword = await sessionData.get("spendingPassword")
   return secureStorage.setPassword(spendingPassword)
 }
 
@@ -31,7 +31,7 @@ export const securePersistence: PersistStorage<any> = {
   getItem: async (name): Promise<any | null> => {
     await setVaultSpendingPassword()
     const value = await secureStorage.get(name)
-    if (!value || value === 'undefined') return
+    if (!value || value === "undefined") return
     return superjson.parse(value)
   },
   setItem: async (name, value) => {
@@ -42,7 +42,7 @@ export const securePersistence: PersistStorage<any> = {
   removeItem: async (name) => {
     await setVaultSpendingPassword()
     await secureStorage.remove(name)
-  }
+  },
 }
 
 export const localPersistence: StateStorage = {
@@ -54,7 +54,7 @@ export const localPersistence: StateStorage = {
   },
   removeItem: async (name) => {
     await localData.remove(name)
-  }
+  },
 }
 
 export const sessionPersistence: StateStorage = {
@@ -66,5 +66,5 @@ export const sessionPersistence: StateStorage = {
   },
   removeItem: async (name) => {
     await sessionData.remove(name)
-  }
+  },
 }

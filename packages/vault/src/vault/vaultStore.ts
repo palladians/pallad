@@ -1,22 +1,22 @@
-import { generateMnemonicWords } from '@palladxyz/key-management'
+import { generateMnemonicWords } from "@palladxyz/key-management"
 import {
-  constructTransaction,
   Network,
-  PalladNetworkNames
-} from '@palladxyz/pallad-core'
-import { getSecurePersistence } from '@palladxyz/persistence'
-import { produce } from 'immer'
-import { create } from 'zustand'
-import { persist, PersistStorage } from 'zustand/middleware'
+  PalladNetworkNames,
+  constructTransaction,
+} from "@palladxyz/pallad-core"
+import { getSecurePersistence } from "@palladxyz/persistence"
+import { produce } from "immer"
+import { create } from "zustand"
+import { type PersistStorage, persist } from "zustand/middleware"
 
-import { accountSlice, AccountStore } from '../account'
-import { credentialSlice, CredentialStore } from '../credentials'
-import { KeyAgents, keyAgentSlice, KeyAgentStore } from '../keyAgent'
-import { getRandomAnimalName } from '../lib/utils'
-import { networkInfoSlice, NetworkInfoStore } from '../network-info'
-import { objectSlice, ObjectStore } from '../objects'
-import { tokenInfoSlice, TokenInfoStore } from '../token-info'
-import { webProviderSlice, WebProviderStore } from '../web-provider'
+import { type AccountStore, accountSlice } from "../account"
+import { type CredentialStore, credentialSlice } from "../credentials"
+import { type KeyAgentStore, KeyAgents, keyAgentSlice } from "../keyAgent"
+import { getRandomAnimalName } from "../lib/utils"
+import { type NetworkInfoStore, networkInfoSlice } from "../network-info"
+import { type ObjectStore, objectSlice } from "../objects"
+import { type TokenInfoStore, tokenInfoSlice } from "../token-info"
+import { type WebProviderStore, webProviderSlice } from "../web-provider"
 import {
   getBalanceHelper,
   getCurrentWalletHelper,
@@ -29,20 +29,20 @@ import {
   switchNetworkHelper,
   syncAccountHelper,
   syncTransactionHelper,
-  syncWalletnHelper
-} from './utils'
-import { GlobalVaultState, GlobalVaultStore } from './vaultState'
+  syncWalletnHelper,
+} from "./utils"
+import type { GlobalVaultState, GlobalVaultStore } from "./vaultState"
 
 const defaultGlobalVaultState: GlobalVaultState = {
-  keyAgentName: '',
-  credentialName: '',
+  keyAgentName: "",
+  credentialName: "",
   currentAccountIndex: 0,
   currentAddressIndex: 0,
   chain: Network.Mina,
-  walletName: '',
+  walletName: "",
   walletNetwork: PalladNetworkNames.MINA_BERKELEY,
   knownAccounts: [],
-  chainIds: []
+  chainIds: [],
 }
 
 export const useVault = create<
@@ -71,14 +71,14 @@ export const useVault = create<
         return set(
           produce((state) => {
             state.chain = chain
-          })
+          }),
         )
       },
       setKnownAccounts(address) {
         return set(
           produce((state) => {
             state.knownAccounts = [...state.knownAccounts, address]
-          })
+          }),
         )
       },
       // TODO: create a new store for wallet?
@@ -89,7 +89,7 @@ export const useVault = create<
             state.credentialName = payload.credentialName
             state.currentAccountIndex = payload.currentAccountIndex
             state.currentAddressIndex = payload.currentAddressIndex
-          })
+          }),
         )
       },
       // the credential doesn't need to be returned, nor does the transactions, nor the singleKeyAgentState
@@ -144,7 +144,7 @@ export const useVault = create<
         { mnemonicWords, getPassphrase },
         keyAgentName,
         keyAgentType = KeyAgents.InMemory,
-        credentialName = getRandomAnimalName()
+        credentialName = getRandomAnimalName(),
         // TODO: add providerConfig object here
       ) => {
         await restoreWalletHelper(
@@ -154,7 +154,7 @@ export const useVault = create<
           { mnemonicWords, getPassphrase },
           keyAgentName,
           keyAgentType,
-          credentialName
+          credentialName,
         )
       },
       restartWallet: () => {
@@ -173,14 +173,14 @@ export const useVault = create<
         const { getCurrentNetworkInfo } = get()
         const currentNetwork = getCurrentNetworkInfo()
         return currentNetwork.chainId
-      }
+      },
     }),
     {
-      name: 'PalladVault',
+      name: "PalladVault",
       storage:
-        import.meta.env['VITE_APP_LADLE'] === 'true'
+        import.meta.env.VITE_APP_LADLE === "true"
           ? undefined
-          : (getSecurePersistence() as PersistStorage<any>)
-    }
-  )
+          : (getSecurePersistence() as PersistStorage<any>),
+    },
+  ),
 )

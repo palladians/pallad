@@ -1,8 +1,8 @@
-import { StoryDefault } from '@ladle/react'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import type { StoryDefault } from "@ladle/react"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
 
-import { UnlockWalletView } from './unlock-wallet'
+import { UnlockWalletView } from "./unlock-wallet"
 
 export const View = () => {
   const [restartAlertVisible, setRestartAlertVisible] = useState(false)
@@ -10,15 +10,15 @@ export const View = () => {
   return (
     <UnlockWalletView
       form={form}
-      onSubmit={() => console.log('submit')}
+      onSubmit={() => console.log("submit")}
       restartAlertVisible={restartAlertVisible}
       setRestartAlertVisible={setRestartAlertVisible}
       showPassword={false}
-      togglePassword={() => console.log('toggle')}
+      togglePassword={() => console.log("toggle")}
     />
   )
 }
 
 export default {
-  title: 'Dashboard / Unlock Wallet'
+  title: "Dashboard / Unlock Wallet",
 } satisfies StoryDefault

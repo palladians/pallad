@@ -1,13 +1,13 @@
 export const fetchGraphQL = async (
   url: string,
   query: string,
-  variables?: Record<string, any>
+  variables?: Record<string, any>,
 ) => {
   try {
     const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, variables })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, variables }),
     })
 
     if (!response.ok) {
@@ -21,7 +21,7 @@ export const fetchGraphQL = async (
         ok: false,
         message: `GraphQL error: ${data.errors
           .map((e: any) => e.message)
-          .join(', ')}`
+          .join(", ")}`,
       }
     }
 
@@ -30,6 +30,6 @@ export const fetchGraphQL = async (
     if (error instanceof Error) {
       return { ok: false, message: `Error: ${error.message}` }
     }
-    return { ok: false, message: 'An unknown error occurred' }
+    return { ok: false, message: "An unknown error occurred" }
   }
 }

@@ -1,17 +1,17 @@
-import { GroupedCredentials } from '@palladxyz/key-management'
-import { Network } from '@palladxyz/pallad-core'
-import { act, renderHook } from '@testing-library/react'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import type { GroupedCredentials } from "@palladxyz/key-management"
+import { Network } from "@palladxyz/pallad-core"
+import { act, renderHook } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it } from "vitest"
 
 import {
-  CredentialName,
-  SingleCredentialState,
-  StoredCredential,
-  useVault
-} from '../../src'
-import { KeyAgentName } from '../../src'
+  type CredentialName,
+  type SingleCredentialState,
+  type StoredCredential,
+  useVault,
+} from "../../src"
+import type { KeyAgentName } from "../../src"
 
-describe('CredentialStore', () => {
+describe("CredentialStore", () => {
   let credential: GroupedCredentials
   let credentialName: CredentialName
   let keyAgentName: KeyAgentName
@@ -21,56 +21,56 @@ describe('CredentialStore', () => {
 
   beforeEach(() => {
     credential = {
-      '@context': ['https://w3id.org/wallet/v1'],
-      id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      type: 'MinaAddress',
+      "@context": ["https://w3id.org/wallet/v1"],
+      id: "did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
+      type: "MinaAddress",
       controller:
-        'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      name: 'Mina Account',
-      description: 'My Mina account.',
+        "did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
+      name: "Mina Account",
+      description: "My Mina account.",
       chain: Network.Mina,
       accountIndex: 0,
       addressIndex: 0,
-      address: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-      encryptedPrivateKeyBytes: new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7])
+      address: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
+      encryptedPrivateKeyBytes: new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7]),
     }
     credentialTwo = {
-      '@context': ['https://www.w3.org/2018/credentials/v1'],
-      id: 'http://example.edu/credentials/3732',
-      type: ['VerifiableCredential', 'UniversityDegreeCredential'],
-      issuer: 'University of Example',
-      issuanceDate: '2010-01-01T00:00:00Z',
+      "@context": ["https://www.w3.org/2018/credentials/v1"],
+      id: "http://example.edu/credentials/3732",
+      type: ["VerifiableCredential", "UniversityDegreeCredential"],
+      issuer: "University of Example",
+      issuanceDate: "2010-01-01T00:00:00Z",
       credentialSubject: {
-        id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        id: "did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
         degree: {
-          type: 'BachelorDegree',
-          name: 'Bachelor of Science and Arts'
-        }
+          type: "BachelorDegree",
+          name: "Bachelor of Science and Arts",
+        },
       },
       proof: {
-        type: 'Kimchi',
-        created: '2023-09-19T12:40:16Z',
+        type: "Kimchi",
+        created: "2023-09-19T12:40:16Z",
         proof: {
-          publicInput: ['0'],
-          publicOutput: ['1'],
+          publicInput: ["0"],
+          publicOutput: ["1"],
           maxProofsVerified: 0,
-          proof: 'KChzdGF0ZW1...SkpKSkp'
-        }
-      }
+          proof: "KChzdGF0ZW1...SkpKSkp",
+        },
+      },
     }
 
-    credentialName = 'credentialName'
-    keyAgentName = 'keyAgentName'
+    credentialName = "credentialName"
+    keyAgentName = "keyAgentName"
     credentialState = {
       credentialName: credentialName,
       keyAgentName: keyAgentName,
-      credential: credential
+      credential: credential,
     }
 
     credentialStateTwo = {
-      credentialName: 'green crocodile credential',
-      keyAgentName: 'keyAgentNameTwo',
-      credential: credentialTwo as StoredCredential
+      credentialName: "green crocodile credential",
+      keyAgentName: "keyAgentNameTwo",
+      credential: credentialTwo as StoredCredential,
     }
   })
 
@@ -79,12 +79,12 @@ describe('CredentialStore', () => {
     act(() => result.current.clear())
   })
 
-  it('should create an credential store', () => {
+  it("should create an credential store", () => {
     const { result } = renderHook(() => useVault())
     expect(result.current.credentials).toEqual({})
   })
 
-  it('should add one Grouped Credentials and remove one from store', () => {
+  it("should add one Grouped Credentials and remove one from store", () => {
     let storedCredential: SingleCredentialState | undefined
     const { result } = renderHook(() => useVault())
     act(() => {
@@ -100,28 +100,28 @@ describe('CredentialStore', () => {
     expect(storedCredential?.credential).toBeUndefined()
   })
 
-  it('should add two Grouped Credentials and search for both separately', () => {
+  it("should add two Grouped Credentials and search for both separately", () => {
     let storedCredentials: StoredCredential[] | undefined
     let storedCredentialsTwo: StoredCredential[] | undefined
     let storedCredentialsThree: StoredCredential[] | undefined
     const { result } = renderHook(() => useVault())
     // search for first credential
     const searchQuery = {
-      type: 'MinaAddress',
-      chain: Network.Mina
+      type: "MinaAddress",
+      chain: Network.Mina,
     }
     // search for second credential
     const searchQueryTwo = {
-      issuer: 'University of Example',
-      type: 'UniversityDegreeCredential'
+      issuer: "University of Example",
+      type: "UniversityDegreeCredential",
     }
     // search for second credential with a different query -- nested query
     const searchQueryThree = {
       credentialSubject: {
         degree: {
-          type: 'BachelorDegree'
-        }
-      }
+          type: "BachelorDegree",
+        },
+      },
     }
     act(() => {
       // add first credential
@@ -145,15 +145,15 @@ describe('CredentialStore', () => {
     expect(storedCredentialsThree).toBeDefined()
     expect(storedCredentialsThree?.length).toEqual(1)
   })
-  it('should add two Grouped Credentials and search for Mina addresses and return them as an array not as a credential object', () => {
+  it("should add two Grouped Credentials and search for Mina addresses and return them as an array not as a credential object", () => {
     let storedCredentials: StoredCredential[] | undefined
     // search for first credential
     const searchQuery = {
-      type: 'MinaAddress',
-      chain: Network.Mina
+      type: "MinaAddress",
+      chain: Network.Mina,
     }
     // return props
-    const props = ['address']
+    const props = ["address"]
     const { result } = renderHook(() => useVault())
     act(() => {
       // add first credential

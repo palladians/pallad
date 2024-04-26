@@ -1,16 +1,16 @@
-import { AlertOctagonIcon } from 'lucide-react'
-import colors from 'tailwindcss/colors' // eslint-disable-line
+import { AlertOctagonIcon } from "lucide-react"
+import colors from "tailwindcss/colors"
 
-import { AppLayout } from '@/components/app-layout'
+import { AppLayout } from "@/components/app-layout"
 
-import { TransactionResult } from '../components/transaction-result'
+import { TransactionResult } from "../components/transaction-result"
 
 type TransactionErrorViewProps = {
   onGoBack: () => void
 }
 
 export const TransactionErrorView = ({
-  onGoBack
+  onGoBack,
 }: TransactionErrorViewProps) => {
   return (
     <AppLayout>
@@ -18,13 +18,13 @@ export const TransactionErrorView = ({
         title="Submission Error"
         result={{
           icon: AlertOctagonIcon,
-          iconColor: colors.red['500'],
-          label: 'Transaction Failed',
-          content: 'Error: 500 Broadcast API not reachable'
+          iconColor: colors.red["500"],
+          label: "Transaction Failed",
+          content: "Error: 500 Broadcast API not reachable",
         }}
         button={{
-          label: 'Try Again',
-          onClick: onGoBack
+          label: "Try Again",
+          onClick: onGoBack,
         }}
       />
     </AppLayout>

@@ -1,1 +1,1 @@
-export * from './pals-handle-provider'
+export * from "./pals-handle-provider"

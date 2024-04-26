@@ -1,14 +1,14 @@
-import { Provider } from '../provider'
+import type { Provider } from "../provider"
 
 export type TxStatusArgs = {
   ID: string
 }
 
 export enum TxStatus {
-  PENDING = 'PENDING',
-  INCLUDED = 'INCLUDED',
-  UNKNOWN = 'UNKNOWN',
-  FAILED = 'FAILED'
+  PENDING = "PENDING",
+  INCLUDED = "INCLUDED",
+  UNKNOWN = "UNKNOWN",
+  FAILED = "FAILED",
 }
 
 export interface TxStatusProvider extends Provider {

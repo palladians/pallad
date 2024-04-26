@@ -1,7 +1,7 @@
-import { getLocalPersistence } from '@palladxyz/persistence'
-import { isBefore } from 'date-fns'
-import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { getLocalPersistence } from "@palladxyz/persistence"
+import { isBefore } from "date-fns"
+import { create } from "zustand"
+import { createJSONStorage, persist } from "zustand/middleware"
 
 type PendingTransaction = {
   hash: string
@@ -22,7 +22,7 @@ type PendingTransactionsStore = PendingTransactionsState &
   PendingTransactionsActions
 
 const initialState: PendingTransactionsState = {
-  pendingTransactions: []
+  pendingTransactions: [],
 }
 
 export const usePendingTransactionStore = create<PendingTransactionsStore>()(
@@ -33,26 +33,26 @@ export const usePendingTransactionStore = create<PendingTransactionsStore>()(
         set((state) => ({
           pendingTransactions: [
             ...state.pendingTransactions,
-            pendingTransaction
-          ]
+            pendingTransaction,
+          ],
         })),
       removePendingTransaction: (hash) =>
         set((state) => ({
           pendingTransactions: state.pendingTransactions.filter(
-            (tx) => tx.hash !== hash
-          )
+            (tx) => tx.hash !== hash,
+          ),
         })),
       clearExpired() {
         const { pendingTransactions } = get()
         const validPendingTransactions = pendingTransactions.filter(
-          (tx) => !isBefore(new Date(tx.expireAt), new Date())
+          (tx) => !isBefore(new Date(tx.expireAt), new Date()),
         )
         return set({ pendingTransactions: validPendingTransactions })
-      }
+      },
     }),
     {
-      name: 'PalladPendingTransactions',
-      storage: createJSONStorage(getLocalPersistence)
-    }
-  )
+      name: "PalladPendingTransactions",
+      storage: createJSONStorage(getLocalPersistence),
+    },
+  ),
 )

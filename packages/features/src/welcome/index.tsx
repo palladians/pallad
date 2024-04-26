@@ -1,6 +1,6 @@
-import { InfoIcon } from 'lucide-react'
+import { InfoIcon } from "lucide-react"
 
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button"
 
 export const WelcomeScreen = () => {
   return (
@@ -11,6 +11,7 @@ export const WelcomeScreen = () => {
           width={600}
           height={800}
           className="opacity-20 rotate-45"
+          alt="Welcome to Pallad"
         />
       </div>
       <div className="flex z-10 flex-col gap-4 w-[370px] h-[600px] bg-background rounded-lg shadow-lg p-8">

@@ -1,13 +1,13 @@
 export type ProviderConfig = {
   nodeEndpoint: {
-    providerName: 'mina-node' | 'obscura' | 'evm-rpc'
+    providerName: "mina-node" | "obscura" | "evm-rpc"
     url: string
   }
   archiveNodeEndpoint: {
-    providerName: 'mina-node' | 'obscura' | 'evm-explorer'
+    providerName: "mina-node" | "obscura" | "evm-explorer"
     url: string
   }
   networkName: string
-  networkType: 'testnet' | 'mainnet'
+  networkType: "testnet" | "mainnet"
   chainId: string
 }

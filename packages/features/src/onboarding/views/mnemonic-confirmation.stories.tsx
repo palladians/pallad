@@ -1,8 +1,8 @@
-import { StoryDefault } from '@ladle/react'
-import { useForm } from 'react-hook-form'
+import type { StoryDefault } from "@ladle/react"
+import { useForm } from "react-hook-form"
 
-import { MnemonicConfirmationData } from '../types'
-import { MnemonicConfirmationView } from './mnemonic-confirmation'
+import type { MnemonicConfirmationData } from "../types"
+import { MnemonicConfirmationView } from "./mnemonic-confirmation"
 
 export const View = () => {
   const form = useForm<MnemonicConfirmationData>()
@@ -11,12 +11,12 @@ export const View = () => {
       form={form}
       confirmationIndex={6}
       confirmationValid={false}
-      onSubmit={() => console.log('confirmed')}
+      onSubmit={() => console.log("confirmed")}
       restoring={false}
     />
   )
 }
 
 export default {
-  title: 'Onboarding / Mnemonic Confirmation'
+  title: "Onboarding / Mnemonic Confirmation",
 } satisfies StoryDefault

@@ -1,9 +1,12 @@
-import { Network } from '@palladxyz/pallad-core'
-import { TransactionRequest } from 'ethers'
+import { Network } from "@palladxyz/pallad-core"
+import type { TransactionRequest } from "ethers"
 
-import { ChainSpecificPayload, KeyPairDerivationOperations } from '../../types'
-import { deriveEthereumPublicAddress } from './credentialDerivation'
-import { deriveEthereumPrivateKey } from './keyDerivation'
+import type {
+  ChainSpecificPayload,
+  KeyPairDerivationOperations,
+} from "../../types"
+import { deriveEthereumPublicAddress } from "./credentialDerivation"
+import { deriveEthereumPrivateKey } from "./keyDerivation"
 
 export type EthereumSpecificPayload = {
   network: Network.Ethereum
@@ -28,9 +31,9 @@ export type EthereumSignablePayload = TransactionRequest | string | Uint8Array
 export type EthereumSignatureResult = string
 
 export type EthereumGroupedCredentials = {
-  '@context': ['https://w3id.org/wallet/v1']
+  "@context": ["https://w3id.org/wallet/v1"]
   id: string
-  type: 'EthereumAddress'
+  type: "EthereumAddress"
   controller: string
   name: string
   description: string
@@ -46,12 +49,12 @@ export class EthereumPayload implements ChainSpecificPayload {
 
   derivePublicKey(privateKey: Uint8Array) {
     return new Promise<string>((resolve) =>
-      resolve(deriveEthereumPublicAddress(privateKey))
+      resolve(deriveEthereumPublicAddress(privateKey)),
     )
   }
   derivePrivateKey(decryptedSeedBytes: Uint8Array, args: EthereumSpecificArgs) {
     return new Promise<string>((resolve) =>
-      resolve(deriveEthereumPrivateKey(args, decryptedSeedBytes))
+      resolve(deriveEthereumPrivateKey(args, decryptedSeedBytes)),
     )
   }
 }
@@ -64,11 +67,11 @@ export const ethKeyPairDerivationOperations: KeyPairDerivationOperations<Ethereu
     },
     derivePrivateKey: (
       decryptedSeedBytes: Uint8Array,
-      args: EthereumDerivationArgs
-    ) => Promise.resolve(deriveEthereumPrivateKey(args, decryptedSeedBytes))
+      args: EthereumDerivationArgs,
+    ) => Promise.resolve(deriveEthereumPrivateKey(args, decryptedSeedBytes)),
   }
 
-export const enum EthereumKeyConst {
+export enum EthereumKeyConst {
   /**
    * Constant value used for defining the purpose in a BIP44 path
    */
@@ -77,5 +80,5 @@ export const enum EthereumKeyConst {
   /**
    * COIN_TYPE value for Ethereum network
    */
-  COIN_TYPE = 60
+  COIN_TYPE = 60,
 }

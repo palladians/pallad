@@ -16,11 +16,11 @@ export type ProvableProgramState = {
 
 export type ProvableProgramActions = {
   getProvableProgram: (
-    programName: ProgramName
+    programName: ProgramName,
   ) => ProvableProgramState | undefined
   setProvableProgram: (
     programName: ProgramName,
-    state: ProvableProgramState
+    state: ProvableProgramState,
   ) => void
   removeProvableProgram: (programName: ProgramName) => void
   allProvablePrograms: () => (ProvableProgramState | undefined)[]

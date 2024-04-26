@@ -1,13 +1,13 @@
-import QRCode from 'react-qr-code'
+import QRCode from "react-qr-code"
 
-import { AppLayout } from '@/components/app-layout'
-import { Card } from '@/components/ui/card'
+import { AppLayout } from "@/components/app-layout"
+import { Card } from "@/components/ui/card"
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
-import { ViewHeading } from '@/components/view-heading'
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { ViewHeading } from "@/components/view-heading"
 
 type ReceiveViewProps = {
   theme: string
@@ -22,7 +22,7 @@ export const ReceiveView = ({
   publicKey,
   gradientBackground,
   onGoBack,
-  onCopyWalletAddress
+  onCopyWalletAddress,
 }: ReceiveViewProps) => (
   <AppLayout>
     <div className="flex flex-col flex-1">
@@ -32,8 +32,8 @@ export const ReceiveView = ({
           <div className="animate-in slide-in-from-bottom-2 fade-in relative max-w-[256px] max-h-[256px] w-full h-full">
             <QRCode
               value={publicKey}
-              bgColor={theme === 'dark' ? '#020617' : '#ffffff'}
-              fgColor={theme === 'dark' ? '#ffffff' : '#000000'}
+              bgColor={theme === "dark" ? "#020617" : "#ffffff"}
+              fgColor={theme === "dark" ? "#ffffff" : "#000000"}
               className="relative w-full h-full"
             />
             <div

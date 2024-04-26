@@ -1,6 +1,6 @@
-import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
+import type { BorrowedTypes, Mina } from "@palladxyz/mina-core"
 
-import { Provider } from '../provider'
+import type { Provider } from "../provider"
 
 export type SubmitTxArgs = {
   signedTransaction:
@@ -8,13 +8,13 @@ export type SubmitTxArgs = {
     | BorrowedTypes.SignedLegacy<BorrowedTypes.StakeDelegation>
   kind: Mina.TransactionKind
   transactionDetails: {
-    fee: Mina.TransactionBody['fee']
-    to: Mina.TransactionBody['to']
-    from: Mina.TransactionBody['from']
-    nonce: Mina.TransactionBody['nonce']
-    memo: Mina.TransactionBody['memo']
-    validUntil: Mina.TransactionBody['validUntil']
-    amount: Mina.TransactionBody['amount']
+    fee: Mina.TransactionBody["fee"]
+    to: Mina.TransactionBody["to"]
+    from: Mina.TransactionBody["from"]
+    nonce: Mina.TransactionBody["nonce"]
+    memo: Mina.TransactionBody["memo"]
+    validUntil: Mina.TransactionBody["validUntil"]
+    amount: Mina.TransactionBody["amount"]
   }
 }
 

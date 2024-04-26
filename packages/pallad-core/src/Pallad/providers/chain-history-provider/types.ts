@@ -1,6 +1,6 @@
-import { Chain } from 'viem'
+import type { Chain } from "viem"
 
-import { ChainAddress, Provider, Tx, TxHash } from '../..'
+import type { ChainAddress, Provider, Tx, TxHash } from "../.."
 
 export interface TransactionsByAddressesArgs {
   addresses: ChainAddress[]

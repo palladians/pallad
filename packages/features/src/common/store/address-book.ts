@@ -1,8 +1,8 @@
-import { getLocalPersistence } from '@palladxyz/persistence'
-import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { getLocalPersistence } from "@palladxyz/persistence"
+import { create } from "zustand"
+import { createJSONStorage, persist } from "zustand/middleware"
 
-import { Contact } from '../types'
+import type { Contact } from "../types"
 
 type AddressBookState = {
   contacts: Contact[]
@@ -27,11 +27,11 @@ export const useAddressBookStore = create<AddressBookStore>()(
         const { contacts } = get()
         const updatedContacts = contacts.filter((_, i) => index !== i)
         return set({ contacts: updatedContacts })
-      }
+      },
     }),
     {
-      name: 'PalladAddressBook',
-      storage: createJSONStorage(getLocalPersistence)
-    }
-  )
+      name: "PalladAddressBook",
+      storage: createJSONStorage(getLocalPersistence),
+    },
+  ),
 )

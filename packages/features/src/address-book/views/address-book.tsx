@@ -1,14 +1,14 @@
-import { PlusIcon } from 'lucide-react'
+import { PlusIcon } from "lucide-react"
 
-import { Contact } from '@/common/types'
-import { AppLayout } from '@/components/app-layout'
-import { ViewHeading } from '@/components/view-heading'
+import type { Contact } from "@/common/types"
+import { AppLayout } from "@/components/app-layout"
+import { ViewHeading } from "@/components/view-heading"
 
-import { ContactTile } from '../components/contact-tile'
+import { ContactTile } from "../components/contact-tile"
 
 const DonatePallad = {
-  name: 'Donate To Pallad',
-  address: 'B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS'
+  name: "Donate To Pallad",
+  address: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
 }
 
 type AddressBookViewProps = {
@@ -18,7 +18,7 @@ type AddressBookViewProps = {
 
 export const AddressBookView = ({
   contacts,
-  onAddClicked
+  onAddClicked,
 }: AddressBookViewProps) => {
   return (
     <AppLayout>
@@ -33,17 +33,18 @@ export const AddressBookView = ({
               </div>
             ),
             onClick: onAddClicked,
-            testId: 'addressBook__addAddressButton'
+            testId: "addressBook__addAddressButton",
           }}
         />
         <div className="flex flex-col gap-2 p-4">
           <ContactTile
             contact={{
               name: DonatePallad.name,
-              address: DonatePallad.address
+              address: DonatePallad.address,
             }}
           />
           {contacts.map((contact, i) => (
+            // biome-ignore lint: it won't update
             <ContactTile key={i} contact={contact} index={i} />
           ))}
         </div>

@@ -1,14 +1,14 @@
-import { StoryDefault } from '@ladle/react'
+import type { StoryDefault } from "@ladle/react"
 
-import { StartView } from './start'
+import { StartView } from "./start"
 
 export const View = () => (
   <StartView
-    onCreateClicked={() => console.log('create')}
-    onRestoreClicked={() => console.log('restore')}
+    onCreateClicked={() => console.log("create")}
+    onRestoreClicked={() => console.log("restore")}
   />
 )
 
 export default {
-  title: 'Onboarding / Start'
+  title: "Onboarding / Start",
 } satisfies StoryDefault

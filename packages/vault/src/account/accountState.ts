@@ -1,5 +1,5 @@
-import { ChainAddress } from '@palladxyz/key-management'
-import { AccountInfo, Tx } from '@palladxyz/pallad-core'
+import type { ChainAddress } from "@palladxyz/key-management"
+import type { AccountInfo, Tx } from "@palladxyz/pallad-core"
 
 export type SingleAccountState = {
   accountInfo: Record<string, AccountInfo>
@@ -17,35 +17,35 @@ export type AccountActions = {
   setAccountInfo: (
     network: string,
     address: ChainAddress,
-    accountInfo: Record<string, AccountInfo>
+    accountInfo: Record<string, AccountInfo>,
   ) => void
 
   setTransactions: (
     network: string,
     address: ChainAddress,
-    transactions: Record<string, Tx[]>
+    transactions: Record<string, Tx[]>,
   ) => void
   getAccountsInfo: (
     network: string,
-    address: ChainAddress
+    address: ChainAddress,
   ) => SingleAccountState
   getAccountInfo: (
     network: string,
     address: ChainAddress,
-    ticker: string
+    ticker: string,
   ) => AccountInfo
 
   getTransactions: (
     network: string,
     address: ChainAddress,
-    ticker: string
+    ticker: string,
   ) => Tx[]
 
   getTransaction: (
     network: string,
     address: ChainAddress,
     hash: string,
-    ticker: string
+    ticker: string,
   ) => Tx | undefined
 
   addAccount: (network: string, address: ChainAddress) => void

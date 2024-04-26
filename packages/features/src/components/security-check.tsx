@@ -1,7 +1,7 @@
-import { CheckIcon } from 'lucide-react'
+import { CheckIcon } from "lucide-react"
 
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 
 export type SecurityCheckProps = {
   onConfirm: () => void

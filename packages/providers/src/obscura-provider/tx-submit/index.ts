@@ -1,1 +1,1 @@
-export * from './tx-submit-provider'
+export * from "./tx-submit-provider"

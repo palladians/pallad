@@ -1,1 +1,1 @@
-export * from './chain-history-provider'
+export * from "./chain-history-provider"

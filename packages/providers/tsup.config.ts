@@ -1,8 +1,8 @@
-import { baseTsupConfig } from '@palladxyz/common'
-import { polyfillNode } from 'esbuild-plugin-polyfill-node'
-import { defineConfig } from 'tsup' // eslint-disable-line import/no-extraneous-dependencies
+import { baseTsupConfig } from "@palladxyz/common"
+import { polyfillNode } from "esbuild-plugin-polyfill-node"
+import { defineConfig } from "tsup"
 
-import packageJson from './package.json'
+import packageJson from "./package.json"
 
 export default defineConfig([
   {
@@ -10,8 +10,8 @@ export default defineConfig([
     name: packageJson.name,
     esbuildPlugins: [
       polyfillNode({
-        polyfills: { punycode: true }
-      })
-    ]
-  }
+        polyfills: { punycode: true },
+      }),
+    ],
+  },
 ])
