@@ -1,12 +1,12 @@
-import { InvalidStringError, OpaqueString } from '@palladxyz/util'
+import { InvalidStringError, type OpaqueString } from "@palladxyz/util"
 
-import { BorrowedTypes } from '..'
+import type { BorrowedTypes } from ".."
 
 /**
  * Represents the body of a transaction.
  */
 export type TransactionBody = {
-  type: 'payment' | 'delegation' | 'zkApp'
+  type: "payment" | "delegation" | "zkApp"
   to: BorrowedTypes.PublicKey
   from: BorrowedTypes.PublicKey
   fee: BorrowedTypes.UInt64
@@ -24,9 +24,9 @@ export type TransactionBody = {
 }
 
 export enum TransactionKind {
-  PAYMENT = 'payment',
-  STAKE_DELEGATION = 'delegation',
-  ZK_APP = 'zkApp'
+  PAYMENT = "payment",
+  STAKE_DELEGATION = "delegation",
+  ZK_APP = "zkApp",
   // Add other kinds of transactions as needed
 }
 
@@ -42,7 +42,7 @@ export type KeyPair = {
  * Represents the network type.
  * It can be either 'mainnet' or 'testnet'.
  */
-export type NetworkType = 'mainnet' | 'testnet'
+export type NetworkType = "mainnet" | "testnet"
 
 export type ConstructedTransaction =
   | (BorrowedTypes.Payment & { type: TransactionKind.PAYMENT })
@@ -54,7 +54,7 @@ export type SignedTransaction =
 /**
  * transaction hash as base64 string
  */
-export type TxId = OpaqueString<'TransactionId'>
+export type TxId = OpaqueString<"TransactionId">
 
 /**
  * @param {string} value transaction hash as base64 string
@@ -62,7 +62,7 @@ export type TxId = OpaqueString<'TransactionId'>
  */
 export const TransactionId = (value: string): TxId => {
   if (!isBase64(value)) {
-    throw new InvalidStringError('Not a valid base64 string')
+    throw new InvalidStringError("Not a valid base64 string")
   }
   return value as TxId
 }

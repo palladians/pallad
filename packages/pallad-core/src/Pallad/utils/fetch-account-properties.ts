@@ -1,4 +1,4 @@
-import { AccountInfo, Network } from '../providers'
+import { type AccountInfo, Network } from "../providers"
 
 export type AccountProperties = {
   balance: number
@@ -10,7 +10,7 @@ export type AccountProperties = {
 
 export function getAccountProperties(
   data: Record<string, AccountInfo>,
-  chain: string
+  chain: string,
 ): AccountProperties {
   let balance: number
   let inferredNonce: number
@@ -18,17 +18,17 @@ export function getAccountProperties(
   let publicKey: string
   let symbol: string
   if (chain === Network.Mina) {
-    balance = data['MINA']?.balance?.total ?? 0
-    inferredNonce = data['MINA']?.inferredNonce ?? 0
-    delegate = data['MINA']?.delegate ?? ''
-    publicKey = data['MINA']?.publicKey ?? ''
-    symbol = 'MINA'
+    balance = data.MINA?.balance?.total ?? 0
+    inferredNonce = data.MINA?.inferredNonce ?? 0
+    delegate = data.MINA?.delegate ?? ""
+    publicKey = data.MINA?.publicKey ?? ""
+    symbol = "MINA"
   } else {
-    balance = data['ETH']?.balance?.total ?? 0
-    inferredNonce = data['ETH']?.inferredNonce ?? 0
-    delegate = data['ETH']?.delegate ?? ''
-    publicKey = data['ETH']?.publicKey ?? ''
-    symbol = 'ETH'
+    balance = data.ETH?.balance?.total ?? 0
+    inferredNonce = data.ETH?.inferredNonce ?? 0
+    delegate = data.ETH?.delegate ?? ""
+    publicKey = data.ETH?.publicKey ?? ""
+    symbol = "ETH"
   }
 
   return { balance, inferredNonce, delegate, publicKey, symbol }

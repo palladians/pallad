@@ -1,15 +1,15 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from "vitest"
 
 import {
-  generateMnemonicWords,
   KeyAgentType,
   KeyDecryptor,
+  type SerializableKeyAgentData,
+  generateMnemonicWords,
   mnemonicToSeed,
-  SerializableKeyAgentData
-} from '../src'
-import { emip3encrypt } from '../src/emip3'
+} from "../src"
+import { emip3encrypt } from "../src/emip3"
 
-describe('KeyDecryptor', () => {
+describe("KeyDecryptor", () => {
   const passphrase = new Uint8Array([1, 2, 3, 4, 5])
   const getPassphrase = async () => {
     return await Promise.resolve(passphrase)
@@ -20,14 +20,14 @@ describe('KeyDecryptor', () => {
 
   beforeAll(async () => {
     mnemonic = generateMnemonicWords()
-    seed = mnemonicToSeed(mnemonic, '')
+    seed = mnemonicToSeed(mnemonic, "")
     encryptedPrivateKey = await emip3encrypt(
       new Uint8Array([1, 2, 3]),
-      passphrase
+      passphrase,
     )
   })
 
-  it('decryptChildPrivateKey should decrypt properly', async () => {
+  it("decryptChildPrivateKey should decrypt properly", async () => {
     const keyDecryptor = new KeyDecryptor(getPassphrase)
     const encryptedPrivateKey = await emip3encrypt(seed, passphrase) // Reusing emip3 encrypt for the setup
 
@@ -36,56 +36,56 @@ describe('KeyDecryptor', () => {
     expect(decryptedPrivateKey).toEqual(seed)
   })
 
-  it('decryptSeedBytes should decrypt seed bytes properly', async () => {
+  it("decryptSeedBytes should decrypt seed bytes properly", async () => {
     const keyDecryptor = new KeyDecryptor(getPassphrase)
     const encryptedSeedBytes = await emip3encrypt(seed, passphrase)
     const serializableData: SerializableKeyAgentData = {
       __typename: KeyAgentType.InMemory,
       encryptedSeedBytes: encryptedSeedBytes,
-      id: 'http://example.gov/wallet/3732',
-      type: ['VerifiableCredential', 'EncryptedWallet'],
-      issuer: 'did:example:123',
-      issuanceDate: '2020-05-22T17:38:21.910Z',
+      id: "http://example.gov/wallet/3732",
+      type: ["VerifiableCredential", "EncryptedWallet"],
+      issuer: "did:example:123",
+      issuanceDate: "2020-05-22T17:38:21.910Z",
       credentialSubject: {
-        id: 'did:example:123',
-        contents: []
-      }
+        id: "did:example:123",
+        contents: [],
+      },
     }
 
     const decryptedBytes = await keyDecryptor.decryptSeedBytes(serializableData)
     expect(decryptedBytes).toEqual(seed)
   })
 
-  it('should throw an authentication error if decryption fails', async () => {
+  it("should throw an authentication error if decryption fails", async () => {
     const keyDecryptor = new KeyDecryptor(getPassphrase)
     const wrongEncryptedData = new Uint8Array([99, 99, 99]) // data that cannot be correctly decrypted
 
     await expect(
-      keyDecryptor.decryptChildPrivateKey(wrongEncryptedData)
-    ).rejects.toThrow('Failed to decrypt child private key')
+      keyDecryptor.decryptChildPrivateKey(wrongEncryptedData),
+    ).rejects.toThrow("Failed to decrypt child private key")
   })
 
-  it('should throw an authentication error if decryption fails in decryptSeed', async () => {
+  it("should throw an authentication error if decryption fails in decryptSeed", async () => {
     const keyDecryptor = new KeyDecryptor(getPassphrase)
     const wrongEncryptedData = new Uint8Array([99, 99, 99]) // data that cannot be correctly decrypted
     const serializableData: SerializableKeyAgentData = {
       __typename: KeyAgentType.InMemory,
       encryptedSeedBytes: wrongEncryptedData, // intentionally incorrect data
-      id: 'http://example.gov/wallet/3732',
-      type: ['VerifiableCredential', 'EncryptedWallet'],
-      issuer: 'did:example:123',
-      issuanceDate: '2020-05-22T17:38:21.910Z',
+      id: "http://example.gov/wallet/3732",
+      type: ["VerifiableCredential", "EncryptedWallet"],
+      issuer: "did:example:123",
+      issuanceDate: "2020-05-22T17:38:21.910Z",
       credentialSubject: {
-        id: 'did:example:123',
-        contents: []
-      }
+        id: "did:example:123",
+        contents: [],
+      },
     }
 
     await expect(
-      keyDecryptor.decryptSeedBytes(serializableData)
-    ).rejects.toThrow('Failed to decrypt seed bytes')
+      keyDecryptor.decryptSeedBytes(serializableData),
+    ).rejects.toThrow("Failed to decrypt seed bytes")
   })
-  it('should not expose passphrase', async () => {
+  it("should not expose passphrase", async () => {
     const keyDecryptor = new KeyDecryptor(getPassphrase)
     let exposedPassphrase = null
 

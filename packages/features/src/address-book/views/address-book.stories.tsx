@@ -1,11 +1,11 @@
-import { StoryDefault } from '@ladle/react'
+import type { StoryDefault } from "@ladle/react"
 
-import { AddressBookView } from './address-book'
+import { AddressBookView } from "./address-book"
 
 export const View = () => (
-  <AddressBookView contacts={[]} onAddClicked={() => console.log('back')} />
+  <AddressBookView contacts={[]} onAddClicked={() => console.log("back")} />
 )
 
 export default {
-  title: 'Dashboard / Address Book'
+  title: "Dashboard / Address Book",
 } satisfies StoryDefault

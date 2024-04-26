@@ -1,1 +1,1 @@
-export * from './mina'
+export * from "./mina"

@@ -10,19 +10,19 @@ export class ServerError extends Error {
   constructor(
     originalError: ExtendedError,
     statusCode: number,
-    responseBody?: string
+    responseBody?: string,
   ) {
     super(`Server Error: ${statusCode} - ${originalError.message}`)
-    this.name = 'ServerError'
+    this.name = "ServerError"
     this.originalError = originalError
     this.statusCode = statusCode
     this.responseBody = responseBody
 
     // Manually adjust the stack trace to omit the constructor call
     if (this.stack) {
-      const newStack = this.stack.split('\n')
+      const newStack = this.stack.split("\n")
       newStack.splice(1, 1) // Remove the constructor call from the stack trace
-      this.stack = newStack.join('\n')
+      this.stack = newStack.join("\n")
     }
   }
 }

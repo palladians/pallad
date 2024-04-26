@@ -1,4 +1,4 @@
-import { CustomError } from 'ts-custom-error'
+import { CustomError } from "ts-custom-error"
 
 /**
  * Base interface to model a range
@@ -26,7 +26,7 @@ export class OutsideRangeError<T, R> extends CustomError {
   public constructor(
     value: T,
     { lowerBound, upperBound }: Range<R>,
-    description: string
+    description: string,
   ) {
     super()
     this.message = `${description} - ${value} must be between ${lowerBound} and ${upperBound}`
@@ -35,18 +35,19 @@ export class OutsideRangeError<T, R> extends CustomError {
 
 export const throwIfInvalidRange = <T>({
   lowerBound,
-  upperBound
+  upperBound,
 }: Range<T>): void => {
   if (!lowerBound && !upperBound) {
-    throw new InvalidRangeError('Must provide at least one bound')
-  } else if (lowerBound === upperBound) {
+    throw new InvalidRangeError("Must provide at least one bound")
+  }
+  if (lowerBound === upperBound) {
     throw new InvalidRangeError(
-      `Lower bound: ${lowerBound}, cannot equal upper bound ${upperBound}`
+      `Lower bound: ${lowerBound}, cannot equal upper bound ${upperBound}`,
     )
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  } else if (lowerBound && lowerBound > upperBound!) {
+  }
+  if (lowerBound && lowerBound > upperBound!) {
     throw new InvalidRangeError(
-      `Lower bound: ${lowerBound}, cannot be larger than upper bound: ${upperBound}`
+      `Lower bound: ${lowerBound}, cannot be larger than upper bound: ${upperBound}`,
     )
   }
 }
@@ -56,17 +57,17 @@ export const inRange = <T>(value: T, range: Range<T>): boolean => {
   const { lowerBound, upperBound } = range
   if (!lowerBound && upperBound) {
     return value <= upperBound
-  } else if (lowerBound && !upperBound) {
+  }
+  if (lowerBound && !upperBound) {
     return value >= lowerBound
   }
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return value >= lowerBound! && value <= upperBound!
 }
 
 export const throwIfOutsideRange = <T>(
   value: T,
   range: Range<T>,
-  description: string
+  description: string,
 ): void => {
   if (!inRange(value, range)) {
     throw new OutsideRangeError(value, range, description)

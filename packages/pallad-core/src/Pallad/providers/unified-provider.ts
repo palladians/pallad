@@ -1,13 +1,13 @@
-import { AccountInfo, AccountInfoArgs } from './account-info-provider'
-import {
+import type { AccountInfo, AccountInfoArgs } from "./account-info-provider"
+import type {
   TransactionsByAddressesArgs,
-  TransactionsByHashesArgs
-} from './chain-history-provider'
-import { NodeStatus } from './node-status-provider'
-import { HealthCheckResponse } from './provider'
-import { TxStatus, TxStatusArgs } from './tx-status-provider'
-import { SubmitTxArgs, SubmitTxResult } from './tx-submit-provider'
-import { Tx } from './types'
+  TransactionsByHashesArgs,
+} from "./chain-history-provider"
+import type { NodeStatus } from "./node-status-provider"
+import type { HealthCheckResponse } from "./provider"
+import type { TxStatus, TxStatusArgs } from "./tx-status-provider"
+import type { SubmitTxArgs, SubmitTxResult } from "./tx-submit-provider"
+import type { Tx } from "./types"
 
 export type UnifiedChainProviderConfig = {
   nodeUrl: string
@@ -20,7 +20,7 @@ export interface UnifiedChainProviderType {
 
   // Methods related to ProviderNode
   getAccountInfo(
-    args: AccountInfoArgs
+    args: AccountInfoArgs,
   ): Promise<Record<string, AccountInfo> | undefined>
   getTransactionStatus?(args: TxStatusArgs): Promise<TxStatus | undefined>
   submitTransaction(args: SubmitTxArgs): Promise<SubmitTxResult | undefined>

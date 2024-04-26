@@ -1,10 +1,10 @@
-import { SecurityCheck } from '@/components/security-check'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
-import { WizardLayout } from '@/components/wizard-layout'
-import { cn } from '@/lib/utils'
+import { SecurityCheck } from "@/components/security-check"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+import { WizardLayout } from "@/components/wizard-layout"
+import { cn } from "@/lib/utils"
 
 type MnemonicWritedownViewProps = {
   onConfirm: () => void
@@ -21,7 +21,7 @@ export const MnemonicWritedownView = ({
   safetyConfirmed,
   mnemonicWords,
   mnemonicWritten,
-  setMnemonicWritten
+  setMnemonicWritten,
 }: MnemonicWritedownViewProps) => (
   <WizardLayout
     title="Mnemonic Backup"
@@ -29,8 +29,8 @@ export const MnemonicWritedownView = ({
     footer={
       <Button
         className={cn([
-          'flex-1 transition-opacity opacity-50',
-          mnemonicWritten && 'opacity-100'
+          "flex-1 transition-opacity opacity-50",
+          mnemonicWritten && "opacity-100",
         ])}
         disabled={!mnemonicWritten}
         onClick={onConfirm}
@@ -47,6 +47,7 @@ export const MnemonicWritedownView = ({
           <div className="grid grid-cols-3 gap-2">
             {mnemonicWords.map((word, i) => (
               <Badge
+                // biome-ignore lint: won't update
                 key={i}
                 variant="outline"
                 data-testid="onboarding__mnemonicWord"

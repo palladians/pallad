@@ -1,1 +1,1 @@
-export * from './account-info-provider'
+export * from "./account-info-provider"

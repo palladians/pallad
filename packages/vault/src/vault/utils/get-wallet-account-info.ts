@@ -1,16 +1,16 @@
-import { GroupedCredentials } from '@palladxyz/key-management'
-import { Network } from '@palladxyz/pallad-core'
+import type { GroupedCredentials } from "@palladxyz/key-management"
+import type { Network } from "@palladxyz/pallad-core"
 
-import { SingleCredentialState } from '../../credentials'
-import { NetworkError, WalletError } from '../../lib/Errors'
+import type { SingleCredentialState } from "../../credentials"
+import { NetworkError, WalletError } from "../../lib/Errors"
 
 const _validateCurrentWallet = (wallet: SingleCredentialState | null) => {
   const credential = wallet?.credential as GroupedCredentials
   if (!wallet || !credential?.address)
-    throw new WalletError('Invalid current wallet or address')
+    throw new WalletError("Invalid current wallet or address")
 }
 const _validateCurrentNetwork = (network: Network | null) => {
-  if (!network) throw new NetworkError('Invalid current network')
+  if (!network) throw new NetworkError("Invalid current network")
 }
 
 export function getWalletAccountInfoHelper(get: any) {

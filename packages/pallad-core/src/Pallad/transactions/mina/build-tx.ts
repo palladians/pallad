@@ -1,6 +1,6 @@
-import { Mina } from '@palladxyz/mina-core'
+import type { Mina } from "@palladxyz/mina-core"
 
-import { constructTransaction } from './build-mina-tx'
+import { constructTransaction } from "./build-mina-tx"
 
 // high-level Mina constructTx API
 export type constructTxArgs = {

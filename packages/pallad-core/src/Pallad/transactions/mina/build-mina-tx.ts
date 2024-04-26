@@ -1,4 +1,4 @@
-import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
+import { type BorrowedTypes, Mina } from "@palladxyz/mina-core"
 
 // Low-level Mina constructTx API for spending Mina only.
 
@@ -8,11 +8,11 @@ import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
  * @returns The constructed payment transaction object.
  */
 export function constructPaymentTx(
-  payment: Mina.TransactionBody
+  payment: Mina.TransactionBody,
 ): BorrowedTypes.Payment {
   const sendFee = BigInt(payment.fee)
   const sendAmount = payment.amount ? BigInt(payment.amount) : BigInt(0)
-  const memo = payment.memo || ''
+  const memo = payment.memo || ""
   const validUntil = payment.validUntil
     ? BigInt(payment.validUntil)
     : BigInt(4294967295) // Mina Signer has a defaultValidUntil = '4294967295';
@@ -24,7 +24,7 @@ export function constructPaymentTx(
     fee: sendFee,
     nonce: BigInt(payment.nonce),
     memo: memo,
-    validUntil: validUntil
+    validUntil: validUntil,
   }
 }
 
@@ -34,10 +34,10 @@ export function constructPaymentTx(
  * @returns The constructed delegation transaction object.
  */
 export function constructDelegationTx(
-  delegation: Mina.TransactionBody
+  delegation: Mina.TransactionBody,
 ): BorrowedTypes.StakeDelegation {
   const sendFee = BigInt(delegation.fee)
-  const memo = delegation.memo || ''
+  const memo = delegation.memo || ""
   const validUntil = delegation.validUntil
     ? BigInt(delegation.validUntil)
     : BigInt(4294967295) // Mina Signer has a defaultValidUntil = '4294967295';
@@ -48,7 +48,7 @@ export function constructDelegationTx(
     fee: sendFee,
     nonce: BigInt(delegation.nonce),
     memo: memo,
-    validUntil: validUntil
+    validUntil: validUntil,
   }
 }
 
@@ -60,20 +60,20 @@ export function constructDelegationTx(
  */
 export function constructTransaction(
   transaction: Mina.TransactionBody,
-  transactionKind: Mina.TransactionKind
+  transactionKind: Mina.TransactionKind,
 ): Mina.ConstructedTransaction {
   switch (transactionKind) {
     case Mina.TransactionKind.PAYMENT:
       return {
         ...constructPaymentTx(transaction),
-        type: Mina.TransactionKind.PAYMENT
+        type: Mina.TransactionKind.PAYMENT,
       }
     case Mina.TransactionKind.STAKE_DELEGATION:
       return {
         ...constructDelegationTx(transaction),
-        type: Mina.TransactionKind.STAKE_DELEGATION
+        type: Mina.TransactionKind.STAKE_DELEGATION,
       }
     default:
-      throw new Error('Unsupported transaction kind')
+      throw new Error("Unsupported transaction kind")
   }
 }

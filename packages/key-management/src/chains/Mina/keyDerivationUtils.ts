@@ -1,6 +1,6 @@
-import { Network } from '@palladxyz/pallad-core'
+import { Network } from "@palladxyz/pallad-core"
 
-import { MinaDerivationArgs } from './types'
+import type { MinaDerivationArgs } from "./types"
 
 /**
  * Reverses the order of bytes in a buffer.

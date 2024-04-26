@@ -1,17 +1,17 @@
-import { TrashIcon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { TrashIcon } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
-import { truncateString } from '@/common/lib/string'
-import { useAddressBookStore } from '@/common/store/address-book'
-import { Contact } from '@/common/types'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { truncateString } from "@/common/lib/string"
+import { useAddressBookStore } from "@/common/store/address-book"
+import type { Contact } from "@/common/types"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface ContactTileProps {
   contact: Contact
@@ -31,7 +31,7 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
           variant="link"
           className="text-sky-400"
           onClick={() =>
-            navigate('/send', { state: { address: contact.address } })
+            navigate("/send", { state: { address: contact.address } })
           }
           data-testid="addressBook__contactName"
         >
@@ -44,10 +44,10 @@ export const ContactTile = ({ contact, index }: ContactTileProps) => {
             truncateString({
               value: contact.address,
               firstCharCount: 4,
-              endCharCount: 4
+              endCharCount: 4,
             })}
         </p>
-        {typeof index === 'number' && (
+        {typeof index === "number" && (
           <Tooltip>
             <TooltipTrigger>
               <Button

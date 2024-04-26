@@ -1,7 +1,7 @@
-import { MinaSignablePayload } from '@palladxyz/key-management'
-import { ProviderConfig } from '@palladxyz/providers'
+import type { MinaSignablePayload } from "@palladxyz/key-management"
+import type { ProviderConfig } from "@palladxyz/providers"
 
-import {
+import type {
   ProviderAccounts,
   ProviderChainId,
   ProviderConnectInfo,
@@ -9,9 +9,9 @@ import {
   ProviderEventArguments,
   ProviderMessage,
   ProviderRpcError,
-  RequestArguments
-} from '../web-provider-types'
-import { MinaProvider } from './mina-provider'
+  RequestArguments,
+} from "../web-provider-types"
+import type { MinaProvider } from "./mina-provider"
 
 export type requestSignableData = {
   data: MinaSignablePayload
@@ -42,29 +42,29 @@ export interface MinaRpcProviderMap {
 }
 
 export interface EIP1102Request extends RequestArguments {
-  method: 'mina_requestAccounts'
+  method: "mina_requestAccounts"
 }
 
 // IMinaProviderEvents interface
 export interface IMinaProviderEvents {
   on: <E extends ProviderEvent>(
     event: E,
-    listener: (args: ProviderEventArguments[E]) => void
+    listener: (args: ProviderEventArguments[E]) => void,
   ) => MinaProvider
 
   once: <E extends ProviderEvent>(
     event: E,
-    listener: (args: ProviderEventArguments[E]) => void
+    listener: (args: ProviderEventArguments[E]) => void,
   ) => MinaProvider
 
   off: <E extends ProviderEvent>(
     event: E,
-    listener: (args: ProviderEventArguments[E]) => void
+    listener: (args: ProviderEventArguments[E]) => void,
   ) => MinaProvider
 
   removeListener: <E extends ProviderEvent>(
     event: E,
-    listener: (args: ProviderEventArguments[E]) => void
+    listener: (args: ProviderEventArguments[E]) => void,
   ) => MinaProvider
 
   //emit: <E extends ProviderEvent>(
@@ -77,28 +77,28 @@ export interface IMinaProviderEvents {
 export interface IMinaProviderBase {
   // connection event
   on(
-    event: 'connect',
-    listener: (info: ProviderConnectInfo) => void
+    event: "connect",
+    listener: (info: ProviderConnectInfo) => void,
   ): MinaProvider
   // disconnection event
   on(
-    event: 'disconnect',
-    listener: (error: ProviderRpcError) => void
+    event: "disconnect",
+    listener: (error: ProviderRpcError) => void,
   ): MinaProvider
   // arbitrary messages
   on(
-    event: 'message',
-    listener: (message: ProviderMessage) => void
+    event: "message",
+    listener: (message: ProviderMessage) => void,
   ): MinaProvider
   // chain changed event
   on(
-    event: 'chainChanged',
-    listener: (chainId: ProviderChainId) => void
+    event: "chainChanged",
+    listener: (chainId: ProviderChainId) => void,
   ): MinaProvider
   // accounts changed event
   on(
-    event: 'accountsChanged',
-    listener: (accounts: ProviderAccounts) => void
+    event: "accountsChanged",
+    listener: (accounts: ProviderAccounts) => void,
   ): MinaProvider
   // make an Ethereum RPC method call.
   request(args: RequestArguments): Promise<unknown>

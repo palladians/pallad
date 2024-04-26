@@ -1,4 +1,4 @@
-import {
+import type {
   AccountInfo,
   AccountInfoArgs,
   Mina,
@@ -7,8 +7,8 @@ import {
   TransactionsByAddressesArgs,
   TransactionsByIdsArgs,
   TxStatus,
-  TxStatusArgs
-} from '@palladxyz/mina-core'
+  TxStatusArgs,
+} from "@palladxyz/mina-core"
 /**
  * An interface that abstracts over Mina node queries.
  */
@@ -53,10 +53,10 @@ export interface ProviderArchive {
   destroy(): void
 
   getTransactions(
-    args: TransactionsByAddressesArgs
+    args: TransactionsByAddressesArgs,
   ): Promise<Mina.Paginated<Mina.TransactionBody> | undefined>
 
   getTransaction(
-    args: TransactionsByIdsArgs
+    args: TransactionsByIdsArgs,
   ): Promise<Mina.TransactionBody[] | undefined>
 }

@@ -1,9 +1,9 @@
-import {
+import type {
   ChainHistoryProvider,
   TransactionsByAddressesArgs,
   TransactionsByHashesArgs,
-  Tx
-} from '@palladxyz/pallad-core'
+  Tx,
+} from "@palladxyz/pallad-core"
 
 /*import {
   createPublicClient,
@@ -11,19 +11,19 @@ import {
   Hash,
   webSocket
 } from 'viem'*/
-import { healthCheckOptimism } from '../utils'
+import { healthCheckOptimism } from "../utils"
 
 export const createChainHistoryProvider = (
   url: string,
-  apiKey = ''
+  apiKey = "",
 ): ChainHistoryProvider => {
   const transactionsByAddresses = async (
-    args: TransactionsByAddressesArgs
+    args: TransactionsByAddressesArgs,
   ): Promise<Tx[]> => {
     const { addresses } = args
     const page = 1
     const offset = 20
-    const sort = 'asc'
+    const sort = "asc"
     const baseEtherscanUrl = `${url}api?module=account&action=txlistinternal&apikey=${apiKey}`
 
     // Fetch transactions for each address (handle only the first address for simplification here)
@@ -36,7 +36,7 @@ export const createChainHistoryProvider = (
     const response = await fetch(fullUrl)
     const data = await response.json()
 
-    if (data.status !== '1') {
+    if (data.status !== "1") {
       throw new Error(`Failed to fetch transactions: ${data.message}`)
     }
 
@@ -45,7 +45,7 @@ export const createChainHistoryProvider = (
   }
 
   const transactionsByHashes = async (
-    args: TransactionsByHashesArgs
+    args: TransactionsByHashesArgs,
   ): Promise<Tx[]> => {
     // TODO: make dependency on etherscan
     /*const client = createPublicClient({
@@ -59,13 +59,13 @@ export const createChainHistoryProvider = (
 
     return transactions as any*/
     await new Promise((resolve) => setTimeout(resolve, 500))
-    console.log('args', args)
+    console.log("args", args)
     return [] as Tx[]
   }
 
   return {
     healthCheck: () => healthCheckOptimism(url),
     transactionsByAddresses,
-    transactionsByHashes
+    transactionsByHashes,
   }
 }

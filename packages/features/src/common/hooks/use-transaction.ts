@@ -1,7 +1,7 @@
-import { getPublicKey, useVault } from '@palladxyz/vault'
-import useSWR from 'swr'
+import { getPublicKey, useVault } from "@palladxyz/vault"
+import useSWR from "swr"
 
-import { useAppStore } from '../store/app'
+import { useAppStore } from "../store/app"
 
 export const useTransaction = ({ hash }: { hash: string }) => {
   const providerConfig = useVault((state) => state.getCurrentNetworkInfo())
@@ -12,10 +12,10 @@ export const useTransaction = ({ hash }: { hash: string }) => {
   const network = useAppStore((state) => state.network)
   const syncAndGetTransaction = async () => {
     await _syncTransactions(providerConfig, publicKey)
-    return getTransaction(network, publicKey, hash, 'MINA') // TODO: remove hardcoded 'MINA'
+    return getTransaction(network, publicKey, hash, "MINA") // TODO: remove hardcoded 'MINA'
   }
   return useSWR(
-    publicKey ? ['transaction', hash, network] : null,
-    async () => await syncAndGetTransaction()
+    publicKey ? ["transaction", hash, network] : null,
+    async () => await syncAndGetTransaction(),
   )
 }

@@ -1,6 +1,6 @@
-import { BorrowedTypes } from '../..'
-import { TransactionBody, TransactionKind } from '../../Mina'
-import { Provider } from '../Provider'
+import type { BorrowedTypes } from "../.."
+import type { TransactionBody, TransactionKind } from "../../Mina"
+import type { Provider } from "../Provider"
 
 export type SubmitTxArgs = {
   signedTransaction:
@@ -8,13 +8,13 @@ export type SubmitTxArgs = {
     | BorrowedTypes.SignedLegacy<BorrowedTypes.StakeDelegation>
   kind: TransactionKind
   transactionDetails: {
-    fee: TransactionBody['fee']
-    to: TransactionBody['to']
-    from: TransactionBody['from']
-    nonce: TransactionBody['nonce']
-    memo: TransactionBody['memo']
-    validUntil: TransactionBody['validUntil']
-    amount: TransactionBody['amount']
+    fee: TransactionBody["fee"]
+    to: TransactionBody["to"]
+    from: TransactionBody["from"]
+    nonce: TransactionBody["nonce"]
+    memo: TransactionBody["memo"]
+    validUntil: TransactionBody["validUntil"]
+    amount: TransactionBody["amount"]
   }
 }
 

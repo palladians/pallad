@@ -1,8 +1,8 @@
-import { ElementType } from 'react'
+import type { ElementType } from "react"
 
-import { MetaField } from '@/components/meta-field'
-import { Button } from '@/components/ui/button'
-import { ViewHeading } from '@/components/view-heading'
+import { MetaField } from "@/components/meta-field"
+import { Button } from "@/components/ui/button"
+import { ViewHeading } from "@/components/view-heading"
 
 type TxResult = {
   icon: ElementType
@@ -25,7 +25,7 @@ interface TransactionResultProps {
 export const TransactionResult = ({
   title,
   result,
-  button
+  button,
 }: TransactionResultProps) => {
   return (
     <div className="flex flex-col flex-1">

@@ -5,12 +5,12 @@ interface FormatCurrencyProps {
 
 export const formatCurrency = ({
   value,
-  precision = 2
+  precision = 2,
 }: FormatCurrencyProps) => {
-  const currencyFormatter = Intl.NumberFormat('en', {
-    style: 'currency',
+  const currencyFormatter = Intl.NumberFormat("en", {
+    style: "currency",
     maximumFractionDigits: precision,
-    minimumFractionDigits: precision
+    minimumFractionDigits: precision,
   })
   return currencyFormatter.format(value)
 }

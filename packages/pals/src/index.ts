@@ -1,1 +1,1 @@
-export * from './pals-provider'
+export * from "./pals-provider"

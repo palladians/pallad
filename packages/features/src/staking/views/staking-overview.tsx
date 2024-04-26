@@ -1,14 +1,14 @@
-import { useAccount } from '@/common/hooks/use-account'
-import { useBlockchainSummary } from '@/common/hooks/use-blockchain-summary'
-import { truncateString } from '@/common/lib/string'
-import { AppLayout } from '@/components/app-layout'
-import { ButtonArrow } from '@/components/button-arrow'
-import { MetaField } from '@/components/meta-field'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { ViewHeading } from '@/components/view-heading'
-import { getAccountUrl } from '@/lib/explorer'
+import type { useAccount } from "@/common/hooks/use-account"
+import type { useBlockchainSummary } from "@/common/hooks/use-blockchain-summary"
+import { truncateString } from "@/common/lib/string"
+import { AppLayout } from "@/components/app-layout"
+import { ButtonArrow } from "@/components/button-arrow"
+import { MetaField } from "@/components/meta-field"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ViewHeading } from "@/components/view-heading"
+import { getAccountUrl } from "@/lib/explorer"
 
 type StakingOverviewViewProps = {
   stakeDelegated: boolean
@@ -21,7 +21,7 @@ export const StakingOverviewView = ({
   stakeDelegated,
   onChangePool,
   blockchainSummary,
-  account
+  account,
 }: StakingOverviewViewProps) => (
   <AppLayout>
     <div className="flex flex-col flex-1">
@@ -30,8 +30,8 @@ export const StakingOverviewView = ({
         button={
           stakeDelegated
             ? {
-                label: 'Change Pool',
-                onClick: onChangePool
+                label: "Change Pool",
+                onClick: onChangePool,
               }
             : undefined
         }
@@ -43,7 +43,7 @@ export const StakingOverviewView = ({
           <Card className="grid grid-cols-2 p-4 gap-2 rounded-[1rem]">
             <MetaField
               label="Epoch"
-              value={blockchainSummary.data?.epoch ?? ''}
+              value={blockchainSummary.data?.epoch ?? ""}
             />
             <MetaField
               label="Slot"
@@ -60,11 +60,11 @@ export const StakingOverviewView = ({
                 value={truncateString({
                   value: account.data.delegate, //TODO: Change to util
                   endCharCount: 8,
-                  firstCharCount: 8
+                  firstCharCount: 8,
                 })}
                 url={getAccountUrl({
                   network: account.network,
-                  publicKey: account.data.publicKey
+                  publicKey: account.data.publicKey,
                 })}
               />
             </div>

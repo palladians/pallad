@@ -1,9 +1,9 @@
-import { getLocalPersistence } from '@palladxyz/persistence'
-import { DEFAULT_NETWORK } from '@palladxyz/vault'
-import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { getLocalPersistence } from "@palladxyz/persistence"
+import { DEFAULT_NETWORK } from "@palladxyz/vault"
+import { create } from "zustand"
+import { createJSONStorage, persist } from "zustand/middleware"
 
-import { VaultState } from '../lib/const'
+import { VaultState } from "../lib/const"
 
 // TODO: Make network a generic type that can support networks other than just Mina
 type AppState = {
@@ -42,7 +42,7 @@ export const useAppStore = create<AppStore>()(
       },
       setNetwork(network) {
         return set({
-          network: network
+          network: network,
         })
       },
       setShareData(shareData) {
@@ -58,11 +58,11 @@ export const useAppStore = create<AppStore>()(
       setVaultStateUninitialized: () => {
         const { setVaultState } = get()
         return setVaultState(VaultState.UNINITIALIZED)
-      }
+      },
     }),
     {
-      name: 'PalladApp',
-      storage: createJSONStorage(getLocalPersistence)
-    }
-  )
+      name: "PalladApp",
+      storage: createJSONStorage(getLocalPersistence),
+    },
+  ),
 )

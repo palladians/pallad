@@ -1,23 +1,23 @@
-import { expect } from '../extension'
-import { devnetWallet } from '../fixtures'
-import { BasePom } from './base'
+import { expect } from "../extension"
+import { devnetWallet } from "../fixtures"
+import { BasePom } from "./base"
 
 const TestId = {
-  RESTORE_WALLET_BUTTON: 'onboarding__restoreWalletButton',
-  CREATE_WALLET_BUTTON: 'onboarding__createWalletButton',
-  WALLET_NAME_INPUT: 'onboarding__walletNameInput',
-  SPENDING_PASSWORD_INPUT: 'onboarding__spendingPasswordInput',
-  TOS_CHECKBOX: 'onboarding__tosCheckbox',
-  NEXT_BUTTON: 'onboarding__nextButton',
-  BACK_BUTTON: 'onboarding__backButton',
-  CONFIRM_ALONE: 'onboarding__confirmAlone',
-  MNEMONIC_FIELD: 'onboarding__mnemonicField',
-  ADDRESS_TRUNCATED: 'dashboard__addressTruncated',
-  MINA_BALANCE: 'dashboard__minaBalance',
-  MNEMONIC_WORD: 'onboarding__mnemonicWord',
-  MNEMONIC_WRITTEN_CHECKBOX: 'onboarding__mnemonicWrittenCheckbox',
-  MNEMONIC_WRITEDOWN_INDEX: 'onboarding__writedownIndex',
-  MNEMONIC_CONFIRMATION_INPUT: 'onboarding__mnemonicConfirmationInput'
+  RESTORE_WALLET_BUTTON: "onboarding__restoreWalletButton",
+  CREATE_WALLET_BUTTON: "onboarding__createWalletButton",
+  WALLET_NAME_INPUT: "onboarding__walletNameInput",
+  SPENDING_PASSWORD_INPUT: "onboarding__spendingPasswordInput",
+  TOS_CHECKBOX: "onboarding__tosCheckbox",
+  NEXT_BUTTON: "onboarding__nextButton",
+  BACK_BUTTON: "onboarding__backButton",
+  CONFIRM_ALONE: "onboarding__confirmAlone",
+  MNEMONIC_FIELD: "onboarding__mnemonicField",
+  ADDRESS_TRUNCATED: "dashboard__addressTruncated",
+  MINA_BALANCE: "dashboard__minaBalance",
+  MNEMONIC_WORD: "onboarding__mnemonicWord",
+  MNEMONIC_WRITTEN_CHECKBOX: "onboarding__mnemonicWrittenCheckbox",
+  MNEMONIC_WRITEDOWN_INDEX: "onboarding__writedownIndex",
+  MNEMONIC_CONFIRMATION_INPUT: "onboarding__mnemonicConfirmationInput",
 } as const
 
 export class OnboardingPom extends BasePom {
@@ -26,13 +26,13 @@ export class OnboardingPom extends BasePom {
   }
   startRestoring() {
     const restoreWalletButton = this.page.getByTestId(
-      TestId.RESTORE_WALLET_BUTTON
+      TestId.RESTORE_WALLET_BUTTON,
     )
     return restoreWalletButton.click()
   }
   startCreating() {
     const createWalletButton = this.page.getByTestId(
-      TestId.CREATE_WALLET_BUTTON
+      TestId.CREATE_WALLET_BUTTON,
     )
     return createWalletButton.click()
   }
@@ -42,7 +42,7 @@ export class OnboardingPom extends BasePom {
   }
   fillSpendingPassword(spendingPassword: string) {
     const spendingPasswordInput = this.page.getByTestId(
-      TestId.SPENDING_PASSWORD_INPUT
+      TestId.SPENDING_PASSWORD_INPUT,
     )
     return spendingPasswordInput.fill(spendingPassword)
   }
@@ -84,7 +84,7 @@ export class OnboardingPom extends BasePom {
   }
   toggleMnemonicWritten() {
     const mnemonicWritten = this.page.getByTestId(
-      TestId.MNEMONIC_WRITTEN_CHECKBOX
+      TestId.MNEMONIC_WRITTEN_CHECKBOX,
     )
     return mnemonicWritten.click()
   }
@@ -92,12 +92,12 @@ export class OnboardingPom extends BasePom {
     const inputLabel = await this.page
       .getByTestId(TestId.MNEMONIC_WRITEDOWN_INDEX)
       .innerText()
-    const [, confirmationIndex] = inputLabel.split('#')
-    return parseInt(confirmationIndex) - 1
+    const [, confirmationIndex] = inputLabel.split("#")
+    return Number.parseInt(confirmationIndex) - 1
   }
   fillMnemonicConfirmation(specificWord: string) {
     const mnemonicConfirmationInput = this.page.getByTestId(
-      TestId.MNEMONIC_CONFIRMATION_INPUT
+      TestId.MNEMONIC_CONFIRMATION_INPUT,
     )
     return mnemonicConfirmationInput.fill(specificWord)
   }
@@ -116,7 +116,7 @@ export class OnboardingPom extends BasePom {
     await this.confirmAlone()
     await this.fillMnemonic(devnetWallet.mnemonic)
     await this.goNext()
-    const pageTitle = this.page.getByText('Stay Connected')
+    const pageTitle = this.page.getByText("Stay Connected")
     await pageTitle.waitFor()
     await this.goNext()
   }

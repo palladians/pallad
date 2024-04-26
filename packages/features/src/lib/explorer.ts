@@ -1,8 +1,8 @@
-const MINAVERSE_URL = 'https://minaverse.xyz/'
+const MINAVERSE_URL = "https://minaverse.xyz/"
 
 export const getAccountUrl = ({
   network,
-  publicKey
+  publicKey,
 }: {
   network: string
   publicKey: string
@@ -10,7 +10,7 @@ export const getAccountUrl = ({
 
 export const getTransactionUrl = ({
   network,
-  hash
+  hash,
 }: {
   network: string
   hash: string

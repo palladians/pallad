@@ -1,20 +1,20 @@
-import {
+import type {
   HealthCheckResponse,
   SubmitTxArgs,
   SubmitTxResult,
-  TxSubmitProvider
-} from '@palladxyz/pallad-core'
+  TxSubmitProvider,
+} from "@palladxyz/pallad-core"
 
-import { createTxSubmitProvider as mn } from '../mina-node'
-import { createTxSubmitProvider as ob } from '../obscura-provider'
-import { ProviderConfig } from './types'
+import { createTxSubmitProvider as mn } from "../mina-node"
+import { createTxSubmitProvider as ob } from "../obscura-provider"
+import type { ProviderConfig } from "./types"
 
 export const createTxSubmitProvider = (
-  config: ProviderConfig
+  config: ProviderConfig,
 ): TxSubmitProvider => {
   // TODO: make the underlyingProvider creation a util function
   const underlyingProvider =
-    config.nodeEndpoint.providerName === 'mina-node'
+    config.nodeEndpoint.providerName === "mina-node"
       ? mn(config.nodeEndpoint.url)
       : ob(config.nodeEndpoint.url)
 
@@ -30,6 +30,6 @@ export const createTxSubmitProvider = (
 
   return {
     submitTx,
-    healthCheck
+    healthCheck,
   }
 }

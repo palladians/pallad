@@ -1,7 +1,7 @@
 export class WalletError extends Error {
   constructor(message: string) {
     super(message)
-    this.name = 'WalletError'
+    this.name = "WalletError"
 
     Object.setPrototypeOf(this, WalletError.prototype)
   }
@@ -10,7 +10,7 @@ export class WalletError extends Error {
 export class NetworkError extends Error {
   constructor(message: string) {
     super(message)
-    this.name = 'NetworkError'
+    this.name = "NetworkError"
 
     Object.setPrototypeOf(this, NetworkError.prototype)
   }
@@ -19,7 +19,7 @@ export class NetworkError extends Error {
 export class AddressError extends Error {
   constructor(message: string) {
     super(message)
-    this.name = 'AddressError'
+    this.name = "AddressError"
 
     Object.setPrototypeOf(this, AddressError.prototype)
   }

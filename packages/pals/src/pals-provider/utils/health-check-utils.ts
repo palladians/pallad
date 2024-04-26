@@ -1,4 +1,4 @@
-import { fetchPals } from './fetch-utils'
+import { fetchPals } from "./fetch-utils"
 
 export type HealthCheckResponse = {
   ok: boolean
@@ -6,14 +6,14 @@ export type HealthCheckResponse = {
 }
 
 export const healthCheck = async (
-  url: string
+  url: string,
 ): Promise<HealthCheckResponse> => {
-  const result = await fetchPals(url + `/health`)
+  const result = await fetchPals(`${url}/health`)
   if (!result.ok) {
     return { ok: result.ok, message: result.message as string }
   }
   return {
     ok: result.ok,
-    message: result.data
+    message: result.data,
   }
 }

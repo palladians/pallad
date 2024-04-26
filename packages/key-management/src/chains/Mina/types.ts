@@ -1,9 +1,12 @@
-import { BorrowedTypes, Mina } from '@palladxyz/mina-core'
-import { Network } from '@palladxyz/pallad-core'
+import type { BorrowedTypes, Mina } from "@palladxyz/mina-core"
+import { Network } from "@palladxyz/pallad-core"
 
-import { ChainSpecificPayload, KeyPairDerivationOperations } from '../../types'
-import { deriveMinaPublicKey } from './credentialDerivation'
-import { deriveMinaPrivateKey } from './keyDerivation'
+import type {
+  ChainSpecificPayload,
+  KeyPairDerivationOperations,
+} from "../../types"
+import { deriveMinaPublicKey } from "./credentialDerivation"
+import { deriveMinaPrivateKey } from "./keyDerivation"
 
 export type MinaSignatureResult =
   | Mina.SignedTransaction
@@ -34,9 +37,9 @@ export type MinaDerivationArgs = {
 }
 
 export type MinaGroupedCredentials = {
-  '@context': ['https://w3id.org/wallet/v1']
+  "@context": ["https://w3id.org/wallet/v1"]
   id: string
-  type: 'MinaAddress'
+  type: "MinaAddress"
   controller: string
   name: string
   description: string
@@ -59,12 +62,12 @@ export class MinaPayload implements ChainSpecificPayload {
 
   derivePublicKey(privateKey: string) {
     return new Promise<string>((resolve) =>
-      resolve(deriveMinaPublicKey(privateKey))
+      resolve(deriveMinaPublicKey(privateKey)),
     )
   }
   derivePrivateKey(decryptedSeedBytes: Uint8Array, args: MinaSpecificArgs) {
     return new Promise<string>((resolve) =>
-      resolve(deriveMinaPrivateKey(args, decryptedSeedBytes))
+      resolve(deriveMinaPrivateKey(args, decryptedSeedBytes)),
     )
   }
 }
@@ -72,19 +75,18 @@ export class MinaPayload implements ChainSpecificPayload {
 export const minaKeyPairDerivationOperations: KeyPairDerivationOperations<MinaDerivationArgs> =
   {
     derivePublicKey: (privateKey: Uint8Array | string) => {
-      if (typeof privateKey === 'string') {
+      if (typeof privateKey === "string") {
         return Promise.resolve(deriveMinaPublicKey(privateKey))
-      } else {
-        throw new Error('Invalid type for privateKey; string required.')
       }
+      throw new Error("Invalid type for privateKey; string required.")
     },
     derivePrivateKey: (
       decryptedSeedBytes: Uint8Array,
-      args: MinaDerivationArgs
-    ) => Promise.resolve(deriveMinaPrivateKey(args, decryptedSeedBytes))
+      args: MinaDerivationArgs,
+    ) => Promise.resolve(deriveMinaPrivateKey(args, decryptedSeedBytes)),
   }
 
-export const enum MinaKeyConst {
+export enum MinaKeyConst {
   /**
    * Constant value used for defining the purpose in a BIP44 path
    */
@@ -93,5 +95,5 @@ export const enum MinaKeyConst {
   /**
    * COIN_TYPE value for Mina network
    */
-  MINA_COIN_TYPE = 12586
+  MINA_COIN_TYPE = 12586,
 }

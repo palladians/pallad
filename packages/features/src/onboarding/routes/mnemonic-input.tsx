@@ -1,19 +1,19 @@
-import { validateMnemonic, wordlist } from '@palladxyz/key-management'
-import { ChainDerivationArgs } from '@palladxyz/key-management'
-import { Network } from '@palladxyz/pallad-core'
-import { getSessionPersistence } from '@palladxyz/persistence'
-import { DEFAULT_NETWORK, KeyAgents, useVault } from '@palladxyz/vault'
-import { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { useMixpanel } from 'react-mixpanel-browser'
-import { useNavigate } from 'react-router-dom'
-import { shallow } from 'zustand/shallow'
+import { validateMnemonic, wordlist } from "@palladxyz/key-management"
+import type { ChainDerivationArgs } from "@palladxyz/key-management"
+import { Network } from "@palladxyz/pallad-core"
+import { getSessionPersistence } from "@palladxyz/persistence"
+import { DEFAULT_NETWORK, KeyAgents, useVault } from "@palladxyz/vault"
+import { useState } from "react"
+import { type SubmitHandler, useForm } from "react-hook-form"
+import { useMixpanel } from "react-mixpanel-browser"
+import { useNavigate } from "react-router-dom"
+import { shallow } from "zustand/shallow"
 
-import { useAppStore } from '@/common/store/app'
-import { useOnboardingStore } from '@/common/store/onboarding'
+import { useAppStore } from "@/common/store/app"
+import { useOnboardingStore } from "@/common/store/onboarding"
 
-import { MnemonicInputData } from '../types'
-import { MnemonicInputView } from '../views/mnemonic-input'
+import type { MnemonicInputData } from "../types"
+import { MnemonicInputView } from "../views/mnemonic-input"
 
 export const MnemonicInputRoute = () => {
   const mixpanel = useMixpanel()
@@ -24,28 +24,28 @@ export const MnemonicInputRoute = () => {
     // TODO: fix this useOnboardingStore it is deprecated
     (state) => ({
       spendingPassword: state.spendingPassword,
-      walletName: state.walletName
+      walletName: state.walletName,
     }),
-    shallow
+    shallow,
   )
   const setVaultStateInitialized = useAppStore(
-    (state) => state.setVaultStateInitialized
+    (state) => state.setVaultStateInitialized,
   )
   const [safetyConfirmed, onSafetyConfirmed] = useState(false)
   const mnemonicInputForm = useForm<MnemonicInputData>()
-  const mnemonic = mnemonicInputForm.watch('mnemonic')
+  const mnemonic = mnemonicInputForm.watch("mnemonic")
   const chain = Network.Mina // TODO: useForm<ChainInputData>()
-  const mnemonicValid = validateMnemonic(mnemonic?.join(' '), wordlist)
+  const mnemonicValid = validateMnemonic(mnemonic?.join(" "), wordlist)
   const onSubmit: SubmitHandler<MnemonicInputData> = async (data) => {
     if (!walletName) return
     if (!spendingPassword) return
-    getSessionPersistence().setItem('spendingPassword', spendingPassword)
+    getSessionPersistence().setItem("spendingPassword", spendingPassword)
     await useVault.persist.rehydrate()
 
     const restoreArgs: ChainDerivationArgs = {
       network: chain,
       accountIndex: 0,
-      addressIndex: 0
+      addressIndex: 0,
     }
     try {
       setRestoring(true)
@@ -56,16 +56,16 @@ export const MnemonicInputRoute = () => {
           mnemonicWords: data.mnemonic,
           getPassphrase: () =>
             new Promise<Uint8Array>((resolve) =>
-              resolve(Buffer.from(spendingPassword))
-            )
+              resolve(Buffer.from(spendingPassword)),
+            ),
         },
         walletName,
         KeyAgents.InMemory,
-        'Test' // TODO: make this a configurable credential name or random if not provided
+        "Test", // TODO: make this a configurable credential name or random if not provided
       )
-      mixpanel.track('WalletRestored')
+      mixpanel.track("WalletRestored")
       setVaultStateInitialized()
-      return navigate('/onboarding/finish')
+      return navigate("/onboarding/finish")
     } finally {
       setRestoring(false)
     }

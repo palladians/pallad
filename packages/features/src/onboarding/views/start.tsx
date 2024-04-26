@@ -1,6 +1,6 @@
-import { ButtonArrow } from '@/components/button-arrow'
-import { Button } from '@/components/ui/button'
-import { WizardLayout } from '@/components/wizard-layout'
+import { ButtonArrow } from "@/components/button-arrow"
+import { Button } from "@/components/ui/button"
+import { WizardLayout } from "@/components/wizard-layout"
 
 type StartViewProps = {
   onRestoreClicked: () => void
@@ -9,7 +9,7 @@ type StartViewProps = {
 
 export const StartView = ({
   onRestoreClicked,
-  onCreateClicked
+  onCreateClicked,
 }: StartViewProps) => (
   <WizardLayout
     title="Pallad"
@@ -36,7 +36,7 @@ export const StartView = ({
     }
   >
     <div className="flex flex-1 flex-col items-center justify-center gap-8 p-4 text-center">
-      <img src="/intro.png" className="w-[220px]" />
+      <img src="/intro.png" className="w-[220px]" alt="Welcome to Pallad" />
       <p className="leading-7 text-muted-foreground">
         Your gateway to the Minaverse.
       </p>

@@ -1,34 +1,30 @@
-import { Mina } from '@palladxyz/mina-core'
-import { Network } from '@palladxyz/pallad-core'
-import Client from 'mina-signer'
-import sinon from 'sinon'
-import { expect } from 'vitest'
+import type { Mina } from "@palladxyz/mina-core"
+import { Network } from "@palladxyz/pallad-core"
+import Client from "mina-signer"
+import sinon from "sinon"
+import { expect } from "vitest"
 
-import { MinaSpecificArgs } from '../../src/chains/Mina'
-import { emip3encrypt } from '../../src/emip3'
-import { getPassphraseRethrowTypedError } from '../../src/InMemoryKeyAgent'
-import { KeyAgentBase } from '../../src/KeyAgentBase'
+import { getPassphraseRethrowTypedError } from "../../src/InMemoryKeyAgent"
+import { KeyAgentBase } from "../../src/KeyAgentBase"
+import type { MinaSpecificArgs } from "../../src/chains/Mina"
+import { emip3encrypt } from "../../src/emip3"
 import {
-  ChainOperationArgs,
-  GetPassphrase,
+  type ChainOperationArgs,
+  type GetPassphrase,
   KeyAgentType,
-  SerializableKeyAgentData
-} from '../../src/types'
-import * as util from '../../src/util/bip39'
+  type SerializableKeyAgentData,
+} from "../../src/types"
+import * as util from "../../src/util/bip39"
 
 // Provide the passphrase for testing purposes
 const params = {
-  passphrase: 'passphrase'
+  passphrase: "passphrase",
 }
 const getPassphrase = () =>
   new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 
-describe('KeyAgentBase (Mina zkApp Functionality)', () => {
-  class KeyAgentBaseInstance extends KeyAgentBase {
-    constructor(data: SerializableKeyAgentData, getPassphrase: GetPassphrase) {
-      super(data, getPassphrase)
-    }
-  }
+describe("KeyAgentBase (Mina zkApp Functionality)", () => {
+  class KeyAgentBaseInstance extends KeyAgentBase {}
 
   let instance: KeyAgentBaseInstance
   let serializableData: SerializableKeyAgentData
@@ -41,18 +37,18 @@ describe('KeyAgentBase (Mina zkApp Functionality)', () => {
     // Generate a mnemonic (24 words)
     //const strength = 128 // increase to 256 for a 24-word mnemonic
     mnemonic = [
-      'habit',
-      'hope',
-      'tip',
-      'crystal',
-      'because',
-      'grunt',
-      'nation',
-      'idea',
-      'electric',
-      'witness',
-      'alert',
-      'like'
+      "habit",
+      "hope",
+      "tip",
+      "crystal",
+      "because",
+      "grunt",
+      "nation",
+      "idea",
+      "electric",
+      "witness",
+      "alert",
+      "like",
     ]
     const seed = util.mnemonicToSeed(mnemonic)
 
@@ -69,100 +65,100 @@ describe('KeyAgentBase (Mina zkApp Functionality)', () => {
     sinon.restore()
   })
 
-  describe('Mina KeyAgent', () => {
+  describe("Mina KeyAgent", () => {
     beforeEach(() => {
       // Define your own appropriate initial data, network, accountKeyDerivationPath, and accountAddressDerivationPath
       serializableData = {
         __typename: KeyAgentType.InMemory,
         encryptedSeedBytes: encryptedSeedBytes,
-        id: 'http://example.gov/wallet/3732',
-        type: ['VerifiableCredential', 'EncryptedWallet'],
-        issuer: 'did:example:123',
-        issuanceDate: '2020-05-22T17:38:21.910Z',
+        id: "http://example.gov/wallet/3732",
+        type: ["VerifiableCredential", "EncryptedWallet"],
+        issuer: "did:example:123",
+        issuanceDate: "2020-05-22T17:38:21.910Z",
         credentialSubject: {
-          id: 'did:example:123',
-          contents: []
-        }
+          id: "did:example:123",
+          contents: [],
+        },
       }
-      networkType = 'testnet'
+      networkType = "testnet"
       instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
     })
-    it('should return the correct empty knownAddresses', () => {
+    it("should return the correct empty knownAddresses", () => {
       expect(instance.knownCredentials).to.deep.equal(
-        serializableData.credentialSubject.contents
+        serializableData.credentialSubject.contents,
       )
     })
-    it('should use the generic sign<T> function to sign a zkapp command correctly and the client should be able to verify it', async () => {
+    it("should use the generic sign<T> function to sign a zkapp command correctly and the client should be able to verify it", async () => {
       // Define a mocked publicKey, which should be expected from the derivation
       const expectedPublicKey: Mina.PublicKey =
-        'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+        "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
 
       const expectedGroupedCredentials = {
-        '@context': ['https://w3id.org/wallet/v1'],
-        id: 'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-        type: 'MinaAddress',
+        "@context": ["https://w3id.org/wallet/v1"],
+        id: "did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
+        type: "MinaAddress",
         controller:
-          'did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-        name: 'Mina Account',
-        description: 'My Mina account.',
+          "did:mina:B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
+        name: "Mina Account",
+        description: "My Mina account.",
         chain: Network.Mina,
         accountIndex: 0,
         addressIndex: 0,
-        address: expectedPublicKey
+        address: expectedPublicKey,
       }
 
       const args: MinaSpecificArgs = {
         network: Network.Mina,
         accountIndex: 0,
         addressIndex: 0,
-        networkType: networkType
+        networkType: networkType,
       }
 
       const groupedCredential = await instance.deriveCredentials(
         args,
         getPassphrase,
-        true
+        true,
       )
       expect(groupedCredential.address).to.deep.equal(
-        expectedGroupedCredentials.address
+        expectedGroupedCredentials.address,
       )
 
       const zkAppCommand: Mina.SignableZkAppCommand = {
         command: {
           zkappCommand: {
             accountUpdates: [],
-            memo: 'E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH',
+            memo: "E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH",
             feePayer: {
               body: {
                 publicKey:
-                  'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-                fee: '100000000',
-                validUntil: '100000',
-                nonce: '1'
+                  "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
+                fee: "100000000",
+                validUntil: "100000",
+                nonce: "1",
               },
-              authorization: ''
-            }
+              authorization: "",
+            },
           },
           feePayer: {
-            feePayer: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-            fee: '100000000',
-            nonce: '1',
-            memo: 'test memo'
-          }
-        }
+            feePayer: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
+            fee: "100000000",
+            nonce: "1",
+            memo: "test memo",
+          },
+        },
       }
       const signedZkAppCommand = await instance.sign(
         groupedCredential,
         zkAppCommand,
         {
           network: Network.Mina,
-          operation: 'mina_signTransaction',
-          networkType: 'testnet'
-        } as ChainOperationArgs
+          operation: "mina_signTransaction",
+          networkType: "testnet",
+        } as ChainOperationArgs,
       )
       const minaClient = new Client({ network: args.networkType })
       const isVerified = await minaClient.verifyZkappCommand(
-        signedZkAppCommand as Mina.SignedZkAppCommand
+        signedZkAppCommand as Mina.SignedZkAppCommand,
       )
       expect(isVerified).toBeTruthy()
     })

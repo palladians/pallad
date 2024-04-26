@@ -1,7 +1,7 @@
-import { NodeStatus, NodeStatusProvider } from '@palladxyz/pallad-core'
-import { createPublicClient, webSocket } from 'viem'
+import type { NodeStatus, NodeStatusProvider } from "@palladxyz/pallad-core"
+import { createPublicClient, webSocket } from "viem"
 
-import { healthCheckOptimism } from '../utils'
+import { healthCheckOptimism } from "../utils"
 
 export const createNodeStatusProvider = (url: string): NodeStatusProvider => {
   const getNodeStatus = async (): Promise<NodeStatus> => {
@@ -11,20 +11,20 @@ export const createNodeStatusProvider = (url: string): NodeStatusProvider => {
       )
     }*/
     const client = createPublicClient({
-      transport: webSocket(url)
+      transport: webSocket(url),
     })
 
     const chainId = await client.getChainId()
 
     return {
       daemonStatus: {
-        chainId: String(chainId)
-      }
+        chainId: String(chainId),
+      },
     }
   }
 
   return {
     healthCheck: () => healthCheckOptimism(url),
-    getNodeStatus
+    getNodeStatus,
   }
 }

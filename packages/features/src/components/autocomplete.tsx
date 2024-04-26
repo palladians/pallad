@@ -1,11 +1,11 @@
-import { matchSorter } from 'match-sorter'
-import { take } from 'rambda'
-import * as React from 'react'
-import { useState } from 'react'
+import { matchSorter } from "match-sorter"
+import { take } from "rambda"
+import * as React from "react"
+import { useState } from "react"
 
-import { Command, CommandItem, CommandList } from '@/components/ui/command'
+import { Command, CommandItem, CommandList } from "@/components/ui/command"
 
-import { Input, InputProps } from './ui/input'
+import { Input, type InputProps } from "./ui/input"
 
 type AutocompleteRef = HTMLInputElement
 type AutocompleteProps = InputProps & {
@@ -29,14 +29,14 @@ export const Autocomplete = React.forwardRef<
       onEnterPressed,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const [open, setOpen] = React.useState(false)
     const [internalValue, setInternalValue] = useState<string>(
-      value?.toString() || ''
+      value?.toString() || "",
     )
     const extendedChange: React.ChangeEventHandler<HTMLInputElement> = (
-      event
+      event,
     ) => {
       setOpen(true)
       setInternalValue(event.target.value)
@@ -49,7 +49,7 @@ export const Autocomplete = React.forwardRef<
       return event
     }
     const extendedFocus: React.FocusEventHandler<HTMLInputElement> = (
-      event
+      event,
     ) => {
       onFocus?.(event)
       setOpen(true)
@@ -61,10 +61,10 @@ export const Autocomplete = React.forwardRef<
       setTimeout(() => setOpen(false), 100)
     }
     const extendedKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
-      event
+      event,
     ) => {
-      if (event.key === 'Escape') setOpen(false)
-      if (event.key === 'Enter') onEnterPressed?.()
+      if (event.key === "Escape") setOpen(false)
+      if (event.key === "Enter") onEnterPressed?.()
       return event
     }
     return (
@@ -98,5 +98,5 @@ export const Autocomplete = React.forwardRef<
         )}
       </Command>
     )
-  }
+  },
 )

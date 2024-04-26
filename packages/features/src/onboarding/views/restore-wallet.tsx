@@ -1,5 +1,5 @@
-import { WalletInfoForm } from '../components/wallet-info-form'
-import { WalletInfoData } from '../types'
+import { WalletInfoForm } from "../components/wallet-info-form"
+import type { WalletInfoData } from "../types"
 
 type RestoreWalletViewProps = {
   onSubmit: (data: WalletInfoData) => void

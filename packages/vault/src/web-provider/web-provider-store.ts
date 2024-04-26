@@ -1,16 +1,16 @@
-import { produce } from 'immer'
-import { create, StateCreator } from 'zustand'
+import { produce } from "immer"
+import { type StateCreator, create } from "zustand"
 
-import {
+import type {
   //AuthorizationState,
   WebProviderState,
-  WebProviderStore
-} from './web-provider-state'
+  WebProviderStore,
+} from "./web-provider-state"
 
 const initialState: WebProviderState = {
   authorized: {
     //'https://palladians.github.io': AuthorizationState.ALLOWED
-  }
+  },
 }
 
 export const webProviderSlice: StateCreator<WebProviderStore> = (set) => ({
@@ -19,17 +19,17 @@ export const webProviderSlice: StateCreator<WebProviderStore> = (set) => ({
     return set(
       produce((state) => {
         state.authorized[origin] = authorizationState
-      })
+      }),
     )
   },
   removeZkAppPermission: ({ origin }) => {
     return set(
       produce((state) => {
         delete state.authorized[origin]
-      })
+      }),
     )
   },
-  reset: () => set({ ...initialState })
+  reset: () => set({ ...initialState }),
 })
 
 export const useWebProviderVault = create<WebProviderStore>(webProviderSlice)

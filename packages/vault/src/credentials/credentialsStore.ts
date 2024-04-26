@@ -1,8 +1,11 @@
-import { produce } from 'immer'
-import { StateCreator } from 'zustand'
+import { produce } from "immer"
+import type { StateCreator } from "zustand"
 
-import { matchesQuery } from '../utils/utils'
-import { CredentialStore, initialCredentialState } from './credentialsState'
+import { matchesQuery } from "../utils/utils"
+import {
+  type CredentialStore,
+  initialCredentialState,
+} from "./credentialsState"
 
 export const credentialSlice: StateCreator<CredentialStore> = (set, get) => ({
   credentials: {},
@@ -13,10 +16,10 @@ export const credentialSlice: StateCreator<CredentialStore> = (set, get) => ({
           state.credentials[credentialName] = {
             ...initialCredentialState,
             credentialName: credentialName,
-            keyAgentName: keyAgentName
+            keyAgentName: keyAgentName,
           }
         }
-      })
+      }),
     )
   },
   setCredential: (credentialState) => {
@@ -24,7 +27,7 @@ export const credentialSlice: StateCreator<CredentialStore> = (set, get) => ({
     set(
       produce((state) => {
         state.credentials[credentialName] = credentialState
-      })
+      }),
     )
   },
   getCredential: (credentialName) => {
@@ -35,14 +38,14 @@ export const credentialSlice: StateCreator<CredentialStore> = (set, get) => ({
     set(
       produce((state) => {
         delete state.credentials[credentialName]
-      })
+      }),
     )
   },
   searchCredentials: (query, props) => {
     const { credentials } = get()
     const credentialsStatesArray = Object.values(credentials)
     const credentialsArray = credentialsStatesArray.map(
-      (cred) => cred.credential
+      (cred) => cred.credential,
     )
     const filteredCredentials = credentialsArray.filter((credential) => {
       if (!credential) {
@@ -50,22 +53,21 @@ export const credentialSlice: StateCreator<CredentialStore> = (set, get) => ({
       }
       return matchesQuery(credential, query)
     })
-    if (props && props.length) {
+    if (props?.length) {
       const arrayOfArrays = filteredCredentials.map((credential) => {
         return props
           .filter((prop) => credential && prop in credential)
           .map((prop) => (credential as Record<string, any>)[prop])
       })
       return arrayOfArrays.flat()
-    } else {
-      return filteredCredentials
     }
+    return filteredCredentials
   },
   clear: () => {
     set(
       produce((state) => {
         state.credentials = {}
-      })
+      }),
     )
-  }
+  },
 })

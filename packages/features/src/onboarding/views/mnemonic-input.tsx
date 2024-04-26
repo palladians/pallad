@@ -1,21 +1,21 @@
-import { wordlist } from '@palladxyz/key-management'
-import { Loader2Icon } from 'lucide-react'
-import { UseFormReturn } from 'react-hook-form'
+import { wordlist } from "@palladxyz/key-management"
+import { Loader2Icon } from "lucide-react"
+import type { UseFormReturn } from "react-hook-form"
 
-import { Autocomplete } from '@/components/autocomplete'
-import { ButtonArrow } from '@/components/button-arrow'
-import { SecurityCheck } from '@/components/security-check'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { WizardLayout } from '@/components/wizard-layout'
-import { cn } from '@/lib/utils'
+import { Autocomplete } from "@/components/autocomplete"
+import { ButtonArrow } from "@/components/button-arrow"
+import { SecurityCheck } from "@/components/security-check"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { WizardLayout } from "@/components/wizard-layout"
+import { cn } from "@/lib/utils"
 
-import { MnemonicInputData } from '../types'
+import type { MnemonicInputData } from "../types"
 
 const MNEMONIC_LENGTH = 12
 const mnemonicIterator = Array.from(
   { length: MNEMONIC_LENGTH },
-  (_, i) => i + 1
+  (_, i) => i + 1,
 )
 
 type MnemonicInputViewProps = {
@@ -33,7 +33,7 @@ export const MnemonicInputView = ({
   form,
   onSubmit,
   mnemonicValid,
-  restoring
+  restoring,
 }: MnemonicInputViewProps) => (
   <WizardLayout
     title="Restore from Mnemonic"
@@ -41,8 +41,8 @@ export const MnemonicInputView = ({
     footer={
       <Button
         className={cn([
-          'flex-1 transition-opacity opacity-50 gap-2 group',
-          mnemonicValid && 'opacity-100'
+          "flex-1 transition-opacity opacity-50 gap-2 group",
+          mnemonicValid && "opacity-100",
         ])}
         disabled={!mnemonicValid || restoring}
         onClick={form.handleSubmit(onSubmit)}
@@ -61,6 +61,8 @@ export const MnemonicInputView = ({
           <div className="grid grid-cols-3 gap-2">
             {mnemonicIterator.map((wordLabel, i) => (
               <Autocomplete
+                // biome-ignore lint: hardcoded
+                key={i}
                 placeholder={wordLabel.toString()}
                 options={wordlist}
                 setValue={(value) => form.setValue(`mnemonic.${i}`, value)}
@@ -68,16 +70,16 @@ export const MnemonicInputView = ({
                 onEnterPressed={() => {
                   if (i === mnemonicIterator.length - 1) return
                   const nextElement = document.querySelector(
-                    `[name="mnemonic.${i + 1}"]`
+                    `[name="mnemonic.${i + 1}"]`,
                   )
                   if (!nextElement) return
                   return (nextElement as HTMLElement).focus()
                 }}
                 onPaste={(event) => {
                   if (i !== 0) return
-                  const value = event.clipboardData.getData('Text')
+                  const value = event.clipboardData.getData("Text")
                   event.currentTarget.blur()
-                  const mnemonic = value.split(' ')
+                  const mnemonic = value.split(" ")
                   if (mnemonic.length !== 12) return
                   mnemonic.forEach((word, i) => {
                     form.setValue(`mnemonic.${i}`, word)

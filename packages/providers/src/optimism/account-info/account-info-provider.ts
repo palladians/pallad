@@ -1,23 +1,23 @@
-import {
+import type {
   AccountInfo,
   AccountInfoArgs,
-  AccountInfoProvider
-} from '@palladxyz/pallad-core'
+  AccountInfoProvider,
+} from "@palladxyz/pallad-core"
 import {
-  Address,
-  Chain,
+  type Address,
+  type Chain,
+  type GetBalanceParameters,
+  type GetTransactionCountParameters,
   createPublicClient,
   formatEther,
-  GetBalanceParameters,
-  GetTransactionCountParameters,
-  webSocket
-} from 'viem'
+  webSocket,
+} from "viem"
 
-import { healthCheckOptimism } from '../utils'
+import { healthCheckOptimism } from "../utils"
 
 export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
   const getAccountInfo = async (
-    args: AccountInfoArgs
+    args: AccountInfoArgs,
   ): Promise<Record<string, AccountInfo>> => {
     /*if (args.chainInfo === undefined) {
       throw new Error(
@@ -26,36 +26,36 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
     }*/
     const client = createPublicClient({
       chain: args.chainInfo as Chain,
-      transport: webSocket(url)
+      transport: webSocket(url),
     })
 
     const balanceVariables: GetBalanceParameters = {
-      address: args.publicKey as Address
+      address: args.publicKey as Address,
     }
     const balanceETH = await client.getBalance(balanceVariables)
     const formattedBalance = await formatEther(balanceETH)
     const nonceVariables: GetTransactionCountParameters = {
-      address: args.publicKey as Address
+      address: args.publicKey as Address,
     }
     const nonce = await client.getTransactionCount(nonceVariables)
 
     const accountsInfo: Record<string, AccountInfo> = {}
 
     if (balanceETH === null) {
-      accountsInfo['ETH'] = {
+      accountsInfo.ETH = {
         balance: { total: 0 },
         inferredNonce: 0,
         nonce: 0,
-        delegate: '',
-        publicKey: args.publicKey
+        delegate: "",
+        publicKey: args.publicKey,
       }
     } else {
-      accountsInfo['ETH'] = {
+      accountsInfo.ETH = {
         balance: { total: Number(formattedBalance) },
         inferredNonce: nonce,
         nonce: nonce,
-        delegate: '',
-        publicKey: args.publicKey
+        delegate: "",
+        publicKey: args.publicKey,
       }
     }
     return accountsInfo
@@ -63,6 +63,6 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
 
   return {
     healthCheck: () => healthCheckOptimism(url),
-    getAccountInfo
+    getAccountInfo,
   }
 }

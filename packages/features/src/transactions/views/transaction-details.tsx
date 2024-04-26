@@ -1,13 +1,13 @@
-import { Mina } from '@palladxyz/mina-core'
+import type { Mina } from "@palladxyz/mina-core"
 
-import { TxSide } from '@/common/types'
-import { AppLayout } from '@/components/app-layout'
-import { MetaField } from '@/components/meta-field'
-import { Skeleton } from '@/components/ui/skeleton'
-import { ViewHeading } from '@/components/view-heading'
-import { getAccountUrl, getTransactionUrl } from '@/lib/explorer'
+import type { TxSide } from "@/common/types"
+import { AppLayout } from "@/components/app-layout"
+import { MetaField } from "@/components/meta-field"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ViewHeading } from "@/components/view-heading"
+import { getAccountUrl, getTransactionUrl } from "@/lib/explorer"
 
-import { TxIndicator } from '../components/tx-indicator'
+import { TxIndicator } from "../components/tx-indicator"
 
 type TransactionData = {
   side: TxSide
@@ -30,25 +30,25 @@ export const TransactionDetailsView = ({
   onGoBack,
   loading,
   transaction,
-  network
+  network,
 }: TransactionDetailsView) => {
   const transactionMetaFields = transaction && [
     {
-      label: 'Hash',
+      label: "Hash",
       value: transaction.hash,
-      url: getTransactionUrl({ network, hash: transaction.hash })
+      url: getTransactionUrl({ network, hash: transaction.hash }),
     },
-    { label: 'Amount', value: `${transaction.minaAmount} MINA` },
+    { label: "Amount", value: `${transaction.minaAmount} MINA` },
     {
-      label: 'Sender',
+      label: "Sender",
       value: transaction.from,
-      url: getAccountUrl({ network, publicKey: transaction.from })
+      url: getAccountUrl({ network, publicKey: transaction.from }),
     },
     {
-      label: 'Receiver',
+      label: "Receiver",
       value: transaction.to,
-      url: getAccountUrl({ network, publicKey: transaction.to })
-    }
+      url: getAccountUrl({ network, publicKey: transaction.to }),
+    },
   ]
   return (
     <AppLayout>

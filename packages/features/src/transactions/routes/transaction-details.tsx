@@ -1,10 +1,10 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from "react-router-dom"
 
-import { useAccount } from '@/common/hooks/use-account'
-import { useTransaction } from '@/common/hooks/use-transaction'
+import { useAccount } from "@/common/hooks/use-account"
+import { useTransaction } from "@/common/hooks/use-transaction"
 
-import { structurizeTransaction } from '../utils/structurize-transactions'
-import { TransactionDetailsView } from '../views/transaction-details'
+import { structurizeTransaction } from "../utils/structurize-transactions"
+import { TransactionDetailsView } from "../views/transaction-details"
 
 export const TransactionDetailsRoute = () => {
   const { publicKey, network } = useAccount()
@@ -18,7 +18,7 @@ export const TransactionDetailsRoute = () => {
     transactionData &&
     structurizeTransaction({
       tx: transactionData as any,
-      walletPublicKey: publicKey
+      walletPublicKey: publicKey,
     })
   if (!transaction) return null
   return (

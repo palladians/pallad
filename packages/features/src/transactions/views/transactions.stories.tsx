@@ -1,12 +1,12 @@
-import { StoryDefault } from '@ladle/react'
+import type { StoryDefault } from "@ladle/react"
 
-import { TransactionsView } from './transactions'
+import { TransactionsView } from "./transactions"
 
 export const View = () => {
   return (
     <TransactionsView
       loading={false}
-      onGoBack={() => console.log('go back')}
+      onGoBack={() => console.log("go back")}
       onlyPendingTransactions={[]}
       transactions={[]}
     />
@@ -14,5 +14,5 @@ export const View = () => {
 }
 
 export default {
-  title: 'Dashboard / Transactions / List'
+  title: "Dashboard / Transactions / List",
 } satisfies StoryDefault
