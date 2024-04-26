@@ -57,7 +57,7 @@ export const stripStackTrace = (error: unknown) => {
   if (!error) return
 
   if (isErrorLike(error)) {
-    ;(error as Error).stack = undefined
+    ;(error as Error).stack = ""
   }
 
   if (isWithInnerError(error)) {
