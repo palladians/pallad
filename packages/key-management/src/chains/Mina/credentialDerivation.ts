@@ -1,7 +1,11 @@
 import type { Mina } from "@palladxyz/mina-core"
 import Client from "mina-signer"
 
-import type { MinaDerivationArgs, MinaGroupedCredentials } from "./types"
+import type {
+  MinaDerivationArgs,
+  MinaGroupedCredentials,
+  MinaSessionCredentials,
+} from "./types"
 
 export function deriveMinaPublicKey(privateKey: string): Mina.PublicKey {
   // Mina network client.
@@ -29,6 +33,26 @@ export function deriveMinaCredentials(
     accountIndex: args.accountIndex,
     address: publicCredential,
     encryptedPrivateKeyBytes: encryptedPrivateKeyBytes,
+  }
+}
+
+export function deriveMinaSessionCredentials(
+  args: MinaDerivationArgs,
+  publicCredential: Mina.PublicKey,
+  privateKeyBytes: Uint8Array,
+): MinaSessionCredentials {
+  return {
+    "@context": ["https://w3id.org/wallet/v1"],
+    id: `did:mina:${publicCredential}`,
+    type: "MinaSessionKey",
+    controller: `did:mina:${publicCredential}`,
+    name: "Mina Account",
+    description: "My Mina account.",
+    chain: args.network,
+    addressIndex: args.addressIndex,
+    accountIndex: args.accountIndex,
+    address: publicCredential,
+    privateKeyBytes: privateKeyBytes,
   }
 }
 

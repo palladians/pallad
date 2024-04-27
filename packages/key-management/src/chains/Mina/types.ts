@@ -50,6 +50,20 @@ export type MinaGroupedCredentials = {
   encryptedPrivateKeyBytes: Uint8Array
 }
 
+export type MinaSessionCredentials = {
+  "@context": ["https://w3id.org/wallet/v1"]
+  id: string
+  type: "MinaSessionKey"
+  controller: string
+  name: string
+  description: string
+  chain: Network.Mina
+  addressIndex: number
+  accountIndex: number
+  address: Mina.PublicKey
+  privateKeyBytes: Uint8Array
+}
+
 export type MinaSignablePayload =
   | Mina.ConstructedTransaction
   | Mina.MessageBody
@@ -78,7 +92,7 @@ export const minaKeyPairDerivationOperations: KeyPairDerivationOperations<MinaDe
       if (typeof privateKey === "string") {
         return Promise.resolve(deriveMinaPublicKey(privateKey))
       }
-      throw new Error("Invalid type for privateKey; string required.")
+      throw new Error("Invalid type for privateKey - string required.")
     },
     derivePrivateKey: (
       decryptedSeedBytes: Uint8Array,

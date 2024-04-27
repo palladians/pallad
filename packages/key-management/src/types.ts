@@ -3,11 +3,13 @@ import { Network } from "@palladxyz/pallad-core"
 
 import {
   deriveEthereumCredentials,
+  deriveEthereumSessionCredentials,
   isEthereumCredential,
 } from "./chains/Ethereum/credentialDerivation"
 import {
   type EthereumDerivationArgs,
   type EthereumGroupedCredentials,
+  type EthereumSessionCredentials,
   type EthereumSignablePayload,
   type EthereumSignatureResult,
   type EthereumSpecificArgs,
@@ -15,12 +17,14 @@ import {
 } from "./chains/Ethereum/types"
 import {
   deriveMinaCredentials,
+  deriveMinaSessionCredentials,
   isMinaCredential,
 } from "./chains/Mina/credentialDerivation"
 import {
   type MinaDerivationArgs,
   type MinaGroupedCredentials,
   type MinaKeyConst,
+  type MinaSessionCredentials,
   type MinaSignablePayload,
   type MinaSignatureResult,
   type MinaSpecificArgs,
@@ -40,6 +44,7 @@ export type EncryptedKeyPropertyName = "encryptedSeedBytes"
 
 export enum KeyAgentType {
   InMemory = "InMemory",
+  Session = "Sesssion",
   Ledger = "Ledger",
   Trezor = "Trezor",
 }
@@ -58,10 +63,24 @@ export interface SerializableInMemoryKeyAgentData {
 }
 
 export type SerializableKeyAgentData = SerializableInMemoryKeyAgentData
-
+export type SerializableSessionKeyAgentData = {
+  __typename: KeyAgentType.Session
+  type: string[]
+  id: string
+  issuer: string
+  issuanceDate: string
+  credentialSubject: {
+    id: string
+    contents: SessionGroupedCredentials[]
+  }
+}
 export type GroupedCredentials =
   | MinaGroupedCredentials
   | EthereumGroupedCredentials
+
+export type SessionGroupedCredentials =
+  | MinaSessionCredentials
+  | EthereumSessionCredentials
 
 export type CredentialMatcher<T extends ChainDerivationArgs> = (
   credential: GroupedCredentials,
@@ -88,7 +107,7 @@ export const createChainDerivationOperationsProvider = (
 ) => {
   const derivePublicKey = (privateKey: Uint8Array | string) => {
     if (args.network === Network.Mina) {
-      return minaKeyPairDerivationOperations.derivePublicKey(privateKey)
+      return minaKeyPairDerivationOperations.derivePublicKey(String(privateKey))
     }
     if (args.network === Network.Ethereum) {
       return ethKeyPairDerivationOperations.derivePublicKey(privateKey)
@@ -169,6 +188,24 @@ export interface KeyAgent {
   decryptSeed(getPassphrase: GetPassphrase): Promise<Uint8Array>
 }
 
+export interface SessionKeyAgent {
+  sign<T extends SessionGroupedCredentials>(
+    payload: T,
+    signable: ChainSignablePayload,
+    args: ChainOperationArgs,
+  ): Promise<ChainSignatureResult>
+
+  deriveKeyPair(
+    args: ChainDerivationArgs,
+    passphrase: Uint8Array,
+  ): Promise<SessionChainKeyPair>
+
+  deriveCredentials(
+    args: ChainDerivationArgs,
+    pure?: boolean,
+  ): Promise<SessionGroupedCredentials>
+}
+
 export type ChainDerivationArgs = MinaDerivationArgs | EthereumDerivationArgs
 
 export type ChainSpecificArgs = MinaSpecificArgs | EthereumSpecificArgs
@@ -202,6 +239,11 @@ export type ChainKeyPair = {
   encryptedPrivateKeyBytes: Uint8Array
 }
 
+export type SessionChainKeyPair = {
+  publicKey: ChainPublicKey
+  privateKeyBytes: Uint8Array
+}
+
 export type DeriveCredentialFunction<T extends ChainDerivationArgs> = (
   args: T,
   publicKey: ChainPublicKey,
@@ -214,7 +256,20 @@ export const credentialDerivers: Record<
 > = {
   Mina: deriveMinaCredentials,
   Ethereum: deriveEthereumCredentials,
-  // Add more as needed...
+}
+
+export type DeriveSessionCredentialFunction<T extends ChainDerivationArgs> = (
+  args: T,
+  publicKey: ChainPublicKey,
+  encryptedPrivateKeyBytes: Uint8Array,
+) => SessionGroupedCredentials
+
+export const credentialSessionDerivers: Record<
+  Network,
+  DeriveSessionCredentialFunction<any>
+> = {
+  Mina: deriveMinaSessionCredentials,
+  Ethereum: deriveEthereumSessionCredentials,
 }
 
 export type ChainSigningFunction = (
