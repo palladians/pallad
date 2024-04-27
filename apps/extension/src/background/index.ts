@@ -78,8 +78,15 @@ onMessage("off", ({ data }) => {
 
 onMessage("mina_setState", async (data) => {
   console.log("test mina_setState method", data)
-  //return await provider.request({ method: 'mina_setState', params: data })
   return await provider.request({ method: "mina_setState", params: data })
+})
+
+onMessage("experimental_requestSession", async (data) => {
+  console.log("test experimental_requestSession method", data)
+  return await provider.request({
+    method: "experimental_requestSession",
+    params: data,
+  })
 })
 
 onMessage("mina_addChain", async (data) => {
