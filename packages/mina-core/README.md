@@ -1,6 +1,6 @@
 # @palladxyz/mina-core
 
-@palladxyz/mina-core is a TypeScript package designed for interacting with the Mina Protocol. It provides interfaces for retrieving account information, processing transaction history, submitting transactions, and provider health checks. The package also includes the core types that represent the main data structures of the Mina Protocol.
+@palladxyz/mina-core is a TypeScript package designed for helping other libraries to interact with Mina. It provides interfaces & types for many the main data strcutures of Mina that are relevant for wallets and applications. This includes providers that retrieve account information, process transaction history, submit transactions, and fetch health checks.
 
 ## Installation
 
@@ -75,7 +75,7 @@ async function checkHealth(provider: Provider) {
 
 ### Mina Core Types
 
-This package also includes TypeScript definitions for some of the core data structures of the Mina Protocol, which can be found under `./src/Mina/types`.
+This package also includes TypeScript definitions for some of the core data structures of Mina, which can be found under `./src/Mina/types`.
 
 ### Disclaimer
 

@@ -8,7 +8,7 @@ export type Field = number | bigint | string
 export type PublicKey = string
 export type PrivateKey = string
 export type Signature = SignatureJson
-export type Network = 'mainnet' | 'testnet'
+export type Network = "mainnet" | "testnet"
 
 export type Keypair = {
   readonly privateKey: PrivateKey

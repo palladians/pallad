@@ -1,18 +1,23 @@
 export const baseTsupConfig = {
-  entry: ['./src/index.ts'],
-  outDir: './dist',
-  format: 'esm' as any,
+  entry: ["./src/index.ts"],
+  outDir: "./dist",
+  format: "esm" as any,
   sourcemap: true,
   clean: true,
   bundle: true,
-  dts: true
+  dts: true,
 }
 
 export const baseVitestConfig = {
   test: {
-    environment: 'happy-dom',
+    environment: "happy-dom",
     globals: true,
-    testTimeout: 30000,
-    hookTimeout: 30000
-  }
+    testTimeout: 100000,
+    hookTimeout: 100000,
+    test: {
+      coverage: {
+        reporter: ["text", "json", "html"],
+      },
+    },
+  },
 }

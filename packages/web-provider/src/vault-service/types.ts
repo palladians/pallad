@@ -1,18 +1,18 @@
-import {
+import type {
   ChainOperationArgs,
   ChainSignablePayload,
-  GetPassphrase
-} from '@palladxyz/key-management'
-import { SingleObjectState } from '@palladxyz/vault'
+  GetPassphrase,
+} from "@palladxyz/key-management"
+import type { SingleObjectState } from "@palladxyz/vault"
 
-import { ZkAppUrl } from './vault-service'
+import type { ZkAppUrl } from "./vault-service"
 
 export interface IVaultService {
   getAccounts(): Promise<string[]>
   sign(
     signable: ChainSignablePayload,
     args: ChainOperationArgs,
-    getPassphrase: GetPassphrase
+    getPassphrase: GetPassphrase,
   ): Promise<unknown>
   getBalance(): Promise<number>
   getChainId(): Promise<string | undefined>

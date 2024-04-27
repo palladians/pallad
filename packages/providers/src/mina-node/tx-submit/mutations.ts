@@ -40,8 +40,8 @@ export function getTxSend(isRawSignature: boolean): string {
           }
         }
       `
-  } else {
-    return `
+  }
+  return `
         mutation sendTx($fee:UInt64!, $amount:UInt64!,
         $to: PublicKey!, $from: PublicKey!, $nonce:UInt32, $memo: String,
         $validUntil: UInt32, $scalar: String!, $field: String!) {
@@ -81,7 +81,6 @@ export function getTxSend(isRawSignature: boolean): string {
           }
         }
       `
-  }
 }
 
 export function getStakeTxSend(isRawSignature: boolean): string {
@@ -125,8 +124,8 @@ export function getStakeTxSend(isRawSignature: boolean): string {
           }
         }
       `
-  } else {
-    return `
+  }
+  return `
         mutation stakeTx($fee:UInt64!,
         $to: PublicKey!, $from: PublicKey!, $nonce:UInt32, $memo: String,
         $validUntil: UInt32, $scalar: String!, $field: String!) {
@@ -165,5 +164,4 @@ export function getStakeTxSend(isRawSignature: boolean): string {
           }
         }
       `
-  }
 }

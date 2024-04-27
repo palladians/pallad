@@ -1,9 +1,9 @@
-import { produce } from 'immer'
-import { create, StateCreator } from 'zustand'
+import { produce } from "immer"
+import { type StateCreator, create } from "zustand"
 
-import { matchesQuery } from '../utils/utils'
-import { DEFAULT_OBJECTS } from './default'
-import { initialObjectState, ObjectStore } from './objectsState'
+import { matchesQuery } from "../utils/utils"
+import { DEFAULT_OBJECTS } from "./default"
+import { type ObjectStore, initialObjectState } from "./objectsState"
 
 export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
   objects: DEFAULT_OBJECTS,
@@ -12,9 +12,9 @@ export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
       produce((draft) => {
         draft.objects[objectName] = draft.objects[objectName] || {
           ...initialObjectState,
-          objectName
+          objectName,
         }
-      })
+      }),
     )
   },
   setObject: (objectState) => {
@@ -23,9 +23,9 @@ export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
       produce(current, (draft) => {
         draft.objects[objectName] = {
           ...draft.objects[objectName],
-          ...objectState
+          ...objectState,
         }
-      })
+      }),
     )
   },
   getObject: (objectName) => {
@@ -36,7 +36,7 @@ export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
     set(
       produce((draft) => {
         delete draft.objects[objectName]
-      })
+      }),
     )
   },
   searchObjects: (query, props) => {
@@ -50,24 +50,23 @@ export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
       }
       return matchesQuery(object, query)
     })
-    if (props && props.length) {
+    if (props?.length) {
       const arrayOfArrays = filteredObjects.map((objects) => {
         return props
           .filter((prop) => objects && prop in objects)
           .map((prop) => (objects as unknown as Record<string, any>)[prop])
       })
       return arrayOfArrays.flat()
-    } else {
-      return filteredObjects
     }
+    return filteredObjects
   },
   clear: () => {
     set(
       produce((draft) => {
         draft.objects = {}
-      })
+      }),
     )
-  }
+  },
 })
 
 export const useObjectVault = create<ObjectStore>(objectSlice)

@@ -1,6 +1,6 @@
 export const fetchPals = async (
   url: string,
-  queryParams?: Record<string, string>
+  queryParams?: Record<string, string>,
 ) => {
   try {
     let queryUrl = url
@@ -12,7 +12,7 @@ export const fetchPals = async (
     }
 
     const response = await fetch(queryUrl, {
-      method: 'GET'
+      method: "GET",
     })
 
     if (!response.ok) {
@@ -30,15 +30,15 @@ export const fetchPals = async (
     if (data.errors) {
       return {
         ok: false,
-        message: `Error: ${data.errors.map((e: any) => e.message).join(', ')}`
+        message: `Error: ${data.errors.map((e: any) => e.message).join(", ")}`,
       }
     }
 
-    return { ok: false, message: 'Data not found' }
+    return { ok: false, message: "Data not found" }
   } catch (error) {
     if (error instanceof Error) {
       return { ok: false, message: `Error: ${error.message}` }
     }
-    return { ok: false, message: 'An unknown error occurred' }
+    return { ok: false, message: "An unknown error occurred" }
   }
 }

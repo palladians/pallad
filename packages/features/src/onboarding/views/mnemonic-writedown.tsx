@@ -1,10 +1,6 @@
-import { SecurityCheck } from '@/components/security-check'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
-import { WizardLayout } from '@/components/wizard-layout'
-import { cn } from '@/lib/utils'
+import { SecurityCheck } from "@/components/security-check"
+import { WizardLayout } from "@/components/wizard-layout"
+import { cn } from "@/lib/utils"
 
 type MnemonicWritedownViewProps = {
   onConfirm: () => void
@@ -21,52 +17,54 @@ export const MnemonicWritedownView = ({
   safetyConfirmed,
   mnemonicWords,
   mnemonicWritten,
-  setMnemonicWritten
+  setMnemonicWritten,
 }: MnemonicWritedownViewProps) => (
   <WizardLayout
     title="Mnemonic Backup"
     backButtonPath={-1}
     footer={
-      <Button
+      <button
+        type="button"
         className={cn([
-          'flex-1 transition-opacity opacity-50',
-          mnemonicWritten && 'opacity-100'
+          "flex-1 transition-opacity opacity-50",
+          mnemonicWritten && "opacity-100",
         ])}
         disabled={!mnemonicWritten}
         onClick={onConfirm}
         data-testid="onboarding__nextButton"
       >
         Next
-      </Button>
+      </button>
     }
   >
     <div className="flex flex-col flex-1 gap-8">
       {safetyConfirmed ? (
         <div className="animate-in fade-in slide-in-from-bottom-1 flex flex-col gap-4 p-4">
-          <Label>Back up the mnemonic</Label>
+          <label>Back up the mnemonic</label>
           <div className="grid grid-cols-3 gap-2">
             {mnemonicWords.map((word, i) => (
-              <Badge
+              <div
+                // biome-ignore lint: won't update
                 key={i}
-                variant="outline"
                 data-testid="onboarding__mnemonicWord"
-                className="py-2 px-4"
+                className="badge"
               >
                 {word}
-              </Badge>
+              </div>
             ))}
           </div>
           <div className="flex items-center gap-4">
-            <Checkbox
+            <input
+              type="checkbox"
               id="mnemonicWrittenCheckbox"
               checked={mnemonicWritten}
               onClick={() => setMnemonicWritten(!mnemonicWritten)}
               data-testid="onboarding__mnemonicWrittenCheckbox"
             />
-            <Label htmlFor="mnemonicWrittenCheckbox" className="leading-5">
+            <label htmlFor="mnemonicWrittenCheckbox" className="leading-5">
               I have backed up the mnemonic and acknowledge that it will not be
               shown to me again.
-            </Label>
+            </label>
           </div>
         </div>
       ) : (

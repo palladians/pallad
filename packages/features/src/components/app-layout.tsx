@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react"
 
-import { useAccount } from '@/common/hooks/use-account'
+import { useAccount } from "@/common/hooks/use-account"
 
-import { CommandMenu } from './command-menu'
+import { CommandMenu } from "./command-menu"
 
 interface AppLayoutProps {
   children: React.ReactNode

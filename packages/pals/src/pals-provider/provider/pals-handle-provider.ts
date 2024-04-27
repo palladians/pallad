@@ -1,5 +1,8 @@
-import { fetchPals } from '../utils/fetch-utils'
-import { healthCheck, HealthCheckResponse } from '../utils/health-check-utils'
+import { fetchPals } from "../utils/fetch-utils"
+import {
+  type HealthCheckResponse,
+  healthCheck,
+} from "../utils/health-check-utils"
 
 export type getAddressFromHandleArgs = {
   handle: string
@@ -16,18 +19,18 @@ export type getSearchAddressFromPartialResponse = {
 export interface PalsHandleProvider {
   healthCheck: () => Promise<HealthCheckResponse>
   getAddressFromHandle: (
-    args: getAddressFromHandleArgs
+    args: getAddressFromHandleArgs,
   ) => Promise<getAddressFromHandleResponse>
   getSearchedHandles: (
-    args: getAddressFromHandleArgs
+    args: getAddressFromHandleArgs,
   ) => Promise<getSearchAddressFromPartialResponse>
 }
 
 export const createPalsHandleProvider = (url: string): PalsHandleProvider => {
   const getAddressFromHandle = async (
-    args: getAddressFromHandleArgs
+    args: getAddressFromHandleArgs,
   ): Promise<getAddressFromHandleResponse> => {
-    const result = await fetchPals(url + `/address/${args.handle}`)
+    const result = await fetchPals(`${url}/address/${args.handle}`)
 
     if (!result.ok) {
       throw new Error(result.message)
@@ -35,17 +38,17 @@ export const createPalsHandleProvider = (url: string): PalsHandleProvider => {
 
     const responseData = result.data
     const responseObject: getAddressFromHandleResponse = {
-      address: responseData.address
+      address: responseData.address,
     }
 
     return responseObject
   }
 
   const getSearchedHandles = async (
-    args: getAddressFromHandleArgs
+    args: getAddressFromHandleArgs,
   ): Promise<getSearchAddressFromPartialResponse> => {
     const queryParams = { moniker: args.handle }
-    const result = await fetchPals(url + `/search`, queryParams)
+    const result = await fetchPals(`${url}/search`, queryParams)
 
     if (!result.ok) {
       throw new Error(result.message)
@@ -53,7 +56,7 @@ export const createPalsHandleProvider = (url: string): PalsHandleProvider => {
 
     const responseData = result.data
     const responseObject: getSearchAddressFromPartialResponse = {
-      addresses: responseData
+      addresses: responseData,
     }
 
     return responseObject
@@ -62,6 +65,6 @@ export const createPalsHandleProvider = (url: string): PalsHandleProvider => {
   return {
     healthCheck: () => healthCheck(url),
     getSearchedHandles,
-    getAddressFromHandle
+    getAddressFromHandle,
   }
 }

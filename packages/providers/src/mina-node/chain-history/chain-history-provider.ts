@@ -1,25 +1,25 @@
-import {
+import type {
   ChainHistoryProvider,
   TransactionsByAddressesArgs,
   TransactionsByHashesArgs,
-  Tx
-} from '@palladxyz/pallad-core'
+  Tx,
+} from "@palladxyz/pallad-core"
 
-import { createGraphQLRequest } from '../utils/fetch-utils'
+import { createGraphQLRequest } from "../utils/fetch-utils"
 import {
   healthCheck,
-  healthCheckQueryArchive
-} from '../utils/health-check-utils'
-import { transactionsByAddressesQuery } from './queries'
+  healthCheckQueryArchive,
+} from "../utils/health-check-utils"
+import { transactionsByAddressesQuery } from "./queries"
 
 export const createChainHistoryProvider = (
-  url: string
+  url: string,
 ): ChainHistoryProvider => {
   const transactionsByAddresses = async (
-    args: TransactionsByAddressesArgs
+    args: TransactionsByAddressesArgs,
   ): Promise<Tx[]> => {
     // if archive url is not available, simply pass '' and the chain history will not be called
-    if (url === '') return []
+    if (url === "") return []
     const { startAt, limit } = { startAt: 0, limit: 10 }
     // TODO: remove array of addresses from TransactionsByAddressesArgs
     const variables = { address: args.addresses[0], limit, offset: startAt }
@@ -37,9 +37,9 @@ export const createChainHistoryProvider = (
   }
 
   const transactionsByHashes = async (
-    args: TransactionsByHashesArgs
+    args: TransactionsByHashesArgs,
   ): Promise<Tx[]> => {
-    if (url === '') return []
+    if (url === "") return []
     const variables = { ids: args.ids }
     const query = transactionsByAddressesQuery
     const fetchGraphQL = createGraphQLRequest(url)
@@ -57,6 +57,6 @@ export const createChainHistoryProvider = (
   return {
     healthCheck: () => healthCheck(url, healthCheckQueryArchive),
     transactionsByAddresses,
-    transactionsByHashes
+    transactionsByHashes,
   }
 }

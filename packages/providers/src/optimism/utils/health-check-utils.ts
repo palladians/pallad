@@ -1,12 +1,12 @@
-import { Chain, createPublicClient, webSocket } from 'viem'
-import { optimismSepolia } from 'viem/chains'
+import { type Chain, createPublicClient, webSocket } from "viem"
+import { optimismSepolia } from "viem/chains"
 
 export const healthCheckOptimism = async (
-  url: string
+  url: string,
 ): Promise<{ ok: boolean; message: string }> => {
   const client = createPublicClient({
     chain: optimismSepolia as Chain,
-    transport: webSocket(url)
+    transport: webSocket(url),
   })
 
   const result = await client.getChainId()
@@ -14,19 +14,19 @@ export const healthCheckOptimism = async (
   if (!result) {
     return {
       ok: false,
-      message: 'Health check failed'
+      message: "Health check failed",
     }
   }
 
   if (result) {
     return {
       ok: true,
-      message: 'RPC is happy!'
+      message: "RPC is happy!",
     }
   }
 
   return {
     ok: false,
-    message: 'Unexpected response format'
+    message: "Unexpected response format",
   }
 }

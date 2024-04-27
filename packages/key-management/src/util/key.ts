@@ -1,13 +1,13 @@
-import * as bip32 from '@scure/bip32'
+import * as bip32 from "@scure/bip32"
 
-import { MinaKeyConst } from '../chains/Mina/types'
+import { MinaKeyConst } from "../chains/Mina/types"
 
 export interface DeriveCoinTypePrivateKeyProps {
   rootPrivateKey: Uint8Array
 }
 
 export const deriveCoinTypePrivateKey = async ({
-  rootPrivateKey
+  rootPrivateKey,
 }: DeriveCoinTypePrivateKeyProps): Promise<Uint8Array> => {
   const coinTypeKey = await bip32.HDKey.fromMasterSeed(rootPrivateKey)
     .deriveChild(MinaKeyConst.PURPOSE)

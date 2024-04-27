@@ -1,12 +1,11 @@
-import { Mina } from '@palladxyz/mina-core'
-import { ClockIcon } from 'lucide-react'
+import type { Mina } from "@palladxyz/mina-core"
+import { ClockIcon } from "lucide-react"
 
-import { AppLayout } from '@/components/app-layout'
-import { ListSkeleton } from '@/components/list-skeleton'
-import { Alert, AlertTitle } from '@/components/ui/alert'
-import { ViewHeading } from '@/components/view-heading'
+import { AppLayout } from "@/components/app-layout"
+import { ListSkeleton } from "@/components/list-skeleton"
+import { ViewHeading } from "@/components/view-heading"
 
-import { TransactionsList } from '../components/transactions-list'
+import { TransactionsList } from "../components/transactions-list"
 
 type PendingTransaction = {
   hash: string
@@ -24,13 +23,13 @@ export const TransactionsView = ({
   onGoBack,
   loading,
   transactions,
-  onlyPendingTransactions
+  onlyPendingTransactions,
 }: TransactionsViewProps) => (
   <AppLayout>
     <div className="flex flex-col flex-1">
       <ViewHeading
         title="Transactions"
-        button={{ label: 'Send', onClick: onGoBack }}
+        button={{ label: "Send", onClick: onGoBack }}
       />
       <div className="fle flex-col gap-4 p-4 pb-12">
         {onlyPendingTransactions.length > 0 && (

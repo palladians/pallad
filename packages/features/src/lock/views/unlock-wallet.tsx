@@ -1,19 +1,10 @@
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
-import { UseFormReturn } from 'react-hook-form'
+import type { UseFormReturn } from "react-hook-form"
 
-import { ButtonArrow } from '@/components/button-arrow'
-import { FormError } from '@/components/form-error'
-import { RestartWalletAlert } from '@/components/restart-wallet-alert'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
-import { WizardLayout } from '@/components/wizard-layout'
-import { cn } from '@/lib/utils'
+import { ButtonArrow } from "@/components/button-arrow"
+import { FormError } from "@/components/form-error"
+import { RestartWalletAlert } from "@/components/restart-wallet-alert"
+import { WizardLayout } from "@/components/wizard-layout"
+import { cn } from "@/lib/utils"
 
 type UnlockWalletData = {
   spendingPassword: string
@@ -34,12 +25,12 @@ export const UnlockWalletView = ({
   form,
   onSubmit,
   showPassword,
-  togglePassword
+  togglePassword,
 }: UnlockWalletViewProps) => (
   <WizardLayout
     title="Unlock Wallet"
     footer={
-      <Button
+      <button
         type="submit"
         className="flex-1 group gap-2 animate-in slide-in-from-bottom-4 fade-in delay-100 fill-mode-both"
         form="unlockWalletForm"
@@ -48,7 +39,7 @@ export const UnlockWalletView = ({
       >
         <span>Unlock</span>
         <ButtonArrow />
-      </Button>
+      </button>
     }
   >
     <RestartWalletAlert
@@ -56,65 +47,43 @@ export const UnlockWalletView = ({
       setOpen={setRestartAlertVisible}
     />
     <div className="animate-in slide-in-from-bottom-4 flex flex-col flex-1 items-center gap-12 p-4">
-      <img src="/lock.png" className="w-[160px]" />
+      <img src="/lock.png" className="w-[160px]" alt="Wallet locked" />
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-2 w-full"
         id="unlockWalletForm"
       >
-        <Label
+        <label
           htmlFor="spendingPassword"
           className={cn(
-            'cursor-pointer',
-            form.formState.errors.spendingPassword && 'text-destructive'
+            "cursor-pointer",
+            form.formState.errors.spendingPassword && "text-destructive",
           )}
         >
           Spending Password
-        </Label>
+        </label>
         <div className="flex flex-col gap-2">
           <div className="flex w-full relative">
-            <Input
+            <input
               id="spendingPassword"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               data-testid="unlockWallet__password"
               className={cn(
-                form.formState.errors.spendingPassword && 'border-destructive'
+                form.formState.errors.spendingPassword && "border-destructive",
               )}
-              autoFocus
-              {...form.register('spendingPassword')}
+              {...form.register("spendingPassword")}
             />
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="icon"
-                  data-testid="unlockWallet__togglePasswordVisible"
-                  className="absolute right-1 top-1 rounded-full w-8 h-8 p-1"
-                  onClick={togglePassword}
-                >
-                  {showPassword ? (
-                    <EyeOffIcon size={20} />
-                  ) : (
-                    <EyeIcon size={20} />
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{showPassword ? 'Hide password' : 'Show password'}</p>
-              </TooltipContent>
-            </Tooltip>
           </div>
         </div>
         <FormError>{form.formState.errors.spendingPassword?.message}</FormError>
         {form.formState.errors.spendingPassword && (
-          <Button
-            variant="link"
+          <button
+            type="button"
             onClick={() => setRestartAlertVisible(true)}
             className="self-start p-0 m-0"
           >
             Forgotten password? Restore again.
-          </Button>
+          </button>
         )}
       </form>
     </div>

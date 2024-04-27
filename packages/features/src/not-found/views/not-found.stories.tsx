@@ -1,14 +1,14 @@
-import { StoryDefault } from '@ladle/react'
+import type { StoryDefault } from "@ladle/react"
 
-import { NotFoundView } from './not-found'
+import { NotFoundView } from "./not-found"
 
 export const View = () => (
   <NotFoundView
-    onGoBack={() => console.log('go back')}
-    onGoToDashboard={() => console.log('go to dash')}
+    onGoBack={() => console.log("go back")}
+    onGoToDashboard={() => console.log("go to dash")}
   />
 )
 
 export default {
-  title: 'Dashboard / NotFound'
+  title: "Dashboard / NotFound",
 } satisfies StoryDefault

@@ -8,19 +8,10 @@ import {
   LockIcon,
   QrCodeIcon,
   ReplaceIcon,
-  SettingsIcon
-} from 'lucide-react'
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from '@/components/ui/command'
+  SettingsIcon,
+} from "lucide-react"
+import React from "react"
+import { useNavigate } from "react-router-dom"
 
 interface CommandMenuProps {
   open: boolean
@@ -31,102 +22,103 @@ interface CommandMenuProps {
 export const CommandMenu = ({
   open,
   setOpen,
-  lockWallet
+  lockWallet,
 }: CommandMenuProps) => {
   const navigate = useNavigate()
 
   const COMMAND_GROUPS = [
     {
-      name: 'General',
+      name: "General",
       items: [
         {
-          name: 'Dashboard',
+          name: "Dashboard",
           icon: LayoutDashboardIcon,
-          onSelect: () => navigate('/dashboard'),
-          testId: 'commandMenu__dashboard'
+          onSelect: () => navigate("/dashboard"),
+          testId: "commandMenu__dashboard",
         },
         {
-          name: 'Receive',
+          name: "Receive",
           icon: QrCodeIcon,
-          onSelect: () => navigate('/receive'),
-          testId: 'commandMenu__receive'
+          onSelect: () => navigate("/receive"),
+          testId: "commandMenu__receive",
         },
         {
-          name: 'Address Book',
+          name: "Address Book",
           icon: BookIcon,
-          onSelect: () => navigate('/contacts'),
-          testId: 'commandMenu__addressBook'
-        }
-      ]
+          onSelect: () => navigate("/contacts"),
+          testId: "commandMenu__addressBook",
+        },
+      ],
     },
     {
-      name: 'Transactions',
+      name: "Transactions",
       items: [
         {
-          name: 'Transactions',
+          name: "Transactions",
           icon: ListIcon,
-          onSelect: () => navigate('/transactions'),
-          testId: 'commandMenu__transactions'
+          onSelect: () => navigate("/transactions"),
+          testId: "commandMenu__transactions",
         },
         {
-          name: 'New Transaction',
+          name: "New Transaction",
           icon: ArrowRightLeftIcon,
-          onSelect: () => navigate('/send'),
-          testId: 'commandMenu__send'
-        }
-      ]
+          onSelect: () => navigate("/send"),
+          testId: "commandMenu__send",
+        },
+      ],
     },
     {
-      name: 'Staking',
+      name: "Staking",
       items: [
         {
-          name: 'Staking',
+          name: "Staking",
           icon: CoinsIcon,
-          onSelect: () => navigate('/staking'),
-          testId: 'commandMenu__staking'
+          onSelect: () => navigate("/staking"),
+          testId: "commandMenu__staking",
         },
         {
-          name: 'Change Delegation',
+          name: "Change Delegation",
           icon: ReplaceIcon,
-          onSelect: () => navigate('/staking/delegate'),
-          testId: 'commandMenu__delegate'
-        }
-      ]
+          onSelect: () => navigate("/staking/delegate"),
+          testId: "commandMenu__delegate",
+        },
+      ],
     },
     {
-      name: 'Wallet',
+      name: "Wallet",
       items: [
         {
-          name: 'Settings',
+          name: "Settings",
           icon: SettingsIcon,
-          onSelect: () => navigate('/settings'),
-          testId: 'commandMenu__settings'
+          onSelect: () => navigate("/settings"),
+          testId: "commandMenu__settings",
         },
         {
-          name: 'About',
+          name: "About",
           icon: InfoIcon,
-          onSelect: () => navigate('/about'),
-          testId: 'commandMenu__about'
+          onSelect: () => navigate("/about"),
+          testId: "commandMenu__about",
         },
         {
-          name: 'Lock Wallet',
+          name: "Lock Wallet",
           icon: LockIcon,
           onSelect: lockWallet,
-          testId: 'commandMenu__lockWallet'
-        }
-      ]
-    }
+          testId: "commandMenu__lockWallet",
+        },
+      ],
+    },
   ]
 
   const down = (e: KeyboardEvent) => {
-    if (e.key === 'k' && e.metaKey) {
+    if (e.key === "k" && e.metaKey) {
       setOpen(!open)
     }
   }
 
+  // biome-ignore lint: only add listeners on first render
   React.useEffect(() => {
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
   }, [])
 
   return (
@@ -135,9 +127,11 @@ export const CommandMenu = ({
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         {COMMAND_GROUPS.map((group, i) => (
+          // biome-ignore lint: array won't update
           <CommandGroup key={i} heading={group.name}>
             {group.items.map((item, j) => (
               <CommandItem
+                // biome-ignore lint: won't update
                 key={j}
                 onSelect={() => {
                   item.onSelect()

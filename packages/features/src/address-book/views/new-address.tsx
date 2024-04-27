@@ -1,7 +1,7 @@
-import { AppLayout } from '@/components/app-layout'
-import { ViewHeading } from '@/components/view-heading'
+import { AppLayout } from "@/components/app-layout"
+import { ViewHeading } from "@/components/view-heading"
 
-import { NewAddressForm } from '../components/new-address-form'
+import { NewAddressForm } from "../components/new-address-form"
 
 type NewAddressViewProps = {
   onGoBack: () => void

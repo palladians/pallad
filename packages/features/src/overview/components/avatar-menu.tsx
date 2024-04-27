@@ -1,14 +1,7 @@
-import { LockIcon, SettingsIcon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { LockIcon, SettingsIcon } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
-import { useAccount } from '@/common/hooks/use-account'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
+import { useAccount } from "@/common/hooks/use-account"
 
 export const AvatarMenu = () => {
   const { gradientBackground, lockWallet } = useAccount()
@@ -26,7 +19,7 @@ export const AvatarMenu = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end">
-        <DropdownMenuItem onClick={() => navigate('/settings')}>
+        <DropdownMenuItem onClick={() => navigate("/settings")}>
           <SettingsIcon className="mr-2 h-4 w-4" />
           <span>Settings</span>
         </DropdownMenuItem>

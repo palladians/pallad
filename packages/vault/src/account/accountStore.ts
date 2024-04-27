@@ -1,15 +1,19 @@
-import { produce } from 'immer'
-import { StateCreator } from 'zustand'
+import { produce } from "immer"
+import type { StateCreator } from "zustand"
 
-import { AccountState, AccountStore, SingleAccountState } from './accountState'
+import type {
+  AccountState,
+  AccountStore,
+  SingleAccountState,
+} from "./accountState"
 
 export const initialAccountStoreState: AccountState = {
-  accounts: {} as never
+  accounts: {} as never,
 }
 
 export const initialSingleAccountState: SingleAccountState = {
   accountInfo: {},
-  transactions: {}
+  transactions: {},
 }
 
 export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
@@ -21,10 +25,10 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
           state.accounts[network] = {}
           state.accounts[network][address] = {
             ...initialSingleAccountState,
-            ...state.accounts[network][address]
+            ...state.accounts[network][address],
           }
         }
-      })
+      }),
     )
   },
   setAccountInfo: (network, address, accountInfo) => {
@@ -32,9 +36,9 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
       produce((state) => {
         state.accounts[network][address] = {
           ...state.accounts[network][address],
-          accountInfo
+          accountInfo,
         }
-      })
+      }),
     )
   },
   setTransactions: (network, address, transactions) => {
@@ -42,9 +46,9 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
       produce((state) => {
         state.accounts[network][address] = {
           ...state.accounts[network][address],
-          transactions
+          transactions,
         }
-      })
+      }),
     )
   },
   addAccount: (network, address) => {
@@ -53,17 +57,17 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
         if (!state.accounts?.[network]?.[address]) {
           state.accounts[network] = state.accounts[network] || {}
           state.accounts[network][address] = {
-            ...initialSingleAccountState
+            ...initialSingleAccountState,
           }
         }
-      })
+      }),
     )
   },
   removeAccount: (network, address) => {
     set(
       produce((state) => {
         delete state.accounts[network][address]
-      })
+      }),
     )
   },
   getAccountsInfo: (network, address) => {
@@ -77,8 +81,8 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
         balance: { total: 0 },
         nonce: 0,
         inferredNonce: 0,
-        delegate: '',
-        publicKey: ''
+        delegate: "",
+        publicKey: "",
       }
     )
   },
@@ -95,8 +99,9 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
   clear: () => {
     set(
       produce((state) => {
+        // TODO: fix this it doesn't work
         state.accounts = {} as never
-      })
+      }),
     )
-  }
+  },
 })

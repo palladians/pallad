@@ -1,18 +1,18 @@
-import './assets/app.css'
-import '@palladxyz/features/dist/index.css'
+import "@palladxyz/features/dist/index.css"
+import "./assets/app.css"
 
-import { Router } from '@palladxyz/features'
-import { ThemeProvider } from 'next-themes'
-import { useEffect } from 'react'
+import { Router } from "@palladxyz/features"
+import { ThemeProvider } from "next-themes"
+import { useEffect } from "react"
 
 function App() {
   useEffect(() => {
     const handleContextmenu = (e: MouseEvent) => {
       if (!e.metaKey) e.preventDefault()
     }
-    document.addEventListener('contextmenu', handleContextmenu)
+    document.addEventListener("contextmenu", handleContextmenu)
     return function cleanup() {
-      document.removeEventListener('contextmenu', handleContextmenu)
+      document.removeEventListener("contextmenu", handleContextmenu)
     }
   }, [])
 

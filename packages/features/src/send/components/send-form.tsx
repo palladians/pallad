@@ -1,68 +1,64 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
+import { useLocation, useNavigate } from "react-router-dom"
 
-import { useAccount } from '@/common/hooks/use-account'
-import { TransactionFee } from '@/common/lib/const'
-import { useTransactionStore } from '@/common/store/transaction'
-import { OutgoingTransaction } from '@/common/types'
-import { ButtonArrow } from '@/components/button-arrow'
-import { FormError } from '@/components/form-error'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { cn } from '@/lib/utils'
+import { useAccount } from "@/common/hooks/use-account"
+import { TransactionFee } from "@/common/lib/const"
+import { useTransactionStore } from "@/common/store/transaction"
+import type { OutgoingTransaction } from "@/common/types"
+import { ButtonArrow } from "@/components/button-arrow"
+import { FormError } from "@/components/form-error"
+import { cn } from "@/lib/utils"
 
-import { SendFormSchema } from './send-form.schema'
+import { SendFormSchema } from "./send-form.schema"
 
 export const SendForm = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const setTransactionDetails = useTransactionStore((state) => state.set)
   const setKind = useTransactionStore((state) => state.setKind)
-  const { data: accountData, isLoading: accountLoading } = useAccount()
+  const { data: accountProperties, isLoading: accountLoading } = useAccount()
   const {
     register,
     handleSubmit,
     setValue,
     getValues,
     formState: { errors },
-    trigger
+    trigger,
   } = useForm({
     resolver: zodResolver(SendFormSchema),
     defaultValues: {
-      to: '',
-      amount: '',
-      fee: 'default',
-      memo: ''
-    }
+      to: "",
+      amount: "",
+      fee: "default",
+      memo: "",
+    },
   })
+  // biome-ignore lint: only first render
   useEffect(() => {
-    setValue('to', location.state?.address || '')
+    setValue("to", location.state?.address || "")
   }, [])
   if (accountLoading) return null
   const totalBalance =
-    accountData?.accountInfo['MINA'].balance.total &&
-    accountData?.accountInfo['MINA'].balance.total / 1_000_000_000
+    accountProperties.balance && accountProperties.balance / 1_000_000_000
   const setMaxAmount = async () => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
-    totalBalance && setValue('amount', String(totalBalance - currentFee))
+    totalBalance && setValue("amount", String(totalBalance - currentFee))
     await trigger()
   }
   const onSubmit = (payload: OutgoingTransaction) => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
-    setKind('transaction')
+    setKind("transaction")
     setTransactionDetails({
       to: payload.to,
       fee: String(currentFee),
       amount: payload.amount,
-      memo: payload.memo
+      memo: payload.memo,
     })
-    navigate('/transactions/summary')
+    navigate("/transactions/summary")
   }
   return (
     <form
@@ -71,69 +67,62 @@ export const SendForm = () => {
     >
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
-          <Label
+          <label
             htmlFor="receiverAddress"
-            className={cn(errors.to && 'text-destructive')}
+            className={cn(errors.to && "text-destructive")}
           >
             Receiver
-          </Label>
-          <Button
+          </label>
+          <button
             type="button"
-            variant="link"
             className="!h-auto !p-0"
-            onClick={() => navigate('/contacts')}
+            onClick={() => navigate("/contacts")}
           >
             Address Book
-          </Button>
+          </button>
         </div>
-        <Input
+        <input
           id="receiverAddress"
           placeholder="Receiver Address"
-          className={errors.to && 'border-destructive'}
+          className={errors.to && "border-destructive"}
           data-testid="send__to"
-          autoFocus
-          {...register('to')}
+          {...register("to")}
         />
         <FormError>{errors.to?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
-          <Label
+          <label
             htmlFor="amount"
-            className={cn(errors.amount && 'text-destructive')}
+            className={cn(errors.amount && "text-destructive")}
           >
             Amount
-          </Label>
-          <Button
-            type="button"
-            variant="link"
-            className="!h-auto !p-0"
-            onClick={setMaxAmount}
-          >
+          </label>
+          <button type="button" className="!h-auto !p-0" onClick={setMaxAmount}>
             Max Amount
-          </Button>
+          </button>
         </div>
-        <Input
+        <input
           id="amount"
           placeholder="Transaction Amount"
-          className={errors.amount && 'border-destructive'}
+          className={errors.amount && "border-destructive"}
           data-testid="send__amount"
-          {...register('amount')}
+          {...register("amount")}
         />
         <FormError>{errors.amount?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="memo" className={cn(errors.memo && 'text-destructive')}>
+        <label htmlFor="memo" className={cn(errors.memo && "text-destructive")}>
           Memo
-        </Label>
-        <Input id="memo" placeholder="Memo" {...register('memo')} />
+        </label>
+        <input id="memo" placeholder="Memo" {...register("memo")} />
         <FormError>{errors.memo?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2 flex-1">
-        <Label className={cn(errors.fee && 'text-destructive')}>Fee</Label>
-        <RadioGroup
+        <label className={cn(errors.fee && "text-destructive")}>Fee</label>
+        {/* <RadioGroup
           defaultValue="default"
-          onValueChange={(value) => setValue('fee', value)}
+          onValueChange={(value) => setValue("fee", value)}
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="slow" id="feeSlow" />
@@ -149,17 +138,17 @@ export const SendForm = () => {
             <RadioGroupItem value="fast" id="feeFast" />
             <Label htmlFor="feeFast">Fast ({TransactionFee.fast} MINA)</Label>
           </div>
-        </RadioGroup>
+        </RadioGroup> */}
         <FormError>{errors.fee?.message}</FormError>
       </div>
-      <Button
+      <button
         type="submit"
         className="group gap-2"
         data-testid="send__nextButton"
       >
         <span>Next</span>
         <ButtonArrow />
-      </Button>
+      </button>
     </form>
   )
 }

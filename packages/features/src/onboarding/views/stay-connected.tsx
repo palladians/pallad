@@ -1,10 +1,9 @@
-import { Link2Icon, TwitterIcon } from 'lucide-react'
+import { Link2Icon, TwitterIcon } from "lucide-react"
 
-import { Button } from '@/components/ui/button'
-import { WizardLayout } from '@/components/wizard-layout'
+import { WizardLayout } from "@/components/wizard-layout"
 
-const DISCORD_URL = 'https://discord.gg/ExzzfTGUnB'
-const TWITTER_URL = 'https://twitter.com/pallad_'
+const DISCORD_URL = "https://discord.gg/ExzzfTGUnB"
+const TWITTER_URL = "https://twitter.com/pallad_"
 
 type StayConnectedRoute = {
   onGoToDashboard: () => void
@@ -15,13 +14,14 @@ export const StayConnectedView = ({ onGoToDashboard }: StayConnectedRoute) => (
     title="Stay Connected"
     footer={
       <>
-        <Button
+        <button
+          type="button"
           className="flex-1"
           onClick={onGoToDashboard}
           data-testid="onboarding__nextButton"
         >
           Go to Dashboard
-        </Button>
+        </button>
       </>
     }
   >
@@ -30,18 +30,24 @@ export const StayConnectedView = ({ onGoToDashboard }: StayConnectedRoute) => (
         That's it. Before moving to Dashboard consider joining our Community.
       </div>
       <div className="flex gap-2">
-        <Button size="lg" variant="outline" asChild className="flex-1">
-          <a href={DISCORD_URL} className="flex gap-2" target="_blank">
-            <Link2Icon size={16} />
-            Discord
-          </a>
-        </Button>
-        <Button size="lg" variant="outline" asChild className="flex-1">
-          <a href={TWITTER_URL} className="flex gap-2" target="_blank">
-            <TwitterIcon size={16} />
-            Twitter
-          </a>
-        </Button>
+        <a
+          href={DISCORD_URL}
+          className="flex gap-2"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Link2Icon size={16} />
+          Discord
+        </a>
+        <a
+          href={TWITTER_URL}
+          className="flex gap-2"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <TwitterIcon size={16} />
+          Twitter
+        </a>
       </div>
     </div>
   </WizardLayout>

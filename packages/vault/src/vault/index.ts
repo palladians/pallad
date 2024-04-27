@@ -1,1 +1,1 @@
-export * from './vaultStore'
+export * from "./vaultStore"

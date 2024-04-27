@@ -6,13 +6,17 @@ This package has been heavily inspired by the [WalletConnect Monorepo](https://g
 
 This is a typescript package that allows applications to interact with the wallet.
 
-## Current Design (POC)
+## Implementation & Testing
 
-`UniversalProvider` is a more generic class that allows users to interact with a specific chain-provider, currently there is only `MinaProvider` which is an EIP-1193-like provider for Pallad and abstracts over the `vault` using `VaultService` that can fetch wallet or network information but also help perform wallet specific operations (like signing) all with prompting the user for permission.
+For implementation of this package, you should investigate the `apps/extension` folder. In there you can view the background script, the injected script, and the content script together allow Pallad to interact with applications. See the e2e tests for a good test suite of this provider's implementation. 
+
+## Current Design
+
+Currently the working provider is `MinaProvider` which is an EIP-1193-like provider for Pallad and abstracts over the `vault` using `VaultService` that can fetch wallet or network information but also help perform wallet specific operations (like signing) all with prompting the user for permission using text, confirmation, or password.
 
 ### Example Flow
 
-`UniversalProvider` --> `{chain}Provider` --> `VaultService` or `MinaProvider` --> `VaultService`.
+`MinaProvider` --> `MinaProvider` --> `VaultService`.
 
 ## Features
 

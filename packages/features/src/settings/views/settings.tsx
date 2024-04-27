@@ -1,13 +1,8 @@
-import { Mina } from '@palladxyz/mina-core'
-import { AlertCircleIcon } from 'lucide-react'
+import { AlertCircleIcon } from "lucide-react"
 
-import { AppLayout } from '@/components/app-layout'
-import { RestartWalletAlert } from '@/components/restart-wallet-alert'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Switch } from '@/components/ui/switch'
-import { ViewHeading } from '@/components/view-heading'
+import { AppLayout } from "@/components/app-layout"
+import { RestartWalletAlert } from "@/components/restart-wallet-alert"
+import { ViewHeading } from "@/components/view-heading"
 
 type SettingsViewProps = {
   onGoBack: () => void
@@ -28,7 +23,7 @@ export const SettingsView = ({
   theme,
   setTheme,
   shareData,
-  setShareData
+  setShareData,
 }: SettingsViewProps) => (
   <AppLayout>
     <RestartWalletAlert
@@ -40,8 +35,8 @@ export const SettingsView = ({
       <div className="flex flex-col gap-4 p-4 flex-1">
         <div className="flex flex-col gap-2">
           <h2 className="font-semibold">Network</h2>
-          <RadioGroup value={network}>
-            {/* TODO: Enable after Public Beta <div className="flex items-center space-x-2">
+          {/* <RadioGroup value={network}> */}
+          {/* TODO: Enable after Public Beta <div className="flex items-center space-x-2">
                 <RadioGroupItem
                   value={
                     Mina.Networks[
@@ -52,33 +47,33 @@ export const SettingsView = ({
                 />
                 <Label htmlFor="networkMainnet">Mainnet</Label>
               </div> */}
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem
+          <div className="flex items-center space-x-2">
+            {/* <RadioGroupItem
                 value={
                   Mina.Networks[
                     Mina.Networks.BERKELEY.toUpperCase() as keyof typeof Mina.Networks
                   ]
                 }
                 id="networkBerkeley"
-              />
-              <Label htmlFor="networkBerkeley">Berkeley</Label>
-            </div>
-            {/* <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value={
-                    Mina.Networks[
-                      Mina.Networks.TESTWORLD.toUpperCase() as keyof typeof Mina.Networks
-                    ]
-                  }
-                  id="networkBerkeley"
-                />
-                <Label htmlFor="networkBerkeley">TestWorld 2.0</Label>
-              </div> */}
-          </RadioGroup>
+              /> */}
+            <label htmlFor="networkBerkeley">Berkeley</label>
+          </div>
+          <div className="flex items-center space-x-2">
+            {/* <RadioGroupItem
+                value={
+                  Mina.Networks[
+                    Mina.Networks.TESTWORLD.toUpperCase() as keyof typeof Mina.Networks
+                  ]
+                }
+                id="networkBerkeley"
+              /> */}
+            <label htmlFor="networkBerkeley">TestWorld 2.0</label>
+          </div>
+          {/* </RadioGroup> */}
         </div>
         <div className="flex flex-col gap-2">
           <h2 className="font-semibold">Theme</h2>
-          <RadioGroup value={theme} onValueChange={setTheme}>
+          {/* <RadioGroup value={theme} onValueChange={setTheme}>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="light" id="themeLight" />
               <Label htmlFor="themeLight">Light</Label>
@@ -91,29 +86,29 @@ export const SettingsView = ({
               <RadioGroupItem value="system" id="themeSystem" />
               <Label htmlFor="themeSystem">System</Label>
             </div>
-          </RadioGroup>
+          </RadioGroup> */}
         </div>
         <div className="flex flex-col gap-2">
           <h2 className="font-semibold">Privacy</h2>
           <div className="flex items-center gap-2">
-            <Switch
+            {/* <Switch
               checked={shareData}
               onCheckedChange={(value) => setShareData(value)}
-            />
-            <Label>Share anonymous data</Label>
+            /> */}
+            <label>Share anonymous data</label>
           </div>
         </div>
         <div className="flex flex-col gap-2 items-start">
           <h2 className="font-semibold">Danger Zone</h2>
-          <Button
-            variant="secondary"
+          <button
+            type="button"
             className="gap-2"
             onClick={() => setRestartAlertVisible(true)}
             data-testid="settings__restartWallet"
           >
             <AlertCircleIcon size={16} />
             Restart Wallet
-          </Button>
+          </button>
         </div>
       </div>
     </div>

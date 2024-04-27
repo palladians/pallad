@@ -1,9 +1,9 @@
-import { StoryDefault } from '@ladle/react'
+import type { StoryDefault } from "@ladle/react"
 
-import { WelcomeScreen } from './'
+import { WelcomeScreen } from "./"
 
 export const View = () => <WelcomeScreen />
 
 export default {
-  title: 'Welcome Screen'
+  title: "Welcome Screen",
 } satisfies StoryDefault

@@ -15,6 +15,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test:unit": "vitest run",
+    "coverage": "vitest run --coverage",
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
     "@noble/hashes": "^1.3.3",
     "@noble/secp256k1": "^2.0.0",
     "@palladxyz/mina-core": "workspace:*",
+    "@palladxyz/pallad-core": "workspace:*",
     "@scure/base": "^1.1.5",
     "@scure/bip32": "^1.3.3",
     "@scure/bip39": "^1.2.2",
@@ -39,6 +41,7 @@
     "@palladxyz/common": "workspace:*",
     "@types/mocha": "^10.0.6",
     "@types/secp256k1": "^4.0.6",
-    "@types/sinon": "^17.0.2"
+    "@types/sinon": "^17.0.2",
+    "@vitest/coverage-v8": "^1.5.0"
   }
 }

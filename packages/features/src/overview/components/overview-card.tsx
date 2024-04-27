@@ -1,17 +1,10 @@
-import { CopyIcon, MoveUpRightIcon, QrCodeIcon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { MoveUpRightIcon, QrCodeIcon } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
-import { useAccount } from '@/common/hooks/use-account'
-import { truncateString } from '@/common/lib/string'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
+import type { useAccount } from "@/common/hooks/use-account"
+import { truncateString } from "@/common/lib/string"
 
-import { AvatarMenu } from './avatar-menu'
+import { AvatarMenu } from "./avatar-menu"
 
 type OverviewCardProps = {
   account: ReturnType<typeof useAccount>
@@ -37,7 +30,7 @@ export const OverviewCard = ({ account, fiatBalance }: OverviewCardProps) => {
               className="text-lg font-semibold"
               data-testid="dashboard__minaBalance"
             >
-              {account.minaBalance?.toString()} MINA
+              {`${account.minaBalance?.toString()} ${account.data?.symbol?.toString()}`}
             </div>
             <div className="text-sm font-semibold">
               ~{fiatBalance?.toFixed(4)} USD
@@ -54,10 +47,10 @@ export const OverviewCard = ({ account, fiatBalance }: OverviewCardProps) => {
               truncateString({
                 value: account.publicKey,
                 firstCharCount: 8,
-                endCharCount: 8
+                endCharCount: 8,
               })}
           </div>
-          <Tooltip>
+          {/* <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="link"
@@ -70,30 +63,27 @@ export const OverviewCard = ({ account, fiatBalance }: OverviewCardProps) => {
             <TooltipContent>
               <p>Copy Address</p>
             </TooltipContent>
-          </Tooltip>
-          <Badge variant="outline" className="capitalize">
-            {account.network}
-          </Badge>
+          </Tooltip> */}
+          <div className="badge">{account.network}</div>
         </div>
         <div className="flex gap-2">
-          <Button
+          <button
+            type="button"
             className="flex-1 gap-2"
-            size="sm"
-            onClick={() => navigate('/send')}
+            onClick={() => navigate("/send")}
             data-testid="dashboard__send"
           >
             <MoveUpRightIcon size={16} />
             Send
-          </Button>
-          <Button
-            variant="outline"
+          </button>
+          <button
+            type="button"
             className="flex-1 gap-2"
-            size="sm"
-            onClick={() => navigate('/receive')}
+            onClick={() => navigate("/receive")}
           >
             <QrCodeIcon size={16} />
             Receive
-          </Button>
+          </button>
         </div>
       </div>
     </div>

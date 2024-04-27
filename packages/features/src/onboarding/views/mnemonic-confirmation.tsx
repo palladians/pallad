@@ -1,14 +1,11 @@
-import { Loader2Icon } from 'lucide-react'
-import { UseFormReturn } from 'react-hook-form'
+import { Loader2Icon } from "lucide-react"
+import type { UseFormReturn } from "react-hook-form"
 
-import { ButtonArrow } from '@/components/button-arrow'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { WizardLayout } from '@/components/wizard-layout'
-import { cn } from '@/lib/utils'
+import { ButtonArrow } from "@/components/button-arrow"
+import { WizardLayout } from "@/components/wizard-layout"
+import { cn } from "@/lib/utils"
 
-import { MnemonicConfirmationData } from '../types'
+import type { MnemonicConfirmationData } from "../types"
 
 type MnemonicConfirmationViewProps = {
   onSubmit: () => unknown
@@ -23,18 +20,18 @@ export const MnemonicConfirmationView = ({
   form,
   restoring,
   confirmationIndex,
-  confirmationValid
+  confirmationValid,
 }: MnemonicConfirmationViewProps) => (
   <WizardLayout
     title="Confirm The Mnemonic"
     backButtonPath={-1}
     footer={
-      <Button
+      <button
         type="submit"
         form="mnemonicConfirmationForm"
         className={cn([
-          'flex-1 opacity-50 transition-opacity gap-2 group',
-          confirmationValid && 'opacity-100'
+          "flex-1 opacity-50 transition-opacity gap-2 group",
+          confirmationValid && "opacity-100",
         ])}
         disabled={!confirmationValid || restoring}
         data-testid="onboarding__nextButton"
@@ -42,7 +39,7 @@ export const MnemonicConfirmationView = ({
         {restoring && <Loader2Icon size={16} className="animate-spin" />}
         <span>Next</span>
         <ButtonArrow />
-      </Button>
+      </button>
     }
   >
     <form
@@ -51,13 +48,12 @@ export const MnemonicConfirmationView = ({
       onSubmit={form.handleSubmit(onSubmit)}
       noValidate
     >
-      <Label data-testid="onboarding__writedownIndex">
+      <label data-testid="onboarding__writedownIndex">
         Type in the word #{confirmationIndex + 1}
-      </Label>
-      <Input
+      </label>
+      <input
         data-testid="onboarding__mnemonicConfirmationInput"
-        {...form.register('mnemonicWord')}
-        autoFocus
+        {...form.register("mnemonicWord")}
       />
     </form>
   </WizardLayout>

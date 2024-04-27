@@ -1,31 +1,31 @@
-import {
+import type {
   AccountInfo,
   AccountInfoArgs,
   HealthCheckResponse,
   SubmitTxArgs,
   TransactionsByAddressesArgs,
   Tx,
-  UnifiedChainProviderType
-} from '@palladxyz/pallad-core'
+  UnifiedChainProviderType,
+} from "@palladxyz/pallad-core"
 
-import { createAccountInfoProvider } from './account-info-provider'
-import { createChainHistoryProvider } from './chain-history-provider'
-import { createNodeStatusProvider } from './node-status-provider'
-import { createTxSubmitProvider } from './tx-submit-provider'
-import { ProviderConfig } from './types'
+import { createAccountInfoProvider } from "./account-info-provider"
+import { createChainHistoryProvider } from "./chain-history-provider"
+import { createNodeStatusProvider } from "./node-status-provider"
+import { createTxSubmitProvider } from "./tx-submit-provider"
+import type { ProviderConfig } from "./types"
 
 export const createChainProvider = (
-  config: ProviderConfig
+  config: ProviderConfig,
 ): UnifiedChainProviderType => {
   const getAccountInfo = async (args: AccountInfoArgs) => {
     return (await createAccountInfoProvider(config).getAccountInfo(
-      args
+      args,
     )) as Record<string, AccountInfo>
   }
 
   const getTransactions = async (args: TransactionsByAddressesArgs) => {
     return (await createChainHistoryProvider(config).transactionsByAddresses(
-      args
+      args,
     )) as Tx[]
   }
 
@@ -47,7 +47,7 @@ export const createChainProvider = (
 
   const healthCheck = async () => {
     const node = await healthCheckNode()
-    let archiveResult: HealthCheckResponse = { ok: true, message: '' }
+    let archiveResult: HealthCheckResponse = { ok: true, message: "" }
 
     if (config.archiveNodeEndpoint) {
       archiveResult = await healthCheckArchive()
@@ -55,12 +55,12 @@ export const createChainProvider = (
 
     const ok = node.ok && archiveResult.ok
     const messages = [node.message, archiveResult.message]
-      .filter((msg) => typeof msg === 'string' && msg)
-      .join(' ')
+      .filter((msg) => typeof msg === "string" && msg)
+      .join(" ")
 
     return {
       ok,
-      message: messages
+      message: messages,
     }
   }
 
@@ -69,6 +69,6 @@ export const createChainProvider = (
     getTransactions,
     submitTransaction,
     getNodeStatus,
-    healthCheck
+    healthCheck,
   }
 }

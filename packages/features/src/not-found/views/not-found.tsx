@@ -1,6 +1,5 @@
-import { AppLayout } from '@/components/app-layout'
-import { Button } from '@/components/ui/button'
-import { ViewHeading } from '@/components/view-heading'
+import { AppLayout } from "@/components/app-layout"
+import { ViewHeading } from "@/components/view-heading"
 
 type NotFoundViewProps = {
   onGoToDashboard: () => void
@@ -9,7 +8,7 @@ type NotFoundViewProps = {
 
 export const NotFoundView = ({
   onGoBack,
-  onGoToDashboard
+  onGoToDashboard,
 }: NotFoundViewProps) => {
   return (
     <AppLayout>
@@ -19,7 +18,9 @@ export const NotFoundView = ({
           <div className="flex flex-1 justify-center items-center">
             <div>Sorry, but we couldn't find this page</div>
           </div>
-          <Button onClick={onGoToDashboard}>Go to Dashboard</Button>
+          <button type="button" onClick={onGoToDashboard}>
+            Go to Dashboard
+          </button>
         </div>
       </div>
     </AppLayout>

@@ -1,7 +1,7 @@
-import { AppLayout } from '@/components/app-layout'
-import { ViewHeading } from '@/components/view-heading'
+import { AppLayout } from "@/components/app-layout"
+import { ViewHeading } from "@/components/view-heading"
 
-import { DelegateForm } from '../components/delegate-form'
+import { DelegateForm } from "../components/delegate-form"
 
 type DelegateViewProps = {
   onGoBack: () => void

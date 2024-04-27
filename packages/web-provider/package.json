@@ -20,6 +20,7 @@
   "dependencies": {
     "@palladxyz/key-management": "workspace:*",
     "@palladxyz/mina-core": "workspace:*",
+    "@palladxyz/providers": "workspace:*",
     "@palladxyz/persistence": "workspace:*",
     "@palladxyz/vault": "workspace:*",
     "mina-signer": "^2.1.1",

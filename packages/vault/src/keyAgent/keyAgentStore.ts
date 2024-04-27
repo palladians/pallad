@@ -1,14 +1,14 @@
 import {
-  FromBip39MnemonicWordsProps,
-  InMemoryKeyAgent
-} from '@palladxyz/key-management'
-import { produce } from 'immer'
-import { StateCreator } from 'zustand'
+  type FromBip39MnemonicWordsProps,
+  InMemoryKeyAgent,
+} from "@palladxyz/key-management"
+import { produce } from "immer"
+import type { StateCreator } from "zustand"
 
-import { initialKeyAgentState, KeyAgentStore } from './keyAgentState'
+import { type KeyAgentStore, initialKeyAgentState } from "./keyAgentState"
 
 const initialState = {
-  keyAgents: {}
+  keyAgents: {},
 }
 
 export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
@@ -19,22 +19,21 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
         if (!state.keyAgents[name]) {
           state.keyAgents[name] = { ...initialKeyAgentState, name: name }
         }
-      })
+      }),
     )
   },
   async initialiseKeyAgent(
     name,
     keyAgentType,
-    { mnemonicWords, getPassphrase }
+    { mnemonicWords, getPassphrase },
   ) {
     const { ensureKeyAgent } = get()
     const agentArgs: FromBip39MnemonicWordsProps = {
       getPassphrase: getPassphrase,
       mnemonicWords: mnemonicWords,
-      mnemonic2ndFactorPassphrase: ''
+      mnemonic2ndFactorPassphrase: "",
     }
     const keyAgent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
-    console.log('>>> KeyAgent in keyAgentStore initialiseKeyAgent', keyAgent)
     ensureKeyAgent(name)
     return set(
       produce((state) => {
@@ -42,28 +41,23 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
           keyAgentType: keyAgentType,
           keyAgent: keyAgent,
           serializableData: keyAgent.getSeralizableData(),
-          name: name
+          name: name,
         }
-      })
+      }),
     )
   },
-  // TODO: this should take a password too.
+  // This isn't used anywhere but is a nice abstraction over signing
   async request(name, credential, signable, args) {
     const { keyAgents } = get()
     const keyAgent = keyAgents[name]
 
     return await keyAgent?.keyAgent?.sign(credential, signable, args)
   },
-  async createCredential(name, payload, args, passphrase) {
+  async createCredential(name, args, passphrase) {
     const { keyAgents } = get()
     const keyAgent = keyAgents[name]
 
-    return await keyAgent?.keyAgent?.deriveCredentials(
-      payload,
-      args,
-      passphrase,
-      true
-    )
+    return await keyAgent?.keyAgent?.deriveCredentials(args, passphrase, true)
   },
   // we should deprecate this method
   // it is superseded by restoreKeyAgent
@@ -83,14 +77,14 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
     return set(
       produce((state) => {
         delete state.keyAgents[name]
-      })
+      }),
     )
   },
   clear() {
     return set(
       produce((state) => {
         state.keyAgents = {}
-      })
+      }),
     )
-  }
+  },
 })

@@ -1,8 +1,8 @@
-import { NodeStatus, NodeStatusProvider } from '@palladxyz/pallad-core'
+import type { NodeStatus, NodeStatusProvider } from "@palladxyz/pallad-core"
 
-import { fetchGraphQL } from '../utils/fetch-utils'
-import { healthCheck } from '../utils/health-check-utils'
-import { getDaemonStatusQuery } from './queries'
+import { fetchGraphQL } from "../utils/fetch-utils"
+import { healthCheck } from "../utils/health-check-utils"
+import { getDaemonStatusQuery } from "./queries"
 
 export const createNodeStatusProvider = (url: string): NodeStatusProvider => {
   const getNodeStatus = async (): Promise<NodeStatus> => {
@@ -19,6 +19,6 @@ export const createNodeStatusProvider = (url: string): NodeStatusProvider => {
 
   return {
     healthCheck: () => healthCheck(url),
-    getNodeStatus
+    getNodeStatus,
   }
 }

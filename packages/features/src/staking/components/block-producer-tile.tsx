@@ -1,8 +1,6 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom"
 
-import { formatCompact } from '@/common/lib/numbers'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Card } from '@/components/ui/card'
+import { formatCompact } from "@/common/lib/numbers"
 
 type BlockProducer = {
   name: string
@@ -21,8 +19,8 @@ export const BlockProducerTile = ({ producer }: BlockProducerTileProps) => {
     <Card
       className="flex flex-1 justify-between items-center p-2"
       onClick={() =>
-        navigate('/staking/delegate', {
-          state: { address: producer.publicKey }
+        navigate("/staking/delegate", {
+          state: { address: producer.publicKey },
         })
       }
     >

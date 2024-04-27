@@ -1,9 +1,9 @@
-import { StoryDefault } from '@ladle/react'
+import type { StoryDefault } from "@ladle/react"
 
-import { SendView } from './send'
+import { SendView } from "./send"
 
-export const View = () => <SendView onGoBack={() => console.log('go back')} />
+export const View = () => <SendView onGoBack={() => console.log("go back")} />
 
 export default {
-  title: 'Dashboard / Send'
+  title: "Dashboard / Send",
 } satisfies StoryDefault

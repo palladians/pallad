@@ -1,11 +1,10 @@
-import { useTheme } from 'next-themes'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useTheme } from "next-themes"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-import { useAppStore } from '@/common/store/app'
-import { useToast } from '@/components/ui/use-toast'
+import { useAppStore } from "@/common/store/app"
 
-import { SettingsView } from '../views/settings'
+import { SettingsView } from "../views/settings"
 
 export const SettingsRoute = () => {
   const [restartAlertVisible, setRestartAlertVisible] = useState(false)
@@ -18,7 +17,7 @@ export const SettingsRoute = () => {
     setNetwork: state.setNetwork,
     network: state.network,
     shareData: state.shareData,
-    setShareData: state.setShareData
+    setShareData: state.setShareData,
   }))
   // const handleNetworkSwitch = async (value: Mina.Networks) => {
   //   await switchNetwork(value)
@@ -32,7 +31,7 @@ export const SettingsRoute = () => {
   const handleThemeSwitch = (value: string) => {
     setTheme(value)
     toast({
-      title: `Theme has been changed.`
+      title: "Theme has been changed.",
     })
   }
   return (
@@ -43,7 +42,7 @@ export const SettingsRoute = () => {
       setRestartAlertVisible={setRestartAlertVisible}
       setShareData={setShareData}
       shareData={shareData}
-      theme={theme ?? 'dark'}
+      theme={theme ?? "dark"}
       setTheme={handleThemeSwitch}
     />
   )

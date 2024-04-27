@@ -1,7 +1,7 @@
-import { Mina } from '@palladxyz/mina-core'
-import { Range } from '@palladxyz/util'
+import type { Mina } from "@palladxyz/mina-core"
+import type { Range } from "@palladxyz/util"
 
-import { Provider } from '../..'
+import type { Provider } from "../.."
 
 export interface TransactionsByAddressesArgs {
   addresses: Mina.PaymentAddress[]
@@ -23,7 +23,7 @@ export interface ChainHistoryProvider extends Provider {
    * @returns {Mina.TransactionBody[]} an array of transactions involving the addresses
    */
   transactionsByAddresses: (
-    args: TransactionsByAddressesArgs
+    args: TransactionsByAddressesArgs,
   ) => Promise<Mina.TransactionBody[] | undefined>
 
   /**
@@ -33,6 +33,6 @@ export interface ChainHistoryProvider extends Provider {
    * @returns {Mina.TransactionBody[]} an array of transactions
    */
   transactionsByHashes: (
-    args: TransactionsByIdsArgs
+    args: TransactionsByIdsArgs,
   ) => Promise<Mina.TransactionBody[] | undefined>
 }

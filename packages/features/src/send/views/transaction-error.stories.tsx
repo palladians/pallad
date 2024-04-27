@@ -1,11 +1,11 @@
-import { StoryDefault } from '@ladle/react'
+import type { StoryDefault } from "@ladle/react"
 
-import { TransactionErrorView } from './transaction-error'
+import { TransactionErrorView } from "./transaction-error"
 
 export const View = () => (
-  <TransactionErrorView onGoBack={() => console.log('go back')} />
+  <TransactionErrorView onGoBack={() => console.log("go back")} />
 )
 
 export default {
-  title: 'Dashboard / Send / Error'
+  title: "Dashboard / Send / Error",
 } satisfies StoryDefault

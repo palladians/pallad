@@ -1,1 +1,1 @@
-export * from './tx-status-provider'
+export * from "./tx-status-provider"

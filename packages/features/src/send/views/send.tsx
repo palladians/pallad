@@ -1,7 +1,7 @@
-import { AppLayout } from '@/components/app-layout'
-import { ViewHeading } from '@/components/view-heading'
+import { AppLayout } from "@/components/app-layout"
+import { ViewHeading } from "@/components/view-heading"
 
-import { SendForm } from '../components/send-form'
+import { SendForm } from "../components/send-form"
 
 type SendViewProps = {
   onGoBack: () => void

@@ -1,29 +1,23 @@
-import '@/globals.css'
-import { useEffect } from 'react'
+import "@/globals.css"
 import {
   ActionType,
-  GlobalProvider,
+  type GlobalProvider,
   ThemeState,
-  useLadleContext
-} from '@ladle/react'
-import { MemoryRouter } from 'react-router-dom'
-import { ThemeProvider } from 'next-themes'
-import { TooltipProvider } from '@/components/ui/tooltip'
-import { Toaster } from '@/components/ui/toaster'
+  useLadleContext,
+} from "@ladle/react"
+import { ThemeProvider } from "next-themes"
+import { useEffect } from "react"
+import { MemoryRouter } from "react-router-dom"
 
 export const Provider: GlobalProvider = ({ children }) => {
   const { dispatch } = useLadleContext()
+  // biome-ignore lint: first render
   useEffect(() => {
     dispatch({ type: ActionType.UpdateTheme, value: ThemeState.Dark })
   }, [])
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <TooltipProvider>
-        <MemoryRouter>
-          {children}
-          <Toaster />
-        </MemoryRouter>
-      </TooltipProvider>
+      <MemoryRouter>{children}</MemoryRouter>
     </ThemeProvider>
   )
 }

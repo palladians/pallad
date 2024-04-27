@@ -1,4 +1,4 @@
-import { BorrowedTypes } from '..'
+import type { BorrowedTypes } from ".."
 
 /**
  * Represents the body of a message.

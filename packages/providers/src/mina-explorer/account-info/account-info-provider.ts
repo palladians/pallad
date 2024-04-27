@@ -1,19 +1,19 @@
-import {
+import type {
   AccountInfo,
   AccountInfoArgs,
-  AccountInfoProvider
-} from '@palladxyz/pallad-core'
+  AccountInfoProvider,
+} from "@palladxyz/pallad-core"
 
-import { createGraphQLRequest } from '../utils/fetch-utils'
-import { healthCheck } from '../utils/health-check-utils'
-import { getTokenAccountInfoQuery } from './queries'
+import { createGraphQLRequest } from "../utils/fetch-utils"
+import { healthCheck } from "../utils/health-check-utils"
+import { getTokenAccountInfoQuery } from "./queries"
 
 export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
   const getAccountInfo = async (
-    args: AccountInfoArgs
+    args: AccountInfoArgs,
   ): Promise<Record<string, AccountInfo>> => {
     const variables = { publicKey: args.publicKey }
-    const query = getTokenAccountInfoQuery(args.tokenMap || { MINA: '1' })
+    const query = getTokenAccountInfoQuery(args.tokenMap || { MINA: "1" })
     const fetchGraphQL = createGraphQLRequest(url)
     const result = await fetchGraphQL(query, variables)
 
@@ -30,8 +30,8 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
           balance: { total: 0 },
           nonce: 0,
           inferredNonce: 0,
-          delegate: '',
-          publicKey: args.publicKey
+          delegate: "",
+          publicKey: args.publicKey,
         }
       } else {
         accountsInfo[key] = account as AccountInfo
@@ -43,6 +43,6 @@ export const createAccountInfoProvider = (url: string): AccountInfoProvider => {
 
   return {
     healthCheck: () => healthCheck(url),
-    getAccountInfo
+    getAccountInfo,
   }
 }

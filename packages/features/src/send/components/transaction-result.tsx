@@ -1,8 +1,7 @@
-import { ElementType } from 'react'
+import type { ElementType } from "react"
 
-import { MetaField } from '@/components/meta-field'
-import { Button } from '@/components/ui/button'
-import { ViewHeading } from '@/components/view-heading'
+import { MetaField } from "@/components/meta-field"
+import { ViewHeading } from "@/components/view-heading"
 
 type TxResult = {
   icon: ElementType
@@ -25,7 +24,7 @@ interface TransactionResultProps {
 export const TransactionResult = ({
   title,
   result,
-  button
+  button,
 }: TransactionResultProps) => {
   return (
     <div className="flex flex-col flex-1">
@@ -35,12 +34,13 @@ export const TransactionResult = ({
         <MetaField label={result.label} value={result.content} />
       </div>
       <div className="flex flex-col p-4">
-        <Button
+        <button
+          type="button"
           onClick={button.onClick}
           data-testid="transactionResult__nextButton"
         >
           {button.label}
-        </Button>
+        </button>
       </div>
     </div>
   )

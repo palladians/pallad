@@ -1,35 +1,34 @@
 import {
-  ChainOperationArgs,
-  constructTransaction,
-  FromBip39MnemonicWordsProps,
+  type ChainOperationArgs,
+  type FromBip39MnemonicWordsProps,
   InMemoryKeyAgent,
-  MinaPayload,
-  MinaSpecificArgs,
-  Network
-} from '@palladxyz/key-management'
-import { Mina, TokenIdMap } from '@palladxyz/mina-core'
-import {
+  type MinaSpecificArgs,
+  Network,
+  constructTransaction,
+} from "@palladxyz/key-management"
+import { Mina, type TokenIdMap } from "@palladxyz/mina-core"
+import type {
   Payment,
-  SignedLegacy
-} from 'mina-signer/dist/node/mina-signer/src/TSTypes'
+  SignedLegacy,
+} from "mina-signer/dist/node/mina-signer/src/TSTypes"
 
-import { MinaExplorer } from '../../../../src'
+import { MinaExplorer } from "../../../../src"
 
 const nodeUrl =
-  process.env['NODE_URL'] || 'https://proxy.berkeley.minaexplorer.com/'
+  process.env.NODE_URL || "https://proxy.berkeley.minaexplorer.com/"
 const publicKey =
-  process.env['PUBLIC_KEY'] ||
-  'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb'
+  process.env.PUBLIC_KEY ||
+  "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
 
 const params = {
-  passphrase: 'passphrase'
+  passphrase: "passphrase",
 }
 
 const getPassphrase = () =>
   new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 // TODO: change this to local network
 // TODO: use different mnemonic for this test -- else there are two duplicate transactions with the unified provider tests
-describe.skip('Mina Explorer Submit Transaction Provider (Functional)', () => {
+describe.skip("Mina Explorer Submit Transaction Provider (Functional)", () => {
   let provider: ReturnType<typeof MinaExplorer.createTxSubmitProvider>
   let accountInfoProvider: ReturnType<
     typeof MinaExplorer.createAccountInfoProvider
@@ -43,80 +42,79 @@ describe.skip('Mina Explorer Submit Transaction Provider (Functional)', () => {
     provider = MinaExplorer.createTxSubmitProvider(nodeUrl)
     accountInfoProvider = MinaExplorer.createAccountInfoProvider(nodeUrl)
     tokenMap = {
-      MINA: '1'
+      MINA: "1",
     }
   })
 
   beforeAll(async () => {
     mnemonic = [
-      'habit',
-      'hope',
-      'tip',
-      'crystal',
-      'because',
-      'grunt',
-      'nation',
-      'idea',
-      'electric',
-      'witness',
-      'alert',
-      'like'
+      "habit",
+      "hope",
+      "tip",
+      "crystal",
+      "because",
+      "grunt",
+      "nation",
+      "idea",
+      "electric",
+      "witness",
+      "alert",
+      "like",
     ]
-    networkType = 'testnet'
+    networkType = "testnet"
     const agentArgs: FromBip39MnemonicWordsProps = {
       getPassphrase: getPassphrase,
       mnemonicWords: mnemonic,
-      mnemonic2ndFactorPassphrase: ''
+      mnemonic2ndFactorPassphrase: "",
     }
     agent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
     const args: MinaSpecificArgs = {
       network: Network.Mina,
       accountIndex: 0,
       addressIndex: 0,
-      networkType: networkType
+      networkType: networkType,
     }
-    const payload = new MinaPayload()
 
-    await agent.restoreKeyAgent(payload, args, getPassphrase)
+    await agent.restoreKeyAgent(args, getPassphrase)
   })
 
-  describe('healthCheck', () => {
-    it('should return a health check response', async () => {
+  describe("healthCheck", () => {
+    it("should return a health check response", async () => {
       // This test depends on the actual response from the server
       const response = await provider.healthCheck()
       expect(response.ok).toBe(true)
     })
   })
   // TODO: use different mnemonic for this test -- else there are two duplicate transactions
-  describe.skip('submitTx', () => {
-    it('should return the submitted transaction response', async () => {
+  describe.skip("submitTx", () => {
+    it("should return the submitted transaction response", async () => {
       // fetch account info
       const accountInfo = await accountInfoProvider.getAccountInfo({
         publicKey,
-        tokenMap
+        tokenMap,
       })
       // construct transaction, sign, and submit
       const amount = 1 * 1e9
-      const inferredNonce = accountInfo['MINA']?.inferredNonce ?? 0
+      const inferredNonce = accountInfo.MINA?.inferredNonce ?? 0
       const transaction: Mina.TransactionBody = {
-        to: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
-        from: 'B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb',
+        to: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
+        from: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
         fee: 1 * 1e9,
         amount: amount,
         nonce: Number(inferredNonce),
-        memo: 'test suite',
-        type: 'payment',
-        validUntil: 4294967295
+        memo: "test suite",
+        type: "payment",
+        validUntil: 4294967295,
       }
       const constructedTx: Mina.ConstructedTransaction = constructTransaction(
         transaction,
-        Mina.TransactionKind.PAYMENT
+        Mina.TransactionKind.PAYMENT,
       )
       const credential = agent.serializableData.credentialSubject.contents[0]
       const args: ChainOperationArgs = {
-        operation: 'mina_signTransaction',
-        network: 'Mina',
-        networkType: networkType
+        operation: "mina_signTransaction",
+        network: "Mina",
+        networkType: networkType,
       }
       const signedTx = await agent.sign(credential, constructedTx, args)
       const submitTxArgs = {
@@ -129,14 +127,14 @@ describe.skip('Mina Explorer Submit Transaction Provider (Functional)', () => {
           nonce: transaction.nonce,
           memo: transaction.memo,
           amount: transaction.amount,
-          validUntil: transaction.validUntil
-        }
+          validUntil: transaction.validUntil,
+        },
       }
       // This test now depends on the actual response from the server
       const response = await provider.submitTx(submitTxArgs)
       console.log(
-        'Mina Explorer Submit Transaction Provider Response',
-        response
+        "Mina Explorer Submit Transaction Provider Response",
+        response,
       )
       //expect(response).toHaveProperty('MINA')
     })

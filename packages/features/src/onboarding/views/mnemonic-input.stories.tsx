@@ -1,9 +1,9 @@
-import { StoryDefault } from '@ladle/react'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import type { StoryDefault } from "@ladle/react"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
 
-import { MnemonicInputData } from '../types'
-import { MnemonicInputView } from './mnemonic-input'
+import type { MnemonicInputData } from "../types"
+import { MnemonicInputView } from "./mnemonic-input"
 
 export const View = () => {
   const [safetyConfirmed, onSafetyConfirmed] = useState(false)
@@ -21,5 +21,5 @@ export const View = () => {
 }
 
 export default {
-  title: 'Onboarding / Mnemonic Input'
+  title: "Onboarding / Mnemonic Input",
 } satisfies StoryDefault

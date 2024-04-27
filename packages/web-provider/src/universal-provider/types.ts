@@ -1,6 +1,6 @@
-import { EventEmitter } from 'events'
+import type { EventEmitter } from "node:events"
 
-import { RequestArguments } from '../web-provider-types'
+import type { RequestArguments } from "../web-provider-types"
 
 export interface RpcProviderMap {
   [chainId: string]: IProvider | unknown // todo remove unknown

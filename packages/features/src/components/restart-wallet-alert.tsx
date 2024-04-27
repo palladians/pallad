@@ -1,16 +1,5 @@
-import { useVault } from '@palladxyz/vault'
-import { storage } from 'webextension-polyfill'
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle
-} from '@/components/ui/alert-dialog'
+import { useVault } from "@palladxyz/vault"
+import { storage } from "webextension-polyfill"
 
 type RestartWalletAlertProps = {
   open: boolean
@@ -19,7 +8,7 @@ type RestartWalletAlertProps = {
 
 export const RestartWalletAlert = ({
   open,
-  setOpen
+  setOpen,
 }: RestartWalletAlertProps) => {
   const confirm = async () => {
     useVault.persist.clearStorage()

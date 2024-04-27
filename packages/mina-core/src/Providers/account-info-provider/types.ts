@@ -1,4 +1,4 @@
-import { Mina, Provider } from '../..'
+import type { Mina, Provider } from "../.."
 
 export interface TokenIdMap {
   [alias: string]: string
@@ -25,6 +25,6 @@ export interface AccountInfoProvider extends Provider {
    * @returns {AccountInfo} - An object with balance and account information
    */
   getAccountInfo: (
-    args: AccountInfoArgs
+    args: AccountInfoArgs,
   ) => Promise<Record<string, AccountInfo>>
 }
