@@ -65,7 +65,6 @@ onMessage("enable", async (payload) => {
 onMessage("on", ({ data }) => {
   const { event /*, context*/ } = data as unknown as OnEventData
   const listenerId = registerListener(event /*, context*/)
-  console.log("test emitted event", event)
   return { success: true, listenerId }
 })
 
