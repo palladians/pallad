@@ -2,7 +2,6 @@ import type { useAccount } from "@/common/hooks/use-account"
 import type { useBlockchainSummary } from "@/common/hooks/use-blockchain-summary"
 import { truncateString } from "@/common/lib/string"
 import { AppLayout } from "@/components/app-layout"
-import { ButtonArrow } from "@/components/button-arrow"
 import { MetaField } from "@/components/meta-field"
 
 import { ViewHeading } from "@/components/view-heading"
@@ -76,7 +75,6 @@ export const StakingOverviewView = ({
               className="group gap-2"
             >
               <span>Start Staking</span>
-              <ButtonArrow />
             </button>
           </div>
         )}

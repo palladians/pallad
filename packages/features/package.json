@@ -43,7 +43,7 @@
     "@palladxyz/vault": "workspace:*",
     "@total-typescript/ts-reset": "^0.5.1",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.0.0",
+    "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
     "date-fns": "^3.0.1",
     "dayjs": "^1.11.10",
@@ -72,7 +72,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "@ladle/react": "^4.0.2",
+    "@ladle/react": "^4.0.3",
     "@palladxyz/common": "workspace:*",
     "@svgr/plugin-jsx": "^8.0.1",
     "@svgr/rollup": "^8.0.1",

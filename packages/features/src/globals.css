@@ -9,6 +9,6 @@
 
 @layer base {
     body {
-        @apply font-work-sans font-[500];
+        @apply font-work-sans font-[500] bg-neutral;
     }
 }

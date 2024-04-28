@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 
 import { useAddressBookStore } from "@/common/store/address-book"
-import { ButtonArrow } from "@/components/button-arrow"
 import { FormError } from "@/components/form-error"
 import { cn } from "@/lib/utils"
 
@@ -72,7 +71,6 @@ export const NewAddressForm = () => {
       >
         <PlusIcon size={16} />
         <span>Create Contact</span>
-        <ButtonArrow />
       </button>
     </form>
   )

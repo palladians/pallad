@@ -1,14 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { EyeIcon, EyeOffIcon, LinkIcon } from "lucide-react"
+import { ExternalLinkIcon, EyeIcon, EyeOffIcon } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { passwordSchema } from "@/common/lib/validation"
-import { ButtonArrow } from "@/components/button-arrow"
 import { FormError } from "@/components/form-error"
 import { WizardLayout } from "@/components/wizard-layout"
-import { cn } from "@/lib/utils"
 
 import type { WalletInfoData } from "../types"
 
@@ -42,96 +40,83 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
       title={title}
       backButtonPath={-1}
       footer={
-        <button
-          type="button"
-          className={cn([
-            "flex-1 transition-opacity opacity-50 gap-2 group",
-            termsAccepted && "opacity-100",
-          ])}
-          disabled={
-            !termsAccepted ||
-            !dirtyFields.walletName ||
-            !dirtyFields.spendingPassword
-          }
-          onClick={handleSubmit(onSubmit)}
-          data-testid="onboarding__nextButton"
-        >
-          <span>Next</span>
-          <ButtonArrow />
-        </button>
+        <div className="flex w-full flex-col items-center justify-center gap-6">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              className="checkbox rounded-md"
+              checked={termsAccepted}
+              onClick={toggleAccepted}
+              data-testid="onboarding__tosCheckbox"
+              id="tosCheckbox"
+            />
+            <label htmlFor="tosCheckbox" className="label">
+              I accept Terms of Service.
+            </label>
+            <a
+              href="https://palladians.xyz/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ExternalLinkIcon size={24} />
+            </a>
+          </div>
+          <button
+            type="button"
+            className="btn btn-primary max-w-48 w-full"
+            disabled={
+              !termsAccepted ||
+              !dirtyFields.walletName ||
+              !dirtyFields.spendingPassword
+            }
+            onClick={handleSubmit(onSubmit)}
+            data-testid="onboarding__nextButton"
+          >
+            <span>Next</span>
+          </button>
+        </div>
       }
     >
-      <div className="flex flex-col flex-1 gap-4 p-4">
-        <div className="gap-2">
-          <label
-            htmlFor="walletNameInput"
-            className={cn(
-              "cursor-pointer",
-              errors.walletName && "text-destructive",
-            )}
-          >
-            Wallet Name
+      <div className="flex flex-col flex-1 gap-4">
+        <div className="flex flex-col">
+          <label htmlFor="walletNameInput" className="label">
+            Wallet name
           </label>
           <input
             id="walletNameInput"
-            placeholder="Wallet Name"
+            placeholder="Set wallet name"
             data-testid="onboarding__walletNameInput"
-            className={cn(errors.walletName && "border-destructive")}
+            className="input"
             {...register("walletName")}
           />
           {errors.walletName && (
             <FormError>{errors.walletName?.message}</FormError>
           )}
         </div>
-        <div className="gap-2">
-          <label
-            htmlFor="spendingPassword"
-            className={cn(
-              "cursor-pointer",
-              errors.spendingPassword && "text-destructive",
-            )}
-          >
-            Spending Password
+        <div className="flex flex-col">
+          <label htmlFor="spendingPassword" className="label">
+            Password
           </label>
-          <div className="flex gap-2 relative">
+          <label className="input flex items-center gap-2">
             <input
               id="spendingPassword"
               type={showPassword ? "text" : "password"}
               data-testid="onboarding__spendingPasswordInput"
-              placeholder="Password"
-              className={cn(errors.spendingPassword && "border-destructive")}
+              placeholder="Create your password"
+              className="grow"
               {...register("spendingPassword")}
             />
             <button
               type="button"
+              className="btn btn-link -mr-4"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-1 top-1 rounded-full w-8 h-8 p-1"
             >
-              {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
+              {showPassword ? <EyeOffIcon size={24} /> : <EyeIcon size={24} />}
             </button>
-          </div>
+          </label>
           {errors.spendingPassword && (
             <FormError>{errors.spendingPassword?.message}</FormError>
           )}
-        </div>
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            checked={termsAccepted}
-            onClick={toggleAccepted}
-            data-testid="onboarding__tosCheckbox"
-            id="tosCheckbox"
-          />
-          <label htmlFor="tosCheckbox" className="ml-4 cursor-pointer">
-            I accept Terms of Service.
-          </label>
-          <a
-            href="https://palladians.xyz/terms"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <LinkIcon size={16} />
-          </a>
         </div>
       </div>
     </WizardLayout>

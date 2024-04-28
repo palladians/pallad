@@ -38,7 +38,6 @@ export const MnemonicConfirmationView = ({
       >
         {restoring && <Loader2Icon size={16} className="animate-spin" />}
         <span>Next</span>
-        <ButtonArrow />
       </button>
     }
   >

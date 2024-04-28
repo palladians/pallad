@@ -7,7 +7,6 @@ import { useAccount } from "@/common/hooks/use-account"
 import { TransactionFee } from "@/common/lib/const"
 import { useTransactionStore } from "@/common/store/transaction"
 import type { OutgoingTransaction } from "@/common/types"
-import { ButtonArrow } from "@/components/button-arrow"
 import { FormError } from "@/components/form-error"
 import { cn } from "@/lib/utils"
 
@@ -147,7 +146,6 @@ export const SendForm = () => {
         data-testid="send__nextButton"
       >
         <span>Next</span>
-        <ButtonArrow />
       </button>
     </form>
   )

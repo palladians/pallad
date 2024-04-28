@@ -3,7 +3,6 @@ import { Loader2Icon } from "lucide-react"
 import type { UseFormReturn } from "react-hook-form"
 
 import { Autocomplete } from "@/components/autocomplete"
-import { ButtonArrow } from "@/components/button-arrow"
 import { SecurityCheck } from "@/components/security-check"
 import { WizardLayout } from "@/components/wizard-layout"
 import { cn } from "@/lib/utils"
@@ -49,7 +48,6 @@ export const MnemonicInputView = ({
       >
         {restoring && <Loader2Icon size={16} className="animate-spin" />}
         <span>Next</span>
-        <ButtonArrow />
       </button>
     }
   >

@@ -1,10 +1,11 @@
 import { ArrowLeftIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { MenuBar } from "./menu-bar"
 
 interface WizardLayoutProps {
   children: React.ReactNode
-  footer: React.ReactNode
-  title: React.ReactNode
+  footer?: React.ReactNode
+  title?: React.ReactNode
   backButtonPath?: string | number
 }
 
@@ -16,28 +17,27 @@ export const WizardLayout = ({
 }: WizardLayoutProps) => {
   const navigate = useNavigate()
   return (
-    <div className="flex flex-1 bg-background flex-col">
-      <div className="flex justify-between items-center p-4">
-        <div className="flex gap-4 items-center">
-          {backButtonPath && (
-            <button
-              type="button"
-              className="w-8 h-8"
-              onClick={() => navigate(backButtonPath as never)}
-            >
-              <ArrowLeftIcon size={16} />
-            </button>
-          )}
-          <span className="text-lg font-semibold">{title}</span>
-        </div>
-        {/* <Toggle size="sm" onClick={toggleTheme}>
-          {theme === "dark" ? <SunIcon size={16} /> : <MoonIcon size={16} />}
-        </Toggle> */}
-      </div>
-      <div className="animate-in fade-in flex flex-1 items-center">
+    <div className="flex flex-1 flex-col">
+      {backButtonPath && (
+        <MenuBar
+          leftSlot={
+            backButtonPath && (
+              <button
+                type="button"
+                className="btn btn-circle btn-secondary"
+                onClick={() => navigate(backButtonPath as never)}
+              >
+                <ArrowLeftIcon size={24} />
+              </button>
+            )
+          }
+        />
+      )}
+      {title && <span className="text-3xl px-8">{title}</span>}
+      <div className="animate-in fade-in flex flex-1 items-center px-8">
         {children}
       </div>
-      <div className="flex gap-4 p-4">{footer}</div>
+      {footer && <div className="flex gap-4 p-8">{footer}</div>}
     </div>
   )
 }

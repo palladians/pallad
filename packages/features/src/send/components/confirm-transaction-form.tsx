@@ -17,7 +17,6 @@ import type { z } from "zod"
 import { useAccount } from "@/common/hooks/use-account"
 import { usePendingTransactionStore } from "@/common/store/pending-transactions"
 import { useTransactionStore } from "@/common/store/transaction"
-import { ButtonArrow } from "@/components/button-arrow"
 import { FormError } from "@/components/form-error"
 import { cn } from "@/lib/utils"
 
@@ -177,7 +176,6 @@ export const ConfirmTransactionForm = () => {
       >
         {submitting && <Loader2Icon size={16} className="animate-spin" />}
         <span>Send</span>
-        <ButtonArrow />
       </button>
     </form>
   )

@@ -1,6 +1,5 @@
 import type { UseFormReturn } from "react-hook-form"
 
-import { ButtonArrow } from "@/components/button-arrow"
 import { FormError } from "@/components/form-error"
 import { RestartWalletAlert } from "@/components/restart-wallet-alert"
 import { WizardLayout } from "@/components/wizard-layout"
@@ -38,7 +37,6 @@ export const UnlockWalletView = ({
         disabled={!form.formState.dirtyFields.spendingPassword}
       >
         <span>Unlock</span>
-        <ButtonArrow />
       </button>
     }
   >
