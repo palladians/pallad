@@ -9,7 +9,6 @@ import { useAppStore } from "../store/app"
 
 export const useAccount = () => {
   const navigate = useNavigate()
-  const { toast } = useToast()
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const getAccountsInfo = useVault((state) => state.getAccountsInfo)
   const restartWallet = useVault((state) => state.restartWallet)
@@ -54,9 +53,9 @@ export const useAccount = () => {
   const stakeDelegated = isDelegated(currentWallet)
   const copyWalletAddress = async () => {
     await navigator.clipboard.writeText(publicKey ?? "")
-    toast({
-      title: "Wallet address was copied.",
-    })
+    // toast({
+    //   title: "Wallet address was copied.",
+    // });
   }
   const lockWallet = async () => {
     await getSessionPersistence().setItem("spendingPassword", "")

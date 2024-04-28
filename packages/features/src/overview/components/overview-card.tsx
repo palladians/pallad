@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom"
 import type { useAccount } from "@/common/hooks/use-account"
 import { truncateString } from "@/common/lib/string"
 
-import { AvatarMenu } from "./avatar-menu"
-
 type OverviewCardProps = {
   account: ReturnType<typeof useAccount>
   fiatBalance: number
@@ -36,7 +34,6 @@ export const OverviewCard = ({ account, fiatBalance }: OverviewCardProps) => {
               ~{fiatBalance?.toFixed(4)} USD
             </div>
           </div>
-          <AvatarMenu />
         </div>
         <div className="flex items-center gap-2">
           <div

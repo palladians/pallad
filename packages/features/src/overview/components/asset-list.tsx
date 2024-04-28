@@ -23,14 +23,10 @@ export const AssetList = ({ account }: AssetListProps) => {
         noHorizontalPadding
       />
       {account.isLoading ? (
-        <Skeleton className="w-full h-8" />
+        <div className="skeleton w-full h-8" />
       ) : (
         <div className="flex items-center gap-4">
-          <Avatar>
-            <AvatarFallback className="p-2 text-blue-charcoal-950 dark:text-white">
-              <MinaIcon stroke="8" />
-            </AvatarFallback>
-          </Avatar>
+          <MinaIcon stroke="8" />
           <p className="flex-1 font-semibold">
             {account.data?.symbol?.toString()}
           </p>

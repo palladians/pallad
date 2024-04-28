@@ -8,7 +8,6 @@ import { SettingsView } from "../views/settings"
 
 export const SettingsRoute = () => {
   const [restartAlertVisible, setRestartAlertVisible] = useState(false)
-  const { toast } = useToast()
   const navigate = useNavigate()
   // const switchNetwork = useVault((state) => state.switchNetwork)
   const { setTheme, theme } = useTheme()
@@ -30,9 +29,9 @@ export const SettingsRoute = () => {
   // }
   const handleThemeSwitch = (value: string) => {
     setTheme(value)
-    toast({
-      title: "Theme has been changed.",
-    })
+    // toast({
+    //   title: "Theme has been changed.",
+    // });
   }
   return (
     <SettingsView
