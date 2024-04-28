@@ -80,7 +80,6 @@ describe("Mina InMemoryKeyAgent", () => {
   })
   it("should create an agent with given properties and return the getSeralizableData", () => {
     expect(agent).to.be.instanceOf(InMemoryKeyAgent)
-    console.log()
     expect(agent.getSeralizableData()).not.toBe(undefined)
   })
   it("should export root private key", async () => {

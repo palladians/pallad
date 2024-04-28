@@ -29,6 +29,7 @@ import type {
   MinaRpcProviderMap,
   requestAddChain,
   requestData,
+  requestOffchainSession,
   requestSignableData,
   requestSignableTransaction,
   requestSwitchChain,
@@ -446,6 +447,35 @@ export class MinaProvider implements IMinaProvider {
           return requestNetworkResponse as unknown as T
         }
       }
+      case "experimental_requestSession": {
+        // check if wallet is locked first
+        const passphrase = await this.userPrompt("password", {
+          title: "Experimental Request for Session Key Creation",
+          payload: superjson.stringify(args.params),
+        })
+        if (passphrase === null) {
+          throw new Error("User denied the request for passphrase.")
+        }
+        const operationArgs: ChainOperationArgs = {
+          // must be signFields because the wallet should sign the merkle root of the session data tree
+          operation: "mina_signFields",
+          network: "Mina",
+          // TODO: make this testnet configurable
+          networkType: "testnet",
+        }
+
+        const requestData = args.params as requestOffchainSession
+        const signable = requestData.data
+          .sessionMerkleRoot as MinaSignablePayload
+        return (await this.vault.sign(
+          signable,
+          operationArgs,
+          () =>
+            new Promise<Uint8Array>((resolve) =>
+              resolve(Buffer.from(passphrase as string)),
+            ),
+        )) as unknown as T
+      }
       case "mina_sign":
       case "mina_createNullifier":
       case "mina_signFields":
@@ -470,6 +500,7 @@ export class MinaProvider implements IMinaProvider {
         const operationArgs: ChainOperationArgs = {
           operation: args.method,
           network: "Mina",
+          // TODO: make this testnet configurable
           networkType: "testnet",
         }
 
