@@ -14,6 +14,7 @@ import type {
   ChainProviderOptions,
   ChainRpcConfig,
   ConnectOps,
+  Params,
   ProviderConnectInfo,
   RequestArguments,
 } from "../web-provider-types"
@@ -302,7 +303,14 @@ export class MinaProvider implements IMinaProvider {
     chain?: string | undefined,
   ): Promise<T> {
     // Step 1: Check if request instantiator is in blocked list.
-    if (await this.vault.isBlocked({ origin: origin })) {
+    const params = args.params as Params
+    let requestOrigin = ""
+
+    if (params.data?.origin) {
+      requestOrigin = params.data.origin
+    }
+    console.log("params, in `request` method:", params)
+    if (await this.vault.isBlocked({ origin: requestOrigin })) {
       throw this.createProviderRpcError(
         4100,
         "Unauthorized - The requested method and/or account has not been authorized for the requests origin by the user.",
@@ -344,9 +352,9 @@ export class MinaProvider implements IMinaProvider {
         throw this.createProviderRpcError(4901, "Chain Disconnected")
       }
     }
-    const enabled = await this.vault.getEnabled({ origin })
+    const enabled = await this.vault.getEnabled({ origin: requestOrigin })
     if (!enabled) {
-      await this.enable({ origin })
+      await this.enable({ origin: requestOrigin })
     }
     // TODO: Add prompt confirmation for signing and broadcasting
     // // Prompt user for confirmation based on the method type

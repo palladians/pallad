@@ -108,12 +108,12 @@ onMessage("isConnected", (payload) => {
   return provider.isConnected({ origin: data.origin })
 })
 
-onMessage("mina_chainId", async () => {
-  return await provider.request({ method: "mina_chainId" })
+onMessage("mina_chainId", async (data) => {
+  return await provider.request({ method: "mina_chainId", params: data })
 })
 
-onMessage("mina_accounts", async () => {
-  return await provider.request({ method: "mina_accounts" })
+onMessage("mina_accounts", async (data) => {
+  return await provider.request({ method: "mina_accounts", params: data })
 })
 
 onMessage("mina_sign", async (data) => {
@@ -131,8 +131,8 @@ onMessage("mina_signTransaction", async (data) => {
   })
 })
 
-onMessage("mina_getBalance", async () => {
-  return await provider.request({ method: "mina_getBalance" })
+onMessage("mina_getBalance", async (data) => {
+  return await provider.request({ method: "mina_getBalance", params: data })
 })
 
 onMessage("mina_createNullifier", async (data) => {
