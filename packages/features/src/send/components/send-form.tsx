@@ -8,8 +8,8 @@ import { TransactionFee } from "@/common/lib/const"
 import { useTransactionStore } from "@/common/store/transaction"
 import type { OutgoingTransaction } from "@/common/types"
 import { FormError } from "@/components/form-error"
-import { cn } from "@/lib/utils"
 
+import clsx from "clsx"
 import { SendFormSchema } from "./send-form.schema"
 
 export const SendForm = () => {
@@ -68,7 +68,7 @@ export const SendForm = () => {
         <div className="flex justify-between items-center">
           <label
             htmlFor="receiverAddress"
-            className={cn(errors.to && "text-destructive")}
+            className={clsx(errors.to && "text-destructive")}
           >
             Receiver
           </label>
@@ -93,7 +93,7 @@ export const SendForm = () => {
         <div className="flex justify-between items-center">
           <label
             htmlFor="amount"
-            className={cn(errors.amount && "text-destructive")}
+            className={clsx(errors.amount && "text-destructive")}
           >
             Amount
           </label>
@@ -111,14 +111,17 @@ export const SendForm = () => {
         <FormError>{errors.amount?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2">
-        <label htmlFor="memo" className={cn(errors.memo && "text-destructive")}>
+        <label
+          htmlFor="memo"
+          className={clsx(errors.memo && "text-destructive")}
+        >
           Memo
         </label>
         <input id="memo" placeholder="Memo" {...register("memo")} />
         <FormError>{errors.memo?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2 flex-1">
-        <label className={cn(errors.fee && "text-destructive")}>Fee</label>
+        <label className={clsx(errors.fee && "text-destructive")}>Fee</label>
         {/* <RadioGroup
           defaultValue="default"
           onValueChange={(value) => setValue("fee", value)}

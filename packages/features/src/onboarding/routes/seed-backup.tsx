@@ -3,22 +3,19 @@ import { useNavigate } from "react-router-dom"
 
 import { useOnboardingStore } from "@/common/store/onboarding"
 
-import { MnemonicWritedownView } from "../views/mnemonic-writedown"
+import { SeedBackupView } from "../views/seed-backup"
 
-export const MnemonicWritedownRoute = () => {
+export const SeedBackupRoute = () => {
   const navigate = useNavigate()
   const mnemonicWords = useOnboardingStore((state) =>
     state.mnemonic?.split(" "),
   )
-  const [safetyConfirmed, setSafetyConfirmed] = useState(false)
   const [mnemonicWritten, setMnemonicWritten] = useState(false)
   return (
-    <MnemonicWritedownView
+    <SeedBackupView
       mnemonicWords={mnemonicWords ?? []}
       mnemonicWritten={mnemonicWritten}
       setMnemonicWritten={setMnemonicWritten}
-      safetyConfirmed={safetyConfirmed}
-      onSafetyConfirmed={setSafetyConfirmed}
       onConfirm={() => navigate("/onboarding/confirmation")}
     />
   )

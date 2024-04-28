@@ -40,7 +40,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
       title={title}
       backButtonPath={-1}
       footer={
-        <div className="flex w-full flex-col items-center justify-center gap-6">
+        <>
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -74,7 +74,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
           >
             <span>Next</span>
           </button>
-        </div>
+        </>
       }
     >
       <div className="flex flex-col flex-1 gap-4">

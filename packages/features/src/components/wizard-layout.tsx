@@ -18,26 +18,28 @@ export const WizardLayout = ({
   const navigate = useNavigate()
   return (
     <div className="flex flex-1 flex-col">
-      {backButtonPath && (
-        <MenuBar
-          leftSlot={
-            backButtonPath && (
-              <button
-                type="button"
-                className="btn btn-circle btn-secondary"
-                onClick={() => navigate(backButtonPath as never)}
-              >
-                <ArrowLeftIcon size={24} />
-              </button>
-            )
-          }
-        />
-      )}
+      <MenuBar
+        leftSlot={
+          backButtonPath && (
+            <button
+              type="button"
+              className="btn btn-circle btn-secondary"
+              onClick={() => navigate(backButtonPath as never)}
+            >
+              <ArrowLeftIcon size={24} />
+            </button>
+          )
+        }
+      />
       {title && <span className="text-3xl px-8">{title}</span>}
       <div className="animate-in fade-in flex flex-1 items-center px-8">
         {children}
       </div>
-      {footer && <div className="flex gap-4 p-8">{footer}</div>}
+      {footer && (
+        <div className="flex flex-col w-full justify-center items-center gap-6 p-8">
+          {footer}
+        </div>
+      )}
     </div>
   )
 }

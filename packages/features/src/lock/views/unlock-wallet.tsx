@@ -3,7 +3,7 @@ import type { UseFormReturn } from "react-hook-form"
 import { FormError } from "@/components/form-error"
 import { RestartWalletAlert } from "@/components/restart-wallet-alert"
 import { WizardLayout } from "@/components/wizard-layout"
-import { cn } from "@/lib/utils"
+import clsx from "clsx"
 
 type UnlockWalletData = {
   spendingPassword: string
@@ -53,7 +53,7 @@ export const UnlockWalletView = ({
       >
         <label
           htmlFor="spendingPassword"
-          className={cn(
+          className={clsx(
             "cursor-pointer",
             form.formState.errors.spendingPassword && "text-destructive",
           )}
@@ -66,7 +66,7 @@ export const UnlockWalletView = ({
               id="spendingPassword"
               type={showPassword ? "text" : "password"}
               data-testid="unlockWallet__password"
-              className={cn(
+              className={clsx(
                 form.formState.errors.spendingPassword && "border-destructive",
               )}
               {...form.register("spendingPassword")}

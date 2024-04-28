@@ -7,8 +7,8 @@ import { TransactionFee } from "@/common/lib/const"
 import { useTransactionStore } from "@/common/store/transaction"
 import type { OutgoingTransaction } from "@/common/types"
 import { FormError } from "@/components/form-error"
-import { cn } from "@/lib/utils"
 
+import clsx from "clsx"
 import { DelegateFormSchema } from "./delegate-form.schema"
 
 export const DelegateForm = () => {
@@ -53,7 +53,7 @@ export const DelegateForm = () => {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="blockProducer"
-          className={cn(errors.to && "text-destructive")}
+          className={clsx(errors.to && "text-destructive")}
         >
           Block Producer
         </label>
@@ -67,7 +67,10 @@ export const DelegateForm = () => {
         <FormError>{errors.to?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2">
-        <label htmlFor="memo" className={cn(errors.memo && "text-destructive")}>
+        <label
+          htmlFor="memo"
+          className={clsx(errors.memo && "text-destructive")}
+        >
           Memo
         </label>
         <input
@@ -80,7 +83,7 @@ export const DelegateForm = () => {
         <FormError>{errors.memo?.message}</FormError>
       </div>
       <div className="flex flex-col gap-2 flex-1">
-        <label className={cn(errors.fee && "text-destructive")}>Fee</label>
+        <label className={clsx(errors.fee && "text-destructive")}>Fee</label>
         {/* <RadioGroup
           defaultValue="default"
           onValueChange={(value) => setValue("fee", value)}

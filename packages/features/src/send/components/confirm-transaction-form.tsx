@@ -18,8 +18,8 @@ import { useAccount } from "@/common/hooks/use-account"
 import { usePendingTransactionStore } from "@/common/store/pending-transactions"
 import { useTransactionStore } from "@/common/store/transaction"
 import { FormError } from "@/components/form-error"
-import { cn } from "@/lib/utils"
 
+import clsx from "clsx"
 import { ConfirmTransactionSchema } from "./confirm-transaction-form.schema"
 
 type ConfirmTransactionData = z.infer<typeof ConfirmTransactionSchema>
@@ -153,7 +153,7 @@ export const ConfirmTransactionForm = () => {
       <fieldset className="flex flex-1 flex-col gap-2">
         <label
           htmlFor="spendingPassword"
-          className={cn(errors.spendingPassword && "text-destructive")}
+          className={clsx(errors.spendingPassword && "text-destructive")}
         >
           Spending Password
         </label>

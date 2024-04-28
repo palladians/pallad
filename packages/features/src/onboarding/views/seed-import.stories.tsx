@@ -1,19 +1,15 @@
 import type { StoryDefault } from "@ladle/react"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 import type { MnemonicInputData } from "../types"
-import { MnemonicInputView } from "./mnemonic-input"
+import { SeedImportView } from "./seed-import"
 
 export const View = () => {
-  const [safetyConfirmed, onSafetyConfirmed] = useState(false)
   const form = useForm<MnemonicInputData>()
   return (
-    <MnemonicInputView
+    <SeedImportView
       form={form}
       mnemonicValid={true}
-      safetyConfirmed={safetyConfirmed}
-      onSafetyConfirmed={onSafetyConfirmed}
       onSubmit={(data) => console.log(data)}
       restoring={false}
     />
@@ -21,5 +17,5 @@ export const View = () => {
 }
 
 export default {
-  title: "Onboarding / Mnemonic Input",
+  title: "Onboarding / Seed Import",
 } satisfies StoryDefault

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import clsx from "clsx"
 
 interface MetaFieldProps {
   label: string
@@ -20,7 +20,7 @@ export const MetaField = ({
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className={cn("leading-8 break-all", capitalize && "capitalize")}
+        className={clsx("leading-8 break-all", capitalize && "capitalize")}
       >
         {value}
       </a>

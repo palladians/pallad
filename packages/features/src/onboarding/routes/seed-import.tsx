@@ -13,9 +13,9 @@ import { useAppStore } from "@/common/store/app"
 import { useOnboardingStore } from "@/common/store/onboarding"
 
 import type { MnemonicInputData } from "../types"
-import { MnemonicInputView } from "../views/mnemonic-input"
+import { SeedImportView } from "../views/seed-import"
 
-export const MnemonicInputRoute = () => {
+export const SeedImportRoute = () => {
   const mixpanel = useMixpanel()
   const [restoring, setRestoring] = useState(false)
   const restoreWallet = useVault((state) => state.restoreWallet)
@@ -31,7 +31,6 @@ export const MnemonicInputRoute = () => {
   const setVaultStateInitialized = useAppStore(
     (state) => state.setVaultStateInitialized,
   )
-  const [safetyConfirmed, onSafetyConfirmed] = useState(false)
   const mnemonicInputForm = useForm<MnemonicInputData>()
   const mnemonic = mnemonicInputForm.watch("mnemonic")
   const chain = Network.Mina // TODO: useForm<ChainInputData>()
@@ -71,12 +70,10 @@ export const MnemonicInputRoute = () => {
     }
   }
   return (
-    <MnemonicInputView
+    <SeedImportView
       form={mnemonicInputForm}
       onSubmit={onSubmit}
       mnemonicValid={mnemonicValid}
-      safetyConfirmed={safetyConfirmed}
-      onSafetyConfirmed={onSafetyConfirmed}
       restoring={restoring}
     />
   )

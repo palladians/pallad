@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { MixpanelProvider } from "react-mixpanel-browser"
-import { MemoryRouter, Route, Routes } from "react-router-dom"
+import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom"
 
 import { AboutRoute } from "./about/routes/about"
 import { AddressBookRoute } from "./address-book/routes/address-book"
@@ -10,9 +10,11 @@ import { UnlockWalletRoute } from "./lock/routes/unlock-wallet"
 import { NotFoundRoute } from "./not-found/routes/not-found"
 import { CreateWalletRoute } from "./onboarding/routes/create-wallet"
 import { MnemonicConfirmationRoute } from "./onboarding/routes/mnemonic-confirmation"
-import { MnemonicInputRoute } from "./onboarding/routes/mnemonic-input"
-import { MnemonicWritedownRoute } from "./onboarding/routes/mnemonic-writedown"
 import { RestoreWalletRoute } from "./onboarding/routes/restore-wallet"
+import { SeedBackupRoute } from "./onboarding/routes/seed-backup"
+import { SeedBackupSecurityRoute } from "./onboarding/routes/seed-backup-security"
+import { SeedImportRoute } from "./onboarding/routes/seed-import"
+import { SeedImportSecurityRoute } from "./onboarding/routes/seed-import-security"
 import { StartRoute } from "./onboarding/routes/start"
 import { StayConnectedRoute } from "./onboarding/routes/stay-connected"
 import { OverviewRoute } from "./overview/routes/overview"
@@ -72,25 +74,27 @@ export const Router = () => {
             />
             <Route path="/contacts" element={<AddressBookRoute />} />
             <Route path="/contacts/new" element={<NewAddressRoute />} />
-            <Route path="/onboarding/create" element={<CreateWalletRoute />} />
-            <Route
-              path="/onboarding/restore"
-              element={<RestoreWalletRoute />}
-            />
+
+            <Route path="onboarding" element={<Outlet />}>
+              <Route path="create" element={<CreateWalletRoute />} />
+              <Route path="restore" element={<RestoreWalletRoute />} />
+              <Route path="backup" element={<SeedBackupRoute />} />
+              <Route
+                path="backup_security"
+                element={<SeedBackupSecurityRoute />}
+              />
+              <Route path="import" element={<SeedImportRoute />} />
+              <Route
+                path="import_security"
+                element={<SeedImportSecurityRoute />}
+              />
+              <Route
+                path="confirmation"
+                element={<MnemonicConfirmationRoute />}
+              />
+              <Route path="finish" element={<StayConnectedRoute />} />
+            </Route>
             <Route path="/unlock" element={<UnlockWalletRoute />} />
-            <Route
-              path="/onboarding/writedown"
-              element={<MnemonicWritedownRoute />}
-            />
-            <Route
-              path="/onboarding/confirmation"
-              element={<MnemonicConfirmationRoute />}
-            />
-            <Route
-              path="/onboarding/mnemonic"
-              element={<MnemonicInputRoute />}
-            />
-            <Route path="/onboarding/finish" element={<StayConnectedRoute />} />
             <Route path="/settings" element={<SettingsRoute />} />
             <Route path="/about" element={<AboutRoute />} />
             <Route path="/*" element={<NotFoundRoute />} />

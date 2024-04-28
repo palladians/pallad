@@ -1,3 +1,6 @@
+import HeartIcon from "@/common/assets/heart.svg?react"
+import SocialDiscordIcon from "@/common/assets/social-discord.svg?react"
+import SocialXIcon from "@/common/assets/social-x.svg?react"
 import { Link2Icon, TwitterIcon } from "lucide-react"
 
 import { WizardLayout } from "@/components/wizard-layout"
@@ -11,42 +14,41 @@ type StayConnectedRoute = {
 
 export const StayConnectedView = ({ onGoToDashboard }: StayConnectedRoute) => (
   <WizardLayout
-    title="Stay Connected"
     footer={
-      <>
-        <button
-          type="button"
-          className="flex-1"
-          onClick={onGoToDashboard}
-          data-testid="onboarding__nextButton"
-        >
-          Go to Dashboard
-        </button>
-      </>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={onGoToDashboard}
+        data-testid="onboarding__nextButton"
+      >
+        Go to dashboard
+      </button>
     }
   >
-    <div className="flex flex-col gap-4 flex-1 p-4">
-      <div className="leading-8">
-        That's it. Before moving to Dashboard consider joining our Community.
+    <div className="flex flex-col justify-center items-center gap-4 flex-1">
+      <HeartIcon />
+      <h1 className="text-2xl text-center">All done!</h1>
+      <div className="leading-8 text-center">
+        Follow us to stay up to date with updates and communications
       </div>
-      <div className="flex gap-2">
-        <a
-          href={DISCORD_URL}
-          className="flex gap-2"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Link2Icon size={16} />
-          Discord
-        </a>
+      <div className="flex w-full gap-2">
         <a
           href={TWITTER_URL}
-          className="flex gap-2"
+          className="btn flex-1 gap-2"
           target="_blank"
           rel="noreferrer"
         >
-          <TwitterIcon size={16} />
+          <SocialXIcon />
           Twitter
+        </a>
+        <a
+          href={DISCORD_URL}
+          className="btn flex-1 gap-2"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <SocialDiscordIcon />
+          Discord
         </a>
       </div>
     </div>

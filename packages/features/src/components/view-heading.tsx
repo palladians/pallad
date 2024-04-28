@@ -1,6 +1,5 @@
+import clsx from "clsx"
 import { ArrowLeftIcon } from "lucide-react"
-
-import { cn } from "@/lib/utils"
 
 type ButtonProps = {
   label: React.ReactNode
@@ -28,7 +27,7 @@ export const ViewHeading = ({
 }: ViewHeadingProps) => {
   return (
     <div
-      className={cn(
+      className={clsx(
         "sticky top-0 right-0 left-0 bg-background flex gap-4 items-center justify-between px-4 py-2 z-10",
         noHorizontalPadding && "px-0",
       )}

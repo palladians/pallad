@@ -1,9 +1,7 @@
 import { Loader2Icon } from "lucide-react"
 import type { UseFormReturn } from "react-hook-form"
 
-import { ButtonArrow } from "@/components/button-arrow"
 import { WizardLayout } from "@/components/wizard-layout"
-import { cn } from "@/lib/utils"
 
 import type { MnemonicConfirmationData } from "../types"
 
@@ -23,16 +21,13 @@ export const MnemonicConfirmationView = ({
   confirmationValid,
 }: MnemonicConfirmationViewProps) => (
   <WizardLayout
-    title="Confirm The Mnemonic"
+    title="Seed backup"
     backButtonPath={-1}
     footer={
       <button
         type="submit"
         form="mnemonicConfirmationForm"
-        className={cn([
-          "flex-1 opacity-50 transition-opacity gap-2 group",
-          confirmationValid && "opacity-100",
-        ])}
+        className="btn btn-primary max-w-48 w-full"
         disabled={!confirmationValid || restoring}
         data-testid="onboarding__nextButton"
       >
@@ -42,18 +37,28 @@ export const MnemonicConfirmationView = ({
     }
   >
     <form
-      className="flex flex-col flex-1 gap-4 p-4"
+      className="flex flex-col flex-1 gap-1"
       id="mnemonicConfirmationForm"
       onSubmit={form.handleSubmit(onSubmit)}
       noValidate
     >
-      <label data-testid="onboarding__writedownIndex">
-        Type in the word #{confirmationIndex + 1}
+      <label
+        htmlFor="confirmation"
+        className="label"
+        data-testid="onboarding__writedownIndex"
+      >
+        Word number {confirmationIndex + 1}
       </label>
       <input
+        id="confirmation"
+        className="input"
+        placeholder="Enter the word"
         data-testid="onboarding__mnemonicConfirmationInput"
         {...form.register("mnemonicWord")}
       />
+      <p className="text-mint mt-4">
+        Confirm you saved the seed by typing this random word
+      </p>
     </form>
   </WizardLayout>
 )

@@ -1,26 +1,23 @@
 import type { StoryDefault } from "@ladle/react"
 import { useState } from "react"
 
-import { MnemonicWritedownView } from "./mnemonic-writedown"
+import { SeedBackupView } from "./seed-backup"
 
 const TEST_MNEMONIC =
   "habit hope tip crystal because grunt nation idea electric witness alert like"
 
 export const View = () => {
-  const [safetyConfirmed, setSafetyConfirmed] = useState(false)
   const [mnemonicWritten, setMnemonicWritten] = useState(false)
   return (
-    <MnemonicWritedownView
+    <SeedBackupView
       mnemonicWords={TEST_MNEMONIC.split(" ")}
       mnemonicWritten={mnemonicWritten}
       setMnemonicWritten={setMnemonicWritten}
-      safetyConfirmed={safetyConfirmed}
-      onSafetyConfirmed={setSafetyConfirmed}
       onConfirm={() => console.log("confirmed")}
     />
   )
 }
 
 export default {
-  title: "Onboarding / Mnemonic Writedown",
+  title: "Onboarding / Seed Backup",
 } satisfies StoryDefault
