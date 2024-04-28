@@ -74,7 +74,13 @@ export interface ProviderConnectInfo {
 
 export interface RequestArguments {
   method: string
-  params?: unknown[] | Record<string, unknown> | object | undefined
+  params: unknown[] | Record<string, unknown> | object | undefined | Params
+}
+
+export interface Params {
+  data?: {
+    origin?: string
+  }
 }
 
 export type ProviderChainId = ProviderConnectInfo["chainId"]
