@@ -34,7 +34,7 @@ const callPalladAsync = ({ method, payload }) =>
     })
     return channel.close()
   })
-const debouncedCall = debounce(callPalladAsync, 1000)
+const debouncedCall = debounce(callPalladAsync, 300, false)
 const init = () => {
   window.mina = {
     wallet: {
