@@ -5,11 +5,9 @@ import { ReceiveView } from "./receive"
 export const View = () => {
   return (
     <ReceiveView
-      gradientBackground=""
-      publicKey="B62XXX"
+      publicKey="B62qizYjLtUebFFQuAnPjpLrUdWx4rLnptvzbVdNpY6EXff2U68Ljf5"
       onCopyWalletAddress={() => console.log("copy address")}
       onGoBack={() => console.log("go back")}
-      theme="dark"
     />
   )
 }
