@@ -1,5 +1,4 @@
 import { useVault } from "@palladxyz/vault"
-import { storage } from "webextension-polyfill"
 
 type RestartWalletAlertProps = {
   open: boolean
@@ -11,6 +10,7 @@ export const RestartWalletAlert = ({
   setOpen,
 }: RestartWalletAlertProps) => {
   const confirm = async () => {
+    const { storage } = await import("webextension-polyfill")
     useVault.persist.clearStorage()
     await storage.local.clear()
     await storage.session.clear()
@@ -18,29 +18,5 @@ export const RestartWalletAlert = ({
     setOpen(false)
     window.close()
   }
-  return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action is irreversible. This will permanently remove all data
-            associated with your wallet. If you don't currently have your
-            mnemonic, you won't be able to use it.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel data-testid="restartWallet__cancel">
-            Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={confirm}
-            data-testid="restartWallet__confirm"
-          >
-            Continue
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  )
+  return null
 }

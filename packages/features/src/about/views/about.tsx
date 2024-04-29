@@ -1,4 +1,4 @@
-import Logo from "@/common/assets/logo.svg"
+import Logo from "@/common/assets/logo.svg?react"
 import { AppLayout } from "@/components/app-layout"
 import { MetaField } from "@/components/meta-field"
 import { ViewHeading } from "@/components/view-heading"

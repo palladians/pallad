@@ -1,11 +1,13 @@
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import { ErrorBoundary } from "react-error-boundary"
 import { MixpanelProvider } from "react-mixpanel-browser"
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom"
 
 import { AboutRoute } from "./about/routes/about"
 import { AddressBookRoute } from "./address-book/routes/address-book"
 import { NewAddressRoute } from "./address-book/routes/new-address"
+import { ErrorView } from "./error-renderer/views/error"
 import { UnlockWalletRoute } from "./lock/routes/unlock-wallet"
 import { NotFoundRoute } from "./not-found/routes/not-found"
 import { CreateWalletRoute } from "./onboarding/routes/create-wallet"
@@ -42,65 +44,67 @@ export const Router = () => {
       config={mixpanelConfig}
       token="ee1f7980362645f72b80bfdd0c7be4a8"
     >
-      <div className="flex flex-1 pointer">
-        <MemoryRouter>
-          <Routes>
-            <Route path="/" element={<StartRoute />} />
-            <Route path="/dashboard" element={<OverviewRoute />} />
-            <Route path="/send" element={<SendRoute />} />
-            <Route path="/receive" element={<ReceiveRoute />} />
-            <Route
-              path="/transactions/summary"
-              element={<TransactionSummaryRoute />}
-            />
-            <Route
-              path="/transactions/success"
-              element={<TransactionSuccessRoute />}
-            />
-            <Route
-              path="/transactions/error"
-              element={<TransactionErrorRoute />}
-            />
-            <Route
-              path="/transactions/:hash"
-              element={<TransactionDetailsRoute />}
-            />
-            <Route path="/transactions" element={<TransactionsRoute />} />
-            <Route path="/staking" element={<StakingOverviewRoute />} />
-            <Route path="/staking/delegate" element={<DelegateRoute />} />
-            <Route
-              path="/staking/producers"
-              element={<BlockProducersRoute />}
-            />
-            <Route path="/contacts" element={<AddressBookRoute />} />
-            <Route path="/contacts/new" element={<NewAddressRoute />} />
+      <ErrorBoundary FallbackComponent={ErrorView}>
+        <div className="flex flex-1 pointer">
+          <MemoryRouter>
+            <Routes>
+              <Route path="/" element={<StartRoute />} />
+              <Route path="/dashboard" element={<OverviewRoute />} />
+              <Route path="/send" element={<SendRoute />} />
+              <Route path="/receive" element={<ReceiveRoute />} />
+              <Route
+                path="/transactions/summary"
+                element={<TransactionSummaryRoute />}
+              />
+              <Route
+                path="/transactions/success"
+                element={<TransactionSuccessRoute />}
+              />
+              <Route
+                path="/transactions/error"
+                element={<TransactionErrorRoute />}
+              />
+              <Route
+                path="/transactions/:hash"
+                element={<TransactionDetailsRoute />}
+              />
+              <Route path="/transactions" element={<TransactionsRoute />} />
+              <Route path="/staking" element={<StakingOverviewRoute />} />
+              <Route path="/staking/delegate" element={<DelegateRoute />} />
+              <Route
+                path="/staking/producers"
+                element={<BlockProducersRoute />}
+              />
+              <Route path="/contacts" element={<AddressBookRoute />} />
+              <Route path="/contacts/new" element={<NewAddressRoute />} />
 
-            <Route path="onboarding" element={<Outlet />}>
-              <Route path="create" element={<CreateWalletRoute />} />
-              <Route path="restore" element={<RestoreWalletRoute />} />
-              <Route path="backup" element={<SeedBackupRoute />} />
-              <Route
-                path="backup_security"
-                element={<SeedBackupSecurityRoute />}
-              />
-              <Route path="import" element={<SeedImportRoute />} />
-              <Route
-                path="import_security"
-                element={<SeedImportSecurityRoute />}
-              />
-              <Route
-                path="confirmation"
-                element={<MnemonicConfirmationRoute />}
-              />
-              <Route path="finish" element={<StayConnectedRoute />} />
-            </Route>
-            <Route path="/unlock" element={<UnlockWalletRoute />} />
-            <Route path="/settings" element={<SettingsRoute />} />
-            <Route path="/about" element={<AboutRoute />} />
-            <Route path="/*" element={<NotFoundRoute />} />
-          </Routes>
-        </MemoryRouter>
-      </div>
+              <Route path="onboarding" element={<Outlet />}>
+                <Route path="create" element={<CreateWalletRoute />} />
+                <Route path="restore" element={<RestoreWalletRoute />} />
+                <Route path="backup" element={<SeedBackupRoute />} />
+                <Route
+                  path="backup_security"
+                  element={<SeedBackupSecurityRoute />}
+                />
+                <Route path="import" element={<SeedImportRoute />} />
+                <Route
+                  path="import_security"
+                  element={<SeedImportSecurityRoute />}
+                />
+                <Route
+                  path="confirmation"
+                  element={<MnemonicConfirmationRoute />}
+                />
+                <Route path="finish" element={<StayConnectedRoute />} />
+              </Route>
+              <Route path="/unlock" element={<UnlockWalletRoute />} />
+              <Route path="/settings" element={<SettingsRoute />} />
+              <Route path="/about" element={<AboutRoute />} />
+              <Route path="/*" element={<NotFoundRoute />} />
+            </Routes>
+          </MemoryRouter>
+        </div>
+      </ErrorBoundary>
     </MixpanelProvider>
   )
 }

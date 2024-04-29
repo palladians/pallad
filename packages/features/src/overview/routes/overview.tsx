@@ -3,9 +3,11 @@ import { useMemo } from "react"
 
 import { useAccount } from "@/common/hooks/use-account"
 
+import { useNavigate } from "react-router-dom"
 import { OverviewView } from "../views/overview"
 
 export const OverviewRoute = () => {
+  const navigate = useNavigate()
   const account = useAccount()
   const { data: fiatPriceData } = useFiatPrice()
   const fiatBalance = useMemo(() => {
@@ -14,5 +16,12 @@ export const OverviewRoute = () => {
     if (!rawFiatPrice) return 0
     return Number(account.minaBalance) * rawFiatPrice ?? 0
   }, [account.minaBalance, fiatPriceData])
-  return <OverviewView account={account} fiatBalance={fiatBalance} />
+  return (
+    <OverviewView
+      account={account}
+      fiatBalance={fiatBalance}
+      onSend={() => navigate("/send")}
+      onReceive={() => navigate("/receive")}
+    />
+  )
 }
