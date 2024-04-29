@@ -7,5 +7,5 @@ export const View = () => (
 )
 
 export default {
-  title: "Dashboard / Address Book",
+  title: "Address Book / Index",
 } satisfies StoryDefault

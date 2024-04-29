@@ -5,5 +5,5 @@ import { AboutView } from "./about"
 export const View = () => <AboutView onGoBack={() => console.log("go back")} />
 
 export default {
-  title: "Dashboard / About",
+  title: "About",
 } satisfies StoryDefault

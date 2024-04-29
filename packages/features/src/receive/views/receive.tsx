@@ -20,7 +20,6 @@ export const ReceiveView = ({
 }: ReceiveViewProps) => (
   <AppLayout>
     <div className="flex flex-col flex-1">
-      <ViewHeading title="Receive" backButton={{ onClick: onGoBack }} />
       <div className="flex flex-col flex-1 justify-center items-center gap-4 p-4">
         {publicKey && (
           <div className="animate-in slide-in-from-bottom-2 fade-in relative max-w-[256px] max-h-[256px] w-full h-full">
@@ -36,19 +35,6 @@ export const ReceiveView = ({
             />
           </div>
         )}
-        <Tooltip>
-          <TooltipTrigger>
-            <Card
-              className="animate-in slide-in-from-bottom-1 delay-100 fill-mode-both fade-in p-2 break-all text-center leading-8 cursor-pointer rounded-[1rem] text-sm max-w-[256px]"
-              onClick={onCopyWalletAddress}
-            >
-              {publicKey}
-            </Card>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Copy Address</p>
-          </TooltipContent>
-        </Tooltip>
       </div>
     </div>
   </AppLayout>

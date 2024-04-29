@@ -12,5 +12,5 @@ export const View = () => (
 )
 
 export default {
-  title: "Dashboard / Staking / Producers",
+  title: "Staking / Block Producers",
 } satisfies StoryDefault

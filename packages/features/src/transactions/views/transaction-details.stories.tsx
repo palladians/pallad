@@ -25,5 +25,5 @@ export const View = () => {
 }
 
 export default {
-  title: "Dashboard / Transactions / Details",
+  title: "Transactions / Details",
 } satisfies StoryDefault

@@ -30,45 +30,41 @@ export const TransactionSummaryView = ({
         backButton={{ onClick: onGoBack }}
       />
       <div className="flex flex-1 flex-col gap-4 p-4">
-        <Card className="flex flex-col relative p-2 gap-2 rounded-[1rem]">
-          <div className="flex absolute right-4 h-full items-center justify-center text-blue-500">
-            <ArrowDownLeftIcon />
-          </div>
-          <MetaField
-            label="From"
-            value={
-              (transaction.from &&
-                truncateString({
-                  value: transaction.from,
-                  endCharCount: 8,
-                  firstCharCount: 8,
-                })) ||
-              ""
-            }
-          />
-          <MetaField
-            label="To"
-            value={
-              (transaction.to &&
-                truncateString({
-                  value: transaction.to,
-                  endCharCount: 8,
-                  firstCharCount: 8,
-                })) ||
-              ""
-            }
-          />
-        </Card>
-        <Card className="grid grid-cols-2 gap-4 p-2 rounded-[1rem]">
-          <MetaField label="Kind" value={transaction.kind} capitalize />
-          {transaction.amount && (
-            <MetaField label="Amount" value={`${transaction.amount} MINA`} />
-          )}
-          <MetaField label="Fee" value={`${transaction.fee} MINA`} />
-          {transaction.amount && (
-            <MetaField label="Total" value={`${transaction.total} MINA`} /> // TODO: this will not always be 'MINA'
-          )}
-        </Card>
+        <div className="flex absolute right-4 h-full items-center justify-center text-blue-500">
+          <ArrowDownLeftIcon />
+        </div>
+        <MetaField
+          label="From"
+          value={
+            (transaction.from &&
+              truncateString({
+                value: transaction.from,
+                endCharCount: 8,
+                firstCharCount: 8,
+              })) ||
+            ""
+          }
+        />
+        <MetaField
+          label="To"
+          value={
+            (transaction.to &&
+              truncateString({
+                value: transaction.to,
+                endCharCount: 8,
+                firstCharCount: 8,
+              })) ||
+            ""
+          }
+        />
+        <MetaField label="Kind" value={transaction.kind} capitalize />
+        {transaction.amount && (
+          <MetaField label="Amount" value={`${transaction.amount} MINA`} />
+        )}
+        <MetaField label="Fee" value={`${transaction.fee} MINA`} />
+        {transaction.amount && (
+          <MetaField label="Total" value={`${transaction.total} MINA`} /> // TODO: this will not always be 'MINA'
+        )}
         <ConfirmTransactionForm />
       </div>
     </div>

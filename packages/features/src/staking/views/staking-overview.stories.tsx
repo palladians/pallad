@@ -5,5 +5,5 @@ import { StakingOverviewView } from "./staking-overview"
 export const View = () => <StakingOverviewView stakeDelegated={false} />
 
 export default {
-  title: "Dashboard / Staking",
+  title: "Staking / Overview",
 } satisfies StoryDefault

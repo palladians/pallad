@@ -20,5 +20,5 @@ export const View = () => {
 }
 
 export default {
-  title: "Dashboard / Unlock Wallet",
+  title: "Unlock Wallet",
 } satisfies StoryDefault

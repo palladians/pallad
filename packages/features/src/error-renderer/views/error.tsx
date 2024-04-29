@@ -12,14 +12,15 @@ export const ErrorView = ({ error, resetErrorBoundary }: FallbackProps) => {
     resetErrorBoundary()
   }
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen p-8">
+    <div className="flex flex-1 flex-col justify-center items-center min-h-screen w-full p-8">
       <div className="card bg-secondary w-full">
         <div className="card-body gap-4 p-4">
           <h1 className="card-title">Woops</h1>
           <p>An error happened.</p>
           <textarea
-            className="textarea textarea-bordered rounded-xl resize-none"
+            className="textarea textarea-bordered rounded-xl resize-none h-64"
             value={stringifiedError}
+            readOnly
           />
           <div className="flex flex-col gap-2">
             <button
