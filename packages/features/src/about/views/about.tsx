@@ -1,6 +1,6 @@
 import { AppLayout } from "@/components/app-layout"
 
-import { SettingsPageHeader } from "@/components/settings-page-layout"
+import { SettingsPageLayout } from "@/components/settings-page-layout"
 import { ChevronRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import packageJson from "../../../package.json"
@@ -34,7 +34,7 @@ type AboutViewProps = {
 export const AboutView = ({ onGoBack }: AboutViewProps) => {
   return (
     <AppLayout>
-      <SettingsPageHeader title="About" backButton={{ onClick: onGoBack }}>
+      <SettingsPageLayout title="About" backButton={{ onClick: onGoBack }}>
         <div className="flex flex-col space-y-2">
           {Links.map((link) => {
             if (link.content) {
@@ -79,7 +79,7 @@ export const AboutView = ({ onGoBack }: AboutViewProps) => {
             )
           })}
         </div>
-      </SettingsPageHeader>
+      </SettingsPageLayout>
     </AppLayout>
   )
 }

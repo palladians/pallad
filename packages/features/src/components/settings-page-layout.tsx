@@ -11,7 +11,7 @@ type SettingsPageHeaderProps = {
   backButton: BackButtonProps
 }
 
-export const SettingsPageHeader = ({
+export const SettingsPageLayout = ({
   title,
   children,
   backButton,

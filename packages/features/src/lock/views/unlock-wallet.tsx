@@ -31,7 +31,7 @@ export const UnlockWalletView = ({
     footer={
       <button
         type="submit"
-        className="flex-1 group gap-2 animate-in slide-in-from-bottom-4 fade-in delay-100 fill-mode-both"
+        className="btn btn-primary max-w-48 w-full"
         form="unlockWalletForm"
         data-testid="unlockWallet__unlockButton"
         disabled={!form.formState.dirtyFields.spendingPassword}
@@ -44,45 +44,37 @@ export const UnlockWalletView = ({
       open={restartAlertVisible}
       setOpen={setRestartAlertVisible}
     />
-    <div className="animate-in slide-in-from-bottom-4 flex flex-col flex-1 items-center gap-12 p-4">
-      <img src="/lock.png" className="w-[160px]" alt="Wallet locked" />
+    <div className="animate-in w-full slide-in-from-bottom-4 flex flex-col flex-1 items-center gap-12">
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 w-full"
+        className="flex flex-1 flex-col gap-2 w-full"
         id="unlockWalletForm"
       >
         <label
           htmlFor="spendingPassword"
-          className={clsx(
-            "cursor-pointer",
-            form.formState.errors.spendingPassword && "text-destructive",
-          )}
+          className={clsx("label cursor-pointer")}
         >
           Spending Password
         </label>
-        <div className="flex flex-col gap-2">
-          <div className="flex w-full relative">
+        <div className="flex flex-1 flex-col gap-2">
+          <div className="flex flex-1 w-full relative">
             <input
               id="spendingPassword"
               type={showPassword ? "text" : "password"}
               data-testid="unlockWallet__password"
-              className={clsx(
-                form.formState.errors.spendingPassword && "border-destructive",
-              )}
+              className="input flex-1"
               {...form.register("spendingPassword")}
             />
           </div>
         </div>
         <FormError>{form.formState.errors.spendingPassword?.message}</FormError>
-        {form.formState.errors.spendingPassword && (
-          <button
-            type="button"
-            onClick={() => setRestartAlertVisible(true)}
-            className="self-start p-0 m-0"
-          >
-            Forgotten password? Restore again.
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => setRestartAlertVisible(true)}
+          className="btn btn-link text-mint self-start pl-0"
+        >
+          Forgotten password? Restore again.
+        </button>
       </form>
     </div>
   </WizardLayout>
