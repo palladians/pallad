@@ -39,7 +39,6 @@ export const StakingOverviewView = ({
       )}
       {stakeDelegated ? (
         <div className="flex flex-col flex-1">
-          <ViewHeading title="Delegation Info" noHorizontalPadding />
           <div className="flex flex-col gap-4">
             <MetaField
               label="Block Producer"

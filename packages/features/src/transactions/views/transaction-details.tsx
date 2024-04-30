@@ -3,7 +3,6 @@ import type { Mina } from "@palladxyz/mina-core"
 import type { TxSide } from "@/common/types"
 import { AppLayout } from "@/components/app-layout"
 import { MetaField } from "@/components/meta-field"
-import { ViewHeading } from "@/components/view-heading"
 import { getAccountUrl, getTransactionUrl } from "@/lib/explorer"
 
 import { TxIndicator } from "../components/tx-indicator"
@@ -52,10 +51,6 @@ export const TransactionDetailsView = ({
   return (
     <AppLayout>
       <div className="flex flex-col flex-1">
-        <ViewHeading
-          title="Transaction Details"
-          backButton={{ onClick: onGoBack }}
-        />
         <div className="flex flex-col gap-4 p-4">
           {loading ? (
             <Skeleton className="w-full h-8" />

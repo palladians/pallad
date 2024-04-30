@@ -1,7 +1,6 @@
 import type { ElementType } from "react"
 
 import { MetaField } from "@/components/meta-field"
-import { ViewHeading } from "@/components/view-heading"
 
 type TxResult = {
   icon: ElementType
@@ -28,7 +27,6 @@ export const TransactionResult = ({
 }: TransactionResultProps) => {
   return (
     <div className="flex flex-col flex-1">
-      <ViewHeading title={title} />
       <div className="flex flex-1 justify-center items-center gap-4 p-4">
         <result.icon size={56} color={result.iconColor} />
         <MetaField label={result.label} value={result.content} />

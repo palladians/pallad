@@ -2,7 +2,6 @@ import { AlertCircleIcon } from "lucide-react"
 
 import { AppLayout } from "@/components/app-layout"
 import { RestartWalletAlert } from "@/components/restart-wallet-alert"
-import { ViewHeading } from "@/components/view-heading"
 
 type SettingsViewProps = {
   onGoBack: () => void
@@ -31,7 +30,6 @@ export const SettingsView = ({
       setOpen={setRestartAlertVisible}
     />
     <div className="flex flex-col flex-1">
-      <ViewHeading title="Settings" backButton={{ onClick: onGoBack }} />
       <div className="flex flex-col gap-4 p-4 flex-1">
         <div className="flex flex-col gap-2">
           <h2 className="font-semibold">Network</h2>

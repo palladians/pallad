@@ -3,7 +3,6 @@ import { ArrowDownLeftIcon } from "lucide-react"
 import { truncateString } from "@/common/lib/string"
 import { AppLayout } from "@/components/app-layout"
 import { MetaField } from "@/components/meta-field"
-import { ViewHeading } from "@/components/view-heading"
 
 import { ConfirmTransactionForm } from "../components/confirm-transaction-form"
 
@@ -25,10 +24,6 @@ export const TransactionSummaryView = ({
 }: TransactionSummaryViewProps) => (
   <AppLayout>
     <div className="flex flex-1 flex-col">
-      <ViewHeading
-        title="Transaction Summary"
-        backButton={{ onClick: onGoBack }}
-      />
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="flex absolute right-4 h-full items-center justify-center text-blue-500">
           <ArrowDownLeftIcon />

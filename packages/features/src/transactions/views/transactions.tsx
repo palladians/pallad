@@ -3,7 +3,6 @@ import { ClockIcon } from "lucide-react"
 
 import { AppLayout } from "@/components/app-layout"
 import { ListSkeleton } from "@/components/list-skeleton"
-import { ViewHeading } from "@/components/view-heading"
 
 import { TransactionsList } from "../components/transactions-list"
 
@@ -27,10 +26,6 @@ export const TransactionsView = ({
 }: TransactionsViewProps) => (
   <AppLayout>
     <div className="flex flex-col flex-1">
-      <ViewHeading
-        title="Transactions"
-        button={{ label: "Send", onClick: onGoBack }}
-      />
       <div className="fle flex-col gap-4 p-4 pb-12">
         {onlyPendingTransactions.length > 0 && (
           <Alert
