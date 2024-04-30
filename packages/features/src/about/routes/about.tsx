@@ -4,5 +4,5 @@ import { AboutView } from "../views/about"
 
 export const AboutRoute = () => {
   const navigate = useNavigate()
-  return <AboutView onGoBack={() => navigate(-1)} />
+  return <AboutView onCloseClicked={() => navigate(-1)} />
 }

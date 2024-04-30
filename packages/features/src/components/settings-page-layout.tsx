@@ -15,7 +15,7 @@ export const SettingsPageLayout = ({
   return (
     <div className="flex flex-col flex-1">
       <div className="flex flex-col">
-        <div className="bg-secondary rounded-b-xl">
+        <div className="bg-secondary rounded-b-2xl">
           <MenuBar variant="wallet" onCloseClicked={onCloseClicked} />
           <div className="pb-12 px-8">
             <p className="text-3xl">{title}</p>

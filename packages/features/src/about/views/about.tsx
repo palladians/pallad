@@ -28,13 +28,13 @@ const Links = [
 ]
 
 type AboutViewProps = {
-  onGoBack: () => void
+  onCloseClicked: () => void
 }
 
-export const AboutView = ({ onGoBack }: AboutViewProps) => {
+export const AboutView = ({ onCloseClicked }: AboutViewProps) => {
   return (
     <AppLayout>
-      <SettingsPageLayout title="About" onCloseClicked={onGoBack}>
+      <SettingsPageLayout title="About" onCloseClicked={onCloseClicked}>
         <div className="flex flex-col space-y-2">
           {Links.map((link) => {
             if (link.content) {

@@ -29,6 +29,7 @@ import { SettingsRoute } from "./settings/routes/settings"
 import { BlockProducersRoute } from "./staking/routes/block-producers"
 import { DelegateRoute } from "./staking/routes/delegate"
 import { StakingOverviewRoute } from "./staking/routes/staking-overview"
+import { SupportRoute } from "./support/routes/support"
 import { TransactionDetailsRoute } from "./transactions/routes/transaction-details"
 import { TransactionsRoute } from "./transactions/routes/transactions"
 
@@ -101,6 +102,7 @@ export const Router = () => {
               <Route path="/unlock" element={<UnlockWalletRoute />} />
               <Route path="/settings" element={<SettingsRoute />} />
               <Route path="/about" element={<AboutRoute />} />
+              <Route path="/support" element={<SupportRoute />} />
               <Route path="/*" element={<NotFoundRoute />} />
             </Routes>
           </MemoryRouter>
