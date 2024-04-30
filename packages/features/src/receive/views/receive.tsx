@@ -1,34 +1,27 @@
 import QRCode from "react-qr-code"
 
-import Logo from "@/common/assets/logo.svg?react"
 import { AppLayout } from "@/components/app-layout"
 import { MenuBar } from "@/components/menu-bar"
-import { XIcon } from "lucide-react"
 
 type ReceiveViewProps = {
   publicKey: string
   onGoBack: () => void
+  onLogoClicked: () => void
   onCopyWalletAddress: () => void
 }
 
 export const ReceiveView = ({
   publicKey,
+  onLogoClicked,
   onGoBack,
   onCopyWalletAddress,
 }: ReceiveViewProps) => (
   <AppLayout>
     <div className="flex flex-col flex-1">
       <MenuBar
-        leftSlot={<Logo width={32} height={32} />}
-        rightSlot={
-          <button
-            type="button"
-            className="btn btn-circle bg-secondary"
-            onClick={onGoBack}
-          >
-            <XIcon size={24} />
-          </button>
-        }
+        variant="card"
+        onCloseClicked={onGoBack}
+        onLogoClicked={onLogoClicked}
       />
       <div className="px-8 pb-8">
         <h1 className="text-3xl mb-4">Your address</h1>

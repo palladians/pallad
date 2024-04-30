@@ -48,7 +48,7 @@ export const StartView = ({
   onRestoreClicked,
   onCreateClicked,
 }: StartViewProps) => (
-  <WizardLayout>
+  <WizardLayout headerShown={false}>
     <div className="flex flex-1 flex-col items-center justify-center gap-8 p-4 text-center">
       <div className="flex flex-col justify-center items-center gap-6">
         <Logo width={84} height={84} />

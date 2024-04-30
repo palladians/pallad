@@ -22,7 +22,7 @@ export const MenuDrawer = () => {
             <Logo width={32} height={32} />
             <label
               htmlFor="menu-drawer"
-              className="btn btn-circle btn-primary bg-white"
+              className="btn btn-circle btn-primary bg-white hover:bg-white"
             >
               <XIcon />
             </label>

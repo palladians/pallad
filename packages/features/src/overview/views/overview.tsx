@@ -39,7 +39,7 @@ export const OverviewView = ({
         <OverviewCard account={account} fiatBalance={fiatBalance} />
       )}
       <AssetList account={account} /> */}
-      <DashboardMenuBar />
+      <MenuBar variant="dashboard" />
       <PortfolioValueChart />
       <div className="card flex-col bg-secondary rounded-t-none px-8 pb-6 gap-4">
         <h1 className="text-primary">Portfolio value</h1>

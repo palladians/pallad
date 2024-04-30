@@ -14,6 +14,7 @@ type StayConnectedRoute = {
 
 export const StayConnectedView = ({ onGoToDashboard }: StayConnectedRoute) => (
   <WizardLayout
+    headerShown={false}
     footer={
       <button
         type="button"

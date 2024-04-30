@@ -34,7 +34,7 @@ type AboutViewProps = {
 export const AboutView = ({ onGoBack }: AboutViewProps) => {
   return (
     <AppLayout>
-      <SettingsPageLayout title="About" backButton={{ onClick: onGoBack }}>
+      <SettingsPageLayout title="About" onCloseClicked={onGoBack}>
         <div className="flex flex-col space-y-2">
           {Links.map((link) => {
             if (link.content) {

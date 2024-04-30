@@ -10,6 +10,7 @@ export const ReceiveRoute = () => {
   return (
     <ReceiveView
       publicKey={publicKey}
+      onLogoClicked={() => navigate("/dashboard")}
       onCopyWalletAddress={copyWalletAddress}
       onGoBack={() => navigate(-1)}
     />
