@@ -1,8 +1,10 @@
 import Logo from "@/common/assets/logo.svg?react"
 import MenuIcon from "@/common/assets/menu.svg?react"
 import { XIcon } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export const MenuDrawer = () => {
+  const navigate = useNavigate()
   return (
     <div className="drawer drawer-end">
       <input id="menu-drawer" type="checkbox" className="drawer-toggle" />
@@ -28,19 +30,32 @@ export const MenuDrawer = () => {
             </label>
           </div>
           <div className="flex flex-col gap-4">
-            <button type="button" className="text-3xl text-left">
+            <button
+              type="button"
+              className="text-3xl text-left"
+              onClick={() => navigate("/transactions")}
+            >
               Activity
             </button>
-            <button type="button" className="text-3xl text-left">
+            <button
+              type="button"
+              className="text-3xl text-left"
+              onClick={() => navigate("/staking")}
+            >
               Staking
             </button>
-            <button type="button" className="text-3xl text-left">
-              Identity
-            </button>
-            <button type="button" className="text-3xl text-left">
+            <button
+              type="button"
+              className="text-3xl text-left"
+              onClick={() => navigate("/contacts")}
+            >
               Address Book
             </button>
-            <button type="button" className="text-3xl text-left">
+            <button
+              type="button"
+              className="text-3xl text-left"
+              onClick={() => navigate("/settings")}
+            >
               Settings
             </button>
           </div>

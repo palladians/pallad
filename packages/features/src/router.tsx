@@ -75,9 +75,10 @@ export const Router = () => {
                 path="/staking/producers"
                 element={<BlockProducersRoute />}
               />
-              <Route path="/contacts" element={<AddressBookRoute />} />
-              <Route path="/contacts/new" element={<NewAddressRoute />} />
-
+              <Route path="contacts" element={<Outlet />}>
+                <Route path="" element={<AddressBookRoute />} />
+                <Route path="new" element={<NewAddressRoute />} />
+              </Route>
               <Route path="onboarding" element={<Outlet />}>
                 <Route path="create" element={<CreateWalletRoute />} />
                 <Route path="restore" element={<RestoreWalletRoute />} />

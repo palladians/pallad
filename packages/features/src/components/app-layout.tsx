@@ -14,7 +14,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
       className="flex flex-col flex-1 bg-background gap-4"
       data-testid="appLayout"
     >
-      <div className="animate-in fade-in flex flex-1">{children}</div>
+      <div className="animate-in fade-in flex flex-col flex-1">{children}</div>
     </div>
   )
 }

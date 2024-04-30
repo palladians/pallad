@@ -1,4 +1,4 @@
-import type { StoryDefault } from "@ladle/react/typings-for-build/app/exports"
+import type { StoryDefault } from "@ladle/react"
 
 import { BlockProducersView } from "./block-producers"
 

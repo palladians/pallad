@@ -2,8 +2,8 @@ import { PlusIcon } from "lucide-react"
 
 import type { Contact } from "@/common/types"
 import { AppLayout } from "@/components/app-layout"
-import { ViewHeading } from "@/components/view-heading"
 
+import { MenuBar } from "@/components/menu-bar"
 import { ContactTile } from "../components/contact-tile"
 
 const DonatePallad = {
@@ -13,41 +13,23 @@ const DonatePallad = {
 
 type AddressBookViewProps = {
   contacts: Contact[]
-  onAddClicked: () => void
 }
 
-export const AddressBookView = ({
-  contacts,
-  onAddClicked,
-}: AddressBookViewProps) => {
+export const AddressBookView = ({ contacts }: AddressBookViewProps) => {
   return (
     <AppLayout>
-      <div className="flex flex-col flex-1">
-        <ViewHeading
-          title="Address Book"
-          button={{
-            label: (
-              <div className="flex justify-center items-center gap-2">
-                <PlusIcon size={14} />
-                Add Address
-              </div>
-            ),
-            onClick: onAddClicked,
-            testId: "addressBook__addAddressButton",
+      <MenuBar variant="dashboard" />
+      <div className="flex flex-col gap-2 p-4">
+        <ContactTile
+          contact={{
+            name: DonatePallad.name,
+            address: DonatePallad.address,
           }}
         />
-        <div className="flex flex-col gap-2 p-4">
-          <ContactTile
-            contact={{
-              name: DonatePallad.name,
-              address: DonatePallad.address,
-            }}
-          />
-          {contacts.map((contact, i) => (
-            // biome-ignore lint: it won't update
-            <ContactTile key={i} contact={contact} index={i} />
-          ))}
-        </div>
+        {contacts.map((contact, i) => (
+          // biome-ignore lint: it won't update
+          <ContactTile key={i} contact={contact} index={i} />
+        ))}
       </div>
     </AppLayout>
   )
