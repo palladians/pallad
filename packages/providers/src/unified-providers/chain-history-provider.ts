@@ -6,8 +6,8 @@ import type {
   Tx,
 } from "@palladxyz/pallad-core"
 
+import { createChainHistoryProvider as ms } from "../blockberry-provider"
 import { createChainHistoryProvider as mn } from "../mina-node"
-import { createChainHistoryProvider as ob } from "../obscura-provider"
 import { createChainHistoryProvider as op } from "../optimism"
 import type { ProviderConfig } from "./types"
 
@@ -16,11 +16,11 @@ export const createChainHistoryProvider = (
 ): ChainHistoryProvider => {
   // TODO: make the underlyingProvider creation a util function
   let underlyingProvider: ChainHistoryProvider
-  if (config.nodeEndpoint.providerName === "mina-node") {
+  if (config.archiveNodeEndpoint.providerName === "mina-node") {
     underlyingProvider = mn(config.archiveNodeEndpoint.url)
-  } else if (config.nodeEndpoint.providerName === "obscura") {
-    underlyingProvider = ob(config.archiveNodeEndpoint.url)
-  } else {
+  } else if (config.archiveNodeEndpoint.providerName === "mina-scan") {
+    underlyingProvider = ms(config.archiveNodeEndpoint.url)
+  } else if (config.archiveNodeEndpoint.providerName === "evm-explorer") {
     underlyingProvider = op(config.archiveNodeEndpoint.url)
   }
 
