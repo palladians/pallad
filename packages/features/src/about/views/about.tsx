@@ -1,7 +1,7 @@
 import { AppLayout } from "@/components/app-layout"
 
 import { SettingsPageLayout } from "@/components/settings-page-layout"
-import { ChevronRight } from "lucide-react"
+import { ChevronRight, SquareArrowOutUpRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import packageJson from "../../../package.json"
 
@@ -15,11 +15,11 @@ const Links = [
   },
   {
     label: "Support",
-    href: "/support",
+    href: "/settings/about/support",
   },
   {
     label: "Terms of Service",
-    href: "/tos",
+    href: "/settings/about/terms-of-use",
   },
   {
     label: "Version",
@@ -55,7 +55,7 @@ export const AboutView = ({ onCloseClicked }: AboutViewProps) => {
                   className={ButtonWrapperStyles}
                 >
                   <p>{link.label}</p>
-                  <ChevronRight
+                  <SquareArrowOutUpRight
                     width={24}
                     height={24}
                     className="text-[#F6C177]"
@@ -67,7 +67,7 @@ export const AboutView = ({ onCloseClicked }: AboutViewProps) => {
               <Link
                 key={link.label}
                 to={link.href || ""}
-                className="flex items-center justify-between p-6 rounded-xl bg-secondary"
+                className={ButtonWrapperStyles}
               >
                 <p>{link.label}</p>
                 <ChevronRight

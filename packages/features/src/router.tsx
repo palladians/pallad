@@ -5,6 +5,8 @@ import { MixpanelProvider } from "react-mixpanel-browser"
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom"
 
 import { AboutRoute } from "./about/routes/about"
+import { SupportRoute } from "./about/routes/support"
+import { TermsOfUseRoute } from "./about/routes/terms-of-use"
 import { AddressBookRoute } from "./address-book/routes/address-book"
 import { NewAddressRoute } from "./address-book/routes/new-address"
 import { ErrorView } from "./error-renderer/views/error"
@@ -29,8 +31,6 @@ import { SettingsRoute } from "./settings/routes/settings"
 import { BlockProducersRoute } from "./staking/routes/block-producers"
 import { DelegateRoute } from "./staking/routes/delegate"
 import { StakingOverviewRoute } from "./staking/routes/staking-overview"
-import { SupportRoute } from "./support/routes/support"
-import { TermsOfUseRoute } from "./terms-of-use/routes/terms-of-use"
 import { TransactionDetailsRoute } from "./transactions/routes/transaction-details"
 import { TransactionsRoute } from "./transactions/routes/transactions"
 
@@ -101,10 +101,14 @@ export const Router = () => {
                 <Route path="finish" element={<StayConnectedRoute />} />
               </Route>
               <Route path="/unlock" element={<UnlockWalletRoute />} />
-              <Route path="/settings" element={<SettingsRoute />} />
-              <Route path="/about" element={<AboutRoute />} />
-              <Route path="/support" element={<SupportRoute />} />
-              <Route path="/terms-of-use" element={<TermsOfUseRoute />} />
+              <Route path="settings" element={<Outlet />}>
+                <Route path="" element={<SettingsRoute />} />
+                <Route path="about" element={<Outlet />}>
+                  <Route path="" element={<AboutRoute />} />
+                  <Route path="support" element={<SupportRoute />} />
+                  <Route path="terms-of-use" element={<TermsOfUseRoute />} />
+                </Route>
+              </Route>
               <Route path="/*" element={<NotFoundRoute />} />
             </Routes>
           </MemoryRouter>

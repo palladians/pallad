@@ -6,5 +6,5 @@ import { SupportView } from "./support"
 export const View = () => <SupportView onCloseClicked={action("Go Back")} />
 
 export default {
-  title: "Support",
+  title: "Settings / About / Support",
 } satisfies StoryDefault

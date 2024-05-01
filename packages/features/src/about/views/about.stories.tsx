@@ -6,5 +6,5 @@ import { AboutView } from "./about"
 export const View = () => <AboutView onCloseClicked={action("Go Back")} />
 
 export default {
-  title: "About",
+  title: "Settings / About",
 } satisfies StoryDefault
