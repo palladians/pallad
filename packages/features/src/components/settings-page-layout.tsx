@@ -5,20 +5,23 @@ type SettingsPageHeaderProps = {
   title: string
   children: ReactNode
   onCloseClicked: () => void
+  headerContent?: ReactNode
 }
 
 export const SettingsPageLayout = ({
   title,
   children,
   onCloseClicked,
+  headerContent = null,
 }: SettingsPageHeaderProps) => {
   return (
     <div className="flex flex-col flex-1">
       <div className="flex flex-col">
         <div className="bg-secondary rounded-b-2xl">
           <MenuBar variant="wallet" onCloseClicked={onCloseClicked} />
-          <div className="pb-12 px-8">
+          <div className={`${headerContent ? "pb-6" : "pb-12"} px-8`}>
             <p className="text-3xl">{title}</p>
+            {headerContent}
           </div>
         </div>
       </div>
