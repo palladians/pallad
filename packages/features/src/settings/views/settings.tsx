@@ -32,9 +32,13 @@ const Links = [
 
 type SettingsViewProps = {
   onCloseClicked: () => void
+  onDonateClicked: () => void
 }
 
-export const SettingsView = ({ onCloseClicked }: SettingsViewProps) => {
+export const SettingsView = ({
+  onCloseClicked,
+  onDonateClicked,
+}: SettingsViewProps) => {
   return (
     <AppLayout>
       <SettingsPageLayout
@@ -43,7 +47,11 @@ export const SettingsView = ({ onCloseClicked }: SettingsViewProps) => {
         headerContent={
           <div className="mt-6 px-6 py-4 flex items-center justify-between bg-neutral rounded-2xl">
             <p>Buy us a coffee!</p>
-            <button type="button" className="px-8 btn btn-primary">
+            <button
+              type="button"
+              className="px-8 btn btn-primary"
+              onClick={onDonateClicked}
+            >
               Send
             </button>
           </div>
