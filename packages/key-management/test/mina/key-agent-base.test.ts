@@ -1,3 +1,4 @@
+import { mnemonic } from "@palladxyz/common"
 import { Mina } from "@palladxyz/mina-core"
 import { constructTransaction } from "@palladxyz/pallad-core"
 import { Network } from "@palladxyz/pallad-core"
@@ -45,26 +46,11 @@ describe("KeyAgentBase (Mina Functionality)", () => {
   let passphrase: Uint8Array
   let rootKeyBytes: Uint8Array
   let encryptedSeedBytes: Uint8Array
-  let mnemonic: string[]
   let seed: Uint8Array
 
   beforeEach(async () => {
     // Generate a mnemonic (24 words)
     //const strength = 128 // increase to 256 for a 24-word mnemonic
-    mnemonic = [
-      "habit",
-      "hope",
-      "tip",
-      "crystal",
-      "because",
-      "grunt",
-      "nation",
-      "idea",
-      "electric",
-      "witness",
-      "alert",
-      "like",
-    ]
     seed = util.mnemonicToSeed(mnemonic)
     // Create root node from seed
     const root = bip32.HDKey.fromMasterSeed(seed)

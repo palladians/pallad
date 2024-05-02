@@ -1,3 +1,4 @@
+import { mnemonic } from "@palladxyz/common"
 import type { Mina } from "@palladxyz/mina-core"
 import { Network } from "@palladxyz/pallad-core"
 import Client from "mina-signer"
@@ -31,25 +32,10 @@ describe("KeyAgentBase (Mina zkApp Functionality)", () => {
   let networkType: Mina.NetworkType
   let passphrase: Uint8Array
   let encryptedSeedBytes: Uint8Array
-  let mnemonic: string[]
 
   beforeEach(async () => {
     // Generate a mnemonic (24 words)
     //const strength = 128 // increase to 256 for a 24-word mnemonic
-    mnemonic = [
-      "habit",
-      "hope",
-      "tip",
-      "crystal",
-      "because",
-      "grunt",
-      "nation",
-      "idea",
-      "electric",
-      "witness",
-      "alert",
-      "like",
-    ]
     const seed = util.mnemonicToSeed(mnemonic)
 
     // passphrase

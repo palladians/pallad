@@ -1,3 +1,4 @@
+import { mnemonic } from "@palladxyz/common"
 import type {
   ChainDerivationArgs,
   //constructTransaction,
@@ -17,20 +18,7 @@ import { useVault } from "../../src"
 import { DEFAULT_NETWORK } from "../../src/network-info/default"
 import { EXAMPLE_CREDENTIAL } from "../../src/objects/default"
 
-const PREGENERATED_MNEMONIC = [
-  "habit",
-  "hope",
-  "tip",
-  "crystal",
-  "because",
-  "grunt",
-  "nation",
-  "idea",
-  "electric",
-  "witness",
-  "alert",
-  "like",
-]
+const PREGENERATED_MNEMONIC = mnemonic
 
 // Provide the passphrase for testing purposes
 const params = {
