@@ -10,7 +10,7 @@ export const AddressBookRoute = () => {
   return (
     <AddressBookView
       contacts={contacts}
-      onAddClicked={() => navigate("/contacts/new")}
+      goToDashboard={() => navigate("/dashboard")}
     />
   )
 }

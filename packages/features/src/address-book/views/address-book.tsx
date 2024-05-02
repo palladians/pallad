@@ -13,12 +13,16 @@ const DonatePallad = {
 
 type AddressBookViewProps = {
   contacts: Contact[]
+  goToDashboard: () => void
 }
 
-export const AddressBookView = ({ contacts }: AddressBookViewProps) => {
+export const AddressBookView = ({
+  contacts,
+  goToDashboard,
+}: AddressBookViewProps) => {
   return (
     <AppLayout>
-      <MenuBar variant="dashboard" />
+      <MenuBar variant="dashboard" onLogoClicked={goToDashboard} />
       <div className="flex flex-col gap-2 p-4">
         <ContactTile
           contact={{

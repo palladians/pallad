@@ -10,7 +10,7 @@ type NewAddressViewProps = {
 export const NewAddressView = ({ onGoBack }: NewAddressViewProps) => {
   return (
     <AppLayout>
-      <MenuBar variant="dashboard" />
+      <MenuBar variant="back" onBackClicked={onGoBack} />
       <div className="flex flex-col flex-1 p-4">
         <NewAddressForm />
       </div>

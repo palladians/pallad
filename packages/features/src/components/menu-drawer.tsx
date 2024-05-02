@@ -21,7 +21,9 @@ export const MenuDrawer = () => {
         />
         <div className="flex flex-col items-start justify-between px-8 py-7 w-full min-h-full bg-secret-sauce text-base-content">
           <div className="w-full flex justify-between items-center">
-            <Logo width={32} height={32} />
+            <button type="button" onClick={() => navigate("/dashboard")}>
+              <Logo width={32} height={32} />
+            </button>
             <label
               htmlFor="menu-drawer"
               className="btn btn-circle btn-primary bg-white hover:bg-white"
