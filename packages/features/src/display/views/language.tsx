@@ -4,13 +4,13 @@ import clsx from "clsx"
 import { Check } from "lucide-react"
 import { useState } from "react"
 
-const Items = [
-  { label: "English", value: "ENG" },
-  { label: "French", value: "FRA" },
-  { label: "Spanish", value: "SPA" },
-  { label: "Turkish", value: "TUR" },
-  { label: "Portugese", value: "POR" },
-  { label: "Chinese", value: "CHI" },
+const Languages = [
+  "English",
+  "French",
+  "Spanish",
+  "Turkish",
+  "Portugese",
+  "Chinese",
 ]
 
 type LanguageViewProps = {
@@ -18,24 +18,24 @@ type LanguageViewProps = {
 }
 
 export const LanguageView = ({ onCloseClicked }: LanguageViewProps) => {
-  const [selected, setSelected] = useState(Items[0].value)
+  const [selected, setSelected] = useState(Languages[0])
   return (
     <AppLayout>
       <SettingsPageLayout title="Language" onCloseClicked={onCloseClicked}>
         <div className="space-y-2">
-          {Items.map((item) => {
-            const active = item.value === selected
+          {Languages.map((language) => {
+            const active = language === selected
             return (
               <button
-                key={item.label}
+                key={language}
                 type="button"
                 className={clsx(
                   "w-full pl-6 pr-4 py-4 flex items-center justify-between rounded-2xl hover:bg-secondary",
                   active && "bg-secondary",
                 )}
-                onClick={() => setSelected(item.value)}
+                onClick={() => setSelected(language)}
               >
-                <p>{item.label}</p>
+                <p>{language}</p>
                 {active && (
                   <Check width={24} height={24} className="text-[#F6C177]" />
                 )}
