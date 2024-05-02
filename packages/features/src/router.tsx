@@ -25,6 +25,7 @@ import { SeedImportSecurityRoute } from "./onboarding/routes/seed-import-securit
 import { StartRoute } from "./onboarding/routes/start"
 import { StayConnectedRoute } from "./onboarding/routes/stay-connected"
 import { OverviewRoute } from "./overview/routes/overview"
+import { PrivacyRoute } from "./privacy/routes/privacy"
 import { ReceiveRoute } from "./receive/routes/receive"
 import { SendRoute } from "./send/routes/send"
 import { TransactionErrorRoute } from "./send/routes/transaction-error"
@@ -116,6 +117,7 @@ export const Router = () => {
                   <Route path="language" element={<LanguageRoute />} />
                   <Route path="currency" element={<CurrencyRoute />} />
                 </Route>
+                <Route path="privacy" element={<PrivacyRoute />} />
               </Route>
               <Route path="/*" element={<NotFoundRoute />} />
             </Routes>
