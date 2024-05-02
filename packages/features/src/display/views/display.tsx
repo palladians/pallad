@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react"
 import { Link } from "react-router-dom"
 
 const ButtonWrapperStyles =
-  "px-4 py-6 flex items-center justify-between rounded-2xl bg-secondary"
+  "pl-6 pr-4 py-6 flex items-center justify-between rounded-2xl bg-secondary"
 
 const Links = [
   {

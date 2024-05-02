@@ -10,6 +10,7 @@ import { TermsOfUseRoute } from "./about/routes/terms-of-use"
 import { AddressBookRoute } from "./address-book/routes/address-book"
 import { NewAddressRoute } from "./address-book/routes/new-address"
 import { DisplayRoute } from "./display/routes/display"
+import { LanguageRoute } from "./display/routes/language"
 import { ErrorView } from "./error-renderer/views/error"
 import { UnlockWalletRoute } from "./lock/routes/unlock-wallet"
 import { NotFoundRoute } from "./not-found/routes/not-found"
@@ -111,6 +112,7 @@ export const Router = () => {
                 </Route>
                 <Route path="display" element={<Outlet />}>
                   <Route path="" element={<DisplayRoute />} />
+                  <Route path="language" element={<LanguageRoute />} />
                 </Route>
               </Route>
               <Route path="/*" element={<NotFoundRoute />} />
