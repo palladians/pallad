@@ -9,6 +9,7 @@ import { SupportRoute } from "./about/routes/support"
 import { TermsOfUseRoute } from "./about/routes/terms-of-use"
 import { AddressBookRoute } from "./address-book/routes/address-book"
 import { NewAddressRoute } from "./address-book/routes/new-address"
+import { CurrencyRoute } from "./display/routes/currency"
 import { DisplayRoute } from "./display/routes/display"
 import { LanguageRoute } from "./display/routes/language"
 import { ErrorView } from "./error-renderer/views/error"
@@ -113,6 +114,7 @@ export const Router = () => {
                 <Route path="display" element={<Outlet />}>
                   <Route path="" element={<DisplayRoute />} />
                   <Route path="language" element={<LanguageRoute />} />
+                  <Route path="currency" element={<CurrencyRoute />} />
                 </Route>
               </Route>
               <Route path="/*" element={<NotFoundRoute />} />
