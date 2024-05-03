@@ -1,7 +1,6 @@
-import { useNavigate } from "react-router-dom"
-
 import { useAddressBookStore } from "@/common/store/address-book"
 
+import { useNavigate } from "react-router-dom"
 import { AddressBookView } from "../views/address-book"
 
 export const AddressBookRoute = () => {
