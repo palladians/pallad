@@ -9,7 +9,7 @@ export const AddressBookRoute = () => {
   return (
     <AddressBookView
       contacts={contacts}
-      goToDashboard={() => navigate("/dashboard")}
+      onLogoClicked={() => navigate("/dashboard")}
     />
   )
 }

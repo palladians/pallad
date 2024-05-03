@@ -14,7 +14,12 @@ const Contacts: Contact[] = [
   },
 ]
 
-export const View = () => <AddressBookView contacts={Contacts} />
+export const View = () => (
+  <AddressBookView
+    contacts={Contacts}
+    onLogoClicked={() => console.log("logo clicked")}
+  />
+)
 
 export default {
   title: "Address Book",
