@@ -9,7 +9,10 @@ export const MenuDrawer = () => {
     <div className="drawer drawer-end">
       <input id="menu-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
-        <label htmlFor="menu-drawer" className="btn btn-circle">
+        <label
+          htmlFor="menu-drawer"
+          className="btn btn-circle min-h-10 h-10 w-10"
+        >
           <MenuIcon />
         </label>
       </div>
@@ -26,7 +29,7 @@ export const MenuDrawer = () => {
             </button>
             <label
               htmlFor="menu-drawer"
-              className="btn btn-circle btn-primary bg-white hover:bg-white"
+              className="btn btn-circle min-h-10 h-10 w-10 btn-primary bg-white hover:bg-white shadow-none border-none"
             >
               <XIcon />
             </label>

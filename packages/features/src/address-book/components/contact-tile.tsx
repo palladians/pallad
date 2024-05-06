@@ -10,7 +10,7 @@ interface ContactTileProps {
   index?: number
 }
 
-export const ContactTile = ({ contact, index }: ContactTileProps) => {
+export const ContactTile = ({ contact }: ContactTileProps) => {
   const navigate = useNavigate()
   // const removeContact = useAddressBookStore((state) => state.removeContact);
   return (

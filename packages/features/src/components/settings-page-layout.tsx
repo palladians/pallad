@@ -20,11 +20,7 @@ export const SettingsPageLayout = ({
     <div className="flex flex-col flex-1">
       <div className="flex flex-col">
         <div className="bg-secondary rounded-b-2xl">
-          <MenuBar
-            variant="wallet"
-            onCloseClicked={onCloseClicked}
-            onLogoClicked={() => navigate("/dashboard")}
-          />
+          <MenuBar variant="wallet" onCloseClicked={onCloseClicked} />
           <div className={`${headerContent ? "pb-6" : "pb-12"} px-8`}>
             <p className="text-3xl">{title}</p>
             {headerContent}

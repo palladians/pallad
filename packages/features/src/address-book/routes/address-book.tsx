@@ -1,15 +1,9 @@
 import { useAddressBookStore } from "@/common/store/address-book"
 
-import { useNavigate } from "react-router-dom"
 import { AddressBookView } from "../views/address-book"
 
 export const AddressBookRoute = () => {
-  const navigate = useNavigate()
   const contacts = useAddressBookStore((state) => state.contacts)
-  return (
-    <AddressBookView
-      contacts={contacts}
-      onLogoClicked={() => navigate("/dashboard")}
-    />
-  )
+  const removeContact = useAddressBookStore((state) => state.removeContact)
+  return <AddressBookView contacts={contacts} removeContact={removeContact} />
 }

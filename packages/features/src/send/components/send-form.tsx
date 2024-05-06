@@ -3,152 +3,226 @@ import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useLocation, useNavigate } from "react-router-dom"
 
-import { useAccount } from "@/common/hooks/use-account"
 import { TransactionFee } from "@/common/lib/const"
 import { useTransactionStore } from "@/common/store/transaction"
-import type { OutgoingTransaction } from "@/common/types"
 import { FormError } from "@/components/form-error"
 
+import { formatCurrency } from "@/common/lib/currency"
+import { MinaIcon } from "@/components/mina-icon"
+import { TransactionKind } from "@palladxyz/mina-core"
 import clsx from "clsx"
-import { SendFormSchema } from "./send-form.schema"
+import { ChevronRightIcon, SearchIcon } from "lucide-react"
+import { SendFormSchema, type SendFormSchemaProps } from "./send-form.schema"
 
-export const SendForm = () => {
+type SendFormProps = {
+  balance: number
+  fiatPrice: number
+  advanced: boolean
+  setAdvanced: (advanced: boolean) => void
+}
+
+export const SendForm = ({
+  balance,
+  fiatPrice,
+  advanced,
+  setAdvanced,
+}: SendFormProps) => {
   const navigate = useNavigate()
   const location = useLocation()
   const setTransactionDetails = useTransactionStore((state) => state.set)
   const setKind = useTransactionStore((state) => state.setKind)
-  const { data: accountProperties, isLoading: accountLoading } = useAccount()
   const {
     register,
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors },
-    trigger,
+    formState: { errors, isValid },
+    watch,
   } = useForm({
     resolver: zodResolver(SendFormSchema),
     defaultValues: {
       to: "",
-      amount: "",
+      amount: undefined as number | undefined,
       fee: "default",
       memo: "",
     },
   })
+  const feeValue = watch("fee")
   // biome-ignore lint: only first render
   useEffect(() => {
     setValue("to", location.state?.address || "")
   }, [])
-  if (accountLoading) return null
-  const totalBalance =
-    accountProperties.balance && accountProperties.balance / 1_000_000_000
+  const totalBalance = balance && balance / 1_000_000_000
+  const totalBalanceFiat = totalBalance * fiatPrice
   const setMaxAmount = async () => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
-    totalBalance && setValue("amount", String(totalBalance - currentFee))
-    await trigger()
+    totalBalance && setValue("amount", totalBalance - currentFee)
   }
-  const onSubmit = (payload: OutgoingTransaction) => {
+  const onSubmit = (payload: SendFormSchemaProps) => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
-    setKind("transaction")
+    setKind(TransactionKind.PAYMENT)
     setTransactionDetails({
       to: payload.to,
-      fee: String(currentFee),
+      fee: currentFee,
       amount: payload.amount,
-      memo: payload.memo,
+      memo: payload.memo ?? "",
     })
     navigate("/transactions/summary")
   }
   return (
     <form
-      className="flex flex-col gap-4 flex-1"
+      className="flex flex-col gap-1 flex-1 pb-8 items-center"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex flex-col gap-2">
-        <div className="flex justify-between items-center">
-          <label
-            htmlFor="receiverAddress"
-            className={clsx(errors.to && "text-destructive")}
-          >
-            Receiver
+      <div className="flex justify-between items-center w-full">
+        <h1 className="text-3xl">Send</h1>
+        <div className="form-control">
+          <label className="label cursor-pointer gap-2">
+            <span className="label-text">Advanced</span>
+            <input
+              type="checkbox"
+              className="toggle toggle-primary border-none"
+              checked={advanced}
+              onClick={() => setAdvanced(!advanced)}
+            />
           </label>
+        </div>
+      </div>
+      <div className="card bg-secondary w-full flex flex-row justify-between items-center p-2 mb-1">
+        <div className="flex gap-2">
+          <div className="btn btn-neutral btn-circle">
+            <MinaIcon size={28} />
+          </div>
+          <div className="flex flex-col">
+            <div>Mina</div>
+            <div className="text-[#7D7A9C]">MINA</div>
+          </div>
+        </div>
+        <div className="flex items-center">
+          <div className="flex flex-col text-right">
+            <div>{totalBalance}</div>
+            <div className="text-[#7D7A9C]">
+              {formatCurrency({ value: totalBalanceFiat })}
+            </div>
+          </div>
           <button
             type="button"
-            className="!h-auto !p-0"
-            onClick={() => navigate("/contacts")}
+            className="btn btn-secondary btn-sm btn-circle text-primary"
           >
-            Address Book
+            <ChevronRightIcon />
           </button>
         </div>
+      </div>
+      <label className="input flex items-center gap-2 py-7 w-full">
         <input
           id="receiverAddress"
-          placeholder="Receiver Address"
-          className={errors.to && "border-destructive"}
+          type="text"
+          className="grow"
+          placeholder="Address"
           data-testid="send__to"
           {...register("to")}
         />
-        <FormError>{errors.to?.message}</FormError>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex justify-between items-center">
-          <label
-            htmlFor="amount"
-            className={clsx(errors.amount && "text-destructive")}
-          >
-            Amount
-          </label>
-          <button type="button" className="!h-auto !p-0" onClick={setMaxAmount}>
-            Max Amount
-          </button>
-        </div>
+        <button
+          type="button"
+          className="btn bg-neutral -mr-3"
+          onClick={() => navigate("/contacts")}
+        >
+          <SearchIcon size={24} className="text-primary" />
+        </button>
+      </label>
+      <FormError>{errors.to?.message}</FormError>
+      <label className="input flex items-center gap-2 py-7 w-full">
         <input
           id="amount"
-          placeholder="Transaction Amount"
-          className={errors.amount && "border-destructive"}
+          type="text"
+          className="grow"
+          placeholder="Amount"
           data-testid="send__amount"
           {...register("amount")}
         />
-        <FormError>{errors.amount?.message}</FormError>
-      </div>
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor="memo"
-          className={clsx(errors.memo && "text-destructive")}
+        <button
+          type="button"
+          className="btn bg-neutral text-primary -mr-3"
+          onClick={setMaxAmount}
         >
-          Memo
-        </label>
-        <input id="memo" placeholder="Memo" {...register("memo")} />
-        <FormError>{errors.memo?.message}</FormError>
-      </div>
-      <div className="flex flex-col gap-2 flex-1">
-        <label className={clsx(errors.fee && "text-destructive")}>Fee</label>
-        {/* <RadioGroup
-          defaultValue="default"
-          onValueChange={(value) => setValue("fee", value)}
+          max
+        </button>
+      </label>
+      <FormError>{errors.amount?.message}</FormError>
+      {advanced && (
+        <>
+          <label className="input flex items-center gap-2 py-7 w-full">
+            <input
+              id="memo"
+              type="text"
+              className="grow"
+              placeholder="Memo"
+              data-testid="send__memo"
+              {...register("memo")}
+            />
+            <button type="button" className="badge badge-neutral -mr-3">
+              optional
+            </button>
+          </label>
+          <FormError>{errors.memo?.message}</FormError>
+        </>
+      )}
+      {advanced ? (
+        <div className="join w-full">
+          <button
+            type="button"
+            className={clsx(
+              "btn flex-col join-item flex-nowrap",
+              feeValue === "slow" ? "btn-primary" : "btn-secondary",
+            )}
+            onClick={() => setValue("fee", "slow")}
+          >
+            <div>Slow</div>
+            <div className="text-nowrap">{TransactionFee.slow} MINA</div>
+          </button>
+          <button
+            type="button"
+            className={clsx(
+              "btn flex-col join-item flex-1 flex-nowrap",
+              feeValue === "default" ? "btn-primary" : "btn-secondary",
+            )}
+            onClick={() => setValue("fee", "default")}
+          >
+            <div>Normal</div>
+            <div className="text-nowrap">{TransactionFee.default} MINA</div>
+          </button>
+          <button
+            type="button"
+            className={clsx(
+              "btn flex-col join-item flex-nowrap",
+              feeValue === "fast" ? "btn-primary" : "btn-secondary",
+            )}
+            onClick={() => setValue("fee", "fast")}
+          >
+            <div>Fast</div>
+            <div className="text-nowrap">{TransactionFee.fast} MINA</div>
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          className="btn btn-link text-base-content no-underline hover:no-underline"
+          onClick={() => setAdvanced(!advanced)}
         >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="slow" id="feeSlow" />
-            <Label htmlFor="feeSlow">Slow ({TransactionFee.slow} MINA)</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="default" id="feeDefault" defaultChecked />
-            <Label htmlFor="feeDefault">
-              Default ({TransactionFee.default} MINA)
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="fast" id="feeFast" />
-            <Label htmlFor="feeFast">Fast ({TransactionFee.fast} MINA)</Label>
-          </div>
-        </RadioGroup> */}
-        <FormError>{errors.fee?.message}</FormError>
-      </div>
+          <span className="underline">Transaction fee:</span>
+          <span>{TransactionFee[feeValue]} MINA</span>
+        </button>
+      )}
+      <FormError>{errors.fee?.message}</FormError>
       <button
         type="submit"
-        className="group gap-2"
+        className="btn btn-primary max-w-48 w-full mt-auto"
         data-testid="send__nextButton"
+        disabled={!isValid}
       >
-        <span>Next</span>
+        Next
       </button>
     </form>
   )

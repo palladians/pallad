@@ -6,6 +6,7 @@ import {
   ChevronUpIcon,
   XIcon,
 } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 import { MenuDrawer } from "./menu-drawer"
 
 type MenuBarBaseProps = {
@@ -28,13 +29,20 @@ export const MenuBarBase = ({
   )
 }
 
+const LogoButton = ({ onClick }: { onClick?: () => void }) => {
+  return (
+    <button type="button" onClick={onClick}>
+      <Logo width={32} height={32} />
+    </button>
+  )
+}
+
 type MenuBarProps = {
   variant: "dashboard" | "wallet" | "card" | "back" | "back-stop" | "stop"
   onBackClicked?: () => void
   onCloseClicked?: () => void
   onAddressClicked?: () => void
   onNetworkClicked?: () => void
-  onLogoClicked?: () => void
   networkManagement?: boolean
 }
 
@@ -44,23 +52,20 @@ export const MenuBar = ({
   onCloseClicked,
   onAddressClicked,
   onNetworkClicked,
-  onLogoClicked,
   networkManagement = false,
 }: MenuBarProps) => {
+  const navigate = useNavigate()
+  const goHome = () => navigate("/dashboard")
   switch (variant) {
     case "dashboard":
       return (
         <MenuBarBase
-          leftSlot={
-            <button type="button" onClick={onLogoClicked}>
-              <Logo width={32} height={32} />
-            </button>
-          }
+          leftSlot={<LogoButton onClick={goHome} />}
           rightSlot={<MenuDrawer />}
         >
           <button
             type="button"
-            className="btn flex gap-1"
+            className="btn flex gap-1 min-h-10 h-10"
             onClick={onAddressClicked}
           >
             <span>B62qq...B7S</span>
@@ -71,16 +76,12 @@ export const MenuBar = ({
     case "wallet":
       return (
         <MenuBarBase
-          leftSlot={
-            <button type="button" onClick={onLogoClicked}>
-              <Logo width={32} height={32} />
-            </button>
-          }
+          leftSlot={<LogoButton onClick={goHome} />}
           rightSlot={
             <div className="flex space-x-2">
               <button
                 type="button"
-                className="flex flex-col btn"
+                className="flex flex-col btn min-h-10 h-10"
                 onClick={onNetworkClicked}
               >
                 <p className="text-sm">Mina</p>
@@ -92,7 +93,7 @@ export const MenuBar = ({
               </button>
               <button
                 type="button"
-                className="btn btn-circle"
+                className="btn btn-circle min-h-10 h-10 w-10"
                 onClick={onCloseClicked}
               >
                 <XIcon width={24} height={24} />
@@ -104,16 +105,12 @@ export const MenuBar = ({
     case "card":
       return (
         <MenuBarBase
-          leftSlot={
-            <button type="button" onClick={onLogoClicked}>
-              <Logo width={32} height={32} />
-            </button>
-          }
+          leftSlot={<LogoButton onClick={goHome} />}
           rightSlot={
             <div className="flex space-x-2">
               <button
                 type="button"
-                className="btn btn-circle"
+                className="btn btn-circle min-h-10 h-10 w-10"
                 onClick={onCloseClicked}
               >
                 <XIcon width={24} height={24} />
@@ -128,7 +125,7 @@ export const MenuBar = ({
           leftSlot={
             <button
               type="button"
-              className="btn btn-circle"
+              className="btn btn-circle min-h-10 h-10 w-10"
               onClick={onBackClicked}
             >
               <ArrowLeftIcon width={24} height={24} />
@@ -142,7 +139,7 @@ export const MenuBar = ({
           leftSlot={
             <button
               type="button"
-              className="btn btn-circle"
+              className="btn btn-circle min-h-10 h-10 w-10"
               onClick={onBackClicked}
             >
               <ArrowLeftIcon width={24} height={24} />
@@ -151,7 +148,7 @@ export const MenuBar = ({
           rightSlot={
             <button
               type="button"
-              className="btn btn-circle"
+              className="btn btn-circle min-h-10 h-10 w-10"
               onClick={onCloseClicked}
             >
               <XIcon width={24} height={24} />
@@ -165,7 +162,7 @@ export const MenuBar = ({
           rightSlot={
             <button
               type="button"
-              className="btn btn-circle"
+              className="btn btn-circle min-h-10 h-10 w-10"
               onClick={onCloseClicked}
             >
               <XIcon width={24} height={24} />

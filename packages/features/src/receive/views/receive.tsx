@@ -6,23 +6,17 @@ import { MenuBar } from "@/components/menu-bar"
 type ReceiveViewProps = {
   publicKey: string
   onGoBack: () => void
-  onLogoClicked: () => void
   onCopyWalletAddress: () => void
 }
 
 export const ReceiveView = ({
   publicKey,
-  onLogoClicked,
   onGoBack,
   onCopyWalletAddress,
 }: ReceiveViewProps) => (
   <AppLayout>
     <div className="flex flex-col flex-1">
-      <MenuBar
-        variant="card"
-        onCloseClicked={onGoBack}
-        onLogoClicked={onLogoClicked}
-      />
+      <MenuBar variant="card" onCloseClicked={onGoBack} />
       <div className="px-8 pb-8">
         <h1 className="text-3xl mb-4">Your address</h1>
         <div className="flex flex-col text-center justify-center items-center space-y-8 card bg-accent p-8">

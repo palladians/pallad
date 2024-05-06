@@ -1,4 +1,4 @@
-export const MinaIcon = ({ stroke = "2", size = "20", className = "" }) => (
+export const MinaIcon = ({ stroke = "2", size = 20, className = "" }) => (
   <svg
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
