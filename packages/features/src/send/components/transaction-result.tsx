@@ -1,10 +1,8 @@
-import type { ElementType } from "react"
-
-import { MetaField } from "@/components/meta-field"
+import { AppLayout } from "@/components/app-layout"
+import { MenuBar } from "@/components/menu-bar"
+import { Link } from "react-router-dom"
 
 type TxResult = {
-  icon: ElementType
-  iconColor: string
   label: string
   content: string
 }
@@ -26,20 +24,36 @@ export const TransactionResult = ({
   button,
 }: TransactionResultProps) => {
   return (
-    <div className="flex flex-col flex-1">
-      <div className="flex flex-1 justify-center items-center gap-4 p-4">
-        <result.icon size={56} color={result.iconColor} />
-        <MetaField label={result.label} value={result.content} />
+    <AppLayout>
+      <MenuBar variant="stop" />
+      <div className="flex flex-col flex-1 items-center text-center">
+        <h1 className="text-3xl max-w-80">{title}</h1>
+        <div className="flex flex-col flex-1 justify-center items-center w-full p-8 gap-2">
+          <label className="label text-lg">{result.label}</label>
+          <div className="card bg-secondary w-full py-6 px-4 text-sm break-all">
+            {result.content}
+          </div>
+        </div>
+        <div className="flex flex-col items-center p-4 gap-2 w-full">
+          <Link
+            to="/dashboard"
+            type="button"
+            className="btn btn-primary max-w-48 w-full"
+            onClick={button.onClick}
+            data-testid="transactionResult__nextButton"
+          >
+            Close
+          </Link>
+          <button
+            type="button"
+            className="btn max-w-48 w-full"
+            onClick={button.onClick}
+            data-testid="transactionResult__nextButton"
+          >
+            {button.label}
+          </button>
+        </div>
       </div>
-      <div className="flex flex-col p-4">
-        <button
-          type="button"
-          onClick={button.onClick}
-          data-testid="transactionResult__nextButton"
-        >
-          {button.label}
-        </button>
-      </div>
-    </div>
+    </AppLayout>
   )
 }

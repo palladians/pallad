@@ -1,8 +1,6 @@
 import { ClockIcon } from "lucide-react"
 import colors from "tailwindcss/colors"
 
-import { AppLayout } from "@/components/app-layout"
-
 import { TransactionResult } from "../components/transaction-result"
 
 type TransactionSuccessViewProps = {
@@ -15,20 +13,16 @@ export const TransactionSuccessView = ({
   onGoToTransactions,
 }: TransactionSuccessViewProps) => {
   return (
-    <AppLayout>
-      <TransactionResult
-        title="Submitted successfully"
-        result={{
-          icon: ClockIcon,
-          iconColor: colors.sky["500"],
-          label: "Pending Transaction Hash",
-          content: hash,
-        }}
-        button={{
-          label: "View Transactions",
-          onClick: onGoToTransactions,
-        }}
-      />
-    </AppLayout>
+    <TransactionResult
+      title="Transaction submitted"
+      result={{
+        label: "Pending Transaction Hash",
+        content: hash,
+      }}
+      button={{
+        label: "View Transactions",
+        onClick: onGoToTransactions,
+      }}
+    />
   )
 }

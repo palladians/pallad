@@ -1,9 +1,8 @@
-import { Loader2Icon } from "lucide-react"
+import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react"
 import type { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 import { FormError } from "@/components/form-error"
-
-import clsx from "clsx"
+import { useState } from "react"
 
 type ConfirmTransactionFormProps = {
   confirmationForm: UseFormReturn<{ spendingPassword: string }>
@@ -14,7 +13,7 @@ export const ConfirmTransactionForm = ({
   confirmationForm,
   submitTransaction,
 }: ConfirmTransactionFormProps) => {
-  console.log(">>>CF", confirmationForm)
+  const [showPassword, setShowPassword] = useState(false)
   const {
     formState: { errors },
   } = confirmationForm
@@ -23,28 +22,29 @@ export const ConfirmTransactionForm = ({
       onSubmit={confirmationForm.handleSubmit(submitTransaction)}
       className="flex flex-1 flex-col gap-4"
     >
-      <fieldset className="flex flex-1 flex-col gap-2">
-        <label
-          htmlFor="spendingPassword"
-          className={clsx(errors.spendingPassword && "text-destructive")}
-        >
-          Spending Password
-        </label>
+      <label className="input flex items-center gap-2">
         <input
           id="spendingPassword"
-          type="password"
-          placeholder="Spending Password"
-          className={errors.spendingPassword && "border-destructive"}
-          data-testid="confirm__spendingPassword"
+          type={showPassword ? "text" : "password"}
+          data-testid="onboarding__spendingPasswordInput"
+          placeholder="Create your password"
+          className="grow"
           {...confirmationForm.register("spendingPassword")}
         />
-        <FormError>{errors.spendingPassword?.message}</FormError>
-        <div className="flex-1" />
-      </fieldset>
+        <button
+          type="button"
+          className="btn btn-link -mr-4"
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? <EyeOffIcon size={24} /> : <EyeIcon size={24} />}
+        </button>
+      </label>
+      <FormError>{errors.spendingPassword?.message}</FormError>
+      <div className="flex-1" />
       <button
         type="submit"
         disabled={confirmationForm.formState.isSubmitting}
-        className="group gap-2"
+        className="btn btn-primary"
         data-testid="confirm__nextButton"
       >
         {confirmationForm.formState.isSubmitting && (

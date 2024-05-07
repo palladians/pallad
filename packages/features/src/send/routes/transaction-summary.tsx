@@ -1,5 +1,4 @@
 import { useMemo } from "react"
-import { useNavigate } from "react-router-dom"
 
 import { useAccount } from "@/common/hooks/use-account"
 import { useTransactionStore } from "@/common/store/transaction"
@@ -14,7 +13,6 @@ import { TransactionSummaryView } from "../views/transaction-summary"
 type ConfirmTransactionData = z.infer<typeof ConfirmTransactionSchema>
 
 export const TransactionSummaryRoute = () => {
-  const navigate = useNavigate()
   const { publicKey } = useAccount()
   const outgoingTransaction = useTransactionStore(
     (state) => state.outgoingTransaction,

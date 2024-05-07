@@ -1,6 +1,3 @@
-import { AlertOctagonIcon } from "lucide-react"
-import colors from "tailwindcss/colors"
-
 import { AppLayout } from "@/components/app-layout"
 
 import { TransactionResult } from "../components/transaction-result"
@@ -17,8 +14,6 @@ export const TransactionErrorView = ({
       <TransactionResult
         title="Submission Error"
         result={{
-          icon: AlertOctagonIcon,
-          iconColor: colors.red["500"],
           label: "Transaction Failed",
           content: "Error: 500 Broadcast API not reachable",
         }}

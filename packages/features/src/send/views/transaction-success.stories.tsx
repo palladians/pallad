@@ -4,7 +4,7 @@ import { TransactionSuccessView } from "./transaction-success"
 
 export const View = () => (
   <TransactionSuccessView
-    hash="ASDF1234"
+    hash="ASDF1234ASDF1234ASDF1234ASDF1234ASDF1234ASDF1234ASDF1234"
     onGoToTransactions={() => console.log("txs")}
   />
 )
