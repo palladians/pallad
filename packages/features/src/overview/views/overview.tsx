@@ -5,6 +5,7 @@ import type { useAccount } from "@/common/hooks/use-account"
 import { DashboardMenuBar } from "@/components/dashboard-menu-bar"
 import { MenuBar } from "@/components/menu-bar"
 import { ChevronRightIcon } from "lucide-react"
+import { Link } from "react-router-dom"
 import { MenuDrawer } from "../components/menu-drawer"
 import { PortfolioValueChart } from "../components/portfolio-value-chart"
 
@@ -71,10 +72,10 @@ export const OverviewView = ({
             <p className="text-mint">Recent</p>
             <h2 className="text-xl">Transactions</h2>
           </div>
-          <button type="button" className="flex items-center mb-[2px]">
+          <Link to="/transactions" className="flex items-center mb-[2px]">
             <span>See all</span>
             <ArrowRightIcon />
-          </button>
+          </Link>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <TxTile />

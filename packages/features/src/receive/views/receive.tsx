@@ -17,7 +17,7 @@ export const ReceiveView = ({
   <AppLayout>
     <div className="flex flex-col flex-1">
       <MenuBar variant="card" onCloseClicked={onGoBack} />
-      <div className="px-8 pb-8">
+      <div className="animate-in fade-in slide-in-from-bottom-8 px-8 pb-8">
         <h1 className="text-3xl mb-4">Your address</h1>
         <div className="flex flex-col text-center justify-center items-center space-y-8 card bg-accent p-8">
           <QRCode

@@ -27,9 +27,7 @@ export const WizardLayout = ({
         />
       )}
       {title && <span className="text-3xl px-8">{title}</span>}
-      <div className="animate-in fade-in flex flex-1 items-center px-8">
-        {children}
-      </div>
+      <div className="flex flex-1 items-center px-8">{children}</div>
       {footer && (
         <div className="flex flex-col w-full justify-center items-center gap-6 p-8">
           {footer}

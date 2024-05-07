@@ -31,7 +31,7 @@ export const TxTile = ({ tx }: TxTileProps) => {
   return (
     <div
       key={tx.hash}
-      className="animate-in fade-in flex justify-between items-center gap-4 cursor-pointer"
+      className="flex justify-between items-center gap-4 cursor-pointer"
       onClick={() => navigate(`/transactions/${tx.hash}`)}
     >
       {tx.kind && (

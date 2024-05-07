@@ -14,7 +14,7 @@ export const SendRoute = () => {
     <SendView
       onGoBack={() => navigate(-1)}
       balance={accountProperties?.balance ?? 0}
-      fiatPrice={fiatPrice?.["mina-protocol"].usd ?? 0}
+      fiatPrice={fiatPrice?.["mina-protocol"]?.usd ?? 0}
       advanced={advanced}
       setAdvanced={setAdvanced}
     />

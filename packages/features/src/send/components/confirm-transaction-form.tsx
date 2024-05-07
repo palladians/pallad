@@ -20,9 +20,9 @@ export const ConfirmTransactionForm = ({
   return (
     <form
       onSubmit={confirmationForm.handleSubmit(submitTransaction)}
-      className="flex flex-1 flex-col gap-4"
+      className="flex flex-1 flex-col items-center gap-4 w-full"
     >
-      <label className="input flex items-center gap-2">
+      <label className="input flex items-center gap-2 w-full">
         <input
           id="spendingPassword"
           type={showPassword ? "text" : "password"}
@@ -44,7 +44,7 @@ export const ConfirmTransactionForm = ({
       <button
         type="submit"
         disabled={confirmationForm.formState.isSubmitting}
-        className="btn btn-primary"
+        className="btn btn-primary max-w-48 w-full"
         data-testid="confirm__nextButton"
       >
         {confirmationForm.formState.isSubmitting && (

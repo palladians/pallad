@@ -1,9 +1,14 @@
-import type { StoryDefault } from "@ladle/react"
+import type { Story, StoryDefault } from "@ladle/react"
 
 import { StakingOverviewView } from "./staking-overview"
 
-export const View = () => <StakingOverviewView stakeDelegated={false} />
+export const View: Story<{ stakeDelegated: boolean }> = ({
+  stakeDelegated,
+}) => <StakingOverviewView stakeDelegated={stakeDelegated} />
 
 export default {
   title: "Staking / Overview",
+  args: {
+    stakeDelegated: false,
+  },
 } satisfies StoryDefault

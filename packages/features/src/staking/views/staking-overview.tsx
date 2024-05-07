@@ -1,11 +1,28 @@
 import type { useAccount } from "@/common/hooks/use-account"
 import type { useBlockchainSummary } from "@/common/hooks/use-blockchain-summary"
-import { truncateString } from "@/common/lib/string"
 import { AppLayout } from "@/components/app-layout"
 import { MenuBar } from "@/components/menu-bar"
-import { MetaField } from "@/components/meta-field"
 
-import { getAccountUrl } from "@/lib/explorer"
+import { Link } from "react-router-dom"
+
+type EmptyStateProps = {
+  heading: React.ReactNode
+  button: {
+    label: string
+    url: string
+  }
+}
+
+const EmptyState = ({ heading, button }: EmptyStateProps) => {
+  return (
+    <div className="flex flex-col items-center gap-6 text-center">
+      {heading}
+      <Link to={button.url} className="btn btn-primary max-w-[140px] w-full">
+        {button.label}
+      </Link>
+    </div>
+  )
+}
 
 type StakingOverviewViewProps = {
   stakeDelegated: boolean
@@ -17,51 +34,36 @@ type StakingOverviewViewProps = {
 export const StakingOverviewView = ({
   stakeDelegated,
   onChangePool,
-  blockchainSummary,
   account,
 }: StakingOverviewViewProps) => (
   <AppLayout>
-    <MenuBar variant="dashboard" />
-    <div className="flex flex-col flex-1 gap-4 p-4">
-      {blockchainSummary.isLoading ? (
-        <div className="skeleton" />
-      ) : (
-        <div className="grid grid-cols-2 p-4 gap-2 rounded-[1rem]">
-          <MetaField
-            label="Epoch"
-            value={blockchainSummary.data?.epoch ?? ""}
-          />
-          <MetaField
-            label="Slot"
-            value={`${blockchainSummary.data?.slot}/7140`}
-          />
-        </div>
-      )}
-      {stakeDelegated ? (
-        <div className="flex flex-col flex-1">
-          <div className="flex flex-col gap-4">
-            <MetaField
-              label="Block Producer"
-              value={truncateString({
-                value: account.data.delegate, //TODO: Change to util
-                endCharCount: 8,
-                firstCharCount: 8,
-              })}
-              url={getAccountUrl({
-                network: account.network,
-                publicKey: account.data.publicKey,
-              })}
-            />
+    <div className="card flex-col bg-secondary rounded-t-none pb-6">
+      <MenuBar variant="dashboard" />
+      <div className="flex flex-col gap-6 px-8">
+        <h1 className="text-3xl">Staking</h1>
+        {stakeDelegated ? (
+          <div className="flex flex-row justify-between card bg-neutral p-6">
+            <div className="flex flex-col">
+              <p>{account?.accountInfo?.delegate}</p>
+            </div>
+            <Link to="/staking/delegate" className="btn btn-primary px-7">
+              Edit
+            </Link>
           </div>
-        </div>
-      ) : (
-        <div className="flex flex-col flex-1">
-          <div className="flex-1" />
-          <button type="button" onClick={onChangePool} className="group gap-2">
-            <span>Start Staking</span>
-          </button>
-        </div>
-      )}
+        ) : (
+          <EmptyState
+            heading={
+              <h2 className="text-lg">
+                Enjoy non-custodial staking and earn up to 6.5% APY
+              </h2>
+            }
+            button={{
+              label: "Stake",
+              url: "/staking/delegate",
+            }}
+          />
+        )}
+      </div>
     </div>
   </AppLayout>
 )

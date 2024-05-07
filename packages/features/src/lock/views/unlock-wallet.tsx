@@ -44,7 +44,7 @@ export const UnlockWalletView = ({
       open={restartAlertVisible}
       setOpen={setRestartAlertVisible}
     />
-    <div className="animate-in w-full slide-in-from-bottom-4 flex flex-col flex-1 items-center gap-12">
+    <div className="w-full flex flex-col flex-1 items-center gap-12">
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-1 flex-col gap-2 w-full"
