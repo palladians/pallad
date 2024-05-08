@@ -1,36 +1,31 @@
 import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
 
 import { useAccount } from "@/common/hooks/use-account"
 import { useTransactions } from "@/common/hooks/use-transactions"
 import { usePendingTransactionStore } from "@/common/store/pending-transactions"
 
+import { useFiatPrice } from "@palladxyz/offchain-data"
 import { TransactionsView } from "../views/transactions"
 
 export const TransactionsRoute = () => {
-  const navigate = useNavigate()
-  const { data: transactions, isLoading: transactionsLoading } =
-    useTransactions()
-  const { isLoading: accountLoading } = useAccount()
-  const loading = transactionsLoading || accountLoading
-  const pendingTransactions = usePendingTransactionStore(
-    (state) => state.pendingTransactions,
-  )
+  const { publicKey } = useAccount()
+  const { data: fiatPriceData } = useFiatPrice()
   const clearExpired = usePendingTransactionStore((state) => state.clearExpired)
-  const transactionHashes = transactions?.map((tx) => tx.hash) || []
-  const onlyPendingTransactions = pendingTransactions.filter(
-    (tx) => !transactionHashes.includes(tx.hash),
-  )
+  const pendingHashes = usePendingTransactionStore(
+    (state) => state.pendingTransactions,
+  ).map((tx) => tx.hash)
+  const { data: transactions, error: transactionsError } = useTransactions()
   // biome-ignore lint: only run on first render
   useEffect(() => {
     clearExpired()
   }, [])
   return (
     <TransactionsView
-      loading={loading}
-      onGoBack={() => navigate(-1)}
+      fiatPrice={fiatPriceData?.["mina-protocol"].usd || 0}
+      pendingHashes={pendingHashes}
+      publicKey={publicKey}
       transactions={transactions ?? []}
-      onlyPendingTransactions={onlyPendingTransactions ?? []}
+      transactionsError={transactionsError}
     />
   )
 }
