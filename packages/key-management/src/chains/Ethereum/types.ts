@@ -44,6 +44,20 @@ export type EthereumGroupedCredentials = {
   encryptedPrivateKeyBytes: Uint8Array
 }
 
+export type EthereumSessionCredentials = {
+  "@context": ["https://w3id.org/wallet/v1"]
+  id: string
+  type: "EthereumSessionKey"
+  controller: string
+  name: string
+  description: string
+  chain: Network.Ethereum
+  addressIndex: number
+  accountIndex: number
+  address: string
+  privateKeyBytes: Uint8Array
+}
+
 export class EthereumPayload implements ChainSpecificPayload {
   network = Network.Ethereum
 

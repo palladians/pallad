@@ -5,6 +5,7 @@ import { Address } from "micro-eth-signer"
 import type {
   EthereumDerivationArgs,
   EthereumGroupedCredentials,
+  EthereumSessionCredentials,
 } from "./types"
 
 export function deriveEthereumPublicAddress(
@@ -56,6 +57,26 @@ export function deriveEthereumCredentials(
     accountIndex: args.accountIndex,
     address: publicCredential,
     encryptedPrivateKeyBytes: encryptedPrivateKeyBytes,
+  }
+}
+
+export function deriveEthereumSessionCredentials(
+  args: EthereumDerivationArgs,
+  publicCredential: string,
+  privateKeyBytes: Uint8Array,
+): EthereumSessionCredentials {
+  return {
+    "@context": ["https://w3id.org/wallet/v1"],
+    id: `did:ethr:${publicCredential}`,
+    type: "EthereumSessionKey",
+    controller: `did:ethr:${publicCredential}`,
+    name: "Ethereum Account",
+    description: "My Ethereum account.",
+    chain: args.network,
+    addressIndex: args.addressIndex,
+    accountIndex: args.accountIndex,
+    address: publicCredential,
+    privateKeyBytes: privateKeyBytes,
   }
 }
 

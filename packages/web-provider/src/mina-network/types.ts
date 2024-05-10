@@ -17,6 +17,20 @@ export type requestSignableData = {
   data: MinaSignablePayload
 }
 
+export interface offchainSessionAllowedMethods {
+  contractAddress: string
+  method: string
+}
+
+export type requestOffchainSession = {
+  data: {
+    sessionKey: string
+    expirationTime: string
+    allowedMethods: offchainSessionAllowedMethods[]
+    sessionMerkleRoot: MinaSignablePayload
+  }
+}
+
 export type requestSignableTransaction = {
   data: { transaction: MinaSignablePayload }
 }

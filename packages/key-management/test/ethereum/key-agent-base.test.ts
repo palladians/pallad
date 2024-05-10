@@ -1,3 +1,4 @@
+import { mnemonic } from "@palladxyz/common"
 import { Network } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import { verifyMessage } from "ethers"
@@ -31,25 +32,10 @@ describe("KeyAgentBase (Ethereum Functionality)", () => {
   let passphrase: Uint8Array
   let rootKeyBytes: Uint8Array
   let encryptedSeedBytes: Uint8Array
-  let mnemonic: string[]
 
   beforeEach(async () => {
     // Generate a mnemonic (24 words)
     //const strength = 128 // increase to 256 for a 24-word mnemonic
-    mnemonic = [
-      "habit",
-      "hope",
-      "tip",
-      "crystal",
-      "because",
-      "grunt",
-      "nation",
-      "idea",
-      "electric",
-      "witness",
-      "alert",
-      "like",
-    ]
     const seed = util.mnemonicToSeed(mnemonic)
     // Create root node from seed
     const root = bip32.HDKey.fromMasterSeed(seed)

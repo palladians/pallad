@@ -1,6 +1,6 @@
+import { mnemonic } from "@palladxyz/common"
 import { Mina } from "@palladxyz/mina-core"
-import { Network } from "@palladxyz/pallad-core"
-import { constructTransaction } from "@palladxyz/pallad-core"
+import { Network, constructTransaction } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import Client from "mina-signer"
 import sinon from "sinon"
@@ -31,27 +31,12 @@ const getPassphrase = () =>
 describe("Mina InMemoryKeyAgent", () => {
   let agent: InMemoryKeyAgent
   let rootKeyBytes: Uint8Array
-  let mnemonic: string[]
   let seed: Uint8Array
   let root: bip32.HDKey
   let networkType: Mina.NetworkType
 
   beforeEach(async () => {
     // Create keys for testing purposes
-    mnemonic = [
-      "habit",
-      "hope",
-      "tip",
-      "crystal",
-      "because",
-      "grunt",
-      "nation",
-      "idea",
-      "electric",
-      "witness",
-      "alert",
-      "like",
-    ]
     //bip39.generateMnemonicWords(strength)
     seed = bip39.mnemonicToSeed(mnemonic, "")
     // Create root node from seed
@@ -80,7 +65,6 @@ describe("Mina InMemoryKeyAgent", () => {
   })
   it("should create an agent with given properties and return the getSeralizableData", () => {
     expect(agent).to.be.instanceOf(InMemoryKeyAgent)
-    console.log()
     expect(agent.getSeralizableData()).not.toBe(undefined)
   })
   it("should export root private key", async () => {
