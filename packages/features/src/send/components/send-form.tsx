@@ -8,9 +8,9 @@ import { useTransactionStore } from "@/common/store/transaction"
 import { FormError } from "@/components/form-error"
 
 import { formatCurrency } from "@/common/lib/currency"
+import { FeePicker, TransactionFeeShort } from "@/components/fee-picker"
 import { MinaIcon } from "@/components/mina-icon"
 import { TransactionKind } from "@palladxyz/mina-core"
-import clsx from "clsx"
 import { ChevronRightIcon, SearchIcon } from "lucide-react"
 import { SendFormSchema, type SendFormSchemaProps } from "./send-form.schema"
 
@@ -151,7 +151,7 @@ export const SendForm = ({
         </button>
       </label>
       <FormError>{errors.amount?.message}</FormError>
-      {advanced && (
+      {advanced ? (
         <>
           <label className="input flex items-center gap-2 py-7 w-full">
             <input
@@ -167,55 +167,14 @@ export const SendForm = ({
             </button>
           </label>
           <FormError>{errors.memo?.message}</FormError>
+          <FeePicker feeValue={feeValue} setValue={setValue} />
         </>
-      )}
-      {advanced ? (
-        <div className="join w-full">
-          <button
-            type="button"
-            className={clsx(
-              "btn flex-col join-item flex-nowrap",
-              feeValue === "slow" ? "btn-primary" : "btn-secondary",
-            )}
-            onClick={() => setValue("fee", "slow")}
-          >
-            <div>Slow</div>
-            <div className="text-nowrap">{TransactionFee.slow} MINA</div>
-          </button>
-          <button
-            type="button"
-            className={clsx(
-              "btn flex-col join-item flex-1 flex-nowrap",
-              feeValue === "default" ? "btn-primary" : "btn-secondary",
-            )}
-            onClick={() => setValue("fee", "default")}
-          >
-            <div>Normal</div>
-            <div className="text-nowrap">{TransactionFee.default} MINA</div>
-          </button>
-          <button
-            type="button"
-            className={clsx(
-              "btn flex-col join-item flex-nowrap",
-              feeValue === "fast" ? "btn-primary" : "btn-secondary",
-            )}
-            onClick={() => setValue("fee", "fast")}
-          >
-            <div>Fast</div>
-            <div className="text-nowrap">{TransactionFee.fast} MINA</div>
-          </button>
-        </div>
       ) : (
-        <button
-          type="button"
-          className="btn btn-link text-base-content no-underline hover:no-underline"
+        <TransactionFeeShort
+          feeValue={feeValue}
           onClick={() => setAdvanced(!advanced)}
-        >
-          <span className="underline">Transaction fee:</span>
-          <span>{TransactionFee[feeValue]} MINA</span>
-        </button>
+        />
       )}
-      <FormError>{errors.fee?.message}</FormError>
       <button
         type="submit"
         className="btn btn-primary max-w-48 w-full mt-auto"

@@ -2,7 +2,6 @@ import type { Mina } from "@palladxyz/mina-core"
 
 import type { TxSide } from "@/common/types"
 import { AppLayout } from "@/components/app-layout"
-import { MetaField } from "@/components/meta-field"
 import { getAccountUrl, getTransactionUrl } from "@/lib/explorer"
 
 import { TxIndicator } from "../components/tx-indicator"
@@ -72,14 +71,6 @@ export const TransactionDetailsView = ({
               </div>
             )
           )}
-          {transactionMetaFields?.map(({ label, value, url }) => (
-            <MetaField
-              key={label}
-              label={label}
-              value={value as any}
-              url={url}
-            />
-          ))}
         </div>
       </div>
     </AppLayout>

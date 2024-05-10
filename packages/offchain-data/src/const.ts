@@ -1,3 +1,2 @@
-export const MINA_FIAT_PRICE_URL = new URL(
-  "https://api.coingecko.com/api/v3/simple/price?ids=mina-protocol&vs_currencies=eur%2Cusd%2Cgbp",
-)
+export const MINA_FIAT_PRICE_URL =
+  "https://api.coingecko.com/api/v3/coins/mina-protocol/market_chart/range"

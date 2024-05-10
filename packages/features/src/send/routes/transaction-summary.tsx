@@ -28,10 +28,7 @@ export const TransactionSummaryRoute = () => {
     confirmationForm,
   })
   const total = useMemo(
-    () =>
-      outgoingTransaction?.amount &&
-      outgoingTransaction?.fee &&
-      (outgoingTransaction.amount ?? 0) + (outgoingTransaction.fee ?? 0),
+    () => (outgoingTransaction?.amount ?? 0) + (outgoingTransaction?.fee ?? 0),
     [outgoingTransaction?.fee, outgoingTransaction?.amount],
   )
   if (!outgoingTransaction) return null

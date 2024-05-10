@@ -61,6 +61,7 @@ export const UnlockWalletView = ({
             <input
               id="spendingPassword"
               type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
               data-testid="unlockWallet__password"
               className="input flex-1"
               {...form.register("spendingPassword")}

@@ -63,14 +63,19 @@ export const MenuBar = ({
           leftSlot={<LogoButton onClick={goHome} />}
           rightSlot={<MenuDrawer />}
         >
-          <button
-            type="button"
-            className="btn flex gap-1 min-h-10 h-10"
-            onClick={onAddressClicked}
+          <div
+            className="tooltip tooltip-secondary tooltip-bottom"
+            data-tip="Wallet management"
           >
-            <span>B62qq...B7S</span>
-            <ChevronRightIcon />
-          </button>
+            <button
+              type="button"
+              className="btn flex gap-1 min-h-10 h-10"
+              onClick={onAddressClicked}
+            >
+              <span>B62qq...B7S</span>
+              <ChevronRightIcon />
+            </button>
+          </div>
         </MenuBarBase>
       )
     case "wallet":
@@ -79,18 +84,23 @@ export const MenuBar = ({
           leftSlot={<LogoButton onClick={goHome} />}
           rightSlot={
             <div className="flex space-x-2">
-              <button
-                type="button"
-                className="flex flex-col btn min-h-10 h-10"
-                onClick={onNetworkClicked}
+              <div
+                className="tooltip tooltip-secondary tooltip-bottom"
+                data-tip="Network management"
               >
-                <p className="text-sm">Mina</p>
-                {networkManagement ? (
-                  <ChevronUpIcon width={24} height={24} />
-                ) : (
-                  <ChevronDownIcon width={24} height={24} />
-                )}
-              </button>
+                <button
+                  type="button"
+                  className="flex flex-col btn min-h-10 h-10"
+                  onClick={onNetworkClicked}
+                >
+                  <p className="text-sm">Mina</p>
+                  {networkManagement ? (
+                    <ChevronUpIcon width={24} height={24} />
+                  ) : (
+                    <ChevronDownIcon width={24} height={24} />
+                  )}
+                </button>
+              </div>
               <button
                 type="button"
                 className="btn btn-circle min-h-10 h-10 w-10"

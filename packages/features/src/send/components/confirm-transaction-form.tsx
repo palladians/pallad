@@ -27,7 +27,7 @@ export const ConfirmTransactionForm = ({
           id="spendingPassword"
           type={showPassword ? "text" : "password"}
           data-testid="onboarding__spendingPasswordInput"
-          placeholder="Create your password"
+          placeholder="Enter your password"
           className="grow"
           {...confirmationForm.register("spendingPassword")}
         />

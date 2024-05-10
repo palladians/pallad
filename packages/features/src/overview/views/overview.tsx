@@ -1,12 +1,10 @@
 import ArrowRightIcon from "@/common/assets/arrow-right.svg?react"
 import IncomingIcon from "@/common/assets/incoming.svg?react"
-import Logo from "@/common/assets/logo.svg?react"
 import type { useAccount } from "@/common/hooks/use-account"
-import { DashboardMenuBar } from "@/components/dashboard-menu-bar"
 import { MenuBar } from "@/components/menu-bar"
-import { ChevronRightIcon } from "lucide-react"
+import { Skeleton } from "@/components/skeleton"
 import { Link } from "react-router-dom"
-import { MenuDrawer } from "../components/menu-drawer"
+import SlotCounter from "react-slot-counter"
 import { PortfolioValueChart } from "../components/portfolio-value-chart"
 
 const TxTile = () => (
@@ -20,35 +18,62 @@ const TxTile = () => (
 )
 
 type OverviewViewProps = {
-  account: ReturnType<typeof useAccount>
-  fiatBalance: number
+  lastMonthPrices: [number, number][]
+  balance: number
+  chartLabel: string
+  loading: boolean
+  currentPriceIndex: number | undefined
+  setCurrentPriceIndex: (currentPriceIndex: number | undefined) => void
   onSend: () => void
   onReceive: () => void
 }
 
 export const OverviewView = ({
-  account,
-  fiatBalance,
+  lastMonthPrices,
+  balance,
+  chartLabel,
+  loading,
+  currentPriceIndex,
+  setCurrentPriceIndex,
   onSend,
   onReceive,
 }: OverviewViewProps) => {
+  const [bucks, cents] = balance.toFixed(2).toString().split(".")
   return (
     <div className="flex flex-col flex-1">
-      {/* {account.isLoading ? (
-        <div className="skeleton w-full h-[182px]" />
-      ) : (
-        <OverviewCard account={account} fiatBalance={fiatBalance} />
-      )}
-      <AssetList account={account} /> */}
       <MenuBar variant="dashboard" />
-      <PortfolioValueChart />
+      <Skeleton loading={loading} h="62px">
+        <PortfolioValueChart
+          lastMonthPrices={lastMonthPrices}
+          setCurrentPriceIndex={setCurrentPriceIndex}
+          currentPriceIndex={currentPriceIndex}
+        />
+      </Skeleton>
       <div className="card flex-col bg-secondary rounded-t-none px-8 pb-6 gap-4">
         <h1 className="text-primary">Portfolio value</h1>
-        <h2>
-          <span className="text-6xl">$10,476</span>
-          <span className="text-lg">.48</span>
-        </h2>
-        <p className="text-mint">+254.58 (24h)</p>
+        <Skeleton loading={loading} h="65px">
+          <h2 className="flex items-end">
+            <span className="flex items-center text-6xl">
+              <span>$</span>
+              <SlotCounter
+                startValue={0}
+                value={bucks}
+                charClassName="font-work-sans"
+              />
+            </span>
+            <span className="flex items-end text-lg">
+              <span>.</span>
+              <SlotCounter
+                startValue="00"
+                value={cents}
+                charClassName="font-work-sans"
+              />
+            </span>
+          </h2>
+        </Skeleton>
+        <Skeleton loading={loading} h="24px">
+          <p className="text-mint">{chartLabel}</p>
+        </Skeleton>
         <div className="flex gap-4">
           <button
             type="button"

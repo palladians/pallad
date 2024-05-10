@@ -123,7 +123,7 @@ export const TransactionsView = ({
         </div>
       )}
       {showTransactions ? (
-        <div className="px-8 mt-6 space-y-4">
+        <div className="px-8 pb-8 mt-6 space-y-4">
           {Object.values(txsGrouped).map((txs) => {
             return (
               <div key={txs[0].date} className="flex flex-col space-y-4">

@@ -1,5 +1,5 @@
 import type { ChainOperationArgs } from "@palladxyz/key-management"
-import { Mina } from "@palladxyz/mina-core"
+import { Mina, TransactionKind } from "@palladxyz/mina-core"
 import { useVault } from "@palladxyz/vault"
 import { addHours } from "date-fns"
 import type {
@@ -54,15 +54,12 @@ export const useTransactionConfirmation = ({
     fee,
     amount,
     nonce: accountProperties?.inferredNonce ?? 0, // need a util for this whole `onSubmit` to remove Mina dependency
-    type: "payment",
+    type: kind === TransactionKind.PAYMENT ? "payment" : "delegation",
   }
   const constructTransaction = () => {
     const constructTxArgs = {
       transaction: rawTransaction,
-      transactionKind:
-        kind === ("staking" as Mina.TransactionKind)
-          ? Mina.TransactionKind.STAKE_DELEGATION
-          : Mina.TransactionKind.PAYMENT,
+      transactionKind: kind,
     }
     return constructTx(constructTxArgs)
   }
@@ -95,10 +92,7 @@ export const useTransactionConfirmation = ({
     // TODO: Make a util for this
     const submitTxArgs = {
       signedTransaction: signedTx as unknown as SignedLegacy<Payment>,
-      kind:
-        kind === ("staking" as Mina.TransactionKind)
-          ? Mina.TransactionKind.STAKE_DELEGATION
-          : Mina.TransactionKind.PAYMENT,
+      kind,
       transactionDetails: {
         fee: rawTransaction.fee,
         to: rawTransaction.to,
@@ -119,7 +113,7 @@ export const useTransactionConfirmation = ({
     })
     await syncWallet()
     mixpanel.track(
-      kind === ("staking" as Mina.TransactionKind)
+      kind === Mina.TransactionKind.STAKE_DELEGATION
         ? "PortfolioDelegated"
         : "TransactionSent",
       {

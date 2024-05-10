@@ -63,6 +63,7 @@
     "react-qr-code": "^2.0.12",
     "react-router": "^6.21.0",
     "react-router-dom": "^6.21.0",
+    "react-slot-counter": "^2.3.1",
     "react-twc": "^1.0.1",
     "recharts": "^2.10.3",
     "superjson": "^2.2.1",

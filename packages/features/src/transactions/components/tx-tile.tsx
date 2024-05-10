@@ -25,9 +25,7 @@ const getTransactionLabel = (tx) => {
 
 export const TxTile = ({ tx }: TxTileProps) => {
   const navigate = useNavigate()
-  const { data: fiatPriceData } = useFiatPrice()
-  const rawFiatPrice = fiatPriceData?.["mina-protocol"]?.usd ?? 0
-
+  const { current: rawFiatPrice } = useFiatPrice()
   return (
     <div
       key={tx.hash}
@@ -44,7 +42,7 @@ export const TxTile = ({ tx }: TxTileProps) => {
       <div className="flex flex-col items-end gap-2">
         <div className="flex items-center font-semibold">
           <span>{tx.txTotalMinaAmount}</span>
-          <MinaIcon stroke="8" size="18" />
+          <MinaIcon stroke="8" size={18} />
         </div>
         <div className="flex items-center text-xs">
           <span>

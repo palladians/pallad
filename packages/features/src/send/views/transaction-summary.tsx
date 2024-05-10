@@ -1,8 +1,7 @@
-import { ArrowDownLeftIcon, ArrowRightIcon } from "lucide-react"
+import { ArrowRightIcon } from "lucide-react"
 
 import { truncateString } from "@/common/lib/string"
 import { AppLayout } from "@/components/app-layout"
-import { MetaField } from "@/components/meta-field"
 
 import { MenuBar } from "@/components/menu-bar"
 import type { SubmitHandler, UseFormReturn } from "react-hook-form"
@@ -59,10 +58,14 @@ export const TransactionSummaryView = ({
         <div className="card bg-secondary px-4 py-2 grid grid-cols-2">
           <div className="text-[#7D7A9C] py-2">Kind</div>
           <div className="capitalize text-right py-2">{transaction.kind}</div>
-          <div className="text-[#7D7A9C] py-2">Amount</div>
-          <div className="capitalize text-right py-2">
-            {transaction.amount} MINA
-          </div>
+          {transaction.kind !== "delegation" && (
+            <>
+              <div className="text-[#7D7A9C] py-2">Amount</div>
+              <div className="capitalize text-right py-2">
+                {transaction.amount} MINA
+              </div>
+            </>
+          )}
           <div className="text-[#7D7A9C] py-2">Fee</div>
           <div className="capitalize text-right py-2">
             {transaction.fee} MINA

@@ -293,6 +293,9 @@ importers:
       react-router-dom:
         specifier: ^6.21.0
         version: 6.22.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-slot-counter:
+        specifier: ^2.3.1
+        version: 2.3.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-twc:
         specifier: ^1.0.1
         version: 1.4.1(@types/react@18.2.79)(react@18.2.0)
@@ -6209,6 +6212,13 @@ packages:
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
+
+  react-slot-counter@2.3.1:
+    resolution: {integrity: sha512-mc7Xdho0zMOeoR7/hzuwFe+dvjgCm3iLCkS67IvxCVkMh+qVZ7o7ph6LqrHd623pjYbjcGRwhEdq5c+uoKVsvA==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react-smooth@4.0.1:
     resolution: {integrity: sha512-OE4hm7XqR0jNOq3Qmk9mFLyd6p2+j6bvbPJ7qlB7+oo0eNcL2l7WQzG6MBnT3EXY6xzkLMUBec3AfewJdA0J8w==}
@@ -14004,6 +14014,11 @@ snapshots:
     dependencies:
       '@remix-run/router': 1.15.3
       react: 18.2.0
+
+  react-slot-counter@2.3.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   react-smooth@4.0.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:

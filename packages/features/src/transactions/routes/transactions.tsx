@@ -9,7 +9,7 @@ import { TransactionsView } from "../views/transactions"
 
 export const TransactionsRoute = () => {
   const { publicKey } = useAccount()
-  const { data: fiatPriceData } = useFiatPrice()
+  const { current: rawFiatPrice } = useFiatPrice()
   const clearExpired = usePendingTransactionStore((state) => state.clearExpired)
   const pendingHashes = usePendingTransactionStore(
     (state) => state.pendingTransactions,
@@ -21,7 +21,7 @@ export const TransactionsRoute = () => {
   }, [])
   return (
     <TransactionsView
-      fiatPrice={fiatPriceData?.["mina-protocol"].usd || 0}
+      fiatPrice={rawFiatPrice}
       pendingHashes={pendingHashes}
       publicKey={publicKey}
       transactions={transactions ?? []}

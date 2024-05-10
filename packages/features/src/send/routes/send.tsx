@@ -9,12 +9,12 @@ export const SendRoute = () => {
   const [advanced, setAdvanced] = useState(false)
   const navigate = useNavigate()
   const { data: accountProperties } = useAccount()
-  const { data: fiatPrice } = useFiatPrice()
+  const { current: rawFiatPrice } = useFiatPrice()
   return (
     <SendView
       onGoBack={() => navigate(-1)}
       balance={accountProperties?.balance ?? 0}
-      fiatPrice={fiatPrice?.["mina-protocol"]?.usd ?? 0}
+      fiatPrice={rawFiatPrice}
       advanced={advanced}
       setAdvanced={setAdvanced}
     />
