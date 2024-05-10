@@ -1,10 +1,11 @@
+import { mnemonic } from "@palladxyz/common"
 import {
   type ChainOperationArgs,
   type FromBip39MnemonicWordsProps,
   type GroupedCredentials,
+  type MinaDerivationArgs,
   generateMnemonicWords,
 } from "@palladxyz/key-management"
-import type { MinaDerivationArgs } from "@palladxyz/key-management"
 import type { Mina } from "@palladxyz/mina-core"
 import { Network } from "@palladxyz/pallad-core"
 import { act, renderHook } from "@testing-library/react"
@@ -13,20 +14,7 @@ import { expect } from "vitest"
 import { KeyAgents } from "../../src"
 import { useVault } from "../../src"
 
-const PREGENERATED_MNEMONIC = [
-  "habit",
-  "hope",
-  "tip",
-  "crystal",
-  "because",
-  "grunt",
-  "nation",
-  "idea",
-  "electric",
-  "witness",
-  "alert",
-  "like",
-]
+const PREGENERATED_MNEMONIC = mnemonic
 
 // Provide the passphrase for testing purposes
 const params = {

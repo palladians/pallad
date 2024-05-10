@@ -1,3 +1,4 @@
+import { mnemonic } from "@palladxyz/common"
 import { Network } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import { type SignatureLike, ethers, hashMessage, recoverAddress } from "ethers"
@@ -27,26 +28,11 @@ const getPassphrase = () =>
 describe("InMemoryKeyAgent", () => {
   let agent: InMemoryKeyAgent
   let rootKeyBytes: Uint8Array
-  let mnemonic: string[]
   let seed: Uint8Array
   let root: bip32.HDKey
 
   beforeEach(async () => {
     // Create keys for testing purposes
-    mnemonic = [
-      "habit",
-      "hope",
-      "tip",
-      "crystal",
-      "because",
-      "grunt",
-      "nation",
-      "idea",
-      "electric",
-      "witness",
-      "alert",
-      "like",
-    ]
     //bip39.generateMnemonicWords(strength)
     seed = bip39.mnemonicToSeed(mnemonic, "")
     // Create root node from seed

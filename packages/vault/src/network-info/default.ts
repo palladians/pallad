@@ -10,11 +10,11 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
   Berkeley: {
     nodeEndpoint: {
       providerName: "obscura",
-      url: "https://mina-berkeley.obscura.build/v1/bfce6350-4f7a-4b63-be9b-8981dec92050/graphql",
+      url: "https://api.minascan.io/node/berkeley/v1/graphql",
     },
     archiveNodeEndpoint: {
-      providerName: "mina-node",
-      url: "https://berkeley.graphql.minaexplorer.com",
+      providerName: "mina-scan",
+      url: "https://minascan.io/qanet/api/",
     },
     networkName: "Berkeley",
     networkType: "testnet",
