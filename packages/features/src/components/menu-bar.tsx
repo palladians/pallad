@@ -1,4 +1,5 @@
 import Logo from "@/common/assets/logo.svg?react"
+import { truncateString } from "@/common/lib/string"
 import {
   ArrowLeftIcon,
   ChevronDownIcon,
@@ -44,15 +45,16 @@ type MenuBarProps = {
   onAddressClicked?: () => void
   onNetworkClicked?: () => void
   networkManagement?: boolean
+  publicAddress?: string
 }
 
 export const MenuBar = ({
   variant,
   onBackClicked,
   onCloseClicked,
-  onAddressClicked,
   onNetworkClicked,
   networkManagement = false,
+  publicAddress,
 }: MenuBarProps) => {
   const navigate = useNavigate()
   const goHome = () => navigate("/dashboard")
@@ -63,18 +65,12 @@ export const MenuBar = ({
           leftSlot={<LogoButton onClick={goHome} />}
           rightSlot={<MenuDrawer />}
         >
-          <div
-            className="tooltip tooltip-secondary tooltip-bottom"
-            data-tip="Wallet management"
-          >
-            <button
-              type="button"
-              className="btn flex gap-1 min-h-10 h-10"
-              onClick={onAddressClicked}
-            >
-              <span>B62qq...B7S</span>
-              <ChevronRightIcon />
-            </button>
+          <div className="btn flex gap-1 min-h-10 h-10">
+            {truncateString({
+              value: publicAddress ?? "",
+              firstCharCount: 5,
+              endCharCount: 3,
+            })}
           </div>
         </MenuBarBase>
       )

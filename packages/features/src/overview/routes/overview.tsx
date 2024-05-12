@@ -1,9 +1,10 @@
 import { useFiatPrice } from "@palladxyz/offchain-data"
 
 import { useAccount } from "@/common/hooks/use-account"
+import { useTransactions } from "@/common/hooks/use-transactions"
 
 import { format } from "date-fns"
-import { takeLast } from "rambda"
+import { take, takeLast } from "rambda"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { OverviewView } from "../views/overview"
@@ -14,15 +15,19 @@ export const OverviewRoute = () => {
   >()
   const navigate = useNavigate()
   const account = useAccount()
+  const { data: transactions, isLoading: transactionsLoading } =
+    useTransactions()
+  const latestTwoTransactions = take(2, transactions ?? [])
   const {
     data: fiatPriceData,
     current,
     isLoading: pricesLoading,
   } = useFiatPrice()
   const lastMonthPrices = takeLast(30, fiatPriceData?.prices ?? [])
-  const minaPrice = currentPriceIndex
-    ? lastMonthPrices?.[currentPriceIndex]?.[1]
-    : current
+  const minaPrice =
+    typeof currentPriceIndex === "number"
+      ? lastMonthPrices?.[currentPriceIndex]?.[1]
+      : current
   const balance = Number(account.minaBalance) * (minaPrice ?? 0)
   const priceToday = lastMonthPrices?.[lastMonthPrices?.length - 1]?.[1] ?? 0
   const priceYesterday =
@@ -39,10 +44,12 @@ export const OverviewRoute = () => {
     <OverviewView
       lastMonthPrices={lastMonthPrices}
       balance={balance}
-      loading={pricesLoading || account.isLoading}
+      loading={pricesLoading || account.isLoading || transactionsLoading}
       chartLabel={chartLabel}
       currentPriceIndex={currentPriceIndex}
       setCurrentPriceIndex={setCurrentPriceIndex}
+      transactions={latestTwoTransactions}
+      publicAddress={account.data?.publicKey ?? ""}
       onSend={() => navigate("/send")}
       onReceive={() => navigate("/receive")}
     />

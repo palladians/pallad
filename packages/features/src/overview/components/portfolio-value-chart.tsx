@@ -30,6 +30,10 @@ const CustomTooltip = ({
       return
     }
     if (currentPriceIndex === index) return
+    if (index === -1) {
+      setCurrentPriceIndex(undefined)
+      return
+    }
     setCurrentPriceIndex(index)
   }, [currentPriceIndex, index])
   return null

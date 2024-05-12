@@ -1,7 +1,7 @@
 type SkeletonProps = {
   loading: boolean
   h: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const Skeleton = ({ loading, h, children }: SkeletonProps) => {

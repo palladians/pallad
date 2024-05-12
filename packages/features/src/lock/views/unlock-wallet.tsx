@@ -28,6 +28,7 @@ export const UnlockWalletView = ({
 }: UnlockWalletViewProps) => (
   <WizardLayout
     title="Unlock Wallet"
+    headerShown={false}
     footer={
       <button
         type="submit"

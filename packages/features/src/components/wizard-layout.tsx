@@ -1,3 +1,4 @@
+import clsx from "clsx"
 import { ArrowLeftIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { MenuBar } from "./menu-bar"
@@ -26,7 +27,11 @@ export const WizardLayout = ({
           onBackClicked={() => navigate(backButtonPath as never)}
         />
       )}
-      {title && <span className="text-3xl px-8">{title}</span>}
+      {title && (
+        <h1 className={clsx("text-3xl px-8", !headerShown && "mt-8")}>
+          {title}
+        </h1>
+      )}
       <div className="flex flex-1 items-center px-8">{children}</div>
       {footer && (
         <div className="flex flex-col w-full justify-center items-center gap-6 p-8">

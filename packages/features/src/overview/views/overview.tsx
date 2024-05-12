@@ -1,21 +1,11 @@
 import ArrowRightIcon from "@/common/assets/arrow-right.svg?react"
-import IncomingIcon from "@/common/assets/incoming.svg?react"
-import type { useAccount } from "@/common/hooks/use-account"
 import { MenuBar } from "@/components/menu-bar"
 import { Skeleton } from "@/components/skeleton"
+import type { Tx } from "@palladxyz/pallad-core"
 import { Link } from "react-router-dom"
 import SlotCounter from "react-slot-counter"
 import { PortfolioValueChart } from "../components/portfolio-value-chart"
-
-const TxTile = () => (
-  <div className="card bg-secondary p-4 aspect-square grid-col gap-1">
-    <div className="btn btn-circle bg-neutral">
-      <IncomingIcon />
-    </div>
-    <h3 className="mt-2">Mina</h3>
-    <p>1,000.0982</p>
-  </div>
-)
+import { TxTile } from "../components/tx-tile"
 
 type OverviewViewProps = {
   lastMonthPrices: [number, number][]
@@ -24,6 +14,8 @@ type OverviewViewProps = {
   loading: boolean
   currentPriceIndex: number | undefined
   setCurrentPriceIndex: (currentPriceIndex: number | undefined) => void
+  transactions: Tx[]
+  publicAddress: string
   onSend: () => void
   onReceive: () => void
 }
@@ -35,13 +27,15 @@ export const OverviewView = ({
   loading,
   currentPriceIndex,
   setCurrentPriceIndex,
+  transactions,
+  publicAddress,
   onSend,
   onReceive,
 }: OverviewViewProps) => {
   const [bucks, cents] = balance.toFixed(2).toString().split(".")
   return (
     <div className="flex flex-col flex-1">
-      <MenuBar variant="dashboard" />
+      <MenuBar variant="dashboard" publicAddress={publicAddress} />
       <Skeleton loading={loading} h="62px">
         <PortfolioValueChart
           lastMonthPrices={lastMonthPrices}
@@ -55,19 +49,11 @@ export const OverviewView = ({
           <h2 className="flex items-end">
             <span className="flex items-center text-6xl">
               <span>$</span>
-              <SlotCounter
-                startValue={0}
-                value={bucks}
-                charClassName="font-work-sans"
-              />
+              <SlotCounter value={bucks} charClassName="font-work-sans" />
             </span>
             <span className="flex items-end text-lg">
               <span>.</span>
-              <SlotCounter
-                startValue="00"
-                value={cents}
-                charClassName="font-work-sans"
-              />
+              <SlotCounter value={cents} charClassName="font-work-sans" />
             </span>
           </h2>
         </Skeleton>
@@ -103,8 +89,22 @@ export const OverviewView = ({
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <TxTile />
-          <TxTile />
+          {loading ? (
+            <>
+              <Skeleton loading={true} h="145px" />
+              <Skeleton loading={true} h="145px" />
+            </>
+          ) : transactions.length > 0 ? (
+            transactions.map((tx) => (
+              <TxTile
+                key={tx.hash}
+                tx={tx}
+                currentWalletAddress={publicAddress}
+              />
+            ))
+          ) : (
+            <p className="col-span-2">No transactions yet.</p>
+          )}
         </div>
       </div>
     </div>

@@ -12,6 +12,8 @@ export const View = () => {
       loading={false}
       currentPriceIndex={undefined}
       setCurrentPriceIndex={action("Set Current Price Index")}
+      transactions={[]}
+      publicAddress="B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS"
       onSend={action("Send Clicked")}
       onReceive={action("Receive Clicked")}
     />
