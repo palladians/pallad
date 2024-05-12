@@ -3,6 +3,7 @@ import relativeTime from "dayjs/plugin/relativeTime"
 import { ErrorBoundary } from "react-error-boundary"
 import { MixpanelProvider } from "react-mixpanel-browser"
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom"
+import { Toaster } from "sonner"
 
 import { AboutRoute } from "./about/routes/about"
 import { SupportRoute } from "./about/routes/support"
@@ -52,6 +53,7 @@ export const Router = () => {
     >
       <ErrorBoundary FallbackComponent={ErrorView}>
         <div className="flex flex-1 pointer">
+          <Toaster />
           <MemoryRouter>
             <Routes>
               <Route path="/" element={<StartRoute />} />

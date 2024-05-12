@@ -6,6 +6,7 @@ import { MenuBar } from "@/components/menu-bar"
 import { Copy, Plus, TrashIcon } from "lucide-react"
 import type { MouseEvent } from "react"
 import { Link } from "react-router-dom"
+import { toast } from "sonner"
 
 type AddressBookViewProps = {
   contacts: Contact[]
@@ -22,6 +23,7 @@ export const AddressBookView = ({
   ) => {
     event.preventDefault()
     navigator.clipboard.writeText(address)
+    toast.success("Address copied")
   }
   return (
     <AppLayout>

@@ -65,13 +65,15 @@ export const MenuBar = ({
           leftSlot={<LogoButton onClick={goHome} />}
           rightSlot={<MenuDrawer />}
         >
-          <div className="btn flex gap-1 min-h-10 h-10">
-            {truncateString({
-              value: publicAddress ?? "",
-              firstCharCount: 5,
-              endCharCount: 3,
-            })}
-          </div>
+          {(publicAddress?.length ?? 0) > 0 && (
+            <div className="btn flex gap-1 min-h-10 h-10">
+              {truncateString({
+                value: publicAddress ?? "",
+                firstCharCount: 5,
+                endCharCount: 3,
+              })}
+            </div>
+          )}
         </MenuBarBase>
       )
     case "wallet":

@@ -1,7 +1,7 @@
 import Logo from "@/common/assets/logo.svg?react"
 import MenuIcon from "@/common/assets/menu.svg?react"
-import { XIcon } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import { ChevronDownIcon, XIcon } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
 
 export const MenuDrawer = () => {
   const navigate = useNavigate()
@@ -32,12 +32,26 @@ export const MenuDrawer = () => {
             <button type="button" onClick={() => navigate("/dashboard")}>
               <Logo width={32} height={32} />
             </button>
-            <label
-              htmlFor="menu-drawer"
-              className="btn btn-circle min-h-10 h-10 w-10 btn-primary bg-white hover:bg-white shadow-none border-none"
-            >
-              <XIcon />
-            </label>
+            <div className="flex gap-2 items-center">
+              <div
+                className="tooltip tooltip-bottom"
+                data-tip="Network management"
+              >
+                <Link
+                  to="/networks"
+                  className="btn btn-primary min-h-10 h-10 bg-white hover:bg-white shadow-none border-none gap-2"
+                >
+                  <span>Mina</span>
+                  <ChevronDownIcon size={24} />
+                </Link>
+              </div>
+              <label
+                htmlFor="menu-drawer"
+                className="btn btn-circle min-h-10 h-10 w-10 btn-primary bg-white hover:bg-white shadow-none border-none"
+              >
+                <XIcon />
+              </label>
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             <button

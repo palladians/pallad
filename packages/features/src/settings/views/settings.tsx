@@ -1,27 +1,29 @@
 import { AppLayout } from "@/components/app-layout"
 import { SettingsPageLayout } from "@/components/settings-page-layout"
-import { Eye, Globe, Info, WalletMinimal } from "lucide-react"
+import { Eye, Info } from "lucide-react"
 import { Link } from "react-router-dom"
 
 const Links = [
-  {
-    label: "Wallet",
-    description: "Management and networks",
-    href: "/settings/wallet",
-    Icon: WalletMinimal,
-  },
+  // TODO: Uncomment when we add multi-account
+  // {
+  //   label: "Wallet",
+  //   description: "Management and networks",
+  //   href: "/settings/wallet",
+  //   Icon: WalletMinimal,
+  // },
   {
     label: "Privacy",
     description: "Data sharing",
     href: "/settings/privacy",
     Icon: Eye,
   },
-  {
-    label: "Display",
-    description: "Languages and currencies",
-    href: "/settings/display",
-    Icon: Globe,
-  },
+  // TODO: Uncomment when we add multiple locales
+  // {
+  //   label: "Display",
+  //   description: "Languages and currencies",
+  //   href: "/settings/display",
+  //   Icon: Globe,
+  // },
   {
     label: "About",
     description: "Everything about us",
