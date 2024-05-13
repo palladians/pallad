@@ -1,8 +1,8 @@
 import type { StoryDefault } from "@ladle/react"
 
-import { WelcomeScreen } from "./"
+import { WelcomeScreen as WelcomeScreenView } from "./"
 
-export const View = () => <WelcomeScreen />
+export const WelcomeScreen = () => <WelcomeScreenView />
 
 export default {
   title: "Welcome Screen",

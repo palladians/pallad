@@ -1,8 +1,8 @@
 import { action } from "@ladle/react"
 import type { StoryDefault } from "@ladle/react"
-import { ErrorView } from "./error"
+import { ErrorView } from "./views/error"
 
-export const View = () => (
+export const RuntimeError = () => (
   <ErrorView
     error={new Error("Unexpected behavior.")}
     resetErrorBoundary={action("Reset Boundary")}

@@ -2,11 +2,11 @@ import type { StoryDefault } from "@ladle/react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
-import { UnlockWalletView } from "./unlock-wallet"
+import { UnlockWalletView } from "./views/unlock-wallet"
 
-export const View = () => {
+export const UnlockWallet = () => {
   const [restartAlertVisible, setRestartAlertVisible] = useState(false)
-  const form = useForm<UnlockWalletData>()
+  const form = useForm<any>()
   return (
     <UnlockWalletView
       form={form}

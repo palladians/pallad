@@ -1,9 +1,9 @@
 import { action } from "@ladle/react"
 import type { StoryDefault } from "@ladle/react"
 
-import { OverviewView } from "./overview"
+import { OverviewView } from "./views/overview"
 
-export const View = () => {
+export const Dashboard = () => {
   return (
     <OverviewView
       lastMonthPrices={[]}

@@ -1,6 +1,9 @@
+import { TxSide } from "@/common/types"
 import type { StoryDefault } from "@ladle/react"
+import { Mina } from "@palladxyz/mina-core"
 
-import { TransactionsView } from "./transactions"
+import { TransactionDetailsView } from "./views/transaction-details"
+import { TransactionsView } from "./views/transactions"
 
 const transactions = [
   {
@@ -44,15 +47,34 @@ const transactions = [
   },
 ]
 
-export const View = () => (
+export const Transactions = () => (
   <TransactionsView
     fiatPrice={4}
     pendingHashes={[transactions[0].hash]}
     publicKey="B62qizYjLtUebFFQuAnPjpLrUdWx4rLnptvzbVdNpY6EXff2U68Ljf5"
-    transactions={transactions}
+    transactions={transactions as any}
     transactionsError={false}
   />
 )
+
+export const TransactionDetails = () => {
+  return (
+    <TransactionDetailsView
+      loading={false}
+      network="berkeley"
+      onGoBack={() => console.log("go back")}
+      transaction={{
+        from: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
+        to: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
+        minaAmount: "5",
+        dateTime: "DATE",
+        hash: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
+        side: TxSide.OUTGOING,
+        kind: Mina.TransactionKind.PAYMENT,
+      }}
+    />
+  )
+}
 
 export default {
   title: "Transactions",

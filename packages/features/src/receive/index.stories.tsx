@@ -1,9 +1,10 @@
 import { action } from "@ladle/react"
 import type { StoryDefault } from "@ladle/react"
+import React from "react"
 
-import { ReceiveView } from "./receive"
+import { ReceiveView } from "./views/receive"
 
-export const View = () => {
+export const Receive = () => {
   return (
     <ReceiveView
       publicKey="B62qizYjLtUebFFQuAnPjpLrUdWx4rLnptvzbVdNpY6EXff2U68Ljf5"

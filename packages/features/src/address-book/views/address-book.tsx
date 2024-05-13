@@ -42,22 +42,27 @@ export const AddressBookView = ({
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: won't update
                 key={index}
-                className="px-6 flex justify-between btn text-base font-medium overflow-x-auto group"
+                className="relative px-6 flex justify-between btn text-base font-medium overflow-x-auto group"
               >
                 <Link to="/send" state={{ address: contact.address }}>
                   {contact.name}
                 </Link>
-                <div className="flex items-center space-x-4 translate-x-10 group-hover:translate-x-0 transition-transform">
-                  <p>
-                    {truncateString({
-                      value: contact.address,
-                      firstCharCount: 4,
-                      endCharCount: 4,
-                    })}
-                  </p>
+                <p>
+                  {truncateString({
+                    value: contact.address,
+                    firstCharCount: 4,
+                    endCharCount: 4,
+                  })}
+                </p>
+                <div className="flex gap-2 absolute right-4 top-3 bg-neutral opacity-0 group-hover:opacity-100 translate-x-16 group-hover:translate-x-0 transition-all">
                   <button
                     type="button"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={(event) => onAddressCopy(event, contact.address)}
+                  >
+                    <Copy width={24} height={24} className="text-[#F6C177]" />
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => removeContact({ index })}
                   >
                     <TrashIcon
@@ -65,13 +70,6 @@ export const AddressBookView = ({
                       height={24}
                       className="text-[#F6C177]"
                     />
-                  </button>
-                  <button
-                    type="button"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={(event) => onAddressCopy(event, contact.address)}
-                  >
-                    <Copy width={24} height={24} className="text-[#F6C177]" />
                   </button>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import type { StoryDefault } from "@ladle/react"
 
-import { NotFoundView } from "./not-found"
+import { NotFoundView } from "./views/not-found"
 
 export const View = () => (
   <NotFoundView

@@ -5,7 +5,7 @@ import { WizardLayout } from "@/components/wizard-layout"
 
 import type { MnemonicConfirmationData } from "../types"
 
-type MnemonicConfirmationViewProps = {
+type SeedBackupConfirmationViewProps = {
   onSubmit: () => unknown
   form: UseFormReturn<MnemonicConfirmationData, any, undefined>
   restoring: boolean
@@ -13,13 +13,13 @@ type MnemonicConfirmationViewProps = {
   confirmationValid: boolean
 }
 
-export const MnemonicConfirmationView = ({
+export const SeedBackupConfirmationView = ({
   onSubmit,
   form,
   restoring,
   confirmationIndex,
   confirmationValid,
-}: MnemonicConfirmationViewProps) => (
+}: SeedBackupConfirmationViewProps) => (
   <WizardLayout
     title="Seed backup"
     backButtonPath={-1}

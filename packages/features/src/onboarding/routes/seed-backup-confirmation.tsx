@@ -10,13 +10,13 @@ import { useNavigate } from "react-router-dom"
 import { useAppStore } from "@/common/store/app"
 import { useOnboardingStore } from "@/common/store/onboarding"
 
-import { MnemonicConfirmationView } from "../views/mnemonic-confirmation"
+import { SeedBackupConfirmationView } from "../views/seed-backup-confirmation"
 
 const getConfirmationIndex = () => {
   return Math.floor(Math.random() * 12)
 }
 
-export const MnemonicConfirmationRoute = () => {
+export const SeedBackupConfirmationRoute = () => {
   const mixpanel = useMixpanel()
   const [restoring, setRestoring] = useState(false)
   const restoreWallet = useVault((state) => state.restoreWallet)
@@ -78,7 +78,7 @@ export const MnemonicConfirmationRoute = () => {
     }
   }
   return (
-    <MnemonicConfirmationView
+    <SeedBackupConfirmationView
       confirmationIndex={confirmationIndex}
       form={mnemonicConfirmationForm}
       confirmationValid={confirmationValid}
