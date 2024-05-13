@@ -7,13 +7,12 @@ import { structurizeTransaction } from "../utils/structurize-transactions"
 import { TransactionDetailsView } from "../views/transaction-details"
 
 export const TransactionDetailsRoute = () => {
-  const { publicKey, network } = useAccount()
+  const { publicKey } = useAccount()
   const navigate = useNavigate()
   const { hash } = useParams()
   if (!hash) return null
   if (!publicKey) return null
-  const { data: transactionData, isLoading: transactionLoading } =
-    useTransaction({ hash })
+  const { data: transactionData } = useTransaction({ hash })
   const transaction =
     transactionData &&
     structurizeTransaction({
@@ -23,8 +22,6 @@ export const TransactionDetailsRoute = () => {
   if (!transaction) return null
   return (
     <TransactionDetailsView
-      loading={transactionLoading}
-      network={network}
       onGoBack={() => navigate(-1)}
       transaction={transaction}
     />
