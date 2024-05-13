@@ -2,8 +2,8 @@ import { Mina } from "@palladxyz/mina-core"
 import { useFiatPrice } from "@palladxyz/offchain-data"
 import { useNavigate } from "react-router-dom"
 
+import MinaIcon from "@/common/assets/mina.svg?react"
 import { type StructurizedTransaction, TxSide } from "@/common/types"
-import { MinaIcon } from "@/components/mina-icon"
 
 import { TxIndicator } from "./tx-indicator"
 
@@ -42,7 +42,7 @@ export const TxTile = ({ tx }: TxTileProps) => {
       <div className="flex flex-col items-end gap-2">
         <div className="flex items-center font-semibold">
           <span>{tx.txTotalMinaAmount}</span>
-          <MinaIcon stroke="8" size={18} />
+          <MinaIcon width={20} height={20} />
         </div>
         <div className="flex items-center text-xs">
           <span>

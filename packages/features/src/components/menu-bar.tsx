@@ -7,7 +7,7 @@ import {
   ChevronUpIcon,
   XIcon,
 } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { MenuDrawer } from "./menu-drawer"
 
 type MenuBarBaseProps = {
@@ -86,7 +86,8 @@ export const MenuBar = ({
                 className="tooltip tooltip-secondary tooltip-bottom"
                 data-tip="Network management"
               >
-                <button
+                <Link
+                  to="/networks"
                   type="button"
                   className="flex flex-col btn min-h-10 h-10"
                   onClick={onNetworkClicked}
@@ -97,7 +98,7 @@ export const MenuBar = ({
                   ) : (
                     <ChevronDownIcon width={24} height={24} />
                   )}
-                </button>
+                </Link>
               </div>
               <button
                 type="button"

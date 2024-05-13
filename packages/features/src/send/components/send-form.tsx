@@ -7,9 +7,9 @@ import { TransactionFee } from "@/common/lib/const"
 import { useTransactionStore } from "@/common/store/transaction"
 import { FormError } from "@/components/form-error"
 
+import MinaIcon from "@/common/assets/mina.svg?react"
 import { formatCurrency } from "@/common/lib/currency"
 import { FeePicker, TransactionFeeShort } from "@/components/fee-picker"
-import { MinaIcon } from "@/components/mina-icon"
 import { TransactionKind } from "@palladxyz/mina-core"
 import { ChevronRightIcon, SearchIcon } from "lucide-react"
 import { SendFormSchema, type SendFormSchemaProps } from "./send-form.schema"
@@ -93,7 +93,7 @@ export const SendForm = ({
       <div className="card bg-secondary w-full flex flex-row justify-between items-center p-2 mb-1">
         <div className="flex gap-2">
           <div className="btn btn-neutral btn-circle">
-            <MinaIcon size={28} />
+            <MinaIcon width={24} height={24} />
           </div>
           <div className="flex flex-col">
             <div>Mina</div>

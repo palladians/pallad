@@ -1,6 +1,7 @@
 import { action } from "@ladle/react"
 import type { StoryDefault } from "@ladle/react"
 
+import { NetworksView } from "./views/networks"
 import { OverviewView } from "./views/overview"
 
 export const Dashboard = () => {
@@ -20,6 +21,10 @@ export const Dashboard = () => {
   )
 }
 
+export const Networks = () => {
+  return <NetworksView />
+}
+
 export default {
-  title: "Dashboard",
+  title: "Wallet",
 } satisfies StoryDefault

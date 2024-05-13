@@ -60,14 +60,12 @@ export const Transactions = () => (
 export const TransactionDetails = () => {
   return (
     <TransactionDetailsView
-      loading={false}
-      network="berkeley"
       onGoBack={() => console.log("go back")}
       transaction={{
         from: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
         to: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
         minaAmount: "5",
-        dateTime: "DATE",
+        dateTime: "2024-04-29T18:10:01Z",
         hash: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
         side: TxSide.OUTGOING,
         kind: Mina.TransactionKind.PAYMENT,

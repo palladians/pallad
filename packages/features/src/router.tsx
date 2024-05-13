@@ -19,7 +19,6 @@ import { SeedImportRoute } from "./onboarding/routes/seed-import"
 import { SeedImportSecurityRoute } from "./onboarding/routes/seed-import-security"
 import { StartRoute } from "./onboarding/routes/start"
 import { StayConnectedRoute } from "./onboarding/routes/stay-connected"
-import { OverviewRoute } from "./overview/routes/overview"
 import { ReceiveRoute } from "./receive/routes/receive"
 import { SendRoute } from "./send/routes/send"
 import { TransactionErrorRoute } from "./send/routes/transaction-error"
@@ -38,6 +37,8 @@ import { DelegateRoute } from "./staking/routes/delegate"
 import { StakingOverviewRoute } from "./staking/routes/staking-overview"
 import { TransactionDetailsRoute } from "./transactions/routes/transaction-details"
 import { TransactionsRoute } from "./transactions/routes/transactions"
+import { NetworksRoute } from "./wallet/routes/networks"
+import { OverviewRoute } from "./wallet/routes/overview"
 
 dayjs.extend(relativeTime)
 
@@ -58,6 +59,7 @@ export const Router = () => {
             <Routes>
               <Route path="/" element={<StartRoute />} />
               <Route path="/dashboard" element={<OverviewRoute />} />
+              <Route path="/networks" element={<NetworksRoute />} />
               <Route path="/send" element={<SendRoute />} />
               <Route path="/receive" element={<ReceiveRoute />} />
               <Route
