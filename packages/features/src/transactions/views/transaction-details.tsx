@@ -1,32 +1,24 @@
 import { Mina } from "@palladxyz/mina-core"
 
-import { TxSide } from "@/common/types"
 import { AppLayout } from "@/components/app-layout"
 import { format } from "date-fns"
 
 import { truncateString } from "@/common/lib/string"
+import { getTxSide } from "@/common/lib/tx"
 import { MenuBar } from "@/components/menu-bar"
 import { ArrowRight } from "lucide-react"
-
-type TransactionData = {
-  side: TxSide
-  type?: Mina.TransactionType
-  minaAmount: string
-  hash: string
-  from: string
-  to: string
-  dateTime: string
-}
-
 type TransactionDetailsViewProps = {
   onGoBack: () => void
-  transaction: TransactionData
+  transaction: Mina.TransactionBody
+  currentWalletAddress: string
 }
 
 export const TransactionDetailsView = ({
   onGoBack,
   transaction,
+  currentWalletAddress,
 }: TransactionDetailsViewProps) => {
+  const side = getTxSide({ tx: transaction, currentWalletAddress })
   return (
     <AppLayout>
       <MenuBar variant="back" onBackClicked={onGoBack} />
@@ -70,17 +62,20 @@ export const TransactionDetailsView = ({
             <div className="flex items-center justify-between">
               <p className="text-[#7D7A9C]">Type</p>
               <p className="text-right">
-                {transaction.side === TxSide.INCOMING ? "Received" : "Sent"}
+                {side === "incoming" ? "Received" : "Sent"}
               </p>
             </div>
             <div className="flex items-center justify-between">
               <p className="text-[#7D7A9C]">Amount</p>
-              <p className="text-right">{`${transaction.minaAmount} MINA`}</p>
+              <p className="text-right">{`${transaction.amount} MINA`}</p>
             </div>
             <div className="flex items-center justify-between">
               <p className="text-[#7D7A9C]">Date and time</p>
               <p className="text-right">
-                {format(new Date(transaction.dateTime), "dd/MM/yy - HH:mm")}
+                {format(
+                  new Date(transaction.dateTime ?? ""),
+                  "dd/MM/yy - HH:mm",
+                )}
               </p>
             </div>
             <hr className="border-[#413E5E]" />

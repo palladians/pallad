@@ -24,6 +24,7 @@ export const TransactionDetailsRoute = () => {
     <TransactionDetailsView
       onGoBack={() => navigate(-1)}
       transaction={transaction}
+      currentWalletAddress={publicKey}
     />
   )
 }
