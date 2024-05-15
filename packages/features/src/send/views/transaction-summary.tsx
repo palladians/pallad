@@ -18,40 +18,58 @@ type TransactionSummaryViewProps = {
   }
   confirmationForm: UseFormReturn<{ spendingPassword: string }>
   submitTransaction: SubmitHandler<any>
+  onGoBack: () => void
+  onClose: () => void
 }
 
 export const TransactionSummaryView = ({
   transaction,
   confirmationForm,
   submitTransaction,
+  onGoBack,
+  onClose,
 }: TransactionSummaryViewProps) => {
   return (
     <AppLayout>
-      <MenuBar variant="back-stop" />
+      <MenuBar
+        variant="back-stop"
+        onBackClicked={onGoBack}
+        onCloseClicked={onClose}
+      />
       <div className="flex flex-1 flex-col px-8 pb-8 gap-2">
         <h1 className="text-3xl">Summary</h1>
         <div className="card bg-secondary py-3 px-4 flex flex-row justify-between mt-1">
           <div className="flex flex-col">
             <div className="text-[#7D7A9C]">From</div>
-            <div>
-              {truncateString({
-                value: transaction.from,
-                endCharCount: 3,
-                firstCharCount: 5,
-              })}
+            <div
+              className="tooltip before:max-w-screen before:break-all before:ml-16"
+              data-tip={transaction.from}
+            >
+              <div>
+                {truncateString({
+                  value: transaction.from,
+                  endCharCount: 3,
+                  firstCharCount: 5,
+                })}
+              </div>
             </div>
           </div>
           <div className="btn btn-circle btn-neutral text-mint">
             <ArrowRightIcon size={24} />
           </div>
           <div className="flex flex-col">
-            <div className="text-[#7D7A9C]">From</div>
-            <div>
-              {truncateString({
-                value: transaction.to,
-                endCharCount: 3,
-                firstCharCount: 5,
-              })}
+            <div className="text-[#7D7A9C]">To</div>
+            <div
+              className="tooltip before:max-w-screen before:break-all before:-ml-16"
+              data-tip={transaction.to}
+            >
+              <div>
+                {truncateString({
+                  value: transaction.to,
+                  endCharCount: 3,
+                  firstCharCount: 5,
+                })}
+              </div>
             </div>
           </div>
         </div>

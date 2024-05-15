@@ -5,6 +5,7 @@ import { useTransactionStore } from "@/common/store/transaction"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 import type { z } from "zod"
 import { ConfirmTransactionSchema } from "../components/confirm-transaction-form.schema"
 import { useTransactionConfirmation } from "../hooks/use-transaction-confirmation"
@@ -13,6 +14,7 @@ import { TransactionSummaryView } from "../views/transaction-summary"
 type ConfirmTransactionData = z.infer<typeof ConfirmTransactionSchema>
 
 export const TransactionSummaryRoute = () => {
+  const navigate = useNavigate()
   const { publicKey } = useAccount()
   const outgoingTransaction = useTransactionStore(
     (state) => state.outgoingTransaction,
@@ -44,6 +46,8 @@ export const TransactionSummaryRoute = () => {
         total: total ?? 0,
       }}
       submitTransaction={submitTransaction}
+      onGoBack={() => navigate(-1)}
+      onClose={() => navigate("/dashboard")}
     />
   )
 }

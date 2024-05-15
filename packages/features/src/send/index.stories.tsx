@@ -41,6 +41,8 @@ export const Summary = () => {
         total: 25.1,
       }}
       confirmationForm={confirmationForm}
+      onClose={action("On Close")}
+      onGoBack={action("Go Back")}
       submitTransaction={(data: any) => console.log(data)}
     />
   )
