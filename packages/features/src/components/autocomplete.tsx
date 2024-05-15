@@ -1,102 +1,62 @@
+import { Combobox } from "@headlessui/react"
+import clsx from "clsx"
 import { matchSorter } from "match-sorter"
 import { take } from "rambda"
-import * as React from "react"
-import { useState } from "react"
+import React from "react"
+import type { ClipboardEventHandler } from "react"
 
-import { Command, CommandItem, CommandList } from "@/components/ui/command"
-
-import { Input, type InputProps } from "./ui/input"
-
-type AutocompleteRef = HTMLInputElement
-type AutocompleteProps = InputProps & {
-  setValue: (value: string) => void
+type AutocompleteProps = {
+  value: string
+  onChange: (value: string) => void
+  onPaste: ClipboardEventHandler<HTMLInputElement>
   options: string[]
-  onEnterPressed?: () => void
+  placeholder?: string
+  autoFocus?: boolean
+  testId: string
 }
 
-export const Autocomplete = React.forwardRef<
-  AutocompleteRef,
-  AutocompleteProps
->(
+export const Autocomplete = React.forwardRef(
   (
     {
       value,
-      onBlur,
-      onFocus,
-      setValue,
-      options,
       onChange,
-      onEnterPressed,
+      onPaste,
+      options,
+      placeholder,
+      autoFocus,
+      testId,
       ...rest
-    },
+    }: AutocompleteProps,
     ref,
   ) => {
-    const [open, setOpen] = React.useState(false)
-    const [internalValue, setInternalValue] = useState<string>(
-      value?.toString() || "",
-    )
-    const extendedChange: React.ChangeEventHandler<HTMLInputElement> = (
-      event,
-    ) => {
-      setOpen(true)
-      setInternalValue(event.target.value)
-      onChange?.(event)
-      return event
-    }
-    const extendedBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
-      onBlur?.(event)
-      setTimeout(() => setOpen(false), 100)
-      return event
-    }
-    const extendedFocus: React.FocusEventHandler<HTMLInputElement> = (
-      event,
-    ) => {
-      onFocus?.(event)
-      setOpen(true)
-      return event
-    }
-    const filteredOptions = take(3, matchSorter(options, internalValue))
-    const extendedSelect = (value: string) => {
-      setValue(value)
-      setTimeout(() => setOpen(false), 100)
-    }
-    const extendedKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
-      event,
-    ) => {
-      if (event.key === "Escape") setOpen(false)
-      if (event.key === "Enter") onEnterPressed?.()
-      return event
-    }
+    const filteredOptions = take(3, matchSorter(options, value))
     return (
-      <Command className="relative overflow-visible">
-        <Input
-          value={value?.toString()}
-          onBlur={extendedBlur}
-          onFocus={extendedFocus}
-          onChange={extendedChange}
-          onKeyDown={extendedKeyDown}
-          {...rest}
-          autoComplete="off"
-          ref={ref}
-        />
-        {open && internalValue.length > 0 && filteredOptions.length > 0 && (
-          <CommandList
-            role="tooltip"
-            className="absolute w-[6.75rem] z-10 top-12 bg-background border rounded-[1rem] p-1"
-          >
-            {filteredOptions.map((option: string) => (
-              <CommandItem
-                key={option}
-                onSelect={extendedSelect}
-                onClick={() => extendedSelect(option)}
-                value={option}
-              >
-                {option}
-              </CommandItem>
+      <div className="dropdown" {...rest}>
+        <Combobox value={value} onChange={onChange}>
+          <Combobox.Input
+            className="input w-full bg-[#413E5E]"
+            placeholder={placeholder}
+            value={value}
+            onChange={(event) => onChange(event.target.value)}
+            autoFocus={autoFocus}
+            onPaste={onPaste}
+            autoComplete="off"
+            data-testid={testId}
+            ref={ref as any}
+          />
+          <Combobox.Options className="dropdown-content z-10 menu shadow p-2 bg-secondary rounded-box w-28">
+            {filteredOptions.map((option) => (
+              <Combobox.Option as="li" key={option} value={option}>
+                {({ active }) => (
+                  <button type="button" className={clsx(active && "active")}>
+                    {option}
+                  </button>
+                )}
+              </Combobox.Option>
             ))}
-          </CommandList>
-        )}
-      </Command>
+          </Combobox.Options>
+        </Combobox>
+      </div>
     )
   },
 )

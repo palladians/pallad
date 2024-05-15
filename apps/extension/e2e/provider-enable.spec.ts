@@ -4,7 +4,7 @@ import { OnboardingPom } from "./pom/onboarding"
 const VALIDATOR = "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
 
 // Note: These tests are manual
-test("enable window.mina and handle pop-up on a specific webpage", async ({
+test.skip("enable window.mina and handle pop-up on a specific webpage", async ({
   page,
   extensionId,
 }) => {

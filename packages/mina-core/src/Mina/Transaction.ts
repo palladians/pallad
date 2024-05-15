@@ -6,7 +6,7 @@ import type { BorrowedTypes } from ".."
  * Represents the body of a transaction.
  */
 export type TransactionBody = {
-  type: "payment" | "delegation" | "zkApp"
+  type: TransactionType
   to: BorrowedTypes.PublicKey
   from: BorrowedTypes.PublicKey
   fee: BorrowedTypes.UInt64
@@ -20,10 +20,9 @@ export type TransactionBody = {
   failureReason?: string
   dateTime?: string
   isDelegation?: boolean
-  kind?: TransactionKind
 }
 
-export enum TransactionKind {
+export enum TransactionType {
   PAYMENT = "payment",
   STAKE_DELEGATION = "delegation",
   ZK_APP = "zkApp",
@@ -45,8 +44,10 @@ export type KeyPair = {
 export type NetworkType = "mainnet" | "testnet"
 
 export type ConstructedTransaction =
-  | (BorrowedTypes.Payment & { type: TransactionKind.PAYMENT })
-  | (BorrowedTypes.StakeDelegation & { type: TransactionKind.STAKE_DELEGATION })
+  | (BorrowedTypes.Payment & { type: TransactionType.PAYMENT })
+  | (BorrowedTypes.StakeDelegation & {
+      type: TransactionType.STAKE_DELEGATION
+    })
 
 export type SignedTransaction =
   BorrowedTypes.SignedLegacy<ConstructedTransaction>

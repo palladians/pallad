@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom"
 
 import { formatCompact } from "@/common/lib/numbers"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Card } from "@/components/ui/card"
 
 type BlockProducer = {
   name: string
@@ -18,7 +16,7 @@ interface BlockProducerTileProps {
 export const BlockProducerTile = ({ producer }: BlockProducerTileProps) => {
   const navigate = useNavigate()
   return (
-    <Card
+    <div
       className="flex flex-1 justify-between items-center p-2"
       onClick={() =>
         navigate("/staking/delegate", {
@@ -27,9 +25,7 @@ export const BlockProducerTile = ({ producer }: BlockProducerTileProps) => {
       }
     >
       <div className="flex items-center gap-4">
-        <Avatar>
-          <AvatarFallback>{producer.name?.[0]}</AvatarFallback>
-        </Avatar>
+        <div>{producer.name?.[0]}</div>
         <div className="font-semibold">{producer.name}</div>
       </div>
       <div className="gap-1">
@@ -40,6 +36,6 @@ export const BlockProducerTile = ({ producer }: BlockProducerTileProps) => {
           {formatCompact({ value: producer.delegatorsCount })} Delegators
         </div>
       </div>
-    </Card>
+    </div>
   )
 }

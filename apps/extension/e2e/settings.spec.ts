@@ -1,11 +1,12 @@
 import { test } from "./extension"
 import { OnboardingPom } from "./pom/onboarding"
 
-test("restart wallet", async ({ page, extensionId }) => {
+// TODO: uncomment when we add wallet management functions
+test.skip("restart wallet", async ({ page, extensionId }) => {
   const onboardingPom = new OnboardingPom({ page, extensionId })
   await onboardingPom.restoreTestWallet()
-  await page.getByTestId("bottomNavigation__menu").click()
-  await page.getByTestId("commandMenu__settings").click()
-  await page.getByTestId("settings__restartWallet").click()
-  await page.getByTestId("restartWallet__confirm").click()
+  await page.getByTestId("bottomNavigation/menu").click()
+  await page.getByTestId("commandMenu/settings").click()
+  await page.getByTestId("settings/restartWallet").click()
+  await page.getByTestId("restartWallet/confirm").click()
 })

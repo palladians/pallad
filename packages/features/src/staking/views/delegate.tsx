@@ -1,21 +1,23 @@
 import { AppLayout } from "@/components/app-layout"
-import { ViewHeading } from "@/components/view-heading"
 
+import { MenuBar } from "@/components/menu-bar"
 import { DelegateForm } from "../components/delegate-form"
 
 type DelegateViewProps = {
+  advanced: boolean
+  setAdvanced: (advanced: boolean) => void
   onGoBack: () => void
 }
 
-export const DelegateView = ({ onGoBack }: DelegateViewProps) => {
+export const DelegateView = ({
+  onGoBack,
+  advanced,
+  setAdvanced,
+}: DelegateViewProps) => {
   return (
     <AppLayout>
-      <div className="flex flex-col flex-1">
-        <ViewHeading title="Delegate" backButton={{ onClick: onGoBack }} />
-        <div className="flex flex-1 flex-col p-4 gap-4">
-          <DelegateForm />
-        </div>
-      </div>
+      <MenuBar variant="back" onBackClicked={onGoBack} />
+      <DelegateForm advanced={advanced} setAdvanced={setAdvanced} />
     </AppLayout>
   )
 }

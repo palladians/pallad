@@ -5,5 +5,5 @@ export const FormError = twc.div`text-destructive text-sm`
 FormError.displayName = "FormError"
 
 FormError.defaultProps = {
-  "data-testid": "form__error",
+  "data-testid": "formError",
 } as never

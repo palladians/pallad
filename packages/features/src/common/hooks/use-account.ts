@@ -4,15 +4,12 @@ import { getPublicKey, isDelegated, useVault } from "@palladxyz/vault"
 import easyMeshGradient from "easy-mesh-gradient"
 import { useMemo } from "react"
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 import useSWR from "swr"
-
-import { useToast } from "@/components/ui/use-toast"
-
 import { useAppStore } from "../store/app"
 
 export const useAccount = () => {
   const navigate = useNavigate()
-  const { toast } = useToast()
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const getAccountsInfo = useVault((state) => state.getAccountsInfo)
   const restartWallet = useVault((state) => state.restartWallet)
@@ -57,14 +54,12 @@ export const useAccount = () => {
   const stakeDelegated = isDelegated(currentWallet)
   const copyWalletAddress = async () => {
     await navigator.clipboard.writeText(publicKey ?? "")
-    toast({
-      title: "Wallet address was copied.",
-    })
+    toast.success("Address copied")
   }
   const lockWallet = async () => {
     await getSessionPersistence().setItem("spendingPassword", "")
+    navigate("/unlock")
     await useVault.persist.rehydrate()
-    return navigate("/unlock")
   }
   const restartCurrentWallet = () => {
     restartWallet()

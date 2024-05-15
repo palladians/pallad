@@ -28,7 +28,7 @@ export const CreateWalletRoute = () => {
     setSpendingPassword(spendingPassword)
     setMnemonic(generateMnemonicWords(128).join(" "))
     setWalletName(walletName)
-    return navigate("/onboarding/writedown")
+    return navigate("/onboarding/backup_security")
   }
   return <CreateWalletView onSubmit={onSubmit} />
 }

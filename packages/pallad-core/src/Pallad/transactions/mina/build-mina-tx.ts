@@ -55,23 +55,23 @@ export function constructDelegationTx(
 /**
  * Constructs a transaction object based on the kind of transaction.
  * @param transaction The transaction body.
- * @param transactionKind The kind of transaction.
+ * @param transactionType The kind of transaction.
  * @returns The constructed transaction object.
  */
 export function constructTransaction(
   transaction: Mina.TransactionBody,
-  transactionKind: Mina.TransactionKind,
+  transactionType: Mina.TransactionType,
 ): Mina.ConstructedTransaction {
-  switch (transactionKind) {
-    case Mina.TransactionKind.PAYMENT:
+  switch (transactionType) {
+    case Mina.TransactionType.PAYMENT:
       return {
         ...constructPaymentTx(transaction),
-        type: Mina.TransactionKind.PAYMENT,
+        type: Mina.TransactionType.PAYMENT,
       }
-    case Mina.TransactionKind.STAKE_DELEGATION:
+    case Mina.TransactionType.STAKE_DELEGATION:
       return {
         ...constructDelegationTx(transaction),
-        type: Mina.TransactionKind.STAKE_DELEGATION,
+        type: Mina.TransactionType.STAKE_DELEGATION,
       }
     default:
       throw new Error("Unsupported transaction kind")

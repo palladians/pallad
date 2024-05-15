@@ -6,7 +6,7 @@ export type SubmitTxArgs = {
   signedTransaction:
     | BorrowedTypes.SignedLegacy<BorrowedTypes.Payment>
     | BorrowedTypes.SignedLegacy<BorrowedTypes.StakeDelegation>
-  kind: Mina.TransactionKind
+  type: Mina.TransactionType
   transactionDetails: {
     fee: Mina.TransactionBody["fee"]
     to: Mina.TransactionBody["to"]
@@ -21,7 +21,7 @@ export type SubmitTxArgs = {
 interface TxResult {
   id: string
   hash: string
-  kind: string
+  type: string
   nonce: number
   source: {
     publicKey: string

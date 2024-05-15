@@ -1,9 +1,6 @@
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { runtime } from "webextension-polyfill"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-
 const ConfirmationForm = ({ windowId }: { windowId: number }) => {
   const confirm = async () => {
     await runtime.sendMessage({
@@ -21,8 +18,12 @@ const ConfirmationForm = ({ windowId }: { windowId: number }) => {
   }
   return (
     <form id="confirm-section">
-      <Button onClick={confirm}>Yes</Button>
-      <Button onClick={decline}>No</Button>
+      <button type="button" onClick={confirm}>
+        Yes
+      </button>
+      <button type="button" onClick={decline}>
+        No
+      </button>
     </form>
   )
 }
@@ -55,9 +56,11 @@ const InputForm = ({
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Input type={inputType} {...register("userInput")} />
-      <Button type="submit">Submit</Button>
-      <Button onClick={reject}>Cancel</Button>
+      <input type={inputType} {...register("userInput")} />
+      <button type="submit">Submit</button>
+      <button type="button" onClick={reject}>
+        Cancel
+      </button>
     </form>
   )
 }

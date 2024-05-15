@@ -4,12 +4,7 @@ import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 
 import { useAddressBookStore } from "@/common/store/address-book"
-import { ButtonArrow } from "@/components/button-arrow"
 import { FormError } from "@/components/form-error"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { cn } from "@/lib/utils"
 
 import { NewAddressFormSchema } from "./new-address-form.schema"
 
@@ -37,47 +32,45 @@ export const NewAddressForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="gap-2">
-        <Label
+        <label
           htmlFor="contactName"
           className={cn(errors.name && "text-destructive")}
         >
           Contact's Name
-        </Label>
-        <Input
+        </label>
+        <input
           id="contactName"
           placeholder="Name"
-          data-testid="newAddress__nameInput"
+          data-testid="newAddress/nameInput"
           className={cn(errors.name && "border-destructive")}
           {...register("name")}
-          autoFocus
         />
         <FormError>{errors.name?.message}</FormError>
       </div>
       <div className="gap-2 flex-1">
-        <Label
+        <label
           htmlFor="contactAddress"
           className={cn(errors.address && "text-destructive")}
         >
           Receiver Address
-        </Label>
-        <Input
+        </label>
+        <input
           id="contactAddress"
           placeholder="B62XXXXXXXXXXXX"
-          data-testid="newAddress__addressInput"
+          data-testid="newAddress/addressInput"
           className={cn(errors.address && "border-destructive")}
           {...register("address")}
         />
         <FormError>{errors.address?.message}</FormError>
       </div>
-      <Button
+      <button
         type="submit"
         className="group gap-2"
-        data-testid="newAddress__createButton"
+        data-testid="newAddress/createButton"
       >
         <PlusIcon size={16} />
         <span>Create Contact</span>
-        <ButtonArrow />
-      </Button>
+      </button>
     </form>
   )
 }

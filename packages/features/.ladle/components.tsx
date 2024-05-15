@@ -1,5 +1,3 @@
-import { Toaster } from "@/components/ui/toaster"
-import { TooltipProvider } from "@/components/ui/tooltip"
 import "@/globals.css"
 import {
   ActionType,
@@ -8,7 +6,8 @@ import {
   useLadleContext,
 } from "@ladle/react"
 import { ThemeProvider } from "next-themes"
-import { useEffect } from "react"
+import React, { useEffect } from "react"
+import { ErrorBoundary } from "react-error-boundary"
 import { MemoryRouter } from "react-router-dom"
 
 export const Provider: GlobalProvider = ({ children }) => {
@@ -19,24 +18,17 @@ export const Provider: GlobalProvider = ({ children }) => {
   }, [])
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <TooltipProvider>
-        <MemoryRouter>
-          <div
-            style={{
-              maxWidth: 371,
-              width: "100%",
-              maxHeight: 600,
-              height: "100%",
-              display: "flex",
-              overflowX: "hidden",
-              overflowY: "scroll",
-            }}
-          >
-            {children}
-            <Toaster />
-          </div>
-        </MemoryRouter>
-      </TooltipProvider>
+      <MemoryRouter>
+        <ErrorBoundary
+          fallbackRender={({ error }) => (
+            <div>
+              {JSON.stringify(error, Object.getOwnPropertyNames(error))}
+            </div>
+          )}
+        >
+          {children}
+        </ErrorBoundary>
+      </MemoryRouter>
     </ThemeProvider>
   )
 }

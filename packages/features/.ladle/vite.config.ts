@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [
     topLevelAwait(),
     nodePolyfills({ protocolImports: true, globals: { Buffer: true } }),
-    svgr({ exportAsDefault: true }),
+    svgr(),
   ],
   build: {
     commonjsOptions: {

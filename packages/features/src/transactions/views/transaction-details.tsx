@@ -1,17 +1,16 @@
-import type { Mina } from "@palladxyz/mina-core"
+import { Mina } from "@palladxyz/mina-core"
 
-import type { TxSide } from "@/common/types"
+import { TxSide } from "@/common/types"
 import { AppLayout } from "@/components/app-layout"
-import { MetaField } from "@/components/meta-field"
-import { Skeleton } from "@/components/ui/skeleton"
-import { ViewHeading } from "@/components/view-heading"
-import { getAccountUrl, getTransactionUrl } from "@/lib/explorer"
+import { format } from "date-fns"
 
-import { TxIndicator } from "../components/tx-indicator"
+import { truncateString } from "@/common/lib/string"
+import { MenuBar } from "@/components/menu-bar"
+import { ArrowRight } from "lucide-react"
 
 type TransactionData = {
   side: TxSide
-  kind?: Mina.TransactionKind
+  type?: Mina.TransactionType
   minaAmount: string
   hash: string
   from: string
@@ -19,73 +18,77 @@ type TransactionData = {
   dateTime: string
 }
 
-type TransactionDetailsView = {
+type TransactionDetailsViewProps = {
   onGoBack: () => void
-  loading: boolean
   transaction: TransactionData
-  network: string
 }
 
 export const TransactionDetailsView = ({
   onGoBack,
-  loading,
   transaction,
-  network,
-}: TransactionDetailsView) => {
-  const transactionMetaFields = transaction && [
-    {
-      label: "Hash",
-      value: transaction.hash,
-      url: getTransactionUrl({ network, hash: transaction.hash }),
-    },
-    { label: "Amount", value: `${transaction.minaAmount} MINA` },
-    {
-      label: "Sender",
-      value: transaction.from,
-      url: getAccountUrl({ network, publicKey: transaction.from }),
-    },
-    {
-      label: "Receiver",
-      value: transaction.to,
-      url: getAccountUrl({ network, publicKey: transaction.to }),
-    },
-  ]
+}: TransactionDetailsViewProps) => {
   return (
     <AppLayout>
-      <div className="flex flex-col flex-1">
-        <ViewHeading
-          title="Transaction Details"
-          backButton={{ onClick: onGoBack }}
-        />
-        <div className="flex flex-col gap-4 p-4">
-          {loading ? (
-            <Skeleton className="w-full h-8" />
-          ) : (
-            transaction && (
-              <div className="flex items-center gap-4">
-                {transaction.kind && (
-                  <TxIndicator
-                    side={transaction.side}
-                    kind={transaction.kind}
-                    from={transaction.from}
-                    to={transaction.to}
-                  />
-                )}
-                <div className="flex flex-col gap-2">
-                  <p>{transaction.dateTime}</p>
-                  <p>Incoming</p>
-                </div>
-              </div>
-            )
-          )}
-          {transactionMetaFields?.map(({ label, value, url }) => (
-            <MetaField
-              key={label}
-              label={label}
-              value={value as any}
-              url={url}
-            />
-          ))}
+      <MenuBar variant="back" onBackClicked={onGoBack} />
+      <div className="px-8 pb-6">
+        <h2 className="text-3xl mb-6">Transaction detail</h2>
+        <div className="space-y-2">
+          <div className="py-3 px-4 flex items-center justify-between bg-secondary rounded-2xl">
+            <div>
+              <p className="text-[#7D7A9C]">From</p>
+              <p>
+                {truncateString({
+                  value: transaction.from,
+                  firstCharCount: 5,
+                  endCharCount: 3,
+                })}
+              </p>
+            </div>
+            <div className="w-10 h-10 flex items-center justify-center bg-neutral rounded-full">
+              <ArrowRight width={24} height={24} className="text-[#A3DBE4]" />
+            </div>
+            <div>
+              <p className="text-[#7D7A9C]">To</p>
+              <p>
+                {truncateString({
+                  value: transaction.to,
+                  firstCharCount: 5,
+                  endCharCount: 3,
+                })}
+              </p>
+            </div>
+          </div>
+          <div className="py-3 px-4 space-y-4 bg-secondary rounded-2xl">
+            <div className="flex items-center justify-between">
+              <p className="text-[#7D7A9C]">Kind</p>
+              <p className="text-right">
+                {transaction.type === Mina.TransactionType.PAYMENT
+                  ? "Transaction"
+                  : "Delegation"}
+              </p>
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-[#7D7A9C]">Type</p>
+              <p className="text-right">
+                {transaction.side === TxSide.INCOMING ? "Received" : "Sent"}
+              </p>
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-[#7D7A9C]">Amount</p>
+              <p className="text-right">{`${transaction.minaAmount} MINA`}</p>
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-[#7D7A9C]">Date and time</p>
+              <p className="text-right">
+                {format(new Date(transaction.dateTime), "dd/MM/yy - HH:mm")}
+              </p>
+            </div>
+            <hr className="border-[#413E5E]" />
+            <div className="flex items-center justify-between">
+              <p className="text-[#7D7A9C]">Hash</p>
+              <p className="w-32 break-all text-right">{transaction.hash}</p>
+            </div>
+          </div>
         </div>
       </div>
     </AppLayout>

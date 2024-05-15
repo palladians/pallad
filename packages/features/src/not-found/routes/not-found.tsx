@@ -7,7 +7,7 @@ export const NotFoundRoute = () => {
   return (
     <NotFoundView
       onGoBack={() => navigate(-1)}
-      onGoToDashboard={() => navigate("/")}
+      onGoToDashboard={() => navigate("/dashboard")}
     />
   )
 }

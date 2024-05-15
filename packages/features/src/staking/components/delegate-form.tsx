@@ -5,28 +5,30 @@ import { useLocation, useNavigate } from "react-router-dom"
 
 import { TransactionFee } from "@/common/lib/const"
 import { useTransactionStore } from "@/common/store/transaction"
-import type { OutgoingTransaction } from "@/common/types"
-import { ButtonArrow } from "@/components/button-arrow"
 import { FormError } from "@/components/form-error"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { cn } from "@/lib/utils"
 
+import { FeePicker, TransactionFeeShort } from "@/components/fee-picker"
+import type { SendFormSchemaProps } from "@/send/components/send-form.schema"
+import { TransactionType } from "@palladxyz/mina-core"
 import { DelegateFormSchema } from "./delegate-form.schema"
 
-export const DelegateForm = () => {
+type DelegateFormProps = {
+  advanced: boolean
+  setAdvanced: (advanced: boolean) => void
+}
+
+export const DelegateForm = ({ advanced, setAdvanced }: DelegateFormProps) => {
   const location = useLocation()
   const navigate = useNavigate()
   const setTransactionDetails = useTransactionStore((state) => state.set)
-  const setKind = useTransactionStore((state) => state.setKind)
+  const setType = useTransactionStore((state) => state.setType)
   const {
     register,
     handleSubmit,
     setValue,
     getValues,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: zodResolver(DelegateFormSchema),
     defaultValues: {
@@ -35,14 +37,15 @@ export const DelegateForm = () => {
       memo: "",
     },
   })
-  const onSubmit = (payload: OutgoingTransaction) => {
+  const feeValue = watch("fee")
+  const onSubmit = (payload: SendFormSchemaProps) => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
-    setKind("staking")
+    setType(TransactionType.STAKE_DELEGATION)
     setTransactionDetails({
       to: payload.to,
-      fee: String(currentFee),
-      memo: payload.memo,
+      fee: currentFee,
+      memo: payload.memo ?? "",
     })
     navigate("/transactions/summary")
   }
@@ -52,70 +55,36 @@ export const DelegateForm = () => {
   }, [])
   return (
     <form
-      className="flex flex-col flex-1 gap-4"
+      className="flex flex-col flex-1 gap-4 px-8 pb-8 items-center"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex flex-col gap-2">
-        <Label
-          htmlFor="blockProducer"
-          className={cn(errors.to && "text-destructive")}
-        >
-          Block Producer
-        </Label>
-        <Input
+      <h1 className="text-3xl w-full">New Stake</h1>
+      <div className="flex flex-col gap-2 w-full">
+        <input
           id="blockProducer"
-          placeholder="Receiver Address"
-          autoFocus
-          className={errors.to && "border-destructive"}
-          data-testid="delegate__to"
+          placeholder="Validator Address"
+          className="input"
+          data-testid="delegate/to"
           {...register("to")}
         />
         <FormError>{errors.to?.message}</FormError>
       </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="memo" className={cn(errors.memo && "text-destructive")}>
-          Memo
-        </Label>
-        <Input
-          id="memo"
-          placeholder="Memo"
-          className={errors.memo && "border-destructive"}
-          data-testid="delegate__memo"
-          {...register("memo")}
+      {advanced ? (
+        <FeePicker feeValue={feeValue} setValue={setValue} />
+      ) : (
+        <TransactionFeeShort
+          feeValue={feeValue}
+          onClick={() => setAdvanced(!advanced)}
         />
-        <FormError>{errors.memo?.message}</FormError>
-      </div>
-      <div className="flex flex-col gap-2 flex-1">
-        <Label className={cn(errors.fee && "text-destructive")}>Fee</Label>
-        <RadioGroup
-          defaultValue="default"
-          onValueChange={(value) => setValue("fee", value)}
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="slow" id="feeSlow" />
-            <Label htmlFor="feeSlow">Slow ({TransactionFee.slow} MINA)</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="default" id="feeDefault" defaultChecked />
-            <Label htmlFor="feeDefault">
-              Default ({TransactionFee.default} MINA)
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="fast" id="feeFast" />
-            <Label htmlFor="feeFast">Fast ({TransactionFee.fast} MINA)</Label>
-          </div>
-        </RadioGroup>
-        <FormError>{errors.fee?.message}</FormError>
-      </div>
-      <Button
+      )}
+      <div className="flex-1" />
+      <button
         type="submit"
-        className="group gap-2"
-        data-testid="delegate__nextButton"
+        className="btn btn-primary max-w-48 w-full"
+        data-testid="formSubmit"
       >
         <span>Next</span>
-        <ButtonArrow />
-      </Button>
+      </button>
     </form>
   )
 }

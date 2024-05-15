@@ -17,6 +17,7 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
+    "dayjs": "^1.11.10",
     "swr": "^2.2.4"
   },
   "devDependencies": {

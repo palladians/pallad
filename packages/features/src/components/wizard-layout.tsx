@@ -1,16 +1,14 @@
-import { ArrowLeftIcon, MoonIcon, SunIcon } from "lucide-react"
-import { useTheme } from "next-themes"
+import clsx from "clsx"
+import { ArrowLeftIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-
-import { Toggle } from "@/components/ui/toggle"
-
-import { Button } from "./ui/button"
+import { MenuBar } from "./menu-bar"
 
 interface WizardLayoutProps {
   children: React.ReactNode
-  footer: React.ReactNode
-  title: React.ReactNode
+  footer?: React.ReactNode
+  title?: React.ReactNode
   backButtonPath?: string | number
+  headerShown?: boolean
 }
 
 export const WizardLayout = ({
@@ -18,36 +16,28 @@ export const WizardLayout = ({
   footer,
   title,
   backButtonPath,
+  headerShown = true,
 }: WizardLayoutProps) => {
   const navigate = useNavigate()
-  const { setTheme, theme } = useTheme()
-  const toggleTheme = () => {
-    theme === "dark" ? setTheme("light") : setTheme("dark")
-  }
   return (
-    <div className="flex flex-1 bg-background flex-col">
-      <div className="flex justify-between items-center p-4">
-        <div className="flex gap-4 items-center">
-          {backButtonPath && (
-            <Button
-              variant="secondary"
-              size="icon"
-              className="w-8 h-8"
-              onClick={() => navigate(backButtonPath as never)}
-            >
-              <ArrowLeftIcon size={16} />
-            </Button>
-          )}
-          <span className="text-lg font-semibold">{title}</span>
+    <div className="flex flex-1 flex-col">
+      {headerShown && (
+        <MenuBar
+          variant="back"
+          onBackClicked={() => navigate(backButtonPath as never)}
+        />
+      )}
+      {title && (
+        <h1 className={clsx("text-3xl px-8", !headerShown && "mt-8")}>
+          {title}
+        </h1>
+      )}
+      <div className="flex flex-1 items-center px-8">{children}</div>
+      {footer && (
+        <div className="flex flex-col w-full justify-center items-center gap-6 p-8">
+          {footer}
         </div>
-        <Toggle size="sm" onClick={toggleTheme}>
-          {theme === "dark" ? <SunIcon size={16} /> : <MoonIcon size={16} />}
-        </Toggle>
-      </div>
-      <div className="animate-in fade-in flex flex-1 items-center">
-        {children}
-      </div>
-      <div className="flex gap-4 p-4">{footer}</div>
+      )}
     </div>
   )
 }

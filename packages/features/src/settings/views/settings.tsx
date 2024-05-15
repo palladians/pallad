@@ -1,121 +1,100 @@
-import { Mina } from "@palladxyz/mina-core"
-import { AlertCircleIcon } from "lucide-react"
-
 import { AppLayout } from "@/components/app-layout"
-import { RestartWalletAlert } from "@/components/restart-wallet-alert"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Switch } from "@/components/ui/switch"
-import { ViewHeading } from "@/components/view-heading"
+import { SettingsPageLayout } from "@/components/settings-page-layout"
+import { Eye, Info } from "lucide-react"
+import { Link } from "react-router-dom"
+
+const Links = [
+  // TODO: Uncomment when we add multi-account
+  // {
+  //   label: "Wallet",
+  //   description: "Management and networks",
+  //   href: "/settings/wallet",
+  //   Icon: WalletMinimal,
+  // },
+  {
+    label: "Privacy",
+    description: "Data sharing",
+    href: "/settings/privacy",
+    Icon: Eye,
+  },
+  // TODO: Uncomment when we add multiple locales
+  // {
+  //   label: "Display",
+  //   description: "Languages and currencies",
+  //   href: "/settings/display",
+  //   Icon: Globe,
+  // },
+  {
+    label: "About",
+    description: "Everything about us",
+    href: "/settings/about",
+    Icon: Info,
+  },
+]
 
 type SettingsViewProps = {
-  onGoBack: () => void
-  restartAlertVisible: boolean
-  setRestartAlertVisible: (visible: boolean) => void
-  network: string
-  theme: string
-  setTheme: (theme: string) => void
-  shareData: boolean
-  setShareData: (shareData: boolean) => void
+  onCloseClicked: () => void
+  onDonateClicked: () => void
+  onLogOut: () => void
 }
 
 export const SettingsView = ({
-  onGoBack,
-  restartAlertVisible,
-  setRestartAlertVisible,
-  network,
-  theme,
-  setTheme,
-  shareData,
-  setShareData,
-}: SettingsViewProps) => (
-  <AppLayout>
-    <RestartWalletAlert
-      open={restartAlertVisible}
-      setOpen={setRestartAlertVisible}
-    />
-    <div className="flex flex-col flex-1">
-      <ViewHeading title="Settings" backButton={{ onClick: onGoBack }} />
-      <div className="flex flex-col gap-4 p-4 flex-1">
-        <div className="flex flex-col gap-2">
-          <h2 className="font-semibold">Network</h2>
-          <RadioGroup value={network}>
-            {/* TODO: Enable after Public Beta <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value={
-                    Mina.Networks[
-                      Mina.Networks.MAINNET.toUpperCase() as keyof typeof Mina.Networks
-                    ]
-                  }
-                  id="networkMainnet"
-                />
-                <Label htmlFor="networkMainnet">Mainnet</Label>
-              </div> */}
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem
-                value={
-                  Mina.Networks[
-                    Mina.Networks.BERKELEY.toUpperCase() as keyof typeof Mina.Networks
-                  ]
-                }
-                id="networkBerkeley"
-              />
-              <Label htmlFor="networkBerkeley">Berkeley</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem
-                value={
-                  Mina.Networks[
-                    Mina.Networks.TESTWORLD.toUpperCase() as keyof typeof Mina.Networks
-                  ]
-                }
-                id="networkBerkeley"
-              />
-              <Label htmlFor="networkBerkeley">TestWorld 2.0</Label>
-            </div>
-          </RadioGroup>
-        </div>
-        <div className="flex flex-col gap-2">
-          <h2 className="font-semibold">Theme</h2>
-          <RadioGroup value={theme} onValueChange={setTheme}>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="light" id="themeLight" />
-              <Label htmlFor="themeLight">Light</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="dark" id="themeDark" />
-              <Label htmlFor="themeDark">Dark</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="system" id="themeSystem" />
-              <Label htmlFor="themeSystem">System</Label>
-            </div>
-          </RadioGroup>
-        </div>
-        <div className="flex flex-col gap-2">
-          <h2 className="font-semibold">Privacy</h2>
-          <div className="flex items-center gap-2">
-            <Switch
-              checked={shareData}
-              onCheckedChange={(value) => setShareData(value)}
-            />
-            <Label>Share anonymous data</Label>
+  onCloseClicked,
+  onDonateClicked,
+  onLogOut,
+}: SettingsViewProps) => {
+  return (
+    <AppLayout>
+      <SettingsPageLayout
+        title="Settings"
+        onCloseClicked={onCloseClicked}
+        headerContent={
+          <div className="mt-6 px-6 py-4 flex items-center justify-between bg-neutral rounded-2xl">
+            <p>Buy us a coffee!</p>
+            <button
+              type="button"
+              className="px-8 btn btn-primary"
+              onClick={onDonateClicked}
+            >
+              Send
+            </button>
           </div>
-        </div>
-        <div className="flex flex-col gap-2 items-start">
-          <h2 className="font-semibold">Danger Zone</h2>
-          <Button
-            variant="secondary"
-            className="gap-2"
-            onClick={() => setRestartAlertVisible(true)}
-            data-testid="settings__restartWallet"
+        }
+      >
+        <div className="flex flex-col items-center space-y-6">
+          <div className="w-full space-y-2">
+            {Links.map((link) => {
+              return (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="p-4 flex items-center space-x-4 bg-secondary rounded-2xl"
+                >
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-neutral">
+                    <link.Icon
+                      width={24}
+                      height={24}
+                      className="text-[#F6C177]"
+                    />
+                  </div>
+                  <div>
+                    <p>{link.label}</p>
+                    <p className="text-sm">{link.description}</p>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+          <button
+            type="button"
+            className="px-10 btn"
+            data-testid="settings/logOut"
+            onClick={onLogOut}
           >
-            <AlertCircleIcon size={16} />
-            Restart Wallet
-          </Button>
+            Log out
+          </button>
         </div>
-      </div>
-    </div>
-  </AppLayout>
-)
+      </SettingsPageLayout>
+    </AppLayout>
+  )
+}

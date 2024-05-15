@@ -1,77 +1,86 @@
-import { ArrowDownLeftIcon } from "lucide-react"
+import { ArrowRightIcon } from "lucide-react"
 
 import { truncateString } from "@/common/lib/string"
 import { AppLayout } from "@/components/app-layout"
-import { MetaField } from "@/components/meta-field"
-import { Card } from "@/components/ui/card"
-import { ViewHeading } from "@/components/view-heading"
 
+import { MenuBar } from "@/components/menu-bar"
+import type { SubmitHandler, UseFormReturn } from "react-hook-form"
 import { ConfirmTransactionForm } from "../components/confirm-transaction-form"
 
 type TransactionSummaryViewProps = {
-  onGoBack: () => void
   transaction: {
     from: string
     to: string
-    amount: string
-    fee: string
-    kind: string
-    total: string
+    amount: number
+    fee: number
+    type: string
+    total: number
   }
+  confirmationForm: UseFormReturn<{ spendingPassword: string }>
+  submitTransaction: SubmitHandler<any>
 }
 
 export const TransactionSummaryView = ({
-  onGoBack,
   transaction,
-}: TransactionSummaryViewProps) => (
-  <AppLayout>
-    <div className="flex flex-1 flex-col">
-      <ViewHeading
-        title="Transaction Summary"
-        backButton={{ onClick: onGoBack }}
-      />
-      <div className="flex flex-1 flex-col gap-4 p-4">
-        <Card className="flex flex-col relative p-2 gap-2 rounded-[1rem]">
-          <div className="flex absolute right-4 h-full items-center justify-center text-blue-500">
-            <ArrowDownLeftIcon />
+  confirmationForm,
+  submitTransaction,
+}: TransactionSummaryViewProps) => {
+  return (
+    <AppLayout>
+      <MenuBar variant="back-stop" />
+      <div className="flex flex-1 flex-col px-8 pb-8 gap-2">
+        <h1 className="text-3xl">Summary</h1>
+        <div className="card bg-secondary py-3 px-4 flex flex-row justify-between mt-1">
+          <div className="flex flex-col">
+            <div className="text-[#7D7A9C]">From</div>
+            <div>
+              {truncateString({
+                value: transaction.from,
+                endCharCount: 3,
+                firstCharCount: 5,
+              })}
+            </div>
           </div>
-          <MetaField
-            label="From"
-            value={
-              (transaction.from &&
-                truncateString({
-                  value: transaction.from,
-                  endCharCount: 8,
-                  firstCharCount: 8,
-                })) ||
-              ""
-            }
-          />
-          <MetaField
-            label="To"
-            value={
-              (transaction.to &&
-                truncateString({
-                  value: transaction.to,
-                  endCharCount: 8,
-                  firstCharCount: 8,
-                })) ||
-              ""
-            }
-          />
-        </Card>
-        <Card className="grid grid-cols-2 gap-4 p-2 rounded-[1rem]">
-          <MetaField label="Kind" value={transaction.kind} capitalize />
-          {transaction.amount && (
-            <MetaField label="Amount" value={`${transaction.amount} MINA`} />
+          <div className="btn btn-circle btn-neutral text-mint">
+            <ArrowRightIcon size={24} />
+          </div>
+          <div className="flex flex-col">
+            <div className="text-[#7D7A9C]">From</div>
+            <div>
+              {truncateString({
+                value: transaction.to,
+                endCharCount: 3,
+                firstCharCount: 5,
+              })}
+            </div>
+          </div>
+        </div>
+        <div className="card bg-secondary px-4 py-2 grid grid-cols-2">
+          <div className="text-[#7D7A9C] py-2">Kind</div>
+          <div className="capitalize text-right py-2">{transaction.type}</div>
+          {transaction.type !== "delegation" && (
+            <>
+              <div className="text-[#7D7A9C] py-2">Amount</div>
+              <div className="capitalize text-right py-2">
+                {transaction.amount} MINA
+              </div>
+            </>
           )}
-          <MetaField label="Fee" value={`${transaction.fee} MINA`} />
-          {transaction.amount && (
-            <MetaField label="Total" value={`${transaction.total} MINA`} /> // TODO: this will not always be 'MINA'
-          )}
-        </Card>
-        <ConfirmTransactionForm />
+          <div className="text-[#7D7A9C] py-2">Fee</div>
+          <div className="capitalize text-right py-2">
+            {transaction.fee} MINA
+          </div>
+          <div className="divider col-span-2 my-0" />
+          <div className="text-[#7D7A9C] py-2">Total</div>
+          <div className="capitalize text-right py-2">
+            {transaction.total} MINA
+          </div>
+        </div>
+        <ConfirmTransactionForm
+          confirmationForm={confirmationForm}
+          submitTransaction={submitTransaction}
+        />
       </div>
-    </div>
-  </AppLayout>
-)
+    </AppLayout>
+  )
+}

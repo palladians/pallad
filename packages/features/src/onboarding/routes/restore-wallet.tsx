@@ -24,7 +24,7 @@ export const RestoreWalletRoute = () => {
   }) => {
     setSpendingPassword(spendingPassword)
     setWalletName(walletName)
-    return navigate("/onboarding/mnemonic")
+    return navigate("/onboarding/import_security")
   }
   return <RestoreWalletView onSubmit={onSubmit} />
 }

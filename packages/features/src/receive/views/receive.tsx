@@ -1,60 +1,43 @@
 import QRCode from "react-qr-code"
 
 import { AppLayout } from "@/components/app-layout"
-import { Card } from "@/components/ui/card"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { ViewHeading } from "@/components/view-heading"
+import { MenuBar } from "@/components/menu-bar"
 
 type ReceiveViewProps = {
-  theme: string
   publicKey: string
-  gradientBackground: string
   onGoBack: () => void
   onCopyWalletAddress: () => void
 }
 
 export const ReceiveView = ({
-  theme,
   publicKey,
-  gradientBackground,
   onGoBack,
   onCopyWalletAddress,
 }: ReceiveViewProps) => (
   <AppLayout>
     <div className="flex flex-col flex-1">
-      <ViewHeading title="Receive" backButton={{ onClick: onGoBack }} />
-      <div className="flex flex-col flex-1 justify-center items-center gap-4 p-4">
-        {publicKey && (
-          <div className="animate-in slide-in-from-bottom-2 fade-in relative max-w-[256px] max-h-[256px] w-full h-full">
-            <QRCode
-              value={publicKey}
-              bgColor={theme === "dark" ? "#020617" : "#ffffff"}
-              fgColor={theme === "dark" ? "#ffffff" : "#000000"}
-              className="relative w-full h-full"
-            />
-            <div
-              className="absolute w-full h-full inset-0 dark:mix-blend-darken mix-blend-lighten"
-              style={{ backgroundImage: gradientBackground }}
-            />
-          </div>
-        )}
-        <Tooltip>
-          <TooltipTrigger>
-            <Card
-              className="animate-in slide-in-from-bottom-1 delay-100 fill-mode-both fade-in p-2 break-all text-center leading-8 cursor-pointer rounded-[1rem] text-sm max-w-[256px]"
+      <MenuBar variant="card" onCloseClicked={onGoBack} />
+      <div className="animate-in fade-in slide-in-from-bottom-8 px-8 pb-8">
+        <h1 className="text-3xl mb-4">Your address</h1>
+        <div className="flex flex-col text-center justify-center items-center space-y-8 card bg-accent p-8">
+          <QRCode
+            value={publicKey}
+            bgColor={"#25233A"}
+            fgColor={"#D1B4F4"}
+            className="relative w-[140px] h-[140px]"
+          />
+          <div className="space-y-3">
+            <h2 className="text-2xl text-secondary">Personal</h2>
+            <p className="text-secondary break-all">{publicKey}</p>
+            <button
+              type="button"
+              className="btn btn-link text-secondary text-sm"
               onClick={onCopyWalletAddress}
             >
-              {publicKey}
-            </Card>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Copy Address</p>
-          </TooltipContent>
-        </Tooltip>
+              Copy to clipboard
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </AppLayout>
