@@ -22,7 +22,7 @@ export const SeedBackupView = ({
         className="btn btn-primary max-w-48 w-full"
         disabled={!mnemonicWritten}
         onClick={onConfirm}
-        data-testid="onboarding__nextButton"
+        data-testid="formSubmit"
       >
         I saved it
       </button>
@@ -37,7 +37,7 @@ export const SeedBackupView = ({
           <div
             // biome-ignore lint: won't update
             key={i}
-            data-testid="onboarding__mnemonicWord"
+            data-testid="onboarding/mnemonicWord"
             className="btn btn-sm bg-[#413E5E]"
           >
             {word}
@@ -51,7 +51,7 @@ export const SeedBackupView = ({
           className="checkbox rounded-md"
           checked={mnemonicWritten}
           onClick={() => setMnemonicWritten(!mnemonicWritten)}
-          data-testid="onboarding__mnemonicWrittenCheckbox"
+          data-testid="onboarding/mnemonicWrittenCheckbox"
         />
         <label htmlFor="mnemonicWrittenCheckbox" className="leading-5">
           I have backed up the seed phrase and acknowledge they will not be

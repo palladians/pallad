@@ -12,6 +12,7 @@ type AutocompleteProps = {
   options: string[]
   placeholder?: string
   autoFocus?: boolean
+  testId: string
 }
 
 export const Autocomplete = React.forwardRef(
@@ -23,6 +24,7 @@ export const Autocomplete = React.forwardRef(
       options,
       placeholder,
       autoFocus,
+      testId,
       ...rest
     }: AutocompleteProps,
     ref,
@@ -39,6 +41,7 @@ export const Autocomplete = React.forwardRef(
             autoFocus={autoFocus}
             onPaste={onPaste}
             autoComplete="off"
+            data-testid={testId}
             ref={ref as any}
           />
           <Combobox.Options className="dropdown-content z-10 menu shadow p-2 bg-secondary rounded-box w-28">

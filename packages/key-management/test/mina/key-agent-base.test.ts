@@ -320,7 +320,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
       }
       const constructedTx: Mina.ConstructedTransaction = constructTransaction(
         transaction,
-        Mina.TransactionKind.PAYMENT,
+        Mina.TransactionType.PAYMENT,
       )
       const signedTx = await instance.sign(groupedCredential, constructedTx, {
         network: Network.Mina,

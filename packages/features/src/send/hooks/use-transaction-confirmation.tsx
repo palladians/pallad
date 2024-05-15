@@ -1,5 +1,5 @@
 import type { ChainOperationArgs } from "@palladxyz/key-management"
-import { Mina, TransactionKind } from "@palladxyz/mina-core"
+import { Mina } from "@palladxyz/mina-core"
 import { useVault } from "@palladxyz/vault"
 import { addHours } from "date-fns"
 import type {
@@ -39,7 +39,7 @@ export const useTransactionConfirmation = ({
   const outgoingTransaction = useTransactionStore(
     (state) => state.outgoingTransaction,
   )
-  const kind = useTransactionStore((state) => state.kind)
+  const type = useTransactionStore((state) => state.type)
   const { addPendingTransaction } = usePendingTransactionStore()
   if (!outgoingTransaction) throw new Error("Missing outgoing tx")
   const rawAmount = outgoingTransaction.amount || 0
@@ -54,12 +54,12 @@ export const useTransactionConfirmation = ({
     fee,
     amount,
     nonce: accountProperties?.inferredNonce ?? 0, // need a util for this whole `onSubmit` to remove Mina dependency
-    type: kind === TransactionKind.PAYMENT ? "payment" : "delegation",
+    type,
   }
   const constructTransaction = () => {
     const constructTxArgs = {
       transaction: rawTransaction,
-      transactionKind: kind,
+      transactionType: type,
     }
     return constructTx(constructTxArgs)
   }
@@ -92,7 +92,7 @@ export const useTransactionConfirmation = ({
     // TODO: Make a util for this
     const submitTxArgs = {
       signedTransaction: signedTx as unknown as SignedLegacy<Payment>,
-      kind,
+      type,
       transactionDetails: {
         fee: rawTransaction.fee,
         to: rawTransaction.to,
@@ -113,13 +113,13 @@ export const useTransactionConfirmation = ({
     })
     await syncWallet()
     mixpanel.track(
-      kind === Mina.TransactionKind.STAKE_DELEGATION
+      type === Mina.TransactionType.STAKE_DELEGATION
         ? "PortfolioDelegated"
         : "TransactionSent",
       {
         amount: rawTransaction.amount,
         fee: rawTransaction.fee,
-        to: kind === ("staking" as Mina.TransactionKind) && rawTransaction.to,
+        to: type === Mina.TransactionType.STAKE_DELEGATION && rawTransaction.to,
       },
     )
     navigate("/transactions/success", {

@@ -1,6 +1,3 @@
-import { ClockIcon } from "lucide-react"
-import colors from "tailwindcss/colors"
-
 import { TransactionResult } from "../components/transaction-result"
 
 type TransactionSuccessViewProps = {

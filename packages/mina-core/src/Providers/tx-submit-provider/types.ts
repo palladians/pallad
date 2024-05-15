@@ -1,12 +1,12 @@
 import type { BorrowedTypes } from "../.."
-import type { TransactionBody, TransactionKind } from "../../Mina"
+import type { TransactionBody, TransactionType } from "../../Mina"
 import type { Provider } from "../Provider"
 
 export type SubmitTxArgs = {
   signedTransaction:
     | BorrowedTypes.SignedLegacy<BorrowedTypes.Payment>
     | BorrowedTypes.SignedLegacy<BorrowedTypes.StakeDelegation>
-  kind: TransactionKind
+  type: TransactionType
   transactionDetails: {
     fee: TransactionBody["fee"]
     to: TransactionBody["to"]
@@ -21,7 +21,7 @@ export type SubmitTxArgs = {
 interface TxResult {
   id: string
   hash: string
-  kind: string
+  type: string
   nonce: number
   source: {
     publicKey: string

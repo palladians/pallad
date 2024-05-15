@@ -26,7 +26,7 @@ export const ConfirmTransactionForm = ({
         <input
           id="spendingPassword"
           type={showPassword ? "text" : "password"}
-          data-testid="onboarding__spendingPasswordInput"
+          data-testid="confirm/spendingPassword"
           placeholder="Enter your password"
           className="grow"
           {...confirmationForm.register("spendingPassword")}
@@ -45,7 +45,7 @@ export const ConfirmTransactionForm = ({
         type="submit"
         disabled={confirmationForm.formState.isSubmitting}
         className="btn btn-primary max-w-48 w-full"
-        data-testid="confirm__nextButton"
+        data-testid="formSubmit"
       >
         {confirmationForm.formState.isSubmitting && (
           <Loader2Icon size={16} className="animate-spin" />

@@ -47,7 +47,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
               className="checkbox rounded-md"
               checked={termsAccepted}
               onClick={toggleAccepted}
-              data-testid="onboarding__tosCheckbox"
+              data-testid="onboarding/tosCheckbox"
               id="tosCheckbox"
             />
             <label htmlFor="tosCheckbox" className="label">
@@ -70,7 +70,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
               !dirtyFields.spendingPassword
             }
             onClick={handleSubmit(onSubmit)}
-            data-testid="onboarding__nextButton"
+            data-testid="formSubmit"
           >
             <span>Next</span>
           </button>
@@ -85,8 +85,9 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
           <input
             id="walletNameInput"
             placeholder="Set wallet name"
-            data-testid="onboarding__walletNameInput"
+            data-testid="onboarding/walletNameInput"
             className="input"
+            autoComplete="off"
             {...register("walletName")}
           />
           {errors.walletName && (
@@ -101,7 +102,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
             <input
               id="spendingPassword"
               type={showPassword ? "text" : "password"}
-              data-testid="onboarding__spendingPasswordInput"
+              data-testid="onboarding/spendingPasswordInput"
               placeholder="Create your password"
               className="grow"
               {...register("spendingPassword")}

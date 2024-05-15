@@ -7,16 +7,17 @@ const VALIDATOR = "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
 test("delegate to self", async ({ page, extensionId }) => {
   const onboardingPom = new OnboardingPom({ page, extensionId })
   await onboardingPom.restoreTestWallet()
-  await page.getByTestId("bottomNavigation__menu").click()
-  await page.getByTestId("commandMenu__delegate").click()
-  await page.getByTestId("delegate__to").fill(VALIDATOR)
-  await page.getByTestId("delegate__nextButton").click()
+  await page.getByTestId("menu/open").click()
+  await page.getByTestId("menu/staking").click()
+  await page.getByTestId("staking/start").click()
+  await page.getByTestId("delegate/to").fill(VALIDATOR)
+  await page.getByTestId("formSubmit").click()
   await page
-    .getByTestId("confirm__spendingPassword")
+    .getByTestId("confirm/spendingPassword")
     .fill(devnetWallet.spendingPassword)
-  await page.getByTestId("confirm__nextButton").click()
-  await page.getByTestId("transactionResult__nextButton").click()
+  await page.getByTestId("formSubmit").click()
+  await page.getByTestId("formSubmit").click()
   await expect(
-    page.getByTestId("transactions__pendingTransactions").first(),
+    page.getByTestId("transactions/pendingTransactions").first(),
   ).toBeVisible()
 })

@@ -10,7 +10,7 @@ import type {
 
 const convertToTransactionBody = (data: any[]): Mina.TransactionBody[] => {
   return data.map((item) => ({
-    type: item.type.toLowerCase() as "payment" | "delegation" | "zkApp",
+    type: item.type.toLowerCase() as Mina.TransactionType,
     from: item.account,
     to: item.account,
     fee: item.fee,
@@ -24,7 +24,6 @@ const convertToTransactionBody = (data: any[]): Mina.TransactionBody[] => {
     failureReason: "", //  Not available
     dateTime: new Date(item.age).toISOString(),
     isDelegation: false, //  Not available
-    //kind: '',  // Not available
   }))
 }
 

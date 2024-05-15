@@ -1,24 +1,22 @@
 import type { Mina } from "@palladxyz/mina-core"
-import { ArrowDownRight, ArrowUpRight, Clock, Filter, X } from "lucide-react"
+import { Filter, X } from "lucide-react"
 import { groupBy } from "rambda"
 import { Link } from "react-router-dom"
 
 import { AppLayout } from "@/components/app-layout"
 
+import { formatCompact } from "@/common/lib/numbers"
 import { TxSide } from "@/common/types"
 import { MenuBar } from "@/components/menu-bar"
 import clsx from "clsx"
 import dayjs from "dayjs"
 import { useState } from "react"
+import { TxTile } from "../components/tx-tile"
 
 const Filters = {
   all: "All",
   sent: "Sent",
   received: "Received",
-}
-
-const convertToK = (amount: number) => {
-  return amount > 1000 ? `${(amount / 1000).toFixed(3)}k` : amount.toFixed(3)
 }
 
 const dateFromNow = (dateTime: string) => {
@@ -29,22 +27,18 @@ const dateFromNow = (dateTime: string) => {
     : date.format("DD MMM YYYY")
 }
 
-const structurizeTx = (
-  tx: Mina.TransactionBody,
-  fiatPrice: number,
-  publicKey: string,
-) => {
-  const minaAmount = Number(tx.amount) / 1_000_000_000
+const structurizeTx = (tx: Mina.TransactionBody, fiatPrice: number) => {
+  const rawAmount = Number(tx.amount)
+  const minaAmount = formatCompact({ value: rawAmount })
   return {
-    hash: tx.hash,
+    ...tx,
     date: dateFromNow(tx.dateTime!),
     time: dayjs(tx.dateTime!).format("HH:mm"),
-    minaAmount: convertToK(minaAmount),
-    fiatAmount: Number(minaAmount * fiatPrice).toLocaleString("en-US", {
+    minaAmount,
+    fiatAmount: Number(rawAmount * fiatPrice).toLocaleString("en-US", {
       style: "currency",
       currency: "USD",
     }),
-    side: tx.from === publicKey ? TxSide.OUTGOING : TxSide.INCOMING,
   }
 }
 
@@ -66,7 +60,8 @@ export const TransactionsView = ({
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [currentFilter, setCurrentFilter] = useState(Filters.all)
   const showTransactions = transactions.length > 0 && !transactionsError
-  const txs = transactions.map((tx) => structurizeTx(tx, fiatPrice, publicKey))
+  const txs = transactions.map((tx) => structurizeTx(tx, fiatPrice))
+  console.log(">>>STRUCT", txs)
   const txsFiltered = txs.filter((tx) => {
     if (currentFilter === Filters.all) return true
     return (
@@ -124,68 +119,23 @@ export const TransactionsView = ({
       )}
       {showTransactions ? (
         <div className="px-8 pb-8 mt-6 space-y-4">
-          {Object.values(txsGrouped).map((txs) => {
-            return (
-              <div key={txs[0].date} className="flex flex-col space-y-4">
-                <p>{txs[0].date}</p>
-                {txs.map((tx) => {
-                  const pending = pendingHashes.includes(tx.hash)
-                  const received = tx.side === TxSide.INCOMING
-                  return (
-                    <Link
-                      key={tx.hash}
-                      to={`/transactions/${tx.hash}`}
-                      className={clsx(
-                        "flex",
-                        pending ? "items-center space-x-4" : "justify-between",
-                      )}
-                    >
-                      {pending ? (
-                        <>
-                          <div className="w-12 h-12 flex items-center justify-center bg-base-100 rounded-full">
-                            <Clock
-                              width={24}
-                              height={24}
-                              className="text-[#F6C177]"
-                            />
-                          </div>
-                          <p>Pending transaction</p>
-                        </>
-                      ) : (
-                        <>
-                          <div className="flex space-x-4">
-                            <div className="w-12 h-12 flex items-center justify-center bg-base-100 rounded-full">
-                              {received ? (
-                                <ArrowDownRight
-                                  width={24}
-                                  height={24}
-                                  className="text-mint"
-                                />
-                              ) : (
-                                <ArrowUpRight
-                                  width={24}
-                                  height={24}
-                                  className="text-[#D1B4F4]"
-                                />
-                              )}
-                            </div>
-                            <div>
-                              <p>{received ? "Received" : "Sent"}</p>
-                              <p className="text-[#7D7A9C]">{tx.time}</p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p>{`${tx.minaAmount} MINA`}</p>
-                            <p className="text-[#7D7A9C]">{tx.fiatAmount}</p>
-                          </div>
-                        </>
-                      )}
-                    </Link>
-                  )
-                })}
-              </div>
-            )
-          })}
+          {pendingHashes.length > 0 && (
+            <p data-testid="transactions/pendingTransactions">
+              There are pending transactions.
+            </p>
+          )}
+          {Object.values(txsGrouped).map((txs) => (
+            <div key={txs[0].date} className="flex flex-col space-y-4">
+              <p>{txs[0].date}</p>
+              {txs.map((tx) => (
+                <TxTile
+                  key={tx.hash}
+                  tx={tx}
+                  currentWalletAddress={publicKey}
+                />
+              ))}
+            </div>
+          ))}
         </div>
       ) : (
         <div className="flex flex-col flex-1 items-center justify-center text-center">

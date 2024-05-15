@@ -15,7 +15,7 @@ export const SecurityCheck = ({ title, onConfirm }: SecurityCheckProps) => (
         type="button"
         className="btn btn-primary max-w-48 w-full"
         onClick={onConfirm}
-        data-testid="onboarding__nextButton"
+        data-testid="formSubmit"
       >
         Confirm
       </button>

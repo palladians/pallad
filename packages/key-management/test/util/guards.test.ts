@@ -23,7 +23,7 @@ describe("Guard functions tests", () => {
     }
     const validPayload: Mina.ConstructedTransaction = constructTransaction(
       transaction,
-      Mina.TransactionKind.PAYMENT,
+      Mina.TransactionType.PAYMENT,
     )
 
     const invalidPayload = { message: "invalid_payload" }

@@ -58,8 +58,8 @@ export const useAccount = () => {
   }
   const lockWallet = async () => {
     await getSessionPersistence().setItem("spendingPassword", "")
+    navigate("/unlock")
     await useVault.persist.rehydrate()
-    return navigate("/unlock")
   }
   const restartCurrentWallet = () => {
     restartWallet()

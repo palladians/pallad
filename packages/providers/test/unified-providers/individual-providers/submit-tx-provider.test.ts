@@ -120,7 +120,7 @@ describe("Unified Submit Transaction Provider (Functional)", () => {
       }
       const constructedTx: Mina.ConstructedTransaction = constructTransaction(
         transaction,
-        Mina.TransactionKind.PAYMENT,
+        Mina.TransactionType.PAYMENT,
       )
       const credential = agent.serializableData.credentialSubject.contents[0]
       const args: ChainOperationArgs = {
@@ -132,7 +132,7 @@ describe("Unified Submit Transaction Provider (Functional)", () => {
       const signedTx = await agent.sign(credential!, constructedTx, args)
       const submitTxArgs = {
         signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>
-        kind: Mina.TransactionKind.PAYMENT,
+        type: Mina.TransactionType.PAYMENT,
         transactionDetails: {
           fee: transaction.fee,
           to: transaction.to,

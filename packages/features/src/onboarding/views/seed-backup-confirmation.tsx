@@ -29,7 +29,7 @@ export const SeedBackupConfirmationView = ({
         form="mnemonicConfirmationForm"
         className="btn btn-primary max-w-48 w-full"
         disabled={!confirmationValid || restoring}
-        data-testid="onboarding__nextButton"
+        data-testid="formSubmit"
       >
         {restoring && <Loader2Icon size={16} className="animate-spin" />}
         <span>Next</span>
@@ -45,7 +45,8 @@ export const SeedBackupConfirmationView = ({
       <label
         htmlFor="confirmation"
         className="label"
-        data-testid="onboarding__writedownIndex"
+        data-testid="onboarding/writedownIndex"
+        data-word-index={confirmationIndex}
       >
         Word number {confirmationIndex + 1}
       </label>
@@ -53,7 +54,7 @@ export const SeedBackupConfirmationView = ({
         id="confirmation"
         className="input"
         placeholder="Enter the word"
-        data-testid="onboarding__mnemonicConfirmationInput"
+        data-testid="onboarding/mnemonicConfirmationInput"
         {...form.register("mnemonicWord")}
       />
       <p className="text-mint mt-4">

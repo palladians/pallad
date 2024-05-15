@@ -10,7 +10,7 @@ import { FormError } from "@/components/form-error"
 import MinaIcon from "@/common/assets/mina.svg?react"
 import { formatCurrency } from "@/common/lib/currency"
 import { FeePicker, TransactionFeeShort } from "@/components/fee-picker"
-import { TransactionKind } from "@palladxyz/mina-core"
+import { TransactionType } from "@palladxyz/mina-core"
 import { ChevronRightIcon, SearchIcon } from "lucide-react"
 import { SendFormSchema, type SendFormSchemaProps } from "./send-form.schema"
 
@@ -30,7 +30,7 @@ export const SendForm = ({
   const navigate = useNavigate()
   const location = useLocation()
   const setTransactionDetails = useTransactionStore((state) => state.set)
-  const setKind = useTransactionStore((state) => state.setKind)
+  const setType = useTransactionStore((state) => state.setType)
   const {
     register,
     handleSubmit,
@@ -62,7 +62,7 @@ export const SendForm = ({
   const onSubmit = (payload: SendFormSchemaProps) => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
-    setKind(TransactionKind.PAYMENT)
+    setType(TransactionType.PAYMENT)
     setTransactionDetails({
       to: payload.to,
       fee: currentFee,
@@ -121,7 +121,7 @@ export const SendForm = ({
           type="text"
           className="grow"
           placeholder="Address"
-          data-testid="send__to"
+          data-testid="send/to"
           {...register("to")}
         />
         <button
@@ -139,7 +139,7 @@ export const SendForm = ({
           type="text"
           className="grow"
           placeholder="Amount"
-          data-testid="send__amount"
+          data-testid="send/amount"
           {...register("amount")}
         />
         <button
@@ -159,7 +159,7 @@ export const SendForm = ({
               type="text"
               className="grow"
               placeholder="Memo"
-              data-testid="send__memo"
+              data-testid="send/memo"
               {...register("memo")}
             />
             <button type="button" className="badge badge-neutral -mr-3">
@@ -178,7 +178,7 @@ export const SendForm = ({
       <button
         type="submit"
         className="btn btn-primary max-w-48 w-full mt-auto"
-        data-testid="send__nextButton"
+        data-testid="formSubmit"
         disabled={!isValid}
       >
         Next

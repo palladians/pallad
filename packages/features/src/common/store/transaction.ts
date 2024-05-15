@@ -5,12 +5,12 @@ import type { OutgoingTransaction } from "../types"
 
 type TransactionState = {
   outgoingTransaction: OutgoingTransaction | null
-  kind: Mina.TransactionKind
+  type: Mina.TransactionType
 }
 
 type TransactionMutators = {
   set: (outgoingTransaction: OutgoingTransaction) => void
-  setKind: (kind: Mina.TransactionKind) => void
+  setType: (type: Mina.TransactionType) => void
 }
 
 type TransactionStore = TransactionState & TransactionMutators
@@ -21,11 +21,11 @@ const initialState = {
 
 export const useTransactionStore = create<TransactionStore>()((set) => ({
   ...initialState,
-  kind: Mina.TransactionKind.PAYMENT,
+  type: Mina.TransactionType.PAYMENT,
   set(outgoingTransaction) {
     return set({ outgoingTransaction })
   },
-  setKind: (kind) => set({ kind }),
+  setType: (type) => set({ type }),
   reset() {
     return set(initialState)
   },

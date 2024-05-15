@@ -41,7 +41,7 @@ export const NewAddressForm = () => {
         <input
           id="contactName"
           placeholder="Name"
-          data-testid="newAddress__nameInput"
+          data-testid="newAddress/nameInput"
           className={cn(errors.name && "border-destructive")}
           {...register("name")}
         />
@@ -57,7 +57,7 @@ export const NewAddressForm = () => {
         <input
           id="contactAddress"
           placeholder="B62XXXXXXXXXXXX"
-          data-testid="newAddress__addressInput"
+          data-testid="newAddress/addressInput"
           className={cn(errors.address && "border-destructive")}
           {...register("address")}
         />
@@ -66,7 +66,7 @@ export const NewAddressForm = () => {
       <button
         type="submit"
         className="group gap-2"
-        data-testid="newAddress__createButton"
+        data-testid="newAddress/createButton"
       >
         <PlusIcon size={16} />
         <span>Create Contact</span>

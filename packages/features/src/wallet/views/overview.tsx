@@ -65,6 +65,7 @@ export const OverviewView = ({
             type="button"
             className="flex-1 btn btn-primary"
             onClick={onSend}
+            data-testid="dashboard/send"
           >
             Send
           </button>
@@ -72,6 +73,7 @@ export const OverviewView = ({
             type="button"
             className="flex-1 btn btn-primary"
             onClick={onReceive}
+            data-testid="dashboard/receive"
           >
             Receive
           </button>

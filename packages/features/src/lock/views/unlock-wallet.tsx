@@ -4,6 +4,7 @@ import { FormError } from "@/components/form-error"
 import { RestartWalletAlert } from "@/components/restart-wallet-alert"
 import { WizardLayout } from "@/components/wizard-layout"
 import clsx from "clsx"
+import { EyeIcon, EyeOffIcon } from "lucide-react"
 
 type UnlockWalletData = {
   spendingPassword: string
@@ -34,7 +35,7 @@ export const UnlockWalletView = ({
         type="submit"
         className="btn btn-primary max-w-48 w-full"
         form="unlockWalletForm"
-        data-testid="unlockWallet__unlockButton"
+        data-testid="submitForm"
         disabled={!form.formState.dirtyFields.spendingPassword}
       >
         <span>Unlock</span>
@@ -57,18 +58,23 @@ export const UnlockWalletView = ({
         >
           Spending Password
         </label>
-        <div className="flex flex-1 flex-col gap-2">
-          <div className="flex flex-1 w-full relative">
-            <input
-              id="spendingPassword"
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              data-testid="unlockWallet__password"
-              className="input flex-1"
-              {...form.register("spendingPassword")}
-            />
-          </div>
-        </div>
+        <label className="input flex items-center gap-2 w-full">
+          <input
+            id="spendingPassword"
+            type={showPassword ? "text" : "password"}
+            data-testid="unlockWallet/password"
+            placeholder="Enter your password"
+            className="grow"
+            {...form.register("spendingPassword")}
+          />
+          <button
+            type="button"
+            className="btn btn-link -mr-4"
+            onClick={togglePassword}
+          >
+            {showPassword ? <EyeOffIcon size={24} /> : <EyeIcon size={24} />}
+          </button>
+        </label>
         <FormError>{form.formState.errors.spendingPassword?.message}</FormError>
         <button
           type="button"

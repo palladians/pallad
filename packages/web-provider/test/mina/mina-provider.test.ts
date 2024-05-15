@@ -265,7 +265,7 @@ describe.skip("Wallet Provider Test", () => {
       }
       const constructedTx: Mina.ConstructedTransaction = constructTransaction(
         transaction,
-        Mina.TransactionKind.PAYMENT,
+        Mina.TransactionType.PAYMENT,
       )
       const signTxRequestArgs: RequestArguments = {
         method: "mina_signTransaction",

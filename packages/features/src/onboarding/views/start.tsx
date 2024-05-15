@@ -11,6 +11,7 @@ type OptionCardProps = {
   icon: React.ReactNode
   disabled?: boolean
   onClick: () => void
+  testId: string
 }
 
 const OptionCard = ({
@@ -19,6 +20,7 @@ const OptionCard = ({
   icon,
   disabled,
   onClick,
+  testId,
 }: OptionCardProps) => {
   return (
     <button
@@ -28,6 +30,7 @@ const OptionCard = ({
         "card card-compact card-side items-center px-4 py-6 gap-4 cursor-pointer border-2 border-secondary",
         disabled ? "bg-neutral" : "bg-secondary",
       )}
+      data-testid={testId}
     >
       <div className="btn btn-circle bg-neutral">{icon}</div>
       <div className="flex flex-col items-start">
@@ -60,18 +63,21 @@ export const StartView = ({
           description="Get a fresh address"
           icon={<Plus />}
           onClick={onCreateClicked}
+          testId="onboarding/createWalletButton"
         />
         <OptionCard
           title="Add existing wallet"
           description="With a seed phrase"
           icon={<Restore />}
           onClick={onRestoreClicked}
+          testId="onboarding/restoreWalletButton"
         />
         <OptionCard
           title="Hardware wallet"
           description="Connect your device"
           icon={<HardwareIcon />}
           onClick={() => console.log("Hardware Wallet")}
+          testId="onboarding/hardwareWalletButton"
           disabled
         />
       </div>

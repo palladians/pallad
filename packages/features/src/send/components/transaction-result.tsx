@@ -40,7 +40,7 @@ export const TransactionResult = ({
             type="button"
             className="btn btn-primary max-w-48 w-full"
             onClick={button.onClick}
-            data-testid="transactionResult__nextButton"
+            data-testid="result/close"
           >
             Close
           </Link>
@@ -48,7 +48,7 @@ export const TransactionResult = ({
             type="button"
             className="btn max-w-48 w-full"
             onClick={button.onClick}
-            data-testid="transactionResult__nextButton"
+            data-testid="formSubmit"
           >
             {button.label}
           </button>

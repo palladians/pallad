@@ -16,6 +16,7 @@ export const MenuDrawer = () => {
           <label
             htmlFor="menu-drawer"
             className="btn btn-circle min-h-10 h-10 w-10"
+            data-testid="menu/open"
           >
             <MenuIcon />
           </label>
@@ -58,6 +59,7 @@ export const MenuDrawer = () => {
               type="button"
               className="text-3xl text-left"
               onClick={() => navigate("/transactions")}
+              data-testid="menu/activity"
             >
               Activity
             </button>
@@ -65,6 +67,7 @@ export const MenuDrawer = () => {
               type="button"
               className="text-3xl text-left"
               onClick={() => navigate("/staking")}
+              data-testid="menu/staking"
             >
               Staking
             </button>
@@ -72,6 +75,7 @@ export const MenuDrawer = () => {
               type="button"
               className="text-3xl text-left"
               onClick={() => navigate("/contacts")}
+              data-testid="menu/addressBook"
             >
               Address Book
             </button>
@@ -79,6 +83,7 @@ export const MenuDrawer = () => {
               type="button"
               className="text-3xl text-left"
               onClick={() => navigate("/settings")}
+              data-testid="menu/settings"
             >
               Settings
             </button>

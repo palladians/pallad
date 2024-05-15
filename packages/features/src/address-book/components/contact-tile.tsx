@@ -16,7 +16,7 @@ export const ContactTile = ({ contact }: ContactTileProps) => {
   return (
     <div
       className="card flex items-center justify-between p-1"
-      data-testid="addressBook__contact"
+      data-testid="addressBook/contact"
     >
       <div className="flex items-center justify-center">
         <button
@@ -25,7 +25,7 @@ export const ContactTile = ({ contact }: ContactTileProps) => {
           onClick={() =>
             navigate("/send", { state: { address: contact.address } })
           }
-          data-testid="addressBook__contactName"
+          data-testid="addressBook/contactName"
         >
           <div className="badge">{contact.name}</div>
         </button>

@@ -12,6 +12,7 @@ type EmptyStateProps = {
   button: {
     label: string
     url: string
+    testId: string
   }
 }
 
@@ -19,7 +20,11 @@ const EmptyState = ({ heading, button }: EmptyStateProps) => {
   return (
     <div className="flex flex-col items-center gap-6 text-center">
       {heading}
-      <Link to={button.url} className="btn btn-primary max-w-[140px] w-full">
+      <Link
+        to={button.url}
+        className="btn btn-primary max-w-[140px] w-full"
+        data-testid={button.testId}
+      >
         {button.label}
       </Link>
     </div>
@@ -37,14 +42,12 @@ const data = [
 
 type StakingOverviewViewProps = {
   stakeDelegated: boolean
-  onChangePool: () => void
   blockchainSummary: ReturnType<typeof useBlockchainSummary>
   account: ReturnType<typeof useAccount>
 }
 
 export const StakingOverviewView = ({
   stakeDelegated,
-  onChangePool,
   account,
 }: StakingOverviewViewProps) => (
   <AppLayout>
@@ -63,7 +66,11 @@ export const StakingOverviewView = ({
                 })}
               </p>
             </div>
-            <Link to="/staking/delegate" className="btn btn-primary px-7">
+            <Link
+              to="/staking/delegate"
+              className="btn btn-primary px-7"
+              data-testid="staking/start"
+            >
               Edit
             </Link>
           </div>
@@ -77,6 +84,7 @@ export const StakingOverviewView = ({
             button={{
               label: "Stake",
               url: "/staking/delegate",
+              testId: "staking/start",
             }}
           />
         )}

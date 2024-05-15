@@ -129,7 +129,7 @@ export const useVault = create<
       },
       constructTx: (args) => {
         // TODO: agnostic construct transaction Util that takes any transaction type
-        return constructTransaction(args.transaction, args.transactionKind)
+        return constructTransaction(args.transaction, args.transactionType)
       },
       submitTx: async (submitTxArgs) => {
         return await submitTxHelper(get, submitTxArgs)

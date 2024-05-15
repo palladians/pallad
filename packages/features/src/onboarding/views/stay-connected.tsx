@@ -20,7 +20,7 @@ export const StayConnectedView = ({ onGoToDashboard }: StayConnectedRoute) => (
         type="button"
         className="btn btn-primary"
         onClick={onGoToDashboard}
-        data-testid="onboarding__nextButton"
+        data-testid="formSubmit"
       >
         Go to dashboard
       </button>

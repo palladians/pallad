@@ -42,6 +42,7 @@ export const NewAddressView = ({ onGoBack, onSubmit }: NewAddressViewProps) => {
                   errors.name && "input-bordered input-error",
                 )}
                 placeholder="Name"
+                data-testid="newAddress/nameInput"
                 {...register("name")}
               />
               {errors.name && (
@@ -56,6 +57,7 @@ export const NewAddressView = ({ onGoBack, onSubmit }: NewAddressViewProps) => {
                   errors.name && "input-bordered input-error",
                 )}
                 placeholder="Address (B62...)"
+                data-testid="newAddress/addressInput"
                 {...register("address")}
               />
               {errors.address && (
@@ -67,6 +69,7 @@ export const NewAddressView = ({ onGoBack, onSubmit }: NewAddressViewProps) => {
             type="submit"
             className="mt-auto px-12 btn btn-primary"
             disabled={disableSubmit}
+            data-testid="submitForm"
           >
             Add contact
           </button>

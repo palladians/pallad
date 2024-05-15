@@ -145,7 +145,7 @@ describe("Mina InMemoryKeyAgent", () => {
       }
       const constructedTx: Mina.ConstructedTransaction = constructTransaction(
         transaction,
-        Mina.TransactionKind.PAYMENT,
+        Mina.TransactionType.PAYMENT,
       )
 
       try {
@@ -183,7 +183,7 @@ describe("Mina InMemoryKeyAgent", () => {
       }
       const constructedTx: Mina.ConstructedTransaction = constructTransaction(
         transaction,
-        Mina.TransactionKind.PAYMENT,
+        Mina.TransactionType.PAYMENT,
       )
 
       const signedTx = await agent.sign(groupedCredential, constructedTx, {

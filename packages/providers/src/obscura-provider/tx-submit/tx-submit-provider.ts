@@ -12,7 +12,7 @@ export const createTxSubmitProvider = (url: string): TxSubmitProvider => {
   const submitTx = async (args: SubmitTxArgs): Promise<SubmitTxResult> => {
     const isRawSignature = typeof args.signedTransaction.signature === "string"
     let mutation
-    if (args.kind === "payment") {
+    if (args.type === "payment") {
       mutation = `
             ${getTxSend(isRawSignature)}
           `

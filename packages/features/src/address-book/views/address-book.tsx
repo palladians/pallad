@@ -32,7 +32,11 @@ export const AddressBookView = ({
         <h2 className="ml-8 mt-1 text-3xl">Address book</h2>
       </div>
       <div className="py-6 px-8 space-y-2">
-        <Link to="/contacts/new" className="flex btn text-base font-medium">
+        <Link
+          to="/contacts/new"
+          className="flex btn text-base font-medium"
+          data-testid="addressBook/addAddressButton"
+        >
           <Plus width={16} height={16} className="text-[#F6C177]" />
           <p>Add new contact</p>
         </Link>
@@ -43,6 +47,7 @@ export const AddressBookView = ({
                 // biome-ignore lint/suspicious/noArrayIndexKey: won't update
                 key={index}
                 className="relative px-6 flex justify-between btn text-base font-medium overflow-x-auto group"
+                data-testid="addressBook/contact"
               >
                 <Link to="/send" state={{ address: contact.address }}>
                   {contact.name}
@@ -64,6 +69,7 @@ export const AddressBookView = ({
                   <button
                     type="button"
                     onClick={() => removeContact({ index })}
+                    data-testid="addressBook/removeAddress"
                   >
                     <TrashIcon
                       width={24}

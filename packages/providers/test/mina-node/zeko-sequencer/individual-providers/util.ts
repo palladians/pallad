@@ -38,7 +38,7 @@ export async function sendMinaOnZeko(nodeUrl: string): Promise<void> {
 
   const submitTxArgs = {
     signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>
-    kind: Mina.TransactionKind.PAYMENT,
+    type: Mina.TransactionType.PAYMENT,
     transactionDetails: {
       fee: transaction.fee,
       to: transaction.to,

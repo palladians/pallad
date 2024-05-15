@@ -11,10 +11,12 @@ export const TransactionsRoute = () => {
   const { publicKey } = useAccount()
   const { current: rawFiatPrice } = useFiatPrice()
   const clearExpired = usePendingTransactionStore((state) => state.clearExpired)
-  const pendingHashes = usePendingTransactionStore(
-    (state) => state.pendingTransactions,
-  ).map((tx) => tx.hash)
   const { data: transactions, error: transactionsError } = useTransactions()
+  const pendingHashes = usePendingTransactionStore((state) =>
+    state.pendingTransactions
+      .map((tx) => tx.hash)
+      .filter((hash) => !transactions?.map((tx) => tx.hash).includes(hash)),
+  )
   // biome-ignore lint: only run on first render
   useEffect(() => {
     clearExpired()

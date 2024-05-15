@@ -17,7 +17,7 @@ export const TransactionSummaryRoute = () => {
   const outgoingTransaction = useTransactionStore(
     (state) => state.outgoingTransaction,
   )
-  const kind = useTransactionStore((state) => state.kind)
+  const type = useTransactionStore((state) => state.type)
   const confirmationForm = useForm<ConfirmTransactionData>({
     resolver: zodResolver(ConfirmTransactionSchema),
     defaultValues: {
@@ -40,7 +40,7 @@ export const TransactionSummaryRoute = () => {
         fee: outgoingTransaction.fee,
         from: publicKey,
         to: outgoingTransaction.to,
-        kind: kind,
+        type,
         total: total ?? 0,
       }}
       submitTransaction={submitTransaction}

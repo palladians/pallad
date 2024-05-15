@@ -35,7 +35,7 @@ export const SeedImportView = ({
         className="btn btn-primary max-w-48 w-full"
         disabled={!mnemonicValid || restoring}
         onClick={form.handleSubmit(onSubmit)}
-        data-testid="onboarding__nextButton"
+        data-testid="formSubmit"
       >
         {restoring && <Loader2Icon size={16} className="animate-spin" />}
         <span>Next</span>
@@ -65,7 +65,7 @@ export const SeedImportView = ({
                 form.setValue(`mnemonic.${i}`, word)
               })
             }}
-            data-testid={`onboarding__mnemonicField.${i}`}
+            testId={`onboarding/mnemonicField.${i}`}
             {...form.register(`mnemonic.${i}`)}
             onChange={(value) => {
               form.setValue(`mnemonic.${i}`, value)

@@ -37,7 +37,7 @@ export const Summary = () => {
         fee: 0.1,
         from: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
         to: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
-        kind: "transaction",
+        type: "transaction",
         total: 25.1,
       }}
       confirmationForm={confirmationForm}

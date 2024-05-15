@@ -35,11 +35,13 @@ const Links = [
 type SettingsViewProps = {
   onCloseClicked: () => void
   onDonateClicked: () => void
+  onLogOut: () => void
 }
 
 export const SettingsView = ({
   onCloseClicked,
   onDonateClicked,
+  onLogOut,
 }: SettingsViewProps) => {
   return (
     <AppLayout>
@@ -83,7 +85,12 @@ export const SettingsView = ({
               )
             })}
           </div>
-          <button type="button" className="px-10 btn">
+          <button
+            type="button"
+            className="px-10 btn"
+            data-testid="settings/logOut"
+            onClick={onLogOut}
+          >
             Log out
           </button>
         </div>

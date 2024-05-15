@@ -5,6 +5,7 @@
   },
   "files": {
     "ignore": [
+      "apps/**/playwright-report/**/*",
       "apps/**/dist/*.js",
       "apps/**/dist/*.ts",
       "apps/**/dist/*.json",

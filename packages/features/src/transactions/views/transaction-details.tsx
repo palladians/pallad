@@ -10,7 +10,7 @@ import { ArrowRight } from "lucide-react"
 
 type TransactionData = {
   side: TxSide
-  kind?: Mina.TransactionKind
+  type?: Mina.TransactionType
   minaAmount: string
   hash: string
   from: string
@@ -62,7 +62,7 @@ export const TransactionDetailsView = ({
             <div className="flex items-center justify-between">
               <p className="text-[#7D7A9C]">Kind</p>
               <p className="text-right">
-                {transaction.kind === Mina.TransactionKind.PAYMENT
+                {transaction.type === Mina.TransactionType.PAYMENT
                   ? "Transaction"
                   : "Delegation"}
               </p>

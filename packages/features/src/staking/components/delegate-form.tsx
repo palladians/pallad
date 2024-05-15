@@ -9,7 +9,7 @@ import { FormError } from "@/components/form-error"
 
 import { FeePicker, TransactionFeeShort } from "@/components/fee-picker"
 import type { SendFormSchemaProps } from "@/send/components/send-form.schema"
-import { TransactionKind } from "@palladxyz/mina-core"
+import { TransactionType } from "@palladxyz/mina-core"
 import { DelegateFormSchema } from "./delegate-form.schema"
 
 type DelegateFormProps = {
@@ -21,7 +21,7 @@ export const DelegateForm = ({ advanced, setAdvanced }: DelegateFormProps) => {
   const location = useLocation()
   const navigate = useNavigate()
   const setTransactionDetails = useTransactionStore((state) => state.set)
-  const setKind = useTransactionStore((state) => state.setKind)
+  const setType = useTransactionStore((state) => state.setType)
   const {
     register,
     handleSubmit,
@@ -41,7 +41,7 @@ export const DelegateForm = ({ advanced, setAdvanced }: DelegateFormProps) => {
   const onSubmit = (payload: SendFormSchemaProps) => {
     const { fee } = getValues()
     const currentFee = TransactionFee[fee]
-    setKind(TransactionKind.STAKE_DELEGATION)
+    setType(TransactionType.STAKE_DELEGATION)
     setTransactionDetails({
       to: payload.to,
       fee: currentFee,
@@ -64,7 +64,7 @@ export const DelegateForm = ({ advanced, setAdvanced }: DelegateFormProps) => {
           id="blockProducer"
           placeholder="Validator Address"
           className="input"
-          data-testid="delegate__to"
+          data-testid="delegate/to"
           {...register("to")}
         />
         <FormError>{errors.to?.message}</FormError>
@@ -81,7 +81,7 @@ export const DelegateForm = ({ advanced, setAdvanced }: DelegateFormProps) => {
       <button
         type="submit"
         className="btn btn-primary max-w-48 w-full"
-        data-testid="delegate__nextButton"
+        data-testid="formSubmit"
       >
         <span>Next</span>
       </button>
