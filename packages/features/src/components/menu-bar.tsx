@@ -3,7 +3,6 @@ import { truncateString } from "@/common/lib/string"
 import {
   ArrowLeftIcon,
   ChevronDownIcon,
-  ChevronRightIcon,
   ChevronUpIcon,
   XIcon,
 } from "lucide-react"

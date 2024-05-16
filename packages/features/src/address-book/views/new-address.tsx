@@ -1,9 +1,11 @@
 import { AppLayout } from "@/components/app-layout"
+import { useEffect } from "react"
 
 import { MenuBar } from "@/components/menu-bar"
 import { zodResolver } from "@hookform/resolvers/zod"
 import clsx from "clsx"
 import { useForm } from "react-hook-form"
+import { useLocation } from "react-router-dom"
 import { NewAddressFormSchema } from "../components/new-address-form.schema"
 
 type NewAddressViewProps = {
@@ -12,16 +14,22 @@ type NewAddressViewProps = {
 }
 
 export const NewAddressView = ({ onGoBack, onSubmit }: NewAddressViewProps) => {
+  const location = useLocation()
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm({
     resolver: zodResolver(NewAddressFormSchema),
     defaultValues: { name: "", address: "" },
   })
   const disableSubmit = watch(["name", "address"]).includes("")
+  // biome-ignore lint: only first render
+  useEffect(() => {
+    setValue("address", location.state?.address || "")
+  }, [])
   return (
     <AppLayout>
       <div className="pb-12 bg-secondary rounded-b-2xl">

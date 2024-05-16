@@ -33,6 +33,7 @@
     "cleanup": "rimraf node_modules dist .turbo build"
   },
   "dependencies": {
+    "@github/hotkey": "^3.1.1",
     "@headlessui/react": "^1.7.19",
     "@hookform/resolvers": "^3.3.2",
     "@palladxyz/key-management": "workspace:*",

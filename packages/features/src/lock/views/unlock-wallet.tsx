@@ -76,13 +76,6 @@ export const UnlockWalletView = ({
           </button>
         </label>
         <FormError>{form.formState.errors.spendingPassword?.message}</FormError>
-        <button
-          type="button"
-          onClick={() => setRestartAlertVisible(true)}
-          className="btn btn-link text-mint self-start pl-0"
-        >
-          Forgotten password? Restore again.
-        </button>
       </form>
     </div>
   </WizardLayout>
