@@ -4,7 +4,8 @@ const nodeUrl =
   process.env.NODE_URL || "https://api.blockberry.one/mina-berkeley/"
 const apiKey = process.env.API_KEY || "2u8a1S9H2NK1kP3olo9962qaRdr2ub" // this is a test api-key for the test-suite, not for production.
 
-describe("Blockberry Stake Pools Provider (Functional)", () => {
+// TODO: Reenable when we readd the list of validators
+describe.skip("Blockberry Stake Pools Provider (Functional)", () => {
   let provider: ReturnType<typeof Blockberry.createStakePoolProvider>
 
   beforeEach(() => {
