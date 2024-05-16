@@ -1,4 +1,5 @@
 import ArrowRightIcon from "@/common/assets/arrow-right.svg?react"
+import { AppLayout } from "@/components/app-layout"
 import { MenuBar } from "@/components/menu-bar"
 import { Skeleton } from "@/components/skeleton"
 import type { Tx } from "@palladxyz/pallad-core"
@@ -34,7 +35,7 @@ export const OverviewView = ({
 }: OverviewViewProps) => {
   const [bucks, cents] = balance.toFixed(2).toString().split(".")
   return (
-    <div className="flex flex-col flex-1">
+    <AppLayout>
       <MenuBar variant="dashboard" publicAddress={publicAddress} />
       <Skeleton loading={loading} h="62px">
         <PortfolioValueChart
@@ -109,6 +110,6 @@ export const OverviewView = ({
           )}
         </div>
       </div>
-    </div>
+    </AppLayout>
   )
 }

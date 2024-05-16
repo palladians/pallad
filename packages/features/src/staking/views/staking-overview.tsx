@@ -1,6 +1,6 @@
 import type { useAccount } from "@/common/hooks/use-account"
 import type { useBlockchainSummary } from "@/common/hooks/use-blockchain-summary"
-import { truncateString } from "@/common/lib/string"
+import { AddressDropdown } from "@/components/address-dropdown"
 import { AppLayout } from "@/components/app-layout"
 import { MenuBar } from "@/components/menu-bar"
 
@@ -58,13 +58,10 @@ export const StakingOverviewView = ({
         {stakeDelegated ? (
           <div className="flex flex-row justify-between items-center card bg-neutral p-6">
             <div className="flex flex-col">
-              <p>
-                {truncateString({
-                  value: account?.accountInfo?.MINA?.delegate ?? "",
-                  firstCharCount: 5,
-                  endCharCount: 3,
-                })}
-              </p>
+              <AddressDropdown
+                publicKey={account?.accountInfo?.MINA?.delegate ?? ""}
+                className="before:ml-16"
+              />
             </div>
             <Link
               to="/staking/delegate"
