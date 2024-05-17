@@ -31,24 +31,19 @@ const EmptyState = ({ heading, button }: EmptyStateProps) => {
   )
 }
 
-const data = [
-  { amount: 80 },
-  { amount: 88 },
-  { amount: 44 },
-  { amount: 55 },
-  { amount: 92 },
-  { amount: 56 },
-]
-
 type StakingOverviewViewProps = {
   stakeDelegated: boolean
   blockchainSummary: ReturnType<typeof useBlockchainSummary>
   account: ReturnType<typeof useAccount>
+  rewards: { amount: number }[]
+  stats: { lastReward: number; avgReward: number; totalReward: number }
 }
 
 export const StakingOverviewView = ({
   stakeDelegated,
   account,
+  rewards,
+  stats,
 }: StakingOverviewViewProps) => (
   <AppLayout>
     <div className="card flex-1 flex-col bg-secondary rounded-t-none pb-6">
@@ -91,20 +86,23 @@ export const StakingOverviewView = ({
       <h2 className="text-2xl">Block rewards</h2>
       <div className="flex justify-between items-center">
         <div className="flex justify-center items-center flex-col">
-          <p className="text-2xl">-</p>
+          <p className="text-2xl">{stats.lastReward}</p>
           <h3 className="text-sm">Last reward</h3>
         </div>
         <div className="flex justify-center items-center flex-col">
-          <p className="text-2xl">-</p>
+          <p className="text-2xl">{stats.avgReward}</p>
           <h3 className="text-sm">Avg. reward</h3>
         </div>
         <div className="flex justify-center items-center flex-col">
-          <p className="text-2xl">-</p>
+          <p className="text-2xl">{stats.totalReward}</p>
           <h3 className="text-sm">Total reward</h3>
         </div>
       </div>
       <ResponsiveContainer width="100%" aspect={2.5}>
-        <BarChart data={data} margin={{ left: 0, top: 0, right: 0, bottom: 0 }}>
+        <BarChart
+          data={rewards}
+          margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
+        >
           <Tooltip
             cursor={false}
             wrapperClassName="card"

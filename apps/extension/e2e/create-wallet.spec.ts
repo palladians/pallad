@@ -15,7 +15,6 @@ test("create new wallet", async ({ page, extensionId }) => {
   await onboardingPom.toggleMnemonicWritten()
   await onboardingPom.goNext()
   const confirmationIndex = await onboardingPom.getMnemonicConfirmationIndex()
-  console.log(">>>MW", mnemonicWords, confirmationIndex)
   await onboardingPom.fillMnemonicConfirmation(mnemonicWords[confirmationIndex])
   await onboardingPom.goNext()
   const pageTitle = page.getByText("All done!")
