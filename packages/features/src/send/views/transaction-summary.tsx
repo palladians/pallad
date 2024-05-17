@@ -1,8 +1,6 @@
-import { ArrowRightIcon } from "lucide-react"
-
-import { truncateString } from "@/common/lib/string"
 import { AppLayout } from "@/components/app-layout"
 
+import { FromTo } from "@/components/from-to"
 import { MenuBar } from "@/components/menu-bar"
 import type { SubmitHandler, UseFormReturn } from "react-hook-form"
 import { ConfirmTransactionForm } from "../components/confirm-transaction-form"
@@ -38,41 +36,7 @@ export const TransactionSummaryView = ({
       />
       <div className="flex flex-1 flex-col px-8 pb-8 gap-2">
         <h1 className="text-3xl">Summary</h1>
-        <div className="card bg-secondary py-3 px-4 flex flex-row justify-between mt-1">
-          <div className="flex flex-col">
-            <div className="text-[#7D7A9C]">From</div>
-            <div
-              className="tooltip before:max-w-screen before:break-all before:ml-16"
-              data-tip={transaction.from}
-            >
-              <div>
-                {truncateString({
-                  value: transaction.from,
-                  endCharCount: 3,
-                  firstCharCount: 5,
-                })}
-              </div>
-            </div>
-          </div>
-          <div className="btn btn-circle btn-neutral text-mint">
-            <ArrowRightIcon size={24} />
-          </div>
-          <div className="flex flex-col">
-            <div className="text-[#7D7A9C]">To</div>
-            <div
-              className="tooltip before:max-w-screen before:break-all before:-ml-16"
-              data-tip={transaction.to}
-            >
-              <div>
-                {truncateString({
-                  value: transaction.to,
-                  endCharCount: 3,
-                  firstCharCount: 5,
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
+        <FromTo tx={transaction} />
         <div className="card bg-secondary px-4 py-2 grid grid-cols-2">
           <div className="text-[#7D7A9C] py-2">Kind</div>
           <div className="capitalize text-right py-2">{transaction.type}</div>

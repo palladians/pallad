@@ -3,10 +3,10 @@ import { Mina } from "@palladxyz/mina-core"
 import { AppLayout } from "@/components/app-layout"
 import { format } from "date-fns"
 
-import { truncateString } from "@/common/lib/string"
 import { getTxSide } from "@/common/lib/tx"
+import { FromTo } from "@/components/from-to"
+import { HashDropdown } from "@/components/hash-dropdown"
 import { MenuBar } from "@/components/menu-bar"
-import { ArrowRight } from "lucide-react"
 type TransactionDetailsViewProps = {
   onGoBack: () => void
   transaction: Mina.TransactionBody
@@ -25,31 +25,7 @@ export const TransactionDetailsView = ({
       <div className="px-8 pb-6">
         <h2 className="text-3xl mb-6">Transaction detail</h2>
         <div className="space-y-2">
-          <div className="py-3 px-4 flex items-center justify-between bg-secondary rounded-2xl">
-            <div>
-              <p className="text-[#7D7A9C]">From</p>
-              <p>
-                {truncateString({
-                  value: transaction.from,
-                  firstCharCount: 5,
-                  endCharCount: 3,
-                })}
-              </p>
-            </div>
-            <div className="w-10 h-10 flex items-center justify-center bg-neutral rounded-full">
-              <ArrowRight width={24} height={24} className="text-[#A3DBE4]" />
-            </div>
-            <div>
-              <p className="text-[#7D7A9C]">To</p>
-              <p>
-                {truncateString({
-                  value: transaction.to,
-                  firstCharCount: 5,
-                  endCharCount: 3,
-                })}
-              </p>
-            </div>
-          </div>
+          <FromTo tx={transaction} />
           <div className="py-3 px-4 space-y-4 bg-secondary rounded-2xl">
             <div className="flex items-center justify-between">
               <p className="text-[#7D7A9C]">Kind</p>
@@ -81,7 +57,10 @@ export const TransactionDetailsView = ({
             <hr className="border-[#413E5E]" />
             <div className="flex items-center justify-between">
               <p className="text-[#7D7A9C]">Hash</p>
-              <p className="w-32 break-all text-right">{transaction.hash}</p>
+              <HashDropdown
+                hash={transaction.hash ?? ""}
+                className="w-32 break-all text-right"
+              />
             </div>
           </div>
         </div>

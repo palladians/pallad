@@ -61,13 +61,15 @@ export const TransactionDetails = () => {
   return (
     <TransactionDetailsView
       onGoBack={() => console.log("go back")}
+      currentWalletAddress="B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS"
       transaction={{
+        fee: 0.01,
+        nonce: "",
         from: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
         to: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
-        minaAmount: "5",
+        amount: 5,
         dateTime: "2024-04-29T18:10:01Z",
         hash: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
-        side: TxSide.OUTGOING,
         type: Mina.TransactionType.PAYMENT,
       }}
     />

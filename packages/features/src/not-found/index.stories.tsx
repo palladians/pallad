@@ -2,7 +2,7 @@ import type { StoryDefault } from "@ladle/react"
 
 import { NotFoundView } from "./views/not-found"
 
-export const View = () => (
+export const NotFound = () => (
   <NotFoundView
     onGoBack={() => console.log("go back")}
     onGoToDashboard={() => console.log("go to dash")}

@@ -17,6 +17,7 @@ export const MenuDrawer = () => {
             htmlFor="menu-drawer"
             className="btn btn-circle min-h-10 h-10 w-10"
             data-testid="menu/open"
+            data-hotkey="Meta+k"
           >
             <MenuIcon />
           </label>

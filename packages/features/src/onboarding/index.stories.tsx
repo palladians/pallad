@@ -71,7 +71,7 @@ export const SeedImportSecurity = () => {
   return <SeedImportSecurityView onConfirm={action("Security confirmed")} />
 }
 
-export const View = () => {
+export const SeedImport = () => {
   const form = useForm<MnemonicInputData>()
   return (
     <SeedImportView

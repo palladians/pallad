@@ -34,7 +34,7 @@ export const Autocomplete = React.forwardRef(
       <div className="dropdown" {...rest}>
         <Combobox value={value} onChange={onChange}>
           <Combobox.Input
-            className="input w-full bg-[#413E5E]"
+            className="input text-sm w-full bg-[#413E5E]"
             placeholder={placeholder}
             value={value}
             onChange={(event) => onChange(event.target.value)}
