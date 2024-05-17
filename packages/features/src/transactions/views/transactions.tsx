@@ -61,7 +61,6 @@ export const TransactionsView = ({
   const [currentFilter, setCurrentFilter] = useState(Filters.all)
   const showTransactions = transactions.length > 0 && !transactionsError
   const txs = transactions.map((tx) => structurizeTx(tx, fiatPrice))
-  console.log(">>>STRUCT", txs)
   const txsFiltered = txs.filter((tx) => {
     if (currentFilter === Filters.all) return true
     return (
