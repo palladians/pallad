@@ -5,7 +5,7 @@ export type ProviderConfig = {
   }
   archiveNodeEndpoint: {
     // TODO: remove "mina-node"
-    providerName: "mina-node" | "mina-scan" | "evm-explorer"
+    providerName: "mina-node" | "mina-scan" | "zeko-scan" | "evm-explorer"
     url: string
   }
   networkName: string
