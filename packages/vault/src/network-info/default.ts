@@ -9,7 +9,7 @@ Note: it is good practice to match the key with the networkName.
 export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
   Berkeley: {
     nodeEndpoint: {
-      providerName: "obscura",
+      providerName: "mina-node",
       url: "https://api.minascan.io/node/berkeley/v1/graphql",
     },
     archiveNodeEndpoint: {
@@ -39,8 +39,8 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
       url: "http://sequencer-zeko-dev.dcspark.io/graphql",
     },
     archiveNodeEndpoint: {
-      providerName: "mina-node",
-      url: "",
+      providerName: "zeko-scan",
+      url: "https://zekoscan.io/devnet",
     },
     networkName: "ZekoDevNet",
     networkType: "testnet",
