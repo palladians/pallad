@@ -1,8 +1,5 @@
 <!-- markdownlint-disable -->
 <div align="center">
-  <img src="./pallad_icon.svg" height="128">
-</div>
-<div align="center">
   <img src="./pallad_name.svg" height="128">
 </div>
 <div align="center">
