@@ -1,9 +1,9 @@
 <!-- markdownlint-disable -->
 <div align="center">
-  <img src="./pallad_icon.svg" height="256">
+  <img src="./pallad_icon.svg" height="128">
 </div>
 <div align="center">
-  <img src="./pallad_name.png" height="128">
+  <img src="./pallad_name.svg" height="128">
 </div>
 <div align="center">
 <br />
