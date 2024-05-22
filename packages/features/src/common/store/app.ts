@@ -42,7 +42,7 @@ export const useAppStore = create<AppStore>()(
       },
       setNetwork(network) {
         return set({
-          network: network,
+          network,
         })
       },
       setShareData(shareData) {

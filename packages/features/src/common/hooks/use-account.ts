@@ -23,6 +23,7 @@ export const useAccount = () => {
     const accountInfo = getAccountsInfo(network, publicKey)
     const chain = currentWallet.credential.credential.chain
     const props = getAccountProperties(accountInfo.accountInfo, chain)
+    console.log(accountInfo, chain, props)
     return props
   }
   const publicKey = getPublicKey(currentWallet)

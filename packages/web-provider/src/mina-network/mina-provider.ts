@@ -5,7 +5,6 @@ import type {
 } from "@palladxyz/key-management"
 import type { BorrowedTypes, Mina } from "@palladxyz/mina-core"
 import type { SearchQuery } from "@palladxyz/vault"
-import superjson from "superjson"
 
 import { hasObjectProps, hasQueryAndProps } from "../utils"
 import { showUserPrompt } from "../utils/prompts"
@@ -165,7 +164,7 @@ export class MinaProvider implements IMinaProvider {
     // Note: all user prompts should define the inputType like this 'confirmation'
     const userConfirmed = await this.userPrompt("confirmation", {
       title: "Connection request.",
-      payload: superjson.stringify({ origin }),
+      payload: JSON.stringify({ origin }),
     })
     if (!userConfirmed) {
       // should this emit an error event?
@@ -373,7 +372,7 @@ export class MinaProvider implements IMinaProvider {
       case "mina_addChain": {
         const userConfirmed = await this.userPrompt("confirmation", {
           title: "Request to add a new Mina chain.",
-          payload: superjson.stringify(args.params),
+          payload: JSON.stringify(args.params),
         })
 
         if (!userConfirmed) {
@@ -395,7 +394,7 @@ export class MinaProvider implements IMinaProvider {
                     },
                     "archiveNodeUrl": "https://zeko-explorer.com/"
                   }
-                
+
           */
         const data = args.params as requestAddChain
         const addChainResponse = await this.vault.addChain(data.data)
@@ -405,7 +404,7 @@ export class MinaProvider implements IMinaProvider {
         {
           const userConfirmed = await this.userPrompt("confirmation", {
             title: "Request to switch to a different Mina chain.",
-            payload: superjson.stringify(args.params),
+            payload: JSON.stringify(args.params),
           })
 
           if (!userConfirmed) {
@@ -419,7 +418,7 @@ export class MinaProvider implements IMinaProvider {
                   {
                     "chainId": "abc",
                   }
-                
+
           */
           const data = args.params as requestSwitchChain
           if (!data.data.chainId) {
@@ -435,7 +434,7 @@ export class MinaProvider implements IMinaProvider {
         {
           const userConfirmed = await this.userPrompt("confirmation", {
             title: "Request to current Mina network information.",
-            payload: superjson.stringify(args.params),
+            payload: JSON.stringify(args.params),
           })
 
           if (!userConfirmed) {
@@ -449,7 +448,7 @@ export class MinaProvider implements IMinaProvider {
                   {
                     "chainId": "abc",
                   }
-                
+
           */
           const requestNetworkResponse = await this.vault.requestNetwork()
           return requestNetworkResponse as unknown as T
@@ -459,7 +458,7 @@ export class MinaProvider implements IMinaProvider {
         // check if wallet is locked first
         const passphrase = await this.userPrompt("password", {
           title: "Experimental Request for Session Key Creation",
-          payload: superjson.stringify(args.params),
+          payload: JSON.stringify(args.params),
         })
         if (passphrase === null) {
           throw new Error("User denied the request for passphrase.")
@@ -490,8 +489,8 @@ export class MinaProvider implements IMinaProvider {
       case "mina_signTransaction": {
         // check if wallet is locked first
         const passphrase = await this.userPrompt("password", {
-          title: "Confirm your transaction",
-          payload: superjson.stringify(args.params),
+          title: "Signature request",
+          payload: JSON.stringify(args.params),
         })
         if (passphrase === null) {
           throw new Error("User denied the request for passphrase.")
@@ -617,9 +616,8 @@ export class MinaProvider implements IMinaProvider {
       case "mina_getState": {
         // check if wallet is locked first
         const confirmation = await this.userPrompt("confirmation", {
-          title:
-            "The application is requesting to a credential from Pallad. Please review the request before deciding whether to confirm.",
-          payload: superjson.stringify(args.params),
+          title: "Credential read request",
+          payload: JSON.stringify(args.params),
         })
         if (!confirmation) {
           throw this.createProviderRpcError(4001, "User Rejected Request")
@@ -639,9 +637,8 @@ export class MinaProvider implements IMinaProvider {
 
       case "mina_setState": {
         const confirmation = await this.userPrompt("confirmation", {
-          title:
-            "The application is requesting Pallad to store a credential. Please review the incoming credential before deciding whether to confirm.",
-          payload: superjson.stringify(args.params),
+          title: "Credential write request",
+          payload: JSON.stringify(args.params),
         })
         if (!confirmation) {
           throw this.createProviderRpcError(4001, "User Rejected Request")

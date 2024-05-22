@@ -5,10 +5,8 @@ import { NetworksView } from "../views/networks"
 export const NetworksRoute = () => {
   const navigate = useNavigate()
   const switchNetwork = useVault((state) => state.switchNetwork)
-  const _syncWallet = useVault((state) => state._syncWallet)
   const onNetworkSwitch = async (network: string) => {
     await switchNetwork(network)
-    await _syncWallet()
     navigate("/dashboard")
   }
   return (
