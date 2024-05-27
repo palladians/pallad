@@ -15,8 +15,7 @@ import type {
 import { MinaNode } from "../../../../src"
 import { sendMinaOnZeko } from "./util"
 
-const nodeUrl =
-  process.env.NODE_URL || "https://sequencer-zeko-dev.dcspark.io/graphql"
+const nodeUrl = process.env.NODE_URL || "https://devnet.zeko.io/graphql"
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"

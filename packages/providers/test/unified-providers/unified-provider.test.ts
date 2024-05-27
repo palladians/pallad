@@ -89,7 +89,7 @@ describe("Unified Chain provider", () => {
       config = {
         nodeEndpoint: {
           providerName: "mina-node",
-          url: "https://sequencer-zeko-dev.dcspark.io/graphql",
+          url: "https://devnet.zeko.io/graphql",
         },
         archiveNodeEndpoint: {
           providerName: "zeko-scan",
