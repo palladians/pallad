@@ -9,6 +9,7 @@ type SendViewProps = {
   fiatPrice: number
   advanced: boolean
   setAdvanced: (advanced: boolean) => void
+  currentNetwork: string
 }
 
 export const SendView = ({
@@ -17,10 +18,15 @@ export const SendView = ({
   fiatPrice,
   advanced,
   setAdvanced,
+  currentNetwork,
 }: SendViewProps) => {
   return (
     <AppLayout>
-      <MenuBar variant="wallet" onCloseClicked={onGoBack} />
+      <MenuBar
+        variant="wallet"
+        onCloseClicked={onGoBack}
+        currentNetwork={currentNetwork}
+      />
       <div className="flex flex-col flex-1 px-8">
         <SendForm
           balance={balance}

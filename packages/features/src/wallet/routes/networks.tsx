@@ -5,6 +5,7 @@ import { NetworksView } from "../views/networks"
 export const NetworksRoute = () => {
   const navigate = useNavigate()
   const switchNetwork = useVault((state) => state.switchNetwork)
+  const currentNetworkName = useVault((state) => state.currentNetworkName)
   const onNetworkSwitch = async (network: string) => {
     await switchNetwork(network)
     navigate("/dashboard")
@@ -13,6 +14,7 @@ export const NetworksRoute = () => {
     <NetworksView
       onCloseClicked={() => navigate(-1)}
       onNetworkSwitch={onNetworkSwitch}
+      currentNetwork={currentNetworkName}
     />
   )
 }

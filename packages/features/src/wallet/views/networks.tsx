@@ -20,17 +20,20 @@ const NETWORKS = [
 type NetworksViewProps = {
   onCloseClicked: () => void
   onNetworkSwitch: (network: string) => Promise<void>
+  currentNetwork: string
 }
 
 export const NetworksView = ({
   onCloseClicked,
   onNetworkSwitch,
+  currentNetwork,
 }: NetworksViewProps) => {
   return (
     <div className="flex flex-col flex-1">
       <MenuBar
         variant="wallet"
         onCloseClicked={onCloseClicked}
+        currentNetwork={currentNetwork}
         networkManagement
       />
       <div className="px-8 pb-8">

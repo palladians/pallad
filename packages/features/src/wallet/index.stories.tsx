@@ -22,7 +22,7 @@ export const Dashboard = () => {
 }
 
 export const Networks = () => {
-  return <NetworksView />
+  return <NetworksView currentNetwork="Berkeley" />
 }
 
 export default {
