@@ -1,9 +1,9 @@
 import DOMPurify from "dompurify"
-import { js_beautify } from "js-beautify"
 import type { SubmitHandler } from "react-hook-form"
 import { MemoryRouter } from "react-router-dom"
 import { highlight } from "sugar-high"
 import { runtime } from "webextension-polyfill"
+import yaml from "yaml"
 import type { UserInputForm } from "../types"
 import { WebConnectorView } from "../views/web-connector"
 
@@ -42,9 +42,9 @@ export const WebConnectorRoute = () => {
     })
     window.close()
   }
-  const userFriendlyPayload = DOMPurify.sanitize(
-    highlight(js_beautify(payload, { indent_size: 4 })),
-  )
+  const parsedPayload = JSON.parse(payload) as Record<string, any>
+  const yamlPayload = yaml.stringify(parsedPayload.data) ?? ""
+  const userFriendlyPayload = DOMPurify.sanitize(highlight(yamlPayload))
   if (!rawWindowId) return null
   if (!inputType) return null
   return (
