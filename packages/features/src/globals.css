@@ -3,6 +3,33 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * Types that sugar-high have:
+ *
+ * identifier
+ * keyword
+ * string
+ * Class, number and null
+ * property
+ * entity
+ * jsx literals
+ * sign
+ * comment
+ * break
+ * space
+ */
+:root {
+    --sh-class: #9ccfd8;
+    --sh-identifier: #e0def4;
+    --sh-sign: #e0def4;
+    --sh-property: #908caa;
+    --sh-entity: #ebbcba;
+    --sh-jsxliterals: #9ccfd8;
+    --sh-string: #908caa;
+    --sh-keyword: #908caa;
+    --sh-comment: #908caa;
+}
+
 :base {
     --mint: #a3dbe4;
 }

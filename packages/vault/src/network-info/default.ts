@@ -36,7 +36,7 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
   ZekoDevNet: {
     nodeEndpoint: {
       providerName: "mina-node",
-      url: "http://sequencer-zeko-dev.dcspark.io/graphql",
+      url: "https://devnet.zeko.io/graphql",
     },
     archiveNodeEndpoint: {
       providerName: "zeko-scan",

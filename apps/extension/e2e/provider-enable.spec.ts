@@ -55,7 +55,7 @@ test.skip("enable window.mina and handle pop-up on a specific webpage", async ({
       params: {
         nodeEndpoint: {
           providerName: "mina-node",
-          url: "https://sequencer-zeko-dev.dcspark.io/graphql",
+          url: "https://devnet.zeko.io/graphql",
         },
         archiveNodeEndpoint: {
           providerName: "mina-node",

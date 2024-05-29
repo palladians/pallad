@@ -17,6 +17,7 @@ export async function syncWalletnHelper(
   } = get()
   // when the wallet bricks this public key is undefined.
   const currentwallet = getCurrentWallet()
+  console.log("currentWallet in syncWallet", currentwallet)
   const publicKey = currentwallet?.credential?.credential?.address // todo: DRY this up
   if (!publicKey)
     throw new AddressError("Wallet address is undefined in _syncWallet method")
@@ -40,6 +41,7 @@ export async function syncWalletnHelper(
   }
 
   const response = await provider.getNodeStatus()
+  console.log("node response for chain info in syncWallet", response)
   if (!response.daemonStatus.chainId) {
     throw new Error(
       `Could not get chainId for ${syncProviderConfig} in updateChainId`,

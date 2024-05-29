@@ -11,23 +11,23 @@ import { useAppStore } from "../store/app"
 export const useAccount = () => {
   const navigate = useNavigate()
   const currentWallet = useVault((state) => state.getCurrentWallet())
+  const currentNetworkName = useVault((state) => state.currentNetworkName)
   const getAccountsInfo = useVault((state) => state.getAccountsInfo)
   const restartWallet = useVault((state) => state.restartWallet)
   const _syncWallet = useVault((state) => state._syncWallet)
-  const network = useAppStore((state) => state.network)
   const setVaultStateUninitialized = useAppStore(
     (state) => state.setVaultStateUninitialized,
   )
   const fetchWallet = async () => {
     await _syncWallet()
-    const accountInfo = getAccountsInfo(network, publicKey)
+    const accountInfo = getAccountsInfo(currentNetworkName, publicKey)
     const chain = currentWallet.credential.credential.chain
     const props = getAccountProperties(accountInfo.accountInfo, chain)
     return props
   }
   const publicKey = getPublicKey(currentWallet)
   const swr = useSWR(
-    publicKey ? [publicKey, "account", network] : null,
+    publicKey ? [publicKey, "account", currentNetworkName] : null,
     async () => await fetchWallet(),
     {
       refreshInterval: 30000,
@@ -75,7 +75,7 @@ export const useAccount = () => {
     publicKey,
     lockWallet,
     restartCurrentWallet,
-    network,
+    network: currentNetworkName,
     stakeDelegated,
   }
 }
