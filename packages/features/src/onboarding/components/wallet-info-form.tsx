@@ -54,7 +54,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
               I accept Terms of Service.
             </label>
             <a
-              href="https://palladians.xyz/terms"
+              href="https://get.pallad.co/terms"
               target="_blank"
               rel="noopener noreferrer"
             >

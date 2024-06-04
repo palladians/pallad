@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 import { AppLayout } from "@/components/app-layout"
 
 import { formatCompact } from "@/common/lib/numbers"
+import { getTxSide } from "@/common/lib/tx"
 import { TxSide } from "@/common/types"
 import { MenuBar } from "@/components/menu-bar"
 import clsx from "clsx"
@@ -63,10 +64,8 @@ export const TransactionsView = ({
   const txs = transactions.map((tx) => structurizeTx(tx, fiatPrice))
   const txsFiltered = txs.filter((tx) => {
     if (currentFilter === Filters.all) return true
-    return (
-      tx.side ===
-      (currentFilter === Filters.sent ? TxSide.OUTGOING : TxSide.INCOMING)
-    )
+    const side = getTxSide({ tx, currentWalletAddress: publicKey })
+    return side === (currentFilter === Filters.sent ? "outgoing" : "incoming")
   })
   const txsGrouped = groupBy((tx) => tx.date, txsFiltered)
   return (

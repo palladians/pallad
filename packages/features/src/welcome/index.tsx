@@ -47,7 +47,11 @@ export const WelcomeScreen = () => {
             </button>
           </div>
         </div>
-        <a href="https://pallad.xyz" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://get.pallad.co/website"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <div className="flex bg-secondary rounded-md p-4 gap-4 items-center">
             <div className="bg-neutral p-3 rounded-full">
               <QuestionIcon />

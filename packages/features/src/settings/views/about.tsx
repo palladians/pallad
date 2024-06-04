@@ -11,15 +11,15 @@ const ButtonWrapperStyles =
 const Links = [
   {
     label: "FAQ",
-    href: "https://pallad.co",
+    href: "https://get.pallad.co/faq",
   },
   {
     label: "Support",
-    href: "/settings/about/support",
+    href: "https://get.pallad.co/support",
   },
   {
     label: "Terms of Service",
-    href: "/settings/about/terms-of-use",
+    href: "https://get.pallad.co/terms",
   },
   {
     label: "Version",

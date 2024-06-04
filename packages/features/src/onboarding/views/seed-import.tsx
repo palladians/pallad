@@ -44,7 +44,7 @@ export const SeedImportView = ({
   >
     <div className="flex flex-1 flex-col gap-4">
       <p className="text-mint">
-        Enter your 12-word seed phrase in in the right order in the inputs below
+        Enter your 12-word seed phrase in the right order in the inputs below
       </p>
       <div className="grid grid-cols-3 gap-2 mt-4">
         {mnemonicIterator.map((wordLabel, i) => (
