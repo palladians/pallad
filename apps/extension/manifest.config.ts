@@ -15,7 +15,7 @@ export default defineManifest((env) => ({
   manifest_version: 3,
   name: env.mode === "DEVELOPMENT" ? "[DEV] Pallad" : "Pallad",
   description:
-    "🦋 Discover the Future of Web3 with Pallad. Unlock the power of the world's lightest blockchain 🪶",
+    "Discover the Future of Web3 with Pallad. Unlock the power of the world's lightest blockchain 🪶",
   icons: {
     "16": "icons/16.png",
     "32": "icons/32.png",
