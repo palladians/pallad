@@ -2,7 +2,6 @@ import type { Mina } from "@palladxyz/mina-core"
 import type {
   ChainHistoryProvider,
   TransactionsByAddressesArgs,
-  TransactionsByHashesArgs,
   Tx,
 } from "@palladxyz/pallad-core"
 
@@ -43,10 +42,7 @@ export const createChainHistoryProvider = (
     return convertToTransactionBody(data.data)
   }
   // TODO: remove txByHashes method
-  const transactionsByHashes = async (
-    args: TransactionsByHashesArgs,
-  ): Promise<Tx[]> => {
-    console.log("args", args)
+  const transactionsByHashes = async (): Promise<Tx[]> => {
     /*const promises = args.ids.map(id => {
       const endpoint = `${url}/api/core/transactions/${id}`;
       return fetch(endpoint).then(response => response.json());

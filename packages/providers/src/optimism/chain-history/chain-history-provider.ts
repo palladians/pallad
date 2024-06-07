@@ -1,7 +1,6 @@
 import type {
   ChainHistoryProvider,
   TransactionsByAddressesArgs,
-  TransactionsByHashesArgs,
   Tx,
 } from "@palladxyz/pallad-core"
 
@@ -44,9 +43,7 @@ export const createChainHistoryProvider = (
     return data.result
   }
 
-  const transactionsByHashes = async (
-    args: TransactionsByHashesArgs,
-  ): Promise<Tx[]> => {
+  const transactionsByHashes = async (): Promise<Tx[]> => {
     // TODO: make dependency on etherscan
     /*const client = createPublicClient({
       chain: args.chainInfo,
@@ -59,7 +56,6 @@ export const createChainHistoryProvider = (
 
     return transactions as any*/
     await new Promise((resolve) => setTimeout(resolve, 500))
-    console.log("args", args)
     return [] as Tx[]
   }
 

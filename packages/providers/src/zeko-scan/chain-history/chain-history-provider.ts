@@ -2,7 +2,6 @@ import type { Mina } from "@palladxyz/mina-core"
 import type {
   ChainHistoryProvider,
   TransactionsByAddressesArgs,
-  TransactionsByHashesArgs,
   Tx,
 } from "@palladxyz/pallad-core"
 
@@ -38,7 +37,6 @@ export const createChainHistoryProvider = (
     // https://zekoscan.io/devnet/api/transactions/B62qq7ecvBQZQK68dwstL27888NEKZJwNXNFjTyu3xpQcfX5UBivCU6?page=0&limit=50&sortBy=height&orderBy=DESC&size=50&pk=B62qq7ecvBQZQK68dwstL27888NEKZJwNXNFjTyu3xpQcfX5UBivCU6&direction=all
     // https://zekoscan.io/devnet/api/transactions/B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb/page=0&limit=20&sortBy=height&orderBy=DESC&size=20&pk=B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb&direction=all
     const endpoint = `${url}/api/transactions/${args.addresses[0]}?page=0&limit=${limit}&sortBy=height&orderBy=DESC&size=${limit}&pk=${args.addresses[0]}&direction=all`
-    console.log("endpoint:", endpoint)
     const response = await fetch(endpoint)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -47,10 +45,7 @@ export const createChainHistoryProvider = (
     return convertToTransactionBody(data.data, args.addresses[0] as string)
   }
   // TODO: remove txByHashes method
-  const transactionsByHashes = async (
-    args: TransactionsByHashesArgs,
-  ): Promise<Tx[]> => {
-    console.log("args", args)
+  const transactionsByHashes = async (): Promise<Tx[]> => {
     /*const promises = args.ids.map(id => {
       const endpoint = `${url}/api/core/transactions/${id}`;
       return fetch(endpoint).then(response => response.json());

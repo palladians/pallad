@@ -61,9 +61,7 @@ export class BlockListenerProvider {
           if ("data" in result && "newBlock" in result.data) {
             const data: BlockData = result.data
             if (data.newBlock) {
-              console.log("Received block data:", data)
-              const accountInfo = await this.getAccountInfo({ publicKey })
-              console.log("Received updated account info:", accountInfo)
+              await this.getAccountInfo({ publicKey })
             } else {
               console.error("No new block data in result:", result)
             }
@@ -75,16 +73,13 @@ export class BlockListenerProvider {
   }
 
   private async getAccountInfo(args: AccountInfoArgs): Promise<AccountInfo> {
-    console.log("Initiating getAccountInfo with args:", args)
     const query = gql`
       ${getAccountBalance}
     `
     try {
-      console.log("Sending request for account info...")
       const data = (await this.gqlClient.request(query, {
         publicKey: args.publicKey,
       })) as AccountData
-      console.log("Received response for account info:", data)
 
       if (!data || !data.account) {
         throw new Error("Invalid account data response")
@@ -100,7 +95,6 @@ export class BlockListenerProvider {
       }
       // if the node is available, then the account doesn't exist yet
       // return an empty account
-      console.log("Error in getAccountInfo, account does not exist yet!")
       return {
         balance: { total: 0 },
         nonce: 0,

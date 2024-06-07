@@ -27,9 +27,7 @@ export type ZkAppUrl = string
 export class VaultService implements IVaultService {
   private static instance: VaultService
 
-  private constructor(exampleArg?: boolean) {
-    console.log("exampleArg: ", exampleArg)
-  }
+  private constructor() {}
 
   public static getInstance() {
     if (!VaultService.instance) {

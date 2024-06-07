@@ -308,7 +308,6 @@ export class MinaProvider implements IMinaProvider {
     if (params.data?.origin) {
       requestOrigin = params.data.origin
     }
-    console.log("params, in `request` method:", params)
     if (await this.vault.isBlocked({ origin: requestOrigin })) {
       throw this.createProviderRpcError(
         4100,

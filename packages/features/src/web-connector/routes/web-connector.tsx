@@ -42,8 +42,10 @@ export const WebConnectorRoute = () => {
     })
     window.close()
   }
-  const parsedPayload = JSON.parse(payload) as Record<string, any>
-  const yamlPayload = yaml.stringify(parsedPayload.data) ?? ""
+  const parsedPayload = payload
+    ? (JSON.parse(payload) as Record<string, any>)
+    : {}
+  const yamlPayload = yaml.stringify(parsedPayload?.data) ?? ""
   const userFriendlyPayload = DOMPurify.sanitize(highlight(yamlPayload))
   if (!rawWindowId) return null
   if (!inputType) return null
