@@ -21,7 +21,7 @@ export const FromTo = ({ tx }: FromToProps) => {
       <div className="flex flex-col">
         <div className="text-[#7D7A9C]">To</div>
         <AddressDropdown
-          publicKey={tx.from}
+          publicKey={tx.to}
           className="before:-ml-20"
           dropdownEnd
         />
