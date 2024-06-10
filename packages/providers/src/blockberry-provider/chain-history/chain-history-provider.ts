@@ -7,11 +7,14 @@ import type {
 
 //import { healthCheck } from "../utils/health-check-utils";
 
-const convertToTransactionBody = (data: any[]): Mina.TransactionBody[] => {
+const convertToTransactionBody = (
+  data: any[],
+  address: string,
+): Mina.TransactionBody[] => {
   return data.map((item) => ({
     type: item.type.toLowerCase() as Mina.TransactionType,
-    from: item.account,
-    to: item.account,
+    from: item.direction === "OUT" ? address : item.account,
+    to: item.direction === "OUT" ? item.account : address,
     fee: item.fee,
     nonce: "", //  Not available
     amount: item.amount,
@@ -22,7 +25,7 @@ const convertToTransactionBody = (data: any[]): Mina.TransactionBody[] => {
     hash: item.transactionHash,
     failureReason: "", //  Not available
     dateTime: new Date(item.age).toISOString(),
-    isDelegation: false, //  Not available
+    isDelegation: item.type === "delegation",
   }))
 }
 
@@ -39,7 +42,7 @@ export const createChainHistoryProvider = (
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     const data = await response.json()
-    return convertToTransactionBody(data.data)
+    return convertToTransactionBody(data.data, args.addresses[0] ?? "")
   }
   // TODO: remove txByHashes method
   const transactionsByHashes = async (): Promise<Tx[]> => {

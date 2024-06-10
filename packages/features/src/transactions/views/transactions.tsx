@@ -7,7 +7,6 @@ import { AppLayout } from "@/components/app-layout"
 
 import { formatCompact } from "@/common/lib/numbers"
 import { getTxSide } from "@/common/lib/tx"
-import { TxSide } from "@/common/types"
 import { MenuBar } from "@/components/menu-bar"
 import clsx from "clsx"
 import dayjs from "dayjs"
