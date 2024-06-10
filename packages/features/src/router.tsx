@@ -7,6 +7,7 @@ import { Toaster } from "sonner"
 
 import { AddressBookRoute } from "./address-book/routes/address-book"
 import { NewAddressRoute } from "./address-book/routes/new-address"
+import { useAppStore } from "./common/store/app"
 import { ErrorView } from "./error-renderer/views/error"
 import { UnlockWalletRoute } from "./lock/routes/unlock-wallet"
 import { NotFoundRoute } from "./not-found/routes/not-found"
@@ -42,11 +43,12 @@ import { OverviewRoute } from "./wallet/routes/overview"
 
 dayjs.extend(relativeTime)
 
-const mixpanelConfig = {
-  track_pageview: true,
-}
-
 export const Router = () => {
+  const shareData = useAppStore((state) => state.shareData)
+  const mixpanelConfig = {
+    track_pageview: true,
+    opt_out_tracking_by_default: shareData ?? false,
+  }
   return (
     <MixpanelProvider
       config={mixpanelConfig}

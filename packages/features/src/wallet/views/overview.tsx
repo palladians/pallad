@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/skeleton"
 import type { Tx } from "@palladxyz/pallad-core"
 import { Link } from "react-router-dom"
 import SlotCounter from "react-slot-counter"
+import { InfoBar } from "../components/info-bar"
 import { PortfolioValueChart } from "../components/portfolio-value-chart"
 import { TxTile } from "../components/tx-tile"
 
@@ -17,6 +18,8 @@ type OverviewViewProps = {
   setCurrentPriceIndex: (currentPriceIndex: number | undefined) => void
   transactions: Tx[]
   publicAddress: string
+  betaBannerVisible: boolean
+  setBetaBannerVisible: (betaBannerVisible: boolean) => void
   onSend: () => void
   onReceive: () => void
 }
@@ -30,6 +33,8 @@ export const OverviewView = ({
   setCurrentPriceIndex,
   transactions,
   publicAddress,
+  betaBannerVisible,
+  setBetaBannerVisible,
   onSend,
   onReceive,
 }: OverviewViewProps) => {
@@ -37,6 +42,9 @@ export const OverviewView = ({
   return (
     <AppLayout>
       <MenuBar variant="dashboard" publicAddress={publicAddress} />
+      {betaBannerVisible ? (
+        <InfoBar onClose={() => setBetaBannerVisible(false)} />
+      ) : null}
       <Skeleton loading={loading} h="62px">
         <PortfolioValueChart
           lastMonthPrices={lastMonthPrices}

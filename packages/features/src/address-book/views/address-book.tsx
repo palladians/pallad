@@ -46,7 +46,7 @@ export const AddressBookView = ({
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: won't update
                 key={index}
-                className="relative px-6 flex justify-between btn text-base font-medium overflow-x-auto group"
+                className="relative px-6 flex justify-between btn text-base font-medium overflow-hidden group"
                 data-testid="addressBook/contact"
               >
                 <Link to="/send" state={{ address: contact.address }}>

@@ -3,6 +3,7 @@ import { useFiatPrice } from "@palladxyz/offchain-data"
 import { useAccount } from "@/common/hooks/use-account"
 import { useTransactions } from "@/common/hooks/use-transactions"
 
+import { useAppStore } from "@/common/store/app"
 import { format } from "date-fns"
 import { take, takeLast } from "rambda"
 import { useState } from "react"
@@ -15,6 +16,10 @@ export const OverviewRoute = () => {
   >()
   const navigate = useNavigate()
   const account = useAccount()
+  const betaBannerVisible = useAppStore((state) => state.betaBannerVisible)
+  const setBetaBannerVisible = useAppStore(
+    (state) => state.setBetaBannerVisible,
+  )
   const { data: transactions, isLoading: transactionsLoading } =
     useTransactions()
   const latestTwoTransactions = take(2, transactions ?? [])
@@ -50,6 +55,8 @@ export const OverviewRoute = () => {
       setCurrentPriceIndex={setCurrentPriceIndex}
       transactions={latestTwoTransactions}
       publicAddress={account.data?.publicKey ?? ""}
+      betaBannerVisible={betaBannerVisible}
+      setBetaBannerVisible={setBetaBannerVisible}
       onSend={() => navigate("/send")}
       onReceive={() => navigate("/receive")}
     />
