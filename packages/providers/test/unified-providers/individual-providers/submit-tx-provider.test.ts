@@ -105,12 +105,12 @@ describe("Unified Submit Transaction Provider (Functional)", () => {
       })) as Record<string, AccountInfo>
 
       // construct transaction, sign, and submit
-      const amount = 1 * 1e9
+      const amount = 0.5 * 1e9
       const inferredNonce = accountInfo.MINA?.inferredNonce ?? 0
       const transaction: Mina.TransactionBody = {
         to: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
         from: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
-        fee: 1 * 1e9,
+        fee: 0.2 * 1e9,
         amount: amount,
         nonce: Number(inferredNonce),
         memo: "test suite",
