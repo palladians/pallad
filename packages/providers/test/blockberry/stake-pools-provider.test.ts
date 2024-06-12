@@ -1,7 +1,7 @@
 import { Blockberry } from "../../src"
 
 const nodeUrl =
-  process.env.NODE_URL || "https://api.blockberry.one/mina-berkeley/"
+  process.env.NODE_URL || "https://api.blockberry.one/mina-mainnet/"
 const apiKey = process.env.API_KEY || "2u8a1S9H2NK1kP3olo9962qaRdr2ub" // this is a test api-key for the test-suite, not for production.
 
 // TODO: Reenable when we readd the list of validators

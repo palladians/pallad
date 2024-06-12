@@ -10,7 +10,7 @@ export enum Network {
   Ethereum = "Ethereum",
 }
 export enum PalladNetworkNames {
-  MINA_BERKELEY = "berkeley",
+  MINA_DEVNET = "devnet",
   MINA_MAINNET = "mainnet",
   OPTIMISM_SEPOLIA = "optimismSepolia",
 }

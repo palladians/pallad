@@ -1,7 +1,7 @@
 name: Extension E2E
 on:
   workflow_run:
-    workflows: ['Extension CI']
+    workflows: ["Extension CI"]
     branches: [main]
     types: [completed]
   workflow_dispatch:
@@ -10,8 +10,8 @@ jobs:
     name: Run E2E tests
     env:
       VITE_APP_MODE: web
-      VITE_APP_DEFAULT_NETWORK: Berkeley
-      NODE_OPTIONS: '--max_old_space_size=4096'
+      VITE_APP_DEFAULT_NETWORK: Devnet
+      NODE_OPTIONS: "--max_old_space_size=4096"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
           TURBO_SERVER_TOKEN: ${{ secrets.TURBO_SERVER_TOKEN }}
       - name: Build extension
         env:
-          TURBO_API: 'http://127.0.0.1:9080'
+          TURBO_API: "http://127.0.0.1:9080"
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
         run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:extension

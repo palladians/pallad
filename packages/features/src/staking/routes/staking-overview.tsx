@@ -1,12 +1,10 @@
 import { useAccount } from "@/common/hooks/use-account"
-import { useBlockchainSummary } from "@/common/hooks/use-blockchain-summary"
 
 import { useTransactions } from "@/common/hooks/use-transactions"
 import { mean, sum } from "rambda"
 import { StakingOverviewView } from "../views/staking-overview"
 
 export const StakingOverviewRoute = () => {
-  const blockchainSummary = useBlockchainSummary()
   const account = useAccount()
   const { data: transactions } = useTransactions()
   const rewardsTransactions = transactions?.filter(
@@ -21,7 +19,6 @@ export const StakingOverviewRoute = () => {
     <StakingOverviewView
       account={account}
       rewards={rewards}
-      blockchainSummary={blockchainSummary}
       stakeDelegated={account.stakeDelegated}
       stats={{
         lastReward: rewardsTransactions[0]?.amount ?? 0,

@@ -2,32 +2,32 @@ import type { ProviderConfig } from "@palladxyz/providers"
 
 import type { NetworkName } from "./network-info-state"
 
-export const DEFAULT_NETWORK = "Berkeley" //'Berkeley'
+export const DEFAULT_NETWORK = "Devnet"
 /*
 Note: it is good practice to match the key with the networkName.
 */
 export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
-  Berkeley: {
+  Devnet: {
     nodeEndpoint: {
       providerName: "mina-node",
-      url: "https://api.minascan.io/node/berkeley/v1/graphql",
+      url: "https://api.minascan.io/node/devnet/v1/graphql",
     },
     archiveNodeEndpoint: {
       providerName: "mina-scan",
-      url: "https://minascan.io/qanet/api/",
+      url: "https://minascan.io/devnet/api/",
     },
-    networkName: "Berkeley",
+    networkName: "Devnet",
     networkType: "testnet",
     chainId: "...", // todo: fetch chainId from a provider
   },
   /*Mainnet: {
     nodeEndpoint: {
       providerName: 'mina-node',
-      url: 'https://proxy.minaexplorer.com/graphql'
+      url: 'https://api.minascan.io/node/mainnet/v1/graphql'
     },
     archiveNodeEndpoint: {
       providerName: 'mina-node',
-      url: 'https://graphql.minaexplorer.com'
+      url: 'https://api.minascan.io/archive/mainnet/v1/graphql'
     },
     networkName: 'Mainnet',
     networkType: 'mainnet',

@@ -1,6 +1,5 @@
 import type { TokenIdMap } from "@palladxyz/mina-core"
-
-import { MinaExplorer } from "../../../../src"
+import { MinaNode } from "../../../../src"
 
 const nodeUrl = process.env.NODE_URL || "https://devnet.zeko.io/graphql"
 const publicKey =
@@ -8,11 +7,11 @@ const publicKey =
   "B62qoereGLPUg5RWuoTEGu5CSKnN7AAirwwA2h6J1JHH3RF6wbThXmr"
 // TODO: change this to local network
 describe("Zeko Sequencer Account Info Provider (Functional)", () => {
-  let provider: ReturnType<typeof MinaExplorer.createAccountInfoProvider>
+  let provider: ReturnType<typeof MinaNode.createAccountInfoProvider>
   let tokenMap: TokenIdMap
 
   beforeEach(() => {
-    provider = MinaExplorer.createAccountInfoProvider(nodeUrl)
+    provider = MinaNode.createAccountInfoProvider(nodeUrl)
     tokenMap = {
       MINA: "1",
     }

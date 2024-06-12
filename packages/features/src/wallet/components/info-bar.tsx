@@ -14,7 +14,7 @@ export const InfoBar = ({ onClose }: InfoBarProps) => {
         <div className="flex flex-col">
           <h2>Open Beta version</h2>
           <p className="text-gray-400 text-sm">
-            Only works for Berkeley before Mainnet launch
+            Only works for Devnet before Mainnet launch
           </p>
         </div>
         <button type="button" onClick={onClose}>

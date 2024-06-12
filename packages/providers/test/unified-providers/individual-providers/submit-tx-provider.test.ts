@@ -18,8 +18,7 @@ import {
 } from "../../../src"
 
 const obscuraUrl =
-  process.env.OBSCURA_URL ||
-  "https://mina-berkeley.obscura.build/v1/bfce6350-4f7a-4b63-be9b-8981dec92050/graphql"
+  process.env.OBSCURA_URL || "https://pallad.co/api/obscura/devnet.json"
 
 const publicKey =
   process.env.PUBLIC_KEY ||
@@ -47,7 +46,7 @@ describe("Unified Submit Transaction Provider (Functional)", () => {
         providerName: "obscura",
         url: obscuraUrl,
       },
-      networkName: "berkeley",
+      networkName: "Devnet",
       chainId: "...",
     }
     provider = createTxSubmitProvider(configMinaExplorer)

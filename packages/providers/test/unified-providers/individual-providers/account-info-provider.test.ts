@@ -2,11 +2,10 @@ import type { TokenIdMap } from "@palladxyz/mina-core"
 
 import { type ProviderConfig, createAccountInfoProvider } from "../../../src"
 
-const minaExplorerUrl =
-  process.env.NODE_URL || "https://proxy.berkeley.minaexplorer.com/"
+const minaNodeApiUrl =
+  process.env.NODE_URL || "https://api.minascan.io/node/devnet/v1/graphql"
 const obscuraUrl =
-  process.env.OBSCURA_URL ||
-  "https://mina-berkeley.obscura.build/v1/bfce6350-4f7a-4b63-be9b-8981dec92050/graphql"
+  process.env.OBSCURA_URL || "https://pallad.co/api/obscura/devnet.json"
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
@@ -28,9 +27,9 @@ describe("Unified Account Info Provider (Functional)", () => {
       configMinaExplorer = {
         nodeEndpoint: {
           providerName: "mina-node",
-          url: minaExplorerUrl,
+          url: minaNodeApiUrl,
         },
-        networkName: "berkeley",
+        networkName: "Devnet",
         chainId: "...",
       }
       provider = createAccountInfoProvider(configMinaExplorer)
@@ -59,7 +58,7 @@ describe("Unified Account Info Provider (Functional)", () => {
           providerName: "obscura",
           url: obscuraUrl,
         },
-        networkName: "berkeley",
+        networkName: "Devnet",
         chainId: "...",
       }
 

@@ -13,7 +13,7 @@ describe("AccountStore", () => {
 
   beforeEach(() => {
     address = "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
-    network = "berkeley"
+    network = "devnet"
     mockAccountInfo = {
       MINA: {
         balance: {
