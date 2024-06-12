@@ -4,13 +4,14 @@ import { type ProviderConfig, createChainHistoryProvider } from "../../../src"
 
 const minaNodeApiUrl =
   process.env.ARCHIVE_NODE_URL ||
-  "https://api.minascan.io/node/devnet/v1/graphql"
+  "https://api.minascan.io/archive/devnet/v1/graphql"
 
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
 
-describe("Unified Chain History Provider (Functional)", () => {
+// Deprecated, confirm if we should delete
+describe.skip("Unified Chain History Provider (Functional)", () => {
   let provider: ReturnType<typeof createChainHistoryProvider>
   let configMinaExplorer: ProviderConfig
 

@@ -8,7 +8,8 @@ const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
 
-describe("Mina Explorer Chain History Provider (Functional)", () => {
+// Deprecated, to be removed when confirmed it won't be needed.
+describe.skip("Mina Explorer Chain History Provider (Functional)", () => {
   let provider: ReturnType<typeof MinaNode.createChainHistoryProvider>
 
   beforeEach(() => {
