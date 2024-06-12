@@ -7,9 +7,11 @@ This repository contains the core state management logic for Pallad. It uses Zus
 ### 1. `account-info-state.ts`
 
 #### Description:
+
 This file defines the types and interfaces used in the state management system.
 
 #### Key Components:
+
 - **SingleAccountState:** Holds the account information and transactions specific to one blockchain address.
 - **ChainAddressMapping:** A record that maps a blockchain address to its corresponding `SingleAccountState`.
 - **AccountState:** Represents the overall state structure, containing all accounts organized by network.
@@ -19,9 +21,11 @@ This file defines the types and interfaces used in the state management system.
 ### 2. `account-info-store.ts`
 
 #### Description:
+
 This file implements the state and actions defined in `account-info-state.ts`, providing functionalities to manage accounts and their transactions.
 
 #### Key Features:
+
 - **State Initialization:** Initializes the state with empty account records.
 - **ensureAccount:** Ensures that an account exists for a specified network and address.
 - **setAccountInfo:** Sets or updates the account information for a specific address and network.
@@ -37,16 +41,18 @@ This file implements the state and actions defined in `account-info-state.ts`, p
 ### Usage
 
 ```typescript
-import createStore from 'zustand';
-import { accountSlice } from './account-info-store';
+import createStore from "zustand";
+import { accountSlice } from "./account-info-store";
 
 const useAccountStore = createStore(accountSlice);
 ```
 
 ### Methods
+
 Each method defined in account-info-store.ts can be accessed using the store instance created. For example, to ensure an account is initialized, you can use:
+
 ```ts
-useAccountStore.getState().ensureAccount('Mina - Berkeley', 'B62fjf...');
+useAccountStore.getState().ensureAccount("Mina - Devnet", "B62fjf...");
 ```
 
 For more detailed usage, checkout the `valut`.

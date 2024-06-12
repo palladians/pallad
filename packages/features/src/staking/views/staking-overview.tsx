@@ -1,5 +1,4 @@
 import type { useAccount } from "@/common/hooks/use-account"
-import type { useBlockchainSummary } from "@/common/hooks/use-blockchain-summary"
 import { AddressDropdown } from "@/components/address-dropdown"
 import { AppLayout } from "@/components/app-layout"
 import { MenuBar } from "@/components/menu-bar"
@@ -33,7 +32,6 @@ const EmptyState = ({ heading, button }: EmptyStateProps) => {
 
 type StakingOverviewViewProps = {
   stakeDelegated: boolean
-  blockchainSummary: ReturnType<typeof useBlockchainSummary>
   account: ReturnType<typeof useAccount>
   rewards: { amount: number }[]
   stats: { lastReward: number; avgReward: number; totalReward: number }

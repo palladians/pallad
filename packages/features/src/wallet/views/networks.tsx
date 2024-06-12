@@ -5,9 +5,9 @@ import { MenuBar } from "@/components/menu-bar"
 const NETWORKS = [
   {
     icon: MinaIcon,
-    value: "Berkeley",
+    value: "Devnet",
     blockchain: "Mina",
-    network: "Berkeley",
+    network: "Devnet",
   },
   {
     icon: ZekoIcon,

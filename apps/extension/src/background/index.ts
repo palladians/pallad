@@ -5,7 +5,7 @@ import { onMessage, sendMessage } from "webext-bridge/background"
 // options should be defined by user
 const opts = {
   projectId: "test",
-  chains: ["Mina - Berkeley"],
+  chains: ["Mina - Devnet"],
 }
 
 const provider = await MinaProvider.init(opts, [])
@@ -91,7 +91,10 @@ onMessage("mina_addChain", async (data) => {
 })
 
 onMessage("mina_requestNetwork", async (data) => {
-  return await provider.request({ method: "mina_requestNetwork", params: data })
+  return await provider.request({
+    method: "mina_requestNetwork",
+    params: data,
+  })
 })
 
 onMessage("mina_switchChain", async (data) => {

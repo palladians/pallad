@@ -18,7 +18,7 @@ export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
     toast.success("Hash Copied")
   }
   const openInExplorer = () => {
-    const url = `https://minascan.io/berkeley/tx/${hash}/txInfo`
+    const url = `https://minascan.io/devnet/tx/${hash}/txInfo`
     window.open(url, "_blank")?.focus()
   }
   return (

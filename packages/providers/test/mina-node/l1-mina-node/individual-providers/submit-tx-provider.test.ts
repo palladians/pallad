@@ -3,19 +3,17 @@ import {
   type FromBip39MnemonicWordsProps,
   InMemoryKeyAgent,
   type MinaSpecificArgs,
-  Network,
-  constructTransaction,
 } from "@palladxyz/key-management"
 import { Mina, type TokenIdMap } from "@palladxyz/mina-core"
+import { Network, constructTransaction } from "@palladxyz/pallad-core"
 import type {
   Payment,
   SignedLegacy,
 } from "mina-signer/dist/node/mina-signer/src/TSTypes"
-
-import { MinaExplorer } from "../../../../src"
+import { MinaNode } from "../../../../src"
 
 const nodeUrl =
-  process.env.NODE_URL || "https://proxy.berkeley.minaexplorer.com/"
+  process.env.NODE_URL || "https://api.minascan.io/node/devnet/v1/graphql"
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
@@ -29,18 +27,16 @@ const getPassphrase = () =>
 // TODO: change this to local network
 // TODO: use different mnemonic for this test -- else there are two duplicate transactions with the unified provider tests
 describe.skip("Mina Explorer Submit Transaction Provider (Functional)", () => {
-  let provider: ReturnType<typeof MinaExplorer.createTxSubmitProvider>
-  let accountInfoProvider: ReturnType<
-    typeof MinaExplorer.createAccountInfoProvider
-  >
+  let provider: ReturnType<typeof MinaNode.createTxSubmitProvider>
+  let accountInfoProvider: ReturnType<typeof MinaNode.createAccountInfoProvider>
   let tokenMap: TokenIdMap
   let networkType: Mina.NetworkType
   let agent: InMemoryKeyAgent
   let mnemonic: string[]
 
   beforeEach(() => {
-    provider = MinaExplorer.createTxSubmitProvider(nodeUrl)
-    accountInfoProvider = MinaExplorer.createAccountInfoProvider(nodeUrl)
+    provider = MinaNode.createTxSubmitProvider(nodeUrl)
+    accountInfoProvider = MinaNode.createAccountInfoProvider(nodeUrl)
     tokenMap = {
       MINA: "1",
     }

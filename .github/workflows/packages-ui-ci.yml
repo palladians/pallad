@@ -21,7 +21,7 @@ jobs:
       id-token: write
     env:
       VITE_APP_MODE: web
-      VITE_APP_DEFAULT_NETWORK: Berkeley
+      VITE_APP_DEFAULT_NETWORK: Devnet
     steps:
       - uses: actions/checkout@v3
       - name: Setup Pages
@@ -33,7 +33,7 @@ jobs:
           TURBO_SERVER_TOKEN: ${{ secrets.TURBO_SERVER_TOKEN }}
       - name: Build features
         env:
-          TURBO_API: 'http://127.0.0.1:9080'
+          TURBO_API: "http://127.0.0.1:9080"
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
         run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:features

@@ -2,8 +2,9 @@ import type { Mina } from "@palladxyz/mina-core"
 
 import { type ProviderConfig, createChainHistoryProvider } from "../../../src"
 
-const minaExplorerUrl =
-  process.env.ARCHIVE_NODE_URL || "https://berkeley.graphql.minaexplorer.com"
+const minaNodeApiUrl =
+  process.env.ARCHIVE_NODE_URL ||
+  "https://api.minascan.io/node/devnet/v1/graphql"
 
 const publicKey =
   process.env.PUBLIC_KEY ||
@@ -22,9 +23,9 @@ describe("Unified Chain History Provider (Functional)", () => {
         },
         archiveNodeEndpoint: {
           providerName: "mina-node",
-          url: minaExplorerUrl,
+          url: minaNodeApiUrl,
         },
-        networkName: "berkeley",
+        networkName: "Devnet",
         chainId: "...",
       }
       provider = createChainHistoryProvider(configMinaExplorer)

@@ -14,7 +14,7 @@ export const Send: Story<{ advanced: boolean }> = ({ advanced }) => (
     fiatPrice={1.5}
     advanced={advanced}
     setAdvanced={action("Set Advanced")}
-    currentNetwork="Berkeley"
+    currentNetwork="Devnet"
   />
 )
 

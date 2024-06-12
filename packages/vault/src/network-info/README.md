@@ -33,37 +33,48 @@ This file defines TypeScript types for the state and actions of the network info
 ## Usage
 
 ### Initializing the Store
+
 You can integrate the store into your application by importing and initializing it like is done in `vault`:
+
 ```ts
-import { networkInfoSlice } from './path/to/network-info-store';
-import create from 'zustand';
+import { networkInfoSlice } from "./path/to/network-info-store";
+import create from "zustand";
 
 const useNetworkInfoStore = create(networkInfoSlice);
 ```
 
 ### Accessing and Modifying the Store
+
 Here's how you can interact with the store:
+
 ```ts
 // Set the current network name
-useNetworkInfoStore.setState(setCurrentNetworkName('testnet'));
+useNetworkInfoStore.setState(setCurrentNetworkName("testnet"));
 
 // Get current network configuration
-const currentNetworkInfo = useNetworkInfoStore.getState().getCurrentNetworkInfo();
+const currentNetworkInfo = useNetworkInfoStore
+  .getState()
+  .getCurrentNetworkInfo();
 
 // Update network information
-useNetworkInfoStore.getState().updateNetworkInfo('testnet', { chainId: 'new-chain-id' });
+useNetworkInfoStore
+  .getState()
+  .updateNetworkInfo("testnet", { chainId: "new-chain-id" });
 
 // Add a new network configuration
-useNetworkInfoStore.getState().setNetworkInfo('newnet', {
-  nodeEndpoint: { providerName: 'mina-node', url: 'http://mina-node.com' },
-  archiveNodeEndpoint: { providerName: 'mina-explorer', url: 'http://mina-explorer.com' },
-  networkName: 'Mina - Berkeley',
-  networkType: 'testnet',
-  chainId: '3c41383994b87449625df91769dff7b507825c064287d30fada9286f3f1cb15e'
+useNetworkInfoStore.getState().setNetworkInfo("newnet", {
+  nodeEndpoint: { providerName: "mina-node", url: "http://mina-node.com" },
+  archiveNodeEndpoint: {
+    providerName: "mina-explorer",
+    url: "http://mina-explorer.com",
+  },
+  networkName: "Mina - Devnet",
+  networkType: "testnet",
+  chainId: "3c41383994b87449625df91769dff7b507825c064287d30fada9286f3f1cb15e",
 });
 
 // Remove a network
-useNetworkInfoStore.getState().removeNetworkInfo('Mina - Berkeley');
+useNetworkInfoStore.getState().removeNetworkInfo("Mina - Berkeley");
 
 // Clear all network information
 useNetworkInfoStore.getState().clear();

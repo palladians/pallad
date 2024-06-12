@@ -25,7 +25,7 @@ export const AddressDropdown = ({
     toast.success("Address Copied")
   }
   const openInExplorer = () => {
-    const url = `https://minascan.io/berkeley/account/${publicKey}`
+    const url = `https://minascan.io/devnet/account/${publicKey}`
     window.open(url, "_blank")?.focus()
   }
   return (

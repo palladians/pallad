@@ -3,9 +3,10 @@ import type { Tx } from "@palladxyz/pallad-core"
 
 import { type ProviderConfig, createChainProvider } from "../../src"
 
-const explorerUrl = process.env.EXPLORER_URL || "https://minascan.io/qanet/api/"
+const explorerUrl =
+  process.env.EXPLORER_URL || "https://minascan.io/devnet/api/"
 const nodeUrl =
-  process.env.NODE_URL || "https://api.minascan.io/node/berkeley/v1/graphql"
+  process.env.NODE_URL || "https://api.minascan.io/node/devnet/v1/graphql"
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
@@ -21,7 +22,7 @@ describe("Unified Chain provider", () => {
     }
   })
 
-  describe("Blockberry Configuration -- Mina Berkeley", () => {
+  describe("Blockberry Configuration -- Mina Devnet", () => {
     beforeEach(() => {
       config = {
         nodeEndpoint: {
@@ -32,7 +33,7 @@ describe("Unified Chain provider", () => {
           providerName: "mina-scan",
           url: explorerUrl,
         },
-        networkName: "berkeley",
+        networkName: "Devnet",
         chainId: "...",
         networkType: "testnet",
       }

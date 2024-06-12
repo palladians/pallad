@@ -7,10 +7,10 @@ import { DEFAULT_NETWORK_INFO } from "../../src/network-info/default"
 
 describe("CredentialStore", () => {
   let networkNameMainnet: string
-  let networkNameBerkeley: string
+  let networkNameDevnet: string
   let networkNameRopsten: string
   let providerConfigMainnet: ProviderConfig
-  let providerConfigBerkeley: ProviderConfig
+  let providerConfigDevnet: ProviderConfig
   let providerConfigRopsten: ProviderConfig
 
   const mockUrl = "https://..."
@@ -20,21 +20,21 @@ describe("CredentialStore", () => {
     networkNameMainnet = "Mainnet"
     networkNameRopsten = "Ropsten"
     // don't use the same network name
-    networkNameBerkeley = "Berkeley Other"
+    networkNameDevnet = "Devnet Other"
     providerConfigMainnet = {
       nodeEndpoint: {
         providerName: "mina-node",
         url: mockUrl,
       },
       archiveNodeEndpoint: {
-        providerName: "mina-explorer",
+        providerName: "mina-scan",
         url: mockUrl,
       },
       networkName: networkNameMainnet,
       networkType: networkType,
       chainId: "...",
     }
-    providerConfigBerkeley = {
+    providerConfigDevnet = {
       nodeEndpoint: {
         providerName: "mina-node",
         url: mockUrl,
@@ -43,17 +43,17 @@ describe("CredentialStore", () => {
         providerName: "mina-node",
         url: mockUrl,
       },
-      networkName: networkNameBerkeley,
+      networkName: networkNameDevnet,
       networkType: networkType,
       chainId: "...",
     }
     providerConfigRopsten = {
       nodeEndpoint: {
-        providerName: "eth-node",
+        providerName: "evm-rpc",
         url: "https://ropsten.ethereum.org",
       },
       archiveNodeEndpoint: {
-        providerName: "eth-archive",
+        providerName: "evm-explorer",
         url: "https://ropsten.archive.ethereum.org",
       },
       networkName: networkNameRopsten,
@@ -92,12 +92,12 @@ describe("CredentialStore", () => {
     const { result } = renderHook(() => useVault())
     act(() => {
       result.current.setNetworkInfo(networkNameMainnet, providerConfigMainnet)
-      result.current.setNetworkInfo(networkNameBerkeley, providerConfigBerkeley)
+      result.current.setNetworkInfo(networkNameDevnet, providerConfigDevnet)
       providerConfig = result.current.getNetworkInfo(networkNameMainnet)
     })
     expect(providerConfig).toEqual(providerConfigMainnet)
-    providerConfig = result.current.getNetworkInfo(networkNameBerkeley)
-    expect(providerConfig).toEqual(providerConfigBerkeley)
+    providerConfig = result.current.getNetworkInfo(networkNameDevnet)
+    expect(providerConfig).toEqual(providerConfigDevnet)
 
     // check total number of networks
     const networks = result.current.allNetworkInfo()
@@ -109,7 +109,7 @@ describe("CredentialStore", () => {
     const { result } = renderHook(() => useVault())
     act(() => {
       result.current.setNetworkInfo(networkNameMainnet, providerConfigMainnet)
-      result.current.setNetworkInfo(networkNameBerkeley, providerConfigBerkeley)
+      result.current.setNetworkInfo(networkNameDevnet, providerConfigDevnet)
       result.current.setCurrentNetworkName(networkNameMainnet)
     })
     const currentNetworkInfo = result.current.getCurrentNetworkInfo()
@@ -119,7 +119,7 @@ describe("CredentialStore", () => {
     const { result } = renderHook(() => useVault())
     act(() => {
       result.current.setNetworkInfo(networkNameMainnet, providerConfigMainnet)
-      result.current.setNetworkInfo(networkNameBerkeley, providerConfigBerkeley)
+      result.current.setNetworkInfo(networkNameDevnet, providerConfigDevnet)
     })
     const chainIds = result.current.getChainIds()
     expect(chainIds.length).toEqual(
@@ -133,7 +133,7 @@ describe("CredentialStore", () => {
       result.current.updateNetworkInfo(networkNameRopsten, { chainId: "4" })
     })
     const updatedNetworkInfo = result.current.getNetworkInfo(networkNameRopsten)
-    expect(updatedNetworkInfo.chainId).toEqual("4")
+    expect(updatedNetworkInfo?.chainId).toEqual("4")
   })
 
   it("should not update non-existing network info", () => {

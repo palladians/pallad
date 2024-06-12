@@ -5,7 +5,7 @@ export type TokenInfo = {
 }
 
 export type TokenInfoState = {
-  tokenInfo: Record<string, Record<string, string>> // e.g. {'Mina - Berkeley' : { MINA : "1" }}
+  tokenInfo: Record<string, Record<string, string>> // e.g. {'Mina - Devnet' : { MINA : "1" }}
 }
 
 /**

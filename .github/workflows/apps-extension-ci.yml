@@ -32,11 +32,11 @@ on:
       - packages/web-provider/**
 jobs:
   test_and_build:
-    name: 'Build and test'
+    name: "Build and test"
     env:
       VITE_APP_MODE: web
-      VITE_APP_DEFAULT_NETWORK: Berkeley
-      NODE_OPTIONS: '--max_old_space_size=4096'
+      VITE_APP_DEFAULT_NETWORK: Devnet
+      NODE_OPTIONS: "--max_old_space_size=4096"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -49,7 +49,7 @@ jobs:
         run: pnpm lint
       - name: Build extension
         env:
-          TURBO_API: 'http://127.0.0.1:9080'
+          TURBO_API: "http://127.0.0.1:9080"
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
         run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:extension

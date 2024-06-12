@@ -40,7 +40,7 @@ const defaultGlobalVaultState: GlobalVaultState = {
   currentAddressIndex: 0,
   chain: Network.Mina,
   walletName: "",
-  walletNetwork: PalladNetworkNames.MINA_BERKELEY,
+  walletNetwork: PalladNetworkNames.MINA_DEVNET,
   knownAccounts: [],
   chainIds: [],
 }

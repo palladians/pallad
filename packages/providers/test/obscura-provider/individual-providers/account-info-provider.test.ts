@@ -3,8 +3,7 @@ import type { TokenIdMap } from "@palladxyz/mina-core"
 import { Obscura } from "../../../src/"
 
 const nodeUrl =
-  process.env.OBSCURA_URL ||
-  "https://mina-berkeley.obscura.build/v1/bfce6350-4f7a-4b63-be9b-8981dec92050/graphql"
+  process.env.OBSCURA_URL || "https://pallad.co/api/obscura/devnet.json"
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qmHMUwiyNfv81NNTumW7Hv8SfRAGLXceGK3ZpyzXgmg2FLqmVhmA"
