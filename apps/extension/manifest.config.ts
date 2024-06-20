@@ -25,7 +25,7 @@ export default defineManifest((env) => ({
   version: `${major}.${minor}.${patch}.${label}`,
   version_name: version,
   action: { default_popup: "index.html" },
-  permissions: ["storage", "activeTab", "tabs", "background"],
+  permissions: ["storage", "activeTab", "background"],
   background: {
     service_worker: "src/background/index.ts",
     type: "module",
