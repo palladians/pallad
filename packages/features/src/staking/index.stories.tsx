@@ -24,7 +24,19 @@ export const Delegate: Story<{ advanced: boolean }> = ({ advanced }) => (
 export const Producers = () => (
   <BlockProducersView
     blockProducers={[
-      { name: "Test", delegatorsCount: 5, publicKey: "B62Test", stake: 442 },
+      {
+        name: "Test",
+        delegators: 5,
+        pk: "B62qj287L1bwP9XguURbxW5cneTRD8Kde4vx3fbeZCNxNxyMzXdsYLP",
+        amountStaked: 442,
+        img: "https://pallad.co/logo.svg",
+      },
+      {
+        delegators: 212,
+        pk: "B62qj287L1bwP9XguURbxW5cneTRD8Kde4vx3fbeZCNxNxyMzXdsYLX",
+        amountStaked: 333,
+        img: "https://pallad.co/logo.svg",
+      },
     ]}
     onGoBack={() => console.log("go back")}
   />

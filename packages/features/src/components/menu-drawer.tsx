@@ -61,6 +61,14 @@ export const MenuDrawer = () => {
             <button
               type="button"
               className="text-3xl text-left"
+              onClick={() => navigate("/")}
+              data-testid="menu/activity"
+            >
+              Dashboard
+            </button>
+            <button
+              type="button"
+              className="text-3xl text-left"
               onClick={() => navigate("/transactions")}
               data-testid="menu/activity"
             >

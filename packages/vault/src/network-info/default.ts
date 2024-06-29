@@ -10,7 +10,7 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
   Devnet: {
     nodeEndpoint: {
       providerName: "mina-node",
-      url: "https://api.minascan.io/node/devnet/v1/graphql",
+      url: "https://pallad.co/api/obscura/devnet.json",
     },
     archiveNodeEndpoint: {
       providerName: "mina-scan",
@@ -23,7 +23,7 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
   /*Mainnet: {
     nodeEndpoint: {
       providerName: 'mina-node',
-      url: 'https://api.minascan.io/node/mainnet/v1/graphql'
+      url: 'https://pallad.co/api/obscura/mainnet.json'
     },
     archiveNodeEndpoint: {
       providerName: 'mina-node',

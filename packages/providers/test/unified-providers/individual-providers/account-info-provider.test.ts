@@ -3,7 +3,7 @@ import type { TokenIdMap } from "@palladxyz/mina-core"
 import { type ProviderConfig, createAccountInfoProvider } from "../../../src"
 
 const minaNodeApiUrl =
-  process.env.NODE_URL || "https://api.minascan.io/node/devnet/v1/graphql"
+  process.env.NODE_URL || "https://pallad.co/api/obscura/devnet.json"
 const obscuraUrl =
   process.env.OBSCURA_URL || "https://pallad.co/api/obscura/devnet.json"
 const publicKey =

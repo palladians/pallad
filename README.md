@@ -132,7 +132,7 @@ We specified contributing guidelines. Please refer to them before starting contr
 
 ## Links 🌍
 
-[pallad.xyz - The official website of Pallad](https://pallad.xyz/)
+[pallad.co - The official website of Pallad](https://get.pallad.co/website)
 
 [Ladle](https://palladians.github.io/pallad/)
 

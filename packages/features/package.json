@@ -1,6 +1,6 @@
 {
   "name": "@palladxyz/features",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "",
   "type": "module",
   "module": "dist/index.js",
@@ -43,6 +43,7 @@
     "@palladxyz/persistence": "workspace:*",
     "@palladxyz/vault": "workspace:*",
     "@total-typescript/ts-reset": "^0.5.1",
+    "array-shuffle": "^3.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
