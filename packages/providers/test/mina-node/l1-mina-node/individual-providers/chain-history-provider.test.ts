@@ -2,8 +2,7 @@ import type { Mina } from "@palladxyz/mina-core"
 import { MinaNode } from "../../../../src"
 
 const nodeUrl =
-  process.env.ARCHIVE_NODE_URL ||
-  "https://api.minascan.io/node/devnet/v1/graphql"
+  process.env.ARCHIVE_NODE_URL || "https://pallad.co/api/obscura/devnet.json"
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"

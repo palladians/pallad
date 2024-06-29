@@ -6,7 +6,7 @@ import { type ProviderConfig, createChainProvider } from "../../src"
 const explorerUrl =
   process.env.EXPLORER_URL || "https://minascan.io/devnet/api/"
 const nodeUrl =
-  process.env.NODE_URL || "https://api.minascan.io/node/devnet/v1/graphql"
+  process.env.NODE_URL || "https://pallad.co/api/obscura/devnet.json"
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"

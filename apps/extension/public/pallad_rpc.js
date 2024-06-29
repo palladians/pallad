@@ -36,11 +36,13 @@ const callPalladAsync = ({ method, payload }) =>
   })
 const debouncedCall = debounce(callPalladAsync, 300, false)
 const init = () => {
-  window.mina = {
-    wallet: {
-      name: "Pallad",
-      icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTY1IiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDE2NSAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik04Mi4zNTMgMTg4LjIzNkM4Mi4zNTMgMTg4LjIzNiAxNTIuOTQxIDE1Mi45NDIgMTUyLjk0MSAxMDAuMDAxVjM4LjIzNjJMODIuMzUzIDExLjc2NTZMMTEuNzY0OCAzOC4yMzYyVjEwMC4wMDFDMTEuNzY0OCAxNTIuOTQyIDgyLjM1MyAxODguMjM2IDgyLjM1MyAxODguMjM2WiIgc3Ryb2tlPSJ1cmwoI3BhaW50MF9saW5lYXJfMTUxXzQ5NikiIHN0cm9rZS13aWR0aD0iMTcuNjc4NiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik02OS4zNTA2IDQ4LjYzNzdDNzEuMTE5NSA0NC4xMzYzIDc1LjQ2MzYgNDEuMTc2MyA4MC4zMDAxIDQxLjE3NjNIODIuMzEwMUM4Ny4xNDE4IDQxLjE3NjMgOTEuNDgxOCA0NC4xMyA5My4yNTQyIDQ4LjYyNDVMMTIxLjA5NSAxMTkuMjEzQzEyNC4xMzkgMTI2LjkzMyAxMTguNDQ5IDEzNS4yOTQgMTEwLjE1MSAxMzUuMjk0SDEwOC4wODdMNzguNjAxMiA1NC45OTc3SDgzLjQ3MThMNTMuOTg2MSAxMzUuMjk0SDUyLjU1ODVDNDQuMjY1NyAxMzUuMjk0IDM4LjU3NTcgMTI2Ljk0NCA0MS42MDkgMTE5LjIyNkw2OS4zNTA2IDQ4LjYzNzdaIiBmaWxsPSJ1cmwoI3BhaW50MV9saW5lYXJfMTUxXzQ5NikiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhcl8xNTFfNDk2IiB4MT0iMTYxLjc2NSIgeTE9IjUuODgzMjciIHgyPSI4LjgyMzYiIHkyPSIyMDAuMDAxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiMxRkQ3RkYiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOEQ3QUZGIi8+CjwvbGluZWFyR3JhZGllbnQ+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQxX2xpbmVhcl8xNTFfNDk2IiB4MT0iMTYxLjc2NSIgeTE9IjIuOTQwOTgiIHgyPSI1Ljg4MjM5IiB5Mj0iMTk3LjA1OSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMUZEN0ZGIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzhEN0FGRiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo=",
-    },
+  const info = {
+    slug: "pallad",
+    name: "Pallad",
+    icon: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzAwIDMwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzE5OF8yNDY5NSkiPgo8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgcng9IjEyIiBmaWxsPSIjRjZDMTc3Ii8+CjxwYXRoIGQ9Ik05MCAyMTRDOTAgMjExLjc5MSA5MS43OTA5IDIxMCA5NCAyMTBIMTM2QzE0My43MzIgMjEwIDE1MCAyMTYuMjY4IDE1MCAyMjRWMjI2QzE1MCAyMzMuNzMyIDE0My43MzIgMjQwIDEzNiAyNDBIMTA0Qzk2LjI2OCAyNDAgOTAgMjMzLjczMiA5MCAyMjZWMjE0WiIgZmlsbD0iIzI1MjMzQSIvPgo8cGF0aCBkPSJNOTAgNjRDOTAgNjEuNzkwOSA5MS43OTA5IDYwIDk0IDYwSDE5NkMyMDMuNzMyIDYwIDIxMCA2Ni4yNjggMjEwIDc0Vjc2QzIxMCA4My43MzIgMjAzLjczMiA5MCAxOTYgOTBIMTA0Qzk2LjI2OCA5MCA5MCA4My43MzIgOTAgNzZWNjRaIiBmaWxsPSIjMjUyMzNBIi8+CjxwYXRoIGQ9Ik0yMTAgOTRDMjEwIDkxLjc5MDkgMjExLjc5MSA5MCAyMTQgOTBIMjI2QzIzMy43MzIgOTAgMjQwIDk2LjI2OCAyNDAgMTA0VjEzNkMyNDAgMTQzLjczMiAyMzMuNzMyIDE1MCAyMjYgMTUwSDIyNEMyMTYuMjY4IDE1MCAyMTAgMTQzLjczMiAyMTAgMTM2Vjk0WiIgZmlsbD0iIzI1MjMzQSIvPgo8cGF0aCBkPSJNNjAgOTRDNjAgOTEuNzkwOSA2MS43OTA5IDkwIDY0IDkwSDc2QzgzLjczMiA5MCA5MCA5Ni4yNjggOTAgMTA0VjE5NkM5MCAyMDMuNzMyIDgzLjczMiAyMTAgNzYgMjEwSDc0QzY2LjI2OCAyMTAgNjAgMjAzLjczMiA2MCAxOTZWOTRaIiBmaWxsPSIjMjUyMzNBIi8+CjxwYXRoIGQ9Ik0xNTAgMTUwSDE5NkMyMDMuNzMyIDE1MCAyMTAgMTU2LjI2OCAyMTAgMTY0VjE2NkMyMTAgMTczLjczMiAyMDMuNzMyIDE4MCAxOTYgMTgwSDE2NEMxNTYuMjY4IDE4MCAxNTAgMTczLjczMiAxNTAgMTY2VjE1MFoiIGZpbGw9IiMyNTIzM0EiLz4KPHBhdGggZD0iTTIxMCAxNTBIMTk1QzE5NSAxNTAgMjAxIDE1MCAyMDUuNSAxNTQuNUMyMTAgMTU5IDIxMCAxNjUgMjEwIDE2NVYxNTBaIiBmaWxsPSIjMjUyMzNBIi8+CjxwYXRoIGQ9Ik0yMTAgMTUwTDIyNSAxNTBDMjI1IDE1MCAyMTkgMTUwIDIxNC41IDE0NS41QzIxMCAxNDEgMjEwIDEzNSAyMTAgMTM1TDIxMCAxNTBaIiBmaWxsPSIjMjUyMzNBIi8+CjxwYXRoIGQ9Ik0yMTAgMTUwTDIxMCAxMzVDMjEwIDEzNSAyMTAgMTQxIDIwNS41IDE0NS41QzIwMSAxNTAgMTk1IDE1MCAxOTUgMTUwTDIxMCAxNTBaIiBmaWxsPSIjMjUyMzNBIi8+CjxwYXRoIGQ9Ik05MCA5MEg3NUM3NSA5MCA4MSA5MCA4NS41IDk0LjVDOTAgOTkgOTAgMTA1IDkwIDEwNVY5MFoiIGZpbGw9IiMyNTIzM0EiLz4KPHBhdGggZD0iTTkwIDkwTDEwNSA5MEMxMDUgOTAgOTkgOTAgOTQuNSA4NS41QzkwIDgxIDkwIDc1IDkwIDc1TDkwIDkwWiIgZmlsbD0iIzI1MjMzQSIvPgo8cGF0aCBkPSJNOTAgOTBMOTAgMTA1QzkwIDEwNSA5MCA5OSA5NC41IDk0LjVDOTkgOTAgMTA1IDkwIDEwNSA5MEw5MCA5MFoiIGZpbGw9IiMyNTIzM0EiLz4KPHBhdGggZD0iTTIxMCA5MEgxOTVDMTk1IDkwIDIwMSA5MCAyMDUuNSA5NC41QzIxMCA5OSAyMTAgMTA1IDIxMCAxMDVWOTBaIiBmaWxsPSIjMjUyMzNBIi8+CjxwYXRoIGQ9Ik0yMTAgOTBMMjEwIDc1QzIxMCA3NSAyMTAgODEgMjA1LjUgODUuNUMyMDEgOTAgMTk1IDkwIDE5NSA5MEwyMTAgOTBaIiBmaWxsPSIjMjUyMzNBIi8+CjxwYXRoIGQ9Ik0yMTAgOTBMMjEwIDEwNUMyMTAgMTA1IDIxMCA5OSAyMTQuNSA5NC41QzIxOSA5MCAyMjUgOTAgMjI1IDkwTDIxMCA5MFoiIGZpbGw9IiMyNTIzM0EiLz4KPHBhdGggZD0iTTkwIDIxMEwxMDUgMjEwQzEwNSAyMTAgOTkgMjEwIDk0LjUgMjA1LjVDOTAgMjAxIDkwIDE5NSA5MCAxOTVMOTAgMjEwWiIgZmlsbD0iIzI1MjMzQSIvPgo8cGF0aCBkPSJNOTAgMjEwTDkwIDE5NUM5MCAxOTUgOTAgMjAxIDg1LjUgMjA1LjVDODEgMjEwIDc1IDIxMCA3NSAyMTBMOTAgMjEwWiIgZmlsbD0iIzI1MjMzQSIvPgo8cGF0aCBkPSJNOTAgMjEwTDkwIDIyNUM5MCAyMjUgOTAgMjE5IDk0LjUgMjE0LjVDOTkgMjEwIDEwNSAyMTAgMTA1IDIxMEw5MCAyMTBaIiBmaWxsPSIjMjUyMzNBIi8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMTk4XzI0Njk1Ij4KPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIHJ4PSI0MCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K",
+    rdns: "co.pallad.wallet",
+  }
+  const provider = {
     request: async ({ method, params }) =>
       debouncedCall({
         method,
@@ -59,9 +61,6 @@ const init = () => {
         payload: { origin: window.location.origin },
       })
     },
-    otherOn: async () => {
-      return "hello world!"
-    },
     /*
     Note: `listenerId` is used as a placeholder to identify listener functions.
     Since functions can't be serialized over postMessage, you need to implement
@@ -76,20 +75,6 @@ const init = () => {
         payload: { event, listenerId },
       })
     },
-    /*once: async (event, listenerId) => {
-      const response = await debouncedCall({
-        method: 'once',
-        payload: { event, listenerId }
-      })
-      return response
-    },
-    removeListener: async (event, listenerId) => {
-      const response = await debouncedCall({
-        method: 'removeListener',
-        payload: { event, listenerId }
-      })
-      return response
-    },*/
     off: async (event, listenerId) => {
       return debouncedCall({
         method: "off",
@@ -97,5 +82,17 @@ const init = () => {
       })
     },
   }
+  window.mina = provider
+  const announceProvider = () => {
+    window.dispatchEvent(
+      new CustomEvent("mina:announceProvider", {
+        detail: Object.freeze({ info, provider }),
+      }),
+    )
+  }
+  window.addEventListener("mina:requestProvider", (event) => {
+    announceProvider()
+  })
+  announceProvider()
 }
 init()

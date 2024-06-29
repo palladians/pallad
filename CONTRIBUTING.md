@@ -64,7 +64,7 @@ Project maintainers may be able to provide more clarification on what is a repre
 ### Enforcement
 
 Instances of abusive, harassing,
-or otherwise unacceptable behavior should be reported to the project team at team@pallad.xyz.
+or otherwise unacceptable behavior should be reported to the project team at team@palladians.xyz.
 All complaints will be reviewed, investigated, and we will respond to the circumstances.
 The project team is obligated to maintain confidentiality concerning the reporter of an incident.
 

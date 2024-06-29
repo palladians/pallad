@@ -1,7 +1,7 @@
 import { MinaNode } from "../../../../src"
 
 const nodeUrl =
-  process.env.NODE_URL || "https://api.minascan.io/node/devnet/v1/graphql"
+  process.env.NODE_URL || "https://pallad.co/api/obscura/devnet.json"
 
 // TODO: change this to local network
 describe("Blockberry Node Status Provider (Functional)", () => {

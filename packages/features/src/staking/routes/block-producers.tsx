@@ -1,28 +1,23 @@
 import { useNavigate } from "react-router-dom"
 
+import { fetcher } from "@/common/lib/fetch"
+import useSWR from "swr"
+import type { BlockProducer } from "../types"
 import { BlockProducersView } from "../views/block-producers"
 
-const MOCKED_PRODUCERS = [
-  {
-    name: "Pallad",
-    publicKey: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
-    stake: 24000,
-    delegatorsCount: 6000,
-  },
-  {
-    name: "Pallad 2",
-    publicKey: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
-    stake: 12000,
-    delegatorsCount: 3000,
-  },
-]
+const STAKEPOOLS_URL = "https://pallad.co/api/stakepools.json"
+
+type StakePoolsResponse = {
+  content: BlockProducer[]
+}
 
 export const BlockProducersRoute = () => {
+  const { data } = useSWR<StakePoolsResponse>(STAKEPOOLS_URL, fetcher)
   const navigate = useNavigate()
   return (
     <BlockProducersView
       onGoBack={() => navigate(-1)}
-      blockProducers={MOCKED_PRODUCERS}
+      blockProducers={data?.content ?? []}
     />
   )
 }
