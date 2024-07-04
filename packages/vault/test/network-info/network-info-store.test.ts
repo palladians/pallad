@@ -102,7 +102,7 @@ describe("CredentialStore", () => {
     // check total number of networks
     const networks = result.current.allNetworkInfo()
     expect(networks.length).toEqual(
-      Object.keys(DEFAULT_NETWORK_INFO).length + 2,
+      Object.keys(DEFAULT_NETWORK_INFO).length + 1,
     )
   })
   it("should add two networks and set mainnet as current network", () => {
@@ -123,7 +123,7 @@ describe("CredentialStore", () => {
     })
     const chainIds = result.current.getChainIds()
     expect(chainIds.length).toEqual(
-      Object.keys(DEFAULT_NETWORK_INFO).length + 2,
+      Object.keys(DEFAULT_NETWORK_INFO).length + 1,
     )
   })
   it("should update existing network info", () => {
