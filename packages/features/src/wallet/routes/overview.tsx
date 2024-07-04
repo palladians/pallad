@@ -16,7 +16,6 @@ export const OverviewRoute = () => {
   >()
   const navigate = useNavigate()
   const account = useAccount()
-  const betaBannerVisible = useAppStore((state) => state.betaBannerVisible)
   const setBetaBannerVisible = useAppStore(
     (state) => state.setBetaBannerVisible,
   )
@@ -55,7 +54,6 @@ export const OverviewRoute = () => {
       setCurrentPriceIndex={setCurrentPriceIndex}
       transactions={latestTwoTransactions}
       publicAddress={account.data?.publicKey ?? ""}
-      betaBannerVisible={betaBannerVisible}
       setBetaBannerVisible={setBetaBannerVisible}
       onSend={() => navigate("/send")}
       onReceive={() => navigate("/receive")}

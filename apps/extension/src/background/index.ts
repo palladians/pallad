@@ -5,7 +5,7 @@ import { onMessage, sendMessage } from "webext-bridge/background"
 // options should be defined by user
 const opts = {
   projectId: "test",
-  chains: ["Mina - Devnet"],
+  chains: ["Mina - Mainnet"],
 }
 
 const provider = await MinaProvider.init(opts, [])

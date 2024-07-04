@@ -5,5 +5,6 @@ export const DEFAULT_TOKEN_INFO = {
   // Note: when a new network is instantiated in
   // switchNetwork there are no tokens for this network so the accountInfo
   // query will error. We should fix that.
+  Devnet: { MINA: "1" },
   ZekoDevNet: { MINA: "1" },
 }

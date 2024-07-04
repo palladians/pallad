@@ -2,7 +2,7 @@ import type { ProviderConfig } from "@palladxyz/providers"
 
 import type { NetworkName } from "./network-info-state"
 
-export const DEFAULT_NETWORK = "Devnet"
+export const DEFAULT_NETWORK = "Mainnet"
 /*
 Note: it is good practice to match the key with the networkName.
 */
@@ -20,19 +20,19 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
     networkType: "testnet",
     chainId: "...", // todo: fetch chainId from a provider
   },
-  /*Mainnet: {
+  Mainnet: {
     nodeEndpoint: {
-      providerName: 'mina-node',
-      url: 'https://pallad.co/api/obscura/mainnet.json'
+      providerName: "mina-node",
+      url: "https://pallad.co/api/obscura/mainnet.json",
     },
     archiveNodeEndpoint: {
-      providerName: 'mina-node',
-      url: 'https://api.minascan.io/archive/mainnet/v1/graphql'
+      providerName: "mina-scan",
+      url: "https://minascan.io/mainnet/api/",
     },
-    networkName: 'Mainnet',
-    networkType: 'mainnet',
-    chainId: '...' // todo: fetch chainId from a provider
-  },*/
+    networkName: "Mainnet",
+    networkType: "mainnet",
+    chainId: "...", // todo: fetch chainId from a provider
+  },
   ZekoDevNet: {
     nodeEndpoint: {
       providerName: "mina-node",
