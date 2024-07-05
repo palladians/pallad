@@ -2,7 +2,7 @@ import type { ProviderConfig } from "@palladxyz/providers"
 
 import type { NetworkName } from "./network-info-state"
 
-export const DEFAULT_NETWORK = "Mainnet"
+export const DEFAULT_NETWORK = process.env.VITE_APP_DEFAULT_NETWORK ?? "Mainnet"
 /*
 Note: it is good practice to match the key with the networkName.
 */

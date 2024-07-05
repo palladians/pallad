@@ -40,7 +40,10 @@ const defaultGlobalVaultState: GlobalVaultState = {
   currentAddressIndex: 0,
   chain: Network.Mina,
   walletName: "",
-  walletNetwork: PalladNetworkNames.MINA_MAINNET,
+  walletNetwork:
+    (process.env.VITE_APP_DEFAULT_NETWORK ?? "Mainnet") === "Mainnet"
+      ? PalladNetworkNames.MINA_MAINNET
+      : PalladNetworkNames.MINA_DEVNET,
   knownAccounts: [],
   chainIds: [],
 }

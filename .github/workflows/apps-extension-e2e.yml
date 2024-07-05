@@ -27,7 +27,7 @@ jobs:
           TURBO_API: "http://127.0.0.1:9080"
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
-        run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:extension
+        run: VITE_APP_MODE=$VITE_APP_MODE VITE_APP_DEFAULT_NETWORK=$VITE_APP_DEFAULT_NETWORK pnpm build:extension
       - name: Install Chromium for Playwright
         working-directory: apps/extension
         run: pnpm test:e2e:install
