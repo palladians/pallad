@@ -8,6 +8,10 @@ export type ProviderConfig = {
     providerName: "mina-node" | "mina-scan" | "zeko-scan" | "evm-explorer"
     url: string
   }
+  explorer: {
+    transactionUrl: string
+    accountUrl: string
+  }
   networkName: string
   networkType: "testnet" | "mainnet"
   chainId: string

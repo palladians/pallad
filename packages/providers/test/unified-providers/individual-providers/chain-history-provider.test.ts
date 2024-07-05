@@ -26,6 +26,10 @@ describe.skip("Unified Chain History Provider (Functional)", () => {
           providerName: "mina-node",
           url: minaNodeApiUrl,
         },
+        explorer: {
+          accountUrl: "",
+          transactionUrl: "",
+        },
         networkName: "Devnet",
         chainId: "...",
       }

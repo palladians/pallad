@@ -33,6 +33,10 @@ describe("Unified Chain provider", () => {
           providerName: "mina-scan",
           url: explorerUrl,
         },
+        explorer: {
+          accountUrl: "",
+          transactionUrl: "",
+        },
         networkName: "Devnet",
         chainId: "...",
         networkType: "testnet",

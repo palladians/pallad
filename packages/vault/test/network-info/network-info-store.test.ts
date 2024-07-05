@@ -30,6 +30,10 @@ describe("CredentialStore", () => {
         providerName: "mina-scan",
         url: mockUrl,
       },
+      explorer: {
+        accountUrl: "",
+        transactionUrl: "",
+      },
       networkName: networkNameMainnet,
       networkType: networkType,
       chainId: "...",
@@ -43,6 +47,10 @@ describe("CredentialStore", () => {
         providerName: "mina-node",
         url: mockUrl,
       },
+      explorer: {
+        accountUrl: "",
+        transactionUrl: "",
+      },
       networkName: networkNameDevnet,
       networkType: networkType,
       chainId: "...",
@@ -55,6 +63,10 @@ describe("CredentialStore", () => {
       archiveNodeEndpoint: {
         providerName: "evm-explorer",
         url: "https://ropsten.archive.ethereum.org",
+      },
+      explorer: {
+        accountUrl: "",
+        transactionUrl: "",
       },
       networkName: networkNameRopsten,
       networkType: networkType,

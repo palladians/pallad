@@ -16,6 +16,10 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
       providerName: "mina-scan",
       url: "https://minascan.io/devnet/api/",
     },
+    explorer: {
+      transactionUrl: "https://minascan.io/devnet/tx/{hash}/txInfo",
+      accountUrl: "https://minascan.io/devnet/account/{publicKey}",
+    },
     networkName: "Devnet",
     networkType: "testnet",
     chainId: "...", // todo: fetch chainId from a provider
@@ -28,6 +32,10 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
     archiveNodeEndpoint: {
       providerName: "mina-scan",
       url: "https://minascan.io/mainnet/api/",
+    },
+    explorer: {
+      transactionUrl: "https://minascan.io/mainnet/tx/{hash}/txInfo",
+      accountUrl: "https://minascan.io/mainnet/account/{publicKey}",
     },
     networkName: "Mainnet",
     networkType: "mainnet",
@@ -42,6 +50,10 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
       providerName: "zeko-scan",
       url: "https://zekoscan.io/devnet",
     },
+    explorer: {
+      transactionUrl: "https://zekoscan.io/devnet/tx/{hash}/txInfo",
+      accountUrl: "https://zekoscan.io/devnet/account/{publicKey}",
+    },
     networkName: "ZekoDevNet",
     networkType: "testnet",
     chainId: "...", // todo: fetch chainId from a provider
@@ -54,6 +66,10 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
     archiveNodeEndpoint: {
       providerName: "evm-explorer",
       url: "https://api-sepolia-optimism.etherscan.io/",
+    },
+    explorer: {
+      transactionUrl: "",
+      accountUrl: "",
     },
     networkName: "OptimismSepolia",
     networkType: "testnet",
