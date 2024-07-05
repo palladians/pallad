@@ -28,7 +28,7 @@
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "json-bigint": "^1.0.0",
-    "mina-signer": "^2.1.1",
+    "mina-signer": "^3.0.7",
     "subscriptions-transport-ws": "^0.11.0",
     "viem": "^2.9.16",
     "ws": "^8.15.1"

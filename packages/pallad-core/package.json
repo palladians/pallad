@@ -22,7 +22,7 @@
     "@palladxyz/util": "workspace:*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
-    "mina-signer": "^2.1.1",
+    "mina-signer": "^3.0.7",
     "sinon": "^17.0.1",
     "viem": "^2.9.16",
     "vite-plugin-top-level-await": "^1.4.1",

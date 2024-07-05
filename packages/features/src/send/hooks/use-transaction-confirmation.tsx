@@ -34,6 +34,7 @@ export const useTransactionConfirmation = ({
   const submitTx = useVault((state) => state.submitTx)
   const constructTx = useVault((state) => state.constructTx)
   const syncWallet = useVault((state) => state._syncWallet)
+  const currentNetworkName = useVault((state) => state.currentNetworkName)
   //const currentWallet = useVault((state) => state.getCurrentWallet())
   const { publicKey, data: accountProperties } = useAccount()
   const outgoingTransaction = useTransactionStore(
@@ -76,7 +77,7 @@ export const useTransactionConfirmation = ({
     const operationArgs: ChainOperationArgs = {
       operation: "mina_signTransaction",
       network: "Mina",
-      networkType: "testnet", // TODO: make configurable for 'mainnet' and 'testnet'
+      networkType: currentNetworkName === "Mainnet" ? "mainnet" : "testnet",
     }
     try {
       signedTx = await sign(constructedTx as any, operationArgs, getPassphrase)

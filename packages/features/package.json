@@ -99,7 +99,7 @@
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "esbuild-plugin-svgr": "2.0.0",
     "graphql-request": "^6.1.0",
-    "mina-signer": "^2.1.1",
+    "mina-signer": "^3.0.7",
     "swr": "^2.2.4",
     "vite": "^5.2.8",
     "vite-plugin-node-polyfills": "^0.17.0",

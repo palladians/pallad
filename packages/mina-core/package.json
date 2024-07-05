@@ -21,7 +21,7 @@
     "@palladxyz/util": "workspace:*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
-    "mina-signer": "^2.1.1"
+    "mina-signer": "^3.0.7"
   },
   "devDependencies": {
     "@palladxyz/common": "workspace:*",

@@ -23,7 +23,7 @@
     "@palladxyz/providers": "workspace:*",
     "@palladxyz/persistence": "workspace:*",
     "@palladxyz/vault": "workspace:*",
-    "mina-signer": "^2.1.1",
+    "mina-signer": "^3.0.7",
     "superjson": "^2.2.1",
     "vitest": "^1.1.0",
     "webextension-polyfill": "^0.10.0"

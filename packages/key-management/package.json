@@ -32,7 +32,7 @@
     "ethers": "^6.9.1",
     "micro-eth-signer": "^0.6.5",
     "micro-starknet": "^0.2.3",
-    "mina-signer": "^2.1.1",
+    "mina-signer": "^3.0.7",
     "sinon": "^17.0.1",
     "ts-custom-error": "^3.3.1",
     "vitest": "^1.1.0"
