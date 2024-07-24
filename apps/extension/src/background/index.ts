@@ -1,6 +1,6 @@
 import { MinaProvider, type ProviderEvent } from "@palladxyz/web-provider"
 import { onMessage, sendMessage } from "webext-bridge/background"
-//import { sendMessage } from 'webext-bridge/content-script'
+import { runtime } from "webextension-polyfill"
 
 // options should be defined by user
 const opts = {
@@ -59,7 +59,7 @@ function removeListener(listenerId: string): void {
 
 onMessage("enable", async (payload) => {
   const data = payload.data as { origin: string }
-  return await provider.enable({ origin: data.origin })
+  return await provider.enable({ origin: data.origin, sender: payload.sender })
 })
 
 onMessage("on", ({ data }) => {
@@ -76,34 +76,51 @@ onMessage("off", ({ data }) => {
 })
 
 onMessage("mina_setState", async (data) => {
-  return await provider.request({ method: "mina_setState", params: data })
+  return await provider.request({
+    method: "mina_setState",
+    params: data,
+    sender: data.sender,
+  })
 })
 
 onMessage("experimental_requestSession", async (data) => {
   return await provider.request({
     method: "experimental_requestSession",
     params: data,
+    sender: data.sender,
   })
 })
 
 onMessage("mina_addChain", async (data) => {
-  return await provider.request({ method: "mina_addChain", params: data })
+  return await provider.request({
+    method: "mina_addChain",
+    params: data,
+    sender: data.sender,
+  })
 })
 
 onMessage("mina_requestNetwork", async (data) => {
   return await provider.request({
     method: "mina_requestNetwork",
     params: data,
+    sender: data.sender,
   })
 })
 
 onMessage("mina_switchChain", async (data) => {
-  return await provider.request({ method: "mina_switchChain", params: data })
+  return await provider.request({
+    method: "mina_switchChain",
+    params: data,
+    sender: data.sender,
+  })
 })
 
 onMessage("mina_getState", async (data) => {
-  //return await provider.request({ method: 'mina_getState' })
-  return await provider.request({ method: "mina_getState", params: data })
+  return await provider.request({
+    method: "mina_getState",
+    params: data,
+    sender: data.sender,
+  })
 })
 
 onMessage("isConnected", (payload) => {
@@ -111,36 +128,88 @@ onMessage("isConnected", (payload) => {
   return provider.isConnected({ origin: data.origin })
 })
 
+onMessage("shouldOpenSidebar", (payload) => {
+  const data = payload.data as { origin: string; method: string }
+  return provider.shouldOpenSidebar({
+    origin: data.origin,
+    method: data.method,
+  })
+})
+
 onMessage("mina_chainId", async (data) => {
-  return await provider.request({ method: "mina_chainId", params: data })
+  return await provider.request({
+    method: "mina_chainId",
+    params: data,
+    sender: data.sender,
+  })
 })
 
 onMessage("mina_accounts", async (data) => {
-  return await provider.request({ method: "mina_accounts", params: data })
+  return await provider.request({
+    method: "mina_accounts",
+    params: data,
+    sender: data.sender,
+  })
 })
 
 onMessage("mina_sign", async (data) => {
-  return await provider.request({ method: "mina_sign", params: data })
+  return await provider.request({
+    method: "mina_sign",
+    params: data,
+    sender: data.sender,
+  })
 })
 
 onMessage("mina_signFields", async (data) => {
-  return await provider.request({ method: "mina_signFields", params: data })
+  return await provider.request({
+    method: "mina_signFields",
+    params: data,
+    sender: data.sender,
+  })
 })
 
 onMessage("mina_signTransaction", async (data) => {
   return await provider.request({
     method: "mina_signTransaction",
     params: data,
+    sender: data.sender,
   })
 })
 
 onMessage("mina_getBalance", async (data) => {
-  return await provider.request({ method: "mina_getBalance", params: data })
+  return await provider.request({
+    method: "mina_getBalance",
+    params: data,
+    sender: data.sender,
+  })
 })
 
 onMessage("mina_createNullifier", async (data) => {
   return await provider.request({
     method: "mina_createNullifier",
     params: data,
+    sender: data.sender,
   })
+})
+
+runtime.onConnect.addListener((port) => {
+  if (port.name === "prompt") {
+    port.onDisconnect.addListener(async () => {
+      await chrome.sidePanel.setOptions({
+        path: "index.html",
+        enabled: true,
+      })
+    })
+  }
+})
+
+chrome.runtime.onMessage.addListener(async (message, sender, response) => {
+  if (message.type === "pallad_side_panel") {
+    await chrome.sidePanel.open({
+      tabId: sender.tab?.id ?? 0,
+      windowId: sender.tab?.windowId,
+    })
+    response({ ok: true })
+  }
+  return true
 })

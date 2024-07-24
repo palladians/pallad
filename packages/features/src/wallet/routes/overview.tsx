@@ -16,17 +16,16 @@ export const OverviewRoute = () => {
   >()
   const navigate = useNavigate()
   const account = useAccount()
-  const setBetaBannerVisible = useAppStore(
-    (state) => state.setBetaBannerVisible,
-  )
   const { data: transactions, isLoading: transactionsLoading } =
     useTransactions()
-  const latestTwoTransactions = take(2, transactions ?? [])
+  const latestTwoTransactions = take(3, transactions ?? [])
   const {
     data: fiatPriceData,
     current,
     isLoading: pricesLoading,
   } = useFiatPrice()
+  const useFiatBalance = useAppStore((state) => state.useFiatBalance)
+  const setUseFiatBalance = useAppStore((state) => state.setUseFiatBalance)
   const lastMonthPrices = takeLast(30, fiatPriceData?.prices ?? [])
   const minaPrice =
     typeof currentPriceIndex === "number"
@@ -40,23 +39,28 @@ export const OverviewRoute = () => {
   const dailyPriceDiffFiat = Math.abs(
     Number(account.minaBalance) * dailyPriceDiff,
   ).toFixed(2)
+  const dailyPriceDiffMina = Math.abs(dailyPriceDiff).toFixed(2)
   const chartLabel =
     typeof currentPriceIndex === "undefined"
-      ? `${dailyPriceDiff >= 0 ? "+" : "-"}${dailyPriceDiffFiat} (24h)`
+      ? `${dailyPriceDiff >= 0 ? "+" : "-"}${
+          useFiatBalance ? dailyPriceDiffFiat : dailyPriceDiffMina
+        } (24h)`
       : format(lastMonthPrices[currentPriceIndex]?.[0], "MMM d")
   return (
     <OverviewView
       lastMonthPrices={lastMonthPrices}
-      balance={balance}
+      minaBalance={Number(account.minaBalance)}
+      fiatBalance={balance}
       loading={pricesLoading || account.isLoading || transactionsLoading}
       chartLabel={chartLabel}
       currentPriceIndex={currentPriceIndex}
       setCurrentPriceIndex={setCurrentPriceIndex}
       transactions={latestTwoTransactions}
       publicAddress={account.data?.publicKey ?? ""}
-      setBetaBannerVisible={setBetaBannerVisible}
       onSend={() => navigate("/send")}
       onReceive={() => navigate("/receive")}
+      useFiatBalance={useFiatBalance}
+      setUseFiatBalance={setUseFiatBalance}
     />
   )
 }

@@ -12,32 +12,26 @@ export const WebConnectorRoute = () => {
   const title = params.get("title") ?? ""
   const payload = params.get("payload") ?? ""
   const inputType = params.get("inputType")
-  const rawWindowId = params.get("windowId")
-  const windowId = Number.parseInt(rawWindowId ?? "")
   const onSubmit: SubmitHandler<UserInputForm> = async ({ userInput }) => {
     await runtime.sendMessage({
-      windowId: windowId,
       userInput,
     })
     window.close()
   }
   const confirm = async () => {
     await runtime.sendMessage({
-      windowId: windowId,
       userConfirmed: true,
     })
     window.close()
   }
   const decline = async () => {
     await runtime.sendMessage({
-      windowId: windowId,
       userConfirmed: false,
     })
     window.close()
   }
   const reject = async () => {
     await runtime.sendMessage({
-      windowId: windowId,
       userRejected: true,
     })
     window.close()
@@ -47,7 +41,6 @@ export const WebConnectorRoute = () => {
     : {}
   const yamlPayload = yaml.stringify(parsedPayload?.data) ?? ""
   const userFriendlyPayload = DOMPurify.sanitize(highlight(yamlPayload))
-  if (!rawWindowId) return null
   if (!inputType) return null
   return (
     <MemoryRouter>

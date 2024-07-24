@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["vite/client", "node"],
+    "types": ["vite/client", "node", "@types/chrome"],
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"]
@@ -10,15 +10,11 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "esModuleInterop": true,
-
-    /* Bundler mode */
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

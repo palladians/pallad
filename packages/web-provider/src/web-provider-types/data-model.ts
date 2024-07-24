@@ -1,3 +1,4 @@
+import type { Endpoint } from "webext-bridge/*"
 import type { showUserPrompt } from "../utils"
 
 export type NamespacesParams = {
@@ -75,6 +76,7 @@ export interface ProviderConnectInfo {
 export interface RequestArguments {
   method: string
   params: unknown[] | Record<string, unknown> | object | undefined | Params
+  sender: Endpoint
 }
 
 export interface Params {

@@ -20,12 +20,13 @@
   "dependencies": {
     "@palladxyz/key-management": "workspace:*",
     "@palladxyz/mina-core": "workspace:*",
-    "@palladxyz/providers": "workspace:*",
     "@palladxyz/persistence": "workspace:*",
+    "@palladxyz/providers": "workspace:*",
     "@palladxyz/vault": "workspace:*",
     "mina-signer": "^3.0.7",
     "superjson": "^2.2.1",
     "vitest": "^1.1.0",
+    "webext-bridge": "^6.0.1",
     "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {

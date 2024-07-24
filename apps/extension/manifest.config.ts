@@ -1,8 +1,6 @@
 import packageJson from "./package.json"
 const { version } = packageJson
-import { createRequire } from "node:module"
-const require = createRequire(import.meta.url)
-const { defineManifest } = require("@crxjs/vite-plugin")
+import { defineManifest } from "@crxjs/vite-plugin"
 
 // Convert from Semver (example: 0.1.0-beta6)
 const [major, minor, patch, label = "0"] = version
@@ -24,8 +22,9 @@ export default defineManifest((env) => ({
   },
   version: `${major}.${minor}.${patch}.${label}`,
   version_name: version,
-  action: { default_popup: "index.html" },
-  permissions: ["storage", "activeTab", "background"],
+  action: { default_title: "Click to open panel" },
+  side_panel: { default_path: "index.html" },
+  permissions: ["storage", "activeTab", "background", "sidePanel"],
   background: {
     service_worker: "src/background/index.ts",
     type: "module",

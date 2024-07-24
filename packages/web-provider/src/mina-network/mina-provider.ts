@@ -6,6 +6,7 @@ import type {
 import type { BorrowedTypes, Mina } from "@palladxyz/mina-core"
 import type { SearchQuery } from "@palladxyz/vault"
 
+import type { Endpoint } from "webext-bridge/*"
 import { hasObjectProps, hasQueryAndProps } from "../utils"
 import { showUserPrompt } from "../utils/prompts"
 import { type VaultService, vaultService } from "../vault-service"
@@ -27,13 +28,14 @@ import type {
   IMinaProviderBase,
   IMinaProviderEvents,
   MinaRpcProviderMap,
-  requestAddChain,
-  requestData,
-  requestOffchainSession,
-  requestSignableData,
-  requestSignableTransaction,
-  requestSwitchChain,
-  requestingStateData,
+  RequestAddChain,
+  RequestDataFields,
+  RequestDataNullifier,
+  RequestOffchainSession,
+  RequestSignableData,
+  RequestSignableTransaction,
+  RequestSwitchChain,
+  RequestingStateData,
 } from "./types"
 import { serializeField, serializeGroup, serializeTransaction } from "./utils"
 
@@ -155,7 +157,7 @@ export class MinaProvider implements IMinaProvider {
     }
   }
   // TODO: add ConnectOps as an optional parameter
-  public async enable({ origin }: { origin: string }) {
+  public async enable({ origin }: { origin: string; sender: Endpoint }) {
     // check if wallet is locked first
     await this.checkAndUnlock()
     // Implement the logic to prompt the user to connect to the wallet
@@ -170,7 +172,7 @@ export class MinaProvider implements IMinaProvider {
       // should this emit an error event?
       throw this.createProviderRpcError(4001, "User Rejected Request")
     }
-    this.connect({ origin })
+    await this.connect({ origin })
     // TODO: perform 'mina_requestAccounts' method
     return await this.vault.getAccounts()
   }
@@ -257,6 +259,32 @@ export class MinaProvider implements IMinaProvider {
 
   public async isConnected({ origin }: { origin: string }) {
     return await this.vault.getEnabled({ origin })
+  }
+
+  public async shouldOpenSidebar({
+    origin,
+    method,
+  }: {
+    origin: string
+    method: string
+  }) {
+    const interactiveMethods = [
+      "mina_addChain",
+      "mina_switchChain",
+      "mina_requestNetwork",
+      "experimental_requestSession",
+      "mina_sign",
+      "mina_createNullifier",
+      "mina_signFields",
+      "mina_signTransaction",
+      "mina_getState",
+      "mina_setState",
+    ]
+    const connected = await this.vault.getEnabled({ origin })
+    const locked = await this.vault.isLocked()
+    const interactive = interactiveMethods.includes(method)
+    console.log({ connected, locked, interactive })
+    return !connected || locked || interactive
   }
 
   public disconnect({ origin }: { origin: string }) {
@@ -351,19 +379,8 @@ export class MinaProvider implements IMinaProvider {
       }
     }
     const enabled = await this.vault.getEnabled({ origin: requestOrigin })
-    if (!enabled) {
-      await this.enable({ origin: requestOrigin })
-    }
-    // TODO: Add prompt confirmation for signing and broadcasting
-    // // Prompt user for confirmation based on the method type
-    // // what scenarios would we need to prompt the user?
-    // const userConfirmed = await this.userPrompt(
-    //   `Do you want to execute ${args.method}?`,
-    //   'confirmation'
-    // )
-    // if (!userConfirmed) {
-    //   throw this.createProviderRpcError(4001, 'User Rejected Request')
-    // }
+    if (!enabled)
+      await this.enable({ origin: requestOrigin, sender: args.sender })
 
     switch (args.method) {
       case "mina_accounts":
@@ -395,7 +412,7 @@ export class MinaProvider implements IMinaProvider {
                   }
 
           */
-        const data = args.params as requestAddChain
+        const data = args.params as RequestAddChain
         const addChainResponse = await this.vault.addChain(data.data)
         return addChainResponse as unknown as T
       }
@@ -419,7 +436,7 @@ export class MinaProvider implements IMinaProvider {
                   }
 
           */
-          const data = args.params as requestSwitchChain
+          const data = args.params as RequestSwitchChain
           if (!data.data.chainId) {
             throw new Error("chainId is undefined in switchChain")
           }
@@ -454,7 +471,6 @@ export class MinaProvider implements IMinaProvider {
         }
       }
       case "experimental_requestSession": {
-        // check if wallet is locked first
         const passphrase = await this.userPrompt("password", {
           title: "Experimental Request for Session Key Creation",
           payload: JSON.stringify(args.params),
@@ -470,7 +486,8 @@ export class MinaProvider implements IMinaProvider {
           networkType: "testnet",
         }
 
-        const requestData = args.params as requestOffchainSession
+        console.log(">>>ARGS", args)
+        const requestData = args.params as RequestOffchainSession
         const signable = requestData.data
           .sessionMerkleRoot as MinaSignablePayload
         return (await this.vault.sign(
@@ -486,7 +503,6 @@ export class MinaProvider implements IMinaProvider {
       case "mina_createNullifier":
       case "mina_signFields":
       case "mina_signTransaction": {
-        // check if wallet is locked first
         const passphrase = await this.userPrompt("password", {
           title: "Signature request",
           payload: JSON.stringify(args.params),
@@ -511,9 +527,10 @@ export class MinaProvider implements IMinaProvider {
         }
 
         if (args.method === "mina_signFields") {
-          const requestData = args.params as requestData
+          const requestData = args.params as RequestDataFields
+          console.log(">>>ARGS2", args)
           const signable = {
-            fields: requestData.data.map((item) => {
+            fields: requestData.data.fields.map((item) => {
               // Convert to BigInt only if the item is a number
               if (typeof item === "number") {
                 return BigInt(item)
@@ -547,9 +564,9 @@ export class MinaProvider implements IMinaProvider {
           return seriliasedResponse as unknown as T
         }
         if (args.method === "mina_createNullifier") {
-          const requestData = args.params as requestData
+          const requestData = args.params as RequestDataNullifier
           const signable = {
-            message: requestData.data.map((item) => {
+            message: requestData.data.message.map((item) => {
               // Convert to BigInt only if the item is a number
               if (typeof item === "number") {
                 return BigInt(item)
@@ -583,7 +600,7 @@ export class MinaProvider implements IMinaProvider {
           return serializedResponseData as unknown as T
         }
         if (args.method === "mina_signTransaction") {
-          const requestData = args.params as requestSignableTransaction
+          const requestData = args.params as RequestSignableTransaction
           const signable = serializeTransaction(
             requestData.data.transaction,
           ) as MinaSignablePayload
@@ -597,7 +614,7 @@ export class MinaProvider implements IMinaProvider {
               ),
           )) as unknown as T
         }
-        const requestData = args.params as requestSignableData
+        const requestData = args.params as RequestSignableData
         const signable = requestData.data as MinaSignablePayload
         return (await this.vault.sign(
           signable,
@@ -613,7 +630,6 @@ export class MinaProvider implements IMinaProvider {
         return (await this.vault.getBalance()) as unknown as T
 
       case "mina_getState": {
-        // check if wallet is locked first
         const confirmation = await this.userPrompt("confirmation", {
           title: "Credential read request",
           payload: JSON.stringify(args.params),
@@ -622,7 +638,7 @@ export class MinaProvider implements IMinaProvider {
           throw this.createProviderRpcError(4001, "User Rejected Request")
         }
         // TODO: handle incorrect passphrase
-        const requestData = args.params as requestingStateData
+        const requestData = args.params as RequestingStateData
         if (!requestData.data || !hasQueryAndProps(requestData.data)) {
           // Handle the case where the necessary properties do not exist
           return {} as unknown as T
@@ -642,7 +658,7 @@ export class MinaProvider implements IMinaProvider {
         if (!confirmation) {
           throw this.createProviderRpcError(4001, "User Rejected Request")
         }
-        const requestData = args.params as requestingStateData
+        const requestData = args.params as RequestingStateData
         if (!requestData.data || !hasObjectProps(requestData.data)) {
           // Handle the case where the necessary properties do not exist
           return false as unknown as T

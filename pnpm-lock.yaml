@@ -92,9 +92,6 @@ importers:
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
-      dotenv:
-        specifier: ^16.3.1
-        version: 16.4.5
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@14.2.1(@babel/core@7.24.4)(@playwright/test@1.43.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -141,6 +138,9 @@ importers:
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
         version: 0.5.1
+      '@types/chrome':
+        specifier: ^0.0.254
+        version: 0.0.254
       '@types/mocha':
         specifier: ^10.0.6
         version: 10.0.6
@@ -159,6 +159,9 @@ importers:
       '@vitejs/plugin-react-swc':
         specifier: ^3.6.0
         version: 3.6.0(@swc/helpers@0.5.5)(vite@5.2.9(@types/node@20.12.7))
+      dedent:
+        specifier: ^1.5.3
+        version: 1.5.3
       path:
         specifier: ^0.12.7
         version: 0.12.7
@@ -366,6 +369,9 @@ importers:
       '@tsconfig/vite-react':
         specifier: ^3.0.2
         version: 3.0.2
+      '@types/chrome':
+        specifier: ^0.0.254
+        version: 0.0.254
       '@types/dompurify':
         specifier: ^3.0.5
         version: 3.0.5
@@ -755,9 +761,6 @@ importers:
       '@types/secp256k1':
         specifier: ^4.0.3
         version: 4.0.6
-      dotenv:
-        specifier: ^16.3.1
-        version: 16.4.5
       mina-signer:
         specifier: ^3.0.7
         version: 3.0.7
@@ -794,6 +797,9 @@ importers:
       vitest:
         specifier: ^1.1.0
         version: 1.5.0(@types/node@20.12.7)(happy-dom@12.10.3)
+      webext-bridge:
+        specifier: ^6.0.1
+        version: 6.0.1
       webextension-polyfill:
         specifier: ^0.10.0
         version: 0.10.0
@@ -3713,6 +3719,14 @@ packages:
     resolution: {integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==}
     engines: {node: '>=10'}
 
+  dedent@1.5.3:
+    resolution: {integrity: sha512-NHQtfOOW68WD8lgypbLA5oT+Bt0xXJhiYvoR6SmmNXZfpzOGXwdKWmcwG8N7PwVVWV3eF/68nmD9BaJSsTBhyQ==}
+    peerDependencies:
+      babel-plugin-macros: ^3.1.0
+    peerDependenciesMeta:
+      babel-plugin-macros:
+        optional: true
+
   deep-diff@0.3.8:
     resolution: {integrity: sha512-yVn6RZmHiGnxRKR9sJb3iVV2XTF1Ghh2DiWRZ3dMnGc43yUdWWF/kX6lQyk3+P84iprfWKU/8zFTrlkvtFm1ug==}
 
@@ -3880,10 +3894,6 @@ packages:
   dot-prop@6.0.1:
     resolution: {integrity: sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==}
     engines: {node: '>=10'}
-
-  dotenv@16.4.5:
-    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
-    engines: {node: '>=12'}
 
   dtrace-provider@0.8.8:
     resolution: {integrity: sha512-b7Z7cNtHPhH9EJhNNbbeqTcXB8LGFFZhq1PGgEvpeHlzd36bhbdTWoE/Ba/YguqpBSlAPKnARWhVlhunCMwfxg==}
@@ -10984,6 +10994,8 @@ snapshots:
     dependencies:
       mimic-response: 3.1.0
 
+  dedent@1.5.3: {}
+
   deep-diff@0.3.8: {}
 
   deep-eql@4.1.3:
@@ -11159,8 +11171,6 @@ snapshots:
   dot-prop@6.0.1:
     dependencies:
       is-obj: 2.0.0
-
-  dotenv@16.4.5: {}
 
   dtrace-provider@0.8.8:
     dependencies:

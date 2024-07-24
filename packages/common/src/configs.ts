@@ -1,7 +1,7 @@
 export const baseTsupConfig = {
   entry: ["./src/index.ts"],
   outDir: "./dist",
-  format: "esm" as any,
+  format: "esm",
   sourcemap: true,
   clean: true,
   bundle: true,

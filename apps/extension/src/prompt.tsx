@@ -1,6 +1,5 @@
 import "@palladxyz/features/dist/index.css"
 import "@total-typescript/ts-reset"
-import "dotenv/config"
 
 import { WebConnectorRoute } from "@palladxyz/features"
 import { ThemeProvider } from "next-themes"

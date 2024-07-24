@@ -1,5 +1,4 @@
 import { baseTsupConfig } from "@palladxyz/common"
-import "dotenv/config"
 import { defineConfig } from "tsup"
 
 import packageJson from "./package.json"

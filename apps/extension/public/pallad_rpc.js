@@ -16,8 +16,8 @@ function debounce(func, wait, immediate) {
   }
 }
 const BROADCAST_CHANNEL_ID = "pallad"
-const callPalladAsync = ({ method, payload }) =>
-  new Promise((resolve, reject) => {
+const callPalladAsync = ({ method, payload }) => {
+  return new Promise((resolve, reject) => {
     const privateChannelId = `private-${Math.random()}`
     const channel = new BroadcastChannel(BROADCAST_CHANNEL_ID)
     const responseChannel = new BroadcastChannel(privateChannelId)
@@ -34,6 +34,7 @@ const callPalladAsync = ({ method, payload }) =>
     })
     return channel.close()
   })
+}
 const debouncedCall = debounce(callPalladAsync, 300, false)
 const init = () => {
   const info = {
@@ -59,6 +60,12 @@ const init = () => {
       return debouncedCall({
         method: "isConnected",
         payload: { origin: window.location.origin },
+      })
+    },
+    shouldOpenSidebar: async ({ method }) => {
+      return debouncedCall({
+        method: "shouldOpenSidebar",
+        payload: { origin: window.location.origin, method },
       })
     },
     /*

@@ -9,11 +9,25 @@ const inject = () => {
   console.info("[Pallad] RPC has been initialized.")
   const channel = new BroadcastChannel("pallad")
   channel.addEventListener("message", async ({ data }) => {
+    const origin = window.location.origin
+    const shouldOpenSidebar = await sendMessage(
+      "shouldOpenSidebar",
+      { method: data.method, origin },
+      "background",
+    )
+    if (shouldOpenSidebar)
+      await chrome.runtime.sendMessage({ type: "pallad_side_panel" })
     const responseChannel = new BroadcastChannel(data.respondAt)
     if (!data.isPallad)
       return responseChannel.postMessage({ error: "Wrong context" })
-    const result = await sendMessage(data.method, data.payload, "background")
-    return responseChannel.postMessage({ response: { jsonrpc: "1.0", result } })
+    const result = await sendMessage(
+      data.method,
+      { ...data.payload, origin },
+      "background",
+    )
+    return responseChannel.postMessage({
+      response: { jsonrpc: "1.0", result },
+    })
   })
 }
 

@@ -1,6 +1,5 @@
 export * as Blockberry from "./blockberry-provider"
 export * as MinaNode from "./mina-node"
-export * as Obscura from "./obscura-provider"
 export * as Optimism from "./optimism"
 export * as ZekoScan from "./zeko-scan"
 export * from "./unified-providers"
