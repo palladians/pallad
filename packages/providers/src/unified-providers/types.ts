@@ -1,6 +1,6 @@
 export type ProviderConfig = {
   nodeEndpoint: {
-    providerName: "mina-node" | "obscura" | "evm-rpc"
+    providerName: "mina-node" | "evm-rpc"
     url: string
   }
   archiveNodeEndpoint: {

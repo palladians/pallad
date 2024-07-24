@@ -8,7 +8,8 @@ const transactionHash =
   process.env.TX_HASH ||
   "0x105bf755a57f5f1e70784dd2ce811795e44a443608879e499d459098fb80f560"
 
-describe("Optimism Chain History Provider (Functional)", () => {
+// TODO: Enable when we go back to EVM
+describe.skip("Optimism Chain History Provider (Functional)", () => {
   let provider: ReturnType<typeof Optimism.createChainHistoryProvider>
 
   beforeEach(() => {
