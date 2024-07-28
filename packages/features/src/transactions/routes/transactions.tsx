@@ -2,7 +2,7 @@ import { useEffect } from "react"
 
 import { useAccount } from "@/common/hooks/use-account"
 import { useTransactions } from "@/common/hooks/use-transactions"
-import { usePendingTransactionStore } from "@/common/store/pending-transactions"
+import { usePendingTransactionStore } from "@palladxyz/vault"
 
 import { useFiatPrice } from "@palladxyz/offchain-data"
 import { TransactionsView } from "../views/transactions"

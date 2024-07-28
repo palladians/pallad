@@ -1,4 +1,4 @@
-import type { Endpoint } from "webext-bridge/*"
+import type { Validation } from "../mina-network"
 import type { showUserPrompt } from "../utils"
 
 export type NamespacesParams = {
@@ -75,8 +75,15 @@ export interface ProviderConnectInfo {
 
 export interface RequestArguments {
   method: string
-  params: unknown[] | Record<string, unknown> | object | undefined | Params
-  sender: Endpoint
+  params:
+    | Validation.RequestData
+    | Validation.SignFieldsData
+    | Validation.SignMessageData
+    | Validation.CreateNullifierData
+    | Validation.SignTransactionData
+    | Validation.SendTransactionData
+    | Validation.SetStateData
+    | Validation.GetStateData
 }
 
 export interface Params {

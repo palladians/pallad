@@ -101,6 +101,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      serialize-error:
+        specifier: ^11.0.3
+        version: 11.0.3
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.3(ts-node@10.9.2(@swc/core@1.4.14(@swc/helpers@0.5.5))(@types/node@20.12.7)(typescript@5.4.5)))
@@ -171,6 +174,9 @@ importers:
       rollup-plugin-polyfill-node:
         specifier: ^0.12.0
         version: 0.12.0(rollup@4.14.3)
+      type-fest:
+        specifier: ^4.23.0
+        version: 4.23.0
       vite:
         specifier: ^5.2.8
         version: 5.2.9(@types/node@20.12.7)
@@ -248,9 +254,6 @@ importers:
       cmdk:
         specifier: ^0.2.0
         version: 0.2.1(@types/react@18.2.79)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      date-fns:
-        specifier: ^3.0.1
-        version: 3.6.0
       dayjs:
         specifier: ^1.11.10
         version: 1.11.10
@@ -730,6 +733,9 @@ importers:
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.10
       immer:
         specifier: ^10.0.3
         version: 10.0.4
@@ -788,6 +794,9 @@ importers:
       '@palladxyz/vault':
         specifier: workspace:*
         version: link:../vault
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.10
       mina-signer:
         specifier: ^3.0.7
         version: 3.0.7
@@ -803,6 +812,9 @@ importers:
       webextension-polyfill:
         specifier: ^0.10.0
         version: 0.10.0
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@palladxyz/common':
         specifier: workspace:*
@@ -822,6 +834,9 @@ importers:
       '@types/webextension-polyfill':
         specifier: ^0.10.7
         version: 0.10.7
+      type-fest:
+        specifier: ^4.23.0
+        version: 4.23.0
 
 packages:
 
@@ -7193,8 +7208,8 @@ packages:
     resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
     engines: {node: '>=12.20'}
 
-  type-fest@4.15.0:
-    resolution: {integrity: sha512-tB9lu0pQpX5KJq54g+oHOLumOx+pMep4RaM6liXh2PKmVRFF+/vAtUP0ZaJ0kOySfVNjF6doBWPHhBhISKdlIA==}
+  type-fest@4.23.0:
+    resolution: {integrity: sha512-ZiBujro2ohr5+Z/hZWHESLz3g08BBdrdLMieYFULJO+tWc437sn8kQsWLJoZErY8alNhxre9K4p3GURAG11n+w==}
     engines: {node: '>=16'}
 
   type-is@1.6.18:
@@ -13386,7 +13401,7 @@ snapshots:
       outvariant: 1.4.2
       path-to-regexp: 6.2.2
       strict-event-emitter: 0.5.1
-      type-fest: 4.15.0
+      type-fest: 4.23.0
       yargs: 17.7.2
     optionalDependencies:
       typescript: 5.4.5
@@ -15167,7 +15182,7 @@ snapshots:
 
   type-fest@2.19.0: {}
 
-  type-fest@4.15.0: {}
+  type-fest@4.23.0: {}
 
   type-is@1.6.18:
     dependencies:

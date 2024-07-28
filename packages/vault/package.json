@@ -26,6 +26,7 @@
     "@palladxyz/util": "workspace:*",
     "bs58check": "^3.0.1",
     "buffer": "^6.0.3",
+    "dayjs": "^1.11.10",
     "immer": "^10.0.3",
     "rambda": "^7.5.0",
     "redux-logger": "^3.0.6",

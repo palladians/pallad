@@ -13,33 +13,41 @@ export const WebConnectorRoute = () => {
   const payload = params.get("payload") ?? ""
   const inputType = params.get("inputType")
   const onSubmit: SubmitHandler<UserInputForm> = async ({ userInput }) => {
+    const { id } = await chrome.windows.getCurrent()
     await runtime.sendMessage({
       userInput,
+      windowId: id,
     })
     window.close()
   }
   const confirm = async () => {
+    const { id } = await chrome.windows.getCurrent()
     await runtime.sendMessage({
       userConfirmed: true,
+      windowId: id,
     })
     window.close()
   }
   const decline = async () => {
+    const { id } = await chrome.windows.getCurrent()
     await runtime.sendMessage({
       userConfirmed: false,
+      windowId: id,
     })
     window.close()
   }
   const reject = async () => {
+    const { id } = await chrome.windows.getCurrent()
     await runtime.sendMessage({
       userRejected: true,
+      windowId: id,
     })
     window.close()
   }
   const parsedPayload = payload
     ? (JSON.parse(payload) as Record<string, any>)
     : {}
-  const yamlPayload = yaml.stringify(parsedPayload?.data) ?? ""
+  const yamlPayload = yaml.stringify(parsedPayload) ?? ""
   const userFriendlyPayload = DOMPurify.sanitize(highlight(yamlPayload))
   if (!inputType) return null
   return (

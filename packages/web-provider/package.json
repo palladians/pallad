@@ -23,11 +23,13 @@
     "@palladxyz/persistence": "workspace:*",
     "@palladxyz/providers": "workspace:*",
     "@palladxyz/vault": "workspace:*",
+    "dayjs": "^1.11.10",
     "mina-signer": "^3.0.7",
     "superjson": "^2.2.1",
     "vitest": "^1.1.0",
     "webext-bridge": "^6.0.1",
-    "webextension-polyfill": "^0.10.0"
+    "webextension-polyfill": "^0.10.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@palladxyz/common": "workspace:*",
@@ -35,6 +37,7 @@
     "@types/chrome": "^0.0.254",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.10.5",
-    "@types/webextension-polyfill": "^0.10.7"
+    "@types/webextension-polyfill": "^0.10.7",
+    "type-fest": "^4.23.0"
   }
 }

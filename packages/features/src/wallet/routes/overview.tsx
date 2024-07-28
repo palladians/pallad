@@ -4,7 +4,7 @@ import { useAccount } from "@/common/hooks/use-account"
 import { useTransactions } from "@/common/hooks/use-transactions"
 
 import { useAppStore } from "@/common/store/app"
-import { format } from "date-fns"
+import dayjs from "dayjs"
 import { take, takeLast } from "rambda"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -45,7 +45,7 @@ export const OverviewRoute = () => {
       ? `${dailyPriceDiff >= 0 ? "+" : "-"}${
           useFiatBalance ? dailyPriceDiffFiat : dailyPriceDiffMina
         } (24h)`
-      : format(lastMonthPrices[currentPriceIndex]?.[0], "MMM d")
+      : dayjs(lastMonthPrices[currentPriceIndex]?.[0]).format("MMM d")
   return (
     <OverviewView
       lastMonthPrices={lastMonthPrices}

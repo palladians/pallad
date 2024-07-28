@@ -16,7 +16,6 @@ import { getRandomAnimalName } from "../lib/utils"
 import { type NetworkInfoStore, networkInfoSlice } from "../network-info"
 import { type ObjectStore, objectSlice } from "../objects"
 import { type TokenInfoStore, tokenInfoSlice } from "../token-info"
-import { type WebProviderStore, webProviderSlice } from "../web-provider"
 import {
   getBalanceHelper,
   getCurrentWalletHelper,
@@ -55,7 +54,6 @@ export const useVault = create<
     ObjectStore &
     NetworkInfoStore &
     TokenInfoStore &
-    WebProviderStore &
     GlobalVaultStore
 >()(
   persist(
@@ -66,7 +64,6 @@ export const useVault = create<
       ...objectSlice(set, get, store),
       ...networkInfoSlice(set, get, store),
       ...tokenInfoSlice(set, get, store),
-      ...webProviderSlice(set, get, store),
       ...defaultGlobalVaultState,
       // This is now available in the networkInfo store
       // api.networkInfo.setCurrentNetworkName(networkName)

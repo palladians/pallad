@@ -25,34 +25,38 @@ export const WebConnectorView = ({
   onSubmit,
 }: WebConnectorViewProps) => {
   const onClose = () => {
-    onDecline()
     onReject()
+    onDecline()
   }
   return (
-    <AppLayout>
-      <MenuBar variant="card" onCloseClicked={onClose} />
-      <div className="flex flex-1 flex-col px-8 pb-8">
-        <div className="flex flex-col flex-1 gap-4">
-          <h1 className="text-2xl">{title}</h1>
-          <div
-            // biome-ignore lint: Sanitized by DOMPurify
-            dangerouslySetInnerHTML={{ __html: payload }}
-            className="card bg-secondary h-48 p-4 overflow-y-scroll whitespace-pre-wrap"
-          />
-        </div>
-        <div className="flex justify-center items-center">
-          {inputType === "confirmation" && (
-            <ConfirmationForm onConfirm={onConfirm} onDecline={onDecline} />
-          )}
-          {["text", "password"].includes(inputType) && (
-            <InputForm
-              inputType={inputType}
-              onSubmit={onSubmit}
-              onReject={onReject}
-            />
-          )}
-        </div>
+    <div className="flex flex-1 justify-center items-center bg-secondary">
+      <div className="flex max-w-[480px] max-h-[772px] h-full flex-1 bg-neutral rounded-xl">
+        <AppLayout>
+          <MenuBar variant="card" onCloseClicked={onClose} />
+          <div className="flex flex-1 flex-col px-8 pb-8">
+            <div className="flex flex-col flex-1 gap-4">
+              <h1 className="text-2xl">{title}</h1>
+              <div
+                // biome-ignore lint: Sanitized by DOMPurify
+                dangerouslySetInnerHTML={{ __html: payload }}
+                className="card bg-secondary h-48 p-4 overflow-y-scroll whitespace-pre-wrap"
+              />
+            </div>
+            <div className="flex justify-center items-center">
+              {inputType === "confirmation" && (
+                <ConfirmationForm onConfirm={onConfirm} onDecline={onDecline} />
+              )}
+              {["text", "password"].includes(inputType) && (
+                <InputForm
+                  inputType={inputType}
+                  onSubmit={onSubmit}
+                  onReject={onReject}
+                />
+              )}
+            </div>
+          </div>
+        </AppLayout>
       </div>
-    </AppLayout>
+    </div>
   )
 }

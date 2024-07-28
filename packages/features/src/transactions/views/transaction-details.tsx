@@ -1,7 +1,7 @@
 import { Mina } from "@palladxyz/mina-core"
 
 import { AppLayout } from "@/components/app-layout"
-import { format } from "date-fns"
+import dayjs from "dayjs"
 
 import { getTxSide } from "@/common/lib/tx"
 import { FromTo } from "@/components/from-to"
@@ -48,10 +48,7 @@ export const TransactionDetailsView = ({
             <div className="flex items-center justify-between">
               <p className="text-[#7D7A9C]">Date and time</p>
               <p className="text-right">
-                {format(
-                  new Date(transaction.dateTime ?? ""),
-                  "dd/MM/yy - HH:mm",
-                )}
+                {dayjs(transaction.dateTime ?? "").format("DD/MM/YY - HH:mm")}
               </p>
             </div>
             <hr className="border-[#413E5E]" />

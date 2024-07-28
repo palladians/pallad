@@ -1,4 +1,9 @@
-import { MinaProvider, type ProviderEvent } from "@palladxyz/web-provider"
+import {
+  MinaProvider,
+  type ProviderEvent,
+  Validation,
+} from "@palladxyz/web-provider"
+import { serializeError } from "serialize-error"
 import { onMessage, sendMessage } from "webext-bridge/background"
 import { runtime } from "webextension-polyfill"
 
@@ -57,9 +62,13 @@ function removeListener(listenerId: string): void {
   }
 }
 
-onMessage("enable", async (payload) => {
-  const data = payload.data as { origin: string }
-  return await provider.enable({ origin: data.origin, sender: payload.sender })
+onMessage("enable", async ({ data }) => {
+  try {
+    const { origin } = Validation.requestSchema.parse(data)
+    return await provider.enable({ origin })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
 onMessage("on", ({ data }) => {
@@ -71,125 +80,169 @@ onMessage("on", ({ data }) => {
 onMessage("off", ({ data }) => {
   const { listenerId } = data as unknown as OnMessageData
   removeListener(listenerId)
-
   return { success: true }
 })
 
-onMessage("mina_setState", async (data) => {
-  return await provider.request({
-    method: "mina_setState",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_setState", async ({ data }) => {
+  try {
+    const params = Validation.setStateRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_setState",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("experimental_requestSession", async (data) => {
-  return await provider.request({
-    method: "experimental_requestSession",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_addChain", async () => {
+  return { error: serializeError(new Error("4200 - Unsupported Method")) }
 })
 
-onMessage("mina_addChain", async (data) => {
-  return await provider.request({
-    method: "mina_addChain",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_requestNetwork", async ({ data }) => {
+  try {
+    const params = Validation.requestSchema.parse(data)
+    return await provider.request({
+      method: "mina_requestNetwork",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("mina_requestNetwork", async (data) => {
-  return await provider.request({
-    method: "mina_requestNetwork",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_switchChain", async () => {
+  return { error: serializeError(new Error("4200 - Unsupported Method")) }
 })
 
-onMessage("mina_switchChain", async (data) => {
-  return await provider.request({
-    method: "mina_switchChain",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_getState", async ({ data }) => {
+  try {
+    const params = Validation.getStateRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_getState",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("mina_getState", async (data) => {
-  return await provider.request({
-    method: "mina_getState",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("isConnected", async ({ data }) => {
+  try {
+    const { origin } = Validation.requestSchema.parse(data)
+    return await provider.isConnected({ origin })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("isConnected", (payload) => {
-  const data = payload.data as { origin: string }
-  return provider.isConnected({ origin: data.origin })
+onMessage("mina_chainId", async ({ data }) => {
+  try {
+    const params = Validation.requestSchema.parse(data)
+    return await provider.request({
+      method: "mina_chainId",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("shouldOpenSidebar", (payload) => {
-  const data = payload.data as { origin: string; method: string }
-  return provider.shouldOpenSidebar({
-    origin: data.origin,
-    method: data.method,
-  })
+onMessage("mina_accounts", async ({ data }) => {
+  try {
+    const params = Validation.requestSchema.parse(data)
+    return await provider.request({
+      method: "mina_accounts",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("mina_chainId", async (data) => {
-  return await provider.request({
-    method: "mina_chainId",
-    params: data,
-    sender: data.sender,
-  })
+// TODO: It should be removed, but let's keep it for now for Auro compatibility.
+onMessage("mina_requestAccounts", async ({ data }) => {
+  try {
+    const params = Validation.requestSchema.parse(data)
+    return await provider.request({
+      method: "mina_accounts",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("mina_accounts", async (data) => {
-  return await provider.request({
-    method: "mina_accounts",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_sign", async ({ data }) => {
+  try {
+    const params = Validation.signMessageRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_sign",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("mina_sign", async (data) => {
-  return await provider.request({
-    method: "mina_sign",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_signFields", async ({ data }) => {
+  try {
+    const params = Validation.signFieldsRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_signFields",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("mina_signFields", async (data) => {
-  return await provider.request({
-    method: "mina_signFields",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_signTransaction", async ({ data }) => {
+  try {
+    const params = Validation.signTransactionRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_signTransaction",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("mina_signTransaction", async (data) => {
-  return await provider.request({
-    method: "mina_signTransaction",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_getBalance", async ({ data }) => {
+  try {
+    const params = Validation.requestSchema.parse(data)
+    return await provider.request({
+      method: "mina_getBalance",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("mina_getBalance", async (data) => {
-  return await provider.request({
-    method: "mina_getBalance",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_createNullifier", async ({ data }) => {
+  try {
+    const params = Validation.createNullifierRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_createNullifier",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("mina_createNullifier", async (data) => {
-  return await provider.request({
-    method: "mina_createNullifier",
-    params: data,
-    sender: data.sender,
-  })
+onMessage("mina_sendTransaction", async ({ data }) => {
+  try {
+    const params = Validation.sendTransactionRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_sendTransaction",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
 runtime.onConnect.addListener((port) => {

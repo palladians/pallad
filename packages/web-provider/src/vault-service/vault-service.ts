@@ -8,12 +8,17 @@ import {
   getSessionPersistence,
 } from "@palladxyz/persistence"
 import type { ProviderConfig } from "@palladxyz/providers"
+import { usePendingTransactionStore } from "@palladxyz/vault"
 import {
   type SearchQuery,
   type SingleObjectState,
   useVault,
 } from "@palladxyz/vault"
+import dayjs from "dayjs"
+import Client from "mina-signer"
 
+import type { Mina } from "@palladxyz/mina-core"
+import type { Validation } from ".."
 import { chainIdToNetwork } from "../utils"
 import type { IVaultService } from "./types"
 
@@ -54,7 +59,45 @@ export class VaultService implements IVaultService {
   ) {
     await this.rehydrate()
     const store = useVault.getState()
-    return store.sign(signable, args, getPassphrase)
+    const { currentNetworkName } = useVault.getState()
+    const networkType = currentNetworkName === "Mainnet" ? "mainnet" : "testnet"
+    const networkAwareArgs: ChainOperationArgs = {
+      ...args,
+      networkType,
+    }
+    return store.sign(signable, networkAwareArgs, getPassphrase)
+  }
+
+  async submitTransaction(payload: Validation.SendTransactionData) {
+    await this.rehydrate()
+    const { addPendingTransaction } = usePendingTransactionStore.getState()
+    const { currentNetworkName, submitTx, _syncWallet } = useVault.getState()
+    const network = currentNetworkName === "Mainnet" ? "mainnet" : "testnet"
+    const accounts = await this.getAccounts()
+    const publicKey = accounts?.[0]
+    if (!publicKey) throw new Error("Wallet is not initialized.")
+    if (publicKey !== payload.signedTransaction.data.from)
+      throw new Error("Wallet is not initialized.")
+    const client = new Client({ network })
+    const validTransaction = client.verifyTransaction(
+      payload.signedTransaction as Mina.SignedTransaction,
+    )
+    if (!validTransaction) throw new Error("Invalid transaction.")
+    const submittable = {
+      signedTransaction: payload.signedTransaction,
+      type: payload.transactionType,
+      transactionDetails: payload.signedTransaction.data,
+    }
+    const submittedTx: any = await submitTx(submittable as any)
+    const hash =
+      submittedTx?.sendPayment?.payment?.hash ??
+      submittedTx?.sendDelegation?.delegation?.hash
+    addPendingTransaction({
+      hash,
+      expireAt: dayjs().add(8, "hours").toISOString(),
+    })
+    await _syncWallet()
+    return { hash }
   }
 
   async getState(params: SearchQuery, props?: string[]) {
@@ -90,25 +133,28 @@ export class VaultService implements IVaultService {
   }
 
   async getEnabled({ origin }: { origin: ZkAppUrl }) {
-    await this.rehydrate()
-    const store = useVault.getState()
-    // FIXME
-    return store.authorized[origin] === AuthorizationState.ALLOWED
+    const { permissions } = await chrome.storage.local.get({
+      permissions: true,
+    })
+    return permissions[origin] === AuthorizationState.ALLOWED
   }
 
   async isBlocked({ origin }: { origin: ZkAppUrl }) {
-    await this.rehydrate()
-    const store = useVault.getState()
-
-    return store.authorized[origin] === AuthorizationState.BLOCKED
+    const { permissions } = await chrome.storage.local.get({
+      permissions: true,
+    })
+    return permissions[origin] === AuthorizationState.BLOCKED
   }
 
   async setEnabled({ origin }: { origin: ZkAppUrl }) {
-    await this.rehydrate()
-    const store = useVault.getState()
-    store.mutateZkAppPermission({
-      origin,
-      authorizationState: AuthorizationState.ALLOWED,
+    const { permissions } = await chrome.storage.local.get({
+      permissions: true,
+    })
+    return chrome.storage.local.set({
+      permissions: {
+        ...permissions,
+        [origin]: AuthorizationState.ALLOWED,
+      },
     })
   }
 

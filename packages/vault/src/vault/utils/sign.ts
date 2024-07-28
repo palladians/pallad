@@ -32,7 +32,7 @@ export async function signHelper(
   const credential = currentWallet.credential.credential as GroupedCredentials
 
   let keyAgent: InMemoryKeyAgent | undefined | null
-  keyAgent = restoreKeyAgent(keyAgentState.name, getPassphrase)
+  keyAgent = await restoreKeyAgent(keyAgentState.name, getPassphrase)
   const signed = await keyAgent?.sign(credential, signable, args)
   keyAgent = null
   return signed

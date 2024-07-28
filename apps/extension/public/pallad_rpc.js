@@ -23,7 +23,16 @@ const callPalladAsync = ({ method, payload }) => {
     const responseChannel = new BroadcastChannel(privateChannelId)
     responseChannel.addEventListener("message", ({ data }) => {
       channel.close()
-      if (data.error) return reject(data.error)
+      const error = data.response?.error
+      if (error) {
+        console.log("[Pallad] Web Connector Error")
+        try {
+          console.table(JSON.parse(error.message))
+        } catch {
+          console.info(error.message)
+        }
+        return reject(error)
+      }
       return resolve(data.response)
     })
     channel.postMessage({
@@ -60,12 +69,6 @@ const init = () => {
       return debouncedCall({
         method: "isConnected",
         payload: { origin: window.location.origin },
-      })
-    },
-    shouldOpenSidebar: async ({ method }) => {
-      return debouncedCall({
-        method: "shouldOpenSidebar",
-        payload: { origin: window.location.origin, method },
       })
     },
     /*

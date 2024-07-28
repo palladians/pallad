@@ -1,7 +1,7 @@
 import type { ChainOperationArgs } from "@palladxyz/key-management"
 import { Mina } from "@palladxyz/mina-core"
 import { useVault } from "@palladxyz/vault"
-import { addHours } from "date-fns"
+import dayjs from "dayjs"
 import type {
   Payment,
   SignedLegacy,
@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom"
 import type { z } from "zod"
 
 import { useAccount } from "@/common/hooks/use-account"
-import { usePendingTransactionStore } from "@/common/store/pending-transactions"
 import { useTransactionStore } from "@/common/store/transaction"
+import { usePendingTransactionStore } from "@palladxyz/vault"
 
 import type { ConfirmTransactionSchema } from "../components/confirm-transaction-form.schema"
 
@@ -110,7 +110,7 @@ export const useTransactionConfirmation = ({
       submittedTx?.sendDelegation?.delegation?.hash
     addPendingTransaction({
       hash,
-      expireAt: addHours(new Date(), 8).toISOString(),
+      expireAt: dayjs().add(8, "hours").toISOString(),
     })
     await syncWallet()
     mixpanel.track(

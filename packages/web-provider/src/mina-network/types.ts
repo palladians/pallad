@@ -55,10 +55,6 @@ export type RequestSwitchChain = {
   data: { chainId: string }
 }
 
-export type RequestingStateData = {
-  data: RequestArguments
-}
-
 export interface MinaRpcProviderMap {
   [chainId: string]: IMinaProviderBase
 }
