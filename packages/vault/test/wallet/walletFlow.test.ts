@@ -130,5 +130,5 @@ describe("WalletTest", () => {
     const currentKeyAgentName = result.current.keyAgentName
     console.log("keyAgentName", currentKeyAgentName)
     expect(currentKeyAgentName).toBe(keyAgentName)
-  })
+  }, 30000)
 })

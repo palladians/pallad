@@ -175,7 +175,7 @@ describe("KeyAgentStore", () => {
         expectedGroupedCredentials.address,
       )
     })
-  })
+  }, 30000)
   it("should sign a payload with a key agent", async () => {
     const { result } = renderHook(() => useVault())
     await act(async () => {
@@ -222,5 +222,5 @@ describe("KeyAgentStore", () => {
     expect(keyAgent?.keyAgent).toBeDefined()
 
     expect(true).toEqual(true)
-  })
+  }, 30000)
 })

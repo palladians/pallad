@@ -6,7 +6,9 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "noPropertyAccessFromIndexSignature": false
+    "noPropertyAccessFromIndexSignature": false,
+    "types": ["vitest/globals"]
   },
+  "include": ["src", "test"],
   "exclude": ["dist", "node_modules", ".turbo"]
 }
