@@ -19,13 +19,13 @@
   },
   "dependencies": {
     "@palladxyz/util": "workspace:*",
-    "bs58check": "^3.0.1",
-    "buffer": "^6.0.3",
-    "mina-signer": "^3.0.7"
+    "bs58check": "4.0.0",
+    "buffer": "6.0.3",
+    "mina-signer": "3.0.7"
   },
   "devDependencies": {
     "@palladxyz/common": "workspace:*",
-    "@types/mocha": "^10.0.6",
-    "@types/secp256k1": "^4.0.6"
+    "@types/mocha": "10.0.7",
+    "@types/secp256k1": "4.0.6"
   }
 }

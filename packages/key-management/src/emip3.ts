@@ -1,5 +1,5 @@
 import { chacha20poly1305 } from "@noble/ciphers/chacha"
-import { randomBytes } from "@noble/ciphers/webcrypto/utils"
+import { randomBytes } from "@noble/ciphers/webcrypto"
 import { pbkdf2Async } from "@noble/hashes/pbkdf2"
 import { sha512 } from "@noble/hashes/sha512"
 

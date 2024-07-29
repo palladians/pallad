@@ -24,6 +24,7 @@ const secureStorage = new SecureStorage({
 
 const setVaultSpendingPassword = async () => {
   const spendingPassword = await sessionData.get("spendingPassword")
+  if (!spendingPassword) throw new Error("Empty password")
   return secureStorage.setPassword(spendingPassword)
 }
 

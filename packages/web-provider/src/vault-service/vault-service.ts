@@ -248,7 +248,7 @@ export class VaultService implements IVaultService {
   async isLocked() {
     await this.rehydrate()
     const authenticated =
-      (await getSecurePersistence().getItem("foo")) === "bar"
+      ((await getSecurePersistence().getItem("foo")) as unknown) === "bar"
     return !authenticated
   }
 

@@ -7,7 +7,7 @@
     "VITE_APP_MINA_PROXY_MAINNET_URL",
     "VITE_APP_MINA_PROXY_DEVNET_URL"
   ],
-  "pipeline": {
+  "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]

@@ -20,17 +20,17 @@
   "dependencies": {
     "@palladxyz/mina-core": "workspace:*",
     "@palladxyz/util": "workspace:*",
-    "bs58check": "^3.0.1",
-    "buffer": "^6.0.3",
-    "mina-signer": "^3.0.7",
-    "sinon": "^17.0.1",
-    "viem": "^2.9.16",
-    "vite-plugin-top-level-await": "^1.4.1",
-    "vite-plugin-wasm": "^3.3.0"
+    "bs58check": "4.0.0",
+    "buffer": "6.0.3",
+    "mina-signer": "3.0.7",
+    "sinon": "18.0.0",
+    "viem": "2.18.4",
+    "vite-plugin-top-level-await": "1.4.2",
+    "vite-plugin-wasm": "3.3.0"
   },
   "devDependencies": {
     "@palladxyz/common": "workspace:*",
-    "@types/mocha": "^10.0.6",
-    "@types/secp256k1": "^4.0.6"
+    "@types/mocha": "10.0.7",
+    "@types/secp256k1": "4.0.6"
   }
 }

@@ -23,21 +23,22 @@
     "@palladxyz/persistence": "workspace:*",
     "@palladxyz/providers": "workspace:*",
     "@palladxyz/vault": "workspace:*",
-    "dayjs": "^1.11.10",
-    "mina-signer": "^3.0.7",
-    "superjson": "^2.2.1",
-    "vitest": "^1.1.0",
-    "webext-bridge": "^6.0.1",
-    "webextension-polyfill": "^0.10.0",
-    "zod": "^3.22.4"
+    "dayjs": "1.11.12",
+    "eventemitter3": "5.0.1",
+    "mina-signer": "3.0.7",
+    "superjson": "2.2.1",
+    "vitest": "2.0.4",
+    "webext-bridge": "6.0.1",
+    "webextension-polyfill": "0.12.0",
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@palladxyz/common": "workspace:*",
-    "@testing-library/react": "^14.1.2",
-    "@types/chrome": "^0.0.254",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.10.5",
-    "@types/webextension-polyfill": "^0.10.7",
-    "type-fest": "^4.23.0"
+    "@testing-library/react": "16.0.0",
+    "@types/chrome": "0.0.269",
+    "@types/mocha": "10.0.7",
+    "@types/node": "22.0.0",
+    "@types/webextension-polyfill": "0.10.7",
+    "type-fest": "4.23.0"
   }
 }

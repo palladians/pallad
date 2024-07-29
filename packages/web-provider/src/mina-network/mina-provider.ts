@@ -1,4 +1,3 @@
-import { EventEmitter } from "node:events"
 import type {
   ChainOperationArgs,
   ChainSignablePayload,
@@ -9,6 +8,7 @@ import {
   type Mina,
   TransactionType,
 } from "@palladxyz/mina-core"
+import EventEmitter from "eventemitter3"
 import type { Validation } from "."
 import { showUserPrompt } from "../utils/prompts"
 import { type VaultService, vaultService } from "../vault-service"

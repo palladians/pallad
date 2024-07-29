@@ -1,4 +1,6 @@
-export const baseTsupConfig = {
+import type { Options } from "tsup"
+
+export const baseTsupConfig: Options = {
   entry: ["./src/index.ts"],
   outDir: "./dist",
   format: "esm",

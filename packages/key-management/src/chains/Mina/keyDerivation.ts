@@ -1,4 +1,3 @@
-import { Buffer } from "node:buffer"
 import { sha256 } from "@noble/hashes/sha256"
 import { base58check } from "@scure/base"
 import { HDKey } from "@scure/bip32"
@@ -17,8 +16,9 @@ export function deriveMinaPrivateKey(
   const path = `m/${MinaKeyConst.PURPOSE}'/${MinaKeyConst.MINA_COIN_TYPE}'/${accountIndex}'/0/${addressIndex}`
   const childNode = rootKey.derive(path)
   if (!childNode?.privateKey) throw new Error("Unable to derive private key")
-
-  childNode.privateKey[0] &= 0x3f
+  if (!childNode?.privateKey?.[0]) {
+    childNode.privateKey.set([0x3f], 0)
+  }
   const childPrivateKey = reverseBytes(Buffer.from(childNode.privateKey))
   const privateKeyHex = `5a01${childPrivateKey.toString("hex")}`
   // Convert the hex string to a Uint8Array
