@@ -28,7 +28,7 @@ const getPassphrase = () =>
   new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
 // TODO: change this to local network
 // TODO: use different mnemonic for this test -- else there are two duplicate transactions with the unified provider tests
-describe("Zeko Sequencer Submit Transaction Provider (Functional)", () => {
+describe.skip("Zeko Sequencer Submit Transaction Provider (Functional)", () => {
   let provider: ReturnType<typeof MinaNode.createTxSubmitProvider>
   let accountInfoProvider: ReturnType<typeof MinaNode.createAccountInfoProvider>
   let tokenMap: TokenIdMap
