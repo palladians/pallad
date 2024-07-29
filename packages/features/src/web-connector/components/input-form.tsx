@@ -7,10 +7,12 @@ export const InputForm = ({
   onSubmit,
   onReject,
   inputType,
+  loading,
 }: {
   onSubmit: SubmitHandler<UserInputForm>
   onReject: () => void
   inputType: string
+  loading: boolean
 }) => {
   const [showPassword, setShowPassword] = useState(false)
   const { register, handleSubmit } = useForm<UserInputForm>()
@@ -32,6 +34,7 @@ export const InputForm = ({
           data-testid="webConnector/password"
           placeholder="Enter your password"
           className="grow"
+          disabled={loading}
           {...register("userInput")}
         />
         {inputType === "password" && (
@@ -44,10 +47,19 @@ export const InputForm = ({
           </button>
         )}
       </label>
-      <button type="submit" className="btn btn-primary max-w-48 w-full">
+      <button
+        type="submit"
+        className="btn btn-primary max-w-48 w-full"
+        disabled={loading}
+      >
         Sign
       </button>
-      <button type="button" className="btn max-w-48 w-full" onClick={onReject}>
+      <button
+        type="button"
+        className="btn max-w-48 w-full"
+        onClick={onReject}
+        disabled={loading}
+      >
         Reject
       </button>
     </form>

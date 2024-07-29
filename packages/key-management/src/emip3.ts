@@ -5,7 +5,7 @@ import { sha512 } from "@noble/hashes/sha512"
 
 const KEY_LENGTH = 32
 const NONCE_LENGTH = 12
-const PBKDF2_ITERATIONS = 19_162
+const PBKDF2_ITERATIONS = 210_000
 const SALT_LENGTH = 32
 
 export const createPbkdf2Key = async (

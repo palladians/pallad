@@ -22,7 +22,9 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
     set(
       produce((state) => {
         if (!state.accounts[network]?.[address]) {
-          state.accounts[network] = {}
+          if (!state.accounts[network]) {
+            state.accounts[network] = {}
+          }
           state.accounts[network][address] = {
             ...initialSingleAccountState,
             ...state.accounts[network][address],
@@ -99,7 +101,6 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
   clear: () => {
     set(
       produce((state) => {
-        // TODO: fix this it doesn't work
         state.accounts = {} as never
       }),
     )

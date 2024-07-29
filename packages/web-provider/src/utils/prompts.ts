@@ -29,17 +29,26 @@ export const showUserPrompt = async (
           return reject(new Error("Wrong window context"))
         }
         if (newWindow?.tabs && newWindow.tabs.length > 0) {
-          // Ensure newWindow and newWindow.tabs are defined and not empty
-          const tabId = newWindow.tabs?.[0]?.id!
+          const tabId = newWindow.tabs?.[0]?.id
           if (typeof tabId === "number") {
-            // If tabId is a number, construct the full URL and update the tab
-            const fullUrl = `prompt.html?title=${encodeURIComponent(
-              metadata.title,
-            )}&payload=${encodeURIComponent(
-              metadata.payload ?? "",
-            )}&inputType=${inputType}&windowId=${newWindow.id}`
-            await chrome.tabs.update(tabId, { url: fullUrl })
+            setTimeout(() => {
+              chrome.runtime.sendMessage({
+                type: "action_request",
+                params: {
+                  title: metadata.title,
+                  payload: metadata.payload ?? "{}",
+                  inputType,
+                },
+              })
+            }, 1000)
             chrome.runtime.onMessage.addListener(listener)
+            const closeListener = (closedWindowId: number) => {
+              chrome.windows.onRemoved.removeListener(closeListener)
+              if (closedWindowId === newWindow?.id) {
+                return reject(new Error("4001 - User Rejected Request"))
+              }
+            }
+            chrome.windows.onRemoved.addListener(closeListener)
           } else {
             return reject(new Error("Failed to retrieve tab ID"))
           }

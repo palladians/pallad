@@ -21,7 +21,7 @@ const inject = () => {
         { ...data.payload, origin },
         "background",
       )
-      if (result.error) {
+      if (result?.error) {
         response = { jsonrpc: "1.0", error: deserializeError(result.error) }
       } else {
         response = { jsonrpc: "1.0", result }

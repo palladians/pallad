@@ -458,15 +458,16 @@ export class MinaProvider implements IMinaProvider {
         return (await this.vault.getBalance()) as unknown as T
 
       case "mina_getState": {
+        const { query, props } = params as Validation.GetStateData
+        const credentials = await this.vault.getState(query as any, props)
         const confirmation = await this.userPrompt("confirmation", {
           title: "Credential read request",
-          payload: JSON.stringify(params),
+          payload: JSON.stringify({ ...params, credentials }),
         })
         if (!confirmation) {
           throw this.createProviderRpcError(4001, "User Rejected Request")
         }
-        const { query, props } = params as Validation.GetStateData
-        return (await this.vault.getState(query as any, props)) as unknown as T
+        return credentials as unknown as T
       }
 
       case "mina_setState": {
@@ -478,7 +479,8 @@ export class MinaProvider implements IMinaProvider {
           throw this.createProviderRpcError(4001, "User Rejected Request")
         }
         const requestData = params as Validation.SetStateData
-        return (await this.vault.setState(requestData as any)) as unknown as T
+        await this.vault.setState(requestData as any)
+        return { success: true } as unknown as T
       }
 
       case "mina_chainId": {
@@ -517,6 +519,6 @@ export class MinaProvider implements IMinaProvider {
 
   protected getRpcUrl(chainId: string /*, projectId?: string*/) {
     const providedRpc = this.rpc.rpcMap?.[chainId]
-    return providedRpc!
+    return providedRpc
   }
 }

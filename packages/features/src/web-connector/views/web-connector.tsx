@@ -1,5 +1,6 @@
 import { AppLayout } from "@/components/app-layout"
 import { MenuBar } from "@/components/menu-bar"
+import { Skeleton } from "@/components/skeleton"
 import type { SubmitHandler } from "react-hook-form"
 import { ConfirmationForm } from "../components/confirmation-form"
 import { InputForm } from "../components/input-form"
@@ -13,6 +14,7 @@ type WebConnectorViewProps = {
   onDecline: () => void
   onReject: () => void
   onSubmit: SubmitHandler<UserInputForm>
+  loading: boolean
 }
 
 export const WebConnectorView = ({
@@ -23,6 +25,7 @@ export const WebConnectorView = ({
   onReject,
   onConfirm,
   onSubmit,
+  loading,
 }: WebConnectorViewProps) => {
   const onClose = () => {
     onReject()
@@ -36,21 +39,28 @@ export const WebConnectorView = ({
           <div className="flex flex-1 flex-col px-8 pb-8">
             <div className="flex flex-col flex-1 gap-4">
               <h1 className="text-2xl">{title}</h1>
-              <div
-                // biome-ignore lint: Sanitized by DOMPurify
-                dangerouslySetInnerHTML={{ __html: payload }}
-                className="card bg-secondary h-48 p-4 overflow-y-scroll whitespace-pre-wrap"
-              />
+              <Skeleton loading={loading} h="192px">
+                <div
+                  // biome-ignore lint: Sanitized by DOMPurify
+                  dangerouslySetInnerHTML={{ __html: payload }}
+                  className="card bg-secondary h-48 p-4 overflow-y-scroll whitespace-pre-wrap break-all"
+                />
+              </Skeleton>
             </div>
             <div className="flex justify-center items-center">
               {inputType === "confirmation" && (
-                <ConfirmationForm onConfirm={onConfirm} onDecline={onDecline} />
+                <ConfirmationForm
+                  onConfirm={onConfirm}
+                  onDecline={onDecline}
+                  loading={loading}
+                />
               )}
               {["text", "password"].includes(inputType) && (
                 <InputForm
                   inputType={inputType}
                   onSubmit={onSubmit}
                   onReject={onReject}
+                  loading={loading}
                 />
               )}
             </div>
