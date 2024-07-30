@@ -67,10 +67,6 @@ describe("Unified Chain provider", () => {
             addresses: [publicKey],
           })) as Tx[]
 
-          console.log(
-            "Mina Explorer Unified.ChainHistory Provider Response",
-            response,
-          )
           const transaction = response[0]
 
           expect(transaction).toHaveProperty("amount")
@@ -130,10 +126,6 @@ describe("Unified Chain provider", () => {
             addresses: [publicKey],
           })) as Tx[]
 
-          console.log(
-            "Mina Explorer Unified.ChainHistory Provider Response",
-            response,
-          )
           const transaction = response[0]
 
           expect(transaction).toHaveProperty("amount")

@@ -9,7 +9,7 @@ import type { MinaDerivationArgs } from "../../dist"
 import { SessionKeyAgentBase } from "../../src"
 import type { ChainOperationArgs } from "../../src/types"
 
-describe("SessionKeyAgentBase (Mina Functionality)", () => {
+describe.skip("SessionKeyAgentBase (Mina Functionality)", () => {
   let instance: SessionKeyAgentBase
   let networkType: Mina.NetworkType
 

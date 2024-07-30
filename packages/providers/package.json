@@ -18,6 +18,7 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
+    "@noble/hashes": "1.4.0",
     "@palladxyz/key-management": "workspace:*",
     "@palladxyz/mina-core": "workspace:*",
     "@palladxyz/pallad-core": "workspace:*",

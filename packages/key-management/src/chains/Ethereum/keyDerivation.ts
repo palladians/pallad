@@ -9,7 +9,7 @@ import {
 export function deriveEthereumPrivateKey(
   args: EthereumSpecificArgs | EthereumDerivationArgs,
   decryptedSeedBytes: Uint8Array,
-): string {
+): Uint8Array {
   const { accountIndex, addressIndex } = args
 
   // Create an HDKey from the root private key
@@ -18,8 +18,5 @@ export function deriveEthereumPrivateKey(
   const childNode = rootKey.derive(path)
   if (!childNode?.privateKey) throw new Error("Unable to derive private key")
 
-  const privateKey = childNode.privateKey
-  // maybe want to return bufferToHex(privateKey)
-  const privateKeyHex = Buffer.from(privateKey).toString("hex")
-  return privateKeyHex
+  return childNode.privateKey
 }

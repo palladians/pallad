@@ -28,7 +28,6 @@ describe("Mina Explorer Chain History Provider (Functional)", () => {
       const response = (await provider.transactionsByAddresses({
         addresses: [publicKey],
       })) as Mina.TransactionBody[]
-      console.log("response", response)
 
       // TODO: investigate pagination
       const transaction = response[0]

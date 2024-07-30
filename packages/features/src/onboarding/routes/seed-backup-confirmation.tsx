@@ -1,6 +1,7 @@
+import { utf8ToBytes } from "@noble/hashes/utils"
 import type { ChainDerivationArgs } from "@palladxyz/key-management"
 import { Network } from "@palladxyz/pallad-core"
-import { getSessionPersistence } from "@palladxyz/persistence"
+import { sessionPersistence } from "@palladxyz/vault"
 import { DEFAULT_NETWORK, KeyAgents, useVault } from "@palladxyz/vault"
 import { useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -47,7 +48,7 @@ export const SeedBackupConfirmationRoute = () => {
     if (!walletName) return
     if (!spendingPassword) return
     if (!mnemonic) return
-    getSessionPersistence().setItem("spendingPassword", spendingPassword)
+    sessionPersistence.setItem("spendingPassword", spendingPassword)
     await useVault.persist.rehydrate()
     const restoreArgs: ChainDerivationArgs = {
       network: Network.Mina,
@@ -61,10 +62,7 @@ export const SeedBackupConfirmationRoute = () => {
         DEFAULT_NETWORK,
         {
           mnemonicWords: mnemonic.split(" "),
-          getPassphrase: () =>
-            new Promise<Uint8Array>((resolve) =>
-              resolve(Buffer.from(spendingPassword)),
-            ),
+          getPassphrase: () => utf8ToBytes(spendingPassword),
         },
         walletName,
         KeyAgents.InMemory,

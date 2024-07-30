@@ -1,7 +1,0 @@
-{
-  "extends": "@palladxyz/common/tsconfig.json",
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext"
-  }
-}

@@ -7,6 +7,7 @@ import { useEffect } from "react"
 
 function App() {
   useEffect(() => {
+    if (typeof document === "undefined") return
     const handleContextmenu = (e: MouseEvent) => {
       if (!e.metaKey) e.preventDefault()
     }

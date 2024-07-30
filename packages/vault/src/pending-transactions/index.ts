@@ -1,7 +1,7 @@
-import { getLocalPersistence } from "@palladxyz/persistence"
 import dayjs from "dayjs"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
+import { localPersistence } from "../utils"
 
 type PendingTransaction = {
   hash: string
@@ -52,7 +52,7 @@ export const usePendingTransactionStore = create<PendingTransactionsStore>()(
     }),
     {
       name: "PalladPendingTransactions",
-      storage: createJSONStorage(getLocalPersistence),
+      storage: createJSONStorage(() => localPersistence),
     },
   ),
 )

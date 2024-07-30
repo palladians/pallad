@@ -30,7 +30,6 @@ describe.skip("Optimism Chain History Provider (Functional)", () => {
       const response = await provider.transactionsByAddresses({
         addresses: [publicKey],
       })
-      console.log("Optimism transaction history:", response)
       expect(response[0]).toHaveProperty("blockNumber")
     })
   })

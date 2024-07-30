@@ -3,11 +3,8 @@ import type {
   GetPassphrase,
 } from "@palladxyz/key-management"
 import type { ChainOperationArgs } from "@palladxyz/key-management"
-import {
-  getSecurePersistence,
-  getSessionPersistence,
-} from "@palladxyz/persistence"
 import type { ProviderConfig } from "@palladxyz/providers"
+import { securePersistence, sessionPersistence } from "@palladxyz/vault"
 import { usePendingTransactionStore } from "@palladxyz/vault"
 import {
   type SearchQuery,
@@ -16,6 +13,7 @@ import {
 } from "@palladxyz/vault"
 import dayjs from "dayjs"
 import Client from "mina-signer"
+import { storage } from "webextension-polyfill"
 
 import type { Mina } from "@palladxyz/mina-core"
 import type { Validation } from ".."
@@ -133,24 +131,24 @@ export class VaultService implements IVaultService {
   }
 
   async getEnabled({ origin }: { origin: ZkAppUrl }) {
-    const { permissions } = await chrome.storage.local.get({
+    const { permissions } = await storage.local.get({
       permissions: true,
     })
     return permissions[origin] === AuthorizationState.ALLOWED
   }
 
   async isBlocked({ origin }: { origin: ZkAppUrl }) {
-    const { permissions } = await chrome.storage.local.get({
+    const { permissions } = await storage.local.get({
       permissions: true,
     })
     return permissions[origin] === AuthorizationState.BLOCKED
   }
 
   async setEnabled({ origin }: { origin: ZkAppUrl }) {
-    const { permissions } = await chrome.storage.local.get({
+    const { permissions } = await storage.local.get({
       permissions: true,
     })
-    return chrome.storage.local.set({
+    return storage.local.set({
       permissions: {
         ...permissions,
         [origin]: AuthorizationState.ALLOWED,
@@ -248,12 +246,12 @@ export class VaultService implements IVaultService {
   async isLocked() {
     await this.rehydrate()
     const authenticated =
-      ((await getSecurePersistence().getItem("foo")) as unknown) === "bar"
+      ((await securePersistence.getItem("foo")) as unknown) === "bar"
     return !authenticated
   }
 
   async unlockWallet(spendingPassword: string) {
-    await getSessionPersistence().setItem("spendingPassword", spendingPassword)
+    await sessionPersistence.setItem("spendingPassword", spendingPassword)
     await this.rehydrate()
     const locked = await this.isLocked()
     if (locked === true) {
@@ -264,15 +262,8 @@ export class VaultService implements IVaultService {
   }
 
   async rehydrate() {
-    return await useVault.persist.rehydrate()
+    return useVault.persist.rehydrate()
   }
-  /*
-  TODO: add checkPassword function for methods that requrie password
-  async checkPassword(password) {
-    const correctPassword = getSessionPersistence().getItem('spendingPassword')
-    return correctPassword === password
-  }
-  */
 
   async syncWallet() {
     await this.rehydrate()

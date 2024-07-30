@@ -95,19 +95,19 @@ export const credentialMatchers: Record<Network, CredentialMatcher<any>> = {
 
 // other new ones that work
 export interface KeyPairDerivationOperations<T> {
-  derivePublicKey: (privateKey: Uint8Array | string) => Promise<string>
+  derivePublicKey: (privateKey: Uint8Array) => Promise<string>
   derivePrivateKey: (
     decryptedSeedBytes: Uint8Array,
     args: T,
-  ) => Promise<Uint8Array | string>
+  ) => Promise<Uint8Array>
 }
 
 export const createChainDerivationOperationsProvider = (
   args: ChainDerivationArgs,
 ) => {
-  const derivePublicKey = (privateKey: Uint8Array | string) => {
+  const derivePublicKey = (privateKey: Uint8Array) => {
     if (args.network === Network.Mina) {
-      return minaKeyPairDerivationOperations.derivePublicKey(String(privateKey))
+      return minaKeyPairDerivationOperations.derivePublicKey(privateKey)
     }
     if (args.network === Network.Ethereum) {
       return ethKeyPairDerivationOperations.derivePublicKey(privateKey)
@@ -149,7 +149,7 @@ export type ChainAddress = Mina.PublicKey | string
 /**
  * @returns passphrase used to decrypt private keys
  */
-export type GetPassphrase = (noCache?: boolean) => Promise<Uint8Array>
+export type GetPassphrase = (noCache?: boolean) => Uint8Array
 
 export interface AccountKeyDerivationPath {
   account_ix: number
@@ -232,7 +232,7 @@ export type ChainPublicKey = Mina.PublicKey | string
 
 export type ChainSignatureResult = MinaSignatureResult | EthereumSignatureResult
 
-export type ChainPrivateKey = string | Uint8Array
+export type ChainPrivateKey = Uint8Array
 
 export type ChainKeyPair = {
   publicKey: ChainPublicKey

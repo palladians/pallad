@@ -7,14 +7,13 @@ import Client from "mina-signer"
 import sinon from "sinon"
 import { expect } from "vitest"
 
+import { hexToBytes, utf8ToBytes } from "@noble/hashes/utils"
 import type { MinaDerivationArgs } from "../../dist"
-import { getPassphraseRethrowTypedError } from "../../src/InMemoryKeyAgent"
 import { KeyAgentBase } from "../../src/KeyAgentBase"
 import {
   type MinaSpecificArgs,
   deriveMinaPrivateKey,
 } from "../../src/chains/Mina"
-import { reverseBytes } from "../../src/chains/Mina/keyDerivationUtils"
 import { emip3encrypt } from "../../src/emip3"
 import {
   type ChainOperationArgs,
@@ -29,13 +28,9 @@ const params = {
   passphrase: "passphrase",
   incorrectPassphrase: "not correct passphrase",
 }
-const getPassphrase = () =>
-  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
+const getPassphrase = () => utf8ToBytes(params.passphrase)
 
-const getWrongPassphrase = () =>
-  new Promise<Uint8Array>((resolve) =>
-    resolve(Buffer.from(params.incorrectPassphrase)),
-  )
+const getWrongPassphrase = () => utf8ToBytes(params.incorrectPassphrase)
 
 describe("KeyAgentBase (Mina Functionality)", () => {
   class KeyAgentBaseInstance extends KeyAgentBase {}
@@ -58,9 +53,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
     rootKeyBytes = root.privateKey ? root.privateKey : new Uint8Array([])
 
     // passphrase
-    passphrase = await getPassphraseRethrowTypedError(getPassphrase)
-    // define the agent properties
-    passphrase = await getPassphraseRethrowTypedError(getPassphrase)
+    passphrase = getPassphrase()
     // Works with seed
     encryptedSeedBytes = await emip3encrypt(seed, passphrase)
   })
@@ -262,10 +255,10 @@ describe("KeyAgentBase (Mina Functionality)", () => {
     })
 
     it("should reverse bytes correctly", () => {
-      const originalBuffer = Buffer.from("1234", "hex")
-      const reversedBuffer = Buffer.from("3412", "hex")
+      const originalBuffer = hexToBytes("1234")
+      const reversedBuffer = hexToBytes("4321")
 
-      expect(reverseBytes(originalBuffer)).to.deep.equal(reversedBuffer)
+      expect(originalBuffer.reverse()).to.deep.equal(reversedBuffer)
     })
 
     it("should export root key successfully", async () => {

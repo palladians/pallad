@@ -1,7 +1,7 @@
 import { validateMnemonic, wordlist } from "@palladxyz/key-management"
 import type { ChainDerivationArgs } from "@palladxyz/key-management"
 import { Network } from "@palladxyz/pallad-core"
-import { getSessionPersistence } from "@palladxyz/persistence"
+import { sessionPersistence } from "@palladxyz/vault"
 import { DEFAULT_NETWORK, KeyAgents, useVault } from "@palladxyz/vault"
 import { useState } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -12,6 +12,7 @@ import { shallow } from "zustand/shallow"
 import { useAppStore } from "@/common/store/app"
 import { useOnboardingStore } from "@/common/store/onboarding"
 
+import { utf8ToBytes } from "@noble/hashes/utils"
 import type { MnemonicInputData } from "../types"
 import { SeedImportView } from "../views/seed-import"
 
@@ -38,7 +39,7 @@ export const SeedImportRoute = () => {
   const onSubmit: SubmitHandler<MnemonicInputData> = async (data) => {
     if (!walletName) return
     if (!spendingPassword) return
-    getSessionPersistence().setItem("spendingPassword", spendingPassword)
+    sessionPersistence.setItem("spendingPassword", spendingPassword)
     await useVault.persist.rehydrate()
 
     const restoreArgs: ChainDerivationArgs = {
@@ -53,10 +54,7 @@ export const SeedImportRoute = () => {
         DEFAULT_NETWORK,
         {
           mnemonicWords: data.mnemonic,
-          getPassphrase: () =>
-            new Promise<Uint8Array>((resolve) =>
-              resolve(Buffer.from(spendingPassword)),
-            ),
+          getPassphrase: () => utf8ToBytes(spendingPassword),
         },
         walletName,
         KeyAgents.InMemory,

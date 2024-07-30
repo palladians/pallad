@@ -1,3 +1,4 @@
+import { bytesToUtf8 } from "@noble/ciphers/utils"
 import {
   type EthereumSignablePayload,
   EthereumSigningOperations,
@@ -66,7 +67,7 @@ export abstract class SessionKeyAgentBase implements SessionKeyAgent {
   ): Promise<ChainSignatureResult> {
     const privateKeyBytes = payload.privateKeyBytes
 
-    let privateKey: string | null = Buffer.from(privateKeyBytes).toString()
+    let privateKey: string | null = bytesToUtf8(privateKeyBytes)
 
     try {
       let result
@@ -110,6 +111,6 @@ export abstract class SessionKeyAgentBase implements SessionKeyAgent {
     const seedBytes = bip39.entropyToSeed(entropy)
     const provider = createChainDerivationOperationsProvider(args)
     const privateKey = await provider.derivePrivateKey(seedBytes)
-    return Buffer.from(privateKey)
+    return privateKey
   }
 }

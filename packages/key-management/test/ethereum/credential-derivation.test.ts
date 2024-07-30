@@ -1,6 +1,7 @@
 import { Network } from "@palladxyz/pallad-core"
 import { describe, expect, it } from "vitest"
 
+import { hexToBytes } from "@noble/hashes/utils"
 import type {
   EthereumDerivationArgs,
   EthereumGroupedCredentials,
@@ -19,9 +20,7 @@ import { isEthereumDerivation } from "../../src/chains/Ethereum/keyDerivationUti
 describe("credentialderivation utils", () => {
   const validPrivateKeyHex =
     "ab8e7c879d7a802940c7a6535752ee6d3064f7dcbb25b4d2cd90c1f8efdb61f0"
-  const validPrivateKeyBytes = Uint8Array.from(
-    Buffer.from(validPrivateKeyHex, "hex"),
-  )
+  const validPrivateKeyBytes = hexToBytes(validPrivateKeyHex)
   const expectedPublicKey = "0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9"
 
   const expectedGroupedCredentials: EthereumGroupedCredentials = {

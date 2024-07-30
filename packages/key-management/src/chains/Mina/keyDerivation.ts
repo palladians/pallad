@@ -1,14 +1,14 @@
 import { sha256 } from "@noble/hashes/sha256"
+import { bytesToHex, utf8ToBytes } from "@noble/hashes/utils"
 import { base58check } from "@scure/base"
 import { HDKey } from "@scure/bip32"
 
-import { reverseBytes } from "./keyDerivationUtils"
 import { type MinaDerivationArgs, MinaKeyConst } from "./types"
 
 export function deriveMinaPrivateKey(
   args: MinaDerivationArgs,
   decryptedSeedBytes: Uint8Array,
-) {
+): Uint8Array {
   const { accountIndex, addressIndex } = args
 
   // Create an HDKey from the root private key
@@ -19,13 +19,12 @@ export function deriveMinaPrivateKey(
   if (!childNode?.privateKey?.[0]) {
     childNode.privateKey.set([0x3f], 0)
   }
-  const childPrivateKey = reverseBytes(Buffer.from(childNode.privateKey))
-  const privateKeyHex = `5a01${childPrivateKey.toString("hex")}`
+  const childPrivateKey = childNode.privateKey.reverse()
+  const privateKeyHex = `5a01${bytesToHex(childPrivateKey)}`
   // Convert the hex string to a Uint8Array
   if (!privateKeyHex) {
     throw new Error("privateKeyHex is empty")
   }
-
   const hexMatches = privateKeyHex.match(/.{1,2}/g)
   if (!hexMatches) {
     throw new Error("Failed to split privateKeyHex into bytes")
@@ -36,5 +35,5 @@ export function deriveMinaPrivateKey(
 
   // Encode the Uint8Array into a base58 string with checksum
   const privateKey = base58check(sha256).encode(privateKeyBytes)
-  return privateKey
+  return utf8ToBytes(privateKey)
 }

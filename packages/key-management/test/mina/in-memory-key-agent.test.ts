@@ -6,10 +6,10 @@ import Client from "mina-signer"
 import sinon from "sinon"
 import { expect } from "vitest"
 
+import { utf8ToBytes } from "@noble/hashes/utils"
 //import { emip3encrypt } from '../src/emip3'
 import {
   type FromBip39MnemonicWordsProps,
-  //getPassphraseRethrowTypedError,
   InMemoryKeyAgent,
 } from "../../src/InMemoryKeyAgent"
 import type {
@@ -25,8 +25,7 @@ const sandbox = sinon.createSandbox()
 const params = {
   passphrase: "passphrase",
 }
-const getPassphrase = () =>
-  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
+const getPassphrase = () => utf8ToBytes(params.passphrase)
 
 describe("Mina InMemoryKeyAgent", () => {
   let agent: InMemoryKeyAgent
@@ -42,7 +41,7 @@ describe("Mina InMemoryKeyAgent", () => {
     // Create root node from seed
     root = bip32.HDKey.fromMasterSeed(seed)
     // unencrypted root key bytes
-    rootKeyBytes = root.privateKey ? root.privateKey : Buffer.from([])
+    rootKeyBytes = root.privateKey ? root.privateKey : new Uint8Array([])
     // define the agent properties
     //encryptedSeedBytes = await emip3encrypt(seed, passphrase)
     const agentArgs: FromBip39MnemonicWordsProps = {
@@ -75,7 +74,7 @@ describe("Mina InMemoryKeyAgent", () => {
     /*
     // Need to fix this test
     it('should throw error when decrypting root private key fails', async () => {
-        const fakeGetPassphrase = async () => Buffer.from('wrong_passphrase');
+        const fakeGetPassphrase = () => utf8ToBytes('wrong_passphrase');
         const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
           getPassphrase: fakeGetPassphrase,
           mnemonicWords: mnemonic
@@ -83,7 +82,7 @@ describe("Mina InMemoryKeyAgent", () => {
         await expect(agentFromBip39.decryptSeed()).rejects.toThrow('Failed to decrypt root private key');
       });
       it('should throw error when decrypting coin type private key fails', async () => {
-        const fakeGetPassphrase = async () => Buffer.from('wrong_passphrase');
+        const fakeGetPassphrase = () => utf8ToBytes('wrong_passphrase');
         const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
           getPassphrase: fakeGetPassphrase,
           mnemonicWords: mnemonic

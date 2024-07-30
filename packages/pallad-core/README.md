@@ -17,11 +17,10 @@ npm install @palladxyz/mina-core
 The `AccountInfoProvider` interface is used to fetch account information based on a public key.
 
 ```ts
-import { AccountInfoProvider } from '@palladxyz/mina-core'
+import { AccountInfoProvider } from "@palladxyz/mina-core";
 
 async function getAccountInfo(provider: AccountInfoProvider) {
-  const accountInfo = await provider.getAccountInfo({ publicKey: '...' })
-  console.log(accountInfo)
+  const accountInfo = await provider.getAccountInfo({ publicKey: "..." });
 }
 ```
 
@@ -30,18 +29,16 @@ async function getAccountInfo(provider: AccountInfoProvider) {
 The `ChainHistoryProvider` interface provides methods to fetch transactions either by addresses or by hashes.
 
 ```ts
-import { ChainHistoryProvider } from '@palladxyz/mina-core'
+import { ChainHistoryProvider } from "@palladxyz/mina-core";
 
 async function getTransactionsByAddresses(provider: ChainHistoryProvider) {
   const transactions = await provider.transactionsByAddresses({
-    addresses: ['...']
-  })
-  console.log(transactions)
+    addresses: ["..."],
+  });
 }
 
 async function getTransactionsByHashes(provider: ChainHistoryProvider) {
-  const transactions = await provider.transactionsByHashes({ ids: ['...'] })
-  console.log(transactions)
+  const transactions = await provider.transactionsByHashes({ ids: ["..."] });
 }
 ```
 
@@ -50,11 +47,11 @@ async function getTransactionsByHashes(provider: ChainHistoryProvider) {
 The `TxSubmitProvider` interface allows you to submit signed transactions to the network.
 
 ```ts
-import { TxSubmitProvider } from '@palladxyz/mina-core'
+import { TxSubmitProvider } from "@palladxyz/mina-core";
 
 async function submitTx(provider: TxSubmitProvider) {
   const signedTx = // Prepare your signed transaction here
-    await provider.submitTx({ signedTransaction: signedTx })
+    await provider.submitTx({ signedTransaction: signedTx });
 }
 ```
 
@@ -63,13 +60,10 @@ async function submitTx(provider: TxSubmitProvider) {
 All provider types extend the base Provider interface, which provides a health check method to verify if the provider is operational.
 
 ```ts
-import { Provider } from '@palladxyz/mina-core'
+import { Provider } from "@palladxyz/mina-core";
 
 async function checkHealth(provider: Provider) {
-  const healthCheckResponse = await provider.healthCheck()
-  console.log(
-    healthCheckResponse.ok ? 'Provider is healthy' : 'Provider is down'
-  )
+  const healthCheckResponse = await provider.healthCheck();
 }
 ```
 

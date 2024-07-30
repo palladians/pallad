@@ -1,3 +1,4 @@
+import { utf8ToBytes } from "@noble/hashes/utils"
 import type {
   ChainOperationArgs,
   ChainSignablePayload,
@@ -285,16 +286,10 @@ export class MinaProvider implements IMinaProvider {
     passphrase: string
   }) {
     try {
-      return await this.vault.sign(
-        signable,
-        operationArgs,
-        () =>
-          new Promise<Uint8Array>((resolve) =>
-            // TODO: make sure we handle scenarios where the password is provided and not just boolean 'confirmed'
-            resolve(Buffer.from(passphrase as string)),
-          ),
+      return await this.vault.sign(signable, operationArgs, () =>
+        utf8ToBytes(passphrase),
       )
-    } catch {
+    } catch (error) {
       throw this.createProviderRpcError(4100, "Unauthorized")
     }
   }

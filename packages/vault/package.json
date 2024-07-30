@@ -18,20 +18,21 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
+    "@noble/hashes": "1.4.0",
     "@palladxyz/key-management": "workspace:*",
     "@palladxyz/mina-core": "workspace:*",
     "@palladxyz/pallad-core": "workspace:*",
-    "@palladxyz/persistence": "workspace:*",
     "@palladxyz/providers": "workspace:*",
     "@palladxyz/util": "workspace:*",
+    "@plasmohq/storage": "^1.11.0",
     "bs58check": "4.0.0",
     "buffer": "6.0.3",
     "dayjs": "1.11.12",
     "immer": "10.1.1",
     "rambda": "9.2.1",
     "redux-logger": "3.0.6",
+    "superjson": "2.2.1",
     "unique-names-generator": "4.7.1",
-    "vitest": "2.0.4",
     "zustand": "4.5.4"
   },
   "devDependencies": {

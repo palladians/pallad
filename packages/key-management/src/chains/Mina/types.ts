@@ -74,13 +74,13 @@ export type MinaSignablePayload =
 export class MinaPayload implements ChainSpecificPayload {
   network = Network.Mina
 
-  derivePublicKey(privateKey: string) {
+  derivePublicKey(privateKey: Uint8Array) {
     return new Promise<string>((resolve) =>
       resolve(deriveMinaPublicKey(privateKey)),
     )
   }
   derivePrivateKey(decryptedSeedBytes: Uint8Array, args: MinaSpecificArgs) {
-    return new Promise<string>((resolve) =>
+    return new Promise<Uint8Array>((resolve) =>
       resolve(deriveMinaPrivateKey(args, decryptedSeedBytes)),
     )
   }
@@ -88,8 +88,8 @@ export class MinaPayload implements ChainSpecificPayload {
 // new functional implementation of MinaPayload
 export const minaKeyPairDerivationOperations: KeyPairDerivationOperations<MinaDerivationArgs> =
   {
-    derivePublicKey: (privateKey: Uint8Array | string) => {
-      if (typeof privateKey === "string") {
+    derivePublicKey: (privateKey: Uint8Array) => {
+      if (privateKey instanceof Uint8Array) {
         return Promise.resolve(deriveMinaPublicKey(privateKey))
       }
       throw new Error("Invalid type for privateKey - string required.")

@@ -50,5 +50,4 @@ export async function sendMinaOnZeko(nodeUrl: string): Promise<void> {
     },
   }
   const response = await provider.submitTx(submitTxArgs)
-  console.log("Zeko Sequencer Submit Transaction Provider Response", response)
 }

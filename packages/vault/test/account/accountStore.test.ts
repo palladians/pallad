@@ -69,7 +69,6 @@ describe("AccountStore", () => {
         address,
       ).accountInfo
     })
-    console.log("finalAccountInfo", finalAccountInfo)
     expect(finalAccountInfo).toEqual(accountInfo)
   })
 

@@ -25,7 +25,6 @@ const callPalladAsync = ({ method, payload }) => {
       channel.close()
       const error = data.response?.error
       if (error) {
-        console.log("[Pallad] Web Connector Error")
         try {
           console.table(JSON.parse(error.message))
         } catch {

@@ -34,9 +34,7 @@ export const privateToPublic = (privateKey: Uint8Array): Uint8Array => {
 }
 
 export function deriveEthereumPublicKey(privateKey: Uint8Array): string {
-  const privateKeyBuffer = Buffer.from(privateKey)
-  const publicKey = privateToPublic(privateKeyBuffer)
-
+  const publicKey = privateToPublic(privateKey)
   return bytesToHex(publicKey)
 }
 

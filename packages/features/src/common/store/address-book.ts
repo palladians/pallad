@@ -1,4 +1,4 @@
-import { getLocalPersistence } from "@palladxyz/persistence"
+import { localPersistence } from "@palladxyz/vault"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
@@ -31,7 +31,7 @@ export const useAddressBookStore = create<AddressBookStore>()(
     }),
     {
       name: "PalladAddressBook",
-      storage: createJSONStorage(getLocalPersistence),
+      storage: createJSONStorage(() => localPersistence),
     },
   ),
 )

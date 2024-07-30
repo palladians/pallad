@@ -7,12 +7,13 @@ import type {
   MinaSessionCredentials,
 } from "./types"
 
-export function deriveMinaPublicKey(privateKey: string): Mina.PublicKey {
+export function deriveMinaPublicKey(privateKey: Uint8Array): Mina.PublicKey {
   // Mina network client.
   // TODO: Check if the public key is different based on client networkType
   const minaClient = new Client({ network: "mainnet" })
   // Derive and return the Mina public key
-  const publicKey = minaClient.derivePublicKey(privateKey)
+  const privateKeyString = new TextDecoder().decode(privateKey)
+  const publicKey = minaClient.derivePublicKeyUnsafe(privateKeyString)
   return publicKey as Mina.PublicKey
 }
 

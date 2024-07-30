@@ -23,7 +23,6 @@ describe("Blockberry Node Status Provider (Functional)", () => {
     it("should return account info for a valid public key", async () => {
       // This test now depends on the actual response from the server
       const response = await provider.getNodeStatus()
-      console.log("response", response)
     })
   })
 

@@ -11,9 +11,7 @@ import { emip3encrypt } from "../src/emip3"
 
 describe("KeyDecryptor", () => {
   const passphrase = new Uint8Array([1, 2, 3, 4, 5])
-  const getPassphrase = async () => {
-    return await Promise.resolve(passphrase)
-  }
+  const getPassphrase = () => passphrase
   let mnemonic: string[]
   let seed: Uint8Array
   let encryptedPrivateKey: Uint8Array

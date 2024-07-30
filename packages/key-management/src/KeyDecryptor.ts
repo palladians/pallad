@@ -1,4 +1,3 @@
-import { getPassphraseRethrowTypedError } from "./InMemoryKeyAgent"
 import { emip3decrypt } from "./emip3"
 import * as errors from "./errors"
 import type {
@@ -8,7 +7,7 @@ import type {
 } from "./types"
 
 export class KeyDecryptor {
-  #getPassphrase: (noCache?: true) => Promise<Uint8Array>
+  #getPassphrase: (noCache?: true) => Uint8Array
 
   constructor(getPassphrase: GetPassphrase) {
     this.#getPassphrase = getPassphrase
@@ -18,13 +17,11 @@ export class KeyDecryptor {
     encryptedPrivateKeyBytes: Uint8Array,
     noCache?: true,
   ): Promise<Uint8Array> {
-    const passphrase = await getPassphraseRethrowTypedError(() =>
-      this.#getPassphrase(noCache),
-    )
+    const passphrase = this.#getPassphrase(noCache)
     let decryptedKeyBytes: Uint8Array
     try {
       decryptedKeyBytes = await emip3decrypt(
-        new Uint8Array(encryptedPrivateKeyBytes),
+        encryptedPrivateKeyBytes,
         passphrase,
       )
     } catch (error) {
@@ -51,9 +48,7 @@ export class KeyDecryptor {
     errorMessage: string,
     noCache?: true,
   ) {
-    const passphrase = await getPassphraseRethrowTypedError(() =>
-      this.#getPassphrase(noCache),
-    )
+    const passphrase = this.#getPassphrase(noCache)
     let decryptedKeyBytes: Uint8Array
     try {
       decryptedKeyBytes = await emip3decrypt(

@@ -1,6 +1,7 @@
 import { HDKey } from "@scure/bip32"
 
-import { getPassphraseRethrowTypedError } from "./InMemoryKeyAgent"
+import { bytesToUtf8 } from "@noble/ciphers/utils"
+import { utf8ToBytes } from "@noble/hashes/utils"
 import { KeyDecryptor } from "./KeyDecryptor"
 import {
   type EthereumSignablePayload,
@@ -76,7 +77,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     getPassphrase: GetPassphrase,
     pure?: boolean,
   ): Promise<GroupedCredentials> {
-    const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
+    const passphrase = getPassphrase()
     const matcher = credentialMatchers[args.network]
     if (!matcher) {
       throw new Error(`Unsupported network: ${args.network}`)
@@ -123,7 +124,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     let privateKey: ChainPrivateKey | null
     privateKey = await this.#generatePrivateKeyFromSeed(args)
     const encryptedPrivateKeyBytes = await emip3encrypt(
-      Buffer.from(privateKey),
+      typeof privateKey === "string" ? utf8ToBytes(privateKey) : privateKey,
       passphrase,
     )
     const provider = createChainDerivationOperationsProvider(args)
@@ -134,14 +135,14 @@ export abstract class KeyAgentBase implements KeyAgent {
         encryptedPrivateKeyBytes,
       }
       // Overwrite and nullify the privateKey
-      privateKey = "0".repeat(privateKey.length)
+      privateKey = utf8ToBytes("0".repeat(privateKey.length))
       privateKey = null
 
       return keyPair
     } catch (error) {
       // Overwrite and nullify the privateKey
       if (privateKey) {
-        privateKey = "0".repeat(privateKey.length)
+        privateKey = utf8ToBytes("0".repeat(privateKey.length))
         privateKey = null
       }
       console.error(error)
@@ -154,12 +155,11 @@ export abstract class KeyAgentBase implements KeyAgent {
     signable: ChainSignablePayload,
     args: ChainOperationArgs,
   ): Promise<ChainSignatureResult> {
-    const encryptedPrivateKeyBytes = payload.encryptedPrivateKeyBytes
     const decryptedKeyBytes = await this.keyDecryptor.decryptChildPrivateKey(
-      encryptedPrivateKeyBytes,
+      new Uint8Array(Object.values(payload.encryptedPrivateKeyBytes)),
     )
 
-    let privateKey: string | null = Buffer.from(decryptedKeyBytes).toString()
+    let privateKey: string | null = bytesToUtf8(decryptedKeyBytes)
 
     try {
       let result
@@ -201,6 +201,6 @@ export abstract class KeyAgentBase implements KeyAgent {
     const decryptedSeedBytes = await this.decryptSeed()
     const provider = createChainDerivationOperationsProvider(args)
 
-    return provider.derivePrivateKey(decryptedSeedBytes)
+    return await provider.derivePrivateKey(decryptedSeedBytes)
   }
 }

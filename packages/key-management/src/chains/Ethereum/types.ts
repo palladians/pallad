@@ -67,7 +67,7 @@ export class EthereumPayload implements ChainSpecificPayload {
     )
   }
   derivePrivateKey(decryptedSeedBytes: Uint8Array, args: EthereumSpecificArgs) {
-    return new Promise<string>((resolve) =>
+    return new Promise<Uint8Array>((resolve) =>
       resolve(deriveEthereumPrivateKey(args, decryptedSeedBytes)),
     )
   }

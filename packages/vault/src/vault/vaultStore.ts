@@ -4,10 +4,9 @@ import {
   PalladNetworkNames,
   constructTransaction,
 } from "@palladxyz/pallad-core"
-import { getSecurePersistence } from "@palladxyz/persistence"
 import { produce } from "immer"
 import { create } from "zustand"
-import { type PersistStorage, persist } from "zustand/middleware"
+import { createJSONStorage, persist } from "zustand/middleware"
 
 import { type AccountStore, accountSlice } from "../account"
 import { type CredentialStore, credentialSlice } from "../credentials"
@@ -16,6 +15,7 @@ import { getRandomAnimalName } from "../lib/utils"
 import { type NetworkInfoStore, networkInfoSlice } from "../network-info"
 import { type ObjectStore, objectSlice } from "../objects"
 import { type TokenInfoStore, tokenInfoSlice } from "../token-info"
+import { securePersistence } from "../utils"
 import {
   getBalanceHelper,
   getCurrentWalletHelper,
@@ -177,10 +177,7 @@ export const useVault = create<
     }),
     {
       name: "PalladVault",
-      storage:
-        import.meta.env.VITE_APP_LADLE === "true"
-          ? undefined
-          : (getSecurePersistence() as PersistStorage<any>),
+      storage: createJSONStorage(() => securePersistence),
     },
   ),
 )

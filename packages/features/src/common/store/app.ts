@@ -1,4 +1,4 @@
-import { getLocalPersistence } from "@palladxyz/persistence"
+import { localPersistence } from "@palladxyz/vault"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
@@ -55,7 +55,7 @@ export const useAppStore = create<AppStore>()(
     }),
     {
       name: "PalladApp",
-      storage: createJSONStorage(getLocalPersistence),
+      storage: createJSONStorage(() => localPersistence),
     },
   ),
 )

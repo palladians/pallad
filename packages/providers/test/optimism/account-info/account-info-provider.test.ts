@@ -32,7 +32,6 @@ describe.skip("Optimism Account Info Provider (Functional)", () => {
         chainInfo: optimismSepolia,
       }
       const response = await provider.getAccountInfo(args)
-      console.log("Optimism AccountInfo Provider Response", response)
       expect(response).toHaveProperty("ETH")
     })
   })

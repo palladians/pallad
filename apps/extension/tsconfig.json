@@ -1,25 +1,4 @@
 {
-  "compilerOptions": {
-    "types": ["vite/client", "node", "@types/chrome"],
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["./*"]
-    },
-    "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "extends": "@tsconfig/vite-react/tsconfig.json",
+  "exclude": ["e2e"]
 }

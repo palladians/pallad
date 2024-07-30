@@ -41,7 +41,7 @@ export const WebConnectorView = ({
               <h1 className="text-2xl">{title}</h1>
               <Skeleton loading={loading} h="192px">
                 <div
-                  // biome-ignore lint: Sanitized by DOMPurify
+                  // biome-ignore lint: Sanitized by `xss`
                   dangerouslySetInnerHTML={{ __html: payload }}
                   className="card bg-secondary h-48 p-4 overflow-y-scroll whitespace-pre-wrap break-all"
                 />

@@ -1,3 +1,4 @@
+import { utf8ToBytes } from "@noble/hashes/utils"
 import {
   type ChainDerivationArgs,
   type FromBip39MnemonicWordsProps,
@@ -15,6 +16,7 @@ import { act, renderHook } from "@testing-library/react"
 import Client from "mina-signer"
 import { vi } from "vitest"
 
+import type { runtime, tabs, windows } from "webextension-polyfill"
 import type { RequestArguments } from "../../src"
 import { MinaProvider } from "../../src"
 
@@ -37,8 +39,7 @@ const PREGENERATED_MNEMONIC = [
 const params = {
   passphrase: "passphrase",
 }
-const getPassphrase = () =>
-  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
+const getPassphrase = () => utf8ToBytes(params.passphrase)
 
 const TEST_ORIGIN = "https://palladians.xyz"
 
@@ -54,7 +55,6 @@ describe.skip("Wallet Provider Test", () => {
   //let defaultNetwork: string
 
   beforeAll(async () => {
-    console.log("Current working directory:", process.cwd())
     networkType = "testnet"
     agentArgs = {
       getPassphrase: getPassphrase,
@@ -105,28 +105,28 @@ describe.skip("Wallet Provider Test", () => {
             tabs: [{ id: 5678 }], // Mock tab ID
           }
           callback(mockWindow)
-        }) as unknown as typeof chrome.windows.create,
+        }) as unknown as typeof windows.create,
       },
       tabs: {
-        update: vi.fn() as unknown as typeof chrome.tabs.update,
+        update: vi.fn() as unknown as typeof tabs.update,
         // ... other tab methods if needed
       },
       runtime: {
-        sendMessage: vi.fn() as unknown as typeof chrome.runtime.sendMessage,
+        sendMessage: vi.fn() as unknown as typeof runtime.sendMessage,
         onMessage: {
           // Mock the addListener to simulate receiving a message with the passphrase
           addListener: vi.fn((listener) => {
             const mockResponse = {
               windowId: 1234,
-              userInput: Buffer.from(params.passphrase), // This is the simulated passphrase input
+              userInput: utf8ToBytes(params.passphrase), // This is the simulated passphrase input
               userConfirmed: true,
             }
             listener(mockResponse)
           }),
           removeListener: vi.fn(),
-        } as unknown as typeof chrome.runtime.onMessage,
+        } as unknown as typeof runtime.onMessage,
       },
-    } as unknown as typeof chrome
+    } as unknown
   })
 
   afterEach(() => {
@@ -142,7 +142,6 @@ describe.skip("Wallet Provider Test", () => {
 
       // Trigger connection
       const result = await provider.enable({ origin: TEST_ORIGIN })
-      console.log("result in test: ", result)
       expect(result).toEqual([
         "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
       ])
@@ -165,7 +164,6 @@ describe.skip("Wallet Provider Test", () => {
       expect(provider).toBeDefined()
 
       const chainId = await provider.request(requestArgs)
-      console.log("chainId in test: ", chainId)
       expect(chainId).toEqual(
         "fd7d111973bf5a9e3e87384f560fdead2f272589ca00b6d9e357fca9839631da",
       )
@@ -236,7 +234,6 @@ describe.skip("Wallet Provider Test", () => {
         publicKey: string
         signature: string
       }
-      console.log("signature: ", signature)
       //const verifiableSignatue = {
       //  fields: signature.data.map((field) => BigInt(field))
       //}

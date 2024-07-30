@@ -3,6 +3,7 @@ import { sendMessage } from "webext-bridge/content-script"
 import { runtime } from "webextension-polyfill"
 
 const inject = () => {
+  if (typeof document === "undefined") return
   const script = document.createElement("script")
   script.src = runtime.getURL("/pallad_rpc.js")
   script.type = "module"

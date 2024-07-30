@@ -1,5 +1,5 @@
 import { Network, getAccountProperties } from "@palladxyz/pallad-core"
-import { getSessionPersistence } from "@palladxyz/persistence"
+import { sessionPersistence } from "@palladxyz/vault"
 import { getPublicKey, isDelegated, useVault } from "@palladxyz/vault"
 import easyMeshGradient from "easy-mesh-gradient"
 import { useMemo } from "react"
@@ -54,7 +54,7 @@ export const useAccount = () => {
     toast.success("Address copied")
   }
   const lockWallet = async () => {
-    await getSessionPersistence().setItem("spendingPassword", "")
+    await sessionPersistence.setItem("spendingPassword", "")
     navigate("/unlock")
     await useVault.persist.rehydrate()
   }

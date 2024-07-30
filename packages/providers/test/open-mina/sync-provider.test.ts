@@ -11,9 +11,6 @@ describe("Open Mina Provider", () => {
   })
   test.skip("should return sync stats", async () => {
     const response = await localNodeSyncStats(url, "?limit=1")
-    //console.log('Open Mina Provider Response', response)
-    //console.log('Ledgers', response[0]?.ledgers)
-    //console.log('Blocks', response[0]?.blocks)
     expect(response[0]).toHaveProperty("synced")
   })
 })

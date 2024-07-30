@@ -5,8 +5,8 @@ import { verifyMessage } from "ethers"
 import sinon from "sinon"
 import { expect } from "vitest"
 
+import { utf8ToBytes } from "@noble/hashes/utils"
 import type { EthereumSpecificArgs } from "../../src"
-import { getPassphraseRethrowTypedError } from "../../src/InMemoryKeyAgent"
 import { KeyAgentBase } from "../../src/KeyAgentBase"
 import { emip3encrypt } from "../../src/emip3"
 import {
@@ -21,8 +21,7 @@ import * as util from "../../src/util/bip39"
 const params = {
   passphrase: "passphrase",
 }
-const getPassphrase = () =>
-  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
+const getPassphrase = () => utf8ToBytes(params.passphrase)
 
 describe("KeyAgentBase (Ethereum Functionality)", () => {
   class KeyAgentBaseInstance extends KeyAgentBase {}
@@ -43,9 +42,7 @@ describe("KeyAgentBase (Ethereum Functionality)", () => {
     rootKeyBytes = root.privateKey ? root.privateKey : new Uint8Array([])
 
     // passphrase
-    passphrase = await getPassphraseRethrowTypedError(getPassphrase)
-    // define the agent properties
-    passphrase = await getPassphraseRethrowTypedError(getPassphrase)
+    passphrase = getPassphrase()
     // Works with seed
     encryptedSeedBytes = await emip3encrypt(seed, passphrase)
   })

@@ -1,3 +1,4 @@
+import { utf8ToBytes } from "@noble/hashes/utils"
 import { mnemonic } from "@palladxyz/common"
 import {
   type ChainOperationArgs,
@@ -20,8 +21,7 @@ const PREGENERATED_MNEMONIC = mnemonic
 const params = {
   passphrase: "passphrase",
 }
-const getPassphrase = () =>
-  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
+const getPassphrase = () => utf8ToBytes(params.passphrase)
 
 describe("KeyAgentStore", () => {
   let randomMnemonic: string[]
@@ -197,7 +197,6 @@ describe("KeyAgentStore", () => {
         getPassphrase,
       )
 
-      console.log("groupedCredential: ", groupedCredential)
       // signable payload
       const message: Mina.MessageBody = {
         message: "Hello, Bob!",
@@ -215,7 +214,6 @@ describe("KeyAgentStore", () => {
         message,
         operations,
       )
-      console.log("signedMessage: ", signedMessage)
     })
     // check that key agent is in the store
     const keyAgent = result.current.keyAgents[keyAgentName]
