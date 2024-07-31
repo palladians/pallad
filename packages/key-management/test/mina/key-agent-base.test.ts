@@ -4,7 +4,6 @@ import { constructTransaction } from "@palladxyz/pallad-core"
 import { Network } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import Client from "mina-signer"
-import sinon from "sinon"
 import { expect } from "vitest"
 
 import { hexToBytes, utf8ToBytes } from "@noble/hashes/utils"
@@ -56,11 +55,6 @@ describe("KeyAgentBase (Mina Functionality)", () => {
     passphrase = getPassphrase()
     // Works with seed
     encryptedSeedBytes = await emip3encrypt(seed, passphrase)
-  })
-
-  afterEach(() => {
-    // Clean up all sinon stubs after each test.
-    sinon.restore()
   })
 
   describe("Mina KeyAgent", () => {

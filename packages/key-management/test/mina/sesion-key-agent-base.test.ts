@@ -2,7 +2,6 @@ import { Mina } from "@palladxyz/mina-core"
 import { constructTransaction } from "@palladxyz/pallad-core"
 import { Network } from "@palladxyz/pallad-core"
 import Client from "mina-signer"
-import sinon from "sinon"
 import { expect } from "vitest"
 
 import type { MinaDerivationArgs } from "../../dist"
@@ -14,11 +13,6 @@ describe.skip("SessionKeyAgentBase (Mina Functionality)", () => {
   let networkType: Mina.NetworkType
 
   beforeEach(async () => {})
-
-  afterEach(() => {
-    // Clean up all sinon stubs after each test.
-    sinon.restore()
-  })
 
   describe("Mina KeyAgent", () => {
     beforeEach(() => {

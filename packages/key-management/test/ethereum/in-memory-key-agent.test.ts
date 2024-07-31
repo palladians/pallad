@@ -2,7 +2,6 @@ import { mnemonic } from "@palladxyz/common"
 import { Network } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import { type SignatureLike, ethers, hashMessage, recoverAddress } from "ethers"
-import sinon from "sinon"
 import { expect } from "vitest"
 
 import { utf8ToBytes } from "@noble/hashes/utils"
@@ -16,7 +15,6 @@ import type { EthereumSpecificArgs } from "../../src/chains/Ethereum"
 import * as bip39 from "../../src/util/bip39"
 
 // Create a sandbox for managing and restoring stubs
-const sandbox = sinon.createSandbox()
 
 // Provide the passphrase for testing purposes
 const params = {
@@ -46,11 +44,6 @@ describe.skip("InMemoryKeyAgent", () => {
       mnemonic2ndFactorPassphrase: "",
     }
     agent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
-  })
-
-  afterEach(() => {
-    // Restore all stubs after each test
-    sandbox.restore()
   })
 
   it("should create an agent with given properties", () => {

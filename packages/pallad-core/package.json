@@ -23,7 +23,6 @@
     "bs58check": "4.0.0",
     "buffer": "6.0.3",
     "mina-signer": "3.0.7",
-    "sinon": "18.0.0",
     "viem": "2.18.4",
     "vite-plugin-top-level-await": "1.4.2",
     "vite-plugin-wasm": "3.3.0"

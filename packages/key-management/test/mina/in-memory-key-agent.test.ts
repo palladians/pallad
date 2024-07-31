@@ -3,7 +3,6 @@ import { Mina } from "@palladxyz/mina-core"
 import { Network, constructTransaction } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import Client from "mina-signer"
-import sinon from "sinon"
 import { expect } from "vitest"
 
 import { utf8ToBytes } from "@noble/hashes/utils"
@@ -17,9 +16,6 @@ import type {
   MinaSpecificArgs,
 } from "../../src/chains/Mina"
 import * as bip39 from "../../src/util/bip39"
-
-// Create a sandbox for managing and restoring stubs
-const sandbox = sinon.createSandbox()
 
 // Provide the passphrase for testing purposes
 const params = {
@@ -52,11 +48,6 @@ describe("Mina InMemoryKeyAgent", () => {
     agent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
     // network type
     networkType = "testnet"
-  })
-
-  afterEach(() => {
-    // Restore all stubs after each test
-    sandbox.restore()
   })
 
   it("should create an agent with given properties", () => {

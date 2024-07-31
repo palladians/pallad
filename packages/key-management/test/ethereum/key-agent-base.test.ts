@@ -2,7 +2,6 @@ import { mnemonic } from "@palladxyz/common"
 import { Network } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import { verifyMessage } from "ethers"
-import sinon from "sinon"
 import { expect } from "vitest"
 
 import { utf8ToBytes } from "@noble/hashes/utils"
@@ -45,11 +44,6 @@ describe.skip("KeyAgentBase (Ethereum Functionality)", () => {
     passphrase = getPassphrase()
     // Works with seed
     encryptedSeedBytes = await emip3encrypt(seed, passphrase)
-  })
-
-  afterEach(() => {
-    // Clean up all sinon stubs after each test.
-    sinon.restore()
   })
 
   describe("Ethereum KeyAgent", () => {
