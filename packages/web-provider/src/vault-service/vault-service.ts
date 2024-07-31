@@ -130,27 +130,24 @@ export class VaultService implements IVaultService {
   }
 
   async getEnabled({ origin }: { origin: ZkAppUrl }) {
-    const { storage } = await import("webextension-polyfill")
-    const { permissions } = await storage.local.get({
+    const { permissions } = await chrome.storage.local.get({
       permissions: true,
     })
     return permissions[origin] === AuthorizationState.ALLOWED
   }
 
   async isBlocked({ origin }: { origin: ZkAppUrl }) {
-    const { storage } = await import("webextension-polyfill")
-    const { permissions } = await storage.local.get({
+    const { permissions } = await chrome.storage.local.get({
       permissions: true,
     })
     return permissions[origin] === AuthorizationState.BLOCKED
   }
 
   async setEnabled({ origin }: { origin: ZkAppUrl }) {
-    const { storage } = await import("webextension-polyfill")
-    const { permissions } = await storage.local.get({
+    const { permissions } = await chrome.storage.local.get({
       permissions: true,
     })
-    return storage.local.set({
+    return chrome.storage.local.set({
       permissions: {
         ...permissions,
         [origin]: AuthorizationState.ALLOWED,
