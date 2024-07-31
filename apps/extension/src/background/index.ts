@@ -3,6 +3,8 @@ import { serializeError } from "serialize-error"
 import { onMessage } from "webext-bridge/background"
 import { runtime, tabs } from "webextension-polyfill"
 
+const E2E_TESTING = import.meta.env.VITE_APP_E2E === "true"
+
 const opts = {
   projectId: "test",
   chains: ["Mina - Mainnet"],
@@ -213,6 +215,7 @@ runtime.onConnect.addListener((port) => {
 runtime.onInstalled.addListener(async ({ reason }) => {
   await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
   if (reason === "install") {
-    await tabs.create({ url: "https://pallad.co" })
+    if (!E2E_TESTING)
+      await tabs.create({ url: "https://get.pallad.co/welcome" })
   }
 })

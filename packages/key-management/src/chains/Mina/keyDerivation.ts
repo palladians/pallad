@@ -16,10 +16,10 @@ export function deriveMinaPrivateKey(
   const path = `m/${MinaKeyConst.PURPOSE}'/${MinaKeyConst.MINA_COIN_TYPE}'/${accountIndex}'/0/${addressIndex}`
   const childNode = rootKey.derive(path)
   if (!childNode?.privateKey) throw new Error("Unable to derive private key")
-  if (!childNode?.privateKey?.[0]) {
-    childNode.privateKey.set([0x3f], 0)
-  }
-  const childPrivateKey = childNode.privateKey.reverse()
+  const privateKeyArray = new Uint8Array(childNode.privateKey)
+  if (!privateKeyArray?.[0]) throw new Error("Unable to derive private key")
+  privateKeyArray[0] &= 0x3f
+  const childPrivateKey = privateKeyArray.reverse()
   const privateKeyHex = `5a01${bytesToHex(childPrivateKey)}`
   // Convert the hex string to a Uint8Array
   if (!privateKeyHex) {
@@ -30,7 +30,8 @@ export function deriveMinaPrivateKey(
     throw new Error("Failed to split privateKeyHex into bytes")
   }
   const privateKeyBytes = new Uint8Array(
-    hexMatches.map((byte) => Number.parseInt(byte, 16)),
+    privateKeyHex.match(/.{1,2}/g)?.map((byte) => Number.parseInt(byte, 16)) ||
+      [],
   )
 
   // Encode the Uint8Array into a base58 string with checksum

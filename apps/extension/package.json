@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && node manifest.mjs && vite build",
+    "build": "tsc && vite build",
     "build:firefox": "web-ext build --source-dir=dist",
     "build:safari": "xcrun safari-web-extension-converter dist --app-name Pallad --bundle-identifier co.pallad.app --swift --no-prompt --force --macos-only --no-open",
     "preview": "vite preview",

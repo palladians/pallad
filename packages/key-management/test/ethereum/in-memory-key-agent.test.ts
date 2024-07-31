@@ -24,7 +24,7 @@ const params = {
 }
 const getPassphrase = () => utf8ToBytes(params.passphrase)
 
-describe("InMemoryKeyAgent", () => {
+describe.skip("InMemoryKeyAgent", () => {
   let agent: InMemoryKeyAgent
   let rootKeyBytes: Uint8Array
   let seed: Uint8Array

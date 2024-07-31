@@ -66,10 +66,14 @@ export class OnboardingPom extends BasePom {
     return confirmAloneButton.click()
   }
   async fillMnemonic(mnemonic: string[]) {
-    for (let i = 0; i < mnemonic.length; i++) {
-      const field = this.page.getByTestId(`${TestId.MNEMONIC_FIELD}.${i}`)
-      await field.fill(mnemonic[i])
-    }
+    const modifier = process.platform === "darwin" ? "Meta" : "Control"
+    const wholeMnemonic = mnemonic.join(" ")
+    await this.page.evaluate(
+      `navigator.clipboard.writeText("${wholeMnemonic}")`,
+    )
+    const firstField = this.page.getByTestId(`${TestId.MNEMONIC_FIELD}.0`)
+    await firstField.focus()
+    await this.page.keyboard.press(`${modifier}+KeyV`)
   }
   getAddressTruncated() {
     const addressTruncated = this.page.getByTestId(TestId.ADDRESS_TRUNCATED)

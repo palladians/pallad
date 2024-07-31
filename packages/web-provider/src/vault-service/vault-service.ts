@@ -13,7 +13,6 @@ import {
 } from "@palladxyz/vault"
 import dayjs from "dayjs"
 import Client from "mina-signer"
-import { storage } from "webextension-polyfill"
 
 import type { Mina } from "@palladxyz/mina-core"
 import type { Validation } from ".."
@@ -131,6 +130,7 @@ export class VaultService implements IVaultService {
   }
 
   async getEnabled({ origin }: { origin: ZkAppUrl }) {
+    const { storage } = await import("webextension-polyfill")
     const { permissions } = await storage.local.get({
       permissions: true,
     })
@@ -138,6 +138,7 @@ export class VaultService implements IVaultService {
   }
 
   async isBlocked({ origin }: { origin: ZkAppUrl }) {
+    const { storage } = await import("webextension-polyfill")
     const { permissions } = await storage.local.get({
       permissions: true,
     })
@@ -145,6 +146,7 @@ export class VaultService implements IVaultService {
   }
 
   async setEnabled({ origin }: { origin: ZkAppUrl }) {
+    const { storage } = await import("webextension-polyfill")
     const { permissions } = await storage.local.get({
       permissions: true,
     })

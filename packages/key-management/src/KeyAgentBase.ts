@@ -123,10 +123,7 @@ export abstract class KeyAgentBase implements KeyAgent {
     // Generate the private key
     let privateKey: ChainPrivateKey | null
     privateKey = await this.#generatePrivateKeyFromSeed(args)
-    const encryptedPrivateKeyBytes = await emip3encrypt(
-      typeof privateKey === "string" ? utf8ToBytes(privateKey) : privateKey,
-      passphrase,
-    )
+    const encryptedPrivateKeyBytes = await emip3encrypt(privateKey, passphrase)
     const provider = createChainDerivationOperationsProvider(args)
 
     try {

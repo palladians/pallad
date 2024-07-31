@@ -20,7 +20,6 @@ jobs:
       pages: write
       id-token: write
     env:
-      VITE_APP_MODE: web
       VITE_APP_DEFAULT_NETWORK: Devnet
     steps:
       - uses: actions/checkout@v3
@@ -36,7 +35,7 @@ jobs:
           TURBO_API: "http://127.0.0.1:9080"
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
-        run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:features
+        run: pnpm build:features
       - name: Build features stories
         run: pnpm story:features
       - name: Upload pages artifact

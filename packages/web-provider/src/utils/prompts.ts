@@ -12,10 +12,9 @@ export const showUserPrompt = async (
         state: "normal",
       })
       .then(async (newWindow) => {
-        const { runtime, windows } = await import("webextension-polyfill")
         const listener = (response: any) => {
           if (response.windowId === newWindow?.id) {
-            runtime.onMessage.removeListener(listener)
+            chrome.runtime.onMessage.removeListener(listener)
             if (response.userRejected) {
               return reject(new Error("4001 - User Rejected Request"))
             }
@@ -33,7 +32,7 @@ export const showUserPrompt = async (
           const tabId = newWindow.tabs?.[0]?.id
           if (typeof tabId === "number") {
             setTimeout(() => {
-              runtime.sendMessage({
+              chrome.runtime.sendMessage({
                 type: "action_request",
                 params: {
                   title: metadata.title,
@@ -42,14 +41,14 @@ export const showUserPrompt = async (
                 },
               })
             }, 1000)
-            runtime.onMessage.addListener(listener)
+            chrome.runtime.onMessage.addListener(listener)
             const closeListener = (closedWindowId: number) => {
-              windows.onRemoved.removeListener(closeListener)
+              chrome.windows.onRemoved.removeListener(closeListener)
               if (closedWindowId === newWindow?.id) {
                 return reject(new Error("4001 - User Rejected Request"))
               }
             }
-            windows.onRemoved.addListener(closeListener)
+            chrome.windows.onRemoved.addListener(closeListener)
           } else {
             return reject(new Error("Failed to retrieve tab ID"))
           }

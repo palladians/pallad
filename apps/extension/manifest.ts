@@ -1,7 +1,6 @@
-import { writeJsonFile } from "write-json-file"
 import packageJson from "./package.json" with { type: "json" }
 
-const manifest = {
+export const manifest: chrome.runtime.ManifestV3 = {
   manifest_version: 3,
   name: "Pallad",
   description:
@@ -35,10 +34,15 @@ const manifest = {
     },
   ],
   host_permissions: ["https://*/*"],
+  commands: {
+    _execute_action: {
+      suggested_key: {
+        windows: "Alt+Shift+P",
+        mac: "Alt+Shift+P",
+        chromeos: "Alt+Shift+P",
+        linux: "Alt+Shift+P",
+      },
+      description: "Open the Pallad extension",
+    },
+  },
 }
-
-const run = async () => {
-  await writeJsonFile("manifest.json", manifest)
-}
-
-run()

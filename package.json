@@ -27,7 +27,7 @@
     "@testing-library/react": "16.0.0",
     "@tsconfig/strictest": "2.0.5",
     "@turbo/gen": "2.0.9",
-    "@vitest/coverage-c8": "0.33.0",
+    "@vitest/coverage-v8": "2.0.5",
     "autoprefixer": "10.4.19",
     "happy-dom": "14.12.3",
     "husky": "9.1.4",

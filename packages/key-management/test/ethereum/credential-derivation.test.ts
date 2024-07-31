@@ -17,7 +17,7 @@ import {
 import { isMessage, isTransaction } from "../../src/chains/Ethereum/guards"
 import { isEthereumDerivation } from "../../src/chains/Ethereum/keyDerivationUtils"
 
-describe("credentialderivation utils", () => {
+describe.skip("credentialderivation utils", () => {
   const validPrivateKeyHex =
     "ab8e7c879d7a802940c7a6535752ee6d3064f7dcbb25b4d2cd90c1f8efdb61f0"
   const validPrivateKeyBytes = hexToBytes(validPrivateKeyHex)

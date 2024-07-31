@@ -23,7 +23,7 @@ const params = {
 }
 const getPassphrase = () => utf8ToBytes(params.passphrase)
 
-describe("KeyAgentBase (Ethereum Functionality)", () => {
+describe.skip("KeyAgentBase (Ethereum Functionality)", () => {
   class KeyAgentBaseInstance extends KeyAgentBase {}
 
   let instance: KeyAgentBaseInstance

@@ -98,8 +98,13 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         addressIndex: 0,
       }
       const childPrivateKey = deriveMinaPrivateKey(args, seed)
-      expect(childPrivateKey).toBe(
-        "EKExKH31gXH7t5KiYxdyEbtgi22vgX6wnqwmcbrANs9nQJt487iN",
+      expect(childPrivateKey).toStrictEqual(
+        new Uint8Array([
+          69, 75, 69, 120, 75, 72, 51, 49, 103, 88, 72, 55, 116, 53, 75, 105,
+          89, 120, 100, 121, 69, 98, 116, 103, 105, 50, 50, 118, 103, 88, 54,
+          119, 110, 113, 119, 109, 99, 98, 114, 65, 78, 115, 57, 110, 81, 74,
+          116, 52, 56, 55, 105, 78,
+        ]),
       )
     })
     it("should throw an error for wrong seed length", () => {
@@ -255,8 +260,8 @@ describe("KeyAgentBase (Mina Functionality)", () => {
     })
 
     it("should reverse bytes correctly", () => {
-      const originalBuffer = hexToBytes("1234")
-      const reversedBuffer = hexToBytes("4321")
+      const originalBuffer = utf8ToBytes("1234")
+      const reversedBuffer = utf8ToBytes("4321")
 
       expect(originalBuffer.reverse()).to.deep.equal(reversedBuffer)
     })
