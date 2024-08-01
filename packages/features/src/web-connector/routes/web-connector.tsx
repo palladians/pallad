@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import type { SubmitHandler } from "react-hook-form"
 import { MemoryRouter } from "react-router-dom"
-import { highlight } from "sugar-high"
 import { runtime, windows } from "webextension-polyfill"
 import xss from "xss"
 import yaml from "yaml"
@@ -11,7 +10,7 @@ import { WebConnectorView } from "../views/web-connector"
 const sanitizePayload = async (payload: string) => {
   const parsedPayload = JSON.parse(payload) as Record<string, any>
   const yamlPayload = yaml.stringify(parsedPayload)
-  return highlight(xss(yamlPayload))
+  return xss(yamlPayload)
 }
 
 type ActionRequest = {
