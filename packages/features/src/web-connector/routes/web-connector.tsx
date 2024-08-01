@@ -9,10 +9,9 @@ import type { UserInputForm } from "../types"
 import { WebConnectorView } from "../views/web-connector"
 
 const sanitizePayload = async (payload: string) => {
-  const sanitizedPayload = xss(payload)
-  const parsedPayload = JSON.parse(sanitizedPayload) as Record<string, any>
+  const parsedPayload = JSON.parse(payload) as Record<string, any>
   const yamlPayload = yaml.stringify(parsedPayload)
-  return highlight(yamlPayload)
+  return highlight(xss(yamlPayload))
 }
 
 type ActionRequest = {

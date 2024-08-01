@@ -8,6 +8,7 @@ export const baseTsupConfig: Options = {
   clean: true,
   bundle: true,
   dts: true,
+  silent: true,
 }
 
 export const baseVitestConfig = {
