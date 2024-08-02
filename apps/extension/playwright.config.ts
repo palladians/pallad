@@ -14,7 +14,6 @@ export default defineConfig({
   reporter: "html",
   timeout: 180000, // 3 minutes timeout
   use: {
-    headless: true,
     baseURL: BASE_URL,
     trace: "on-first-retry",
     permissions: ["clipboard-read", "clipboard-write"],

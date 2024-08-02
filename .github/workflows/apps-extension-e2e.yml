@@ -14,9 +14,7 @@ jobs:
       NODE_OPTIONS: "--max_old_space_size=4096"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup deps
-        run: sudo apt-get install xvfb
+      - uses: actions/checkout@v4
       - name: Setup env
         uses: ./.github/actions/setup
         with:
@@ -32,8 +30,8 @@ jobs:
         working-directory: apps/extension
         run: pnpm test:e2e:install
       - name: Run E2E tests
-        run: xvfb-run --auto-servernum pnpm test:e2e:extension
-      - uses: actions/upload-artifact@v3
+        run: pnpm test:e2e:extension
+      - uses: actions/upload-artifact@v4
         with:
           name: pallad-extension-e2e
           path: apps/extension/playwright-report/

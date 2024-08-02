@@ -38,7 +38,7 @@ jobs:
       NODE_OPTIONS: "--max_old_space_size=4096"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup env
         uses: ./.github/actions/setup
         with:
@@ -54,7 +54,7 @@ jobs:
         run: VITE_APP_DEFAULT_NETWORK=$VITE_APP_DEFAULT_NETWORK pnpm build:extension
       - name: Run unit tests
         run: pnpm test:unit
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: pallad-chromium
           path: apps/extension/dist/
