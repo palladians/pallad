@@ -1,8 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  getSecurePersistence,
-  getSessionPersistence,
-} from "@palladxyz/persistence"
+import { securePersistence, sessionPersistence } from "@palladxyz/vault"
 import { useVault } from "@palladxyz/vault"
 import { type FormEvent, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -32,7 +29,7 @@ export const UnlockWalletRoute = () => {
   }: {
     spendingPassword: string
   }) => {
-    await getSessionPersistence().setItem("spendingPassword", spendingPassword)
+    await sessionPersistence.setItem("spendingPassword", spendingPassword)
     await useVault.persist.rehydrate()
     setTimeout(() => {
       unlockWalletForm.setError("spendingPassword", {
@@ -48,10 +45,9 @@ export const UnlockWalletRoute = () => {
   // biome-ignore lint: won't update
   useEffect(() => {
     const unsub = useVault.persist?.onFinishHydration(async () => {
-      const authenticated =
-        (await getSecurePersistence().getItem("foo")) === "bar"
+      const authenticated = (await securePersistence.getItem("foo")) === "bar"
       if (!authenticated) {
-        await getSessionPersistence().removeItem("spendingPassword")
+        await sessionPersistence.removeItem("spendingPassword")
         return unlockWalletForm.setError("spendingPassword", {
           type: "wrongPassword",
           message: "The spending password is wrong",

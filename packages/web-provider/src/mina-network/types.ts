@@ -13,42 +13,46 @@ import type {
 } from "../web-provider-types"
 import type { MinaProvider } from "./mina-provider"
 
-export type requestSignableData = {
+export type RequestSignableData = {
   data: MinaSignablePayload
 }
 
-export interface offchainSessionAllowedMethods {
+export interface OffchainSessionAllowedMethods {
   contractAddress: string
   method: string
 }
 
-export type requestOffchainSession = {
+export type RequestOffchainSession = {
   data: {
     sessionKey: string
     expirationTime: string
-    allowedMethods: offchainSessionAllowedMethods[]
+    allowedMethods: OffchainSessionAllowedMethods[]
     sessionMerkleRoot: MinaSignablePayload
   }
 }
 
-export type requestSignableTransaction = {
+export type RequestSignableTransaction = {
   data: { transaction: MinaSignablePayload }
 }
 
-export type requestData = {
-  data: number[] | bigint[]
+export type RequestDataFields = {
+  data: {
+    fields: number[] | bigint[]
+  }
 }
 
-export type requestAddChain = {
+export type RequestDataNullifier = {
+  data: {
+    message: number[] | bigint[]
+  }
+}
+
+export type RequestAddChain = {
   data: ProviderConfig
 }
 
-export type requestSwitchChain = {
+export type RequestSwitchChain = {
   data: { chainId: string }
-}
-
-export type requestingStateData = {
-  data: RequestArguments
 }
 
 export interface MinaRpcProviderMap {

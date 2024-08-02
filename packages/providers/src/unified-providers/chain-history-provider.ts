@@ -8,7 +8,6 @@ import type {
 
 import { createChainHistoryProvider as ms } from "../blockberry-provider"
 import { createChainHistoryProvider as mn } from "../mina-node"
-import { createChainHistoryProvider as op } from "../optimism"
 import { createChainHistoryProvider as zs } from "../zeko-scan"
 
 import type { ProviderConfig } from "./types"
@@ -24,8 +23,6 @@ export const createChainHistoryProvider = (
     underlyingProvider = ms(config.archiveNodeEndpoint.url)
   } else if (config.archiveNodeEndpoint.providerName === "zeko-scan") {
     underlyingProvider = zs(config.archiveNodeEndpoint.url)
-  } else if (config.archiveNodeEndpoint.providerName === "evm-explorer") {
-    underlyingProvider = op(config.archiveNodeEndpoint.url)
   }
 
   const transactionsByAddresses = async (

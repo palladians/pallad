@@ -6,6 +6,7 @@ export type StoreInstance<T> = ReturnType<
 
 interface ImportMetaEnv {
   readonly VITE_APP_LADLE: string
+  readonly VITE_APP_DEFAULT_NETWORK: string
 }
 
 interface ImportMeta {

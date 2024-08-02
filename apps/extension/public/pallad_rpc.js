@@ -16,14 +16,22 @@ function debounce(func, wait, immediate) {
   }
 }
 const BROADCAST_CHANNEL_ID = "pallad"
-const callPalladAsync = ({ method, payload }) =>
-  new Promise((resolve, reject) => {
+const callPalladAsync = ({ method, payload }) => {
+  return new Promise((resolve, reject) => {
     const privateChannelId = `private-${Math.random()}`
     const channel = new BroadcastChannel(BROADCAST_CHANNEL_ID)
     const responseChannel = new BroadcastChannel(privateChannelId)
     responseChannel.addEventListener("message", ({ data }) => {
       channel.close()
-      if (data.error) return reject(data.error)
+      const error = data.response?.error
+      if (error) {
+        try {
+          console.table(JSON.parse(error.message))
+        } catch {
+          console.info(error.message)
+        }
+        return reject(error)
+      }
       return resolve(data.response)
     })
     channel.postMessage({
@@ -34,6 +42,7 @@ const callPalladAsync = ({ method, payload }) =>
     })
     return channel.close()
   })
+}
 const debouncedCall = debounce(callPalladAsync, 300, false)
 const init = () => {
   const info = {

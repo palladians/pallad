@@ -1,7 +1,7 @@
 import type { ChainOperationArgs } from "@palladxyz/key-management"
 import { Mina } from "@palladxyz/mina-core"
 import { useVault } from "@palladxyz/vault"
-import { addHours } from "date-fns"
+import dayjs from "dayjs"
 import type {
   Payment,
   SignedLegacy,
@@ -12,9 +12,10 @@ import { useNavigate } from "react-router-dom"
 import type { z } from "zod"
 
 import { useAccount } from "@/common/hooks/use-account"
-import { usePendingTransactionStore } from "@/common/store/pending-transactions"
 import { useTransactionStore } from "@/common/store/transaction"
+import { usePendingTransactionStore } from "@palladxyz/vault"
 
+import { utf8ToBytes } from "@noble/hashes/utils"
 import type { ConfirmTransactionSchema } from "../components/confirm-transaction-form.schema"
 
 type ConfirmTransactionData = z.infer<typeof ConfirmTransactionSchema>
@@ -34,6 +35,7 @@ export const useTransactionConfirmation = ({
   const submitTx = useVault((state) => state.submitTx)
   const constructTx = useVault((state) => state.constructTx)
   const syncWallet = useVault((state) => state._syncWallet)
+  const currentNetworkName = useVault((state) => state.currentNetworkName)
   //const currentWallet = useVault((state) => state.getCurrentWallet())
   const { publicKey, data: accountProperties } = useAccount()
   const outgoingTransaction = useTransactionStore(
@@ -67,16 +69,13 @@ export const useTransactionConfirmation = ({
     data,
   ) => {
     const constructedTx = await constructTransaction()
-    const getPassphrase = () =>
-      new Promise<Uint8Array>((resolve) =>
-        resolve(Buffer.from(data.spendingPassword)),
-      )
+    const getPassphrase = () => utf8ToBytes(data.spendingPassword)
     let signedTx
     // TODO: make chain agnostic depending on the currentWallet chain and it's corresponding operation e.g. 'eth_signTransaction' vs 'mina_signTransaction'
     const operationArgs: ChainOperationArgs = {
       operation: "mina_signTransaction",
       network: "Mina",
-      networkType: "testnet", // TODO: make configurable for 'mainnet' and 'testnet'
+      networkType: currentNetworkName === "Mainnet" ? "mainnet" : "testnet",
     }
     try {
       signedTx = await sign(constructedTx as any, operationArgs, getPassphrase)
@@ -109,7 +108,7 @@ export const useTransactionConfirmation = ({
       submittedTx?.sendDelegation?.delegation?.hash
     addPendingTransaction({
       hash,
-      expireAt: addHours(new Date(), 8).toISOString(),
+      expireAt: dayjs().add(8, "hours").toISOString(),
     })
     await syncWallet()
     mixpanel.track(

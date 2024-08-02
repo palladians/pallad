@@ -34,7 +34,7 @@ export const entropyToSeed = (entropy: Uint8Array, passphrase?: string) => {
   // Get root key from seed
   //const root = bip32.HDKey.fromMasterSeed(seed)
   // Return unencrypted root key bytes
-  return seed //root.privateKey ? root.privateKey : Buffer.from([])
+  return seed //root.privateKey ? root.privateKey : Uint8Array
 }
 
 /**

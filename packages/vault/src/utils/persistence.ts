@@ -1,7 +1,7 @@
 import { Storage } from "@plasmohq/storage"
 import { SecureStorage } from "@plasmohq/storage/secure"
 import superjson from "superjson"
-import type { PersistStorage, StateStorage } from "zustand/middleware"
+import type { StateStorage } from "zustand/middleware"
 
 superjson.registerCustom<Buffer, number[]>(
   {
@@ -24,14 +24,14 @@ const secureStorage = new SecureStorage({
 
 const setVaultSpendingPassword = async () => {
   const spendingPassword = await sessionData.get("spendingPassword")
-  return secureStorage.setPassword(spendingPassword)
+  return secureStorage.setPassword(spendingPassword ?? "")
 }
 
-export const securePersistence: PersistStorage<any> = {
-  getItem: async (name): Promise<any | null> => {
+export const securePersistence: StateStorage = {
+  getItem: async (name): Promise<string | null> => {
     await setVaultSpendingPassword()
     const value = await secureStorage.get(name)
-    if (!value || value === "undefined") return
+    if (!value || value === "undefined") return null
     return superjson.parse(value)
   },
   setItem: async (name, value) => {

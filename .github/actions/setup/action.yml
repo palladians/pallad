@@ -8,7 +8,7 @@ inputs:
     description: Turborepo token
     required: true
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Turborepo Caching Server
       uses: felixmosh/turborepo-gh-artifacts@v2
@@ -16,10 +16,10 @@ runs:
         repo-token: ${{ inputs.GITHUB_TOKEN }}
         server-token: ${{ inputs.TURBO_SERVER_TOKEN }}
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version-file: .nvmrc
-    - uses: pnpm/action-setup@v2
+    - uses: pnpm/action-setup@v4
       name: Install pnpm
       with:
         run_install: false

@@ -17,7 +17,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --dts --format esm",
+    "build": "tsup src/index.ts --dts --format esm --silent",
     "cleanup": "rimraf node_modules dist .turbo"
   }
 }

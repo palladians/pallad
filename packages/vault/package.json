@@ -18,28 +18,30 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
+    "@noble/hashes": "1.4.0",
     "@palladxyz/key-management": "workspace:*",
     "@palladxyz/mina-core": "workspace:*",
     "@palladxyz/pallad-core": "workspace:*",
-    "@palladxyz/persistence": "workspace:*",
     "@palladxyz/providers": "workspace:*",
     "@palladxyz/util": "workspace:*",
-    "bs58check": "^3.0.1",
-    "buffer": "^6.0.3",
-    "immer": "^10.0.3",
-    "rambda": "^7.5.0",
-    "redux-logger": "^3.0.6",
-    "unique-names-generator": "^4.7.1",
-    "vitest": "^0.34.4",
-    "zustand": "^4.4.7"
+    "@plasmohq/storage": "^1.11.0",
+    "bs58check": "4.0.0",
+    "buffer": "6.0.3",
+    "dayjs": "1.11.12",
+    "immer": "10.1.1",
+    "rambda": "9.2.1",
+    "redux-logger": "3.0.6",
+    "superjson": "2.2.1",
+    "unique-names-generator": "4.7.1",
+    "zustand": "4.5.4"
   },
   "devDependencies": {
     "@palladxyz/common": "workspace:*",
-    "@testing-library/react": "^14.0.0",
-    "@types/mocha": "^10.0.1",
-    "@types/secp256k1": "^4.0.3",
-    "mina-signer": "^2.1.1",
-    "msw": "^1.2.2",
-    "vite": "^5.2.8"
+    "@testing-library/react": "16.0.0",
+    "@types/mocha": "10.0.7",
+    "@types/secp256k1": "4.0.6",
+    "mina-signer": "3.0.7",
+    "msw": "2.3.4",
+    "vite": "5.3.5"
   }
 }

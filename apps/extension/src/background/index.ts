@@ -1,146 +1,221 @@
-import { MinaProvider, type ProviderEvent } from "@palladxyz/web-provider"
-import { onMessage, sendMessage } from "webext-bridge/background"
-//import { sendMessage } from 'webext-bridge/content-script'
+import { MinaProvider, Validation } from "@palladxyz/web-provider"
+import { serializeError } from "serialize-error"
+import { onMessage } from "webext-bridge/background"
+import { runtime, tabs } from "webextension-polyfill"
 
-// options should be defined by user
+const E2E_TESTING = import.meta.env.VITE_APP_E2E === "true"
+
 const opts = {
   projectId: "test",
-  chains: ["Mina - Devnet"],
+  chains: ["Mina - Mainnet"],
 }
 
-const provider = await MinaProvider.init(opts, [])
-
-// Example structure for listenerRegistry
-type ListenerFunction = (args: any) => void // Adjust the 'any' type based on actual event arguments
-
-interface ListenerRegistration {
-  event: ProviderEvent
-  listener: ListenerFunction
-}
-
-interface OnMessageData {
-  listenerId: string
-}
-
-interface OnEventData {
-  event: ProviderEvent
-  context: any // Can be more specific type based on our context structure
-}
-
-const listenerRegistry: Record<string, ListenerRegistration> = {}
-
-function generateListenerId(): string {
-  return Math.random().toString(36).substring(2, 15)
-}
-
-function registerListener(event: ProviderEvent /*, context: string*/): string {
-  const listenerId = generateListenerId()
-  const listener: ListenerFunction = (args) => {
-    // Adjusting sendMessage call to match its signature
-    sendMessage("eventTriggered", { listenerId, event, args }) // Assuming context is handled elsewhere or not needed
+onMessage("enable", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const { origin } = Validation.requestSchema.parse(data)
+    return await provider.enable({ origin })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
   }
+})
 
-  listenerRegistry[listenerId] = { event, listener }
-
-  // Register with MinaProvider
-  provider.on(event, listener)
-
-  return listenerId
-}
-
-function removeListener(listenerId: string): void {
-  const registration = listenerRegistry[listenerId]
-  if (registration) {
-    const { event, listener } = registration
-    provider.off(event, listener)
-    delete listenerRegistry[listenerId]
+onMessage("mina_setState", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.setStateRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_setState",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
   }
-}
-
-onMessage("enable", async (payload) => {
-  const data = payload.data as { origin: string }
-  return await provider.enable({ origin: data.origin })
 })
 
-onMessage("on", ({ data }) => {
-  const { event /*, context*/ } = data as unknown as OnEventData
-  const listenerId = registerListener(event /*, context*/)
-  return { success: true, listenerId }
+onMessage("mina_addChain", async () => {
+  return { error: serializeError(new Error("4200 - Unsupported Method")) }
 })
 
-onMessage("off", ({ data }) => {
-  const { listenerId } = data as unknown as OnMessageData
-  removeListener(listenerId)
-
-  return { success: true }
+onMessage("mina_requestNetwork", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.requestSchema.parse(data)
+    return await provider.request({
+      method: "mina_requestNetwork",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 })
 
-onMessage("mina_setState", async (data) => {
-  return await provider.request({ method: "mina_setState", params: data })
+onMessage("mina_switchChain", async () => {
+  return { error: serializeError(new Error("4200 - Unsupported Method")) }
 })
 
-onMessage("experimental_requestSession", async (data) => {
-  return await provider.request({
-    method: "experimental_requestSession",
-    params: data,
+onMessage("mina_getState", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.getStateRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_getState",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+onMessage("isConnected", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const { origin } = Validation.requestSchema.parse(data)
+    return await provider.isConnected({ origin })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+onMessage("mina_chainId", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.requestSchema.parse(data)
+    return await provider.request({
+      method: "mina_chainId",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+onMessage("mina_accounts", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.requestSchema.parse(data)
+    return await provider.request({
+      method: "mina_accounts",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+// TODO: It should be removed, but let's keep it for now for Auro compatibility.
+onMessage("mina_requestAccounts", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.requestSchema.parse(data)
+    return await provider.request({
+      method: "mina_accounts",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+onMessage("mina_sign", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.signMessageRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_sign",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+onMessage("mina_signFields", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.signFieldsRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_signFields",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+onMessage("mina_signTransaction", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.signTransactionRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_signTransaction",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+onMessage("mina_getBalance", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.requestSchema.parse(data)
+    return await provider.request({
+      method: "mina_getBalance",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+onMessage("mina_createNullifier", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.createNullifierRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_createNullifier",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+onMessage("mina_sendTransaction", async ({ data }) => {
+  try {
+    const provider = await MinaProvider.init(opts, [])
+    const params = Validation.sendTransactionRequestSchema.parse(data)
+    return await provider.request({
+      method: "mina_sendTransaction",
+      params,
+    })
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+})
+
+onMessage("pallad_sidePanel", async ({ sender }) => {
+  await chrome.sidePanel.open({
+    tabId: sender.tabId,
   })
 })
 
-onMessage("mina_addChain", async (data) => {
-  return await provider.request({ method: "mina_addChain", params: data })
+runtime.onConnect.addListener((port) => {
+  if (port.name === "prompt") {
+    port.onDisconnect.addListener(async () => {
+      await chrome.sidePanel.setOptions({
+        path: "index.html",
+        enabled: true,
+      })
+    })
+  }
 })
 
-onMessage("mina_requestNetwork", async (data) => {
-  return await provider.request({
-    method: "mina_requestNetwork",
-    params: data,
-  })
-})
-
-onMessage("mina_switchChain", async (data) => {
-  return await provider.request({ method: "mina_switchChain", params: data })
-})
-
-onMessage("mina_getState", async (data) => {
-  //return await provider.request({ method: 'mina_getState' })
-  return await provider.request({ method: "mina_getState", params: data })
-})
-
-onMessage("isConnected", (payload) => {
-  const data = payload.data as { origin: string }
-  return provider.isConnected({ origin: data.origin })
-})
-
-onMessage("mina_chainId", async (data) => {
-  return await provider.request({ method: "mina_chainId", params: data })
-})
-
-onMessage("mina_accounts", async (data) => {
-  return await provider.request({ method: "mina_accounts", params: data })
-})
-
-onMessage("mina_sign", async (data) => {
-  return await provider.request({ method: "mina_sign", params: data })
-})
-
-onMessage("mina_signFields", async (data) => {
-  return await provider.request({ method: "mina_signFields", params: data })
-})
-
-onMessage("mina_signTransaction", async (data) => {
-  return await provider.request({
-    method: "mina_signTransaction",
-    params: data,
-  })
-})
-
-onMessage("mina_getBalance", async (data) => {
-  return await provider.request({ method: "mina_getBalance", params: data })
-})
-
-onMessage("mina_createNullifier", async (data) => {
-  return await provider.request({
-    method: "mina_createNullifier",
-    params: data,
-  })
+runtime.onInstalled.addListener(async ({ reason }) => {
+  await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+  if (reason === "install") {
+    if (!E2E_TESTING)
+      await tabs.create({ url: "https://get.pallad.co/welcome" })
+  }
 })

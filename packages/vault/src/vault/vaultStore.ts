@@ -4,10 +4,9 @@ import {
   PalladNetworkNames,
   constructTransaction,
 } from "@palladxyz/pallad-core"
-import { getSecurePersistence } from "@palladxyz/persistence"
 import { produce } from "immer"
 import { create } from "zustand"
-import { type PersistStorage, persist } from "zustand/middleware"
+import { createJSONStorage, persist } from "zustand/middleware"
 
 import { type AccountStore, accountSlice } from "../account"
 import { type CredentialStore, credentialSlice } from "../credentials"
@@ -16,7 +15,7 @@ import { getRandomAnimalName } from "../lib/utils"
 import { type NetworkInfoStore, networkInfoSlice } from "../network-info"
 import { type ObjectStore, objectSlice } from "../objects"
 import { type TokenInfoStore, tokenInfoSlice } from "../token-info"
-import { type WebProviderStore, webProviderSlice } from "../web-provider"
+import { securePersistence } from "../utils"
 import {
   getBalanceHelper,
   getCurrentWalletHelper,
@@ -40,7 +39,10 @@ const defaultGlobalVaultState: GlobalVaultState = {
   currentAddressIndex: 0,
   chain: Network.Mina,
   walletName: "",
-  walletNetwork: PalladNetworkNames.MINA_DEVNET,
+  walletNetwork:
+    (process.env.VITE_APP_DEFAULT_NETWORK ?? "Mainnet") === "Mainnet"
+      ? PalladNetworkNames.MINA_MAINNET
+      : PalladNetworkNames.MINA_DEVNET,
   knownAccounts: [],
   chainIds: [],
 }
@@ -52,7 +54,6 @@ export const useVault = create<
     ObjectStore &
     NetworkInfoStore &
     TokenInfoStore &
-    WebProviderStore &
     GlobalVaultStore
 >()(
   persist(
@@ -63,7 +64,6 @@ export const useVault = create<
       ...objectSlice(set, get, store),
       ...networkInfoSlice(set, get, store),
       ...tokenInfoSlice(set, get, store),
-      ...webProviderSlice(set, get, store),
       ...defaultGlobalVaultState,
       // This is now available in the networkInfo store
       // api.networkInfo.setCurrentNetworkName(networkName)
@@ -177,10 +177,7 @@ export const useVault = create<
     }),
     {
       name: "PalladVault",
-      storage:
-        import.meta.env.VITE_APP_LADLE === "true"
-          ? undefined
-          : (getSecurePersistence() as PersistStorage<any>),
+      storage: createJSONStorage(() => securePersistence),
     },
   ),
 )

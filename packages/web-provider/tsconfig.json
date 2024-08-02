@@ -1,3 +1,6 @@
 {
-  "extends": "@palladxyz/common/tsconfig.json"
+  "extends": "@palladxyz/common/tsconfig.json",
+  "compilerOptions": {
+    "types": ["@types/chrome"]
+  }
 }

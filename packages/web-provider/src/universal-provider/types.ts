@@ -1,4 +1,4 @@
-import type { EventEmitter } from "node:events"
+import type { EventEmitter } from "eventemitter3"
 
 import type { RequestArguments } from "../web-provider-types"
 

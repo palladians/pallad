@@ -1,7 +1,7 @@
 import { MinaNode } from "../../../../src"
 
 const nodeUrl =
-  process.env.NODE_URL || "https://pallad.co/api/obscura/devnet.json"
+  process.env.NODE_URL || "https://api.minascan.io/node/devnet/v1/graphql"
 
 // TODO: change this to local network
 describe("Blockberry Node Status Provider (Functional)", () => {
@@ -23,7 +23,6 @@ describe("Blockberry Node Status Provider (Functional)", () => {
     it("should return account info for a valid public key", async () => {
       // This test now depends on the actual response from the server
       const response = await provider.getNodeStatus()
-      console.log("response", response)
     })
   })
 

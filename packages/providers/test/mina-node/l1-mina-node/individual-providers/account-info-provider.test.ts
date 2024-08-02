@@ -3,7 +3,7 @@ import type { TokenIdMap } from "@palladxyz/mina-core"
 import { MinaNode } from "../../../../src"
 
 const nodeUrl =
-  process.env.NODE_URL || "https://pallad.co/api/obscura/devnet.json"
+  process.env.NODE_URL || "https://api.minascan.io/node/devnet/v1/graphql"
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qkAqbeE4h1M5hop288jtVYxK1MsHVMMcBpaWo8qdsAztgXaHH1xq"
@@ -31,7 +31,6 @@ describe("Blockberry Account Info Provider (Functional)", () => {
     it("should return account info for a valid public key", async () => {
       // This test now depends on the actual response from the server
       const response = await provider.getAccountInfo({ publicKey, tokenMap })
-      console.log("response", response)
       expect(response).toHaveProperty("MINA")
     })
   })

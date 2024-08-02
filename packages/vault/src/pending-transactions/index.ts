@@ -1,7 +1,7 @@
-import { getLocalPersistence } from "@palladxyz/persistence"
-import { isBefore } from "date-fns"
+import dayjs from "dayjs"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
+import { localPersistence } from "../utils"
 
 type PendingTransaction = {
   hash: string
@@ -44,15 +44,15 @@ export const usePendingTransactionStore = create<PendingTransactionsStore>()(
         })),
       clearExpired() {
         const { pendingTransactions } = get()
-        const validPendingTransactions = pendingTransactions.filter(
-          (tx) => !isBefore(new Date(tx.expireAt), new Date()),
+        const validPendingTransactions = pendingTransactions.filter((tx) =>
+          dayjs(tx.expireAt).isAfter(dayjs()),
         )
         return set({ pendingTransactions: validPendingTransactions })
       },
     }),
     {
       name: "PalladPendingTransactions",
-      storage: createJSONStorage(getLocalPersistence),
+      storage: createJSONStorage(() => localPersistence),
     },
   ),
 )

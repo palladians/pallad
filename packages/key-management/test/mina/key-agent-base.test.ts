@@ -4,17 +4,15 @@ import { constructTransaction } from "@palladxyz/pallad-core"
 import { Network } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import Client from "mina-signer"
-import sinon from "sinon"
 import { expect } from "vitest"
 
+import { hexToBytes, utf8ToBytes } from "@noble/hashes/utils"
 import type { MinaDerivationArgs } from "../../dist"
-import { getPassphraseRethrowTypedError } from "../../src/InMemoryKeyAgent"
 import { KeyAgentBase } from "../../src/KeyAgentBase"
 import {
   type MinaSpecificArgs,
   deriveMinaPrivateKey,
 } from "../../src/chains/Mina"
-import { reverseBytes } from "../../src/chains/Mina/keyDerivationUtils"
 import { emip3encrypt } from "../../src/emip3"
 import {
   type ChainOperationArgs,
@@ -29,13 +27,9 @@ const params = {
   passphrase: "passphrase",
   incorrectPassphrase: "not correct passphrase",
 }
-const getPassphrase = () =>
-  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
+const getPassphrase = () => utf8ToBytes(params.passphrase)
 
-const getWrongPassphrase = () =>
-  new Promise<Uint8Array>((resolve) =>
-    resolve(Buffer.from(params.incorrectPassphrase)),
-  )
+const getWrongPassphrase = () => utf8ToBytes(params.incorrectPassphrase)
 
 describe("KeyAgentBase (Mina Functionality)", () => {
   class KeyAgentBaseInstance extends KeyAgentBase {}
@@ -58,16 +52,9 @@ describe("KeyAgentBase (Mina Functionality)", () => {
     rootKeyBytes = root.privateKey ? root.privateKey : new Uint8Array([])
 
     // passphrase
-    passphrase = await getPassphraseRethrowTypedError(getPassphrase)
-    // define the agent properties
-    passphrase = await getPassphraseRethrowTypedError(getPassphrase)
+    passphrase = getPassphrase()
     // Works with seed
     encryptedSeedBytes = await emip3encrypt(seed, passphrase)
-  })
-
-  afterEach(() => {
-    // Clean up all sinon stubs after each test.
-    sinon.restore()
   })
 
   describe("Mina KeyAgent", () => {
@@ -105,8 +92,13 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         addressIndex: 0,
       }
       const childPrivateKey = deriveMinaPrivateKey(args, seed)
-      expect(childPrivateKey).toBe(
-        "EKExKH31gXH7t5KiYxdyEbtgi22vgX6wnqwmcbrANs9nQJt487iN",
+      expect(childPrivateKey).toStrictEqual(
+        new Uint8Array([
+          69, 75, 69, 120, 75, 72, 51, 49, 103, 88, 72, 55, 116, 53, 75, 105,
+          89, 120, 100, 121, 69, 98, 116, 103, 105, 50, 50, 118, 103, 88, 54,
+          119, 110, 113, 119, 109, 99, 98, 114, 65, 78, 115, 57, 110, 81, 74,
+          116, 52, 56, 55, 105, 78,
+        ]),
       )
     })
     it("should throw an error for wrong seed length", () => {
@@ -262,10 +254,10 @@ describe("KeyAgentBase (Mina Functionality)", () => {
     })
 
     it("should reverse bytes correctly", () => {
-      const originalBuffer = Buffer.from("1234", "hex")
-      const reversedBuffer = Buffer.from("3412", "hex")
+      const originalBuffer = utf8ToBytes("1234")
+      const reversedBuffer = utf8ToBytes("4321")
 
-      expect(reverseBytes(originalBuffer)).to.deep.equal(reversedBuffer)
+      expect(originalBuffer.reverse()).to.deep.equal(reversedBuffer)
     })
 
     it("should export root key successfully", async () => {

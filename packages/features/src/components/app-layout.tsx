@@ -11,6 +11,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   const location = useLocation()
   // biome-ignore lint: dependent just on location
   useEffect(() => {
+    if (typeof document === "undefined") return
     for (const el of document.querySelectorAll("[data-hotkey]")) {
       install(el as never)
     }

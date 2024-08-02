@@ -6,7 +6,7 @@ import { type ProviderConfig, createChainProvider } from "../../src"
 const explorerUrl =
   process.env.EXPLORER_URL || "https://minascan.io/devnet/api/"
 const nodeUrl =
-  process.env.NODE_URL || "https://pallad.co/api/obscura/devnet.json"
+  process.env.NODE_URL || "https://api.minascan.io/node/devnet/v1/graphql"
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
@@ -32,6 +32,10 @@ describe("Unified Chain provider", () => {
         archiveNodeEndpoint: {
           providerName: "mina-scan",
           url: explorerUrl,
+        },
+        explorer: {
+          accountUrl: "",
+          transactionUrl: "",
         },
         networkName: "Devnet",
         chainId: "...",
@@ -63,10 +67,6 @@ describe("Unified Chain provider", () => {
             addresses: [publicKey],
           })) as Tx[]
 
-          console.log(
-            "Mina Explorer Unified.ChainHistory Provider Response",
-            response,
-          )
           const transaction = response[0]
 
           expect(transaction).toHaveProperty("amount")
@@ -126,10 +126,6 @@ describe("Unified Chain provider", () => {
             addresses: [publicKey],
           })) as Tx[]
 
-          console.log(
-            "Mina Explorer Unified.ChainHistory Provider Response",
-            response,
-          )
           const transaction = response[0]
 
           expect(transaction).toHaveProperty("amount")

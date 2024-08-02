@@ -11,13 +11,18 @@ export const TxTile = ({
 }) => {
   const formattedAmount = formatCompact({ value: tx.amount })
   return (
-    <Link to={`/transactions/${tx.hash}`}>
-      <div className="card bg-secondary p-4 aspect-square grid-col gap-1">
+    <Link
+      to={`/transactions/${tx.hash}`}
+      className="[&:nth-child(3)]:hidden sm:[&:nth-child(3)]:flex"
+    >
+      <div className="card bg-secondary p-4 aspect-square grid-col gap-1 justify-between">
         <div className="btn btn-circle bg-neutral">
           <TxIcon tx={tx} currentWalletAddress={currentWalletAddress} />
         </div>
-        <h3 className="mt-2">Mina</h3>
-        <p>{formattedAmount}</p>
+        <div className="flex flex-col">
+          <h3 className="mt-2">Mina</h3>
+          <p>{formattedAmount}</p>
+        </div>
       </div>
     </Link>
   )

@@ -51,7 +51,7 @@ export const PortfolioValueChart = ({
   currentPriceIndex,
 }: PortfolioValueChart) => {
   return (
-    <ResponsiveContainer width="100%" aspect={6}>
+    <ResponsiveContainer width="100%" aspect={6} maxHeight={53}>
       <AreaChart
         width={300}
         height={100}

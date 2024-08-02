@@ -1,4 +1,4 @@
-import { getLocalPersistence } from "@palladxyz/persistence"
+import { localPersistence } from "@palladxyz/vault"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
@@ -8,7 +8,7 @@ import { VaultState } from "../lib/const"
 type AppState = {
   vaultState: VaultState
   shareData: boolean
-  betaBannerVisible: boolean
+  useFiatBalance: boolean
 }
 
 type AppQueries = {
@@ -20,7 +20,7 @@ type AppMutators = {
   setVaultStateInitialized: () => void
   setVaultStateUninitialized: () => void
   setShareData: (shareData: boolean) => void
-  setBetaBannerVisible: (betaBannerVisible: boolean) => void
+  setUseFiatBalance: (useFiatBalance: boolean) => void
 }
 
 type AppStore = AppState & AppMutators & AppQueries
@@ -28,7 +28,7 @@ type AppStore = AppState & AppMutators & AppQueries
 export const useAppStore = create<AppStore>()(
   persist(
     (set, get) => ({
-      betaBannerVisible: true,
+      useFiatBalance: true,
       vaultState: VaultState[VaultState.UNINITIALIZED],
       shareData: true,
       isInitialized: () => {
@@ -49,13 +49,13 @@ export const useAppStore = create<AppStore>()(
         const { setVaultState } = get()
         return setVaultState(VaultState.UNINITIALIZED)
       },
-      setBetaBannerVisible(betaBannerVisible) {
-        return set({ betaBannerVisible })
+      setUseFiatBalance(useFiatBalance) {
+        return set({ useFiatBalance })
       },
     }),
     {
       name: "PalladApp",
-      storage: createJSONStorage(getLocalPersistence),
+      storage: createJSONStorage(() => localPersistence),
     },
   ),
 )

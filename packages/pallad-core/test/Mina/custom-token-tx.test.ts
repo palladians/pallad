@@ -7,7 +7,6 @@ import {
   Network
 } from '@palladxyz/key-management'
 import { Mina } from '@palladxyz/mina-core'
-import sinon from 'sinon'
 //import { constructCustomTokenPaymentTx, paymentInfo } from '../../src/Pallad/transactions/mina'
 
 
@@ -40,15 +39,11 @@ LinkError: WebAssembly.Instance(): Import #0 module="env" function="memory" erro
 This error originated in "test/Mina/custom-token-tx.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
 
 
-// Create a sandbox for managing and restoring stubs
-const sandbox = sinon.createSandbox()
-
 // Provide the passphrase for testing purposes
 const params = {
   passphrase: 'passphrase'
 }
-const getPassphrase = () =>
-  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
+const getPassphrase = () => utf8ToBytes(params.passphrase)
 
 describe('Mina InMemoryKeyAgent Signing Custom Token Transaction', () => {
   let agent: InMemoryKeyAgent
@@ -120,7 +115,6 @@ describe('Mina InMemoryKeyAgent Signing Custom Token Transaction', () => {
       const decryptedChildKey = Buffer.from(
         await decryptor.decryptChildPrivateKey(encryptedChildKey as Uint8Array)
       ).toString()
-      console.log('decrypted child key:', decryptedChildKey)
     })
   })
 
@@ -152,7 +146,6 @@ describe('Mina InMemoryKeyAgent Signing Custom Token Transaction', () => {
       }
 
       const signedTx = await agent.sign(groupedCredentials, tx, operationArgs)
-      console.log('signedTx', signedTx)
     })
   })
 })

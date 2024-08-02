@@ -1,5 +1,4 @@
 import { baseTsupConfig } from "@palladxyz/common"
-import svgJsx from "@svgr/plugin-jsx"
 import { polyfillNode } from "esbuild-plugin-polyfill-node"
 import svgr from "esbuild-plugin-svgr"
 import { defineConfig } from "tsup"
@@ -15,7 +14,7 @@ export default defineConfig([
         polyfills: { crypto: true },
         globals: { process: true },
       }),
-      svgr({ plugins: [svgJsx] }),
+      svgr(),
     ],
     external: ["swr"],
     treeshake: true,

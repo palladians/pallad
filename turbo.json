@@ -1,7 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
-  "pipeline": {
+  "globalDependencies": [".env"],
+  "globalEnv": [
+    "VITE_APP_E2E",
+    "VITE_APP_DEFAULT_NETWORK",
+    "VITE_APP_MINA_PROXY_MAINNET_URL",
+    "VITE_APP_MINA_PROXY_DEVNET_URL"
+  ],
+  "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]

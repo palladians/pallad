@@ -1,3 +1,4 @@
+import { useVault } from "@palladxyz/vault"
 import clsx from "clsx"
 import { toast } from "sonner"
 
@@ -7,6 +8,7 @@ type HashDropdownProps = {
 }
 
 export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
+  const currentNetworkInfo = useVault((state) => state.getCurrentNetworkInfo())
   const handleClick = () => {
     const elem = document.activeElement as HTMLLIElement
     if (elem) {
@@ -18,7 +20,10 @@ export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
     toast.success("Hash Copied")
   }
   const openInExplorer = () => {
-    const url = `https://minascan.io/devnet/tx/${hash}/txInfo`
+    const url = currentNetworkInfo.explorer.transactionUrl.replace(
+      "{hash}",
+      hash,
+    )
     window.open(url, "_blank")?.focus()
   }
   return (

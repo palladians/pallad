@@ -1,5 +1,5 @@
 import { Network, getAccountProperties } from "@palladxyz/pallad-core"
-import { getSessionPersistence } from "@palladxyz/persistence"
+import { sessionPersistence } from "@palladxyz/vault"
 import { getPublicKey, isDelegated, useVault } from "@palladxyz/vault"
 import easyMeshGradient from "easy-mesh-gradient"
 import { useMemo } from "react"
@@ -21,8 +21,11 @@ export const useAccount = () => {
   const fetchWallet = async () => {
     await _syncWallet()
     const accountInfo = getAccountsInfo(currentNetworkName, publicKey)
-    const chain = currentWallet.credential.credential.chain
-    const props = getAccountProperties(accountInfo.accountInfo, chain)
+    const chain = currentWallet.credential.credential?.chain
+    const props = getAccountProperties(
+      accountInfo.accountInfo,
+      chain ?? Network.Mina,
+    )
     return props
   }
   const publicKey = getPublicKey(currentWallet)
@@ -33,15 +36,9 @@ export const useAccount = () => {
       refreshInterval: 30000,
     },
   )
-  const rawBalance = swr.isLoading ? 0 : swr.data.balance ?? 0
-  let minaBalance: bigint | number | 0
-  if (currentWallet.credential.credential.chain === Network.Mina) {
-    minaBalance = rawBalance && BigInt(rawBalance) / BigInt(1_000_000_000) // TODO: adjust this for other chains and their decimal conversion
-  } else if (currentWallet.credential.credential.chain === Network.Ethereum) {
-    minaBalance = rawBalance
-  } else {
-    throw new Error("chain is not supported in useAccount")
-  }
+  const rawBalance = swr.isLoading ? 0 : swr.data?.balance ?? 0
+  const minaBalance =
+    rawBalance && Number.parseInt(String(rawBalance)) / 1_000_000_000
   const gradientBackground = useMemo(
     () =>
       publicKey &&
@@ -57,7 +54,7 @@ export const useAccount = () => {
     toast.success("Address copied")
   }
   const lockWallet = async () => {
-    await getSessionPersistence().setItem("spendingPassword", "")
+    await sessionPersistence.setItem("spendingPassword", "")
     navigate("/unlock")
     await useVault.persist.rehydrate()
   }

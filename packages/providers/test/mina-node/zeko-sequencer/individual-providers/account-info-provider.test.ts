@@ -6,7 +6,7 @@ const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qoereGLPUg5RWuoTEGu5CSKnN7AAirwwA2h6J1JHH3RF6wbThXmr"
 // TODO: change this to local network
-describe("Zeko Sequencer Account Info Provider (Functional)", () => {
+describe.skip("Zeko Sequencer Account Info Provider (Functional)", () => {
   let provider: ReturnType<typeof MinaNode.createAccountInfoProvider>
   let tokenMap: TokenIdMap
 

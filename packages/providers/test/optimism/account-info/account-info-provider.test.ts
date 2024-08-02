@@ -8,8 +8,8 @@ const nodeUrl =
 const publicKey =
   process.env.PUBLIC_KEY || "0xA98005e6ce8E62ADf8f9020fa99888E8f107e3C9"
 
-// TODO: change this to local network
-describe("Optimism Account Info Provider (Functional)", () => {
+// TODO: Enable when we go back to EVM
+describe.skip("Optimism Account Info Provider (Functional)", () => {
   let provider: ReturnType<typeof Optimism.createAccountInfoProvider>
 
   beforeEach(() => {
@@ -32,7 +32,6 @@ describe("Optimism Account Info Provider (Functional)", () => {
         chainInfo: optimismSepolia,
       }
       const response = await provider.getAccountInfo(args)
-      console.log("Optimism AccountInfo Provider Response", response)
       expect(response).toHaveProperty("ETH")
     })
   })

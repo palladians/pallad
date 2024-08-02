@@ -12,5 +12,5 @@ export const deriveCoinTypePrivateKey = async ({
   const coinTypeKey = await bip32.HDKey.fromMasterSeed(rootPrivateKey)
     .deriveChild(MinaKeyConst.PURPOSE)
     .deriveChild(MinaKeyConst.MINA_COIN_TYPE)
-  return coinTypeKey.privateKey ? coinTypeKey.privateKey : Buffer.from([])
+  return coinTypeKey.privateKey ? coinTypeKey.privateKey : new Uint8Array([])
 }

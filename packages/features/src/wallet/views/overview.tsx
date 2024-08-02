@@ -5,46 +5,47 @@ import { Skeleton } from "@/components/skeleton"
 import type { Tx } from "@palladxyz/pallad-core"
 import { Link } from "react-router-dom"
 import SlotCounter from "react-slot-counter"
-import { InfoBar } from "../components/info-bar"
 import { PortfolioValueChart } from "../components/portfolio-value-chart"
 import { TxTile } from "../components/tx-tile"
 
 type OverviewViewProps = {
   lastMonthPrices: [number, number][]
-  balance: number
+  minaBalance: number
+  fiatBalance: number
   chartLabel: string
   loading: boolean
   currentPriceIndex: number | undefined
   setCurrentPriceIndex: (currentPriceIndex: number | undefined) => void
   transactions: Tx[]
   publicAddress: string
-  betaBannerVisible: boolean
-  setBetaBannerVisible: (betaBannerVisible: boolean) => void
   onSend: () => void
   onReceive: () => void
+  useFiatBalance: boolean
+  setUseFiatBalance: (useFiatBalance: boolean) => void
 }
 
 export const OverviewView = ({
   lastMonthPrices,
-  balance,
+  minaBalance,
+  fiatBalance,
   chartLabel,
   loading,
   currentPriceIndex,
   setCurrentPriceIndex,
   transactions,
   publicAddress,
-  betaBannerVisible,
-  setBetaBannerVisible,
   onSend,
   onReceive,
+  useFiatBalance,
+  setUseFiatBalance,
 }: OverviewViewProps) => {
-  const [bucks, cents] = balance.toFixed(2).toString().split(".")
+  const [bucks, cents] = (useFiatBalance ? fiatBalance : minaBalance)
+    .toFixed(2)
+    .toString()
+    .split(".")
   return (
     <AppLayout>
       <MenuBar variant="dashboard" publicAddress={publicAddress} />
-      {betaBannerVisible ? (
-        <InfoBar onClose={() => setBetaBannerVisible(false)} />
-      ) : null}
       <Skeleton loading={loading} h="62px">
         <PortfolioValueChart
           lastMonthPrices={lastMonthPrices}
@@ -53,11 +54,20 @@ export const OverviewView = ({
         />
       </Skeleton>
       <div className="card flex-col bg-secondary rounded-t-none px-8 pb-6 gap-4">
-        <h1 className="text-primary">Portfolio value</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-primary">Portfolio value</h1>
+          <button
+            type="button"
+            className="btn btn-sm"
+            onClick={() => setUseFiatBalance(!useFiatBalance)}
+          >
+            Use {useFiatBalance ? "Mina" : "Fiat"}
+          </button>
+        </div>
         <Skeleton loading={loading} h="65px">
           <h2 className="flex items-end">
             <span className="flex items-center text-6xl">
-              <span>$</span>
+              <span>{useFiatBalance ? "$" : "M"}</span>
               <SlotCounter value={bucks} charClassName="font-work-sans" />
             </span>
             <span className="flex items-end text-lg">
@@ -99,7 +109,7 @@ export const OverviewView = ({
             <ArrowRightIcon />
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           {loading ? (
             <>
               <Skeleton loading={true} h="145px" />

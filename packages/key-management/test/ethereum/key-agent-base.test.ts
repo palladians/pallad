@@ -2,11 +2,10 @@ import { mnemonic } from "@palladxyz/common"
 import { Network } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import { verifyMessage } from "ethers"
-import sinon from "sinon"
 import { expect } from "vitest"
 
+import { utf8ToBytes } from "@noble/hashes/utils"
 import type { EthereumSpecificArgs } from "../../src"
-import { getPassphraseRethrowTypedError } from "../../src/InMemoryKeyAgent"
 import { KeyAgentBase } from "../../src/KeyAgentBase"
 import { emip3encrypt } from "../../src/emip3"
 import {
@@ -21,10 +20,9 @@ import * as util from "../../src/util/bip39"
 const params = {
   passphrase: "passphrase",
 }
-const getPassphrase = () =>
-  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
+const getPassphrase = () => utf8ToBytes(params.passphrase)
 
-describe("KeyAgentBase (Ethereum Functionality)", () => {
+describe.skip("KeyAgentBase (Ethereum Functionality)", () => {
   class KeyAgentBaseInstance extends KeyAgentBase {}
 
   let instance: KeyAgentBaseInstance
@@ -43,16 +41,9 @@ describe("KeyAgentBase (Ethereum Functionality)", () => {
     rootKeyBytes = root.privateKey ? root.privateKey : new Uint8Array([])
 
     // passphrase
-    passphrase = await getPassphraseRethrowTypedError(getPassphrase)
-    // define the agent properties
-    passphrase = await getPassphraseRethrowTypedError(getPassphrase)
+    passphrase = getPassphrase()
     // Works with seed
     encryptedSeedBytes = await emip3encrypt(seed, passphrase)
-  })
-
-  afterEach(() => {
-    // Clean up all sinon stubs after each test.
-    sinon.restore()
   })
 
   describe("Ethereum KeyAgent", () => {

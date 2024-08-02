@@ -1,7 +1,6 @@
 import HeartIcon from "@/common/assets/heart.svg?react"
 import SocialDiscordIcon from "@/common/assets/social-discord.svg?react"
 import SocialXIcon from "@/common/assets/social-x.svg?react"
-import { Link2Icon, TwitterIcon } from "lucide-react"
 
 import { WizardLayout } from "@/components/wizard-layout"
 

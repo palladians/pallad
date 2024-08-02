@@ -34,8 +34,7 @@ jobs:
   test_and_build:
     name: "Build and test"
     env:
-      VITE_APP_MODE: web
-      VITE_APP_DEFAULT_NETWORK: Devnet
+      VITE_APP_DEFAULT_NETWORK: Mainnet
       NODE_OPTIONS: "--max_old_space_size=4096"
     runs-on: ubuntu-latest
     steps:
@@ -52,7 +51,7 @@ jobs:
           TURBO_API: "http://127.0.0.1:9080"
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
-        run: VITE_APP_MODE=$VITE_APP_MODE pnpm build:extension
+        run: VITE_APP_DEFAULT_NETWORK=$VITE_APP_DEFAULT_NETWORK pnpm build:extension
       - name: Run unit tests
         run: pnpm test:unit
       - uses: actions/upload-artifact@v3

@@ -3,13 +3,12 @@ import { Mina } from "@palladxyz/mina-core"
 import { Network, constructTransaction } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import Client from "mina-signer"
-import sinon from "sinon"
 import { expect } from "vitest"
 
+import { utf8ToBytes } from "@noble/hashes/utils"
 //import { emip3encrypt } from '../src/emip3'
 import {
   type FromBip39MnemonicWordsProps,
-  //getPassphraseRethrowTypedError,
   InMemoryKeyAgent,
 } from "../../src/InMemoryKeyAgent"
 import type {
@@ -18,15 +17,11 @@ import type {
 } from "../../src/chains/Mina"
 import * as bip39 from "../../src/util/bip39"
 
-// Create a sandbox for managing and restoring stubs
-const sandbox = sinon.createSandbox()
-
 // Provide the passphrase for testing purposes
 const params = {
   passphrase: "passphrase",
 }
-const getPassphrase = () =>
-  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
+const getPassphrase = () => utf8ToBytes(params.passphrase)
 
 describe("Mina InMemoryKeyAgent", () => {
   let agent: InMemoryKeyAgent
@@ -42,7 +37,7 @@ describe("Mina InMemoryKeyAgent", () => {
     // Create root node from seed
     root = bip32.HDKey.fromMasterSeed(seed)
     // unencrypted root key bytes
-    rootKeyBytes = root.privateKey ? root.privateKey : Buffer.from([])
+    rootKeyBytes = root.privateKey ? root.privateKey : new Uint8Array([])
     // define the agent properties
     //encryptedSeedBytes = await emip3encrypt(seed, passphrase)
     const agentArgs: FromBip39MnemonicWordsProps = {
@@ -53,11 +48,6 @@ describe("Mina InMemoryKeyAgent", () => {
     agent = await InMemoryKeyAgent.fromMnemonicWords(agentArgs)
     // network type
     networkType = "testnet"
-  })
-
-  afterEach(() => {
-    // Restore all stubs after each test
-    sandbox.restore()
   })
 
   it("should create an agent with given properties", () => {
@@ -75,7 +65,7 @@ describe("Mina InMemoryKeyAgent", () => {
     /*
     // Need to fix this test
     it('should throw error when decrypting root private key fails', async () => {
-        const fakeGetPassphrase = async () => Buffer.from('wrong_passphrase');
+        const fakeGetPassphrase = () => utf8ToBytes('wrong_passphrase');
         const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
           getPassphrase: fakeGetPassphrase,
           mnemonicWords: mnemonic
@@ -83,7 +73,7 @@ describe("Mina InMemoryKeyAgent", () => {
         await expect(agentFromBip39.decryptSeed()).rejects.toThrow('Failed to decrypt root private key');
       });
       it('should throw error when decrypting coin type private key fails', async () => {
-        const fakeGetPassphrase = async () => Buffer.from('wrong_passphrase');
+        const fakeGetPassphrase = () => utf8ToBytes('wrong_passphrase');
         const agentFromBip39 = await InMemoryKeyAgent.fromBip39MnemonicWords({
           getPassphrase: fakeGetPassphrase,
           mnemonicWords: mnemonic

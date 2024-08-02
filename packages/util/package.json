@@ -18,14 +18,14 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "bs58check": "^3.0.1",
-    "buffer": "^6.0.3",
-    "mina-signer": "^2.1.1",
-    "ts-custom-error": "^3.3.1"
+    "bs58check": "4.0.0",
+    "buffer": "6.0.3",
+    "mina-signer": "3.0.7",
+    "ts-custom-error": "3.3.1"
   },
   "devDependencies": {
     "@palladxyz/common": "workspace:*",
-    "@types/mocha": "^10.0.6",
-    "@types/secp256k1": "^4.0.6"
+    "@types/mocha": "10.0.7",
+    "@types/secp256k1": "4.0.6"
   }
 }

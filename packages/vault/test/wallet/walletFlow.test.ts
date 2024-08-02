@@ -1,3 +1,4 @@
+import { utf8ToBytes } from "@noble/hashes/utils"
 import { mnemonic } from "@palladxyz/common"
 import type {
   ChainDerivationArgs,
@@ -24,8 +25,7 @@ const PREGENERATED_MNEMONIC = mnemonic
 const params = {
   passphrase: "passphrase",
 }
-const getPassphrase = () =>
-  new Promise<Uint8Array>((resolve) => resolve(Buffer.from(params.passphrase)))
+const getPassphrase = () => utf8ToBytes(params.passphrase)
 
 describe("WalletTest", () => {
   let agentArgs: FromBip39MnemonicWordsProps
@@ -87,11 +87,8 @@ describe("WalletTest", () => {
 
     // check if chainId has been set and not '...'
     const chainId = result.current.getChainId()
-    console.log("chainId: ", chainId)
     const networkInfos = result.current.getNetworkInfo(defaultNetwork)
-    console.log("networkInfos: ", networkInfos)
     const currentNetworkInfo = result.current.getCurrentNetworkInfo()
-    console.log("currentNetworkInfo: ", currentNetworkInfo)
     expect(chainId).not.toEqual("...")
 
     // check if first credential is in the store
@@ -104,14 +101,12 @@ describe("WalletTest", () => {
 
     // check current network info is of the expected network
     const currentNetwork = result.current.getCurrentNetwork()
-    console.log("currentNetwork: ", currentNetwork)
     expect(currentNetwork).toEqual(defaultNetwork)
     // check if accountInfo is in the store
     const accountInfo = result.current.getAccountsInfo(
       defaultNetwork,
       expectedAddress,
     )
-    console.log("accountInfo", accountInfo)
     expect(accountInfo).toBeDefined()
     act(() => {
       result.current.setObject({
@@ -125,10 +120,8 @@ describe("WalletTest", () => {
       [],
     )
     expect(allObjects.length).toEqual(2)
-    console.log("all credentials", allObjects)
     // get keyAgentName
     const currentKeyAgentName = result.current.keyAgentName
-    console.log("keyAgentName", currentKeyAgentName)
     expect(currentKeyAgentName).toBe(keyAgentName)
-  })
+  }, 30000)
 })

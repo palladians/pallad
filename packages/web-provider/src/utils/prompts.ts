@@ -1,14 +1,14 @@
-export function showUserPrompt(
+export const showUserPrompt = async (
   inputType: "text" | "password" | "confirmation",
   metadata: { title: string; payload?: string },
-) {
-  return new Promise((resolve) => {
+) => {
+  return new Promise((resolve, reject) => {
     chrome.windows
       .create({
         url: "prompt.html",
         type: "popup",
-        width: 371,
-        height: 600,
+        width: 480,
+        height: 772,
         state: "normal",
       })
       .then(async (newWindow) => {
@@ -16,33 +16,44 @@ export function showUserPrompt(
           if (response.windowId === newWindow?.id) {
             chrome.runtime.onMessage.removeListener(listener)
             if (response.userRejected) {
-              resolve(null) // User cancelled the prompt
-            } else if (inputType === "confirmation") {
-              resolve(response.userConfirmed) // Confirmation response (true/false)
-            } else {
-              resolve(response.userInput) // User provided text/password input
+              return reject(new Error("4001 - User Rejected Request"))
             }
+            if (inputType === "confirmation") {
+              if (response.userConfirmed) return resolve(true)
+              return reject(new Error("4001 - User Rejected Request"))
+            }
+            if (response.userInput.length > 0)
+              return resolve(response.userInput)
+            return reject(new Error("4100 - Unauthorized"))
           }
+          return reject(new Error("Wrong window context"))
         }
         if (newWindow?.tabs && newWindow.tabs.length > 0) {
-          // Ensure newWindow and newWindow.tabs are defined and not empty
-          const tabId = newWindow.tabs?.[0]?.id!
+          const tabId = newWindow.tabs?.[0]?.id
           if (typeof tabId === "number") {
-            // If tabId is a number, construct the full URL and update the tab
-            const fullUrl = `prompt.html?title=${encodeURIComponent(
-              metadata.title,
-            )}&payload=${encodeURIComponent(
-              metadata.payload ?? "",
-            )}&inputType=${inputType}&windowId=${newWindow.id}`
-            await chrome.tabs.update(tabId, { url: fullUrl })
+            setTimeout(() => {
+              chrome.runtime.sendMessage({
+                type: "action_request",
+                params: {
+                  title: metadata.title,
+                  payload: metadata.payload ?? "{}",
+                  inputType,
+                },
+              })
+            }, 1000)
             chrome.runtime.onMessage.addListener(listener)
+            const closeListener = (closedWindowId: number) => {
+              chrome.windows.onRemoved.removeListener(closeListener)
+              if (closedWindowId === newWindow?.id) {
+                return reject(new Error("4001 - User Rejected Request"))
+              }
+            }
+            chrome.windows.onRemoved.addListener(closeListener)
           } else {
-            console.error("Failed to retrieve tab ID")
-            resolve(null)
+            return reject(new Error("Failed to retrieve tab ID"))
           }
         } else {
-          console.error("Failed to create prompt window")
-          resolve(null)
+          return reject(new Error("Failed to create prompt window"))
         }
       })
   })

@@ -1,4 +1,5 @@
 import { truncateString } from "@/common/lib/string"
+import { useVault } from "@palladxyz/vault"
 import clsx from "clsx"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
@@ -14,6 +15,7 @@ export const AddressDropdown = ({
   className,
   dropdownEnd,
 }: AddressDropdownProps) => {
+  const currentNetworkInfo = useVault((state) => state.getCurrentNetworkInfo())
   const handleClick = () => {
     const elem = document.activeElement as HTMLLIElement
     if (elem) {
@@ -25,7 +27,10 @@ export const AddressDropdown = ({
     toast.success("Address Copied")
   }
   const openInExplorer = () => {
-    const url = `https://minascan.io/devnet/account/${publicKey}`
+    const url = currentNetworkInfo.explorer.accountUrl.replace(
+      "{publicKey}",
+      publicKey,
+    )
     window.open(url, "_blank")?.focus()
   }
   return (

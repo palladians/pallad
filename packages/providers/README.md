@@ -1,6 +1,6 @@
 # @palladxyz/providers
 
-This TypeScript library creates Providers that can read and write (mutate) data to Mina via a set of API providers such as Obscura and Mina Explorer.
+This TypeScript library creates Providers that can read and write (mutate) data to Mina via a set of API providers such as Minascan.
 
 A Provider is an abstraction that encapsulates the functionality for interacting with the underlying protocol, whether by reading or mutating on-chain data or querying historical state information.
 
@@ -13,5 +13,4 @@ While these providers can be used individually, they are more functional in natu
 The following is a list of APIs there are providers for:
 
 - Mina Explorer
-- Obscura
 - OpenMina Node

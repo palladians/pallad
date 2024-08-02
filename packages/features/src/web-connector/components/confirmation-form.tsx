@@ -1,11 +1,13 @@
 type ConfirmationFormProps = {
   onConfirm: () => void
   onDecline: () => void
+  loading: boolean
 }
 
 export const ConfirmationForm = ({
   onConfirm,
   onDecline,
+  loading,
 }: ConfirmationFormProps) => {
   return (
     <form
@@ -15,11 +17,17 @@ export const ConfirmationForm = ({
       <button
         className="btn btn-primary max-w-48 w-full"
         type="button"
+        disabled={loading}
         onClick={onConfirm}
       >
         Approve
       </button>
-      <button className="btn max-w-48 w-full" type="button" onClick={onDecline}>
+      <button
+        className="btn max-w-48 w-full"
+        type="button"
+        onClick={onDecline}
+        disabled={loading}
+      >
         Deny
       </button>
     </form>

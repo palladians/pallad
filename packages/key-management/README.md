@@ -57,27 +57,25 @@ Here's a simple example of usage:
 
 ```ts
 const mnemonicWords = [
-  'habit',
-  'hope',
-  'tip',
-  'crystal',
-  'because',
-  'grunt',
-  'nation',
-  'idea',
-  'electric',
-  'witness',
-  'alert',
-  'like'
-]
-const getPassphrase = new Promise<Uint8Array>((resolve) =>
-  resolve(Buffer.from('passphrase'))
-)
+  "habit",
+  "hope",
+  "tip",
+  "crystal",
+  "because",
+  "grunt",
+  "nation",
+  "idea",
+  "electric",
+  "witness",
+  "alert",
+  "like",
+];
+const getPassphrase = () => utf8ToBytes(passphrase);
 
 const agent = await InMemoryKeyAgent.fromMnemonicWords({
   mnemonicWords,
-  getPassphrase
-})
+  getPassphrase,
+});
 ```
 
 **Important**: When implementing, the passphrase function should be set up in a secure way that's suitable for your application.
@@ -85,7 +83,6 @@ const agent = await InMemoryKeyAgent.fromMnemonicWords({
 With the `InMemoryKeyAgent`, you can handle sensitive key material in a way that conforms to the W3C Universal Wallet Specification. It enables you to derive credentials, sign transactions, and manage seeds for supported blockchain networks, with secure in-memory storage.
 
 Check out the test suite!
-
 
 # `src/emip3.ts`
 
@@ -131,7 +128,6 @@ Returns a promise that resolves with the decrypted data as a Uint8Array.
 
 1. **Encryption**: Call `emip3encrypt` with plaintext data and a passphrase to get encrypted data.
 2. **Decryption**: Call `emip3decrypt` with the encrypted data (including salt and nonce) and the same passphrase to decrypt and obtain the original plaintext.
-
 
 # `src/keyDecryptor.ts`
 

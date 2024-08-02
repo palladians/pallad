@@ -53,8 +53,8 @@ export const SeedImportView = ({
             key={i}
             placeholder={`${wordLabel}.`}
             options={wordlist}
-            value={form.watch(`mnemonic.${i}`)}
             autoFocus={i === 0}
+            currentValue={form.watch(`mnemonic.${i}`)}
             onPaste={(event) => {
               if (i !== 0) return
               const value = event.clipboardData.getData("Text")
@@ -66,10 +66,10 @@ export const SeedImportView = ({
               })
             }}
             testId={`onboarding/mnemonicField.${i}`}
-            {...form.register(`mnemonic.${i}`)}
-            onChange={(value) => {
-              form.setValue(`mnemonic.${i}`, value)
-            }}
+            setValue={(newValue: string) =>
+              form.setValue(`mnemonic.${i}`, newValue)
+            }
+            inputProps={form.register(`mnemonic.${i}`, { value: "" })}
           />
         ))}
       </div>

@@ -1,7 +1,4 @@
-import {
-  getSecurePersistence,
-  getSessionPersistence,
-} from "@palladxyz/persistence"
+import { securePersistence, sessionPersistence } from "@palladxyz/vault"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -20,15 +17,15 @@ export const StartRoute = () => {
       let spendingPassword
       try {
         spendingPassword =
-          (await getSessionPersistence().getItem("spendingPassword")) || ""
+          (await sessionPersistence.getItem("spendingPassword")) || ""
       } catch {
         return navigate("/unlock")
       }
       const spendingPasswordSet = spendingPassword?.length > 0
       if (!spendingPasswordSet) return navigate("/unlock")
-      let authenticated
+      let authenticated: boolean
       try {
-        authenticated = (await getSecurePersistence().getItem("foo")) === "bar"
+        authenticated = (await securePersistence.getItem("foo")) === "bar"
       } catch {
         authenticated = false
       }

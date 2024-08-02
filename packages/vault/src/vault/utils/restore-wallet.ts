@@ -2,13 +2,13 @@ import type {
   ChainDerivationArgs,
   FromBip39MnemonicWordsProps,
 } from "@palladxyz/key-management"
-import { getSecurePersistence } from "@palladxyz/persistence"
 import { createChainProvider } from "@palladxyz/providers"
 
 import type { CredentialName, SingleCredentialState } from "../../credentials"
 import type { KeyAgentName, KeyAgents } from "../../keyAgent"
 import { WalletError } from "../../lib/Errors"
 import { getRandomAnimalName } from "../../lib/utils"
+import { securePersistence } from "../../utils"
 
 export async function restoreWalletHelper(
   get: any,
@@ -92,6 +92,6 @@ export async function restoreWalletHelper(
   })
   setCurrentNetworkName(providerConfig.networkName)
   ensureAccount(network, derivedCredential.address)
-  getSecurePersistence().setItem("foo", "bar" as any)
+  securePersistence.setItem("foo", "bar" as any)
   await _syncWallet()
 }

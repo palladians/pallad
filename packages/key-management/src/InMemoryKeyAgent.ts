@@ -26,15 +26,6 @@ export interface FromBip39MnemonicWordsProps {
   getPassphrase: GetPassphrase
 }
 
-export const getPassphraseRethrowTypedError = async (
-  getPassphrase: GetPassphrase,
-) => {
-  try {
-    return await getPassphrase()
-  } catch (error) {
-    throw new errors.AuthenticationError("Failed to enter passphrase", error)
-  }
-}
 export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
   static async fromMnemonicWords({
     getPassphrase,
@@ -45,7 +36,7 @@ export class InMemoryKeyAgent extends KeyAgentBase implements KeyAgent {
     const validMnemonic = validateMnemonic(mnemonic, wordlist)
     if (!validMnemonic) throw new errors.InvalidMnemonicError()
 
-    const passphrase = await getPassphraseRethrowTypedError(getPassphrase)
+    const passphrase = getPassphrase()
     const encryptedSeedBytes = await mnemonicWordsToEncryptedSeed(
       mnemonicWords,
       passphrase,

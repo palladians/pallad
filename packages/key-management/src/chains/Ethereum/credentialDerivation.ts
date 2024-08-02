@@ -1,6 +1,6 @@
 import { bytesToHex } from "@noble/hashes/utils"
 import * as secp256k1 from "@noble/secp256k1"
-import { Address } from "micro-eth-signer"
+import { addr } from "micro-eth-signer"
 
 import type {
   EthereumDerivationArgs,
@@ -11,7 +11,7 @@ import type {
 export function deriveEthereumPublicAddress(
   privateKey: Uint8Array | string,
 ): string {
-  return Address.fromPrivateKey(privateKey)
+  return addr.fromPrivateKey(privateKey)
 }
 
 /**
@@ -34,9 +34,7 @@ export const privateToPublic = (privateKey: Uint8Array): Uint8Array => {
 }
 
 export function deriveEthereumPublicKey(privateKey: Uint8Array): string {
-  const privateKeyBuffer = Buffer.from(privateKey)
-  const publicKey = privateToPublic(privateKeyBuffer)
-
+  const publicKey = privateToPublic(privateKey)
   return bytesToHex(publicKey)
 }
 

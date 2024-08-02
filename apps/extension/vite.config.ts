@@ -1,35 +1,28 @@
-import { crx } from "@crxjs/vite-plugin"
 import react from "@vitejs/plugin-react-swc"
 import { defineConfig } from "vite"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
 import svgr from "vite-plugin-svgr"
-import topLevelAwait from "vite-plugin-top-level-await"
+import webExtension from "vite-plugin-web-extension"
+import { manifest } from "./manifest"
 
-import manifest from "./manifest.config"
-
-export default defineConfig({
-  plugins: [
-    react(),
-    crx({ manifest }),
-    topLevelAwait(),
-    nodePolyfills({ protocolImports: true, globals: { Buffer: true } }),
-    svgr(),
-  ],
-  define: {
-    "global.browser": {},
-  },
-  build: {
-    rollupOptions: {
-      input: {
-        app: "app.html",
-        index: "index.html",
-        prompt: "prompt.html",
-        welcome: "welcome.html",
-        inject: "public/pallad_rpc.js",
-      },
+export default defineConfig(() => {
+  return {
+    plugins: [
+      react(),
+      webExtension({
+        additionalInputs: ["prompt.html"],
+        manifest: () => manifest,
+      }),
+      svgr(),
+      nodePolyfills({ protocolImports: true, globals: { Buffer: true } }),
+    ],
+    define: {
+      "global.browser": {},
+      "process.env": {},
     },
-    commonjsOptions: {
-      transformMixedEsModules: true,
+    build: {
+      chunkSizeWarningLimit: 5000,
+      emptyOutDir: true,
     },
-  },
+  }
 })

@@ -30,6 +30,10 @@ describe("CredentialStore", () => {
         providerName: "mina-scan",
         url: mockUrl,
       },
+      explorer: {
+        accountUrl: "",
+        transactionUrl: "",
+      },
       networkName: networkNameMainnet,
       networkType: networkType,
       chainId: "...",
@@ -43,6 +47,10 @@ describe("CredentialStore", () => {
         providerName: "mina-node",
         url: mockUrl,
       },
+      explorer: {
+        accountUrl: "",
+        transactionUrl: "",
+      },
       networkName: networkNameDevnet,
       networkType: networkType,
       chainId: "...",
@@ -55,6 +63,10 @@ describe("CredentialStore", () => {
       archiveNodeEndpoint: {
         providerName: "evm-explorer",
         url: "https://ropsten.archive.ethereum.org",
+      },
+      explorer: {
+        accountUrl: "",
+        transactionUrl: "",
       },
       networkName: networkNameRopsten,
       networkType: networkType,
@@ -102,7 +114,7 @@ describe("CredentialStore", () => {
     // check total number of networks
     const networks = result.current.allNetworkInfo()
     expect(networks.length).toEqual(
-      Object.keys(DEFAULT_NETWORK_INFO).length + 2,
+      Object.keys(DEFAULT_NETWORK_INFO).length + 1,
     )
   })
   it("should add two networks and set mainnet as current network", () => {
@@ -123,7 +135,7 @@ describe("CredentialStore", () => {
     })
     const chainIds = result.current.getChainIds()
     expect(chainIds.length).toEqual(
-      Object.keys(DEFAULT_NETWORK_INFO).length + 2,
+      Object.keys(DEFAULT_NETWORK_INFO).length + 1,
     )
   })
   it("should update existing network info", () => {
