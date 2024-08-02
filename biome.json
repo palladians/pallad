@@ -9,6 +9,7 @@
       "apps/**/dist/*.js",
       "apps/**/dist/*.ts",
       "apps/**/dist/*.json",
+      "packages/**/build/**/*",
       "packages/**/dist/*.js",
       "packages/**/dist/*.ts",
       "packages/**/dist/*.json"
