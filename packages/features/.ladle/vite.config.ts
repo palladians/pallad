@@ -8,15 +8,16 @@ const env = (import.meta as any).env
 export default defineConfig({
   define: {
     __DEV__: env?.MODE === "development",
+    "global.browser": {},
+    "process.env": {},
   },
   plugins: [
     topLevelAwait(),
-    nodePolyfills({ protocolImports: true, globals: { Buffer: true } }),
     svgr(),
+    nodePolyfills({ protocolImports: true, globals: { Buffer: true } }),
   ],
   build: {
-    commonjsOptions: {
-      transformMixedEsModules: true,
-    },
+    chunkSizeWarningLimit: 5000,
+    emptyOutDir: true,
   },
 })
