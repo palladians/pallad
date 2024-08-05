@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import type { SubmitHandler } from "react-hook-form"
 import { MemoryRouter } from "react-router-dom"
+import { sendMessage } from "webext-bridge/popup"
 import { runtime, windows } from "webextension-polyfill"
 import xss from "xss"
 import yaml from "yaml"
@@ -18,6 +19,7 @@ type ActionRequest = {
   payload: string
   inputType: "text" | "password" | "confirmation"
   loading: boolean
+  emitConnected: boolean
 }
 
 export const WebConnectorRoute = () => {
@@ -26,6 +28,7 @@ export const WebConnectorRoute = () => {
     payload: "",
     inputType: "confirmation",
     loading: true,
+    emitConnected: false,
   })
   const onSubmit: SubmitHandler<UserInputForm> = async ({ userInput }) => {
     const { id } = await windows.getCurrent()
@@ -41,6 +44,9 @@ export const WebConnectorRoute = () => {
       userConfirmed: true,
       windowId: id,
     })
+    if (request.emitConnected) {
+      await sendMessage("pallad_connected", {}, "background")
+    }
     window.close()
   }
   const decline = async () => {
@@ -67,6 +73,7 @@ export const WebConnectorRoute = () => {
           payload: await sanitizePayload(message.params.payload),
           inputType: message.params.inputType,
           loading: false,
+          emitConnected: message.params.emitConnected,
         })
       }
     })

@@ -6,12 +6,15 @@ import { StakingOverviewView } from "../views/staking-overview"
 
 export const StakingOverviewRoute = () => {
   const account = useAccount()
+  const { accountInfo } = account.currentWallet
   const { data: transactions } = useTransactions()
-  const rewardsTransactions = transactions?.filter(
-    (tx) =>
-      tx.from === account.accountInfo.MINA.delegate &&
-      tx.to === account.accountInfo.MINA.publicKey,
-  )
+  const rewardsTransactions = transactions
+    ?.filter(
+      (tx) =>
+        tx.from === accountInfo.MINA.delegate &&
+        tx.to === accountInfo.MINA.publicKey,
+    )
+    .filter((tx) => tx.from !== accountInfo.MINA.publicKey)
   const rewards = Array(6)
     .fill({ amount: 0 })
     .map((_, i) => ({ amount: rewardsTransactions?.[i]?.amount ?? 0 }))

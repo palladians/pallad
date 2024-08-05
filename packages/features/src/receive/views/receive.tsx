@@ -5,12 +5,14 @@ import { MenuBar } from "@/components/menu-bar"
 
 type ReceiveViewProps = {
   publicKey: string
+  walletName: string
   onGoBack: () => void
   onCopyWalletAddress: () => void
 }
 
 export const ReceiveView = ({
   publicKey,
+  walletName,
   onGoBack,
   onCopyWalletAddress,
 }: ReceiveViewProps) => (
@@ -27,7 +29,7 @@ export const ReceiveView = ({
             className="relative w-[140px] h-[140px]"
           />
           <div className="space-y-3">
-            <h2 className="text-2xl text-secondary">Personal</h2>
+            <h2 className="text-2xl text-secondary">{walletName}</h2>
             <p className="text-secondary break-all">{publicKey}</p>
             <button
               type="button"

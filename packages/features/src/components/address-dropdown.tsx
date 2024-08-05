@@ -1,6 +1,7 @@
 import { truncateString } from "@/common/lib/string"
 import { useVault } from "@palladxyz/vault"
 import clsx from "clsx"
+import { CopyIcon, ExternalLinkIcon, UserPlusIcon } from "lucide-react"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
@@ -52,18 +53,25 @@ export const AddressDropdown = ({
       </div>
       <ul className="p-2 shadow menu dropdown-content border-2 border-secondary z-[1] bg-neutral rounded-box w-52">
         <li onClick={handleClick}>
-          <button type="button" onClick={copyAddress}>
-            Copy Address
+          <button type="button" onClick={copyAddress} className="flex gap-2">
+            <CopyIcon />
+            <span>Copy Address</span>
           </button>
         </li>
         <li onClick={handleClick}>
-          <button type="button" onClick={openInExplorer}>
-            Open in Minascan
+          <button type="button" onClick={openInExplorer} className="flex gap-2">
+            <ExternalLinkIcon />
+            <span>Open in Minascan</span>
           </button>
         </li>
         <li onClick={handleClick}>
-          <Link to="/contacts/new" state={{ address: publicKey }}>
-            Create Contact
+          <Link
+            to="/contacts/new"
+            state={{ address: publicKey }}
+            className="flex gap-2"
+          >
+            <UserPlusIcon />
+            <span>Create Contact</span>
           </Link>
         </li>
       </ul>

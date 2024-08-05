@@ -6,10 +6,11 @@ import { ReceiveView } from "../views/receive"
 
 export const ReceiveRoute = () => {
   const navigate = useNavigate()
-  const { copyWalletAddress, publicKey } = useAccount()
+  const { copyWalletAddress, publicKey, currentWallet } = useAccount()
   return (
     <ReceiveView
       publicKey={publicKey}
+      walletName={currentWallet.credential.keyAgentName}
       onCopyWalletAddress={copyWalletAddress}
       onGoBack={() => navigate(-1)}
     />

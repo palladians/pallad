@@ -33,12 +33,15 @@ export function getCurrentWalletHelper(get: any) {
   const credential = getCredential(credentialName)
   const publicKey = getPublicKey(credential)
   const providerConfig = getCurrentNetworkInfo()
-  const accountsInfo = getAccountsInfo(providerConfig.networkName, publicKey)
+  const { accountInfo, transactions } = getAccountsInfo(
+    providerConfig.networkName,
+    publicKey,
+  )
 
   return {
     singleKeyAgentState,
     credential,
-    accountInfo: accountsInfo.accountInfo,
-    transactions: accountsInfo.transactions,
+    accountInfo,
+    transactions,
   }
 }

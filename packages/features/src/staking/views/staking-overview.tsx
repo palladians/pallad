@@ -44,7 +44,7 @@ export const StakingOverviewView = ({
   stats,
 }: StakingOverviewViewProps) => (
   <AppLayout>
-    <div className="card flex-1 flex-col bg-secondary rounded-t-none pb-6">
+    <div className="card flex-col bg-secondary rounded-t-none pb-6">
       <MenuBar variant="dashboard" />
       <div className="flex flex-col gap-6 px-8">
         <h1 className="text-3xl">Staking</h1>
@@ -52,7 +52,9 @@ export const StakingOverviewView = ({
           <div className="flex flex-row justify-between items-center card bg-neutral p-6">
             <div className="flex flex-col">
               <AddressDropdown
-                publicKey={account?.accountInfo?.MINA?.delegate ?? ""}
+                publicKey={
+                  account?.currentWallet.accountInfo?.MINA?.delegate ?? ""
+                }
                 className="before:ml-16"
               />
             </div>

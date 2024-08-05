@@ -48,6 +48,7 @@ type TransactionsViewProps = {
   publicKey: string
   transactions: Mina.TransactionBody[]
   transactionsError: boolean
+  openPendingTransactions: () => void
 }
 
 export const TransactionsView = ({
@@ -56,6 +57,7 @@ export const TransactionsView = ({
   publicKey,
   transactions,
   transactionsError,
+  openPendingTransactions,
 }: TransactionsViewProps) => {
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [currentFilter, setCurrentFilter] = useState(Filters.all)
@@ -118,7 +120,10 @@ export const TransactionsView = ({
         <div className="px-8 pb-8 mt-6 space-y-4">
           {pendingHashes.length > 0 && (
             <p data-testid="transactions/pendingTransactions">
-              There are pending transactions.
+              There are pending transactions.{" "}
+              <button type="button" onClick={openPendingTransactions}>
+                Preview
+              </button>
             </p>
           )}
           {Object.values(txsGrouped).map((txs) => (

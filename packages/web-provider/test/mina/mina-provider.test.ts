@@ -138,7 +138,7 @@ describe.skip("Wallet Provider Test", () => {
     it("should emit connect event on successful connection when using `enable` method", async () => {
       // Listen to the connect event
       const connectListener = vi.fn()
-      provider.on("connect", connectListener)
+      provider.emitter.on("connect", connectListener)
 
       // Trigger connection
       const result = await provider.enable({ origin: TEST_ORIGIN })
@@ -308,7 +308,7 @@ describe.skip("Wallet Provider Test", () => {
     it.skip("should switch the network successfully when requesting the balance of another chain id", async () => {
       // Listen to the chains changed event
       const connectListener = vi.fn()
-      provider.on("chainChanged", connectListener)
+      provider.emitter.on("chainChanged", connectListener)
 
       const switchNetworkRequestArgs: RequestArguments = {
         method: "mina_getBalance",
@@ -360,23 +360,6 @@ describe.skip("Wallet Provider Test", () => {
         expect.objectContaining({
           code: 4001,
           message: "User Rejected Request",
-        }),
-      )
-    })
-
-    it("should emit disconnect event with ProviderRpcError code 4900 when not connected", () => {
-      // Listen to the disconnect event
-      const disconnectListener = vi.fn()
-      provider.on("disconnect", disconnectListener)
-
-      // Call the disconnect method
-      provider.disconnect({ origin: TEST_ORIGIN })
-
-      // Assert that the disconnect event was emitted with the correct error
-      expect(disconnectListener).toHaveBeenCalledWith(
-        expect.objectContaining({
-          code: 4900,
-          message: "Disconnected",
         }),
       )
     })

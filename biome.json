@@ -7,6 +7,7 @@
     "ignore": [
       "apps/**/playwright-report/**/*",
       "apps/**/dist/*.js",
+      "apps/**/public/rpc.js",
       "apps/**/dist/*.ts",
       "apps/**/dist/*.json",
       "packages/**/build/**/*",

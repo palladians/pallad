@@ -61,7 +61,7 @@ export const SeedImportRoute = () => {
         "Test", // TODO: make this a configurable credential name or random if not provided
       )
       mixpanel.track("WalletRestored")
-      setVaultStateInitialized()
+      await setVaultStateInitialized()
       return navigate("/onboarding/finish")
     } finally {
       setRestoring(false)

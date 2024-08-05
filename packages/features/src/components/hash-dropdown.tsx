@@ -1,5 +1,6 @@
 import { useVault } from "@palladxyz/vault"
 import clsx from "clsx"
+import { CopyIcon, ExternalLinkIcon } from "lucide-react"
 import { toast } from "sonner"
 
 type HashDropdownProps = {
@@ -37,13 +38,15 @@ export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
       </div>
       <ul className="p-2 shadow menu dropdown-content border-2 border-secondary z-[1] bg-neutral rounded-box w-52">
         <li onClick={handleClick}>
-          <button type="button" onClick={copyHash}>
-            Copy Hash
+          <button type="button" onClick={copyHash} className="flex gap-2">
+            <CopyIcon />
+            <span>Copy Hash</span>
           </button>
         </li>
         <li onClick={handleClick}>
-          <button type="button" onClick={openInExplorer}>
-            Open in Minascan
+          <button type="button" onClick={openInExplorer} className="flex gap-2">
+            <ExternalLinkIcon />
+            <span>Open in Minascan</span>
           </button>
         </li>
       </ul>
