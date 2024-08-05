@@ -1,4 +1,4 @@
-import type { EventEmitter } from "eventemitter3"
+import type { Emitter } from "mitt"
 
 import type { RequestArguments } from "../web-provider-types"
 
@@ -23,7 +23,7 @@ export interface IProvider {
 }
 
 export abstract class IEvents {
-  public abstract events: EventEmitter
+  public abstract events: Emitter
 
   // events
   public abstract on(event: string, listener: any): void

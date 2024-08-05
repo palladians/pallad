@@ -29,7 +29,7 @@ export const manifest: chrome.runtime.ManifestV3 = {
   ],
   web_accessible_resources: [
     {
-      resources: ["pallad_rpc.js"],
+      resources: ["rpc.js"],
       matches: ["https://*/*"],
     },
   ],

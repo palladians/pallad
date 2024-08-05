@@ -8,7 +8,7 @@ export const SettingsRoute = () => {
   const onDonateClicked = () => {
     navigate("/send", {
       state: {
-        address: "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
+        address: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
       },
     })
   }

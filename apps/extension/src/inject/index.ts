@@ -1,14 +1,20 @@
 import { deserializeError } from "serialize-error"
-import { sendMessage } from "webext-bridge/content-script"
+import { onMessage, sendMessage } from "webext-bridge/content-script"
 import { runtime } from "webextension-polyfill"
+
+onMessage("pallad_event", async ({ data }) => {
+  const palladEvent = new CustomEvent("pallad_event", {
+    detail: data,
+  })
+  window.dispatchEvent(palladEvent)
+})
 
 const inject = () => {
   if (typeof document === "undefined") return
   const script = document.createElement("script")
-  script.src = runtime.getURL("/pallad_rpc.js")
+  script.src = runtime.getURL("/rpc.js")
   script.type = "module"
   document.documentElement.appendChild(script)
-  console.info("[Pallad] RPC has been initialized.")
   const channel = new BroadcastChannel("pallad")
   channel.addEventListener("message", async ({ data }) => {
     const origin = window.location.origin

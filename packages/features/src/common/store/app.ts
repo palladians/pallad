@@ -41,8 +41,16 @@ export const useAppStore = create<AppStore>()(
       setVaultState(vaultState) {
         return set({ vaultState })
       },
-      setVaultStateInitialized: () => {
+      setVaultStateInitialized: async () => {
         const { setVaultState } = get()
+        const { id } = chrome.runtime
+        const { permissions } = await chrome.storage.local.get("permissions")
+        await chrome.storage.local.set({
+          permissions: {
+            ...permissions,
+            [`chrome-extension://${id}`]: "ALLOWED",
+          },
+        })
         return setVaultState(VaultState.INITIALIZED)
       },
       setVaultStateUninitialized: () => {
@@ -54,6 +62,7 @@ export const useAppStore = create<AppStore>()(
       },
     }),
     {
+      // Do not change this, may break Web Connector if not updated in Mina Provider.
       name: "PalladApp",
       storage: createJSONStorage(() => localPersistence),
     },

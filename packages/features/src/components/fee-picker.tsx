@@ -33,7 +33,7 @@ export const FeePicker = ({ feeValue, setValue }: FeePickerProps) => {
       <button
         type="button"
         className={clsx(
-          "btn flex-col join-item flex-nowrap",
+          "btn flex-1 flex-col join-item flex-nowrap",
           feeValue === "slow" ? "btn-primary" : "btn-secondary",
         )}
         onClick={() => setValue("fee", "slow")}
@@ -44,7 +44,7 @@ export const FeePicker = ({ feeValue, setValue }: FeePickerProps) => {
       <button
         type="button"
         className={clsx(
-          "btn flex-col join-item flex-1 flex-nowrap",
+          "btn flex-1 flex-col join-item flex-nowrap",
           feeValue === "default" ? "btn-primary" : "btn-secondary",
         )}
         onClick={() => setValue("fee", "default")}
@@ -55,7 +55,7 @@ export const FeePicker = ({ feeValue, setValue }: FeePickerProps) => {
       <button
         type="button"
         className={clsx(
-          "btn flex-col join-item flex-nowrap",
+          "btn flex-1 flex-col join-item flex-nowrap",
           feeValue === "fast" ? "btn-primary" : "btn-secondary",
         )}
         onClick={() => setValue("fee", "fast")}

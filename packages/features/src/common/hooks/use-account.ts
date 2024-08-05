@@ -65,10 +65,11 @@ export const useAccount = () => {
   }
   return {
     ...swr,
+    fetchWallet,
     minaBalance,
     gradientBackground,
     copyWalletAddress,
-    accountInfo: currentWallet.accountInfo,
+    currentWallet,
     publicKey,
     lockWallet,
     restartCurrentWallet,

@@ -1,7 +1,15 @@
-export const showUserPrompt = async (
-  inputType: "text" | "password" | "confirmation",
-  metadata: { title: string; payload?: string },
-) => {
+type InputType = "text" | "password" | "confirmation"
+type Metadata = { title: string; payload?: string }
+
+export const showUserPrompt = async ({
+  inputType,
+  metadata,
+  emitConnected = false,
+}: {
+  inputType: InputType
+  metadata: Metadata
+  emitConnected?: boolean
+}) => {
   return new Promise((resolve, reject) => {
     chrome.windows
       .create({
@@ -38,6 +46,7 @@ export const showUserPrompt = async (
                   title: metadata.title,
                   payload: metadata.payload ?? "{}",
                   inputType,
+                  emitConnected,
                 },
               })
             }, 1000)

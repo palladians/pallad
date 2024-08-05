@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && pnpm build:rpc && vite build",
+    "build:rpc": "tsup",
     "build:firefox": "web-ext build --source-dir=dist",
     "build:safari": "xcrun safari-web-extension-converter dist --app-name Pallad --bundle-identifier co.pallad.app --swift --no-prompt --force --macos-only --no-open",
     "preview": "vite preview",
@@ -18,9 +19,11 @@
     "@palladxyz/features": "workspace:*",
     "@palladxyz/key-management": "workspace:*",
     "@palladxyz/web-provider": "workspace:*",
+    "@palladxyz/vault": "workspace:*",
     "@plasmohq/messaging": "0.6.2",
     "buffer": "6.0.3",
-    "debounce": "^2.1.0",
+    "p-debounce": "4.0.0",
+    "mitt": "3.0.1",
     "next-themes": "0.3.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -58,8 +61,8 @@
     "vite-plugin-svgr": "4.2.0",
     "vite-plugin-top-level-await": "1.4.2",
     "vite-plugin-wasm": "3.3.0",
-    "vite-plugin-web-extension": "^4.1.6",
+    "vite-plugin-web-extension": "4.1.6",
     "web-ext": "8.2.0",
-    "write-json-file": "^6.0.0"
+    "write-json-file": "6.0.0"
   }
 }

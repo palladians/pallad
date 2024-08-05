@@ -1,13 +1,17 @@
+import { useAccount } from "@/common/hooks/use-account"
 import { useVault } from "@palladxyz/vault"
 import { useNavigate } from "react-router-dom"
+import { sendMessage } from "webext-bridge/popup"
 import { NetworksView } from "../views/networks"
 
 export const NetworksRoute = () => {
   const navigate = useNavigate()
-  const switchNetwork = useVault((state) => state.switchNetwork)
   const currentNetworkName = useVault((state) => state.currentNetworkName)
+  const { fetchWallet } = useAccount()
   const onNetworkSwitch = async (network: string) => {
-    await switchNetwork(network)
+    await sendMessage("pallad_switchNetwork", { network })
+    await useVault.persist.rehydrate()
+    await fetchWallet()
     navigate("/dashboard")
   }
   return (

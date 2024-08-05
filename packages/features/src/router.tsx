@@ -56,7 +56,7 @@ export const Router = () => {
     >
       <ErrorBoundary FallbackComponent={ErrorView}>
         <div className="flex flex-1 pointer">
-          <Toaster />
+          <Toaster theme="dark" />
           <MemoryRouter>
             <Routes>
               <Route path="/" element={<StartRoute />} />
