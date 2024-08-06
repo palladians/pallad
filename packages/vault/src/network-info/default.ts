@@ -21,10 +21,12 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
     explorer: {
       transactionUrl: "https://minascan.io/devnet/tx/{hash}/txInfo",
       accountUrl: "https://minascan.io/devnet/account/{publicKey}",
+      pendingTransactionsUrl:
+        "https://minascan.io/devnet/txs/pending-txs?search={publicKey}",
     },
     networkName: "Devnet",
     networkType: "testnet",
-    chainId: "...", // todo: fetch chainId from a provider
+    chainId: "",
   },
   Mainnet: {
     nodeEndpoint: {
@@ -40,10 +42,12 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
     explorer: {
       transactionUrl: "https://minascan.io/mainnet/tx/{hash}/txInfo",
       accountUrl: "https://minascan.io/mainnet/account/{publicKey}",
+      pendingTransactionsUrl:
+        "https://minascan.io/mainnet/txs/pending-txs?search={publicKey}",
     },
     networkName: "Mainnet",
     networkType: "mainnet",
-    chainId: "...", // todo: fetch chainId from a provider
+    chainId: "",
   },
   ZekoDevNet: {
     nodeEndpoint: {
@@ -57,26 +61,11 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
     explorer: {
       transactionUrl: "https://zekoscan.io/devnet/tx/{hash}/txInfo",
       accountUrl: "https://zekoscan.io/devnet/account/{publicKey}",
+      pendingTransactionsUrl:
+        "https://zekoscan.io/devnet/txs/user-txs?search={publicKey}",
     },
     networkName: "ZekoDevNet",
     networkType: "testnet",
-    chainId: "...", // todo: fetch chainId from a provider
-  },
-  OptimismSepolia: {
-    nodeEndpoint: {
-      providerName: "evm-rpc",
-      url: "wss://optimism-sepolia-rpc.publicnode.com",
-    },
-    archiveNodeEndpoint: {
-      providerName: "evm-explorer",
-      url: "https://api-sepolia-optimism.etherscan.io/",
-    },
-    explorer: {
-      transactionUrl: "",
-      accountUrl: "",
-    },
-    networkName: "OptimismSepolia",
-    networkType: "testnet",
-    chainId: "...", // todo: fetch chainId from a provider
+    chainId: "",
   },
 }

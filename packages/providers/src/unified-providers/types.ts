@@ -11,6 +11,7 @@ export type ProviderConfig = {
   explorer: {
     transactionUrl: string
     accountUrl: string
+    pendingTransactionsUrl: string
   }
   networkName: string
   networkType: "testnet" | "mainnet"
