@@ -19,11 +19,11 @@ export const TransactionsRoute = () => {
       .filter((hash) => !transactions?.map((tx) => tx.hash).includes(hash)),
   )
   const openPendingTransactions = () => {
-    const url = currentNetworkInfo.explorer.accountUrl.replace(
+    const url = currentNetworkInfo.explorer.pendingTransactionsUrl.replace(
       "{publicKey}",
       publicKey,
     )
-    window.open(`${url}/txs`, "_blank")?.focus()
+    window.open(url, "_blank")?.focus()
   }
   // biome-ignore lint: only run on first render
   useEffect(() => {

@@ -33,6 +33,7 @@ describe("CredentialStore", () => {
       explorer: {
         accountUrl: "",
         transactionUrl: "",
+        pendingTransactionsUrl: "",
       },
       networkName: networkNameMainnet,
       networkType: networkType,
@@ -50,6 +51,7 @@ describe("CredentialStore", () => {
       explorer: {
         accountUrl: "",
         transactionUrl: "",
+        pendingTransactionsUrl: "",
       },
       networkName: networkNameDevnet,
       networkType: networkType,
@@ -67,6 +69,7 @@ describe("CredentialStore", () => {
       explorer: {
         accountUrl: "",
         transactionUrl: "",
+        pendingTransactionsUrl: "",
       },
       networkName: networkNameRopsten,
       networkType: networkType,

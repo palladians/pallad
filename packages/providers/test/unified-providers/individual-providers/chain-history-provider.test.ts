@@ -29,6 +29,7 @@ describe.skip("Unified Chain History Provider (Functional)", () => {
         explorer: {
           accountUrl: "",
           transactionUrl: "",
+          pendingTransactionsUrl: "",
         },
         networkName: "Devnet",
         chainId: "...",

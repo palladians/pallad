@@ -36,6 +36,7 @@ describe("Unified Chain provider", () => {
         explorer: {
           accountUrl: "",
           transactionUrl: "",
+          pendingTransactionsUrl: "",
         },
         networkName: "Devnet",
         chainId: "...",
