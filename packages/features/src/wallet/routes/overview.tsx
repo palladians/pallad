@@ -45,7 +45,7 @@ export const OverviewRoute = () => {
       ? `${dailyPriceDiff >= 0 ? "+" : "-"}${
           useFiatBalance ? dailyPriceDiffFiat : dailyPriceDiffMina
         } (24h)`
-      : dayjs(lastMonthPrices[currentPriceIndex]?.[0]).format("MMM d")
+      : dayjs(lastMonthPrices[currentPriceIndex]?.[0]).format("MMM D")
   return (
     <OverviewView
       lastMonthPrices={lastMonthPrices}
