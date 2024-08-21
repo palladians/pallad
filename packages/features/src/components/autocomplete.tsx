@@ -41,7 +41,7 @@ export const Autocomplete = ({
         <ComboboxInput
           className={clsx(
             "input text-sm w-full bg-[#413E5E] caret-[#eec382]",
-            wordNumber > 9 ? "pl-8" : "pl-6"
+            wordNumber > 9 ? "pl-8" : "pl-6",
           )}
           placeholder={placeholder}
           autoFocus={autoFocus}
