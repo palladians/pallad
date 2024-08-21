@@ -20,6 +20,7 @@ type AutocompleteProps = {
   autoFocus?: boolean
   testId: string
   inputProps: UseFormRegisterReturn
+  wordNumber: number
 }
 
 export const Autocomplete = ({
@@ -31,20 +32,25 @@ export const Autocomplete = ({
   testId,
   inputProps,
   setValue,
+  wordNumber,
 }: AutocompleteProps) => {
   const filteredOptions = take(3, matchSorter(options, currentValue))
   return (
-    <div className="dropdown">
+    <div className="dropdown relative">
       <Combobox value={currentValue} onChange={setValue}>
         <ComboboxInput
-          className="input text-sm w-full bg-[#413E5E]"
+          className="input text-sm w-full bg-[#413E5E] pl-6 caret-[#eec382]"
           placeholder={placeholder}
           autoFocus={autoFocus}
           onPaste={onPaste}
           autoComplete="off"
           data-testid={testId}
           {...inputProps}
+          style={{ position: "relative" }}
         />
+        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-[#afd9e2] pointer-events-none">
+          {wordNumber}.
+        </span>
         <ComboboxOptions
           className={clsx(
             "dropdown-content z-10 menu shadow p-2 bg-secondary rounded-box w-28 empty:invisible",
