@@ -39,7 +39,10 @@ export const Autocomplete = ({
     <div className="dropdown relative">
       <Combobox value={currentValue} onChange={setValue}>
         <ComboboxInput
-          className="input text-sm w-full bg-[#413E5E] pl-6 caret-[#eec382]"
+          className={clsx(
+            "input text-sm w-full bg-[#413E5E] caret-[#eec382]",
+            wordNumber > 9 ? "pl-8" : "pl-5"
+          )}
           placeholder={placeholder}
           autoFocus={autoFocus}
           onPaste={onPaste}
