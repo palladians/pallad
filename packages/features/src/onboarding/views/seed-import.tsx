@@ -51,7 +51,7 @@ export const SeedImportView = ({
           <Autocomplete
             // biome-ignore lint: hardcoded
             key={i}
-            placeholder={`${wordLabel}.`}
+            placeholder=""
             options={wordlist}
             autoFocus={i === 0}
             currentValue={form.watch(`mnemonic.${i}`)}
@@ -70,6 +70,7 @@ export const SeedImportView = ({
               form.setValue(`mnemonic.${i}`, newValue)
             }
             inputProps={form.register(`mnemonic.${i}`, { value: "" })}
+            wordNumber={wordLabel}
           />
         ))}
       </div>
