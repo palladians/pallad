@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { zxcvbn } from "@zxcvbn-ts/core"
 import { ExternalLinkIcon, EyeIcon, EyeOffIcon } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -20,6 +21,22 @@ const formSchema = z.object({
   spendingPassword: passwordSchema,
 })
 
+const getPasswordStrengthConfig = (score: number) => {
+  switch (score) {
+    case 0:
+    case 1:
+      return ["Not the best", "#EB6F92"]
+    case 2:
+      return ["Weak", "#F2BEBC"]
+    case 3:
+      return ["OK and could be better", "#F2BEBC"]
+    case 4:
+      return ["Safe", "#A3DBE4"]
+    default:
+      return ["", ""]
+  }
+}
+
 export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
   const [showPassword, setShowPassword] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState(false)
@@ -28,6 +45,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
     register,
     handleSubmit,
     formState: { errors, dirtyFields },
+    watch,
   } = useForm({
     defaultValues: {
       walletName: "",
@@ -35,6 +53,10 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
     },
     resolver: zodResolver(formSchema),
   })
+  const [strengthLabel, strengthColor] = getPasswordStrengthConfig(
+    zxcvbn(watch("spendingPassword")).score,
+  )
+
   return (
     <WizardLayout
       title={title}
@@ -114,6 +136,16 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
             >
               {showPassword ? <EyeOffIcon size={24} /> : <EyeIcon size={24} />}
             </button>
+          </label>
+          <label className="text-[#7D7A9C] text-sm my-2 h-px">
+            {dirtyFields.spendingPassword && (
+              <span>
+                Your password is...
+                <span style={{ color: strengthColor }} className="px-2">
+                  {strengthLabel}
+                </span>
+              </span>
+            )}
           </label>
           {errors.spendingPassword && (
             <FormError>{errors.spendingPassword?.message}</FormError>
