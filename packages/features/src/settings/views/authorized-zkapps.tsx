@@ -1,53 +1,21 @@
-import { useEffect, useState } from "react"
+import { AppWindowMac, X } from "lucide-react"
 
-import { fetcher } from "@/common/lib/fetch"
+import { truncateString } from "@/common/lib/string"
 import { AppLayout } from "@/components/app-layout"
 import { SettingsPageLayout } from "@/components/settings-page-layout"
-import { X } from "lucide-react"
+import type { ZkApp } from "../routes/authorized-zkapps"
 
 type AuthorizedZkAppsViewProps = {
   onCloseClicked: () => void
+  apps: ZkApp[]
+  handleDeleteApp: (appToDelete: ZkApp) => void
 }
-
-type ZkApp = { title: string; description: string; image: string; url: string }
 
 export const AuthorizedZkAppsView = ({
   onCloseClicked,
+  handleDeleteApp,
+  apps: connectedApps,
 }: AuthorizedZkAppsViewProps) => {
-  const [connectedApps, setConnectedApps] = useState([] as ZkApp[])
-
-  useEffect(() => {
-    fetchConnectedApps()
-  }, [])
-
-  const fetchConnectedApps = async () => {
-    const { permissions } = (await chrome.storage.local.get({
-      permissions: [],
-    })) as Record<string, "ALLOWED">
-    // https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-    const URLRegex =
-      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
-    const appsWithMetadata = await Promise.all(
-      Object.keys(permissions)
-        .filter((key) => URLRegex.test(key))
-        .map(async (url) => {
-          const metadata = (await fetcher(
-            `https://api.dub.co/metatags?url=${url}`,
-          )) as Omit<ZkApp, "url">
-          return { url, ...metadata }
-        }),
-    )
-    setConnectedApps(appsWithMetadata)
-  }
-
-  const handleDeleteApp = async (appToDelete: ZkApp) => {
-    const filteredApps = connectedApps.filter(
-      (app) => app.url !== appToDelete.url,
-    )
-    await chrome.storage.local.set({ permissions: filteredApps })
-    setConnectedApps(filteredApps)
-  }
-
   return (
     <AppLayout>
       <SettingsPageLayout
@@ -57,17 +25,35 @@ export const AuthorizedZkAppsView = ({
         {connectedApps.map((app) => (
           <div
             key={app.url}
-            className="p-4 flex items-center justify-between bg-secondary rounded-2xl"
+            className="p-4 flex items-center justify-between bg-secondary rounded-2xl mb-4"
           >
             <div className="flex gap-3">
-              <img
-                src={app.image}
-                alt={app.title}
-                className="w-8 h-8 pt-1 rounded"
-              />
+              {app.image ? (
+                <img
+                  src={app.image}
+                  alt={app.title}
+                  className="w-8 h-8 pt-1 rounded"
+                />
+              ) : (
+                <div className="pt-1 w-8 h-8 rounded">
+                  <AppWindowMac size={32} />
+                </div>
+              )}
               <div>
-                <p>{app.title}</p>
-                <p className="text-sm">{app.url}</p>
+                <p>
+                  {truncateString({
+                    value: app.title,
+                    firstCharCount: 20,
+                    endCharCount: 2,
+                  })}
+                </p>
+                <p className="text-sm">
+                  {truncateString({
+                    value: app.url,
+                    firstCharCount: 20,
+                    endCharCount: 2,
+                  })}
+                </p>
               </div>
             </div>
             <div>
