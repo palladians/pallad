@@ -114,6 +114,8 @@ Thanks goes to these wonderful people
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/teddyjfpender"><img src="https://avatars.githubusercontent.com/u/92999717?v=4?s=100" width="100px;" alt="Teddy Pender"/><br /><sub><b>Teddy Pender</b></sub></a><br /><a href="https://github.com/palladians/pallad/commits?author=teddyjfpender" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://dev.to/rgolawski"><img src="https://avatars.githubusercontent.com/u/19167236?v=4?s=100" width="100px;" alt="Rafał Goławski"/><br /><sub><b>Rafał Goławski</b></sub></a><br /><a href="https://github.com/palladians/pallad/commits?author=rago4" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mich3lang3lo"><img src="https://avatars.githubusercontent.com/u/164676295?v=4?s=100" width="100px;" alt="Mariusz"/><br /><sub><b>Mariusz</b></sub></a><br /><a href="https://github.com/palladians/pallad/commits?author=mich3lang3lo" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aliraza556"><img src="https://avatars.githubusercontent.com/u/87068339?v=4?s=100" width="100px;" alt="Ali Raza"/><br /><sub><b>Ali Raza</b></sub></a><br /><a href="https://github.com/palladians/pallad/commits?author=aliraza556" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://yaodingyd.github.io/"><img src="https://avatars.githubusercontent.com/u/11392695?v=4?s=100" width="100px;" alt="Yao Ding"/><br /><sub><b>Yao Ding</b></sub></a><br /><a href="https://github.com/palladians/pallad/commits?author=yaodingyd" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
