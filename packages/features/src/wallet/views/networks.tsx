@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import MinaIcon from "@/common/assets/mina.svg?react"
 import ZekoIcon from "@/common/assets/zeko.svg?react"
 import { MenuBar } from "@/components/menu-bar"
@@ -34,6 +36,7 @@ export const NetworksView = ({
   onNetworkSwitch,
   currentNetwork,
 }: NetworksViewProps) => {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-col flex-1">
       <MenuBar
@@ -46,9 +49,9 @@ export const NetworksView = ({
         <div className="flex justify-between">
           <div className="flex flex-col gap-2">
             <h1>
-              <span className="text-mint">Available</span>
+              <span className="text-mint">{t("available")}</span>
               <br />
-              <span className="text-2xl">Networks</span>
+              <span className="text-2xl">{t("networks")}</span>
             </h1>
           </div>
         </div>

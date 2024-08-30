@@ -1,5 +1,5 @@
 import "@total-typescript/ts-reset"
-
+import "./i18n/"
 import type {} from "graphql-request"
 import type {} from "swr"
 export { useAppStore } from "./common/store/app"

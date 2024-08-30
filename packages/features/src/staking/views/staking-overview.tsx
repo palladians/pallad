@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import type { useAccount } from "@/common/hooks/use-account"
 import { AddressDropdown } from "@/components/address-dropdown"
 import { AppLayout } from "@/components/app-layout"
@@ -47,7 +49,7 @@ export const StakingOverviewView = ({
     <div className="card flex-col bg-secondary rounded-t-none pb-6">
       <MenuBar variant="dashboard" />
       <div className="flex flex-col gap-6 px-8">
-        <h1 className="text-3xl">Staking</h1>
+        <h1 className="text-3xl">{useTranslation().t("staking")}</h1>
         {stakeDelegated ? (
           <div className="flex flex-row justify-between items-center card bg-neutral p-6">
             <div className="flex flex-col">
@@ -63,14 +65,14 @@ export const StakingOverviewView = ({
               className="btn btn-primary px-7"
               data-testid="staking/start"
             >
-              Edit
+              {useTranslation().t("edit")}
             </Link>
           </div>
         ) : (
           <EmptyState
             heading={
               <h2 className="text-lg">
-                Enjoy seamless staking and start earning rewards.
+                {useTranslation().t("enjoy-seamless")}
               </h2>
             }
             button={{
@@ -83,19 +85,19 @@ export const StakingOverviewView = ({
       </div>
     </div>
     <div className="flex flex-1 justify-between flex-col px-8 pt-8 gap-4">
-      <h2 className="text-2xl">Block rewards</h2>
+      <h2 className="text-2xl">{useTranslation().t("block-rewards")}</h2>
       <div className="flex justify-between items-center">
         <div className="flex justify-center items-center flex-col">
           <p className="text-2xl">{stats.lastReward}</p>
-          <h3 className="text-sm">Last reward</h3>
+          <h3 className="text-sm">{useTranslation().t("last-reward")}</h3>
         </div>
         <div className="flex justify-center items-center flex-col">
           <p className="text-2xl">{stats.avgReward}</p>
-          <h3 className="text-sm">Avg. reward</h3>
+          <h3 className="text-sm">{useTranslation().t("avg-reward")}</h3>
         </div>
         <div className="flex justify-center items-center flex-col">
           <p className="text-2xl">{stats.totalReward}</p>
-          <h3 className="text-sm">Total reward</h3>
+          <h3 className="text-sm">{useTranslation().t("total-reward")}</h3>
         </div>
       </div>
       <ResponsiveContainer width="100%" aspect={2.5}>

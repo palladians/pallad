@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { useLocation, useNavigate } from "react-router-dom"
 
 import { TransactionFee } from "@/common/lib/const"
@@ -31,6 +32,7 @@ export const SendForm = ({
   const location = useLocation()
   const setTransactionDetails = useTransactionStore((state) => state.set)
   const setType = useTransactionStore((state) => state.setType)
+  const { t } = useTranslation()
   const {
     register,
     handleSubmit,
@@ -77,10 +79,10 @@ export const SendForm = ({
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex justify-between items-center w-full">
-        <h1 className="text-3xl">Send</h1>
+        <h1 className="text-3xl">{t("send")}</h1>
         <div className="form-control">
           <label className="label cursor-pointer gap-2">
-            <span className="label-text">Advanced</span>
+            <span className="label-text">{t("advanced")}</span>
             <input
               type="checkbox"
               className="toggle toggle-primary border-none"
@@ -181,7 +183,7 @@ export const SendForm = ({
         data-testid="formSubmit"
         disabled={!isValid}
       >
-        Next
+        {t("next")}
       </button>
     </form>
   )

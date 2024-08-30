@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import QRCode from "react-qr-code"
 
 import { AppLayout } from "@/components/app-layout"
@@ -20,7 +21,7 @@ export const ReceiveView = ({
     <div className="flex flex-col flex-1">
       <MenuBar variant="card" onCloseClicked={onGoBack} />
       <div className="animate-in fade-in slide-in-from-bottom-8 px-8 pb-8">
-        <h1 className="text-3xl mb-4">Your address</h1>
+        <h1 className="text-3xl mb-4">{useTranslation().t("your-address")}</h1>
         <div className="flex flex-col text-center justify-center items-center space-y-8 card bg-accent p-8">
           <QRCode
             value={publicKey}
@@ -36,7 +37,7 @@ export const ReceiveView = ({
               className="btn btn-link text-secondary text-sm"
               onClick={onCopyWalletAddress}
             >
-              Copy to clipboard
+              {useTranslation().t("copy-clipboard")}
             </button>
           </div>
         </div>

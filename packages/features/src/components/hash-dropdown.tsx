@@ -1,6 +1,7 @@
 import { useVault } from "@palladxyz/vault"
 import clsx from "clsx"
 import { CopyIcon, ExternalLinkIcon } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 type HashDropdownProps = {
@@ -9,6 +10,8 @@ type HashDropdownProps = {
 }
 
 export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
+  const { t } = useTranslation()
+
   const currentNetworkInfo = useVault((state) => state.getCurrentNetworkInfo())
   const handleClick = () => {
     const elem = document.activeElement as HTMLLIElement
@@ -40,13 +43,13 @@ export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
         <li onClick={handleClick}>
           <button type="button" onClick={copyHash} className="flex gap-2">
             <CopyIcon />
-            <span>Copy Hash</span>
+            <span>{t("copy-hash")}</span>
           </button>
         </li>
         <li onClick={handleClick}>
           <button type="button" onClick={openInExplorer} className="flex gap-2">
             <ExternalLinkIcon />
-            <span>Open in Minascan</span>
+            <span>{t("open-in-minascan")}</span>
           </button>
         </li>
       </ul>

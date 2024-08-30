@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { AppLayout } from "@/components/app-layout"
 import { SettingsPageLayout } from "@/components/settings-page-layout"
 import { Eye, Info } from "lucide-react"
@@ -6,26 +8,26 @@ import { Link } from "react-router-dom"
 const Links = [
   // TODO: Uncomment when we add multi-account
   // {
-  //   label: "Wallet",
+  //   label: useTranslation().t('wallet'),
   //   description: "Management and networks",
   //   href: "/settings/wallet",
   //   Icon: WalletMinimal,
   // },
   {
-    label: "Privacy",
+    label: useTranslation().t("privacy"),
     description: "Data sharing",
     href: "/settings/privacy",
     Icon: Eye,
   },
   // TODO: Uncomment when we add multiple locales
   // {
-  //   label: "Display",
+  //   label: useTranslation().t('display'),
   //   description: "Languages and currencies",
   //   href: "/settings/display",
   //   Icon: Globe,
   // },
   {
-    label: "About",
+    label: useTranslation().t("about"),
     description: "Everything about us",
     href: "/settings/about",
     Icon: Info,
@@ -43,6 +45,8 @@ export const SettingsView = ({
   onDonateClicked,
   onLogOut,
 }: SettingsViewProps) => {
+  const { t } = useTranslation()
+
   return (
     <AppLayout>
       <SettingsPageLayout
@@ -50,13 +54,13 @@ export const SettingsView = ({
         onCloseClicked={onCloseClicked}
         headerContent={
           <div className="mt-6 px-6 py-4 flex items-center justify-between bg-neutral rounded-2xl">
-            <p>Buy us a coffee!</p>
+            <p>{t("buy-us-a-coffee")}</p>
             <button
               type="button"
               className="px-8 btn btn-primary"
               onClick={onDonateClicked}
             >
-              Send
+              {t("send")}
             </button>
           </div>
         }
@@ -91,7 +95,7 @@ export const SettingsView = ({
             data-testid="settings/logOut"
             onClick={onLogOut}
           >
-            Log out
+            {t("log-out")}
           </button>
         </div>
       </SettingsPageLayout>

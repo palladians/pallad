@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import PlaceholderImage from "@/common/assets/placeholder.svg?react"
 import { useNavigate } from "react-router-dom"
 
@@ -32,6 +34,7 @@ interface BlockProducerTileProps {
 export const BlockProducerTile = ({ producer }: BlockProducerTileProps) => {
   const [showPlaceholder, setShowPlaceholder] = useState(false)
   const navigate = useNavigate()
+  const { t } = useTranslation()
   return (
     <button
       type="button"
@@ -65,7 +68,7 @@ export const BlockProducerTile = ({ producer }: BlockProducerTileProps) => {
           {formatCompact({ value: producer.amountStaked })} MINA
         </div>
         <div className="text-right text-sm">
-          {formatCompact({ value: producer.delegators })} Delegators
+          {formatCompact({ value: producer.delegators })} {t("delegators")}
         </div>
       </div>
     </button>

@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { AppLayout } from "@/components/app-layout"
 
 import { SettingsPageLayout } from "@/components/settings-page-layout"
@@ -10,19 +12,19 @@ const ButtonWrapperStyles =
 
 const Links = [
   {
-    label: "FAQ",
+    label: useTranslation().t("faq"),
     href: "https://get.pallad.co/faq",
   },
   {
-    label: "Support",
+    label: useTranslation().t("support"),
     href: "https://get.pallad.co/support",
   },
   {
-    label: "Terms of Service",
+    label: useTranslation().t("term-of-services"),
     href: "https://get.pallad.co/terms",
   },
   {
-    label: "Version",
+    label: useTranslation().t("version"),
     content: packageJson.version,
   },
 ]

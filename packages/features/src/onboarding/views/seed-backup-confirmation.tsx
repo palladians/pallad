@@ -1,5 +1,6 @@
 import { Loader2Icon } from "lucide-react"
 import type { UseFormReturn } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 
 import { WizardLayout } from "@/components/wizard-layout"
 
@@ -32,7 +33,7 @@ export const SeedBackupConfirmationView = ({
         data-testid="formSubmit"
       >
         {restoring && <Loader2Icon size={16} className="animate-spin" />}
-        <span>Next</span>
+        <span>{useTranslation().t("next")}</span>
       </button>
     }
   >
@@ -48,7 +49,7 @@ export const SeedBackupConfirmationView = ({
         data-testid="onboarding/writedownIndex"
         data-word-index={confirmationIndex}
       >
-        Word number {confirmationIndex + 1}
+        {useTranslation().t("word-number")} {confirmationIndex + 1}
       </label>
       <input
         id="confirmation"
@@ -58,7 +59,7 @@ export const SeedBackupConfirmationView = ({
         {...form.register("mnemonicWord")}
       />
       <p className="text-mint mt-4">
-        Confirm you saved the seed by typing this random word
+        {useTranslation().t("confirm-saved-seed")}
       </p>
     </form>
   </WizardLayout>

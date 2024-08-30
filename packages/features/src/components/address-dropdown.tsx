@@ -2,6 +2,7 @@ import { truncateString } from "@/common/lib/string"
 import { useVault } from "@palladxyz/vault"
 import clsx from "clsx"
 import { CopyIcon, ExternalLinkIcon, UserPlusIcon } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
@@ -34,6 +35,8 @@ export const AddressDropdown = ({
     )
     window.open(url, "_blank")?.focus()
   }
+  const { t } = useTranslation()
+
   return (
     <div className={clsx("dropdown", dropdownEnd && "dropdown-end")}>
       <div
@@ -55,13 +58,13 @@ export const AddressDropdown = ({
         <li onClick={handleClick}>
           <button type="button" onClick={copyAddress} className="flex gap-2">
             <CopyIcon />
-            <span>Copy Address</span>
+            <span>{t("copy-address")}</span>
           </button>
         </li>
         <li onClick={handleClick}>
           <button type="button" onClick={openInExplorer} className="flex gap-2">
             <ExternalLinkIcon />
-            <span>Open in Minascan</span>
+            <span>{t("open-in-minascan")}</span>
           </button>
         </li>
         <li onClick={handleClick}>
@@ -71,7 +74,7 @@ export const AddressDropdown = ({
             className="flex gap-2"
           >
             <UserPlusIcon />
-            <span>Create Contact</span>
+            <span>{t("create-contact")}</span>
           </Link>
         </li>
       </ul>
