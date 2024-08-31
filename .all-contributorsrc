@@ -1,7 +1,5 @@
 {
-  "files": [
-    "README.md"
-  ],
+  "files": ["README.md"],
   "imageSize": 100,
   "commit": false,
   "commitType": "docs",
@@ -12,63 +10,49 @@
       "name": "Tomek Marciniak",
       "avatar_url": "https://avatars.githubusercontent.com/u/16132011?v=4",
       "profile": "https://github.com/mrcnk",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "teddyjfpender",
       "name": "Teddy Pender",
       "avatar_url": "https://avatars.githubusercontent.com/u/92999717?v=4",
       "profile": "https://github.com/teddyjfpender",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "rago4",
       "name": "Rafał Goławski",
       "avatar_url": "https://avatars.githubusercontent.com/u/19167236?v=4",
       "profile": "https://dev.to/rgolawski",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "mich3lang3lo",
       "name": "Mariusz",
       "avatar_url": "https://avatars.githubusercontent.com/u/164676295?v=4",
       "profile": "https://github.com/mich3lang3lo",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "aliraza556",
       "name": "Ali Raza",
       "avatar_url": "https://avatars.githubusercontent.com/u/87068339?v=4",
       "profile": "https://github.com/aliraza556",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "yaodingyd",
       "name": "Yao Ding",
       "avatar_url": "https://avatars.githubusercontent.com/u/11392695?v=4",
       "profile": "https://yaodingyd.github.io/",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "Myestery",
       "name": "Chiwetelu Johnpaul Chidera",
       "avatar_url": "https://avatars.githubusercontent.com/u/49923152?v=4",
       "profile": "https://www.myestery.com",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     }
   ],
   "contributorsPerLine": 7,
