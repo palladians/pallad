@@ -2,6 +2,7 @@ import { action } from "@ladle/react"
 import type { StoryDefault } from "@ladle/react"
 
 import { AboutView } from "./views/about"
+import { AuthorizedZkAppsView } from "./views/authorized-zkapps"
 import { CurrencyView } from "./views/currency"
 import { DisplayView } from "./views/display"
 import { LanguageView } from "./views/language"
@@ -18,6 +19,9 @@ export const Settings = () => (
 )
 
 export const About = () => <AboutView onCloseClicked={action("Go Back")} />
+export const AuthorizedZkApps = () => (
+  <AuthorizedZkAppsView onCloseClicked={action("Go Back")} />
+)
 
 export const Support = () => <SupportView onCloseClicked={action("Go Back")} />
 

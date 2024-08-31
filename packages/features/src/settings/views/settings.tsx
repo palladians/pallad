@@ -1,6 +1,7 @@
+import { AppWindowMac, Eye, Info } from "lucide-react"
+
 import { AppLayout } from "@/components/app-layout"
 import { SettingsPageLayout } from "@/components/settings-page-layout"
-import { Eye, Info } from "lucide-react"
 import { Link } from "react-router-dom"
 
 const Links = [
@@ -11,6 +12,12 @@ const Links = [
   //   href: "/settings/wallet",
   //   Icon: WalletMinimal,
   // },
+  {
+    label: "Authorized zkApps",
+    description: "zkApps connected to your wallet",
+    href: "/settings/authorized-zkapps",
+    Icon: AppWindowMac,
+  },
   {
     label: "Privacy",
     description: "Data sharing",
