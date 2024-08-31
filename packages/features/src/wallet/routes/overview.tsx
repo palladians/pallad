@@ -36,16 +36,18 @@ export const OverviewRoute = () => {
   const priceYesterday =
     lastMonthPrices?.[lastMonthPrices?.length - 2]?.[1] ?? 0
   const dailyPriceDiff = (priceToday - priceYesterday) / priceYesterday
-  const dailyPriceDiffFiat = Math.abs(
-    Number(account.minaBalance) * dailyPriceDiff,
+  const dailyPriceDiffFiat = (
+    Number(account.minaBalance) * dailyPriceDiff
   ).toFixed(2)
-  const dailyPriceDiffMina = Math.abs(dailyPriceDiff).toFixed(2)
+  const dailyPriceDiffMina = (
+    Number(dailyPriceDiffFiat) / (minaPrice ?? 1)
+  ).toFixed(2)
   const chartLabel =
     typeof currentPriceIndex === "undefined"
-      ? `${dailyPriceDiff >= 0 ? "+" : "-"}${
+      ? `${dailyPriceDiff >= 0 ? "+" : ""}${
           useFiatBalance ? dailyPriceDiffFiat : dailyPriceDiffMina
         } (24h)`
-      : dayjs(lastMonthPrices[currentPriceIndex]?.[0]).format("MMM d")
+      : dayjs(lastMonthPrices[currentPriceIndex]?.[0]).format("MMM D")
   return (
     <OverviewView
       lastMonthPrices={lastMonthPrices}
