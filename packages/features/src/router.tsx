@@ -1,10 +1,10 @@
+import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom"
+
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { ErrorBoundary } from "react-error-boundary"
 import { MixpanelProvider } from "react-mixpanel-browser"
-import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom"
 import { Toaster } from "sonner"
-
 import { AddressBookRoute } from "./address-book/routes/address-book"
 import { NewAddressRoute } from "./address-book/routes/new-address"
 import { useAppStore } from "./common/store/app"
@@ -26,6 +26,7 @@ import { TransactionErrorRoute } from "./send/routes/transaction-error"
 import { TransactionSuccessRoute } from "./send/routes/transaction-success"
 import { TransactionSummaryRoute } from "./send/routes/transaction-summary"
 import { AboutRoute } from "./settings/routes/about"
+import { AuthorizedZkAppsRoute } from "./settings/routes/authorized-zkapps"
 import { CurrencyRoute } from "./settings/routes/currency"
 import { DisplayRoute } from "./settings/routes/display"
 import { LanguageRoute } from "./settings/routes/language"
@@ -123,6 +124,10 @@ export const Router = () => {
                   <Route path="language" element={<LanguageRoute />} />
                   <Route path="currency" element={<CurrencyRoute />} />
                 </Route>
+                <Route
+                  path="authorized-zkapps"
+                  element={<AuthorizedZkAppsRoute />}
+                />
                 <Route path="privacy" element={<PrivacyRoute />} />
               </Route>
               <Route path="/*" element={<NotFoundRoute />} />
