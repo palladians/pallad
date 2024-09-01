@@ -1,5 +1,8 @@
 import packageJson from "./package.json" with { type: "json" }
 
+const isDevMode = process.env.VITE_APP_DEV_MODE === "true"
+const rpcMatches = ["https://*/*", ...(isDevMode ? ["http://*/*"] : [])]
+
 export const manifest: chrome.runtime.ManifestV3 = {
   manifest_version: 3,
   name: "Pallad",
@@ -21,7 +24,7 @@ export const manifest: chrome.runtime.ManifestV3 = {
   },
   content_scripts: [
     {
-      matches: ["https://*/*"],
+      matches: rpcMatches,
       js: ["src/inject/index.ts"],
       run_at: "document_start",
       all_frames: true,
@@ -30,7 +33,7 @@ export const manifest: chrome.runtime.ManifestV3 = {
   web_accessible_resources: [
     {
       resources: ["rpc.js"],
-      matches: ["https://*/*"],
+      matches: rpcMatches,
     },
   ],
   host_permissions: ["https://*/*"],
