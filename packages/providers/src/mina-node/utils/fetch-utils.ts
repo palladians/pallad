@@ -3,12 +3,12 @@ import { GraphQLClient } from "graphql-request"
 import { customFetch } from "./custom-fetch"
 import { defaultJsonSerializer } from "./json-serializer"
 
-type ErrorPolicy = "ignore" | "all" // Define more types if needed
+type ErrorPolicy = "ignore" | "all" | "none" // Define more types if needed
 type FetchFunctionType = typeof fetch // Assuming you are using the standard Fetch API
 
 export const createGraphQLRequest = (
   url: string,
-  errorPolicy: ErrorPolicy = "ignore",
+  errorPolicy: ErrorPolicy = "none",
   fetchFunction: FetchFunctionType | undefined = undefined,
 ) => {
   const graphqlClient = new GraphQLClient(url, {
