@@ -7,7 +7,7 @@
   "scripts": {
     "build": "turbo run build",
     "b": "pnpm build",
-    "build:extension": "VITE_APP_DEV_MODE=true turbo run build --filter=@palladxyz/extension...",
+    "build:extension": "turbo run build --filter=@palladxyz/extension...",
     "build:features": "turbo run build --filter=@palladxyz/features...",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
     "dev:extension": "turbowatch extension.turbowatch.ts",
