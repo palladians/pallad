@@ -1,6 +1,6 @@
 import packageJson from "./package.json" with { type: "json" }
 
-const isDevMode = process.env.VITE_APP_DEV_MODE === 'true';
+const isDevMode = process.env.VITE_APP_DEV_MODE === "true"
 
 export const manifest: chrome.runtime.ManifestV3 = {
   manifest_version: 3,
