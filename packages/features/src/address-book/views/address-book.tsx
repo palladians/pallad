@@ -1,10 +1,10 @@
+import { truncateString } from "@/common/lib/string"
 import type { Contact } from "@/common/types"
 import { AppLayout } from "@/components/app-layout"
-
-import { truncateString } from "@/common/lib/string"
 import { MenuBar } from "@/components/menu-bar"
 import { Copy, Plus, TrashIcon } from "lucide-react"
 import type { MouseEvent } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
@@ -25,11 +25,12 @@ export const AddressBookView = ({
     navigator.clipboard.writeText(address)
     toast.success("Address copied")
   }
+  const { t } = useTranslation()
   return (
     <AppLayout>
       <div className="pb-12 bg-secondary rounded-b-2xl">
         <MenuBar variant="dashboard" />
-        <h2 className="ml-8 mt-1 text-3xl">Address book</h2>
+        <h2 className="ml-8 mt-1 text-3xl">{t("address-book")}</h2>
       </div>
       <div className="py-6 px-8 space-y-2">
         <Link
@@ -38,7 +39,7 @@ export const AddressBookView = ({
           data-testid="addressBook/addAddressButton"
         >
           <Plus width={16} height={16} className="text-[#F6C177]" />
-          <p>Add new contact</p>
+          <p>{t("add-new-contact")}</p>
         </Link>
         <div className="space-y-2">
           {contacts.map((contact, index) => {

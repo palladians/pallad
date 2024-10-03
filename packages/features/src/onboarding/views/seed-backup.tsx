@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { WizardLayout } from "@/components/wizard-layout"
 
 type MnemonicWritedownViewProps = {
@@ -24,13 +26,13 @@ export const SeedBackupView = ({
         onClick={onConfirm}
         data-testid="formSubmit"
       >
-        I saved it
+        {useTranslation().t("saved-it")}
       </button>
     }
   >
     <div className="flex flex-col justify-center items-center flex-1 gap-8">
       <p className="text-mint text-center max-w-[240px]">
-        Keep this in a safe place, never share them with anyone
+        {useTranslation().t("keep-this-safe")}
       </p>
       <div className="grid grid-cols-3 gap-2">
         {mnemonicWords.map((word, i) => (
@@ -54,8 +56,7 @@ export const SeedBackupView = ({
           data-testid="onboarding/mnemonicWrittenCheckbox"
         />
         <label htmlFor="mnemonicWrittenCheckbox" className="leading-5">
-          I have backed up the seed phrase and acknowledge they will not be
-          shown to me again
+          {useTranslation().t("backed-up")}
         </label>
       </div>
     </div>

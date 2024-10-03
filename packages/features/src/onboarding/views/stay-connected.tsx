@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import HeartIcon from "@/common/assets/heart.svg?react"
 import SocialDiscordIcon from "@/common/assets/social-discord.svg?react"
 import SocialXIcon from "@/common/assets/social-x.svg?react"
@@ -21,15 +23,15 @@ export const StayConnectedView = ({ onGoToDashboard }: StayConnectedRoute) => (
         onClick={onGoToDashboard}
         data-testid="formSubmit"
       >
-        Go to dashboard
+        {useTranslation().t("go-to-dashboard")}
       </button>
     }
   >
     <div className="flex flex-col justify-center items-center gap-4 flex-1">
       <HeartIcon />
-      <h1 className="text-2xl text-center">All done!</h1>
+      <h1 className="text-2xl text-center">{useTranslation().t("all-done")}</h1>
       <div className="leading-8 text-center">
-        Follow us to stay up to date with updates and communications
+        {useTranslation().t("follow-us")}
       </div>
       <div className="flex w-full gap-2">
         <a

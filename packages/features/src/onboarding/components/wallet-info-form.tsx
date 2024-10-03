@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { zxcvbn } from "@zxcvbn-ts/core"
 import { ExternalLinkIcon, EyeIcon, EyeOffIcon } from "lucide-react"
@@ -56,6 +58,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
   const [strengthLabel, strengthColor] = getPasswordStrengthConfig(
     zxcvbn(watch("spendingPassword")).score,
   )
+  const { t } = useTranslation()
 
   return (
     <WizardLayout
@@ -73,7 +76,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
               id="tosCheckbox"
             />
             <label htmlFor="tosCheckbox" className="label">
-              I accept Terms of Service.
+              {t("term-of-services")}
             </label>
             <a
               href="https://get.pallad.co/terms"
@@ -94,7 +97,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
             onClick={handleSubmit(onSubmit)}
             data-testid="formSubmit"
           >
-            <span>Next</span>
+            <span>{t("next")}</span>
           </button>
         </>
       }
@@ -102,7 +105,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
       <div className="flex flex-col flex-1 gap-4">
         <div className="flex flex-col">
           <label htmlFor="walletNameInput" className="label">
-            Wallet name
+            {t("wallet-name")}
           </label>
           <input
             id="walletNameInput"
@@ -118,7 +121,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
         </div>
         <div className="flex flex-col">
           <label htmlFor="spendingPassword" className="label">
-            Password
+            {t("password")}
           </label>
           <label className="input flex items-center gap-2">
             <input
@@ -140,7 +143,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
           <label className="text-[#7D7A9C] text-sm my-2 h-px">
             {dirtyFields.spendingPassword && (
               <span>
-                Your password is...
+                {t("your-password")}
                 <span style={{ color: strengthColor }} className="px-2">
                   {strengthLabel}
                 </span>

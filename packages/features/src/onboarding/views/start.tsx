@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import HardwareIcon from "@/common/assets/hardware.svg?react"
 import Logo from "@/common/assets/logo.svg?react"
 import Plus from "@/common/assets/plus.svg?react"
@@ -22,6 +24,7 @@ const OptionCard = ({
   onClick,
   testId,
 }: OptionCardProps) => {
+  const { t } = useTranslation()
   return (
     <button
       type="button"
@@ -34,7 +37,7 @@ const OptionCard = ({
     >
       <div className="btn btn-circle bg-neutral">{icon}</div>
       <div className="flex flex-col items-start">
-        {disabled && <p className="text-sm text-mint">Coming soon!</p>}
+        {disabled && <p className="text-sm text-mint">{t("coming-soon")}</p>}
         <p>{title}</p>
         <p className="text-sm">{description}</p>
       </div>

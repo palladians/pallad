@@ -1,6 +1,7 @@
 import { wordlist } from "@palladxyz/key-management"
 import { Loader2Icon } from "lucide-react"
 import type { UseFormReturn } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 
 import { Autocomplete } from "@/components/autocomplete"
 import { WizardLayout } from "@/components/wizard-layout"
@@ -38,14 +39,12 @@ export const SeedImportView = ({
         data-testid="formSubmit"
       >
         {restoring && <Loader2Icon size={16} className="animate-spin" />}
-        <span>Next</span>
+        <span>{useTranslation().t("next")}</span>
       </button>
     }
   >
     <div className="flex flex-1 flex-col gap-4">
-      <p className="text-mint">
-        Enter your 12-word seed phrase in the right order in the inputs below
-      </p>
+      <p className="text-mint">{useTranslation().t("enter-12-word")}</p>
       <div className="grid grid-cols-3 gap-2 mt-4">
         {mnemonicIterator.map((wordLabel, i) => (
           <Autocomplete

@@ -3,6 +3,8 @@ import { PlusIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 
+import { useTranslation } from "react-i18next"
+
 import { useAddressBookStore } from "@/common/store/address-book"
 import { FormError } from "@/components/form-error"
 
@@ -26,6 +28,8 @@ export const NewAddressForm = () => {
     addContact(data)
     return navigate("/contacts")
   }
+
+  const { t } = useTranslation()
   return (
     <form
       className="flex flex-col flex-1 gap-4"
@@ -36,7 +40,7 @@ export const NewAddressForm = () => {
           htmlFor="contactName"
           className={cn(errors.name && "text-destructive")}
         >
-          Contact's Name
+          {t("contact-name")}
         </label>
         <input
           id="contactName"
@@ -52,7 +56,7 @@ export const NewAddressForm = () => {
           htmlFor="contactAddress"
           className={cn(errors.address && "text-destructive")}
         >
-          Receiver Address
+          {t("receiver-address")}
         </label>
         <input
           id="contactAddress"
@@ -69,7 +73,7 @@ export const NewAddressForm = () => {
         data-testid="newAddress/createButton"
       >
         <PlusIcon size={16} />
-        <span>Create Contact</span>
+        <span>{t("create-contact")}</span>
       </button>
     </form>
   )

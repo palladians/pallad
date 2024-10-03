@@ -1,5 +1,6 @@
 import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react"
 import type { SubmitHandler, UseFormReturn } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 
 import { FormError } from "@/components/form-error"
 import { useState } from "react"
@@ -50,7 +51,7 @@ export const ConfirmTransactionForm = ({
         {confirmationForm.formState.isSubmitting && (
           <Loader2Icon size={16} className="animate-spin" />
         )}
-        <span>Send</span>
+        <span>{useTranslation().t("send")}</span>
       </button>
     </form>
   )

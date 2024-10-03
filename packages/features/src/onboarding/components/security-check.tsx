@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import NoLookIcon from "@/common/assets/nolook.svg?react"
 import { WizardLayout } from "@/components/wizard-layout"
 
@@ -17,18 +19,17 @@ export const SecurityCheck = ({ title, onConfirm }: SecurityCheckProps) => (
         onClick={onConfirm}
         data-testid="formSubmit"
       >
-        Confirm
+        {useTranslation().t("confirm")}
       </button>
     }
   >
     <div className="flex flex-1 flex-col justify-center items-center gap-4 text-center">
       <NoLookIcon />
       <h1 className="text-2xl max-w-[260px]">
-        Make sure you are alone when doing this
+        {useTranslation().t("youre-alone")}
       </h1>
       <p className="max-w-[260px]">
-        Confirm that your screen is not being recorded and no one else is
-        currently looking.
+        {useTranslation().t("screen-not-recording")}
       </p>
     </div>
   </WizardLayout>
