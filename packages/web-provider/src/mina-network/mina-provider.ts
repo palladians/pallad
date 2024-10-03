@@ -359,7 +359,16 @@ export class MinaProvider extends EventEmitter {
         })
         if (passphrase === null)
           throw this.createProviderRpcError(4100, "Unauthorized.")
-        return this._vault.submitTransaction(requestData) as unknown as T
+        try {
+          return (await this._vault.submitTransaction(
+            requestData,
+          )) as unknown as T
+        } catch (error: any) {
+          throw this.createProviderRpcError(
+            4100,
+            "Unauthorized. Coudldn't broadscast transaction. Make sure nonce is correct.",
+          )
+        }
       }
 
       default:
