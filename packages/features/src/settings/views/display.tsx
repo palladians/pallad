@@ -32,7 +32,7 @@ export const DisplayView = ({ onCloseClicked }: DisplayViewProps) => {
       <SettingsPageLayout title="Display" onCloseClicked={onCloseClicked}>
         <div className="space-y-2">
           <div className={ButtonWrapperStyles}>
-            <p>{t("dark-mode")}</p>
+            <p>{t("darkMode")}</p>
             <input
               type="checkbox"
               className="toggle [--tglbg:#F6C177] bg-white hover:bg-white border-[#F6C177]"

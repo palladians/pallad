@@ -20,7 +20,7 @@ const Links = [
     href: "https://get.pallad.co/support",
   },
   {
-    label: useTranslation().t("term-of-services"),
+    label: useTranslation().t("termOfServices"),
     href: "https://get.pallad.co/terms",
   },
   {

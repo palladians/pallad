@@ -30,7 +30,7 @@ export const AddressBookView = ({
     <AppLayout>
       <div className="pb-12 bg-secondary rounded-b-2xl">
         <MenuBar variant="dashboard" />
-        <h2 className="ml-8 mt-1 text-3xl">{t("address-book")}</h2>
+        <h2 className="ml-8 mt-1 text-3xl">{t("addressBook")}</h2>
       </div>
       <div className="py-6 px-8 space-y-2">
         <Link
@@ -39,7 +39,7 @@ export const AddressBookView = ({
           data-testid="addressBook/addAddressButton"
         >
           <Plus width={16} height={16} className="text-[#F6C177]" />
-          <p>{t("add-new-contact")}</p>
+          <p>{t("addNewContact")}</p>
         </Link>
         <div className="space-y-2">
           {contacts.map((contact, index) => {

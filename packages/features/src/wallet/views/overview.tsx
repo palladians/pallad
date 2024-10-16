@@ -58,7 +58,7 @@ export const OverviewView = ({
       </Skeleton>
       <div className="card flex-col bg-secondary rounded-t-none px-8 pb-6 gap-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-primary">{t("portfolio-value")}</h1>
+          <h1 className="text-primary">{t("portfolioValue")}</h1>
           <button
             type="button"
             className="btn btn-sm"
@@ -108,7 +108,7 @@ export const OverviewView = ({
             <h2 className="text-xl">{t("transactions")}</h2>
           </div>
           <Link to="/transactions" className="flex items-center mb-[2px]">
-            <span>{t("see-all")}</span>
+            <span>{t("seeAll")}</span>
             <ArrowRightIcon />
           </Link>
         </div>
@@ -127,7 +127,7 @@ export const OverviewView = ({
               />
             ))
           ) : (
-            <p className="col-span-2">{t("no-transactions-yet")}</p>
+            <p className="col-span-2">{t("noTransactionsYet")}</p>
           )}
         </div>
       </div>

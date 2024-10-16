@@ -41,6 +41,7 @@ import { TransactionDetailsRoute } from "./transactions/routes/transaction-detai
 import { TransactionsRoute } from "./transactions/routes/transactions"
 import { NetworksRoute } from "./wallet/routes/networks"
 import { OverviewRoute } from "./wallet/routes/overview"
+import "./i18n"
 
 dayjs.extend(relativeTime)
 

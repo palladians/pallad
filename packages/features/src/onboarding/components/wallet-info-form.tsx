@@ -76,7 +76,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
               id="tosCheckbox"
             />
             <label htmlFor="tosCheckbox" className="label">
-              {t("term-of-services")}
+              {t("termService")}
             </label>
             <a
               href="https://get.pallad.co/terms"
@@ -105,7 +105,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
       <div className="flex flex-col flex-1 gap-4">
         <div className="flex flex-col">
           <label htmlFor="walletNameInput" className="label">
-            {t("wallet-name")}
+            {t("walletName")}
           </label>
           <input
             id="walletNameInput"
@@ -143,7 +143,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
           <label className="text-[#7D7A9C] text-sm my-2 h-px">
             {dirtyFields.spendingPassword && (
               <span>
-                {t("your-password")}
+                {t("yourPassword")}
                 <span style={{ color: strengthColor }} className="px-2">
                   {strengthLabel}
                 </span>

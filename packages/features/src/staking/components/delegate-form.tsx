@@ -61,12 +61,12 @@ export const DelegateForm = ({ advanced, setAdvanced }: DelegateFormProps) => {
       className="flex flex-col flex-1 gap-4 px-8 pb-8 items-center"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h1 className="text-3xl w-full">{t("select-validator")}</h1>
+      <h1 className="text-3xl w-full">{t("selectValidator")}</h1>
       <Link
         to="/staking/producers"
         className="card bg-secondary w-full flex-row py-2 px-4 items-center justify-between"
       >
-        <h2 className="text-mint">{t("find-validator")}</h2>
+        <h2 className="text-mint">{t("findValidator")}</h2>
         <div className="bg-neutral rounded-full p-2">
           <ExternalLinkIcon />
         </div>

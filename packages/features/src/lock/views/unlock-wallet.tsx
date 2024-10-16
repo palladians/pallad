@@ -5,6 +5,7 @@ import { RestartWalletAlert } from "@/components/restart-wallet-alert"
 import { WizardLayout } from "@/components/wizard-layout"
 import clsx from "clsx"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 type UnlockWalletData = {
   spendingPassword: string
@@ -38,7 +39,7 @@ export const UnlockWalletView = ({
         data-testid="submitForm"
         disabled={!form.formState.dirtyFields.spendingPassword}
       >
-        <span>Unlock</span>
+        <span>{useTranslation().t("unlock")}</span>
       </button>
     }
   >
@@ -56,7 +57,7 @@ export const UnlockWalletView = ({
           htmlFor="spendingPassword"
           className={clsx("label cursor-pointer")}
         >
-          Spending Password
+          {useTranslation().t("spendingPassword")}
         </label>
         <label className="input flex items-center gap-2 w-full">
           <input

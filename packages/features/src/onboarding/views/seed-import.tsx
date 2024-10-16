@@ -44,7 +44,7 @@ export const SeedImportView = ({
     }
   >
     <div className="flex flex-1 flex-col gap-4">
-      <p className="text-mint">{useTranslation().t("enter-12-word")}</p>
+      <p className="text-mint">{useTranslation().t("enter12Word")}</p>
       <div className="grid grid-cols-3 gap-2 mt-4">
         {mnemonicIterator.map((wordLabel, i) => (
           <Autocomplete

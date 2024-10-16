@@ -21,7 +21,7 @@ export const ReceiveView = ({
     <div className="flex flex-col flex-1">
       <MenuBar variant="card" onCloseClicked={onGoBack} />
       <div className="animate-in fade-in slide-in-from-bottom-8 px-8 pb-8">
-        <h1 className="text-3xl mb-4">{useTranslation().t("your-address")}</h1>
+        <h1 className="text-3xl mb-4">{useTranslation().t("yourAddress")}</h1>
         <div className="flex flex-col text-center justify-center items-center space-y-8 card bg-accent p-8">
           <QRCode
             value={publicKey}
@@ -37,7 +37,7 @@ export const ReceiveView = ({
               className="btn btn-link text-secondary text-sm"
               onClick={onCopyWalletAddress}
             >
-              {useTranslation().t("copy-clipboard")}
+              {useTranslation().t("copyClipboard")}
             </button>
           </div>
         </div>

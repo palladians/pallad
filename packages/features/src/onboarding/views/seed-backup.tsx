@@ -26,13 +26,13 @@ export const SeedBackupView = ({
         onClick={onConfirm}
         data-testid="formSubmit"
       >
-        {useTranslation().t("saved-it")}
+        {useTranslation().t("savedIt")}
       </button>
     }
   >
     <div className="flex flex-col justify-center items-center flex-1 gap-8">
       <p className="text-mint text-center max-w-[240px]">
-        {useTranslation().t("keep-this-safe")}
+        {useTranslation().t("keepThisSafe")}
       </p>
       <div className="grid grid-cols-3 gap-2">
         {mnemonicWords.map((word, i) => (
@@ -56,7 +56,7 @@ export const SeedBackupView = ({
           data-testid="onboarding/mnemonicWrittenCheckbox"
         />
         <label htmlFor="mnemonicWrittenCheckbox" className="leading-5">
-          {useTranslation().t("backed-up")}
+          {useTranslation().t("backedUp")}
         </label>
       </div>
     </div>

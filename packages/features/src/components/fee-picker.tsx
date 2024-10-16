@@ -18,7 +18,7 @@ export const TransactionFeeShort = ({
       className="btn btn-link text-base-content no-underline hover:no-underline"
       onClick={onClick}
     >
-      <span className="underline">{t("transaction-fee")}</span>
+      <span className="underline">{t("transactionFee")}</span>
       <span>{TransactionFee[feeValue]} MINA</span>
     </button>
   )

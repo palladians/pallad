@@ -34,7 +34,7 @@ export const InputForm = ({
               : "text"
           }
           data-testid="webConnector/password"
-          placeholder={t("enter-your-password")}
+          placeholder={t("enterYourPassword")}
           className="grow"
           disabled={loading}
           {...register("userInput")}

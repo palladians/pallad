@@ -90,7 +90,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/contacts")}
               data-testid="menu/addressBook"
             >
-              {t("address-book")}
+              {t("adressBook")}
             </button>
             <button
               type="button"

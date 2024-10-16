@@ -37,7 +37,7 @@ const OptionCard = ({
     >
       <div className="btn btn-circle bg-neutral">{icon}</div>
       <div className="flex flex-col items-start">
-        {disabled && <p className="text-sm text-mint">{t("coming-soon")}</p>}
+        {disabled && <p className="text-sm text-mint">{t("comingSoon")}</p>}
         <p>{title}</p>
         <p className="text-sm">{description}</p>
       </div>

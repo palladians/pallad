@@ -49,7 +49,7 @@ export const SeedBackupConfirmationView = ({
         data-testid="onboarding/writedownIndex"
         data-word-index={confirmationIndex}
       >
-        {useTranslation().t("word-number")} {confirmationIndex + 1}
+        {useTranslation().t("wordNumber")} {confirmationIndex + 1}
       </label>
       <input
         id="confirmation"
@@ -58,9 +58,7 @@ export const SeedBackupConfirmationView = ({
         data-testid="onboarding/mnemonicConfirmationInput"
         {...form.register("mnemonicWord")}
       />
-      <p className="text-mint mt-4">
-        {useTranslation().t("confirm-saved-seed")}
-      </p>
+      <p className="text-mint mt-4">{useTranslation().t("confirmSavedSeed")}</p>
     </form>
   </WizardLayout>
 )

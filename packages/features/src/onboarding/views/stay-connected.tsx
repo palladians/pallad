@@ -23,15 +23,15 @@ export const StayConnectedView = ({ onGoToDashboard }: StayConnectedRoute) => (
         onClick={onGoToDashboard}
         data-testid="formSubmit"
       >
-        {useTranslation().t("go-to-dashboard")}
+        {useTranslation().t("goToDashboard")}
       </button>
     }
   >
     <div className="flex flex-col justify-center items-center gap-4 flex-1">
       <HeartIcon />
-      <h1 className="text-2xl text-center">{useTranslation().t("all-done")}</h1>
+      <h1 className="text-2xl text-center">{useTranslation().t("allDone")}</h1>
       <div className="leading-8 text-center">
-        {useTranslation().t("follow-us")}
+        {useTranslation().t("followUs")}
       </div>
       <div className="flex w-full gap-2">
         <a

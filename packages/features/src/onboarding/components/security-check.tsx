@@ -26,10 +26,10 @@ export const SecurityCheck = ({ title, onConfirm }: SecurityCheckProps) => (
     <div className="flex flex-1 flex-col justify-center items-center gap-4 text-center">
       <NoLookIcon />
       <h1 className="text-2xl max-w-[260px]">
-        {useTranslation().t("youre-alone")}
+        {useTranslation().t("youreAlone")}
       </h1>
       <p className="max-w-[260px]">
-        {useTranslation().t("screen-not-recording")}
+        {useTranslation().t("screenNotRecording")}
       </p>
     </div>
   </WizardLayout>

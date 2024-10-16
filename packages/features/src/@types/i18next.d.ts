@@ -1,6 +1,6 @@
 import "i18next"
-import type ns1 from "../i18n/locales/en/en.json"
-import type ns2 from "../i18n/locales/tr/tr.json"
+import resources from "./resources"
+const { ns1, ns2 } = resources
 
 declare module "i18next" {
   interface CustomTypeOptions {

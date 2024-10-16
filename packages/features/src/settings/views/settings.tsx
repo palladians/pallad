@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next"
 import { AppWindowMac, Eye, Info } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 import { AppLayout } from "@/components/app-layout"
 import { SettingsPageLayout } from "@/components/settings-page-layout"
@@ -60,7 +60,7 @@ export const SettingsView = ({
         onCloseClicked={onCloseClicked}
         headerContent={
           <div className="mt-6 px-6 py-4 flex items-center justify-between bg-neutral rounded-2xl">
-            <p>{t("buy-us-a-coffee")}</p>
+            <p>{t("buyUsACoffee")}</p>
             <button
               type="button"
               className="px-8 btn btn-primary"
@@ -101,7 +101,7 @@ export const SettingsView = ({
             data-testid="settings/logOut"
             onClick={onLogOut}
           >
-            {t("log-out")}
+            {t("logOut")}
           </button>
         </div>
       </SettingsPageLayout>

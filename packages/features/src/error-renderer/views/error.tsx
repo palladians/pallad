@@ -19,14 +19,14 @@ export const ErrorView = ({ error, resetErrorBoundary }: FallbackProps) => {
       <div className="card flex flex-col flex-1 bg-secondary w-full">
         <div className="card-body flex-1 flex flex-col gap-4 p-4">
           <h1 className="text-xl">Woops</h1>
-          <p className="flex-[0] text-gray-400">{t("error-happend")}</p>
+          <p className="flex-[0] text-gray-400">{t("errorHappend")}</p>
           <a
             href="https://get.pallad.co/status"
             target="_blank"
             rel="noopener noreferrer"
             className="underline"
           >
-            {t("check-service-status")}
+            {t("checkServiceStatus")}
           </a>
           <textarea
             className="textarea textarea-bordered rounded-xl resize-none flex-1"
@@ -39,14 +39,14 @@ export const ErrorView = ({ error, resetErrorBoundary }: FallbackProps) => {
               className="btn bg-neutral flex-1"
               onClick={resetErrorBoundary}
             >
-              {t("try-again")}
+              {t("tryAgain")}
             </button>
             <button
               type="button"
               className="btn btn-primary flex-1"
               onClick={report}
             >
-              {t("send-report")}
+              {t("sendReport")}
             </button>
           </div>
         </div>

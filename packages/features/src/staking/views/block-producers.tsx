@@ -22,7 +22,7 @@ export const BlockProducersView = ({
     <AppLayout>
       <MenuBar variant="back" onBackClicked={onGoBack} />
       <div className="flex flex-col gap-3 px-8 pb-8">
-        <h1 className="text-3xl w-full">{t("select-validator")}</h1>
+        <h1 className="text-3xl w-full">{t("selectValidator")}</h1>
         {randomTwentyProducers.map((producer) => (
           <BlockProducerTile key={producer.pk} producer={producer} />
         ))}

@@ -71,9 +71,7 @@ export const StakingOverviewView = ({
         ) : (
           <EmptyState
             heading={
-              <h2 className="text-lg">
-                {useTranslation().t("enjoy-seamless")}
-              </h2>
+              <h2 className="text-lg">{useTranslation().t("enjoySeamless")}</h2>
             }
             button={{
               label: "Stake",
@@ -85,19 +83,19 @@ export const StakingOverviewView = ({
       </div>
     </div>
     <div className="flex flex-1 justify-between flex-col px-8 pt-8 gap-4">
-      <h2 className="text-2xl">{useTranslation().t("block-rewards")}</h2>
+      <h2 className="text-2xl">{useTranslation().t("blockRewards")}</h2>
       <div className="flex justify-between items-center">
         <div className="flex justify-center items-center flex-col">
           <p className="text-2xl">{stats.lastReward}</p>
-          <h3 className="text-sm">{useTranslation().t("last-reward")}</h3>
+          <h3 className="text-sm">{useTranslation().t("lastReward")}</h3>
         </div>
         <div className="flex justify-center items-center flex-col">
           <p className="text-2xl">{stats.avgReward}</p>
-          <h3 className="text-sm">{useTranslation().t("avg-reward")}</h3>
+          <h3 className="text-sm">{useTranslation().t("avgReward")}</h3>
         </div>
         <div className="flex justify-center items-center flex-col">
           <p className="text-2xl">{stats.totalReward}</p>
-          <h3 className="text-sm">{useTranslation().t("total-reward")}</h3>
+          <h3 className="text-sm">{useTranslation().t("totalReward")}</h3>
         </div>
       </div>
       <ResponsiveContainer width="100%" aspect={2.5}>
