@@ -19,7 +19,7 @@ importers:
         version: 2.0.5
       '@turbo/gen':
         specifier: 2.0.9
-        version: 2.0.9(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4)
+        version: 2.0.9(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4)
       '@vitest/coverage-v8':
         specifier: 2.0.5
         version: 2.0.5(vitest@2.0.4(@types/node@22.0.0)(happy-dom@14.12.3)(jsdom@24.1.1))
@@ -43,13 +43,13 @@ importers:
         version: 2.4.0
       tailwindcss:
         specifier: 3.4.7
-        version: 3.4.7(ts-node@10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4))
+        version: 3.4.7(ts-node@10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4))
       tailwindcss-animate:
         specifier: 1.0.7
-        version: 1.0.7(tailwindcss@3.4.7(ts-node@10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4)))
+        version: 1.0.7(tailwindcss@3.4.7(ts-node@10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4)))
       tsup:
         specifier: 8.2.3
-        version: 8.2.3(@swc/core@1.7.3(@swc/helpers@0.5.12))(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0)
+        version: 8.2.3(@swc/core@1.7.3)(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0)
       turbo:
         specifier: 2.0.9
         version: 2.0.9
@@ -106,7 +106,7 @@ importers:
         version: 11.0.3
       tailwindcss-animate:
         specifier: 1.0.7
-        version: 1.0.7(tailwindcss@3.4.7(ts-node@10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4)))
+        version: 1.0.7(tailwindcss@3.4.7(ts-node@10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4)))
       vite-plugin-node-stdlib-browser:
         specifier: 0.2.1
         version: 0.2.1(node-stdlib-browser@1.2.0)(rollup@4.19.1)(vite@5.3.5(@types/node@22.0.0))
@@ -269,6 +269,12 @@ importers:
       easy-mesh-gradient:
         specifier: 0.0.5
         version: 0.0.5
+      i18next:
+        specifier: ^23.16.0
+        version: 23.16.0
+      i18next-browser-languagedetector:
+        specifier: ^8.0.0
+        version: 8.0.0
       immer:
         specifier: 10.1.1
         version: 10.1.1
@@ -305,6 +311,9 @@ importers:
       react-hook-form:
         specifier: 7.52.1
         version: 7.52.1(react@18.3.1)
+      react-i18next:
+        specifier: ^15.0.3
+        version: 15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-mixpanel-browser:
         specifier: 4.1.0
         version: 4.1.0(react@18.3.1)
@@ -337,7 +346,7 @@ importers:
         version: 2.4.0
       tailwindcss-animate:
         specifier: 1.0.7
-        version: 1.0.7
+        version: 1.0.7(tailwindcss@3.4.7(ts-node@10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4)))
       webext-bridge:
         specifier: 6.0.1
         version: 6.0.1
@@ -4179,6 +4188,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@10.0.1:
@@ -4701,6 +4711,9 @@ packages:
   html-escaper@3.0.3:
     resolution: {integrity: sha512-RuMffC89BOWQoY0WKGpIhn5gX3iI54O6nRA0yC124NYVtzjmFWBIiFd8M0x+ZdX0P9R4lADg1mgP8C7PxGOWuQ==}
 
+  html-parse-stringify@3.0.1:
+    resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
+
   html-void-elements@3.0.0:
     resolution: {integrity: sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==}
 
@@ -4753,6 +4766,12 @@ packages:
     resolution: {integrity: sha512-bho94YyReb4JV7LYWRWxZ/xr6TtOTt8cMfmQ39MQYJ7f/YE268s3GdghGwi+y4zAeqewE5zYLvuhV0M0ijsDEA==}
     engines: {node: '>=18'}
     hasBin: true
+
+  i18next-browser-languagedetector@8.0.0:
+    resolution: {integrity: sha512-zhXdJXTTCoG39QsrOCiOabnWj2jecouOqbchu3EfhtSHxIB5Uugnm9JaizenOy39h7ne3+fLikIjeW88+rgszw==}
+
+  i18next@23.16.0:
+    resolution: {integrity: sha512-Ni3CG6c14teOogY19YNRl+kYaE/Rb59khy0VyHVn4uOZ97E2E/Yziyi6r3C3s9+wacjdLZiq/LLYyx+Cgd+FCw==}
 
   iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
@@ -6268,6 +6287,19 @@ packages:
       react: '>=16.8.1'
       react-dom: '>=16.8.1'
 
+  react-i18next@15.0.3:
+    resolution: {integrity: sha512-BlO1P+oLKjjIxDBQ0GkAIMacgjfMbnvops+3Y5nZXF7UJ99v4KCWr0Na1azJXC8AMiNWp4kgUcFCJM7U9ZsUDg==}
+    peerDependencies:
+      i18next: '>= 23.2.3'
+      react: '>= 16.8.0'
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+
   react-inspector@6.0.2:
     resolution: {integrity: sha512-x+b7LxhmHXjHoU/VrFAzw5iutsILRoYyDq97EDYdFpPLcvqtEzk4ZSZSQjnFPbr5T57tLXnHcqFYoN1pI6u8uQ==}
     peerDependencies:
@@ -7499,6 +7531,10 @@ packages:
 
   vm-browserify@1.1.2:
     resolution: {integrity: sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==}
+
+  void-elements@3.1.0:
+    resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
+    engines: {node: '>=0.10.0'}
 
   w3c-xmlserializer@5.0.0:
     resolution: {integrity: sha512-o8qghlI8NZHU1lLPrpi2+Uq7abh4GGPpYANlalzWxyWteJOCsr/P+oPBA49TOLu5FTZO4d3F9MnWJfiMo4BkmA==}
@@ -9727,7 +9763,7 @@ snapshots:
 
   '@tsconfig/vite-react@3.0.2': {}
 
-  '@turbo/gen@2.0.9(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4)':
+  '@turbo/gen@2.0.9(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4)':
     dependencies:
       '@turbo/workspaces': 2.0.9
       commander: 10.0.1
@@ -9737,7 +9773,7 @@ snapshots:
       node-plop: 0.26.3
       picocolors: 1.0.1
       proxy-agent: 6.4.0
-      ts-node: 10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4)
+      ts-node: 10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.1
     transitivePeerDependencies:
@@ -12102,6 +12138,10 @@ snapshots:
 
   html-escaper@3.0.3: {}
 
+  html-parse-stringify@3.0.1:
+    dependencies:
+      void-elements: 3.1.0
+
   html-void-elements@3.0.0: {}
 
   htmlparser2@8.0.2:
@@ -12156,6 +12196,14 @@ snapshots:
   human-signals@5.0.0: {}
 
   husky@9.1.4: {}
+
+  i18next-browser-languagedetector@8.0.0:
+    dependencies:
+      '@babel/runtime': 7.25.0
+
+  i18next@23.16.0:
+    dependencies:
+      '@babel/runtime': 7.25.0
 
   iconv-lite@0.4.24:
     dependencies:
@@ -13797,13 +13845,13 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.4.40
 
-  postcss-load-config@4.0.2(postcss@8.4.40)(ts-node@10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4)):
+  postcss-load-config@4.0.2(postcss@8.4.40)(ts-node@10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4)):
     dependencies:
       lilconfig: 3.1.2
       yaml: 2.5.0
     optionalDependencies:
       postcss: 8.4.40
-      ts-node: 10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4)
+      ts-node: 10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4)
 
   postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.40)(yaml@2.5.0):
     dependencies:
@@ -13977,6 +14025,15 @@ snapshots:
   react-hotkeys-hook@4.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  react-i18next@15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@babel/runtime': 7.25.0
+      html-parse-stringify: 3.0.1
+      i18next: 23.16.0
+      react: 18.3.1
+    optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
 
   react-inspector@6.0.2(react@18.3.1):
@@ -14710,13 +14767,11 @@ snapshots:
 
   tailwind-merge@2.4.0: {}
 
-  tailwindcss-animate@1.0.7: {}
-
-  tailwindcss-animate@1.0.7(tailwindcss@3.4.7(ts-node@10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4))):
+  tailwindcss-animate@1.0.7(tailwindcss@3.4.7(ts-node@10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4))):
     dependencies:
-      tailwindcss: 3.4.7(ts-node@10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4))
+      tailwindcss: 3.4.7(ts-node@10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4))
 
-  tailwindcss@3.4.7(ts-node@10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4)):
+  tailwindcss@3.4.7(ts-node@10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -14735,7 +14790,7 @@ snapshots:
       postcss: 8.4.40
       postcss-import: 15.1.0(postcss@8.4.40)
       postcss-js: 4.0.1(postcss@8.4.40)
-      postcss-load-config: 4.0.2(postcss@8.4.40)(ts-node@10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4))
+      postcss-load-config: 4.0.2(postcss@8.4.40)(ts-node@10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4))
       postcss-nested: 6.2.0(postcss@8.4.40)
       postcss-selector-parser: 6.1.1
       resolve: 1.22.8
@@ -14839,7 +14894,7 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-node@10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@22.0.0)(typescript@5.5.4):
+  ts-node@10.9.2(@swc/core@1.7.3)(@types/node@22.0.0)(typescript@5.5.4):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -14873,7 +14928,7 @@ snapshots:
 
   tsscmp@1.0.6: {}
 
-  tsup@8.2.3(@swc/core@1.7.3(@swc/helpers@0.5.12))(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0):
+  tsup@8.2.3(@swc/core@1.7.3)(jiti@1.21.6)(postcss@8.4.40)(typescript@5.5.4)(yaml@2.5.0):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.23.0)
       cac: 6.7.14
@@ -15369,6 +15424,8 @@ snapshots:
       - terser
 
   vm-browserify@1.1.2: {}
+
+  void-elements@3.1.0: {}
 
   w3c-xmlserializer@5.0.0:
     dependencies:

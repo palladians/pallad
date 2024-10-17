@@ -3,6 +3,8 @@ import { AddressDropdown } from "@/components/address-dropdown"
 import { AppLayout } from "@/components/app-layout"
 import { MenuBar } from "@/components/menu-bar"
 
+import { useTranslation } from "react-i18next"
+
 import { Link } from "react-router-dom"
 import { Bar, BarChart, ResponsiveContainer, Tooltip } from "recharts"
 
@@ -42,84 +44,83 @@ export const StakingOverviewView = ({
   account,
   rewards,
   stats,
-}: StakingOverviewViewProps) => (
-  <AppLayout>
-    <div className="card flex-col bg-secondary rounded-t-none pb-6">
-      <MenuBar variant="dashboard" />
-      <div className="flex flex-col gap-6 px-8">
-        <h1 className="text-3xl">Staking</h1>
-        {stakeDelegated ? (
-          <div className="flex flex-row justify-between items-center card bg-neutral p-6">
-            <div className="flex flex-col">
-              <AddressDropdown
-                publicKey={
-                  account?.currentWallet.accountInfo?.MINA?.delegate ?? ""
-                }
-                className="before:ml-16"
-              />
+}: StakingOverviewViewProps) => {
+  const { t } = useTranslation()
+  return (
+    <AppLayout>
+      <div className="card flex-col bg-secondary rounded-t-none pb-6">
+        <MenuBar variant="dashboard" />
+        <div className="flex flex-col gap-6 px-8">
+          <h1 className="text-3xl">{t("staking")}</h1>
+          {stakeDelegated ? (
+            <div className="flex flex-row justify-between items-center card bg-neutral p-6">
+              <div className="flex flex-col">
+                <AddressDropdown
+                  publicKey={
+                    account?.currentWallet.accountInfo?.MINA?.delegate ?? ""
+                  }
+                  className="before:ml-16"
+                />
+              </div>
+              <Link
+                to="/staking/delegate"
+                className="btn btn-primary px-7"
+                data-testid="staking/start"
+              >
+                {t("edit")}
+              </Link>
             </div>
-            <Link
-              to="/staking/delegate"
-              className="btn btn-primary px-7"
-              data-testid="staking/start"
-            >
-              Edit
-            </Link>
+          ) : (
+            <EmptyState
+              heading={<h2 className="text-lg">{t("enjoySeamless")}</h2>}
+              button={{
+                label: "Stake",
+                url: "/staking/delegate",
+                testId: "staking/start",
+              }}
+            />
+          )}
+        </div>
+      </div>
+      <div className="flex flex-1 justify-between flex-col px-8 pt-8 gap-4">
+        <h2 className="text-2xl">{t("blockRewards")}</h2>
+        <div className="flex justify-between items-center">
+          <div className="flex justify-center items-center flex-col">
+            <p className="text-2xl">{stats.lastReward}</p>
+            <h3 className="text-sm">{t("lastReward")}</h3>
           </div>
-        ) : (
-          <EmptyState
-            heading={
-              <h2 className="text-lg">
-                Enjoy seamless staking and start earning rewards.
-              </h2>
-            }
-            button={{
-              label: "Stake",
-              url: "/staking/delegate",
-              testId: "staking/start",
-            }}
-          />
-        )}
+          <div className="flex justify-center items-center flex-col">
+            <p className="text-2xl">{stats.avgReward}</p>
+            <h3 className="text-sm">{t("avgReward")}</h3>
+          </div>
+          <div className="flex justify-center items-center flex-col">
+            <p className="text-2xl">{stats.totalReward}</p>
+            <h3 className="text-sm">{t("totalReward")}</h3>
+          </div>
+        </div>
+        <ResponsiveContainer width="100%" aspect={2.5}>
+          <BarChart
+            data={rewards}
+            margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
+          >
+            <Tooltip
+              cursor={false}
+              wrapperClassName="card"
+              contentStyle={{
+                background: "#413E5E",
+                borderColor: "#25233A",
+                borderWidth: "2px",
+              }}
+            />
+            <Bar
+              dataKey="amount"
+              fill="#A3DBE4"
+              radius={[32, 32, 0, 0]}
+              background={{ fill: "#25233A", radius: 32 }}
+            />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
-    </div>
-    <div className="flex flex-1 justify-between flex-col px-8 pt-8 gap-4">
-      <h2 className="text-2xl">Block rewards</h2>
-      <div className="flex justify-between items-center">
-        <div className="flex justify-center items-center flex-col">
-          <p className="text-2xl">{stats.lastReward}</p>
-          <h3 className="text-sm">Last reward</h3>
-        </div>
-        <div className="flex justify-center items-center flex-col">
-          <p className="text-2xl">{stats.avgReward}</p>
-          <h3 className="text-sm">Avg. reward</h3>
-        </div>
-        <div className="flex justify-center items-center flex-col">
-          <p className="text-2xl">{stats.totalReward}</p>
-          <h3 className="text-sm">Total reward</h3>
-        </div>
-      </div>
-      <ResponsiveContainer width="100%" aspect={2.5}>
-        <BarChart
-          data={rewards}
-          margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
-        >
-          <Tooltip
-            cursor={false}
-            wrapperClassName="card"
-            contentStyle={{
-              background: "#413E5E",
-              borderColor: "#25233A",
-              borderWidth: "2px",
-            }}
-          />
-          <Bar
-            dataKey="amount"
-            fill="#A3DBE4"
-            radius={[32, 32, 0, 0]}
-            background={{ fill: "#25233A", radius: 32 }}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  </AppLayout>
-)
+    </AppLayout>
+  )
+}

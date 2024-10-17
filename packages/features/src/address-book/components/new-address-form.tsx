@@ -8,6 +8,8 @@ import { FormError } from "@/components/form-error"
 
 import { NewAddressFormSchema } from "./new-address-form.schema"
 
+import { useTranslation } from "react-i18next"
+
 export const NewAddressForm = () => {
   const navigate = useNavigate()
   const addContact = useAddressBookStore((state) => state.addContact)
@@ -26,6 +28,7 @@ export const NewAddressForm = () => {
     addContact(data)
     return navigate("/contacts")
   }
+  const { t } = useTranslation()
   return (
     <form
       className="flex flex-col flex-1 gap-4"
@@ -36,7 +39,7 @@ export const NewAddressForm = () => {
           htmlFor="contactName"
           className={cn(errors.name && "text-destructive")}
         >
-          Contact's Name
+          {t("contactName")}
         </label>
         <input
           id="contactName"
@@ -52,7 +55,7 @@ export const NewAddressForm = () => {
           htmlFor="contactAddress"
           className={cn(errors.address && "text-destructive")}
         >
-          Receiver Address
+          {t("receiverAddress")}
         </label>
         <input
           id="contactAddress"
@@ -69,7 +72,7 @@ export const NewAddressForm = () => {
         data-testid="newAddress/createButton"
       >
         <PlusIcon size={16} />
-        <span>Create Contact</span>
+        <span>{t("createContact")}</span>
       </button>
     </form>
   )

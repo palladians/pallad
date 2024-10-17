@@ -3,6 +3,8 @@ import clsx from "clsx"
 import { CopyIcon, ExternalLinkIcon } from "lucide-react"
 import { toast } from "sonner"
 
+import { useTranslation } from "react-i18next"
+
 type HashDropdownProps = {
   hash: string
   className?: string
@@ -27,6 +29,7 @@ export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
     )
     window.open(url, "_blank")?.focus()
   }
+  const { t } = useTranslation()
   return (
     <div className={clsx("dropdown dropdown-top dropdown-end")}>
       <div
@@ -40,13 +43,13 @@ export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
         <li onClick={handleClick}>
           <button type="button" onClick={copyHash} className="flex gap-2">
             <CopyIcon />
-            <span>Copy Hash</span>
+            <span>{t("copyHash")}</span>
           </button>
         </li>
         <li onClick={handleClick}>
           <button type="button" onClick={openInExplorer} className="flex gap-2">
             <ExternalLinkIcon />
-            <span>Open in Minascan</span>
+            <span>{t("openInMinascan")}</span>
           </button>
         </li>
       </ul>

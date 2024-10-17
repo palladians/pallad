@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 type ConfirmationFormProps = {
   onConfirm: () => void
   onDecline: () => void
@@ -9,6 +11,7 @@ export const ConfirmationForm = ({
   onDecline,
   loading,
 }: ConfirmationFormProps) => {
+  const { t } = useTranslation()
   return (
     <form
       id="confirm-section"
@@ -20,7 +23,7 @@ export const ConfirmationForm = ({
         disabled={loading}
         onClick={onConfirm}
       >
-        Approve
+        {t("approve")}
       </button>
       <button
         className="btn max-w-48 w-full"
@@ -28,7 +31,7 @@ export const ConfirmationForm = ({
         onClick={onDecline}
         disabled={loading}
       >
-        Deny
+        {t("deny")}
       </button>
     </form>
   )

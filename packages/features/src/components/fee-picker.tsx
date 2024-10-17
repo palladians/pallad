@@ -1,6 +1,6 @@
 import { TransactionFee } from "@/common/lib/const"
 import { clsx } from "clsx"
-
+import { useTranslation } from "react-i18next"
 type TransactionFeeShortProps = {
   feeValue: keyof typeof TransactionFee
   onClick: () => void
@@ -10,13 +10,14 @@ export const TransactionFeeShort = ({
   feeValue,
   onClick,
 }: TransactionFeeShortProps) => {
+  const { t } = useTranslation()
   return (
     <button
       type="button"
       className="btn btn-link text-base-content no-underline hover:no-underline"
       onClick={onClick}
     >
-      <span className="underline">Transaction fee:</span>
+      <span className="underline">{t("transactionFee")}</span>
       <span>{TransactionFee[feeValue]} MINA</span>
     </button>
   )
@@ -28,6 +29,7 @@ type FeePickerProps = {
 }
 
 export const FeePicker = ({ feeValue, setValue }: FeePickerProps) => {
+  const { t } = useTranslation()
   return (
     <div className="join w-full">
       <button
@@ -38,7 +40,7 @@ export const FeePicker = ({ feeValue, setValue }: FeePickerProps) => {
         )}
         onClick={() => setValue("fee", "slow")}
       >
-        <div>Slow</div>
+        <div>{t("slow")}</div>
         <div className="text-nowrap">{TransactionFee.slow} MINA</div>
       </button>
       <button
@@ -49,7 +51,7 @@ export const FeePicker = ({ feeValue, setValue }: FeePickerProps) => {
         )}
         onClick={() => setValue("fee", "default")}
       >
-        <div>Normal</div>
+        <div>{t("normal")}</div>
         <div className="text-nowrap">{TransactionFee.default} MINA</div>
       </button>
       <button
@@ -60,7 +62,7 @@ export const FeePicker = ({ feeValue, setValue }: FeePickerProps) => {
         )}
         onClick={() => setValue("fee", "fast")}
       >
-        <div>Fast</div>
+        <div>{t("fast")}</div>
         <div className="text-nowrap">{TransactionFee.fast} MINA</div>
       </button>
     </div>

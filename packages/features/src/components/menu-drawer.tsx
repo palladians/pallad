@@ -4,9 +4,12 @@ import { useVault } from "@palladxyz/vault"
 import { ChevronDownIcon, XIcon } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 
+import { useTranslation } from "react-i18next"
+
 export const MenuDrawer = () => {
   const navigate = useNavigate()
   const currentNetworkName = useVault((state) => state.currentNetworkName)
+  const { t } = useTranslation()
   return (
     <div className="drawer drawer-end">
       <input id="menu-drawer" type="checkbox" className="drawer-toggle" />
@@ -64,7 +67,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/")}
               data-testid="menu/activity"
             >
-              Dashboard
+              {t("dashboard")}
             </button>
             <button
               type="button"
@@ -72,7 +75,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/transactions")}
               data-testid="menu/activity"
             >
-              Activity
+              {t("activity")}
             </button>
             <button
               type="button"
@@ -80,7 +83,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/staking")}
               data-testid="menu/staking"
             >
-              Staking
+              {t("staking")}
             </button>
             <button
               type="button"
@@ -88,7 +91,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/contacts")}
               data-testid="menu/addressBook"
             >
-              Address Book
+              {t("adressBook")}
             </button>
             <button
               type="button"
@@ -96,7 +99,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/settings")}
               data-testid="menu/settings"
             >
-              Settings
+              {t("settings")}
             </button>
           </div>
         </div>
