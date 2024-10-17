@@ -1,6 +1,7 @@
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import { useState } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import type { UserInputForm } from "../types"
 
 export const InputForm = ({
@@ -16,6 +17,7 @@ export const InputForm = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false)
   const { register, handleSubmit } = useForm<UserInputForm>()
+  const { t } = useTranslation()
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -52,7 +54,7 @@ export const InputForm = ({
         className="btn btn-primary max-w-48 w-full"
         disabled={loading}
       >
-        Sign
+        {t("sign")}
       </button>
       <button
         type="button"
@@ -60,7 +62,7 @@ export const InputForm = ({
         onClick={onReject}
         disabled={loading}
       >
-        Reject
+        {t("reject")}
       </button>
     </form>
   )

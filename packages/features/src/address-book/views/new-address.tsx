@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form"
 import { useLocation } from "react-router-dom"
 import { NewAddressFormSchema } from "../components/new-address-form.schema"
 
+import { useTranslation } from "react-i18next"
+
 type NewAddressViewProps = {
   onGoBack: () => void
   onSubmit: (contact: { name: string; address: string }) => void
@@ -30,11 +32,12 @@ export const NewAddressView = ({ onGoBack, onSubmit }: NewAddressViewProps) => {
   useEffect(() => {
     setValue("address", location.state?.address || "")
   }, [])
+  const { t } = useTranslation()
   return (
     <AppLayout>
       <div className="pb-12 bg-secondary rounded-b-2xl">
         <MenuBar variant="back" onBackClicked={onGoBack} />
-        <h2 className="ml-8 mt-1 text-3xl">New contact</h2>
+        <h2 className="ml-8 mt-1 text-3xl">{t("newContact")}</h2>
       </div>
       <div className="pt-6 pb-8 px-8 flex flex-col flex-1">
         <form
@@ -79,7 +82,7 @@ export const NewAddressView = ({ onGoBack, onSubmit }: NewAddressViewProps) => {
             disabled={disableSubmit}
             data-testid="submitForm"
           >
-            Add contact
+            {t("addContact")}
           </button>
         </form>
       </div>
