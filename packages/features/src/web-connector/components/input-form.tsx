@@ -4,12 +4,16 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 import type { UserInputForm } from "../types"
 
 export const InputForm = ({
+  submitButtonLabel,
   onSubmit,
+  rejectButtonLabel,
   onReject,
   inputType,
   loading,
 }: {
+  submitButtonLabel?: string
   onSubmit: SubmitHandler<UserInputForm>
+  rejectButtonLabel?: string
   onReject: () => void
   inputType: string
   loading: boolean
@@ -52,7 +56,7 @@ export const InputForm = ({
         className="btn btn-primary max-w-48 w-full"
         disabled={loading}
       >
-        Sign
+        {submitButtonLabel ?? "Sign"}
       </button>
       <button
         type="button"
@@ -60,7 +64,7 @@ export const InputForm = ({
         onClick={onReject}
         disabled={loading}
       >
-        Reject
+        {rejectButtonLabel ?? "Reject"}
       </button>
     </form>
   )
