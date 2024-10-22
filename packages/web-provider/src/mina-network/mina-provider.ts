@@ -174,13 +174,19 @@ export class MinaProvider extends EventEmitter {
     if (!initialized) {
       throw this.createProviderRpcError(4100, "Unauthorized")
     }
-    // check if wallet is locked first
-    await this.checkAndUnlock()
+
+    const locked = await this._vault.isLocked()
     const enabled = await this._vault.getEnabled({ origin: requestOrigin })
+    if ((locked || !enabled) && args.method === "mina_accounts") {
+      return [] as T
+    }
+
+    if (locked) await this.unlockWallet()
     if (!enabled) await this.enable({ origin: requestOrigin })
 
     switch (args.method) {
       case "mina_accounts":
+      case "mina_requestAccounts":
         return (await this._vault.getAccounts()) as unknown as T
       case "mina_addChain": {
         throw this.createProviderRpcError(4200, "Unsupported Method")
