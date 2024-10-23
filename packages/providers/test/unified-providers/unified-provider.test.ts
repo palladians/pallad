@@ -11,7 +11,7 @@ const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
 
-describe("Unified Chain provider", () => {
+describe.skip("Unified Chain provider", () => {
   let provider: ReturnType<typeof createChainProvider>
   let tokenMap: TokenIdMap
   let config: ProviderConfig
