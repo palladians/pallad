@@ -16,6 +16,8 @@ const sanitizePayload = async (payload: string) => {
 
 type ActionRequest = {
   title: string
+  submitButtonLabel?: string
+  rejectButtonLabel?: string
   payload: string
   inputType: "text" | "password" | "confirmation"
   loading: boolean
@@ -70,6 +72,8 @@ export const WebConnectorRoute = () => {
       if (message.type === "action_request") {
         setRequest({
           title: message.params.title,
+          submitButtonLabel: message.params.submitButtonLabel,
+          rejectButtonLabel: message.params.rejectButtonLabel,
           payload: await sanitizePayload(message.params.payload),
           inputType: message.params.inputType,
           loading: false,
@@ -84,7 +88,9 @@ export const WebConnectorRoute = () => {
         inputType={request.inputType}
         onConfirm={confirm}
         onDecline={decline}
+        rejectButtonLabel={request.rejectButtonLabel}
         onReject={reject}
+        submitButtonLabel={request.submitButtonLabel}
         onSubmit={onSubmit}
         title={request.title}
         payload={request.payload}

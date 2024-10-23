@@ -67,6 +67,8 @@ export class MinaProvider extends EventEmitter {
       inputType: "password",
       metadata: {
         title: "Unlock your wallet",
+        submitButtonLabel: "Unlock",
+        rejectButtonLabel: "Cancel",
       },
     })
     if (passphrase === null)
