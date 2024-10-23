@@ -1,5 +1,10 @@
 type InputType = "text" | "password" | "confirmation"
-type Metadata = { title: string; payload?: string }
+type Metadata = {
+  title: string
+  submitButtonLabel?: string
+  rejectButtonLabel?: string
+  payload?: string
+}
 
 export const showUserPrompt = async ({
   inputType,
@@ -44,6 +49,8 @@ export const showUserPrompt = async ({
                 type: "action_request",
                 params: {
                   title: metadata.title,
+                  submitButtonLabel: metadata.submitButtonLabel,
+                  rejectButtonLabel: metadata.rejectButtonLabel,
                   payload: metadata.payload ?? "{}",
                   inputType,
                   emitConnected,

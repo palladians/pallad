@@ -12,7 +12,9 @@ type WebConnectorViewProps = {
   inputType: string
   onConfirm: () => void
   onDecline: () => void
+  rejectButtonLabel?: string
   onReject: () => void
+  submitButtonLabel?: string
   onSubmit: SubmitHandler<UserInputForm>
   loading: boolean
 }
@@ -22,8 +24,10 @@ export const WebConnectorView = ({
   payload,
   inputType,
   onDecline,
+  rejectButtonLabel,
   onReject,
   onConfirm,
+  submitButtonLabel,
   onSubmit,
   loading,
 }: WebConnectorViewProps) => {
@@ -58,7 +62,9 @@ export const WebConnectorView = ({
               {["text", "password"].includes(inputType) && (
                 <InputForm
                   inputType={inputType}
+                  submitButtonLabel={submitButtonLabel}
                   onSubmit={onSubmit}
+                  rejectButtonLabel={rejectButtonLabel}
                   onReject={onReject}
                   loading={loading}
                 />
