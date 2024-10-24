@@ -34,7 +34,6 @@ onMessage("mina_switchChain", minaSwitchChain)
 onMessage("mina_getState", minaGetState)
 onMessage("mina_chainId", minaChainId)
 onMessage("mina_accounts", minaAccounts)
-// TODO: It should be removed, but let's keep it for now for Auro compatibility.
 onMessage("mina_requestAccounts", minaRequestAccounts)
 onMessage("mina_sign", minaSign)
 onMessage("mina_signFields", minaSignFields)

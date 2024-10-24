@@ -83,7 +83,7 @@ export const minaRequestAccounts: Handler = async ({ data }) => {
     const provider = await MinaProvider.getInstance()
     const params = Validation.requestSchema.parse(data)
     return await provider.request({
-      method: "mina_accounts",
+      method: "mina_requestAccounts",
       params,
     })
   } catch (error: unknown) {
