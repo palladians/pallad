@@ -1,6 +1,6 @@
-import type { Mina } from "@palladxyz/mina-core"
 import Client from "mina-signer"
 
+import { SignableData } from "../../../../mina-core/src/borrowed-types"
 import * as errors from "../../errors"
 import type { ChainOperationArgs } from "../../types"
 import * as util from "./guards"
@@ -19,26 +19,18 @@ export function MinaSigningOperations<T extends MinaSignablePayload>(
   try {
     // Perform the specific signing action
     switch (args.operation) {
+      case "mina_sign":
       case "mina_signTransaction": {
-        if (util.isConstructedTransaction(payload)) {
-          return minaClient.signTransaction(
-            payload as Mina.ConstructedTransaction,
-            privateKey,
-          )
+        if ("message" in payload) {
+          return minaClient.signTransaction<string>(payload.message, privateKey)
         }
-        if (util.isZkAppTransaction(payload)) {
-          return minaClient.signZkappCommand(payload.command, privateKey)
+        if ("transaction" in payload) {
+          return minaClient.signTransaction(payload.transaction, privateKey)
         }
-        throw new Error(
-          `Invalid constructed transaction, the payload is: ${payload}`,
-        )
-      }
-
-      case "mina_sign": {
-        if (util.isMessageBody(payload)) {
-          return minaClient.signMessage(payload.message, privateKey)
+        if ("command" in payload) {
+          return minaClient.signTransaction(payload.command, privateKey)
         }
-        throw new Error("Invalid message body")
+        throw new Error("Invalid transaction payload")
       }
 
       case "mina_signFields": {

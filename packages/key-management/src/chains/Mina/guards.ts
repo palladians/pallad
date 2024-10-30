@@ -1,15 +1,9 @@
+import { TransactionBody } from "@mina-js/utils"
 import type { Mina } from "@palladxyz/mina-core"
 
-export function isConstructedTransaction(
-  payload: any,
-): payload is Mina.ConstructedTransaction {
-  return (
-    payload &&
-    typeof payload === "object" &&
-    "type" in payload &&
-    "to" in payload &&
-    "from" in payload
-  )
+export function isConstructedTransaction(payload: any) {
+  const transaction = TransactionBody.parse(payload)
+  return !!transaction
 }
 
 export function isMessageBody(payload: any): payload is Mina.MessageBody {

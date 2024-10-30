@@ -1,5 +1,5 @@
 import type { BorrowedTypes } from "../.."
-import type { TransactionBody, TransactionType } from "../../Mina"
+import type { TransactionType } from "../../Mina"
 import type { Provider } from "../Provider"
 
 export type SubmitTxArgs = {
@@ -7,15 +7,6 @@ export type SubmitTxArgs = {
     | BorrowedTypes.SignedLegacy<BorrowedTypes.Payment>
     | BorrowedTypes.SignedLegacy<BorrowedTypes.StakeDelegation>
   type: TransactionType
-  transactionDetails: {
-    fee: TransactionBody["fee"]
-    to: TransactionBody["to"]
-    from: TransactionBody["from"]
-    nonce: TransactionBody["nonce"]
-    memo: TransactionBody["memo"]
-    validUntil: TransactionBody["validUntil"]
-    amount: TransactionBody["amount"]
-  }
 }
 
 interface TxResult {

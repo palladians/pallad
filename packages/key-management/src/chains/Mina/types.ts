@@ -1,6 +1,14 @@
-import type { BorrowedTypes, Mina } from "@palladxyz/mina-core"
+import type { Mina } from "@palladxyz/mina-core"
 import { Network } from "@palladxyz/pallad-core"
 
+import type {
+  Nullifier,
+  SignedFields,
+  SignedMessage,
+  SignedTransaction,
+  TransactionPayload,
+  ZkAppCommandProperties,
+} from "@mina-js/utils"
 import type {
   ChainSpecificPayload,
   KeyPairDerivationOperations,
@@ -9,11 +17,10 @@ import { deriveMinaPublicKey } from "./credentialDerivation"
 import { deriveMinaPrivateKey } from "./keyDerivation"
 
 export type MinaSignatureResult =
-  | Mina.SignedTransaction
-  | Mina.SignedMessage
-  | Mina.SignedFields
-  | Mina.SignedZkAppCommand
-  | BorrowedTypes.Nullifier
+  | SignedTransaction
+  | SignedMessage
+  | SignedFields
+  | Nullifier
 
 export type MinaSpecificPayload = {
   network: Network.Mina
@@ -65,10 +72,10 @@ export type MinaSessionCredentials = {
 }
 
 export type MinaSignablePayload =
-  | Mina.ConstructedTransaction
+  | TransactionPayload
+  | ZkAppCommandProperties
   | Mina.MessageBody
   | Mina.SignableFields
-  | Mina.SignableZkAppCommand
   | Mina.CreatableNullifer
 
 export class MinaPayload implements ChainSpecificPayload {

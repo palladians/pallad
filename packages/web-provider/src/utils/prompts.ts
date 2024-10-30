@@ -6,7 +6,7 @@ type Metadata = {
   payload?: string
 }
 
-export const showUserPrompt = async ({
+export const showUserPrompt = async <T extends boolean | string = boolean>({
   inputType,
   metadata,
   emitConnected = false,
@@ -14,8 +14,8 @@ export const showUserPrompt = async ({
   inputType: InputType
   metadata: Metadata
   emitConnected?: boolean
-}) => {
-  return new Promise((resolve, reject) => {
+}): Promise<T> => {
+  return new Promise<T>((resolve, reject) => {
     chrome.windows
       .create({
         url: "prompt.html",
@@ -32,7 +32,7 @@ export const showUserPrompt = async ({
               return reject(new Error("4001 - User Rejected Request"))
             }
             if (inputType === "confirmation") {
-              if (response.userConfirmed) return resolve(true)
+              if (response.userConfirmed) return resolve(true as any)
               return reject(new Error("4001 - User Rejected Request"))
             }
             if (response.userInput.length > 0)

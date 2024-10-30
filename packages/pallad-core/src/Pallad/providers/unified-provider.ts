@@ -6,7 +6,6 @@ import type {
 import type { NodeStatus } from "./node-status-provider"
 import type { HealthCheckResponse } from "./provider"
 import type { TxStatus, TxStatusArgs } from "./tx-status-provider"
-import type { SubmitTxArgs, SubmitTxResult } from "./tx-submit-provider"
 import type { Tx } from "./types"
 
 export type UnifiedChainProviderConfig = {
@@ -23,7 +22,6 @@ export interface UnifiedChainProviderType {
     args: AccountInfoArgs,
   ): Promise<Record<string, AccountInfo> | undefined>
   getTransactionStatus?(args: TxStatusArgs): Promise<TxStatus | undefined>
-  submitTransaction(args: SubmitTxArgs): Promise<SubmitTxResult | undefined>
 
   // Methods related to ProviderArchive
   getTransactions(args: TransactionsByAddressesArgs): Promise<Tx[] | undefined>

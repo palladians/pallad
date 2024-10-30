@@ -1,12 +1,12 @@
 import { mnemonic } from "@palladxyz/common"
-import { Mina } from "@palladxyz/mina-core"
-import { constructTransaction } from "@palladxyz/pallad-core"
+import type { Mina } from "@palladxyz/mina-core"
 import { Network } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import Client from "mina-signer"
 import { expect } from "vitest"
 
-import { hexToBytes, utf8ToBytes } from "@noble/hashes/utils"
+import { TransactionBodySchema } from "@mina-js/utils"
+import { utf8ToBytes } from "@noble/hashes/utils"
 import type { MinaDerivationArgs } from "../../dist"
 import { KeyAgentBase } from "../../src/KeyAgentBase"
 import {
@@ -16,7 +16,6 @@ import {
 import { emip3encrypt } from "../../src/emip3"
 import {
   type ChainOperationArgs,
-  type GetPassphrase,
   KeyAgentType,
   type SerializableKeyAgentData,
 } from "../../src/types"
@@ -300,7 +299,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         expectedGroupedCredentials.address,
       )
 
-      const transaction: Mina.TransactionBody = {
+      const transaction = TransactionBodySchema.parse({
         to: groupedCredential.address,
         from: groupedCredential.address,
         fee: 1,
@@ -308,17 +307,16 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         nonce: 0,
         memo: "hello Bob",
         validUntil: 321,
-        type: "payment",
-      }
-      const constructedTx: Mina.ConstructedTransaction = constructTransaction(
-        transaction,
-        Mina.TransactionType.PAYMENT,
-      )
-      const signedTx = await instance.sign(groupedCredential, constructedTx, {
-        network: Network.Mina,
-        networkType: "testnet",
-        operation: "mina_signTransaction",
       })
+      const signedTx = await instance.sign(
+        groupedCredential,
+        { transaction },
+        {
+          network: Network.Mina,
+          networkType: "testnet",
+          operation: "mina_signTransaction",
+        },
+      )
       const minaClient = new Client({ network: args.networkType })
       const isVerified = minaClient.verifyTransaction(
         signedTx as Mina.SignedTransaction,

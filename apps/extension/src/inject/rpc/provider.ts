@@ -26,7 +26,10 @@ export const provider = {
   request: async ({ method, params }: { method: string; params: any }) =>
     await debouncedCall({
       method,
-      payload: { ...params, origin: window.location.origin },
+      params,
+      context: {
+        origin: window.location.origin,
+      },
     }),
   isPallad: true,
   on: _events.on,
