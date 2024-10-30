@@ -81,7 +81,7 @@ describe("ObjectStore", () => {
   })
 
   it("should add one object and remove one from store", () => {
-    let storedObject: Json | undefined
+    let storedObject
     const { result } = renderHook(() => useVault())
     act(() => {
       result.current.setObject(objectState)
@@ -93,7 +93,7 @@ describe("ObjectStore", () => {
       storedObject = result.current.getObject(objectName)
     })
     // check that object is removed
-    expect(storedObject?.object).toBeUndefined()
+    expect(storedObject.object).toEqual({})
   })
   it("should add two objects and search for Mina addresses and return them as an array not as a credential object", () => {
     let storedObjects: StoredObject[] | undefined
