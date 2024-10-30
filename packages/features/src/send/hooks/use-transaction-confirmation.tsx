@@ -1,5 +1,5 @@
 import type { ChainOperationArgs } from "@palladxyz/key-management"
-import { Mina } from "@palladxyz/mina-core"
+import { Mina, TransactionType } from "@palladxyz/mina-core"
 import { useVault } from "@palladxyz/vault"
 import dayjs from "dayjs"
 import type { SubmitHandler, UseFormReturn } from "react-hook-form"
@@ -11,6 +11,7 @@ import { useAccount } from "@/common/hooks/use-account"
 import { useTransactionStore } from "@/common/store/transaction"
 import { usePendingTransactionStore } from "@palladxyz/vault"
 
+import type { SignedTransaction, TransactionBody } from "@mina-js/utils"
 import { utf8ToBytes } from "@noble/hashes/utils"
 import type { ConfirmTransactionSchema } from "../components/confirm-transaction-form.schema"
 
@@ -62,12 +63,19 @@ export const useTransactionConfirmation = ({
       network: "Mina",
       networkType: currentNetworkName === "Mainnet" ? "mainnet" : "testnet",
     }
+    let txBody: TransactionBody
+    if (type === TransactionType.STAKE_DELEGATION) {
+      const { amount, ...txRest } = constructedTx
+      txBody = txRest
+    } else {
+      txBody = constructedTx
+    }
     try {
-      signedTx = await sign(
-        { transaction: constructedTx },
+      signedTx = (await sign(
+        { transaction: txBody },
         operationArgs,
         getPassphrase,
-      )
+      )) as SignedTransaction
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.name === "AuthenticationError")
@@ -78,22 +86,10 @@ export const useTransactionConfirmation = ({
       }
     }
     const submitTxArgs = {
-      signedTransaction: signedTx as never,
+      signedTransaction: signedTx,
       type,
-      transactionDetails: {
-        fee: rawTransaction.fee,
-        to: rawTransaction.to,
-        from: rawTransaction.from,
-        nonce: rawTransaction.nonce,
-        memo: rawTransaction.memo,
-        amount: rawTransaction.amount,
-        validUntil: rawTransaction.validUntil,
-      },
     }
-    const submittedTx = (await submitTx(submitTxArgs)) as any
-    const hash =
-      submittedTx?.sendPayment?.payment?.hash ??
-      submittedTx?.sendDelegation?.delegation?.hash
+    const hash = await submitTx(submitTxArgs as never)
     addPendingTransaction({
       hash,
       expireAt: dayjs().add(8, "hours").toISOString(),

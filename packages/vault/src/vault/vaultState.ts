@@ -81,7 +81,7 @@ export type GlobalVaultActions = {
     getPassphrase: GetPassphrase,
   ) => Promise<unknown>
   constructTx: (args: { transaction: any }) => TransactionBody
-  submitTx: (submitTxArgs: SubmitTxArgs) => Promise<unknown>
+  submitTx: (submitTxArgs: SubmitTxArgs) => Promise<string>
   createWallet: (strength?: number) => CreateWalletReturn
   restoreWallet: (
     args: ChainDerivationArgs,

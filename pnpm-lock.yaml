@@ -356,9 +356,6 @@ importers:
       yaml:
         specifier: 2.5.0
         version: 2.5.0
-      zod:
-        specifier: 3.23.8
-        version: 3.23.8
       zustand:
         specifier: 4.5.4
         version: 4.5.4(@types/react@18.3.3)(immer@10.1.1)(react@18.3.1)
@@ -432,6 +429,9 @@ importers:
       vite-plugin-top-level-await:
         specifier: 1.4.2
         version: 1.4.2(@swc/helpers@0.5.12)(rollup@4.19.1)(vite@5.3.5(@types/node@22.0.0))
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
 
   packages/key-management:
     dependencies:
@@ -654,6 +654,9 @@ importers:
 
   packages/vault:
     dependencies:
+      '@mina-js/klesia-sdk':
+        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@7fe60e8
+        version: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@7fe60e8(typescript@5.5.4)
       '@noble/hashes':
         specifier: 1.4.0
         version: 1.4.0

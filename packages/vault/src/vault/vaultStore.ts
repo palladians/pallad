@@ -4,6 +4,7 @@ import { produce } from "immer"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
+import { createClient } from "@mina-js/klesia-sdk"
 import { TransactionBodySchema } from "@mina-js/utils"
 import { type AccountStore, accountSlice } from "../account"
 import { type CredentialStore, credentialSlice } from "../credentials"
@@ -21,7 +22,6 @@ import {
   restartWalletHelper,
   restoreWalletHelper,
   signHelper,
-  submitTxHelper,
   switchNetworkHelper,
   syncAccountHelper,
   syncTransactionHelper,
@@ -127,8 +127,22 @@ export const useVault = create<
       constructTx: (args) => {
         return TransactionBodySchema.parse(args.transaction)
       },
-      submitTx: async (submitTxArgs) => {
-        return await submitTxHelper(get, submitTxArgs)
+      submitTx: async ({ signedTransaction, type }) => {
+        const { currentNetworkName } = get()
+        const networkName =
+          currentNetworkName === "Mainnet" ? "mainnet" : "devnet"
+        const klesia = createClient({ network: networkName })
+        const { result } = await klesia.request<"mina_sendTransaction">({
+          method: "mina_sendTransaction",
+          params: [
+            {
+              input: signedTransaction.data,
+              signature: signedTransaction.signature,
+            },
+            type as "payment" | "delegation",
+          ],
+        })
+        return result
       },
       createWallet: (strength = 128) => {
         const mnemonic = generateMnemonicWords(strength)
