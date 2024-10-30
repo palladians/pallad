@@ -1,13 +1,10 @@
 import { generateMnemonicWords } from "@palladxyz/key-management"
-import {
-  Network,
-  PalladNetworkNames,
-  constructTransaction,
-} from "@palladxyz/pallad-core"
+import { Network, PalladNetworkNames } from "@palladxyz/pallad-core"
 import { produce } from "immer"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
+import { TransactionBodySchema } from "@mina-js/utils"
 import { type AccountStore, accountSlice } from "../account"
 import { type CredentialStore, credentialSlice } from "../credentials"
 import { type KeyAgentStore, KeyAgents, keyAgentSlice } from "../keyAgent"
@@ -128,8 +125,7 @@ export const useVault = create<
         return await signHelper(get, signable, args, getPassphrase)
       },
       constructTx: (args) => {
-        // TODO: agnostic construct transaction Util that takes any transaction type
-        return constructTransaction(args.transaction, args.transactionType)
+        return TransactionBodySchema.parse(args.transaction)
       },
       submitTx: async (submitTxArgs) => {
         return await submitTxHelper(get, submitTxArgs)

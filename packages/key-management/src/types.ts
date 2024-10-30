@@ -10,7 +10,6 @@ import {
   type EthereumDerivationArgs,
   type EthereumGroupedCredentials,
   type EthereumSessionCredentials,
-  type EthereumSignablePayload,
   type EthereumSignatureResult,
   type EthereumSpecificArgs,
   ethKeyPairDerivationOperations,
@@ -277,7 +276,7 @@ export type ChainSigningFunction = (
   privateKey: ChainPrivateKey,
 ) => Promise<ChainSignatureResult>
 
-export type ChainSignablePayload = MinaSignablePayload | EthereumSignablePayload
+export type ChainSignablePayload = MinaSignablePayload
 
 /*export const chainSigningOperations: Record<string, ChainSigningFunction> = {
   'Mina': MinaSigningOperations,

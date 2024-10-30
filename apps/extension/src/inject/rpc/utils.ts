@@ -4,8 +4,13 @@ const BROADCAST_CHANNEL_ID = "pallad"
 
 const callPalladAsync = ({
   method,
-  payload,
-}: { method: string; payload: any }) => {
+  params,
+  context,
+}: {
+  method: string
+  params: any
+  context: Record<string, string>
+}) => {
   return new Promise((resolve, reject) => {
     const privateChannelId = `private-${Math.random()}`
     const channel = new BroadcastChannel(BROADCAST_CHANNEL_ID)
@@ -26,7 +31,8 @@ const callPalladAsync = ({
     responseChannel.addEventListener("message", messageListener)
     channel.postMessage({
       method,
-      payload,
+      params,
+      context,
       isPallad: true,
       respondAt: privateChannelId,
     })

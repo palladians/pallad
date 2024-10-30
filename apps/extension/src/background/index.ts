@@ -1,4 +1,4 @@
-import { MinaProvider } from "@palladxyz/web-provider"
+import { createMinaProvider } from "@palladxyz/web-provider"
 import { onMessage, sendMessage } from "webext-bridge/background"
 import { runtime, tabs } from "webextension-polyfill"
 import {
@@ -17,7 +17,6 @@ import {
   minaSignTransaction,
   minaSwitchChain,
   palladConnected,
-  palladIsConnected,
   palladSidePanel,
   palladSwitchNetwork,
 } from "./handlers"
@@ -45,7 +44,6 @@ onMessage("mina_sendTransaction", minaSendTransaction)
 /**
  * Wallet handlers
  */
-onMessage("pallad_isConnected", palladIsConnected)
 onMessage("pallad_switchNetwork", palladSwitchNetwork)
 onMessage("pallad_connected", palladConnected)
 onMessage("pallad_sidePanel", palladSidePanel)
@@ -64,13 +62,13 @@ runtime.onConnect.addListener(async (port) => {
   }
 })
 runtime.onInstalled.addListener(async ({ reason }) => {
-  const provider = await MinaProvider.getInstance()
+  const provider = await createMinaProvider()
   await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
   if (reason === "install") {
     if (!E2E_TESTING)
       await tabs.create({ url: "https://get.pallad.co/welcome" })
   }
-  provider.on("pallad_event", async (data) => {
+  provider.on("pallad_event" as never, async (data: any) => {
     const { permissions } = await chrome.storage.local.get("permissions")
     const urls = Object.entries(permissions)
       .filter(([_, allowed]) => allowed === "ALLOWED")

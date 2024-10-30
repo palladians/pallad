@@ -1,12 +1,10 @@
-import type { SingleObjectState } from "@palladxyz/vault"
+import type { Json } from "@mina-js/utils"
 
-import type { RequestArguments } from "../web-provider-types"
-
-export function hasQueryAndProps(obj: any): obj is RequestArguments {
+export function hasQueryAndProps(obj: any) {
   return obj && typeof obj === "object" && "query" in obj && "props" in obj
 }
 
-export function hasObjectProps(obj: any): obj is SingleObjectState {
+export function hasObjectProps(obj: any): obj is Json {
   // Check for the existence of both 'objectName' and 'object' properties
   return (
     obj && typeof obj === "object" && "objectName" in obj && "object" in obj

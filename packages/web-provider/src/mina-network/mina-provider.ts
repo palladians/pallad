@@ -1,69 +1,49 @@
+import type {
+  MinaProviderClient,
+  ProviderRequestParams,
+} from "@mina-js/providers"
+import type {
+  Nullifier,
+  SignedFields,
+  SignedMessage,
+  SignedTransaction,
+} from "@mina-js/utils"
 import { utf8ToBytes } from "@noble/hashes/utils"
 import type {
   ChainOperationArgs,
   ChainSignablePayload,
-  MinaSignablePayload,
 } from "@palladxyz/key-management"
-import {
-  type BorrowedTypes,
-  type Mina,
-  TransactionType,
-} from "@palladxyz/mina-core"
-import EventEmitter from "eventemitter3"
-import type { Validation } from "."
+import type { SearchQuery } from "@palladxyz/vault"
+import mitt from "mitt"
+import { P, match } from "ts-pattern"
 import { showUserPrompt } from "../utils/prompts"
-import { type VaultService, vaultService } from "../vault-service"
-import type { ConnectOps, RequestArguments } from "../web-provider-types"
-import { serializeField, serializeGroup, serializeTransaction } from "./utils"
-
-export type RpcMethod =
-  | "mina_sendTransaction"
-  | "mina_accounts"
-  | "mina_requestAccounts"
-  | "mina_getBalance"
-  | "mina_sign"
-  | "mina_signTransaction"
-  | "mina_createNullifier"
-  | "mina_getState"
-  | "mina_setState"
+import { createVaultService } from "../vault-service"
+import type { ConnectOps } from "../web-provider-types"
+import { serializeField, serializeGroup } from "./utils"
 
 export function getMinaChainId(chains: string[]) {
   return Number(chains[0]?.split(":")[1])
 }
 
-export class MinaProvider extends EventEmitter {
-  private static instance: MinaProvider
-  public accounts: string[] = []
-  public chainId: string | undefined = undefined
-  private _vault: VaultService
+const createProviderRpcError = (code: number, message: string) => {
+  const error = new Error(`${code} - ${message}`)
+  error.name = "ProviderRpcError"
+  return error
+}
 
-  private userPrompt: typeof showUserPrompt
+const verifyInitialized = async () => {
+  const { PalladApp } = await chrome.storage.local.get("PalladApp")
+  if (!PalladApp) return false
+  return !PalladApp.includes("UNINITIALIZED")
+}
 
-  constructor() {
-    super()
-    this._vault = vaultService
-    this.userPrompt = showUserPrompt
-  }
-
-  static async init() {
-    const provider = new MinaProvider()
-    await provider.initialize()
-    return provider
-  }
-
-  public static async getInstance() {
-    if (!MinaProvider.instance) {
-      MinaProvider.instance = await MinaProvider.init()
-    }
-    return MinaProvider.instance
-  }
-
-  private async initialize() {
-    this.chainId = await this._vault.getChainId()
-  }
-
-  async unlockWallet() {
-    const passphrase = await this.userPrompt({
+export const createMinaProvider = async (): Promise<
+  MinaProviderClient & { emit: (type: any, event: any) => void }
+> => {
+  const _emitter = mitt()
+  const _vault = createVaultService()
+  const unlockWallet = async () => {
+    const passphrase = await showUserPrompt<string>({
       inputType: "password",
       metadata: {
         title: "Unlock your wallet",
@@ -71,34 +51,33 @@ export class MinaProvider extends EventEmitter {
         rejectButtonLabel: "Cancel",
       },
     })
-    if (passphrase === null)
-      throw this.createProviderRpcError(4100, "Unauthorized")
-    await this._vault.unlockWallet(passphrase as string)
+    if (passphrase === null) throw createProviderRpcError(4100, "Unauthorized")
+    await _vault.unlockWallet(passphrase)
   }
-
-  async verifyInitialized() {
-    const { PalladApp } = await chrome.storage.local.get("PalladApp")
-    if (!PalladApp) return false
-    return !PalladApp.includes("UNINITIALIZED")
-  }
-
-  async checkAndUnlock() {
-    const locked = await this._vault.isLocked()
-    if (locked === true) {
-      await this.unlockWallet()
+  const connectOrigin = async (opts: ConnectOps) => {
+    try {
+      if (await _vault.getEnabled({ origin: opts.origin }))
+        throw createProviderRpcError(4100, "Already enabled.")
+      if (!opts.chains) {
+        const defaultChainId = await _vault.getChainId()
+        if (!defaultChainId) {
+          throw createProviderRpcError(4100, "Chain ID is undefined.")
+        }
+      }
+      await _vault.setEnabled({ origin: opts.origin })
+    } catch (error) {
+      console.error("Error during connection:", error)
     }
   }
-
-  private createProviderRpcError(code: number, message: string) {
-    const error = new Error(`${code} - ${message}`)
-    error.name = "ProviderRpcError"
-    return error
+  const checkAndUnlockWallet = async () => {
+    const locked = await _vault.isLocked()
+    if (locked === true) {
+      await unlockWallet()
+    }
   }
-  // TODO: add ConnectOps as an optional parameter
-  public async enable({ origin }: { origin: string }) {
-    // check if wallet is locked first
-    await this.checkAndUnlock()
-    const userConfirmed = await this.userPrompt({
+  const enableOrigin = async ({ origin }: { origin: string }) => {
+    await checkAndUnlockWallet()
+    const userConfirmed = await showUserPrompt<boolean>({
       inputType: "confirmation",
       metadata: {
         title: "Connection request.",
@@ -107,45 +86,12 @@ export class MinaProvider extends EventEmitter {
       emitConnected: true,
     })
     if (!userConfirmed) {
-      // should this emit an error event?
-      throw this.createProviderRpcError(4001, "User Rejected Request")
+      throw createProviderRpcError(4001, "User Rejected Request")
     }
-    await this.connect({ origin })
-    // TODO: perform 'mina_requestAccounts' method
-    return await this._vault.getAccounts()
+    await connectOrigin({ origin })
+    return _vault.getAccounts()
   }
-  public async connect(opts: ConnectOps) {
-    try {
-      // Step 1: Check if already connected.
-      if (await this._vault.getEnabled({ origin: opts.origin }))
-        throw this.createProviderRpcError(4100, "Already enabled.")
-      // Step 2: Attempt to connect to a chain.
-      if (!opts.chains) {
-        // Try to connect to the default chain -- this is actually the current chain the wallet is connected to not the default chain
-        const defaultChainId = await this._vault.getChainId()
-        if (!defaultChainId) {
-          throw this.createProviderRpcError(4100, "Chain ID is undefined.")
-        }
-        this.chainId = defaultChainId
-      } else if (opts.chains && opts.chains.length > 0) {
-        this.chainId = String(opts.chains[0])
-      } else {
-        throw this.createProviderRpcError(4901, "Chain Disconnected")
-      }
-      await this._vault.setEnabled({ origin: opts.origin })
-    } catch (error) {
-      // Handle any errors that occurred during connection.
-      console.error("Error during connection:", error)
-      // Additional error handling as needed
-    }
-  }
-  public requestAccounts() {
-    return this.accounts
-  }
-  public async isConnected({ origin }: { origin: string }) {
-    return await this._vault.getEnabled({ origin })
-  }
-  private async sign({
+  const signPayload = async <T>({
     signable,
     operationArgs,
     passphrase,
@@ -153,234 +99,241 @@ export class MinaProvider extends EventEmitter {
     signable: ChainSignablePayload
     operationArgs: ChainOperationArgs
     passphrase: string
-  }) {
+  }) => {
     try {
-      return await this._vault.sign(signable, operationArgs, () =>
+      return (await _vault.sign(signable, operationArgs, () =>
         utf8ToBytes(passphrase),
-      )
+      )) as T
     } catch (error) {
-      throw this.createProviderRpcError(4100, "Unauthorized")
+      throw createProviderRpcError(4100, "Unauthorized")
     }
   }
-  public async request<T = unknown>(args: RequestArguments): Promise<T> {
-    // Step 1: Check if request instantiator is in blocked list.
-    const { params } = args
-    const requestOrigin = params.origin
-    if (!requestOrigin) {
-      throw this.createProviderRpcError(4100, "Unauthorized")
-    }
-    if (await this._vault.isBlocked({ origin: requestOrigin })) {
-      throw this.createProviderRpcError(4100, "Unauthorized")
-    }
-    const initialized = await this.verifyInitialized()
-    if (!initialized) {
-      throw this.createProviderRpcError(4100, "Unauthorized")
-    }
-
-    const locked = await this._vault.isLocked()
-    const enabled = await this._vault.getEnabled({ origin: requestOrigin })
-    if ((locked || !enabled) && args.method === "mina_accounts") {
-      return [] as T
-    }
-
-    if (locked) await this.unlockWallet()
-    if (!enabled) await this.enable({ origin: requestOrigin })
-
-    switch (args.method) {
-      case "mina_accounts":
-      case "mina_requestAccounts":
-        return (await this._vault.getAccounts()) as unknown as T
-      case "mina_addChain": {
-        throw this.createProviderRpcError(4200, "Unsupported Method")
+  return {
+    on: _emitter.on,
+    removeListener: _emitter.off,
+    emit: _emitter.emit,
+    request: async (args) => {
+      const typedArgs: ProviderRequestParams = args
+      const { context } = typedArgs
+      const { origin } = context as Record<string, string>
+      if (!origin) {
+        throw createProviderRpcError(4100, "Unauthorized")
       }
-      case "mina_switchChain": {
-        throw this.createProviderRpcError(4200, "Unsupported Method")
+      if (await _vault.isBlocked({ origin })) {
+        throw createProviderRpcError(4100, "Unauthorized")
       }
-      case "mina_requestNetwork": {
-        {
-          const userConfirmed = await this.userPrompt({
+      const initialized = await verifyInitialized()
+      if (!initialized) {
+        throw createProviderRpcError(4100, "Unauthorized")
+      }
+      const locked = await _vault.isLocked()
+      const enabled = await _vault.getEnabled({ origin })
+      if ((locked || !enabled) && typedArgs.method === "mina_accounts") {
+        return []
+      }
+      if (locked) await unlockWallet()
+      if (!enabled) await enableOrigin({ origin })
+      return match(typedArgs)
+        .with(
+          { method: P.union("mina_accounts", "mina_requestAccounts") },
+          _vault.getAccounts,
+        )
+        .with({ method: "mina_getBalance" }, _vault.getBalance)
+        .with({ method: "mina_chainId" }, _vault.getChainId)
+        .with({ method: "mina_addChain" }, () =>
+          createProviderRpcError(4200, "Unsupported Method"),
+        )
+        .with({ method: "mina_switchChain" }, () =>
+          createProviderRpcError(4200, "Unsupported Method"),
+        )
+        .with({ method: "mina_chainInformation" }, async () => {
+          const userConfirmed = await showUserPrompt<boolean>({
             inputType: "confirmation",
             metadata: {
               title: "Request to current Mina network information.",
-              payload: JSON.stringify(params),
             },
           })
           if (!userConfirmed) {
-            throw this.createProviderRpcError(4001, "User Rejected Request")
+            throw createProviderRpcError(4001, "User Rejected Request")
           }
-          const requestNetworkResponse = await this._vault.requestNetwork()
-          return requestNetworkResponse as unknown as T
-        }
-      }
-      case "mina_sign":
-      case "mina_createNullifier":
-      case "mina_signFields":
-      case "mina_signTransaction": {
-        const passphrase = <string>await this.userPrompt({
-          inputType: "password",
-          metadata: {
-            title: "Signature request",
-            payload: JSON.stringify(params),
-          },
+          const requestNetworkResponse = await _vault.requestNetwork()
+          return requestNetworkResponse
         })
-        if (passphrase === null)
-          throw this.createProviderRpcError(4100, "Unauthorized.")
-        const operationArgs: ChainOperationArgs = {
-          operation: args.method,
-          network: "Mina",
-        }
-
-        if (args.method === "mina_signFields") {
-          const requestData = params as Validation.SignFieldsData
-          const signable = {
-            fields: requestData.fields.map((item: any) => {
-              // Convert to BigInt only if the item is a number
-              if (typeof item === "number") {
-                return BigInt(item)
-              }
-              // If it's not a number, return the item as is
-              return item
-            }),
-          } as MinaSignablePayload
-          const signedResponse = (await this.sign({
-            signable,
-            operationArgs,
-            passphrase,
-          })) as Mina.SignedFields
-          // serialise the response if mina_signFields
-          const serializedResponseData = signedResponse.data.map((item) => {
-            // Convert to BigInt only if the item is a number
-            if (typeof item === "bigint") {
-              return String(item)
+        .with(
+          { method: P.union("mina_sign", "mina_signTransaction") },
+          async (signatureRequest) => {
+            const passphrase = await showUserPrompt<string>({
+              inputType: "password",
+              metadata: {
+                title: "Signature request",
+                payload: JSON.stringify(signatureRequest.params),
+              },
+            })
+            if (passphrase === null)
+              throw createProviderRpcError(4100, "Unauthorized.")
+            const operationArgs: ChainOperationArgs = {
+              operation: args.method,
+              network: "Mina",
             }
-            // If it's not a number, return the item as is
-            return item
-          })
-          const seriliasedResponse = {
-            ...signedResponse,
-            data: serializedResponseData,
-          }
-          return seriliasedResponse as unknown as T
-        }
-        if (args.method === "mina_createNullifier") {
-          const requestData = params as Validation.CreateNullifierData
-          const signable = {
-            message: requestData.message.map((item) => {
-              // Convert to BigInt only if the item is a number
-              if (typeof item === "number") {
-                return BigInt(item)
-              }
-              // If it's not a number, return the item as is
-              return item
-            }),
-          } as MinaSignablePayload
-          const signedResponse = (await this.sign({
-            signable,
-            operationArgs,
-            passphrase,
-          })) as BorrowedTypes.Nullifier
-          // serialise the response if mina_createNullifier
-          const serializedResponseData = {
-            publicKey: serializeGroup(signedResponse.publicKey),
-            public: {
-              nullifier: serializeGroup(signedResponse.public.nullifier),
-              s: serializeField(signedResponse.public.s),
-            },
-            private: {
-              c: serializeField(signedResponse.private.c),
-              g_r: serializeGroup(signedResponse.private.g_r),
-              h_m_pk_r: serializeGroup(signedResponse.private.h_m_pk_r),
-            },
-          }
-
-          return serializedResponseData as unknown as T
-        }
-        if (args.method === "mina_signTransaction") {
-          const requestData = params as Validation.SignTransactionData
-          const signable = serializeTransaction({
-            ...requestData.transaction,
-            memo: requestData.transaction.memo ?? "",
-            validUntil: requestData.transaction.validUntil ?? 4294967295,
-            amount: requestData.transaction.amount ?? 0,
-            type: TransactionType.PAYMENT,
-          }) as MinaSignablePayload
-          return (await this.sign({
-            signable,
-            operationArgs,
-            passphrase,
-          })) as unknown as T
-        }
-        const requestData = params as Validation.SignMessageData
-        return (await this.sign({
-          signable: requestData,
-          operationArgs,
-          passphrase,
-        })) as unknown as T
-      }
-      case "mina_getBalance":
-        return (await this._vault.getBalance()) as unknown as T
-
-      case "mina_getState": {
-        const { query, props } = params as Validation.GetStateData
-        const credentials = await this._vault.getState(query as any, props)
-        const confirmation = await this.userPrompt({
-          inputType: "confirmation",
-          metadata: {
-            title: "Credential read request",
-            payload: JSON.stringify({ ...params, credentials }),
+            return match(signatureRequest)
+              .with({ method: "mina_signTransaction" }, ({ params }) => {
+                const payload = params?.[0]
+                if (!payload) {
+                  throw createProviderRpcError(4100, "Unauthorized.")
+                }
+                if ("transaction" in payload) {
+                  return signPayload<SignedTransaction>({
+                    signable: payload,
+                    operationArgs,
+                    passphrase,
+                  })
+                }
+                return signPayload<SignedTransaction>({
+                  signable: payload,
+                  operationArgs,
+                  passphrase,
+                })
+              })
+              .with({ method: "mina_sign" }, ({ params }) => {
+                const [message] = params as string[]
+                return signPayload<SignedMessage>({
+                  signable: { message: message as string },
+                  operationArgs,
+                  passphrase,
+                })
+              })
+              .exhaustive()
           },
-        })
-        if (!confirmation) {
-          throw this.createProviderRpcError(4001, "User Rejected Request")
-        }
-        return credentials as unknown as T
-      }
-
-      case "mina_setState": {
-        const confirmation = await this.userPrompt({
-          inputType: "confirmation",
-          metadata: {
-            title: "Credential write request",
-            payload: JSON.stringify(params),
+        )
+        .with(
+          { method: P.union("mina_createNullifier", "mina_signFields") },
+          async (signatureRequest) => {
+            const passphrase = await showUserPrompt<string>({
+              inputType: "password",
+              metadata: {
+                title: "Signature request",
+                payload: JSON.stringify(signatureRequest.params),
+              },
+            })
+            if (passphrase === null)
+              throw createProviderRpcError(4100, "Unauthorized.")
+            const operationArgs: ChainOperationArgs = {
+              operation: args.method,
+              network: "Mina",
+            }
+            return match(signatureRequest)
+              .with({ method: "mina_signFields" }, async ({ params }) => {
+                const [fields] = params
+                if (!fields || !fields.length) {
+                  throw createProviderRpcError(4100, "Unauthorized.")
+                }
+                const signedResponse = await signPayload<SignedFields>({
+                  signable: {
+                    fields: fields.map((item: any) => BigInt(item)),
+                  },
+                  operationArgs,
+                  passphrase,
+                })
+                const serializedResponseData = signedResponse.data.map(
+                  (item) => {
+                    if (typeof item === "bigint") {
+                      return String(item)
+                    }
+                    return item
+                  },
+                )
+                const seriliasedResponse = {
+                  ...signedResponse,
+                  data: serializedResponseData,
+                }
+                return seriliasedResponse
+              })
+              .with({ method: "mina_createNullifier" }, async ({ params }) => {
+                const [message] = params
+                if (!message || !message.length) {
+                  throw createProviderRpcError(4100, "Unauthorized.")
+                }
+                const signedResponse = await signPayload<Nullifier>({
+                  signable: {
+                    message: message.map((item: any) => BigInt(item)),
+                  },
+                  operationArgs,
+                  passphrase,
+                })
+                // serialise the response if mina_createNullifier
+                const serializedResponseData = {
+                  publicKey: serializeGroup(signedResponse.publicKey),
+                  public: {
+                    nullifier: serializeGroup(signedResponse.public.nullifier),
+                    s: serializeField(signedResponse.public.s),
+                  },
+                  private: {
+                    c: serializeField(signedResponse.private.c),
+                    g_r: serializeGroup(signedResponse.private.g_r),
+                    h_m_pk_r: serializeGroup(signedResponse.private.h_m_pk_r),
+                  },
+                }
+                return serializedResponseData
+              })
+              .exhaustive()
           },
-        })
-        if (!confirmation) {
-          throw this.createProviderRpcError(4001, "User Rejected Request")
-        }
-        const requestData = params as Validation.SetStateData
-        await this._vault.setState(requestData as any)
-        return { success: true } as unknown as T
-      }
-
-      case "mina_chainId": {
-        return (await this._vault.getChainId()) as unknown as T
-      }
-
-      case "mina_sendTransaction": {
-        const requestData = params as Validation.SendTransactionData
-        const passphrase = await this.userPrompt({
-          inputType: "password",
-          metadata: {
-            title: "Send transaction request",
-            payload: JSON.stringify(params),
-          },
-        })
-        if (passphrase === null)
-          throw this.createProviderRpcError(4100, "Unauthorized.")
-        try {
-          return (await this._vault.submitTransaction(
-            requestData,
-          )) as unknown as T
-        } catch (error: any) {
-          throw this.createProviderRpcError(
-            4100,
-            "Unauthorized. Coudldn't broadscast transaction. Make sure nonce is correct.",
+        )
+        .with({ method: "mina_getState" }, async ({ params }) => {
+          const [query, props] = params
+          const credentials = await _vault.getState(
+            query as SearchQuery,
+            props as string[],
           )
-        }
-      }
-
-      default:
-        throw this.createProviderRpcError(4200, "Unsupported Method")
-    }
+          const confirmation = await showUserPrompt<boolean>({
+            inputType: "confirmation",
+            metadata: {
+              title: "Credential read request",
+              payload: JSON.stringify({ ...params, credentials }),
+            },
+          })
+          if (!confirmation) {
+            throw createProviderRpcError(4001, "User Rejected Request")
+          }
+          return credentials
+        })
+        .with({ method: "mina_setState" }, async ({ params }) => {
+          const payload = params?.[0]
+          if (!payload) throw createProviderRpcError(4000, "Invalid Request")
+          const confirmation = await showUserPrompt<boolean>({
+            inputType: "confirmation",
+            metadata: {
+              title: "Credential write request",
+              payload: JSON.stringify(payload),
+            },
+          })
+          if (!confirmation) {
+            throw createProviderRpcError(4001, "User Rejected Request")
+          }
+          await _vault.setState(payload)
+          return { success: true }
+        })
+        .with({ method: "mina_sendTransaction" }, async ({ params }) => {
+          const [payload] = params
+          if (!payload) throw createProviderRpcError(4000, "Invalid Request")
+          const passphrase = await showUserPrompt<string>({
+            inputType: "password",
+            metadata: {
+              title: "Send transaction request",
+              payload: JSON.stringify(payload),
+            },
+          })
+          if (passphrase === null)
+            throw createProviderRpcError(4100, "Unauthorized.")
+          try {
+            return _vault.submitTransaction(payload)
+          } catch (error: any) {
+            throw createProviderRpcError(
+              4100,
+              "Unauthorized. Coudldn't broadscast transaction. Make sure nonce is correct.",
+            )
+          }
+        })
+        .exhaustive() as any
+    },
   }
 }

@@ -7,31 +7,31 @@ const jsonSchema: z.ZodType<Json> = z.lazy(() =>
   z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]),
 )
 
-export const originSchema = z.string().url()
+export const OriginSchema = z.string().url()
 
-export type Origin = z.infer<typeof originSchema>
+export type Origin = z.infer<typeof OriginSchema>
 
-export const requestSchema = z
+export const RequestSchema = z
   .object({
-    origin: originSchema,
+    origin: OriginSchema,
   })
   .strict()
 
-export type RequestData = z.infer<typeof requestSchema>
+export type RequestData = z.infer<typeof RequestSchema>
 
-export const signFieldsRequestSchema = requestSchema.extend({
+export const signFieldsRequestSchema = RequestSchema.extend({
   fields: z.array(z.coerce.number()),
 })
 
 export type SignFieldsData = z.infer<typeof signFieldsRequestSchema>
 
-export const signMessageRequestSchema = requestSchema.extend({
+export const signMessageRequestSchema = RequestSchema.extend({
   message: z.string(),
 })
 
 export type SignMessageData = z.infer<typeof signMessageRequestSchema>
 
-export const createNullifierRequestSchema = requestSchema.extend({
+export const createNullifierRequestSchema = RequestSchema.extend({
   message: z.array(z.coerce.number()),
 })
 
@@ -64,27 +64,27 @@ export const signedTransactionSchema = z.object({
   signature: signatureSchema,
 })
 
-export const signTransactionRequestSchema = requestSchema.extend({
+export const signTransactionRequestSchema = RequestSchema.extend({
   transaction: transactionSchema.strict(),
 })
 
 export type SignTransactionData = z.infer<typeof signTransactionRequestSchema>
 
-export const sendTransactionRequestSchema = requestSchema.extend({
+export const sendTransactionRequestSchema = RequestSchema.extend({
   signedTransaction: signedTransactionSchema.strict(),
   transactionType: z.enum(["payment", "delegation", "zkapp"]),
 })
 
 export type SendTransactionData = z.infer<typeof sendTransactionRequestSchema>
 
-export const setStateRequestSchema = requestSchema.extend({
+export const setStateRequestSchema = RequestSchema.extend({
   objectName: z.string(),
   object: jsonSchema,
 })
 
 export type SetStateData = z.infer<typeof setStateRequestSchema>
 
-export const getStateRequestSchema = requestSchema.extend({
+export const getStateRequestSchema = RequestSchema.extend({
   query: jsonSchema,
   props: z.array(z.string()),
 })
