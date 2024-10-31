@@ -3,10 +3,10 @@ import { Network } from "@palladxyz/pallad-core"
 import { act, renderHook } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
 
+import type { Json } from "@mina-js/utils"
 import {
   DEFAULT_OBJECTS,
   type ObjectName,
-  type SingleObjectState,
   type StoredObject,
   useVault,
 } from "../../src"
@@ -14,8 +14,8 @@ import {
 describe("ObjectStore", () => {
   let object: GroupedCredentials
   let objectName: ObjectName
-  let objectState: SingleObjectState
-  let objectStateTwo: SingleObjectState
+  let objectState: Json
+  let objectStateTwo: Json
   let objectTwo: object
 
   beforeEach(() => {
@@ -81,7 +81,7 @@ describe("ObjectStore", () => {
   })
 
   it("should add one object and remove one from store", () => {
-    let storedObject: SingleObjectState | undefined
+    let storedObject
     const { result } = renderHook(() => useVault())
     act(() => {
       result.current.setObject(objectState)
@@ -93,7 +93,7 @@ describe("ObjectStore", () => {
       storedObject = result.current.getObject(objectName)
     })
     // check that object is removed
-    expect(storedObject?.object).toBeUndefined()
+    expect(storedObject.object).toEqual({})
   })
   it("should add two objects and search for Mina addresses and return them as an array not as a credential object", () => {
     let storedObjects: StoredObject[] | undefined

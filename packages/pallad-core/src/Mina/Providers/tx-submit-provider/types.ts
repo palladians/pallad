@@ -7,15 +7,6 @@ export type SubmitTxArgs = {
     | BorrowedTypes.SignedLegacy<BorrowedTypes.Payment>
     | BorrowedTypes.SignedLegacy<BorrowedTypes.StakeDelegation>
   type: Mina.TransactionType
-  transactionDetails: {
-    fee: Mina.TransactionBody["fee"]
-    to: Mina.TransactionBody["to"]
-    from: Mina.TransactionBody["from"]
-    nonce: Mina.TransactionBody["nonce"]
-    memo: Mina.TransactionBody["memo"]
-    validUntil: Mina.TransactionBody["validUntil"]
-    amount: Mina.TransactionBody["amount"]
-  }
 }
 
 interface TxResult {

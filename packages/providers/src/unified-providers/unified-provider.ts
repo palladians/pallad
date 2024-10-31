@@ -2,7 +2,6 @@ import type {
   AccountInfo,
   AccountInfoArgs,
   HealthCheckResponse,
-  SubmitTxArgs,
   TransactionsByAddressesArgs,
   Tx,
   UnifiedChainProviderType,
@@ -11,7 +10,6 @@ import type {
 import { createAccountInfoProvider } from "./account-info-provider"
 import { createChainHistoryProvider } from "./chain-history-provider"
 import { createNodeStatusProvider } from "./node-status-provider"
-import { createTxSubmitProvider } from "./tx-submit-provider"
 import type { ProviderConfig } from "./types"
 
 export const createChainProvider = (
@@ -27,10 +25,6 @@ export const createChainProvider = (
     return (await createChainHistoryProvider(config).transactionsByAddresses(
       args,
     )) as Tx[]
-  }
-
-  const submitTransaction = async (args: SubmitTxArgs) => {
-    return await createTxSubmitProvider(config).submitTx(args)
   }
 
   const getNodeStatus = async () => {
@@ -67,7 +61,6 @@ export const createChainProvider = (
   return {
     getAccountInfo,
     getTransactions,
-    submitTransaction,
     getNodeStatus,
     healthCheck,
   }

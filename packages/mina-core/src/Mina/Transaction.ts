@@ -43,15 +43,6 @@ export type KeyPair = {
  */
 export type NetworkType = "mainnet" | "testnet"
 
-export type ConstructedTransaction =
-  | (BorrowedTypes.Payment & { type: TransactionType.PAYMENT })
-  | (BorrowedTypes.StakeDelegation & {
-      type: TransactionType.STAKE_DELEGATION
-    })
-
-export type SignedTransaction =
-  BorrowedTypes.SignedLegacy<ConstructedTransaction>
-
 /**
  * transaction hash as base64 string
  */

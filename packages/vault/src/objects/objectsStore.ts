@@ -11,16 +11,16 @@ export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
     set(
       produce((draft) => {
         draft.objects[objectName] = draft.objects[objectName] || {
-          ...initialObjectState,
+          ...(initialObjectState as object),
           objectName,
         }
       }),
     )
   },
-  setObject: (objectState) => {
+  setObject: (objectState: any) => {
     const { objectName } = objectState
     set((current) =>
-      produce(current, (draft) => {
+      produce(current, (draft: any) => {
         draft.objects[objectName] = {
           ...draft.objects[objectName],
           ...objectState,
@@ -43,7 +43,7 @@ export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
     // TODO: improve
     const { objects } = get()
     const objectsStatesArray = Object.values(objects)
-    const objectsArray = objectsStatesArray.map((obj) => obj.object)
+    const objectsArray = objectsStatesArray.map((obj: any) => obj?.object)
     const filteredObjects = objectsArray.filter((object) => {
       if (!object) {
         return false

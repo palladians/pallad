@@ -1,5 +1,4 @@
-import { Mina } from "@palladxyz/mina-core"
-import { constructTransaction } from "@palladxyz/pallad-core"
+import type { Mina } from "@palladxyz/mina-core"
 import { test } from "vitest"
 
 import {
@@ -10,28 +9,6 @@ import {
 } from "../../src/chains/Mina/guards"
 
 describe("Guard functions tests", () => {
-  test("isConstructedTransaction", () => {
-    const transaction: Mina.TransactionBody = {
-      to: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
-      from: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
-      fee: 1,
-      amount: 100,
-      nonce: 0,
-      memo: "hello Bob",
-      validUntil: 321,
-      type: "payment",
-    }
-    const validPayload: Mina.ConstructedTransaction = constructTransaction(
-      transaction,
-      Mina.TransactionType.PAYMENT,
-    )
-
-    const invalidPayload = { message: "invalid_payload" }
-
-    expect(isConstructedTransaction(validPayload)).toBeTruthy()
-    expect(isConstructedTransaction(invalidPayload)).not.toBeTruthy()
-  })
-
   test("isMessageBody", () => {
     const validPayload: Mina.MessageBody = {
       message: "anyMessage",

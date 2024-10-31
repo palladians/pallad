@@ -25,19 +25,19 @@ const inject = () => {
     try {
       const result: any = await sendMessage(
         data.method,
-        { ...data.payload, origin },
+        { params: data.params, context: { origin } },
         "background",
       )
       if (result?.error) {
-        response = { jsonrpc: "1.0", error: deserializeError(result.error) }
+        response = { jsonrpc: "2.0", error: deserializeError(result.error) }
       } else {
-        response = { jsonrpc: "1.0", result }
+        response = { jsonrpc: "2.0", result }
       }
       return responseChannel.postMessage({
         response,
       })
     } catch (error) {
-      response = { jsonrpc: "1.0", error }
+      response = { jsonrpc: "2.0", error }
       return responseChannel.postMessage({
         response,
       })

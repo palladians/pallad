@@ -12,10 +12,10 @@ import type {
   PalladNetworkNames,
   SubmitTxArgs,
   Tx,
-  constructTxArgs,
 } from "@palladxyz/pallad-core"
 import type { ProviderConfig } from "@palladxyz/providers"
 
+import type { TransactionBody } from "@mina-js/utils"
 import type {
   CredentialName,
   SingleCredentialState,
@@ -80,8 +80,8 @@ export type GlobalVaultActions = {
     args: ChainOperationArgs,
     getPassphrase: GetPassphrase,
   ) => Promise<unknown>
-  constructTx: (args: constructTxArgs) => unknown
-  submitTx: (submitTxArgs: SubmitTxArgs) => Promise<unknown>
+  constructTx: (args: { transaction: any }) => TransactionBody
+  submitTx: (submitTxArgs: SubmitTxArgs) => Promise<string>
   createWallet: (strength?: number) => CreateWalletReturn
   restoreWallet: (
     args: ChainDerivationArgs,

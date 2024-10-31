@@ -80,7 +80,6 @@
     "webextension-polyfill": "0.12.0",
     "xss": "1.0.15",
     "yaml": "2.5.0",
-    "zod": "3.23.8",
     "zustand": "4.5.4"
   },
   "devDependencies": {
@@ -106,7 +105,8 @@
     "vite": "5.3.5",
     "vite-plugin-node-polyfills": "0.17.0",
     "vite-plugin-svgr": "4.2.0",
-    "vite-plugin-top-level-await": "1.4.2"
+    "vite-plugin-top-level-await": "1.4.2",
+    "zod": "3.23.8"
   },
   "peerDependencies": {
     "@types/mocha": "10.0.1",
