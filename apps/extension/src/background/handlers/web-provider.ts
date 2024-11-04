@@ -202,6 +202,6 @@ export const minaStorePrivateCredential: Handler = async ({ data }) => {
     })
     return await provider.request(payload)
   } catch (error: unknown) {
-    return { error: serializeError(error)}
+    return { error: serializeError(error) }
   }
 }
