@@ -101,10 +101,21 @@ export const createVaultService = (): IVaultService => {
       const store = useVault.getState()
       store.setObject(state)
     },
-    storePrivateCredential: async (state) => {
+    storePrivateCredential: async (credential) => {
       await rehydrate()
       const store = useVault.getState()
-      store.setObject(state)
+      store.setObject({
+        type: "private-credential",
+        credential,
+      })
+    },
+    getPrivateCredential: async (query?) => {
+      await rehydrate()
+      const store = useVault.getState()
+      return await store.searchObjects({
+        type: "private-credential",
+        ...query,
+      })
     },
     getEnabled: async ({ origin }) => {
       const { permissions } = await chrome.storage.local.get({

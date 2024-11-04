@@ -20,6 +20,7 @@ export interface IVaultService {
   getChainIds(): Promise<string[]>
   setState(state: Json): Promise<void>
   storePrivateCredential(state: Json): Promise<void>
+  getPrivateCredential(query?: SearchQuery): Promise<StoredObject[]>
   getEnabled({ origin }: { origin: string }): Promise<boolean>
   setEnabled({ origin }: { origin: string }): Promise<void>
   switchNetwork(network: string): Promise<void>
