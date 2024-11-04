@@ -43,7 +43,7 @@
     "@palladxyz/pallad-core": "workspace:*",
     "@palladxyz/vault": "workspace:*",
     "@total-typescript/ts-reset": "0.5.1",
-    "@zxcvbn-ts/core": "^3.0.4",
+    "@zxcvbn-ts/core": "3.0.4",
     "array-shuffle": "3.0.0",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",

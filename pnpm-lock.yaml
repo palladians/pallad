@@ -12,8 +12,8 @@ importers:
         specifier: 1.8.3
         version: 1.8.3
       '@mina-js/utils':
-        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@7fe60e8
-        version: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@7fe60e8(typescript@5.5.4)
+        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@fdb1786
+        version: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@fdb1786(typescript@5.5.4)
       '@testing-library/react':
         specifier: 16.0.0
         version: 16.0.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -69,8 +69,8 @@ importers:
   apps/extension:
     dependencies:
       '@mina-js/providers':
-        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@7fe60e8
-        version: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@7fe60e8(typescript@5.5.4)
+        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@fdb1786
+        version: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@fdb1786(typescript@5.5.4)
       '@palladxyz/common':
         specifier: workspace:*
         version: link:../../packages/common
@@ -255,7 +255,7 @@ importers:
         specifier: 0.5.1
         version: 0.5.1
       '@zxcvbn-ts/core':
-        specifier: ^3.0.4
+        specifier: 3.0.4
         version: 3.0.4
       array-shuffle:
         specifier: 3.0.0
@@ -655,8 +655,8 @@ importers:
   packages/vault:
     dependencies:
       '@mina-js/klesia-sdk':
-        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@7fe60e8
-        version: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@7fe60e8(typescript@5.5.4)
+        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@fdb1786
+        version: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@fdb1786(typescript@5.5.4)
       '@noble/hashes':
         specifier: 1.4.0
         version: 1.4.0
@@ -731,11 +731,11 @@ importers:
   packages/web-provider:
     dependencies:
       '@mina-js/klesia-sdk':
-        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@7fe60e8
-        version: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@7fe60e8(typescript@5.5.4)
+        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@fdb1786
+        version: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@fdb1786(typescript@5.5.4)
       '@mina-js/providers':
-        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@7fe60e8
-        version: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@7fe60e8(typescript@5.5.4)
+        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@fdb1786
+        version: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@fdb1786(typescript@5.5.4)
       '@noble/hashes':
         specifier: 1.4.0
         version: 1.4.0
@@ -755,7 +755,7 @@ importers:
         specifier: 1.11.12
         version: 1.11.12
       eventemitter3:
-        specifier: ^5.0.1
+        specifier: 5.0.1
         version: 5.0.1
       mina-signer:
         specifier: 3.0.7
@@ -2008,20 +2008,20 @@ packages:
       '@types/react': '>=16'
       react: '>=16'
 
-  '@mina-js/klesia-sdk@https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@7fe60e8':
-    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@7fe60e8}
+  '@mina-js/klesia-sdk@https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@fdb1786':
+    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@fdb1786}
     version: 0.0.1
     peerDependencies:
       typescript: ^5.0.0
 
-  '@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@7fe60e8':
-    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@7fe60e8}
+  '@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@fdb1786':
+    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@fdb1786}
     version: 0.0.1
     peerDependencies:
       typescript: ^5.0.0
 
-  '@mina-js/utils@https://pkg.pr.new/palladians/mina-js/@mina-js/utils@7fe60e8':
-    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@7fe60e8}
+  '@mina-js/utils@https://pkg.pr.new/palladians/mina-js/@mina-js/utils@fdb1786':
+    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@fdb1786}
     version: 0.0.1
     peerDependencies:
       typescript: ^5.0.0
@@ -4727,10 +4727,6 @@ packages:
   hmac-drbg@1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
 
-  hono@4.6.8:
-    resolution: {integrity: sha512-f+2Ec9JAzabT61pglDiLJcF/DjiSefZkjCn9bzm1cYLGkD5ExJ3Jnv93ax9h0bn7UPLHF81KktoyjdQfWI2n1Q==}
-    engines: {node: '>=16.9.0'}
-
   html-encoding-sniffer@4.0.0:
     resolution: {integrity: sha512-Y22oTqIU4uuPgEemfz7NDJz6OeKf12Lsu+QC+s3BVpda64lTiMYCyGwg5ki4vFxkMwQdeZDl2adZoqUgdFuTgQ==}
     engines: {node: '>=18'}
@@ -5477,6 +5473,9 @@ packages:
 
   micro-eth-signer@0.10.0:
     resolution: {integrity: sha512-o02bX24EWdJ77h2X4yeon2FJ81JfJk0V80ZjibW3KwOSiv5FxmJv301hbK6pfE+hq9yiYdrJ9SVCsw9DZU/N3g==}
+
+  micro-ftch@0.4.0:
+    resolution: {integrity: sha512-1SEH+syTsMQMQByZGJeMAiBxJIRu/3gG1z1+tHexgtXtXgwQy1C5JVBtXRdMZOIx9flerUBCJtmtVl7szwWgxQ==}
 
   micro-packed@0.6.3:
     resolution: {integrity: sha512-VmVkyc7lIzAq/XCPFuLc/CwQ7Ehs5XDK3IwqsZHiBIDttAI9Gs7go6Lv4lNRuAIKrGKcRTtthFKUNyHS0S4wJQ==}
@@ -9155,23 +9154,20 @@ snapshots:
       '@types/react': 18.3.3
       react: 18.3.1
 
-  '@mina-js/klesia-sdk@https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@7fe60e8(typescript@5.5.4)':
+  '@mina-js/klesia-sdk@https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@fdb1786(typescript@5.5.4)':
     dependencies:
-      hono: 4.6.8
+      micro-ftch: 0.4.0
       ts-pattern: 5.5.0
       typescript: 5.5.4
 
-  '@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@7fe60e8(typescript@5.5.4)':
+  '@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@fdb1786(typescript@5.5.4)':
     dependencies:
-      '@mina-js/utils': https://pkg.pr.new/palladians/mina-js/@mina-js/utils@7fe60e8(typescript@5.5.4)
       typescript: 5.5.4
-      zod: 3.23.8
 
-  '@mina-js/utils@https://pkg.pr.new/palladians/mina-js/@mina-js/utils@7fe60e8(typescript@5.5.4)':
+  '@mina-js/utils@https://pkg.pr.new/palladians/mina-js/@mina-js/utils@fdb1786(typescript@5.5.4)':
     dependencies:
       mina-signer: 3.0.7
       typescript: 5.5.4
-      zod: 3.23.8
 
   '@molt/command@0.9.0':
     dependencies:
@@ -12154,8 +12150,6 @@ snapshots:
       minimalistic-assert: 1.0.1
       minimalistic-crypto-utils: 1.0.1
 
-  hono@4.6.8: {}
-
   html-encoding-sniffer@4.0.0:
     dependencies:
       whatwg-encoding: 3.1.1
@@ -13002,6 +12996,8 @@ snapshots:
       '@noble/curves': 1.4.2
       '@noble/hashes': 1.4.0
       micro-packed: 0.6.3
+
+  micro-ftch@0.4.0: {}
 
   micro-packed@0.6.3:
     dependencies:

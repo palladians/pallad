@@ -21,7 +21,7 @@ export const createVaultService = (): IVaultService => {
   const { currentNetworkName } = useVault.getState()
   const network = currentNetworkName === "Mainnet" ? "mainnet" : "devnet"
   const networkType = currentNetworkName === "Mainnet" ? "mainnet" : "testnet"
-  const client = createClient({ network })
+  const klesia = createClient({ network })
   const signer = new Client({ network: networkType })
   const getAccounts = async () => {
     await rehydrate()
@@ -43,11 +43,11 @@ export const createVaultService = (): IVaultService => {
     const store = useVault.getState()
     await store._syncWallet()
   }
-  const getTxType = (signedTransaction: SignedTransaction) => {
-    if ("feePayer" in signedTransaction.data) {
+  const getTxType = (txData: SignedTransaction["data"]) => {
+    if ("feePayer" in txData) {
       return "zkapp"
     }
-    if (signedTransaction.data.amount) {
+    if (txData.amount) {
       return "payment"
     }
     return "delegation"
@@ -67,19 +67,23 @@ export const createVaultService = (): IVaultService => {
       }
       return store.sign(signable, networkAwareArgs, getPassphrase)
     },
-    submitTransaction: async (payload) => {
+    submitTransaction: async (sendable) => {
       await rehydrate()
       const { addPendingTransaction } = usePendingTransactionStore.getState()
       const { _syncWallet } = useVault.getState()
       const accounts = await getAccounts()
       const publicKey = accounts?.[0]
       if (!publicKey) throw new Error("Wallet is not initialized.")
-      const validTransaction = signer.verifyTransaction(payload as never)
+      const validTransaction = signer.verifyTransaction(sendable.input as never)
       if (!validTransaction) throw new Error("Invalid transaction.")
-      const type = getTxType(payload)
-      const { result } = await client.request<"mina_sendTransaction">({
+      const type = getTxType(sendable.input as never)
+      const payload =
+        type === "zkapp"
+          ? { input: sendable.input }
+          : { input: sendable.input, signature: (sendable as any).signature }
+      const result = await klesia.request<"mina_sendTransaction">({
         method: "mina_sendTransaction",
-        params: [{ input: payload.data, signature: payload.signature }, type],
+        params: [payload as never, type],
       })
       addPendingTransaction({
         hash: result,

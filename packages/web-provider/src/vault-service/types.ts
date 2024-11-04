@@ -4,7 +4,7 @@ import type {
   GetPassphrase,
 } from "@palladxyz/key-management"
 
-import type { Json, SignedTransaction } from "@mina-js/utils"
+import type { Json, Sendable } from "@mina-js/utils"
 import type { ProviderConfig } from "@palladxyz/providers"
 import type { SearchQuery, StoredObject } from "@palladxyz/vault"
 
@@ -23,9 +23,7 @@ export interface IVaultService {
   setEnabled({ origin }: { origin: string }): Promise<void>
   switchNetwork(network: string): Promise<void>
   isLocked(): Promise<boolean>
-  submitTransaction(
-    signedTransaction: SignedTransaction,
-  ): Promise<{ hash: string }>
+  submitTransaction(sendable: Sendable): Promise<{ hash: string }>
   getState(params: SearchQuery, props?: string[]): Promise<StoredObject[]>
   isBlocked({ origin }: { origin: string }): Promise<boolean>
   addChain(

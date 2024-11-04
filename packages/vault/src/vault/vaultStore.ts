@@ -132,11 +132,11 @@ export const useVault = create<
         const networkName =
           currentNetworkName === "Mainnet" ? "mainnet" : "devnet"
         const klesia = createClient({ network: networkName })
-        const { result } = await klesia.request<"mina_sendTransaction">({
+        const result = await klesia.request<"mina_sendTransaction">({
           method: "mina_sendTransaction",
           params: [
             {
-              input: signedTransaction.data,
+              input: signedTransaction.data as never,
               signature: signedTransaction.signature,
             },
             type as "payment" | "delegation",
