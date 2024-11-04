@@ -19,6 +19,7 @@ export interface IVaultService {
   getChainId(): Promise<string | undefined>
   getChainIds(): Promise<string[]>
   setState(state: Json): Promise<void>
+  storePrivateCredential(state: Json): Promise<void>
   getEnabled({ origin }: { origin: string }): Promise<boolean>
   setEnabled({ origin }: { origin: string }): Promise<void>
   switchNetwork(network: string): Promise<void>

@@ -11,6 +11,7 @@ import {
   SignFieldsRequestParamsSchema,
   SignRequestParamsSchema,
   SignTransactionRequestParamsSchema,
+  StorePrivateCredentialRequestParamsSchema,
 } from "@mina-js/providers"
 import { serializeError } from "serialize-error"
 import { z } from "zod"
@@ -187,5 +188,20 @@ export const minaSendTransaction: Handler = async ({ data }) => {
     return await provider.request(payload)
   } catch (error: unknown) {
     return { error: serializeError(error) }
+  }
+}
+
+export const minaStorePrivateCredential: Handler = async ({ data }) => {
+  try {
+    const provider = await createMinaProvider()
+    const payload = StorePrivateCredentialRequestParamsSchema.parse({
+      method: "mina_storePrivateCredential",
+      // TODO: might have to add parsing
+      params: data.params,
+      context: data.context,
+    })
+    return await provider.request(payload)
+  } catch (error: unknown) {
+    return { error: serializeError(error)}
   }
 }

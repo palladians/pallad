@@ -20,6 +20,7 @@ import { showUserPrompt } from "../utils/prompts"
 import { createVaultService } from "../vault-service"
 import type { ConnectOps } from "../web-provider-types"
 import { serializeField, serializeGroup } from "./utils"
+import { Credential } from 'mina-credentials'
 
 export function getMinaChainId(chains: string[]) {
   return Number(chains[0]?.split(":")[1])
@@ -311,6 +312,37 @@ export const createMinaProvider = async (): Promise<
           }
           await _vault.setState(payload)
           return { success: true }
+        })
+        .with({ method: "mina_storePrivateCredential" }, async ({ params }) => {
+          const [credential] = params
+          if (!credential) throw createProviderRpcError(4000, "Invalid Request")
+        
+          const confirmation = await showUserPrompt<boolean>({
+            inputType: "confirmation",
+            metadata: {
+              title: "Store private credential request",
+              payload: JSON.stringify(credential),
+            },
+          })
+        
+          if (!confirmation) {
+            throw createProviderRpcError(4001, "User Rejected Request")
+          }
+
+          try {
+            // TODO: change serialization
+            const credentialDeserialized = Credential.fromJSON(JSON.stringify(credential))
+            Credential.validate(credentialDeserialized)
+          } catch (error: any) {
+            // TODO: add error
+          }
+        
+          try {
+            await _vault.storePrivateCredential(credential)
+            return { success: true }
+          } catch (error: any) {
+            throw createProviderRpcError(4100, "Failed to store private credential")
+          }
         })
         .with({ method: "mina_sendTransaction" }, async ({ params }) => {
           const [payload] = params

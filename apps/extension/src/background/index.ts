@@ -15,6 +15,7 @@ import {
   minaSign,
   minaSignFields,
   minaSignTransaction,
+  minaStorePrivateCredential,
   minaSwitchChain,
   palladConnected,
   palladSidePanel,
@@ -40,6 +41,7 @@ onMessage("mina_signTransaction", minaSignTransaction)
 onMessage("mina_getBalance", minaGetBalance)
 onMessage("mina_createNullifier", minaCreateNullifier)
 onMessage("mina_sendTransaction", minaSendTransaction)
+onMessage("mina_storePrivateCredential", minaStorePrivateCredential)
 
 /**
  * Wallet handlers
