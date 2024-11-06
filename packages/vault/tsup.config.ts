@@ -8,8 +8,8 @@ export default defineConfig([
     ...baseTsupConfig,
     name: packageJson.name,
     env: {
-      VITE_APP_DEFAULT_NETWORK:
-        process.env.VITE_APP_DEFAULT_NETWORK ?? "Mainnet",
+      VITE_APP_DEFAULT_NETWORK_ID:
+        process.env.VITE_APP_DEFAULT_NETWORK_ID ?? "mina:mainnet",
     },
   },
 ])

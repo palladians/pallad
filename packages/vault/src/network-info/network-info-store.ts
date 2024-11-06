@@ -6,7 +6,7 @@ import type { NetworkInfoStore } from "./network-info-state"
 
 export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
   networkInfoV2: DEFAULT_NETWORK_INFO,
-  currentNetworkId: "mina:mainnet",
+  currentNetworkId: process.env.VITE_APP_DEFAULT_NETWORK_ID ?? "mina:mainnet",
   setCurrentNetworkId: (networkId) => {
     return set({ currentNetworkId: networkId })
   },
