@@ -25,11 +25,11 @@ export const TransactionResult = ({
 }: TransactionResultProps) => {
   return (
     <AppLayout>
-      <MenuBar variant="stop" />
+      <MenuBar variant="stop" onCloseClicked={button.onClick} />
       <div className="flex flex-col flex-1 items-center text-center">
         <h1 className="text-3xl max-w-80">{title}</h1>
         <div className="flex flex-col flex-1 justify-center items-center w-full p-8 gap-2">
-          <label className="label text-lg">{result.label}</label>
+          <p className="label text-lg">{result.label}</p>
           <div className="card bg-secondary w-full py-6 px-4 text-sm break-all">
             {result.content}
           </div>

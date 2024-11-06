@@ -1,11 +1,10 @@
 export type ProviderConfig = {
   nodeEndpoint: {
-    providerName: "mina-node" | "evm-rpc"
+    providerName: "mina-node"
     url: string
   }
   archiveNodeEndpoint: {
-    // TODO: remove "mina-node"
-    providerName: "mina-node" | "mina-scan" | "zeko-scan" | "evm-explorer"
+    providerName: "mina-scan" | "zeko-scan"
     url: string
   }
   explorer: {
@@ -15,5 +14,5 @@ export type ProviderConfig = {
   }
   networkName: string
   networkType: "testnet" | "mainnet"
-  chainId: string
+  networkId: string
 }

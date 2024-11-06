@@ -5,7 +5,7 @@ export type TokenInfo = {
 }
 
 export type TokenInfoState = {
-  tokenInfo: Record<string, Record<string, string>> // e.g. {'Mina - Devnet' : { MINA : "1" }}
+  tokenInfoV2: Record<string, Record<string, string>> // e.g. {'Mina - Devnet' : { MINA : "1" }}
 }
 
 /**
@@ -13,10 +13,10 @@ export type TokenInfoState = {
  * @typedef {Object} TokenInfoStore
  */
 export type TokenInfoActions = {
-  setTokenInfo: (networkName: string, tokenInfo: TokenInfo) => void
-  getTokenInfo: (networkName: string, ticker: string) => TokenInfo | undefined
-  getTokensInfo: (networkName: string) => Record<string, string>
-  removeTokenInfo: (networkName: string, ticker: string) => void
+  setTokenInfo: (networkId: string, tokenInfo: TokenInfo) => void
+  getTokenInfo: (networkId: string, ticker: string) => TokenInfo | undefined
+  getTokensInfo: (networkId: string) => Record<string, string>
+  removeTokenInfo: (networkId: string, ticker: string) => void
   clear: () => void
 }
 

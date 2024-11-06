@@ -18,36 +18,40 @@ export const initialSingleAccountState: SingleAccountState = {
 
 export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
   ...initialAccountStoreState,
-  ensureAccount: (network, address) => {
+  ensureAccount: (networkId, address) => {
     set(
       produce((state) => {
-        if (!state.accounts[network]?.[address]) {
-          if (!state.accounts[network]) {
-            state.accounts[network] = {}
+        if (!state.accounts[networkId]?.[address]) {
+          if (!state.accounts[networkId]) {
+            state.accounts[networkId] = {}
           }
-          state.accounts[network][address] = {
+          state.accounts[networkId][address] = {
             ...initialSingleAccountState,
-            ...state.accounts[network][address],
+            ...state.accounts[networkId][address],
           }
         }
       }),
     )
   },
   setAccountInfo: (network, address, accountInfo) => {
+    const { accounts } = get()
+    const account = accounts[network]?.[address] ?? {}
     set(
       produce((state) => {
         state.accounts[network][address] = {
-          ...state.accounts[network][address],
+          ...account,
           accountInfo,
         }
       }),
     )
   },
   setTransactions: (network, address, transactions) => {
+    const { accounts } = get()
+    const account = accounts[network]?.[address] ?? {}
     set(
       produce((state) => {
         state.accounts[network][address] = {
-          ...state.accounts[network][address],
+          ...account,
           transactions,
         }
       }),
@@ -72,9 +76,9 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
       }),
     )
   },
-  getAccountsInfo: (network, address) => {
+  getAccountsInfo: (networkId, address) => {
     const { accounts } = get()
-    return accounts[network]?.[address] || initialSingleAccountState
+    return accounts[networkId]?.[address] || initialSingleAccountState
   },
   getAccountInfo: (network, address, ticker) => {
     const { accounts } = get()

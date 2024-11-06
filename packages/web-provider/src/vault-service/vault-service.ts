@@ -8,7 +8,6 @@ import dayjs from "dayjs"
 import Client from "mina-signer"
 
 import type { SignedTransaction } from "@mina-js/utils"
-import { chainIdToNetwork } from "../utils"
 import type { IVaultService } from "./types"
 
 export enum AuthorizationState {
@@ -18,9 +17,10 @@ export enum AuthorizationState {
 
 export const createVaultService = (): IVaultService => {
   const rehydrate = useVault.persist.rehydrate
-  const { currentNetworkName } = useVault.getState()
-  const network = currentNetworkName === "Mainnet" ? "mainnet" : "devnet"
-  const networkType = currentNetworkName === "Mainnet" ? "mainnet" : "testnet"
+  const { currentNetworkId } = useVault.getState()
+  const network = currentNetworkId === "mina:mainnet" ? "mainnet" : "devnet"
+  const networkType =
+    currentNetworkId === "mina:mainnet" ? "mainnet" : "testnet"
   const klesia = createClient({ network })
   const signer = new Client({ network: networkType })
   const getAccounts = async () => {
@@ -58,9 +58,9 @@ export const createVaultService = (): IVaultService => {
     sign: async (signable, args, getPassphrase) => {
       await rehydrate()
       const store = useVault.getState()
-      const { currentNetworkName } = useVault.getState()
+      const { currentNetworkId } = useVault.getState()
       const networkType =
-        currentNetworkName === "Mainnet" ? "mainnet" : "testnet"
+        currentNetworkId === "mina:mainnet" ? "mainnet" : "testnet"
       const networkAwareArgs: ChainOperationArgs = {
         ...args,
         networkType,
@@ -138,75 +138,56 @@ export const createVaultService = (): IVaultService => {
     addChain: async (providerConfig: ProviderConfig) => {
       await rehydrate()
       const store = useVault.getState()
-      store.setNetworkInfo(providerConfig.networkName, providerConfig)
+      store.setNetworkInfo(providerConfig.networkId, providerConfig)
       return {
-        networkName: providerConfig.networkName,
-        chainId: providerConfig.chainId,
+        name: providerConfig.networkName,
+        slug: providerConfig.networkId,
+        url: providerConfig.archiveNodeEndpoint.url,
       }
     },
-    switchChain: async (chainId) => {
+    switchNetwork: async (networkId) => {
       await rehydrate()
       const store = useVault.getState()
-      // check if chainId is in the store
-      const allChains = store.getChainIds()
-      if (allChains.includes(chainId)) {
-        // get the networkName if the chainId exists
-        const allNetworks = store.allNetworkInfo()
-        const networkConfig = allNetworks.find(
-          (network) => network?.chainId === chainId,
-        )
-        if (!networkConfig || !networkConfig.networkName) {
-          throw new Error(
-            `Network Configuration is not defined for the chainId: ${chainId}`,
-          )
-        }
-        await store.switchNetwork(networkConfig?.networkName)
-        return { chainId, networkName: networkConfig?.networkName }
-      }
-      throw new Error(
-        "chainId does not exist in the store, please use `addChain` first.",
+      const allNetworks = store.allNetworkInfo()
+      const nextNetwork = allNetworks.find(
+        (network) => network?.networkId === networkId,
       )
+      if (!nextNetwork?.networkName) {
+        throw new Error(
+          `Network Configuration is not defined for the networkId: ${networkId}`,
+        )
+      }
+      await store.switchNetwork(nextNetwork.networkId)
+      return {
+        slug: networkId,
+        name: nextNetwork.networkName,
+        url: nextNetwork.nodeEndpoint.url,
+      }
     },
     requestNetwork: async () => {
-      await rehydrate()
-      const store = useVault.getState()
-      // check if chainId is in the store
-      const chainId = store.getChainId()
-      if (chainId !== "...") {
-        // get the networkName if the chainId exists
-        const allNetworks = store.allNetworkInfo()
-        const networkConfig = allNetworks.find(
-          (network) => network?.chainId === chainId,
+      const { currentNetworkId, networkInfoV2 } = useVault.getState()
+      const currentNetwork = networkInfoV2[currentNetworkId]
+      if (!currentNetwork) {
+        throw new Error(
+          `Network Configuration is not defined for the networkId: ${currentNetworkId}`,
         )
-        if (!networkConfig || !networkConfig.networkName) {
-          throw new Error(
-            `Network Configuration is not defined for the chainId: ${chainId}`,
-          )
-        }
-        return { chainId: chainId, networkName: networkConfig?.networkName }
       }
-      throw new Error("Something went wrong!")
-    },
-    getChainId: async () => {
-      await rehydrate()
-      const store = useVault.getState()
-      return store.getChainId()
-    },
-    getChainIds: async () => {
-      await rehydrate()
-      const store = useVault.getState()
-      return store.getChainIds()
-    },
-    // TODO: deprecate this method
-    switchNetwork: async (network) => {
-      await rehydrate()
-      const store = useVault.getState()
-      // map chainId to network
-      const networkName = chainIdToNetwork(network)
-      if (!networkName) {
-        throw new Error(`Invalid chain id: ${network}`)
+      return {
+        slug: currentNetworkId,
+        name: currentNetwork.networkName,
+        url: currentNetwork.nodeEndpoint.url,
       }
-      return store.switchNetwork(networkName)
+    },
+    getNetworkId: async () => {
+      await rehydrate()
+      const store = useVault.getState()
+      return store.getNetworkId()
+    },
+    getNetworkIds: async () => {
+      await rehydrate()
+      const store = useVault.getState()
+      const allNetworks = store.allNetworkInfo().filter((network) => !!network)
+      return allNetworks.map((network) => network?.networkId)
     },
     unlockWallet: async (spendingPassword: string) => {
       await sessionPersistence.setItem("spendingPassword", spendingPassword)

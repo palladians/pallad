@@ -23,7 +23,7 @@ describe.skip("Unified Chain History Provider (Functional)", () => {
           url: "...",
         },
         archiveNodeEndpoint: {
-          providerName: "mina-node",
+          providerName: "mina-scan",
           url: minaNodeApiUrl,
         },
         explorer: {
@@ -32,7 +32,7 @@ describe.skip("Unified Chain History Provider (Functional)", () => {
           pendingTransactionsUrl: "",
         },
         networkName: "Devnet",
-        chainId: "...",
+        networkId: "mina:devnet",
       }
       provider = createChainHistoryProvider(configMinaExplorer)
     })

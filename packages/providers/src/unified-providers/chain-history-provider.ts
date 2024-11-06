@@ -7,7 +7,6 @@ import type {
 } from "@palladxyz/pallad-core"
 
 import { createChainHistoryProvider as ms } from "../blockberry-provider"
-import { createChainHistoryProvider as mn } from "../mina-node"
 import { createChainHistoryProvider as zs } from "../zeko-scan"
 
 import type { ProviderConfig } from "./types"
@@ -17,9 +16,7 @@ export const createChainHistoryProvider = (
 ): ChainHistoryProvider => {
   // TODO: make the underlyingProvider creation a util function
   let underlyingProvider: ChainHistoryProvider
-  if (config.archiveNodeEndpoint.providerName === "mina-node") {
-    underlyingProvider = mn(config.archiveNodeEndpoint.url)
-  } else if (config.archiveNodeEndpoint.providerName === "mina-scan") {
+  if (config.archiveNodeEndpoint.providerName === "mina-scan") {
     underlyingProvider = ms(config.archiveNodeEndpoint.url)
   } else if (config.archiveNodeEndpoint.providerName === "zeko-scan") {
     underlyingProvider = zs(config.archiveNodeEndpoint.url)

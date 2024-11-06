@@ -16,22 +16,21 @@ export interface IVaultService {
     getPassphrase: GetPassphrase,
   ): Promise<unknown>
   getBalance(): Promise<number>
-  getChainId(): Promise<string | undefined>
-  getChainIds(): Promise<string[]>
+  getNetworkId(): Promise<string | undefined>
+  getNetworkIds(): Promise<string[]>
   setState(state: Json): Promise<void>
   getEnabled({ origin }: { origin: string }): Promise<boolean>
   setEnabled({ origin }: { origin: string }): Promise<void>
-  switchNetwork(network: string): Promise<void>
+  switchNetwork(
+    networkId: string,
+  ): Promise<{ name: string; slug: string; url: string }>
   isLocked(): Promise<boolean>
   submitTransaction(sendable: Sendable): Promise<{ hash: string }>
   getState(params: SearchQuery, props?: string[]): Promise<StoredObject[]>
   isBlocked({ origin }: { origin: string }): Promise<boolean>
   addChain(
     providerConfig: ProviderConfig,
-  ): Promise<{ networkName: string; chainId: string }>
-  switchChain(
-    chainId: string,
-  ): Promise<{ chainId: string; networkName: string }>
-  requestNetwork(): Promise<{ chainId: string; networkName: string }>
+  ): Promise<{ slug: string; name: string; url: string }>
+  requestNetwork(): Promise<{ slug: string; name: string; url: string }>
   unlockWallet(spendingPassword: string): Promise<void>
 }

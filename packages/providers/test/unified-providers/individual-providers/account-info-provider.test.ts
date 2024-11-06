@@ -27,7 +27,7 @@ describe("Unified Account Info Provider (Functional)", () => {
           url: minaNodeApiUrl,
         },
         networkName: "Devnet",
-        chainId: "...",
+        networkId: "mina:devnet",
       }
       provider = createAccountInfoProvider(configMinaExplorer)
     })

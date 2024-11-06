@@ -9,7 +9,6 @@ import type { GetPassphrase } from "@palladxyz/key-management"
 import type {
   AccountInfo,
   Network,
-  PalladNetworkNames,
   SubmitTxArgs,
   Tx,
 } from "@palladxyz/pallad-core"
@@ -22,7 +21,7 @@ import type {
   StoredCredential,
 } from "../credentials"
 import type { KeyAgentName, KeyAgents, SingleKeyAgentState } from "../keyAgent"
-import type { NetworkName } from "../network-info"
+import type { NetworkId } from "../network-info"
 import type { SearchQuery } from "../utils/utils"
 
 // Note: this is the full state of the account not just 'MINA' tokens
@@ -46,7 +45,7 @@ export type GlobalVaultState = {
   currentAccountIndex: number
   currentAddressIndex: number
   chain: Network
-  walletNetwork: PalladNetworkNames
+  walletNetworkId: string
   walletName: string
   knownAccounts: string[]
   chainIds: string[]
@@ -69,9 +68,9 @@ export type GlobalVaultActions = {
     providerConfig: ProviderConfig,
     publicKey: ChainAddress,
   ) => Promise<void>
-  _syncWallet: (networkName?: NetworkName) => Promise<void>
-  getCurrentNetwork: () => string
-  switchNetwork: (networkName: NetworkName) => Promise<void>
+  _syncWallet: (networkId?: NetworkId) => Promise<void>
+  getCurrentNetworkId: () => string
+  switchNetwork: (networkId: NetworkId) => Promise<void>
   getCredentials: (query: SearchQuery, props: string[]) => StoredCredential[]
   getWalletAccountInfo: () => unknown
   getWalletTransactions: () => unknown[]
@@ -95,7 +94,7 @@ export type GlobalVaultActions = {
   // web provider APIs
   getAccounts: () => string[]
   getBalance: (ticker?: string) => number
-  getChainId: () => string
+  getNetworkId: () => string
 }
 
 export type GlobalVaultStore = GlobalVaultState & GlobalVaultActions

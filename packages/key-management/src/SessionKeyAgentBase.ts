@@ -1,8 +1,4 @@
 import { bytesToUtf8 } from "@noble/ciphers/utils"
-import {
-  type EthereumSignablePayload,
-  EthereumSigningOperations,
-} from "./chains"
 import type { MinaSignablePayload } from "./chains/Mina"
 import { MinaSigningOperations } from "./chains/Mina/signingOperations"
 import {
@@ -74,12 +70,6 @@ export abstract class SessionKeyAgentBase implements SessionKeyAgent {
       if (args.network === "Mina") {
         result = MinaSigningOperations(
           signable as MinaSignablePayload,
-          args,
-          privateKey,
-        )
-      } else if (args.network === "Ethereum") {
-        result = EthereumSigningOperations(
-          signable as EthereumSignablePayload,
           args,
           privateKey,
         )

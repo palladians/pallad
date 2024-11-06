@@ -1,21 +1,22 @@
 import {
   AccountsRequestParamsSchema,
-  ChainIdRequestParamsSchema,
   ChainInformationRequestParamsSchema,
   CreateNullifierRequestParamsSchema,
   GetBalanceRequestParamsSchema,
   GetStateRequestParamsSchema,
+  NetworkIdRequestParamsSchema,
   RequestAccountsRequestParamsSchema,
   SendTransactionRequestParamsSchema,
   SetStateRequestParamsSchema,
   SignFieldsRequestParamsSchema,
   SignRequestParamsSchema,
   SignTransactionRequestParamsSchema,
+  SwitchChainRequestParamsSchema,
 } from "@mina-js/providers"
+import { createMinaProvider } from "@palladxyz/web-provider"
 import { serializeError } from "serialize-error"
 import { z } from "zod"
 import type { Handler } from "."
-import { createMinaProvider } from "../../../../../packages/web-provider/src"
 
 export const OriginSchema = z.string().url()
 
@@ -50,8 +51,18 @@ export const minaRequestNetwork: Handler = async ({ data }) => {
   }
 }
 
-export const minaSwitchChain = async () => {
-  return { error: serializeError(new Error("4200 - Unsupported Method")) }
+export const minaSwitchChain: Handler = async ({ data }) => {
+  try {
+    const provider = await createMinaProvider()
+    const payload = SwitchChainRequestParamsSchema.parse({
+      method: "mina_switchChain",
+      params: data.params,
+      context: data.context,
+    })
+    return await provider.request(payload)
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
 }
 
 export const minaGetState: Handler = async ({ data }) => {
@@ -68,11 +79,11 @@ export const minaGetState: Handler = async ({ data }) => {
   }
 }
 
-export const minaChainId: Handler = async ({ data }) => {
+export const minaNetworkId: Handler = async ({ data }) => {
   try {
     const provider = await createMinaProvider()
-    const payload = ChainIdRequestParamsSchema.parse({
-      method: "mina_chainId",
+    const payload = NetworkIdRequestParamsSchema.parse({
+      method: "mina_networkId",
       context: data.context,
     })
     return await provider.request(payload)

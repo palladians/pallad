@@ -5,28 +5,28 @@ import { DEFAULT_TOKEN_INFO } from "./default"
 import type { TokenInfoStore } from "./token-info-state"
 
 export const tokenInfoSlice: StateCreator<TokenInfoStore> = (set, get) => ({
-  tokenInfo: DEFAULT_TOKEN_INFO,
-  setTokenInfo: (networkName, tokenInfo) => {
+  tokenInfoV2: DEFAULT_TOKEN_INFO,
+  setTokenInfo: (networkId, tokenInfo) => {
     const { ticker, tokenId } = tokenInfo
     set(
       produce((state) => {
-        state.tokenInfo[networkName][ticker] = tokenId
+        state.tokenInfo[networkId][ticker] = tokenId
       }),
     )
   },
-  getTokensInfo: (networkName) => {
-    const { tokenInfo } = get()
-    return tokenInfo[networkName] || {}
+  getTokensInfo: (networkId) => {
+    const { tokenInfoV2 } = get()
+    return tokenInfoV2[networkId] || {}
   },
-  getTokenInfo: (networkName, ticker) => {
-    const { tokenInfo } = get()
-    const tokenId = tokenInfo[networkName]?.[ticker] ?? "undefined"
+  getTokenInfo: (networkId, ticker) => {
+    const { tokenInfoV2 } = get()
+    const tokenId = tokenInfoV2[networkId]?.[ticker] ?? "undefined"
     return { ticker: ticker, tokenId: tokenId } || undefined
   },
-  removeTokenInfo: (networkName, ticker) => {
+  removeTokenInfo: (networkId, ticker) => {
     set(
       produce((state) => {
-        delete state.tokenInfo[networkName][ticker]
+        delete state.tokenInfo[networkId][ticker]
       }),
     )
   },

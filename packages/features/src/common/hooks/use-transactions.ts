@@ -5,9 +5,9 @@ export const useTransactions = () => {
   const currentWallet = useVault((state) => state.getCurrentWallet())
   const getTransactions = useVault((state) => state.getTransactions)
   const publicKey = getPublicKey(currentWallet)
-  const currentNetworkName = useVault((state) => state.currentNetworkName)
+  const networkId = useVault((state) => state.currentNetworkId)
   return useSWR(
-    publicKey ? [publicKey, "transactions", currentNetworkName] : null,
-    () => getTransactions(currentNetworkName, publicKey, "MINA"), // TODO: remove hardcoded 'MINA'
+    publicKey ? [publicKey, "transactions", networkId] : null,
+    () => getTransactions(networkId, publicKey, "MINA"), // TODO: remove hardcoded 'MINA'
   )
 }

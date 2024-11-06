@@ -3,10 +3,6 @@ import { HDKey } from "@scure/bip32"
 import { bytesToUtf8 } from "@noble/ciphers/utils"
 import { utf8ToBytes } from "@noble/hashes/utils"
 import { KeyDecryptor } from "./KeyDecryptor"
-import {
-  type EthereumSignablePayload,
-  EthereumSigningOperations,
-} from "./chains"
 import type { MinaSignablePayload } from "./chains/Mina"
 import { MinaSigningOperations } from "./chains/Mina/signingOperations"
 import { emip3encrypt } from "./emip3"
@@ -32,7 +28,6 @@ import type {
 export abstract class KeyAgentBase implements KeyAgent {
   readonly serializableData: SerializableKeyAgentData
   private keyDecryptor: KeyDecryptor
-  // private #getPassphrase: GetPassphrase
 
   get knownCredentials(): GroupedCredentials[] {
     return this.serializableData.credentialSubject.contents
@@ -163,12 +158,6 @@ export abstract class KeyAgentBase implements KeyAgent {
       if (args.network === "Mina") {
         result = MinaSigningOperations(
           signable as MinaSignablePayload,
-          args,
-          privateKey,
-        )
-      } else if (args.network === "Ethereum") {
-        result = EthereumSigningOperations(
-          signable as EthereumSignablePayload,
           args,
           privateKey,
         )

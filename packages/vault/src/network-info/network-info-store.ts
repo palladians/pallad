@@ -1,79 +1,54 @@
-import type { ProviderConfig } from "@palladxyz/providers"
 import { produce } from "immer"
 import type { StateCreator } from "zustand"
 
-import { DEFAULT_NETWORK, DEFAULT_NETWORK_INFO } from "./default"
+import { DEFAULT_NETWORK_INFO } from "./default"
 import type { NetworkInfoStore } from "./network-info-state"
 
 export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
-  networkInfo: DEFAULT_NETWORK_INFO,
-  currentNetworkName: DEFAULT_NETWORK,
-  setCurrentNetworkName: (networkName) => {
-    set((current) =>
-      produce(current, (draft) => {
-        draft.currentNetworkName = networkName
-      }),
-    )
+  networkInfoV2: DEFAULT_NETWORK_INFO,
+  currentNetworkId: "mina:mainnet",
+  setCurrentNetworkId: (networkId) => {
+    return set({ currentNetworkId: networkId })
   },
   getCurrentNetworkInfo: () => {
-    const { networkInfo, currentNetworkName } = get()
-    return networkInfo[currentNetworkName] as ProviderConfig
+    const { networkInfoV2, currentNetworkId } = get()
+    return Object.values(networkInfoV2).find(
+      (network) => network.networkId === currentNetworkId,
+    )
   },
-  updateNetworkInfo: (networkName, updates) => {
+  setNetworkInfo: (networkId, providerConfig) => {
+    const { networkInfoV2 } = get()
     set((current) =>
       produce(current, (draft) => {
-        // Ensure the network exists before trying to update it
-        if (draft.networkInfo[networkName]) {
-          draft.networkInfo[networkName] = {
-            ...draft.networkInfo[networkName],
-            ...updates,
-          }
+        draft.networkInfoV2[networkId] = {
+          ...networkInfoV2[networkId],
+          ...providerConfig,
         }
       }),
     )
   },
-  setNetworkInfo: (networkName, providerConfig) => {
+  getNetworkInfo: (networkId) => {
+    const { networkInfoV2 } = get()
+    return networkInfoV2[networkId] || undefined
+  },
+  removeNetworkInfo: (networkId) => {
     set((current) =>
       produce(current, (draft) => {
-        draft.networkInfo[networkName] = providerConfig
+        delete draft.networkInfoV2[networkId]
       }),
     )
-  },
-  getNetworkInfo: (networkName) => {
-    const { networkInfo } = get()
-    return networkInfo[networkName] || undefined
-  },
-  removeNetworkInfo: (networkName) => {
-    set((current) =>
-      produce(current, (draft) => {
-        delete draft.networkInfo[networkName]
-      }),
-    )
-  },
-  getChainIds: () => {
-    const { networkInfo } = get()
-    if (!networkInfo) {
-      return []
-    }
-
-    return Object.keys(networkInfo).flatMap((networkName) => {
-      const network = networkInfo[networkName]
-      return network && typeof network.chainId !== "undefined"
-        ? [network.chainId]
-        : []
-    })
   },
   allNetworkInfo: () => {
-    const { networkInfo } = get()
-    return Object.keys(networkInfo).map(
-      (networkName) => networkInfo[networkName],
+    const { networkInfoV2 } = get()
+    return Object.keys(networkInfoV2).map(
+      (networkId) => networkInfoV2[networkId],
     )
   },
   clear: () => {
     set((current) =>
       produce(current, (draft) => {
         // TODO: fix this method it doesn't work
-        draft.networkInfo = {}
+        draft.networkInfoV2 = {}
       }),
     )
   },
