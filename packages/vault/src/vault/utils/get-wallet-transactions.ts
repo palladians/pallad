@@ -1,10 +1,9 @@
 import type { GroupedCredentials } from "@palladxyz/key-management"
-import type { PalladNetworkNames } from "@palladxyz/pallad-core"
 
 import { AddressError, NetworkError, WalletError } from "../../lib/Errors"
 
 export function getWalletTransactionsHelper(get: any) {
-  const { getCurrentWallet, getCurrentNetwork, getTransactions } = get()
+  const { getCurrentWallet, getCurrentNetworkId, getTransactions } = get()
   const currentWallet = getCurrentWallet()
   if (!currentWallet)
     throw new WalletError(
@@ -17,7 +16,7 @@ export function getWalletTransactionsHelper(get: any) {
     throw new AddressError(
       "Wallet address is undefined in getTransactions method",
     )
-  const currentNetwork = getCurrentNetwork() as PalladNetworkNames
+  const currentNetwork = getCurrentNetworkId()
   if (!currentNetwork)
     throw new NetworkError(
       "Current network is null, empty or undefined in getTransactions method",

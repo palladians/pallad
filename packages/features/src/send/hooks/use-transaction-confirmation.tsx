@@ -1,9 +1,8 @@
 import type { ChainOperationArgs } from "@palladxyz/key-management"
-import { Mina, TransactionType } from "@palladxyz/mina-core"
+import { TransactionType } from "@palladxyz/mina-core"
 import { useVault } from "@palladxyz/vault"
 import dayjs from "dayjs"
 import type { SubmitHandler, UseFormReturn } from "react-hook-form"
-import { useMixpanel } from "react-mixpanel-browser"
 import { useNavigate } from "react-router-dom"
 import type { z } from "zod"
 
@@ -24,13 +23,12 @@ type UseTransactionConfirmationProps = {
 export const useTransactionConfirmation = ({
   confirmationForm,
 }: UseTransactionConfirmationProps) => {
-  const mixpanel = useMixpanel()
   const navigate = useNavigate()
   const sign = useVault((state) => state.sign)
   const submitTx = useVault((state) => state.submitTx)
   const constructTx = useVault((state) => state.constructTx)
   const syncWallet = useVault((state) => state._syncWallet)
-  const currentNetworkName = useVault((state) => state.currentNetworkName)
+  const currentNetworkId = useVault((state) => state.currentNetworkId)
   const { publicKey, data: accountProperties } = useAccount()
   const outgoingTransaction = useTransactionStore(
     (state) => state.outgoingTransaction,
@@ -61,7 +59,7 @@ export const useTransactionConfirmation = ({
     const operationArgs: ChainOperationArgs = {
       operation: "mina_signTransaction",
       network: "Mina",
-      networkType: currentNetworkName === "Mainnet" ? "mainnet" : "testnet",
+      networkType: currentNetworkId === "mina:mainnet" ? "mainnet" : "testnet",
     }
     let txBody: TransactionBody
     if (type === TransactionType.STAKE_DELEGATION) {
@@ -95,16 +93,6 @@ export const useTransactionConfirmation = ({
       expireAt: dayjs().add(8, "hours").toISOString(),
     })
     await syncWallet()
-    mixpanel.track(
-      type === Mina.TransactionType.STAKE_DELEGATION
-        ? "PortfolioDelegated"
-        : "TransactionSent",
-      {
-        amount: rawTransaction.amount,
-        fee: rawTransaction.fee,
-        to: type === Mina.TransactionType.STAKE_DELEGATION && rawTransaction.to,
-      },
-    )
     navigate("/transactions/success", {
       state: {
         hash,

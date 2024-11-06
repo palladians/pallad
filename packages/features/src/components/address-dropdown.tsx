@@ -28,7 +28,7 @@ export const AddressDropdown = ({
     toast.success("Address Copied")
   }
   const openInExplorer = () => {
-    const url = currentNetworkInfo.explorer.accountUrl.replace(
+    const url = currentNetworkInfo?.explorer.accountUrl.replace(
       "{publicKey}",
       publicKey,
     )

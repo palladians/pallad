@@ -3,28 +3,30 @@ import type { ProviderConfig } from "@palladxyz/providers"
 
 import { AddressError } from "../../lib/Errors"
 
-export async function syncWalletnHelper(
+export async function syncWalletHelper(
   get: any,
-  networkName: string | undefined,
+  networkId: string | undefined,
 ) {
   const {
     getCurrentNetworkInfo,
+    setCurrentNetworkId,
     getNetworkInfo,
     getCurrentWallet,
-    updateNetworkInfo,
+    setNetworkInfo,
     _syncAccountInfo,
     _syncTransactions,
   } = get()
+  if (networkId) setCurrentNetworkId(networkId)
   // when the wallet bricks this public key is undefined.
   const currentwallet = getCurrentWallet()
   const publicKey = currentwallet?.credential?.credential?.address // todo: DRY this up
   if (!publicKey)
     throw new AddressError("Wallet address is undefined in _syncWallet method")
   let syncProviderConfig: ProviderConfig
-  if (!networkName) {
+  if (!networkId) {
     syncProviderConfig = getCurrentNetworkInfo()
   } else {
-    syncProviderConfig = getNetworkInfo(networkName)
+    syncProviderConfig = getNetworkInfo(networkId)
   }
   // set the chainIds
   if (!syncProviderConfig) {
@@ -45,7 +47,7 @@ export async function syncWalletnHelper(
       `Could not get chainId for ${syncProviderConfig} in updateChainId`,
     )
   }
-  updateNetworkInfo(syncProviderConfig.networkName, {
+  setNetworkInfo(syncProviderConfig.networkId, {
     chainId: response.daemonStatus.chainId,
   })
   await _syncAccountInfo(syncProviderConfig, publicKey)

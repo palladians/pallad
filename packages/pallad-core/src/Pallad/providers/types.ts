@@ -7,10 +7,4 @@ export type Tx = Mina.TransactionBody | GetTransactionReturnType
 export type ChainAddress = Mina.PublicKey | Address
 export enum Network {
   Mina = "Mina",
-  Ethereum = "Ethereum",
-}
-export enum PalladNetworkNames {
-  MINA_DEVNET = "devnet",
-  MINA_MAINNET = "mainnet",
-  OPTIMISM_SEPOLIA = "optimismSepolia",
 }

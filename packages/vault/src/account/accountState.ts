@@ -26,7 +26,7 @@ export type AccountActions = {
     transactions: Record<string, Tx[]>,
   ) => void
   getAccountsInfo: (
-    network: string,
+    networkId: string,
     address: ChainAddress,
   ) => SingleAccountState
   getAccountInfo: (

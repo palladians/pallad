@@ -3,11 +3,9 @@ import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { ErrorBoundary } from "react-error-boundary"
-import { MixpanelProvider } from "react-mixpanel-browser"
 import { Toaster } from "sonner"
 import { AddressBookRoute } from "./address-book/routes/address-book"
 import { NewAddressRoute } from "./address-book/routes/new-address"
-import { useAppStore } from "./common/store/app"
 import { ErrorView } from "./error-renderer/views/error"
 import { UnlockWalletRoute } from "./lock/routes/unlock-wallet"
 import { NotFoundRoute } from "./not-found/routes/not-found"
@@ -45,96 +43,86 @@ import { OverviewRoute } from "./wallet/routes/overview"
 dayjs.extend(relativeTime)
 
 export const Router = () => {
-  const shareData = useAppStore((state) => state.shareData)
-  const mixpanelConfig = {
-    track_pageview: true,
-    opt_out_tracking_by_default: shareData ?? false,
-  }
   return (
-    <MixpanelProvider
-      config={mixpanelConfig}
-      token="ee1f7980362645f72b80bfdd0c7be4a8"
-    >
-      <ErrorBoundary FallbackComponent={ErrorView}>
-        <div className="flex flex-1 pointer">
-          <Toaster theme="dark" />
-          <MemoryRouter>
-            <Routes>
-              <Route path="/" element={<StartRoute />} />
-              <Route path="/dashboard" element={<OverviewRoute />} />
-              <Route path="/networks" element={<NetworksRoute />} />
-              <Route path="/send" element={<SendRoute />} />
-              <Route path="/receive" element={<ReceiveRoute />} />
+    <ErrorBoundary FallbackComponent={ErrorView}>
+      <div className="flex flex-1 pointer">
+        <Toaster theme="dark" />
+        <MemoryRouter>
+          <Routes>
+            <Route path="/" element={<StartRoute />} />
+            <Route path="/dashboard" element={<OverviewRoute />} />
+            <Route path="/networks" element={<NetworksRoute />} />
+            <Route path="/send" element={<SendRoute />} />
+            <Route path="/receive" element={<ReceiveRoute />} />
+            <Route
+              path="/transactions/summary"
+              element={<TransactionSummaryRoute />}
+            />
+            <Route
+              path="/transactions/success"
+              element={<TransactionSuccessRoute />}
+            />
+            <Route
+              path="/transactions/error"
+              element={<TransactionErrorRoute />}
+            />
+            <Route
+              path="/transactions/:hash"
+              element={<TransactionDetailsRoute />}
+            />
+            <Route path="/transactions" element={<TransactionsRoute />} />
+            <Route path="/staking" element={<StakingOverviewRoute />} />
+            <Route path="/staking/delegate" element={<DelegateRoute />} />
+            <Route
+              path="/staking/producers"
+              element={<BlockProducersRoute />}
+            />
+            <Route path="contacts" element={<Outlet />}>
+              <Route path="" element={<AddressBookRoute />} />
+              <Route path="new" element={<NewAddressRoute />} />
+            </Route>
+            <Route path="onboarding" element={<Outlet />}>
+              <Route path="create" element={<CreateWalletRoute />} />
+              <Route path="restore" element={<RestoreWalletRoute />} />
+              <Route path="backup" element={<SeedBackupRoute />} />
               <Route
-                path="/transactions/summary"
-                element={<TransactionSummaryRoute />}
+                path="backup_security"
+                element={<SeedBackupSecurityRoute />}
+              />
+              <Route path="import" element={<SeedImportRoute />} />
+              <Route
+                path="import_security"
+                element={<SeedImportSecurityRoute />}
               />
               <Route
-                path="/transactions/success"
-                element={<TransactionSuccessRoute />}
+                path="confirmation"
+                element={<SeedBackupConfirmationRoute />}
               />
-              <Route
-                path="/transactions/error"
-                element={<TransactionErrorRoute />}
-              />
-              <Route
-                path="/transactions/:hash"
-                element={<TransactionDetailsRoute />}
-              />
-              <Route path="/transactions" element={<TransactionsRoute />} />
-              <Route path="/staking" element={<StakingOverviewRoute />} />
-              <Route path="/staking/delegate" element={<DelegateRoute />} />
-              <Route
-                path="/staking/producers"
-                element={<BlockProducersRoute />}
-              />
-              <Route path="contacts" element={<Outlet />}>
-                <Route path="" element={<AddressBookRoute />} />
-                <Route path="new" element={<NewAddressRoute />} />
+              <Route path="finish" element={<StayConnectedRoute />} />
+            </Route>
+            <Route path="/unlock" element={<UnlockWalletRoute />} />
+            <Route path="settings" element={<Outlet />}>
+              <Route path="" element={<SettingsRoute />} />
+              <Route path="about" element={<Outlet />}>
+                <Route path="" element={<AboutRoute />} />
+                <Route path="support" element={<SupportRoute />} />
+                <Route path="terms-of-use" element={<TermsOfUseRoute />} />
               </Route>
-              <Route path="onboarding" element={<Outlet />}>
-                <Route path="create" element={<CreateWalletRoute />} />
-                <Route path="restore" element={<RestoreWalletRoute />} />
-                <Route path="backup" element={<SeedBackupRoute />} />
-                <Route
-                  path="backup_security"
-                  element={<SeedBackupSecurityRoute />}
-                />
-                <Route path="import" element={<SeedImportRoute />} />
-                <Route
-                  path="import_security"
-                  element={<SeedImportSecurityRoute />}
-                />
-                <Route
-                  path="confirmation"
-                  element={<SeedBackupConfirmationRoute />}
-                />
-                <Route path="finish" element={<StayConnectedRoute />} />
+              <Route path="display" element={<Outlet />}>
+                <Route path="" element={<DisplayRoute />} />
+                <Route path="language" element={<LanguageRoute />} />
+                <Route path="currency" element={<CurrencyRoute />} />
               </Route>
-              <Route path="/unlock" element={<UnlockWalletRoute />} />
-              <Route path="settings" element={<Outlet />}>
-                <Route path="" element={<SettingsRoute />} />
-                <Route path="about" element={<Outlet />}>
-                  <Route path="" element={<AboutRoute />} />
-                  <Route path="support" element={<SupportRoute />} />
-                  <Route path="terms-of-use" element={<TermsOfUseRoute />} />
-                </Route>
-                <Route path="display" element={<Outlet />}>
-                  <Route path="" element={<DisplayRoute />} />
-                  <Route path="language" element={<LanguageRoute />} />
-                  <Route path="currency" element={<CurrencyRoute />} />
-                </Route>
-                <Route
-                  path="authorized-zkapps"
-                  element={<AuthorizedZkAppsRoute />}
-                />
-                <Route path="privacy" element={<PrivacyRoute />} />
-              </Route>
-              <Route path="/*" element={<NotFoundRoute />} />
-            </Routes>
-          </MemoryRouter>
-        </div>
-      </ErrorBoundary>
-    </MixpanelProvider>
+              <Route
+                path="authorized-zkapps"
+                element={<AuthorizedZkAppsRoute />}
+              />
+              <Route path="privacy" element={<PrivacyRoute />} />
+            </Route>
+            <Route path="/*" element={<NotFoundRoute />} />
+          </Routes>
+        </MemoryRouter>
+      </div>
+    </ErrorBoundary>
   )
 }

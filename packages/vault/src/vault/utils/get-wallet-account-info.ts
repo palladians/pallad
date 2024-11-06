@@ -14,15 +14,15 @@ const _validateCurrentNetwork = (network: Network | null) => {
 }
 
 export function getWalletAccountInfoHelper(get: any) {
-  const { getCurrentWallet, getCurrentNetwork, getAccountsInfo } = get()
+  const { getCurrentWallet, getCurrentNetworkId, getAccountsInfo } = get()
   const currentWallet = getCurrentWallet()
   _validateCurrentWallet(currentWallet.credential)
-  const currentNetwork = getCurrentNetwork()
-  _validateCurrentNetwork(currentNetwork)
+  const currentNetworkId = getCurrentNetworkId()
+  _validateCurrentNetwork(currentNetworkId)
   const walletCredential = currentWallet?.credential
     .credential as GroupedCredentials
   return (
-    getAccountsInfo(currentNetwork, walletCredential?.address as string)
+    getAccountsInfo(currentNetworkId, walletCredential?.address as string)
       ?.accountInfo || null
   )
 }

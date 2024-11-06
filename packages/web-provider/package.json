@@ -18,15 +18,15 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@mina-js/klesia-sdk": "https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@7fe60e8",
-    "@mina-js/providers": "https://pkg.pr.new/palladians/mina-js/@mina-js/providers@7fe60e8",
+    "@mina-js/klesia-sdk": "https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@a51d3b4",
+    "@mina-js/providers": "https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a51d3b4",
     "@noble/hashes": "1.4.0",
     "@palladxyz/key-management": "workspace:*",
     "@palladxyz/mina-core": "workspace:*",
     "@palladxyz/providers": "workspace:*",
     "@palladxyz/vault": "workspace:*",
     "dayjs": "1.11.12",
-    "eventemitter3": "^5.0.1",
+    "eventemitter3": "5.0.1",
     "mina-signer": "3.0.7",
     "mitt": "3.0.1",
     "superjson": "2.2.1",

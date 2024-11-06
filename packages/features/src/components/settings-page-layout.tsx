@@ -15,7 +15,7 @@ export const SettingsPageLayout = ({
   onCloseClicked,
   headerContent = null,
 }: SettingsPageHeaderProps) => {
-  const currentNetworkName = useVault((state) => state.currentNetworkName)
+  const networkId = useVault((state) => state.currentNetworkId)
   return (
     <div className="flex flex-col flex-1">
       <div className="flex flex-col">
@@ -23,7 +23,7 @@ export const SettingsPageLayout = ({
           <MenuBar
             variant="wallet"
             onCloseClicked={onCloseClicked}
-            currentNetwork={currentNetworkName}
+            networkId={networkId}
           />
           <div className={`${headerContent ? "pb-6" : "pb-12"} px-8`}>
             <p className="text-3xl">{title}</p>

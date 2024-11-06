@@ -2,18 +2,12 @@ import { utf8ToBytes } from "@noble/hashes/utils"
 import { mnemonic } from "@palladxyz/common"
 import type {
   ChainDerivationArgs,
-  //constructTransaction,
   FromBip39MnemonicWordsProps,
-  //GroupedCredentials,
-  //MinaDerivationArgs,
 } from "@palladxyz/key-management"
 import { Network } from "@palladxyz/pallad-core"
-//import { Mina } from '@palladxyz/mina-core'
 import { act, renderHook } from "@testing-library/react"
 import { expect } from "vitest"
 
-//import Client from 'mina-signer'
-//import { Payment, SignedLegacy } from 'mina-signer/dist/node/mina-signer/src/TSTypes'
 import { type CredentialName, KeyAgents } from "../../src"
 import { useVault } from "../../src"
 import { DEFAULT_NETWORK } from "../../src/network-info/default"
@@ -86,10 +80,8 @@ describe("WalletTest", () => {
     expect(keyagent?.keyAgentType).toEqual(KeyAgents.InMemory)
 
     // check if chainId has been set and not '...'
-    const chainId = result.current.getChainId()
-    const networkInfos = result.current.getNetworkInfo(defaultNetwork)
-    const currentNetworkInfo = result.current.getCurrentNetworkInfo()
-    expect(chainId).not.toEqual("...")
+    const networkId = result.current.getNetworkId()
+    expect(networkId).not.toEqual("...")
 
     // check if first credential is in the store
     const minaCredentials = result.current.getCredentials(
@@ -100,8 +92,8 @@ describe("WalletTest", () => {
     expect(minaCredentials[0]?.address).toEqual(expectedAddress)
 
     // check current network info is of the expected network
-    const currentNetwork = result.current.getCurrentNetwork()
-    expect(currentNetwork).toEqual(defaultNetwork)
+    const currentNetworkId = result.current.getCurrentNetworkId()
+    expect(currentNetworkId).toEqual(defaultNetwork)
     // check if accountInfo is in the store
     const accountInfo = result.current.getAccountsInfo(
       defaultNetwork,

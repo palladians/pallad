@@ -5,7 +5,6 @@ import { sessionPersistence } from "@palladxyz/vault"
 import { DEFAULT_NETWORK, KeyAgents, useVault } from "@palladxyz/vault"
 import { useState } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
-import { useMixpanel } from "react-mixpanel-browser"
 import { useNavigate } from "react-router-dom"
 import { shallow } from "zustand/shallow"
 
@@ -17,7 +16,6 @@ import type { MnemonicInputData } from "../types"
 import { SeedImportView } from "../views/seed-import"
 
 export const SeedImportRoute = () => {
-  const mixpanel = useMixpanel()
   const [restoring, setRestoring] = useState(false)
   const restoreWallet = useVault((state) => state.restoreWallet)
   const navigate = useNavigate()
@@ -60,8 +58,7 @@ export const SeedImportRoute = () => {
         KeyAgents.InMemory,
         "Test", // TODO: make this a configurable credential name or random if not provided
       )
-      mixpanel.track("WalletRestored")
-      await setVaultStateInitialized()
+      setVaultStateInitialized()
       return navigate("/onboarding/finish")
     } finally {
       setRestoring(false)

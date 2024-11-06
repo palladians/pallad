@@ -1,24 +1,18 @@
 import { AddressError } from "../../lib/Errors"
 
-export async function switchNetworkHelper(get: any, networkName: string) {
+export async function switchNetworkHelper(get: any, networkId: string) {
   // if the network info is already stored we can just switch to it using the networkName
-  const {
-    setCurrentNetworkName,
-    getCurrentWallet,
-    _syncWallet,
-    ensureAccount,
-  } = get()
-  const currentWallet = getCurrentWallet()
+  const { getCurrentWallet, _syncWallet, ensureAccount } = get()
+  const currentWallet = await getCurrentWallet()
   if (!currentWallet)
     throw new Error("Current wallet is null, empty or undefined")
-  const publicKey = await getCurrentWallet()?.credential?.credential?.address // todo: DRY this up
+  const publicKey = currentWallet.credential?.credential?.address
   if (!publicKey)
     throw new AddressError(
       "Wallet address is undefined in switchNetwork method",
     )
 
-  ensureAccount(networkName, publicKey)
-  await setCurrentNetworkName(networkName)
+  ensureAccount(networkId, publicKey)
 
-  await _syncWallet(networkName)
+  await _syncWallet(networkId)
 }
