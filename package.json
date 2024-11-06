@@ -30,7 +30,7 @@
     "@vitest/coverage-v8": "2.0.5",
     "@mina-js/utils": "https://pkg.pr.new/palladians/mina-js/@mina-js/utils@a51d3b4",
     "autoprefixer": "10.4.19",
-    "happy-dom": "14.12.3",
+    "happy-dom": "15.10.2",
     "husky": "9.1.4",
     "postcss": "8.4.40",
     "rimraf": "6.0.1",
