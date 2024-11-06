@@ -13,15 +13,15 @@ export type AccountState = {
 }
 
 export type AccountActions = {
-  ensureAccount: (network: string, address: ChainAddress) => void
+  ensureAccount: (networkId: string, address: ChainAddress) => void
   setAccountInfo: (
-    network: string,
+    networkId: string,
     address: ChainAddress,
     accountInfo: Record<string, AccountInfo>,
   ) => void
 
   setTransactions: (
-    network: string,
+    networkId: string,
     address: ChainAddress,
     transactions: Record<string, Tx[]>,
   ) => void
@@ -30,27 +30,27 @@ export type AccountActions = {
     address: ChainAddress,
   ) => SingleAccountState
   getAccountInfo: (
-    network: string,
+    networkId: string,
     address: ChainAddress,
     ticker: string,
   ) => AccountInfo
 
   getTransactions: (
-    network: string,
+    networkId: string,
     address: ChainAddress,
     ticker: string,
   ) => Tx[]
 
   getTransaction: (
-    network: string,
+    networkId: string,
     address: ChainAddress,
     hash: string,
     ticker: string,
   ) => Tx | undefined
 
-  addAccount: (network: string, address: ChainAddress) => void
+  addAccount: (networkId: string, address: ChainAddress) => void
 
-  removeAccount: (network: string, address: ChainAddress) => void
+  removeAccount: (networkId: string, address: ChainAddress) => void
 
   clear: () => void
 }

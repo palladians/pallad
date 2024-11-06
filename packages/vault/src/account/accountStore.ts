@@ -33,46 +33,46 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
       }),
     )
   },
-  setAccountInfo: (network, address, accountInfo) => {
+  setAccountInfo: (networkId, address, accountInfo) => {
     const { accounts } = get()
-    const account = accounts[network]?.[address] ?? {}
+    const account = accounts[networkId]?.[address] ?? {}
     set(
       produce((state) => {
-        state.accounts[network][address] = {
+        state.accounts[networkId][address] = {
           ...account,
           accountInfo,
         }
       }),
     )
   },
-  setTransactions: (network, address, transactions) => {
+  setTransactions: (networkId, address, transactions) => {
     const { accounts } = get()
-    const account = accounts[network]?.[address] ?? {}
+    const account = accounts[networkId]?.[address] ?? {}
     set(
       produce((state) => {
-        state.accounts[network][address] = {
+        state.accounts[networkId][address] = {
           ...account,
           transactions,
         }
       }),
     )
   },
-  addAccount: (network, address) => {
+  addAccount: (networkId, address) => {
     set(
       produce((state) => {
-        if (!state.accounts?.[network]?.[address]) {
-          state.accounts[network] = state.accounts[network] || {}
-          state.accounts[network][address] = {
+        if (!state.accounts?.[networkId]?.[address]) {
+          state.accounts[networkId] = state.accounts[networkId] || {}
+          state.accounts[networkId][address] = {
             ...initialSingleAccountState,
           }
         }
       }),
     )
   },
-  removeAccount: (network, address) => {
+  removeAccount: (networkId, address) => {
     set(
       produce((state) => {
-        delete state.accounts[network][address]
+        delete state.accounts[networkId][address]
       }),
     )
   },
@@ -80,10 +80,10 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
     const { accounts } = get()
     return accounts[networkId]?.[address] || initialSingleAccountState
   },
-  getAccountInfo: (network, address, ticker) => {
+  getAccountInfo: (networkId, address, ticker) => {
     const { accounts } = get()
     return (
-      accounts[network]?.[address]?.accountInfo[ticker] || {
+      accounts[networkId]?.[address]?.accountInfo[ticker] || {
         balance: { total: 0 },
         nonce: 0,
         inferredNonce: 0,
@@ -92,14 +92,14 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
       }
     )
   },
-  getTransactions: (network, address, ticker) => {
+  getTransactions: (networkId, address, ticker) => {
     const { accounts } = get()
-    return accounts[network]?.[address]?.transactions[ticker] || []
+    return accounts[networkId]?.[address]?.transactions[ticker] || []
   },
-  getTransaction: (network, address, hash, ticker) => {
+  getTransaction: (networkId, address, hash, ticker) => {
     const { accounts } = get()
     const transactions =
-      accounts[network]?.[address]?.transactions[ticker] || []
+      accounts[networkId]?.[address]?.transactions[ticker] || []
     return transactions.find((tx) => tx.hash === hash)
   },
   clear: () => {
