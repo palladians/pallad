@@ -59,7 +59,7 @@ export const createMinaProvider = async (): Promise<
       if (await _vault.getEnabled({ origin: opts.origin }))
         throw createProviderRpcError(4100, "Already enabled.")
       if (!opts.chains) {
-        const defaultChainId = await _vault.getChainId()
+        const defaultChainId = await _vault.getNetworkId()
         if (!defaultChainId) {
           throw createProviderRpcError(4100, "Chain ID is undefined.")
         }
@@ -139,14 +139,33 @@ export const createMinaProvider = async (): Promise<
           _vault.getAccounts,
         )
         .with({ method: "mina_getBalance" }, _vault.getBalance)
-        .with({ method: "mina_chainId" }, _vault.getChainId)
+        .with({ method: "mina_networkId" }, _vault.getNetworkId)
         .with({ method: "mina_addChain" }, () =>
           createProviderRpcError(4200, "Unsupported Method"),
         )
-        .with({ method: "mina_switchChain" }, () =>
-          createProviderRpcError(4200, "Unsupported Method"),
-        )
-        .with({ method: "mina_chainInformation" }, async () => {
+        .with({ method: "mina_switchChain" }, async ({ params }) => {
+          const [networkId] = params
+          if (!networkId) {
+            throw createProviderRpcError(4100, "Unauthorized.")
+          }
+          const networkIds = await _vault.getNetworkIds()
+          if (!networkIds.includes(networkId)) {
+            throw createProviderRpcError(4100, "Unauthorized.")
+          }
+          const userConfirmed = await showUserPrompt<boolean>({
+            inputType: "confirmation",
+            metadata: {
+              title: "Switch to different chain.",
+              payload: JSON.stringify({ networkId }),
+            },
+          })
+          if (!userConfirmed) {
+            throw createProviderRpcError(4001, "User Rejected Request")
+          }
+          await _vault.switchNetwork(networkId)
+          return networkId
+        })
+        .with({ method: "mina_requestNetwork" }, async () => {
           const userConfirmed = await showUserPrompt<boolean>({
             inputType: "confirmation",
             metadata: {

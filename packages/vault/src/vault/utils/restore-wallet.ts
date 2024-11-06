@@ -28,8 +28,8 @@ export async function restoreWalletHelper(
     ensureAccount,
     setKnownAccounts,
     getCurrentNetworkInfo,
-    updateNetworkInfo,
-    setCurrentNetworkName,
+    setNetworkInfo,
+    setCurrentNetworkId,
   } = get()
   const agentArgs: FromBip39MnemonicWordsProps = {
     getPassphrase: getPassphrase,
@@ -87,10 +87,10 @@ export async function restoreWalletHelper(
       `Could not get chainId for ${providerConfig} in updateChainId`,
     )
   }
-  updateNetworkInfo(providerConfig.networkName, {
+  setNetworkInfo(providerConfig.networkId, {
     chainId: response.daemonStatus.chainId,
   })
-  setCurrentNetworkName(providerConfig.networkName)
+  setCurrentNetworkId(providerConfig.networkId)
   ensureAccount(network, derivedCredential.address)
   securePersistence.setItem("foo", "bar" as any)
   await _syncWallet()

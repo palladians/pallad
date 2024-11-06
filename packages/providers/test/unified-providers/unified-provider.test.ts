@@ -39,7 +39,7 @@ describe.skip("Unified Chain provider", () => {
           pendingTransactionsUrl: "",
         },
         networkName: "Devnet",
-        chainId: "...",
+        networkId: "mina:devnet",
         networkType: "testnet",
       }
 
@@ -99,7 +99,7 @@ describe.skip("Unified Chain provider", () => {
         },
         networkName: "ZekoDevNet",
         networkType: "testnet",
-        chainId: "...", // todo: fetch chainId from a provider
+        networkId: "zeko:devnet", // todo: fetch chainId from a provider
       }
 
       provider = createChainProvider(config)

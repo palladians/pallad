@@ -10,6 +10,8 @@ export const MenuDrawer = () => {
   const navigate = useNavigate()
   const currentNetworkName = useVault((state) => state.currentNetworkName)
   const { t } = useTranslation()
+  const networkId = useVault((state) => state.currentNetworkId)
+  
   return (
     <div className="drawer drawer-end">
       <input id="menu-drawer" type="checkbox" className="drawer-toggle" />
@@ -48,7 +50,7 @@ export const MenuDrawer = () => {
                   to="/networks"
                   className="btn btn-primary min-h-10 h-10 bg-white hover:bg-white shadow-none border-none gap-2"
                 >
-                  <span>{currentNetworkName}</span>
+                  <span>{networkId}</span>
                   <ChevronDownIcon size={24} />
                 </Link>
               </div>

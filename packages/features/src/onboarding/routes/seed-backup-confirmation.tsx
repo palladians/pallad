@@ -5,7 +5,6 @@ import { sessionPersistence } from "@palladxyz/vault"
 import { DEFAULT_NETWORK, KeyAgents, useVault } from "@palladxyz/vault"
 import { useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
-import { useMixpanel } from "react-mixpanel-browser"
 import { useNavigate } from "react-router-dom"
 
 import { useAppStore } from "@/common/store/app"
@@ -18,7 +17,6 @@ const getConfirmationIndex = () => {
 }
 
 export const SeedBackupConfirmationRoute = () => {
-  const mixpanel = useMixpanel()
   const [restoring, setRestoring] = useState(false)
   const restoreWallet = useVault((state) => state.restoreWallet)
   const [confirmationIndex] = useState(getConfirmationIndex())
@@ -68,8 +66,7 @@ export const SeedBackupConfirmationRoute = () => {
         KeyAgents.InMemory,
         "Test", // TODO: make this a configurable credential name or random if not provided
       )
-      mixpanel.track("WalletCreated")
-      await setVaultStateInitialized()
+      setVaultStateInitialized()
       return navigate("/onboarding/finish")
     } finally {
       setRestoring(false)

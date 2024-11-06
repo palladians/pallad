@@ -7,13 +7,14 @@ export const useTransaction = ({ hash }: { hash: string }) => {
   const _syncTransactions = useVault((state) => state._syncTransactions)
   const getTransaction = useVault((state) => state.getTransaction)
   const publicKey = getPublicKey(currentWallet)
-  const currentNetworkName = useVault((state) => state.currentNetworkName)
+  const networkId = useVault((state) => state.currentNetworkId)
   const syncAndGetTransaction = async () => {
+    if (!providerConfig) return
     await _syncTransactions(providerConfig, publicKey)
-    return getTransaction(currentNetworkName, publicKey, hash, "MINA") // TODO: remove hardcoded 'MINA'
+    return getTransaction(networkId, publicKey, hash, "MINA") // TODO: remove hardcoded 'MINA'
   }
   return useSWR(
-    publicKey ? ["transaction", hash, currentNetworkName] : null,
+    publicKey ? ["transaction", hash, networkId] : null,
     async () => await syncAndGetTransaction(),
   )
 }

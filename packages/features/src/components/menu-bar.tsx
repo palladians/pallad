@@ -45,7 +45,7 @@ type MenuBarProps = {
   onNetworkClicked?: () => void
   networkManagement?: boolean
   publicAddress?: string
-  currentNetwork?: string
+  networkId?: string
 }
 
 export const MenuBar = ({
@@ -55,7 +55,7 @@ export const MenuBar = ({
   onNetworkClicked,
   networkManagement = false,
   publicAddress,
-  currentNetwork,
+  networkId,
 }: MenuBarProps) => {
   const navigate = useNavigate()
   const goHome = () => navigate("/dashboard")
@@ -93,7 +93,7 @@ export const MenuBar = ({
                   className="flex flex-col btn min-h-10 h-10"
                   onClick={onNetworkClicked}
                 >
-                  <p className="text-sm">{currentNetwork}</p>
+                  <p className="text-sm">{networkId}</p>
                   {networkManagement ? (
                     <ChevronUpIcon width={24} height={24} />
                   ) : (

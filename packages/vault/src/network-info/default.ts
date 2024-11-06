@@ -1,13 +1,12 @@
 import type { ProviderConfig } from "@palladxyz/providers"
 
-import type { NetworkName } from "./network-info-state"
+import type { NetworkId } from "./network-info-state"
 
-export const DEFAULT_NETWORK = process.env.VITE_APP_DEFAULT_NETWORK ?? "Mainnet"
-/*
-Note: it is good practice to match the key with the networkName.
-*/
-export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
-  Devnet: {
+export const DEFAULT_NETWORK =
+  process.env.VITE_APP_DEFAULT_NETWORK_ID ?? "mina:mainnet"
+
+export const DEFAULT_NETWORK_INFO: Record<NetworkId, ProviderConfig> = {
+  "mina:devnet": {
     nodeEndpoint: {
       providerName: "mina-node",
       url:
@@ -26,9 +25,9 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
     },
     networkName: "Devnet",
     networkType: "testnet",
-    chainId: "",
+    networkId: "mina:devnet",
   },
-  Mainnet: {
+  "mina:mainnet": {
     nodeEndpoint: {
       providerName: "mina-node",
       url:
@@ -47,25 +46,6 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkName, ProviderConfig> = {
     },
     networkName: "Mainnet",
     networkType: "mainnet",
-    chainId: "",
-  },
-  ZekoDevNet: {
-    nodeEndpoint: {
-      providerName: "mina-node",
-      url: "https://devnet.zeko.io/graphql",
-    },
-    archiveNodeEndpoint: {
-      providerName: "zeko-scan",
-      url: "https://zekoscan.io/devnet",
-    },
-    explorer: {
-      transactionUrl: "https://zekoscan.io/devnet/tx/{hash}/txInfo",
-      accountUrl: "https://zekoscan.io/devnet/account/{publicKey}",
-      pendingTransactionsUrl:
-        "https://zekoscan.io/devnet/txs/user-txs?search={publicKey}",
-    },
-    networkName: "ZekoDevNet",
-    networkType: "testnet",
-    chainId: "",
+    networkId: "mina:mainnet",
   },
 }
