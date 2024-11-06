@@ -347,19 +347,26 @@ export const createMinaProvider = async (): Promise<
           if (!confirmation) {
             throw createProviderRpcError(4001, "User Rejected Request")
           }
-
+          let credentialSerialized
           try {
             // TODO: change serialization
             const credentialDeserialized = Credential.fromJSON(
               JSON.stringify(credential),
             )
             Credential.validate(credentialDeserialized)
+
+            credentialSerialized = Credential.toJSON(credentialDeserialized)
           } catch (error: any) {
             // TODO: add error
           }
 
+          // TODO: update error
+          if (!credentialSerialized) {
+            throw new Error("Failed to serialize credential")
+          }
+
           try {
-            await _vault.storePrivateCredential(credential)
+            await _vault.storePrivateCredential(credentialSerialized)
             return { success: true }
           } catch (error: any) {
             throw createProviderRpcError(

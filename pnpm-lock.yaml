@@ -12,8 +12,8 @@ importers:
         specifier: 1.8.3
         version: 1.8.3
       '@mina-js/utils':
-        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@a51d3b4
-        version: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@a51d3b4(typescript@5.5.4)
+        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@261950d
+        version: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@261950d(typescript@5.5.4)
       '@testing-library/react':
         specifier: 16.0.0
         version: 16.0.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -69,8 +69,8 @@ importers:
   apps/extension:
     dependencies:
       '@mina-js/providers':
-        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a51d3b4
-        version: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a51d3b4(typescript@5.5.4)
+        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@261950d
+        version: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@261950d(typescript@5.5.4)
       '@palladxyz/common':
         specifier: workspace:*
         version: link:../../packages/common
@@ -92,6 +92,9 @@ importers:
       buffer:
         specifier: 6.0.3
         version: 6.0.3
+      mina-credentials:
+        specifier: ^0.1.0
+        version: 0.1.0(o1js@2.0.0)
       mitt:
         specifier: 3.0.1
         version: 3.0.1
@@ -722,8 +725,8 @@ importers:
         specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@a51d3b4
         version: https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@a51d3b4(typescript@5.5.4)
       '@mina-js/providers':
-        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@1
-        version: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@1(typescript@5.5.4)
+        specifier: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@261950d
+        version: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@261950d(typescript@5.5.4)
       '@noble/hashes':
         specifier: 1.4.0
         version: 1.4.0
@@ -746,8 +749,8 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1
       mina-credentials:
-        specifier: ^0.1.0
-        version: 0.1.0(o1js@2.0.0)
+        specifier: ^0.1.1
+        version: 0.1.1(o1js@2.0.0)
       mina-signer:
         specifier: 3.0.7
         version: 3.0.7
@@ -1918,20 +1921,14 @@ packages:
     peerDependencies:
       typescript: ^5.0.0
 
-  '@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@1':
-    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@1}
+  '@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@261950d':
+    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@261950d}
     version: 0.0.1
     peerDependencies:
       typescript: ^5.0.0
 
-  '@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a51d3b4':
-    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a51d3b4}
-    version: 0.0.1
-    peerDependencies:
-      typescript: ^5.0.0
-
-  '@mina-js/utils@https://pkg.pr.new/palladians/mina-js/@mina-js/utils@a51d3b4':
-    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@a51d3b4}
+  '@mina-js/utils@https://pkg.pr.new/palladians/mina-js/@mina-js/utils@261950d':
+    resolution: {tarball: https://pkg.pr.new/palladians/mina-js/@mina-js/utils@261950d}
     version: 0.0.1
     peerDependencies:
       typescript: ^5.0.0
@@ -5460,6 +5457,12 @@ packages:
     peerDependencies:
       o1js: ^2.0.0
 
+  mina-credentials@0.1.1:
+    resolution: {integrity: sha512-afJh2PTK4AgxD0wodgo7vRwFeUFCOk+67fl+oSUj2+EEwJ8rq41mIy8hbacoq3vlTyhCxihbyXG73CTqWmU5FA==}
+    engines: {node: '>=22.0'}
+    peerDependencies:
+      o1js: ^2.0.0
+
   mina-signer@3.0.7:
     resolution: {integrity: sha512-7eYp/6WWj2VzJjvfC8dNeGMud/brdBrzkUsCdysFFXnfV2/FVpVhAGCMfaS6hs0HJtS4+eplmiD2hXfshQS8CQ==}
 
@@ -8874,15 +8877,11 @@ snapshots:
       ts-pattern: 5.5.0
       typescript: 5.5.4
 
-  '@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@1(typescript@5.5.4)':
+  '@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@261950d(typescript@5.5.4)':
     dependencies:
       typescript: 5.5.4
 
-  '@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a51d3b4(typescript@5.5.4)':
-    dependencies:
-      typescript: 5.5.4
-
-  '@mina-js/utils@https://pkg.pr.new/palladians/mina-js/@mina-js/utils@a51d3b4(typescript@5.5.4)':
+  '@mina-js/utils@https://pkg.pr.new/palladians/mina-js/@mina-js/utils@261950d(typescript@5.5.4)':
     dependencies:
       mina-signer: 3.0.7
       typescript: 5.5.4
@@ -12915,6 +12914,10 @@ snapshots:
   mimic-response@4.0.0: {}
 
   mina-credentials@0.1.0(o1js@2.0.0):
+    dependencies:
+      o1js: 2.0.0
+
+  mina-credentials@0.1.1(o1js@2.0.0):
     dependencies:
       o1js: 2.0.0
 

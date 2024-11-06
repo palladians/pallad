@@ -19,7 +19,8 @@ export interface IVaultService {
   getNetworkId(): Promise<string | undefined>
   getNetworkIds(): Promise<string[]>
   setState(state: Json): Promise<void>
-  storePrivateCredential(state: Json): Promise<void>
+  // TODO: change from any to type from minajs
+  storePrivateCredential(state: string): Promise<void>
   getPrivateCredential(query?: SearchQuery): Promise<StoredObject[]>
   getEnabled({ origin }: { origin: string }): Promise<boolean>
   setEnabled({ origin }: { origin: string }): Promise<void>

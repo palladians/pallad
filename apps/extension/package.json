@@ -15,7 +15,7 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@mina-js/providers": "https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a51d3b4",
+    "@mina-js/providers": "https://pkg.pr.new/palladians/mina-js/@mina-js/providers@261950d",
     "@palladxyz/common": "workspace:*",
     "@palladxyz/features": "workspace:*",
     "@palladxyz/key-management": "workspace:*",
@@ -23,6 +23,7 @@
     "@palladxyz/web-provider": "workspace:*",
     "@plasmohq/messaging": "0.6.2",
     "buffer": "6.0.3",
+    "mina-credentials": "^0.1.0",
     "mitt": "3.0.1",
     "next-themes": "0.3.0",
     "p-debounce": "4.0.0",
