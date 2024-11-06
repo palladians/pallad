@@ -6,10 +6,10 @@ import { NetworksView } from "../views/networks"
 
 export const NetworksRoute = () => {
   const navigate = useNavigate()
-  const currentNetworkName = useVault((state) => state.currentNetworkName)
+  const networkId = useVault((state) => state.currentNetworkId)
   const { fetchWallet } = useAccount()
-  const onNetworkSwitch = async (network: string) => {
-    await sendMessage("pallad_switchNetwork", { network })
+  const onNetworkSwitch = async (networkId: string) => {
+    await sendMessage("pallad_switchNetwork", { networkId })
     await useVault.persist.rehydrate()
     await fetchWallet()
     navigate("/dashboard")
@@ -18,7 +18,7 @@ export const NetworksRoute = () => {
     <NetworksView
       onCloseClicked={() => navigate(-1)}
       onNetworkSwitch={onNetworkSwitch}
-      currentNetwork={currentNetworkName}
+      networkId={networkId}
     />
   )
 }

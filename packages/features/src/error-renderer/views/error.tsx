@@ -1,14 +1,11 @@
 import type { FallbackProps } from "react-error-boundary"
-import { useMixpanel } from "react-mixpanel-browser"
 
 export const ErrorView = ({ error, resetErrorBoundary }: FallbackProps) => {
-  const mixpanel = useMixpanel()
   const stringifiedError = JSON.stringify(
     error,
     Object.getOwnPropertyNames(error),
   )
   const report = async () => {
-    await mixpanel.track("Boundary Error", { error: stringifiedError })
     resetErrorBoundary()
   }
   return (

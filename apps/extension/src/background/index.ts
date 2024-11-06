@@ -4,10 +4,10 @@ import { runtime, tabs } from "webextension-polyfill"
 import {
   minaAccounts,
   minaAddChain,
-  minaChainId,
   minaCreateNullifier,
   minaGetBalance,
   minaGetState,
+  minaNetworkId,
   minaRequestAccounts,
   minaRequestNetwork,
   minaSendTransaction,
@@ -32,7 +32,7 @@ onMessage("mina_addChain", minaAddChain)
 onMessage("mina_requestNetwork", minaRequestNetwork)
 onMessage("mina_switchChain", minaSwitchChain)
 onMessage("mina_getState", minaGetState)
-onMessage("mina_chainId", minaChainId)
+onMessage("mina_networkId", minaNetworkId)
 onMessage("mina_accounts", minaAccounts)
 onMessage("mina_requestAccounts", minaRequestAccounts)
 onMessage("mina_sign", minaSign)

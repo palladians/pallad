@@ -5,24 +5,20 @@
 
 import type { ProviderConfig } from "@palladxyz/providers"
 
+export type NetworkId = string
+
 export type NetworkInfoState = {
-  networkInfo: Record<NetworkName, ProviderConfig>
-  currentNetworkName: NetworkName
+  networkInfoV2: Record<NetworkId, ProviderConfig>
+  currentNetworkId: string
 }
 
-export type NetworkName = string
 export type NetworkInfoActions = {
-  setCurrentNetworkName: (networkName: NetworkName) => void
-  getCurrentNetworkInfo: () => ProviderConfig
-  setNetworkInfo: (
-    networkName: NetworkName,
-    providerConfig: ProviderConfig,
-  ) => void
-  getNetworkInfo: (networkName: NetworkName) => ProviderConfig | undefined
+  setCurrentNetworkId: (networkId: NetworkId) => void
+  getCurrentNetworkInfo: () => ProviderConfig | undefined
+  setNetworkInfo: (networkId: NetworkId, providerConfig: ProviderConfig) => void
+  getNetworkInfo: (networkId: NetworkId) => ProviderConfig | undefined
   removeNetworkInfo: (ticker: string) => void
   allNetworkInfo: () => (ProviderConfig | undefined)[]
-  getChainIds: () => string[]
-  updateNetworkInfo: (networkName: NetworkName, update: any) => void
   clear: () => void
 }
 

@@ -1,17 +1,15 @@
-import type { PalladNetworkNames } from "@palladxyz/pallad-core"
-
 export function restartWalletHelper(get: any) {
   const {
     getCurrentWallet,
     keyAgentName,
-    getCurrentNetwork,
+    getCurrentNetworkId,
     removeKeyAgent,
     removeAccount,
     removeCredential,
   } = get()
   const currentWallet = getCurrentWallet()
-  const currentNetwork = getCurrentNetwork()
-  removeAccount(currentNetwork as PalladNetworkNames, "")
+  const currentNetwork = getCurrentNetworkId()
+  removeAccount(currentNetwork, "")
   removeKeyAgent(keyAgentName)
   removeCredential(currentWallet.credential.credentialName)
 }

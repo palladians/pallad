@@ -1,5 +1,5 @@
 import { generateMnemonicWords } from "@palladxyz/key-management"
-import { Network, PalladNetworkNames } from "@palladxyz/pallad-core"
+import { Network } from "@palladxyz/pallad-core"
 import { produce } from "immer"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
@@ -25,7 +25,7 @@ import {
   switchNetworkHelper,
   syncAccountHelper,
   syncTransactionHelper,
-  syncWalletnHelper,
+  syncWalletHelper,
 } from "./utils"
 import type { GlobalVaultState, GlobalVaultStore } from "./vaultState"
 
@@ -36,10 +36,11 @@ const defaultGlobalVaultState: GlobalVaultState = {
   currentAddressIndex: 0,
   chain: Network.Mina,
   walletName: "",
-  walletNetwork:
-    (process.env.VITE_APP_DEFAULT_NETWORK ?? "Mainnet") === "Mainnet"
-      ? PalladNetworkNames.MINA_MAINNET
-      : PalladNetworkNames.MINA_DEVNET,
+  walletNetworkId:
+    (process.env.VITE_APP_DEFAULT_NETWORK_ID ?? "mina:mainnet") ===
+    "mina:mainnet"
+      ? "mina:mainnet"
+      : "mina:devnet",
   knownAccounts: [],
   chainIds: [],
 }
@@ -99,17 +100,16 @@ export const useVault = create<
       _syncTransactions: async (providerConfig, publicKey) => {
         await syncTransactionHelper(get, providerConfig, publicKey)
       },
-      _syncWallet: async (networkName) => {
-        await syncWalletnHelper(get, networkName)
+      _syncWallet: async (networkId) => {
+        await syncWalletHelper(get, networkId)
       },
-      getCurrentNetwork: () => {
-        const { getCurrentNetworkInfo } = get()
-        const network = getCurrentNetworkInfo().networkName
-        return network
+      getCurrentNetworkId: () => {
+        const { currentNetworkId } = get()
+        return currentNetworkId
       },
       // TODO: this must emit an event `chainChanged`
-      switchNetwork: async (networkName) => {
-        await switchNetworkHelper(get, networkName)
+      switchNetwork: async (networkId) => {
+        await switchNetworkHelper(get, networkId)
       },
       getCredentials: (query, props = []) => {
         const { searchCredentials } = get()
@@ -128,15 +128,15 @@ export const useVault = create<
         return TransactionBodySchema.parse(args.transaction)
       },
       submitTx: async ({ signedTransaction, type }) => {
-        const { currentNetworkName } = get()
+        const { currentNetworkId } = get()
         const networkName =
-          currentNetworkName === "Mainnet" ? "mainnet" : "devnet"
+          currentNetworkId === "mina:mainnet" ? "mainnet" : "devnet"
         const klesia = createClient({ network: networkName })
-        const { result } = await klesia.request<"mina_sendTransaction">({
+        const result = await klesia.request<"mina_sendTransaction">({
           method: "mina_sendTransaction",
           params: [
             {
-              input: signedTransaction.data,
+              input: signedTransaction.data as never,
               signature: signedTransaction.signature,
             },
             type as "payment" | "delegation",
@@ -177,12 +177,9 @@ export const useVault = create<
       getBalance: (ticker) => {
         return getBalanceHelper(get, ticker)
       },
-      getChainId: () => {
-        // could also fetch this from the daemon provider
-        // TODO: consider syncing the chainId on switchNetwork
-        const { getCurrentNetworkInfo } = get()
-        const currentNetwork = getCurrentNetworkInfo()
-        return currentNetwork.chainId
+      getNetworkId: () => {
+        const { currentNetworkId } = get()
+        return currentNetworkId
       },
     }),
     {

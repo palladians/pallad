@@ -1,24 +1,17 @@
 import MinaIcon from "@/common/assets/mina.svg?react"
-import ZekoIcon from "@/common/assets/zeko.svg?react"
 import { MenuBar } from "@/components/menu-bar"
 
 const NETWORKS = [
   {
+    id: "mina:mainnet",
     icon: MinaIcon,
-    value: "Mainnet",
     blockchain: "Mina",
     network: "Mainnet",
   },
   {
+    id: "mina:devnet",
     icon: MinaIcon,
-    value: "Devnet",
     blockchain: "Mina",
-    network: "Devnet",
-  },
-  {
-    icon: ZekoIcon,
-    value: "ZekoDevNet",
-    blockchain: "Zeko",
     network: "Devnet",
   },
 ]
@@ -26,20 +19,20 @@ const NETWORKS = [
 type NetworksViewProps = {
   onCloseClicked: () => void
   onNetworkSwitch: (network: string) => Promise<void>
-  currentNetwork: string
+  networkId: string
 }
 
 export const NetworksView = ({
   onCloseClicked,
   onNetworkSwitch,
-  currentNetwork,
+  networkId,
 }: NetworksViewProps) => {
   return (
     <div className="flex flex-col flex-1">
       <MenuBar
         variant="wallet"
         onCloseClicked={onCloseClicked}
-        currentNetwork={currentNetwork}
+        networkId={networkId}
         networkManagement
       />
       <div className="px-8 pb-8">
@@ -56,9 +49,9 @@ export const NetworksView = ({
           {NETWORKS.map((entry) => (
             <button
               type="button"
-              key={entry.value}
+              key={entry.id}
               className="card flex flex-row bg-secondary w-full py-2 px-4 justify-between items-center"
-              onClick={() => onNetworkSwitch(entry.value)}
+              onClick={() => onNetworkSwitch(entry.id)}
             >
               <div className="flex items-center gap-2">
                 <div className="btn btn-circle">

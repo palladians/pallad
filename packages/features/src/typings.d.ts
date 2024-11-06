@@ -3,7 +3,7 @@ declare module "*.svg" {
   export default content
 }
 interface ImportMetaEnv {
-  readonly VITE_APP_DEFAULT_NETWORK: string
+  readonly VITE_APP_DEFAULT_NETWORK_ID: string
   readonly VITE_APP_MINA_PROXY_MAINNET_URL: string
   readonly VITE_APP_MINA_PROXY_DEVNET_URL: string
 }

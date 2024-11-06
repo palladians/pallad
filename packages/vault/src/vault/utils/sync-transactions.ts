@@ -17,5 +17,5 @@ export async function syncTransactionHelper(
     // TODO: remove 'MINA' as the key
     MINA: transactions,
   } // TODO: replace with util using tokeId map to map transactions to tokens
-  setTransactions(providerConfig.networkName, publicKey, transactionsRecord) // note: there is no pagination now
+  setTransactions(providerConfig.networkId, publicKey, transactionsRecord) // note: there is no pagination now
 }
