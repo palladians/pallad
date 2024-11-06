@@ -12,7 +12,7 @@ export default defineConfig({
       ],
       name: "build",
       onChange: async ({ spawn }) => {
-        await spawn`pnpm build:extension`
+        await spawn`bun run build:extension`
       },
     },
   ],

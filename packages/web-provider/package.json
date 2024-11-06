@@ -12,10 +12,10 @@
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test:unit": "vitest run",
-    "cleanup": "rimraf node_modules dist .turbo"
+    "build": "bunx --bun tsup",
+    "dev": "bunx --bun tsup --watch",
+    "test:unit": "bunx --bun vitest run",
+    "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
     "@mina-js/klesia-sdk": "https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@a51d3b4",

@@ -6,21 +6,21 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "turbo run build",
-    "b": "pnpm build",
+    "b": "bun run build",
     "build:extension": "turbo run build --filter=@palladxyz/extension...",
     "build:features": "turbo run build --filter=@palladxyz/features...",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
     "dev:extension": "turbowatch extension.turbowatch.ts",
-    "lint": "pnpm biome check .",
-    "lint:fix": "pnpm lint --write",
+    "lint": "bunx biome check .",
+    "lint:fix": "bun run lint --write",
     "test:unit": "turbo run test:unit",
     "test:e2e:extension": "turbo run test:e2e --filter=@palladxyz/extension",
-    "format": "pnpm biome check --write .",
-    "format:unsafe": "pnpm biome check --write --unsafe .",
-    "f": "pnpm format",
+    "format": "bunx biome check --write .",
+    "format:unsafe": "bunx biome check --write --unsafe .",
+    "f": "bun run format",
     "cleanup": "turbo run cleanup && rimraf node_modules .turbo",
     "prepare": "husky install",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "bunx only-allow bun"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
@@ -43,5 +43,6 @@
     "typescript": "5.5.4",
     "vitest": "2.0.4"
   },
-  "packageManager": "pnpm@9.0.1"
+  "workspaces": ["packages/*", "apps/*"],
+  "packageManager": "bun@1.1.34"
 }

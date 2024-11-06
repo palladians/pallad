@@ -24,13 +24,13 @@
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "bunx --bun tsup",
+    "dev": "bunx --bun tsup --watch",
     "test:unit": "echo 'not yet'",
-    "story:dev": "VITE_APP_LADLE=true ladle serve",
-    "story:build": "VITE_APP_LADLE=true ladle build -o ./build",
-    "story:preview": "VITE_APP_LADLE=true ladle preview",
-    "cleanup": "rimraf node_modules dist .turbo build"
+    "story:dev": "VITE_APP_LADLE=true bunx --bun ladle serve",
+    "story:build": "VITE_APP_LADLE=true bunx --bun ladle build -o ./build",
+    "story:preview": "VITE_APP_LADLE=true bunx --bun ladle preview",
+    "cleanup": "bunx --bun rimraf node_modules dist .turbo build"
   },
   "dependencies": {
     "@github/hotkey": "3.1.1",
