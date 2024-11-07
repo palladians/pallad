@@ -1,3 +1,5 @@
+import { beforeAll, beforeEach, describe, expect, it } from "bun:test"
+import { TransactionBodySchema } from "@mina-js/utils"
 import { utf8ToBytes } from "@noble/hashes/utils"
 import {
   type ChainOperationArgs,
@@ -6,7 +8,7 @@ import {
   type MinaSpecificArgs,
 } from "@palladxyz/key-management"
 import { Mina, type TokenIdMap } from "@palladxyz/mina-core"
-import { Network, constructTransaction } from "@palladxyz/pallad-core"
+import { Network } from "@palladxyz/pallad-core"
 import type {
   Payment,
   SignedLegacy,
@@ -92,27 +94,22 @@ describe.skip("Mina Explorer Submit Transaction Provider (Functional)", () => {
       // construct transaction, sign, and submit
       const amount = 1 * 1e9
       const inferredNonce = accountInfo.MINA?.inferredNonce ?? 0
-      const transaction: Mina.TransactionBody = {
+      const transaction = TransactionBodySchema.parse({
         to: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
         from: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
         fee: 1 * 1e9,
         amount: amount,
         nonce: Number(inferredNonce),
         memo: "test suite",
-        type: "payment",
         validUntil: 4294967295,
-      }
-      const constructedTx: Mina.ConstructedTransaction = constructTransaction(
-        transaction,
-        Mina.TransactionType.PAYMENT,
-      )
+      })
       const credential = agent.serializableData.credentialSubject.contents[0]
       const args: ChainOperationArgs = {
         operation: "mina_signTransaction",
         network: "Mina",
         networkType: networkType,
       }
-      const signedTx = await agent.sign(credential, constructedTx, args)
+      const signedTx = await agent.sign(credential, { transaction }, args)
       const submitTxArgs = {
         signedTransaction: signedTx as unknown as SignedLegacy<Payment>, // or SignedLegacy<Common>
         type: Mina.TransactionType.PAYMENT,

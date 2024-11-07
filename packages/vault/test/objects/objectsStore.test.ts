@@ -1,7 +1,7 @@
+import { beforeEach, describe, expect, it } from "bun:test"
 import type { GroupedCredentials } from "@palladxyz/key-management"
 import { Network } from "@palladxyz/pallad-core"
 import { act, renderHook } from "@testing-library/react"
-import { afterEach, beforeEach, describe, expect, it } from "vitest"
 
 import type { Json } from "@mina-js/utils"
 import {
@@ -68,11 +68,8 @@ describe("ObjectStore", () => {
       objectName: "green crocodile credential",
       object: objectTwo as StoredObject,
     }
-  })
-
-  afterEach(() => {
     const { result } = renderHook(() => useVault())
-    act(() => result.current.clear())
+    act(() => result.current.clearObjects())
   })
 
   it("should create an objects store", () => {

@@ -10,9 +10,6 @@
 [![Discord](https://img.shields.io/discord/1127906495409958953?label=Discord)](https://discord.gg/ExzzfTGUnB)
 ![example workflow](https://github.com/palladians/pallad/actions/workflows/apps-extension-ci.yml/badge.svg)
 
-⚠️ Work in progress ⚠️
-🚨 Now in Beta 🚨
-
 </div>
 
 Welcome to Pallad an experimental and progressive Mina Protocol wallet!
@@ -25,22 +22,16 @@ Pallad is at the frontier, leading the way in innovation and user-centric design
 
 ### Prerequisite 📌
 
-- [NVM](https://github.com/nvm-sh/nvm)
-- pnpm
+- Bun
 
 ### Installation 💻
 
-Make sure you're on the right Node.js version, and you got pnpm installed.
-
-```shell
-$ nvm use
-$ npm i -g pnpm
-```
+Make sure you're on the latest Bun version.
 
 Install the dependencies:
 
 ```shell
-$ pnpm i
+$ bun i
 ```
 
 From `apps/extension` copy the `.env.example` as `.env` and adjust the variables there.
@@ -48,7 +39,7 @@ From `apps/extension` copy the `.env.example` as `.env` and adjust the variables
 Build all the modules in repo:
 
 ```shell
-$ pnpm build
+$ bun run build
 ```
 
 ## Structure 🏗️
@@ -59,7 +50,7 @@ This is a monorepo for all the Pallad-related code.
   - `extension` - Browser extension app.
 - `packages`
   - `_template` - Template to follow for new packages in this repo.
-  - `common` - Common configuration for packages (tsup and vitest).
+  - `common` - Common configuration for packages (tsup).
   - `features` - Wallet features, views, and UI components.
   - `key-management` - Blockchain agnostic key management.
   - `mina-core` - Core Mina Package SDK.
@@ -74,7 +65,7 @@ This is a monorepo for all the Pallad-related code.
 Set up the dev server of extension:
 
 ```shell
-$ pnpm dev:extension
+$ bun run dev:extension
 ```
 
 ## Testing 🧪
@@ -82,20 +73,20 @@ $ pnpm dev:extension
 Running linter:
 
 ```shell
-$ pnpm lint
+$ bun run lint
 ```
 
-Running unit tests (Vitest):
+Running unit tests (Bun Test):
 
 ```shell
-$ pnpm test:unit
+$ bun run test:unit
 ```
 
 Running E2E tests for browser extension (Playwright):
 
 ```shell
-$ npx playwright install chromium # make sure you have Chromium driver
-$ pnpm test:e2e:extension
+$ bunx playwright install chromium # make sure you have Chromium driver
+$ bun run test:e2e:extension
 ```
 
 ## Contributors ✨

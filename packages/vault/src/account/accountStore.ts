@@ -38,6 +38,9 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
     const account = accounts[networkId]?.[address] ?? {}
     set(
       produce((state) => {
+        state.accounts[networkId] = state.accounts[networkId] ?? {}
+        state.accounts[networkId][address] =
+          state.accounts[networkId][address] ?? {}
         state.accounts[networkId][address] = {
           ...account,
           accountInfo,
@@ -50,6 +53,9 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
     const account = accounts[networkId]?.[address] ?? {}
     set(
       produce((state) => {
+        state.accounts[networkId] = state.accounts[networkId] ?? {}
+        state.accounts[networkId][address] =
+          state.accounts[networkId][address] ?? {}
         state.accounts[networkId][address] = {
           ...account,
           transactions,
@@ -102,10 +108,10 @@ export const accountSlice: StateCreator<AccountStore> = (set, get) => ({
       accounts[networkId]?.[address]?.transactions[ticker] || []
     return transactions.find((tx) => tx.hash === hash)
   },
-  clear: () => {
+  clearAccounts: () => {
     set(
       produce((state) => {
-        state.accounts = {} as never
+        state.accounts = {}
       }),
     )
   },

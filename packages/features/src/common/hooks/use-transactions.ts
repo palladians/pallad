@@ -1,3 +1,4 @@
+import type { Mina } from "@palladxyz/mina-core"
 import { getPublicKey, useVault } from "@palladxyz/vault"
 import useSWR from "swr"
 
@@ -8,6 +9,7 @@ export const useTransactions = () => {
   const networkId = useVault((state) => state.currentNetworkId)
   return useSWR(
     publicKey ? [publicKey, "transactions", networkId] : null,
-    () => getTransactions(networkId, publicKey, "MINA"), // TODO: remove hardcoded 'MINA'
+    () =>
+      getTransactions(networkId, publicKey, "MINA") as Mina.TransactionBody[], // TODO: remove hardcoded 'MINA'
   )
 }

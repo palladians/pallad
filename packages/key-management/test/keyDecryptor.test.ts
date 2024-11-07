@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { beforeAll, describe, expect, it } from "bun:test"
 
 import {
   KeyAgentType,
@@ -79,9 +79,9 @@ describe("KeyDecryptor", () => {
       },
     }
 
-    await expect(
-      keyDecryptor.decryptSeedBytes(serializableData),
-    ).rejects.toThrow("Failed to decrypt seed bytes")
+    expect(keyDecryptor.decryptSeedBytes(serializableData)).rejects.toThrow(
+      "Failed to decrypt seed bytes",
+    )
   })
   it("should not expose passphrase", async () => {
     const keyDecryptor = new KeyDecryptor(getPassphrase)

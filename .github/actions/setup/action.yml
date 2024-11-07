@@ -15,25 +15,14 @@ runs:
       with:
         repo-token: ${{ inputs.GITHUB_TOKEN }}
         server-token: ${{ inputs.TURBO_SERVER_TOKEN }}
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version-file: .nvmrc
-    - uses: pnpm/action-setup@v4
-      name: Install pnpm
-      with:
-        run_install: false
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+    - uses: oven-sh/setup-bun@v2
+      name: Install Bun
     - uses: actions/cache@v4
-      name: Setup pnpm cache
+      name: Setup cache
       with:
-        path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
+        path: |
+          ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
     - name: Install dependencies
       shell: bash
-      run: pnpm install
+      run: bun i

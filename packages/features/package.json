@@ -24,13 +24,13 @@
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "bunx --bun tsc --noEmit && bunx --bun tsup",
+    "dev": "bunx --bun tsup --watch",
     "test:unit": "echo 'not yet'",
-    "story:dev": "VITE_APP_LADLE=true ladle serve",
-    "story:build": "VITE_APP_LADLE=true ladle build -o ./build",
-    "story:preview": "VITE_APP_LADLE=true ladle preview",
-    "cleanup": "rimraf node_modules dist .turbo build"
+    "story:dev": "VITE_APP_LADLE=true bunx --bun ladle serve",
+    "story:build": "VITE_APP_LADLE=true bunx --bun ladle build -o ./build",
+    "story:preview": "VITE_APP_LADLE=true bunx --bun ladle preview",
+    "cleanup": "bunx --bun rimraf node_modules dist .turbo build"
   },
   "dependencies": {
     "@github/hotkey": "3.1.1",
@@ -82,13 +82,11 @@
     "@ladle/react": "4.1.0",
     "@palladxyz/common": "workspace:*",
     "@svgr/rollup": "8.1.0",
-    "@testing-library/react": "16.0.0",
     "@trpc/server": "10.45.2",
     "@tsconfig/recommended": "1.0.7",
     "@tsconfig/vite-react": "3.0.2",
     "@types/chrome": "0.0.269",
     "@types/js-beautify": "1.14.3",
-    "@types/mocha": "10.0.7",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "@types/webextension-polyfill": "0.10.7",
@@ -105,7 +103,6 @@
     "zod": "3.23.8"
   },
   "peerDependencies": {
-    "@types/mocha": "10.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   }

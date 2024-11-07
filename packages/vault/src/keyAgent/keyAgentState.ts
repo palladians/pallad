@@ -74,5 +74,5 @@ export type KeyAgentStore = {
   ) => Promise<GroupedCredentials | undefined>
   getKeyAgent: (name: KeyAgentName) => SingleKeyAgentState | undefined
   removeKeyAgent: (name: KeyAgentName) => void
-  clear: () => void
+  clearKeyAgents: () => void
 }

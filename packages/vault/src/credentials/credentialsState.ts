@@ -46,5 +46,5 @@ export type CredentialStore = {
   ) => SingleCredentialState | typeof initialCredentialState
   removeCredential: (name: KeyAgentName) => void
   searchCredentials(query: SearchQuery, props?: string[]): StoredCredential[]
-  clear: () => void
+  clearCredentials: () => void
 }

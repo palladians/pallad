@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, it } from "bun:test"
 import { utf8ToBytes } from "@noble/hashes/utils"
 import { mnemonic } from "@palladxyz/common"
 import {
@@ -10,7 +11,6 @@ import {
 import type { Mina } from "@palladxyz/mina-core"
 import { Network } from "@palladxyz/pallad-core"
 import { act, renderHook } from "@testing-library/react"
-import { expect } from "vitest"
 
 import { KeyAgents } from "../../src"
 import { useVault } from "../../src"
@@ -40,13 +40,10 @@ describe("KeyAgentStore", () => {
       getPassphrase: getPassphrase,
       mnemonicWords: randomMnemonic,
     }
-  })
-
-  afterEach(() => {
     const {
       result: { current },
     } = renderHook(() => useVault())
-    act(() => current.clear())
+    act(() => current.clearKeyAgents())
   })
 
   it("should create an keyAgent store", () => {

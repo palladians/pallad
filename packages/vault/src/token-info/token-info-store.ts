@@ -21,7 +21,7 @@ export const tokenInfoSlice: StateCreator<TokenInfoStore> = (set, get) => ({
   getTokenInfo: (networkId, ticker) => {
     const { tokenInfoV2 } = get()
     const tokenId = tokenInfoV2[networkId]?.[ticker] ?? "undefined"
-    return { ticker: ticker, tokenId: tokenId } || undefined
+    return { ticker: ticker, tokenId: tokenId }
   },
   removeTokenInfo: (networkId, ticker) => {
     set(
@@ -30,10 +30,10 @@ export const tokenInfoSlice: StateCreator<TokenInfoStore> = (set, get) => ({
       }),
     )
   },
-  clear: () => {
+  clearTokenInfo: () => {
     set(
       produce((state) => {
-        state.tokenInfo = {}
+        state.tokenInfo = DEFAULT_TOKEN_INFO
       }),
     )
   },

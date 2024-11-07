@@ -19,7 +19,7 @@ export const TransactionsRoute = () => {
       .filter((hash) => !transactions?.map((tx) => tx.hash).includes(hash)),
   )
   const openPendingTransactions = () => {
-    const url = currentNetworkInfo.explorer.pendingTransactionsUrl.replace(
+    const url = currentNetworkInfo?.explorer.pendingTransactionsUrl.replace(
       "{publicKey}",
       publicKey,
     )

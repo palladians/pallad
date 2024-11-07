@@ -4,6 +4,7 @@ import { WebConnectorView } from "./views/web-connector"
 export const Enable = () => {
   return (
     <WebConnectorView
+      loading={false}
       inputType="confirmation"
       onConfirm={action("Confirm")}
       onDecline={action("Decline")}

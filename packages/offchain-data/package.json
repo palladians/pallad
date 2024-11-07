@@ -12,9 +12,9 @@
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "cleanup": "rimraf node_modules dist .turbo"
+    "build": "bunx --bun tsc --noEmit && bunx --bun tsup",
+    "dev": "bunx --bun tsup --watch",
+    "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
     "dayjs": "1.11.12",
