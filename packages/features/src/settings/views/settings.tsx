@@ -52,6 +52,22 @@ export const SettingsView = ({
   onLogOut,
 }: SettingsViewProps) => {
   const { t } = useTranslation()
+  const getLabel = (label: string) => {
+    switch (label) {
+      case "Wallet":
+        return t("settings.wallet")
+      case "Privacy":
+        return t("settings.privacy")
+      case "About":
+        return t("settings.about")
+      case "Display":
+        return t("settings.display")
+      case "Authorized zkApps":
+        return t("settings.zkapps")
+      default:
+        return ""
+    }
+  }
   return (
     <AppLayout>
       <SettingsPageLayout
@@ -59,13 +75,13 @@ export const SettingsView = ({
         onCloseClicked={onCloseClicked}
         headerContent={
           <div className="mt-6 px-6 py-4 flex items-center justify-between bg-neutral rounded-2xl">
-            <p>{t("buyUsACoffee")}</p>
+            <p>{t("settings.buyUsACoffee")}</p>
             <button
               type="button"
               className="px-8 btn btn-primary"
               onClick={onDonateClicked}
             >
-              {t("send")}
+              {t("settings.send")}
             </button>
           </div>
         }
@@ -87,7 +103,7 @@ export const SettingsView = ({
                     />
                   </div>
                   <div>
-                    <p>{link.label}</p>
+                    <p>{getLabel(link.label)}</p>
                     <p className="text-sm">{link.description}</p>
                   </div>
                 </Link>
@@ -100,7 +116,7 @@ export const SettingsView = ({
             data-testid="settings/logOut"
             onClick={onLogOut}
           >
-            {t("logOut")}
+            {t("settings.logOut")}
           </button>
         </div>
       </SettingsPageLayout>

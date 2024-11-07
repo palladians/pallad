@@ -25,14 +25,14 @@ export const StayConnectedView = ({ onGoToDashboard }: StayConnectedRoute) => {
           onClick={onGoToDashboard}
           data-testid="formSubmit"
         >
-          {t("goToDashboard")}
+          {t("onboarding.goToDashboard")}
         </button>
       }
     >
       <div className="flex flex-col justify-center items-center gap-4 flex-1">
         <HeartIcon />
-        <h1 className="text-2xl text-center">{t("allDone")}</h1>
-        <div className="leading-8 text-center">{t("followUs")}</div>
+        <h1 className="text-2xl text-center">{t("onboarding.allDone")}</h1>
+        <div className="leading-8 text-center">{t("onboarding.followUs")}</div>
         <div className="flex w-full gap-2">
           <a
             href={TWITTER_URL}

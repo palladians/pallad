@@ -58,7 +58,7 @@ export const InputForm = ({
         className="btn btn-primary max-w-48 w-full"
         disabled={loading}
       >
-        {submitButtonLabel ?? t("sign")}
+        {submitButtonLabel ?? t("webConnector.sign")}
       </button>
       <button
         type="button"
@@ -66,7 +66,7 @@ export const InputForm = ({
         onClick={onReject}
         disabled={loading}
       >
-        {rejectButtonLabel ?? t("reject")}
+        {rejectButtonLabel ?? t("webConnector.reject")}
       </button>
     </form>
   )

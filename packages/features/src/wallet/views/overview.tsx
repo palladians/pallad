@@ -58,13 +58,13 @@ export const OverviewView = ({
       </Skeleton>
       <div className="card flex-col bg-secondary rounded-t-none px-8 pb-6 gap-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-primary">{t("portfolioValue")}</h1>
+          <h1 className="text-primary">{t("wallet.portfolioValue")}</h1>
           <button
             type="button"
             className="btn btn-sm"
             onClick={() => setUseFiatBalance(!useFiatBalance)}
           >
-            {t("use")} {useFiatBalance ? "Mina" : "Fiat"}
+            {t("wallet.use")} {useFiatBalance ? "Mina" : "Fiat"}
           </button>
         </div>
         <Skeleton loading={loading} h="65px">
@@ -89,7 +89,7 @@ export const OverviewView = ({
             onClick={onSend}
             data-testid="dashboard/send"
           >
-            {t("send")}
+            {t("wallet.send")}
           </button>
           <button
             type="button"
@@ -97,18 +97,18 @@ export const OverviewView = ({
             onClick={onReceive}
             data-testid="dashboard/receive"
           >
-            {t("receive")}
+            {t("wallet.receive")}
           </button>
         </div>
       </div>
       <div className="flex flex-col px-8 py-4 gap-3 pb-16">
         <div className="flex justify-between items-end">
           <div className="flex flex-col gap-1">
-            <p className="text-mint">{t("recent")}</p>
-            <h2 className="text-xl">{t("transactions")}</h2>
+            <p className="text-mint">{t("wallet.recent")}</p>
+            <h2 className="text-xl">{t("wallet.transactions")}</h2>
           </div>
           <Link to="/transactions" className="flex items-center mb-[2px]">
-            <span>{t("seeAll")}</span>
+            <span>{t("wallet.seeAll")}</span>
             <ArrowRightIcon />
           </Link>
         </div>
@@ -127,7 +127,7 @@ export const OverviewView = ({
               />
             ))
           ) : (
-            <p className="col-span-2">{t("noTransactionsYet")}</p>
+            <p className="col-span-2">{t("wallet.noTransactionsYet")}</p>
           )}
         </div>
       </div>

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next"
 
 export const MenuDrawer = () => {
   const navigate = useNavigate()
-  const currentNetworkName = useVault((state) => state.currentNetworkName)
+  const networkId = useVault((state) => state.currentNetworkId)
   const { t } = useTranslation()
   const networkId = useVault((state) => state.currentNetworkId)
   
@@ -69,7 +69,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/")}
               data-testid="menu/activity"
             >
-              {t("dashboard")}
+              {t("components.dashboard")}
             </button>
             <button
               type="button"
@@ -77,7 +77,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/transactions")}
               data-testid="menu/activity"
             >
-              {t("activity")}
+              {t("components.activity")}
             </button>
             <button
               type="button"
@@ -85,7 +85,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/staking")}
               data-testid="menu/staking"
             >
-              {t("staking")}
+              {t("components.staking")}
             </button>
             <button
               type="button"
@@ -93,7 +93,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/contacts")}
               data-testid="menu/addressBook"
             >
-              {t("adressBook")}
+              {t("components.adressBook")}
             </button>
             <button
               type="button"
@@ -101,7 +101,7 @@ export const MenuDrawer = () => {
               onClick={() => navigate("/settings")}
               data-testid="menu/settings"
             >
-              {t("settings")}
+              {t("components.settings")}
             </button>
           </div>
         </div>

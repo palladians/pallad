@@ -17,7 +17,7 @@ export const TransactionFeeShort = ({
       className="btn btn-link text-base-content no-underline hover:no-underline"
       onClick={onClick}
     >
-      <span className="underline">{t("transactionFee")}</span>
+      <span className="underline">{t("components.transactionFee")}</span>
       <span>{TransactionFee[feeValue]} MINA</span>
     </button>
   )
@@ -40,7 +40,7 @@ export const FeePicker = ({ feeValue, setValue }: FeePickerProps) => {
         )}
         onClick={() => setValue("fee", "slow")}
       >
-        <div>{t("slow")}</div>
+        <div>{t("onboarding.slow")}</div>
         <div className="text-nowrap">{TransactionFee.slow} MINA</div>
       </button>
       <button
@@ -51,7 +51,7 @@ export const FeePicker = ({ feeValue, setValue }: FeePickerProps) => {
         )}
         onClick={() => setValue("fee", "default")}
       >
-        <div>{t("normal")}</div>
+        <div>{t("onboarding.normal")}</div>
         <div className="text-nowrap">{TransactionFee.default} MINA</div>
       </button>
       <button
@@ -62,7 +62,7 @@ export const FeePicker = ({ feeValue, setValue }: FeePickerProps) => {
         )}
         onClick={() => setValue("fee", "fast")}
       >
-        <div>{t("fast")}</div>
+        <div>{t("onboarding.fast")}</div>
         <div className="text-nowrap">{TransactionFee.fast} MINA</div>
       </button>
     </div>

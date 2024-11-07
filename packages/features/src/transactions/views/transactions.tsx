@@ -76,14 +76,14 @@ export const TransactionsView = ({
     <AppLayout>
       <MenuBar variant="dashboard" />
       <div className="px-8 mt-1 flex items-center justify-between">
-        <h2 className="text-3xl">{t("activity")}</h2>
+        <h2 className="text-3xl">{t("transactions.activity")}</h2>
         {showTransactions && (
           <button
             type="button"
             className="flex items-center space-x-1"
             onClick={() => setFiltersOpen(!filtersOpen)}
           >
-            <p>{t("filters")}</p>
+            <p>{t("transactions.filters")}</p>
             {filtersOpen ? (
               <X
                 width={24}
@@ -123,9 +123,9 @@ export const TransactionsView = ({
         <div className="px-8 pb-8 mt-6 space-y-4">
           {pendingHashes.length > 0 && (
             <p data-testid="transactions/pendingTransactions">
-              {t("pendingTransactions")}{" "}
+              {t("transactions.pendingTransactions")}{" "}
               <button type="button" onClick={openPendingTransactions}>
-                {t("preview")}
+                {t("transactions.preview")}
               </button>
             </p>
           )}
@@ -144,10 +144,10 @@ export const TransactionsView = ({
         </div>
       ) : (
         <div className="flex flex-col flex-1 items-center justify-center text-center">
-          <p className="mb-2 text-xl">{t("nothingHere")}</p>
-          <p className="mb-4 w-64">{t("detailsGetStarted")}</p>
+          <p className="mb-2 text-xl">{t("transactions.nothingHere")}</p>
+          <p className="mb-4 w-64">{t("transactions.detailsGetStarted")}</p>
           <Link to="/receive" className="w-36 btn btn-primary">
-            {t("receive")}
+            {t("transactions.receive")}
           </Link>
         </div>
       )}

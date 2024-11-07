@@ -68,7 +68,8 @@ export const BlockProducerTile = ({ producer }: BlockProducerTileProps) => {
           {formatCompact({ value: producer.amountStaked })} MINA
         </div>
         <div className="text-right text-sm">
-          {formatCompact({ value: producer.delegators })} {t("delegators")}
+          {formatCompact({ value: producer.delegators })}{" "}
+          {t("staking.delegators")}
         </div>
       </div>
     </button>

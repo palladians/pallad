@@ -41,9 +41,9 @@ export const NetworksView = ({
         <div className="flex justify-between">
           <div className="flex flex-col gap-2">
             <h1>
-              <span className="text-mint">{t("available")}</span>
+              <span className="text-mint">{t("wallet.available")}</span>
               <br />
-              <span className="text-2xl">{t("networks")}</span>
+              <span className="text-2xl">{t("wallet.networks")}</span>
             </h1>
           </div>
         </div>

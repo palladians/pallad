@@ -21,14 +21,14 @@ export const SecurityCheck = ({ title, onConfirm }: SecurityCheckProps) => {
           onClick={onConfirm}
           data-testid="formSubmit"
         >
-          {t("confirm")}
+          {t("onboarding.confirm")}
         </button>
       }
     >
       <div className="flex flex-1 flex-col justify-center items-center gap-4 text-center">
         <NoLookIcon />
-        <h1 className="text-2xl max-w-[260px]">{t("youreAlone")}</h1>
-        <p className="max-w-[260px]">{t("screenNotRecording")}</p>
+        <h1 className="text-2xl max-w-[260px]">{t("onboarding.youreAlone")}</h1>
+        <p className="max-w-[260px]">{t("onboarding.screenNotRecording")}</p>
       </div>
     </WizardLayout>
   )

@@ -59,7 +59,7 @@ export const StartView = ({
       <div className="flex flex-1 flex-col items-center justify-center gap-8 p-4 text-center">
         <div className="flex flex-col justify-center items-center gap-6">
           <Logo width={84} height={84} />
-          <p className="text-mint">{t("yourGateway")}</p>
+          <p className="text-mint">{t("onboarding.yourGateway")}</p>
         </div>
         <div className="flex w-full flex-col gap-2">
           <OptionCard

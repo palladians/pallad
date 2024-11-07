@@ -42,7 +42,7 @@ export const UnlockWalletView = ({
           data-testid="submitForm"
           disabled={!form.formState.dirtyFields.spendingPassword}
         >
-          <span>{t("unlock")}</span>
+          <span>{t("lock.unlock")}</span>
         </button>
       }
     >
@@ -60,7 +60,7 @@ export const UnlockWalletView = ({
             htmlFor="spendingPassword"
             className={clsx("label cursor-pointer")}
           >
-            {t("spendingPassword")}
+            {t("lock.spendingPassword")}
           </label>
           <label className="input flex items-center gap-2 w-full">
             <input

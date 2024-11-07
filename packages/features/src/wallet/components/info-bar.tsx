@@ -14,8 +14,10 @@ export const InfoBar = ({ onClose }: InfoBarProps) => {
           <InfoIcon className="text-primary" />
         </div>
         <div className="flex flex-col">
-          <h2>{t("openBeta")}</h2>
-          <p className="text-gray-400 text-sm">{t("onlyWorksForDevnet")}</p>
+          <h2>{t("wallet.openBeta")}</h2>
+          <p className="text-gray-400 text-sm">
+            {t("wallet.onlyWorksForDevnet")}
+          </p>
         </div>
         <button type="button" onClick={onClose}>
           <XIcon size={20} className="text-gray-400" />

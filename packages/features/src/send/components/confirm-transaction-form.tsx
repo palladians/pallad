@@ -53,7 +53,7 @@ export const ConfirmTransactionForm = ({
         {confirmationForm.formState.isSubmitting && (
           <Loader2Icon size={16} className="animate-spin" />
         )}
-        <span>{t("send")}</span>
+        <span>{t("send.send")}</span>
       </button>
     </form>
   )

@@ -58,13 +58,13 @@ export const AddressDropdown = ({
         <li onClick={handleClick}>
           <button type="button" onClick={copyAddress} className="flex gap-2">
             <CopyIcon />
-            <span>{t("copyAddress")}</span>
+            <span>{t("components.copyAddress")}</span>
           </button>
         </li>
         <li onClick={handleClick}>
           <button type="button" onClick={openInExplorer} className="flex gap-2">
             <ExternalLinkIcon />
-            <span>{t("openInMinascan")}</span>
+            <span>{t("components.openInMinascan")}</span>
           </button>
         </li>
         <li onClick={handleClick}>
@@ -74,7 +74,7 @@ export const AddressDropdown = ({
             className="flex gap-2"
           >
             <UserPlusIcon />
-            <span>{t("createContact")}</span>
+            <span>{t("addressBook.createContact")}</span>
           </Link>
         </li>
       </ul>

@@ -36,7 +36,7 @@ export const SeedBackupConfirmationView = ({
           data-testid="formSubmit"
         >
           {restoring && <Loader2Icon size={16} className="animate-spin" />}
-          <span>{t("next")}</span>
+          <span>{t("onboarding.next")}</span>
         </button>
       }
     >
@@ -52,7 +52,7 @@ export const SeedBackupConfirmationView = ({
           data-testid="onboarding/writedownIndex"
           data-word-index={confirmationIndex}
         >
-          {t("wordNumber")} {confirmationIndex + 1}
+          {t("onboarding.wordNumber")} {confirmationIndex + 1}
         </label>
         <input
           id="confirmation"
@@ -61,7 +61,7 @@ export const SeedBackupConfirmationView = ({
           data-testid="onboarding/mnemonicConfirmationInput"
           {...form.register("mnemonicWord")}
         />
-        <p className="text-mint mt-4">{t("confirmSavedSeed")}</p>
+        <p className="text-mint mt-4">{t("onboarding.confirmSavedSeed")}</p>
       </form>
     </WizardLayout>
   )

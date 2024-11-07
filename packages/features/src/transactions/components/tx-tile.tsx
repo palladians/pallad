@@ -24,15 +24,15 @@ export const TxTile = ({ tx, currentWalletAddress }: TxTileProps) => {
           <TxIcon tx={tx} currentWalletAddress={currentWalletAddress} />
         </div>
         <div>
-          {kind === "incoming" && <p>{t("received")}</p>}
-          {kind === "outgoing" && <p>{t("sent")}</p>}
-          {kind === "delegation" && <p>{t("staked")}</p>}
+          {kind === "incoming" && <p>{t("transactions.received")}</p>}
+          {kind === "outgoing" && <p>{t("transactions.sent")}</p>}
+          {kind === "delegation" && <p>{t("transactions.staked")}</p>}
           <p className="text-[#7D7A9C]">{tx.time}</p>
         </div>
       </div>
       <div className="text-right">
         {kind === "delegation" ? (
-          <p>{t("portfolio")}</p>
+          <p>{t("transactions.portfolio")}</p>
         ) : (
           <p>{`${tx.minaAmount} MINA`}</p>
         )}

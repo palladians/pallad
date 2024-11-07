@@ -51,7 +51,7 @@ export const StakingOverviewView = ({
       <div className="card flex-col bg-secondary rounded-t-none pb-6">
         <MenuBar variant="dashboard" />
         <div className="flex flex-col gap-6 px-8">
-          <h1 className="text-3xl">{t("staking")}</h1>
+          <h1 className="text-3xl">{t("staking.staking")}</h1>
           {stakeDelegated ? (
             <div className="flex flex-row justify-between items-center card bg-neutral p-6">
               <div className="flex flex-col">
@@ -67,12 +67,14 @@ export const StakingOverviewView = ({
                 className="btn btn-primary px-7"
                 data-testid="staking/start"
               >
-                {t("edit")}
+                {t("staking.edit")}
               </Link>
             </div>
           ) : (
             <EmptyState
-              heading={<h2 className="text-lg">{t("enjoySeamless")}</h2>}
+              heading={
+                <h2 className="text-lg">{t("staking.enjoySeamless")}</h2>
+              }
               button={{
                 label: "Stake",
                 url: "/staking/delegate",
@@ -83,19 +85,19 @@ export const StakingOverviewView = ({
         </div>
       </div>
       <div className="flex flex-1 justify-between flex-col px-8 pt-8 gap-4">
-        <h2 className="text-2xl">{t("blockRewards")}</h2>
+        <h2 className="text-2xl">{t("staking.blockRewards")}</h2>
         <div className="flex justify-between items-center">
           <div className="flex justify-center items-center flex-col">
             <p className="text-2xl">{stats.lastReward}</p>
-            <h3 className="text-sm">{t("lastReward")}</h3>
+            <h3 className="text-sm">{t("staking.lastReward")}</h3>
           </div>
           <div className="flex justify-center items-center flex-col">
             <p className="text-2xl">{stats.avgReward}</p>
-            <h3 className="text-sm">{t("avgReward")}</h3>
+            <h3 className="text-sm">{t("staking.avgReward")}</h3>
           </div>
           <div className="flex justify-center items-center flex-col">
             <p className="text-2xl">{stats.totalReward}</p>
-            <h3 className="text-sm">{t("totalReward")}</h3>
+            <h3 className="text-sm">{t("staking.totalReward")}</h3>
           </div>
         </div>
         <ResponsiveContainer width="100%" aspect={2.5}>

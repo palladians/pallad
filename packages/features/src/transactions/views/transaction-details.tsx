@@ -26,12 +26,12 @@ export const TransactionDetailsView = ({
     <AppLayout>
       <MenuBar variant="back" onBackClicked={onGoBack} />
       <div className="px-8 pb-6">
-        <h2 className="text-3xl mb-6">{t("transactionDetail")}</h2>
+        <h2 className="text-3xl mb-6">{t("transactions.transactionDetail")}</h2>
         <div className="space-y-2">
           <FromTo tx={transaction} />
           <div className="py-3 px-4 space-y-4 bg-secondary rounded-2xl">
             <div className="flex items-center justify-between">
-              <p className="text-[#7D7A9C]">{t("kind")}</p>
+              <p className="text-[#7D7A9C]">{t("transactions.kind")}</p>
               <p className="text-right">
                 {transaction.type === Mina.TransactionType.PAYMENT
                   ? "Transaction"
@@ -39,17 +39,17 @@ export const TransactionDetailsView = ({
               </p>
             </div>
             <div className="flex items-center justify-between">
-              <p className="text-[#7D7A9C]">{t("type")}</p>
+              <p className="text-[#7D7A9C]">{t("transactions.type")}</p>
               <p className="text-right">
                 {side === "incoming" ? "Received" : "Sent"}
               </p>
             </div>
             <div className="flex items-center justify-between">
-              <p className="text-[#7D7A9C]">{t("amount")}</p>
+              <p className="text-[#7D7A9C]">{t("transactions.amount")}</p>
               <p className="text-right">{`${transaction.amount} MINA`}</p>
             </div>
             <div className="flex items-center justify-between">
-              <p className="text-[#7D7A9C]">{t("dateTime")}</p>
+              <p className="text-[#7D7A9C]">{t("transactions.dateTime")}</p>
               <p className="text-right">
                 {dayjs(transaction.dateTime ?? "").format("DD/MM/YY - HH:mm")}
               </p>

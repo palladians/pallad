@@ -15074,11 +15074,6 @@ snapshots:
 
   void-elements@3.1.0: {}
 
-  w3c-xmlserializer@5.0.0:
-    dependencies:
-      xml-name-validator: 5.0.0
-    optional: true
-
   watchpack@2.4.1:
     dependencies:
       glob-to-regexp: 0.4.1

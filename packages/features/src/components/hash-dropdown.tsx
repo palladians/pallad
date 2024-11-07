@@ -43,13 +43,13 @@ export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
         <li onClick={handleClick}>
           <button type="button" onClick={copyHash} className="flex gap-2">
             <CopyIcon />
-            <span>{t("copyHash")}</span>
+            <span>{t("components.copyHash")}</span>
           </button>
         </li>
         <li onClick={handleClick}>
           <button type="button" onClick={openInExplorer} className="flex gap-2">
             <ExternalLinkIcon />
-            <span>{t("openInMinascan")}</span>
+            <span>{t("components.openInMinascan")}</span>
           </button>
         </li>
       </ul>

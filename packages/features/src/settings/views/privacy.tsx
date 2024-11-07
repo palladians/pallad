@@ -20,8 +20,8 @@ export const PrivacyView = ({
       <SettingsPageLayout title="Privacy" onCloseClicked={onCloseClicked}>
         <div className="pl-6 pr-4 py-4 flex items-center justify-between bg-secondary rounded-2xl">
           <div>
-            <p>{t("sharedData")}</p>
-            <p className="text-sm">{t("anomymousData")}</p>
+            <p>{t("settings.sharedData")}</p>
+            <p className="text-sm">{t("settings.anomymousData")}</p>
           </div>
           <input
             type="checkbox"

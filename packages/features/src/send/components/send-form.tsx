@@ -80,10 +80,10 @@ export const SendForm = ({
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex justify-between items-center w-full">
-        <h1 className="text-3xl">{t("send")}</h1>
+        <h1 className="text-3xl">{t("send.send")}</h1>
         <div className="form-control">
           <label className="label cursor-pointer gap-2">
-            <span className="label-text">{t("advanced")}</span>
+            <span className="label-text">{t("send.advanced")}</span>
             <input
               type="checkbox"
               className="toggle toggle-primary border-none"
@@ -166,7 +166,7 @@ export const SendForm = ({
               {...register("memo")}
             />
             <button type="button" className="badge badge-neutral -mr-3">
-              {t("optional")}
+              {t("send.optional")}
             </button>
           </label>
           <FormError>{errors.memo?.message}</FormError>
@@ -184,7 +184,7 @@ export const SendForm = ({
         data-testid="formSubmit"
         disabled={!isValid}
       >
-        {t("next")}
+        {t("send.next")}
       </button>
     </form>
   )

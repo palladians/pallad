@@ -39,7 +39,7 @@ export const NewAddressForm = () => {
           htmlFor="contactName"
           className={cn(errors.name && "text-destructive")}
         >
-          {t("contactName")}
+          {t("addressBook.contactName")}
         </label>
         <input
           id="contactName"
@@ -55,7 +55,7 @@ export const NewAddressForm = () => {
           htmlFor="contactAddress"
           className={cn(errors.address && "text-destructive")}
         >
-          {t("receiverAddress")}
+          {t("addressBook.receiverAddress")}
         </label>
         <input
           id="contactAddress"
@@ -72,7 +72,7 @@ export const NewAddressForm = () => {
         data-testid="newAddress/createButton"
       >
         <PlusIcon size={16} />
-        <span>{t("createContact")}</span>
+        <span>{t("addressBook.createContact")}</span>
       </button>
     </form>
   )

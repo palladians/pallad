@@ -42,12 +42,12 @@ export const SeedImportView = ({
           data-testid="formSubmit"
         >
           {restoring && <Loader2Icon size={16} className="animate-spin" />}
-          <span>{t("next")}</span>
+          <span>{t("onboarding.next")}</span>
         </button>
       }
     >
       <div className="flex flex-1 flex-col gap-4">
-        <p className="text-mint">{t("enter12Word")}</p>
+        <p className="text-mint">{t("onboarding.enter12Word")}</p>
         <div className="grid grid-cols-3 gap-2 mt-4">
           {mnemonicIterator.map((wordLabel, i) => (
             <Autocomplete

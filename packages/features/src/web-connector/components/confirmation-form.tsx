@@ -23,7 +23,7 @@ export const ConfirmationForm = ({
         disabled={loading}
         onClick={onConfirm}
       >
-        {t("approve")}
+        {t("webConnector.approve")}
       </button>
       <button
         className="btn max-w-48 w-full"
@@ -31,7 +31,7 @@ export const ConfirmationForm = ({
         onClick={onDecline}
         disabled={loading}
       >
-        {t("deny")}
+        {t("webConnector.deny")}
       </button>
     </form>
   )
