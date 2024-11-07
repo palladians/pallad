@@ -1,6 +1,7 @@
 import { AppLayout } from "@/components/app-layout"
 import { SettingsPageLayout } from "@/components/settings-page-layout"
 import clsx from "clsx"
+import { useTranslation } from "react-i18next"
 
 type PrivacyViewProps = {
   onCloseClicked: () => void
@@ -13,13 +14,14 @@ export const PrivacyView = ({
   shareData,
   setShareData,
 }: PrivacyViewProps) => {
+  const { t } = useTranslation()
   return (
     <AppLayout>
       <SettingsPageLayout title="Privacy" onCloseClicked={onCloseClicked}>
         <div className="pl-6 pr-4 py-4 flex items-center justify-between bg-secondary rounded-2xl">
           <div>
-            <p>Share data</p>
-            <p className="text-sm">Anonymous data only</p>
+            <p>{t("settings.sharedData")}</p>
+            <p className="text-sm">{t("settings.anomymousData")}</p>
           </div>
           <input
             type="checkbox"

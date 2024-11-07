@@ -5,6 +5,8 @@ import { CopyIcon, ExternalLinkIcon, UserPlusIcon } from "lucide-react"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
+import { useTranslation } from "react-i18next"
+
 type AddressDropdownProps = {
   publicKey: string
   className?: string
@@ -34,6 +36,7 @@ export const AddressDropdown = ({
     )
     window.open(url, "_blank")?.focus()
   }
+  const { t } = useTranslation()
   return (
     <div className={clsx("dropdown", dropdownEnd && "dropdown-end")}>
       <div
@@ -55,13 +58,13 @@ export const AddressDropdown = ({
         <li onClick={handleClick}>
           <button type="button" onClick={copyAddress} className="flex gap-2">
             <CopyIcon />
-            <span>Copy Address</span>
+            <span>{t("components.copyAddress")}</span>
           </button>
         </li>
         <li onClick={handleClick}>
           <button type="button" onClick={openInExplorer} className="flex gap-2">
             <ExternalLinkIcon />
-            <span>Open in Minascan</span>
+            <span>{t("components.openInMinascan")}</span>
           </button>
         </li>
         <li onClick={handleClick}>
@@ -71,7 +74,7 @@ export const AddressDropdown = ({
             className="flex gap-2"
           >
             <UserPlusIcon />
-            <span>Create Contact</span>
+            <span>{t("addressBook.createContact")}</span>
           </Link>
         </li>
       </ul>

@@ -1,5 +1,6 @@
 import { AppLayout } from "@/components/app-layout"
 import { MenuBar } from "@/components/menu-bar"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 type TxResult = {
@@ -23,6 +24,7 @@ export const TransactionResult = ({
   result,
   button,
 }: TransactionResultProps) => {
+  const { t } = useTranslation()
   return (
     <AppLayout>
       <MenuBar variant="stop" onCloseClicked={button.onClick} />
@@ -42,7 +44,7 @@ export const TransactionResult = ({
             onClick={button.onClick}
             data-testid="result/close"
           >
-            Close
+            {t("send.close")}
           </Link>
           <button
             type="button"
