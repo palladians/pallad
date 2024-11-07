@@ -44,11 +44,10 @@ export const networkInfoSlice: StateCreator<NetworkInfoStore> = (set, get) => ({
       (networkId) => networkInfoV2[networkId],
     )
   },
-  clear: () => {
+  clearNetworkInfo: () => {
     set((current) =>
       produce(current, (draft) => {
-        // TODO: fix this method it doesn't work
-        draft.networkInfoV2 = {}
+        draft.networkInfoV2 = DEFAULT_NETWORK_INFO
       }),
     )
   },

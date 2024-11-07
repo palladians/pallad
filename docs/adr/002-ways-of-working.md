@@ -31,7 +31,7 @@ In Progress can consist of many stages, such as `Development In Progress`, `Read
 
 #### Code Standards
 
-The code we deliver should be as close to 0 weak TypeScript types as possible. The code we deliver should have adequate test automation coverage (unit testing with Vitest and E2E testing with Playwright).
+The code we deliver should be as close to 0 weak TypeScript types as possible. The code we deliver should have adequate test automation coverage (unit testing with Bun Test and E2E testing with Playwright).
 
 #### Commits and branches
 

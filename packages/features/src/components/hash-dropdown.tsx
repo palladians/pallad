@@ -23,7 +23,7 @@ export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
     toast.success("Hash Copied")
   }
   const openInExplorer = () => {
-    const url = currentNetworkInfo.explorer.transactionUrl.replace(
+    const url = currentNetworkInfo?.explorer.transactionUrl.replace(
       "{hash}",
       hash,
     )

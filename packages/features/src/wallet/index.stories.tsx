@@ -8,7 +8,6 @@ export const Dashboard = () => {
   return (
     <OverviewView
       lastMonthPrices={[]}
-      balance={1337}
       chartLabel="test"
       loading={false}
       currentPriceIndex={undefined}
@@ -17,12 +16,22 @@ export const Dashboard = () => {
       publicAddress="B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS"
       onSend={action("Send Clicked")}
       onReceive={action("Receive Clicked")}
+      fiatBalance={100}
+      minaBalance={200}
+      setUseFiatBalance={action("Set Use Fiat Balance")}
+      useFiatBalance={true}
     />
   )
 }
 
 export const Networks = () => {
-  return <NetworksView currentNetwork="Devnet" />
+  return (
+    <NetworksView
+      networkId="mina:devnet"
+      onCloseClicked={action("Close")}
+      onNetworkSwitch={() => Promise.resolve(action("Switch")())}
+    />
+  )
 }
 
 export default {

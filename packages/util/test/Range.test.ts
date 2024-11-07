@@ -1,3 +1,4 @@
+import { describe, expect, test } from "bun:test"
 import { InvalidRangeError, inRange, throwIfInvalidRange } from "../src/Range"
 
 describe("Range", () => {

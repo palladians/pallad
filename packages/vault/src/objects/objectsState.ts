@@ -27,5 +27,5 @@ export type ObjectStore = {
   getObject: (objectName: ObjectName) => Json | typeof initialObjectState
   removeObject: (name: ObjectName) => void
   searchObjects(query: SearchQuery, props?: string[]): StoredObject[]
-  clear: () => void
+  clearObjects: () => void
 }

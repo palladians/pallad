@@ -80,7 +80,7 @@ export const keyAgentSlice: StateCreator<KeyAgentStore> = (set, get) => ({
       }),
     )
   },
-  clear() {
+  clearKeyAgents() {
     return set(
       produce((state) => {
         state.keyAgents = {}

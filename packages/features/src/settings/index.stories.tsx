@@ -15,12 +15,17 @@ export const Settings = () => (
   <SettingsView
     onCloseClicked={action("Go Back")}
     onDonateClicked={action("Donate Clicked")}
+    onLogOut={action("Log Out")}
   />
 )
 
 export const About = () => <AboutView onCloseClicked={action("Go Back")} />
 export const AuthorizedZkApps = () => (
-  <AuthorizedZkAppsView onCloseClicked={action("Go Back")} />
+  <AuthorizedZkAppsView
+    onCloseClicked={action("Go Back")}
+    apps={[]}
+    handleDeleteApp={action("Delete App")}
+  />
 )
 
 export const Support = () => <SupportView onCloseClicked={action("Go Back")} />
@@ -39,7 +44,13 @@ export const Language = () => (
   <LanguageView onCloseClicked={action("Go Back")} />
 )
 
-export const Privacy = () => <PrivacyView onCloseClicked={action("Go Back")} />
+export const Privacy = () => (
+  <PrivacyView
+    onCloseClicked={action("Go Back")}
+    setShareData={action("Share Data")}
+    shareData={true}
+  />
+)
 
 export default {
   title: "Settings",

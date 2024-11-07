@@ -9,7 +9,9 @@ export const Overview: Story<{ stakeDelegated: boolean }> = ({
 }) => (
   <StakingOverviewView
     stakeDelegated={stakeDelegated}
-    onChangePool={action("Change Pool")}
+    account={null as never}
+    rewards={[]}
+    stats={{ avgReward: 0, totalReward: 0, lastReward: 0 }}
   />
 )
 

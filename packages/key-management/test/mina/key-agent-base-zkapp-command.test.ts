@@ -1,8 +1,8 @@
+import { beforeEach, describe, expect, it } from "bun:test"
 import { mnemonic } from "@palladxyz/common"
 import type { Mina } from "@palladxyz/mina-core"
 import { Network } from "@palladxyz/pallad-core"
 import Client from "mina-signer"
-import { expect } from "vitest"
 
 import { utf8ToBytes } from "@noble/hashes/utils"
 import { KeyAgentBase } from "../../src/KeyAgentBase"
@@ -10,7 +10,6 @@ import type { MinaSpecificArgs } from "../../src/chains/Mina"
 import { emip3encrypt } from "../../src/emip3"
 import {
   type ChainOperationArgs,
-  type GetPassphrase,
   KeyAgentType,
   type SerializableKeyAgentData,
 } from "../../src/types"
@@ -61,7 +60,7 @@ describe("KeyAgentBase (Mina zkApp Functionality)", () => {
       instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
     })
     it("should return the correct empty knownAddresses", () => {
-      expect(instance.knownCredentials).to.deep.equal(
+      expect(instance.knownCredentials).toStrictEqual(
         serializableData.credentialSubject.contents,
       )
     })
@@ -96,7 +95,7 @@ describe("KeyAgentBase (Mina zkApp Functionality)", () => {
         getPassphrase,
         true,
       )
-      expect(groupedCredential.address).to.deep.equal(
+      expect(groupedCredential.address).toStrictEqual(
         expectedGroupedCredentials.address,
       )
 
@@ -134,8 +133,8 @@ describe("KeyAgentBase (Mina zkApp Functionality)", () => {
         } as ChainOperationArgs,
       )
       const minaClient = new Client({ network: args.networkType })
-      const isVerified = await minaClient.verifyZkappCommand(
-        signedZkAppCommand as Mina.SignedZkAppCommand,
+      const isVerified = minaClient.verifyZkappCommand(
+        signedZkAppCommand as unknown as Mina.SignedZkAppCommand,
       )
       expect(isVerified).toBeTruthy()
     })

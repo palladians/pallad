@@ -7,7 +7,6 @@ import {
 import clsx from "clsx"
 import { matchSorter } from "match-sorter"
 import { take } from "rambda"
-import React from "react"
 import type { ClipboardEventHandler } from "react"
 import type { UseFormRegisterReturn } from "react-hook-form"
 

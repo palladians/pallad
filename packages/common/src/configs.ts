@@ -10,17 +10,3 @@ export const baseTsupConfig: Options = {
   dts: true,
   silent: true,
 }
-
-export const baseVitestConfig = {
-  test: {
-    environment: "happy-dom",
-    globals: true,
-    testTimeout: 100000,
-    hookTimeout: 100000,
-    test: {
-      coverage: {
-        reporter: ["text", "json", "html"],
-      },
-    },
-  },
-}

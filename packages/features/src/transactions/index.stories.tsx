@@ -1,5 +1,4 @@
-import { TxSide } from "@/common/types"
-import type { StoryDefault } from "@ladle/react"
+import { type StoryDefault, action } from "@ladle/react"
 import { Mina } from "@palladxyz/mina-core"
 
 import { TransactionDetailsView } from "./views/transaction-details"
@@ -54,6 +53,7 @@ export const Transactions = () => (
     publicKey="B62qizYjLtUebFFQuAnPjpLrUdWx4rLnptvzbVdNpY6EXff2U68Ljf5"
     transactions={transactions as any}
     transactionsError={false}
+    openPendingTransactions={action("openPendingTransactions")}
   />
 )
 
