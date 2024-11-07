@@ -27,7 +27,6 @@
     "@palladxyz/vault": "workspace:*",
     "dayjs": "1.11.12",
     "eventemitter3": "^5.0.1",
-    "mina-credentials": "^0.1.1",
     "mina-signer": "3.0.7",
     "mitt": "3.0.1",
     "superjson": "2.2.1",

@@ -93,8 +93,8 @@ importers:
         specifier: 6.0.3
         version: 6.0.3
       mina-credentials:
-        specifier: ^0.1.0
-        version: 0.1.0(o1js@2.0.0)
+        specifier: ^0.1.1
+        version: 0.1.1(o1js@2.0.0)
       mitt:
         specifier: 3.0.1
         version: 3.0.1
@@ -748,9 +748,6 @@ importers:
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
-      mina-credentials:
-        specifier: ^0.1.1
-        version: 0.1.1(o1js@2.0.0)
       mina-signer:
         specifier: 3.0.7
         version: 3.0.7
@@ -5450,12 +5447,6 @@ packages:
   mimic-response@4.0.0:
     resolution: {integrity: sha512-e5ISH9xMYU0DzrT+jl8q2ze9D6eWBto+I8CNpe+VI+K2J/F/k3PdkdTdz4wvGVH4NTpo+NRYTVIuMQEMMcsLqg==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-
-  mina-credentials@0.1.0:
-    resolution: {integrity: sha512-SmKlnwlnAONPaKz+THM6WKNYjzrVsq0wCr9ikWsmr795DjSyOuVafq4PEbPEe3vtmxoZLFk6ySMo18iMWC5Q3Q==}
-    engines: {node: '>=22.0'}
-    peerDependencies:
-      o1js: ^2.0.0
 
   mina-credentials@0.1.1:
     resolution: {integrity: sha512-afJh2PTK4AgxD0wodgo7vRwFeUFCOk+67fl+oSUj2+EEwJ8rq41mIy8hbacoq3vlTyhCxihbyXG73CTqWmU5FA==}
@@ -12912,10 +12903,6 @@ snapshots:
   mimic-response@3.1.0: {}
 
   mimic-response@4.0.0: {}
-
-  mina-credentials@0.1.0(o1js@2.0.0):
-    dependencies:
-      o1js: 2.0.0
 
   mina-credentials@0.1.1(o1js@2.0.0):
     dependencies:

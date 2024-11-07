@@ -32,7 +32,7 @@ export const manifest: chrome.runtime.ManifestV3 = {
   ],
   web_accessible_resources: [
     {
-      resources: ["rpc.js"],
+      resources: ["rpc.js", "credential-sandbox/index.html"],
       matches: rpcMatches,
     },
   ],

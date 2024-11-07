@@ -10,7 +10,7 @@ export default defineConfig(() => {
     plugins: [
       react(),
       webExtension({
-        additionalInputs: ["prompt.html"],
+        additionalInputs: ["prompt.html", "src/credential-sandbox/index.tsx"],
         manifest: () => manifest,
       }),
       svgr(),

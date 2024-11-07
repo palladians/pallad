@@ -14,12 +14,12 @@ import type {
   ChainSignablePayload,
 } from "@palladxyz/key-management"
 import type { SearchQuery } from "@palladxyz/vault"
-import { Credential } from "mina-credentials"
 import mitt from "mitt"
 import { P, match } from "ts-pattern"
 import { showUserPrompt } from "../utils/prompts"
 import { createVaultService } from "../vault-service"
 import type { ConnectOps } from "../web-provider-types"
+import { CredentialValidator } from "./credential-validator"
 import { serializeField, serializeGroup } from "./utils"
 
 export function getMinaChainId(chains: string[]) {
@@ -347,31 +347,20 @@ export const createMinaProvider = async (): Promise<
           if (!confirmation) {
             throw createProviderRpcError(4001, "User Rejected Request")
           }
-          let credentialSerialized
+
           try {
-            // TODO: change serialization
-            const credentialDeserialized = Credential.fromJSON(
-              JSON.stringify(credential),
+            const validator = CredentialValidator.initialize(
+              chrome.runtime.getURL("credential-sandbox/index.html"),
             )
-            Credential.validate(credentialDeserialized)
 
-            credentialSerialized = Credential.toJSON(credentialDeserialized)
-          } catch (error: any) {
-            // TODO: add error
-          }
-
-          // TODO: update error
-          if (!credentialSerialized) {
-            throw new Error("Failed to serialize credential")
-          }
-
-          try {
-            await _vault.storePrivateCredential(credentialSerialized)
+            const validatedCredential =
+              await validator.validateCredential(credential)
+            await _vault.storePrivateCredential(validatedCredential)
             return { success: true }
           } catch (error: any) {
             throw createProviderRpcError(
               4100,
-              "Failed to store private credential",
+              `Failed to store private credential: ${error}`,
             )
           }
         })
