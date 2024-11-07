@@ -50,7 +50,7 @@ This is a monorepo for all the Pallad-related code.
   - `extension` - Browser extension app.
 - `packages`
   - `_template` - Template to follow for new packages in this repo.
-  - `common` - Common configuration for packages (tsup and vitest).
+  - `common` - Common configuration for packages (tsup).
   - `features` - Wallet features, views, and UI components.
   - `key-management` - Blockchain agnostic key management.
   - `mina-core` - Core Mina Package SDK.
@@ -76,7 +76,7 @@ Running linter:
 $ bun run lint
 ```
 
-Running unit tests (Vitest):
+Running unit tests (Bun Test):
 
 ```shell
 $ bun run test:unit

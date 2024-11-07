@@ -15,7 +15,7 @@
     "build": "bunx --bun tsup",
     "dev": "bunx --bun tsup --watch",
     "test:unit": "bun test",
-    "coverage": "bunx --bun vitest run --coverage",
+    "coverage": "bun test --coverage",
     "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
