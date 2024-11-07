@@ -10,8 +10,7 @@ export const MenuDrawer = () => {
   const navigate = useNavigate()
   const networkId = useVault((state) => state.currentNetworkId)
   const { t } = useTranslation()
-  const networkId = useVault((state) => state.currentNetworkId)
-  
+
   return (
     <div className="drawer drawer-end">
       <input id="menu-drawer" type="checkbox" className="drawer-toggle" />

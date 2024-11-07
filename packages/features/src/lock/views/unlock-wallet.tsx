@@ -25,53 +25,58 @@ export const UnlockWalletView = ({
   onSubmit,
   showPassword,
   togglePassword,
-}: UnlockWalletViewProps) => (
-  <WizardLayout
-    title="Unlock Wallet"
-    headerShown={false}
-    footer={
-      <button
-        type="submit"
-        className="btn btn-primary max-w-48 w-full"
-        form="unlockWalletForm"
-        data-testid="submitForm"
-        disabled={!form.formState.dirtyFields.spendingPassword}
-      >
-        <span>Unlock</span>
-      </button>
-    }
-  >
-    <div className="w-full flex flex-col flex-1 items-center gap-12">
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-1 flex-col gap-2 w-full"
-        id="unlockWalletForm"
-      >
-        <label
-          htmlFor="spendingPassword"
-          className={clsx("label cursor-pointer")}
+}: UnlockWalletViewProps) => {
+  const { t } = useTranslation()
+  return (
+    <WizardLayout
+      title="Unlock Wallet"
+      headerShown={false}
+      footer={
+        <button
+          type="submit"
+          className="btn btn-primary max-w-48 w-full"
+          form="unlockWalletForm"
+          data-testid="submitForm"
+          disabled={!form.formState.dirtyFields.spendingPassword}
         >
-          Spending Password
-        </label>
-        <label className="input flex items-center gap-2 w-full">
-          <input
-            id="spendingPassword"
-            type={showPassword ? "text" : "password"}
-            data-testid="unlockWallet/password"
-            placeholder="Enter your password"
-            className="grow"
-            {...form.register("spendingPassword")}
-          />
-          <button
-            type="button"
-            className="btn btn-link -mr-4"
-            onClick={togglePassword}
+          <span>{t("lock.unlock")}</span>
+        </button>
+      }
+    >
+      <div className="w-full flex flex-col flex-1 items-center gap-12">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-1 flex-col gap-2 w-full"
+          id="unlockWalletForm"
+        >
+          <label
+            htmlFor="spendingPassword"
+            className={clsx("label cursor-pointer")}
           >
-            {showPassword ? <EyeOffIcon size={24} /> : <EyeIcon size={24} />}
-          </button>
-        </label>
-        <FormError>{form.formState.errors.spendingPassword?.message}</FormError>
-      </form>
-    </div>
-  </WizardLayout>
-)
+            {t("lock.spendingPassword")}
+          </label>
+          <label className="input flex items-center gap-2 w-full">
+            <input
+              id="spendingPassword"
+              type={showPassword ? "text" : "password"}
+              data-testid="unlockWallet/password"
+              placeholder="Enter your password"
+              className="grow"
+              {...form.register("spendingPassword")}
+            />
+            <button
+              type="button"
+              className="btn btn-link -mr-4"
+              onClick={togglePassword}
+            >
+              {showPassword ? <EyeOffIcon size={24} /> : <EyeIcon size={24} />}
+            </button>
+          </label>
+          <FormError>
+            {form.formState.errors.spendingPassword?.message}
+          </FormError>
+        </form>
+      </div>
+    </WizardLayout>
+  )
+}
