@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "build": "bunx --bun tsup",
+    "build": "bunx --bun tsc --noEmit && bunx --bun tsup",
     "dev": "bunx --bun tsup --watch",
     "test:unit": "bun test",
     "coverage": "bun test --coverage",

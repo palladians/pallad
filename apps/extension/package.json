@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "bunx --bun vite",
-    "build": "tsc --noEmit && bun run build:rpc && bunx --bun vite build",
+    "build": "bunx --bun tsc --noEmit && bun run build:rpc && bunx --bun vite build",
     "build:rpc": "bunx --bun tsup",
     "build:firefox": "web-ext build --source-dir=dist",
     "build:safari": "xcrun safari-web-extension-converter dist --app-name Pallad --bundle-identifier co.pallad.app --swift --no-prompt --force --macos-only --no-open",

@@ -17,16 +17,34 @@ export const StakingOverviewRoute = () => {
     .filter((tx) => tx.from !== accountInfo.MINA.publicKey)
   const rewards = Array(6)
     .fill({ amount: 0 })
-    .map((_, i) => ({ amount: rewardsTransactions?.[i]?.amount ?? 0 }))
+    .map((_, i) => ({
+      amount:
+        Number.parseFloat(
+          rewardsTransactions?.[i]?.amount?.toString() ?? "0",
+        ) ?? 0,
+    }))
   return (
     <StakingOverviewView
       account={account}
       rewards={rewards}
       stakeDelegated={account.stakeDelegated}
       stats={{
-        lastReward: rewardsTransactions[0]?.amount ?? 0,
-        avgReward: mean(rewardsTransactions.map((tx) => tx?.amount)) || 0,
-        totalReward: sum(rewardsTransactions.map((tx) => tx?.amount)),
+        lastReward:
+          Number.parseFloat(
+            rewardsTransactions?.[0]?.amount?.toString() ?? "0",
+          ) ?? 0,
+        avgReward:
+          mean(
+            rewardsTransactions?.map((tx) =>
+              Number.parseFloat(tx?.amount?.toString() ?? "0"),
+            ) ?? [],
+          ) ?? 0,
+        totalReward:
+          sum(
+            rewardsTransactions?.map((tx) =>
+              Number.parseFloat(tx?.amount?.toString() ?? "0"),
+            ) ?? [],
+          ) ?? 0,
       }}
     />
   )
