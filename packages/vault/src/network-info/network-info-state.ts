@@ -19,7 +19,7 @@ export type NetworkInfoActions = {
   getNetworkInfo: (networkId: NetworkId) => ProviderConfig | undefined
   removeNetworkInfo: (ticker: string) => void
   allNetworkInfo: () => (ProviderConfig | undefined)[]
-  clear: () => void
+  clearNetworkInfo: () => void
 }
 
 export type NetworkInfoStore = NetworkInfoState & NetworkInfoActions

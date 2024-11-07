@@ -12,11 +12,11 @@
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test:unit": "vitest run",
-    "coverage": "vitest run --coverage",
-    "cleanup": "rimraf node_modules dist .turbo"
+    "build": "bunx --bun tsc --noEmit && bunx --bun tsup",
+    "dev": "bunx --bun tsup --watch",
+    "test:unit": "bun test",
+    "coverage": "bun test --coverage",
+    "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
     "@noble/ciphers": "0.5.3",

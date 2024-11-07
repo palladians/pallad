@@ -1,7 +1,6 @@
 import type { UseFormReturn } from "react-hook-form"
 
 import { FormError } from "@/components/form-error"
-import { RestartWalletAlert } from "@/components/restart-wallet-alert"
 import { WizardLayout } from "@/components/wizard-layout"
 import clsx from "clsx"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
@@ -20,8 +19,6 @@ type UnlockWalletViewProps = {
 }
 
 export const UnlockWalletView = ({
-  restartAlertVisible,
-  setRestartAlertVisible,
   form,
   onSubmit,
   showPassword,
@@ -42,10 +39,6 @@ export const UnlockWalletView = ({
       </button>
     }
   >
-    <RestartWalletAlert
-      open={restartAlertVisible}
-      setOpen={setRestartAlertVisible}
-    />
     <div className="w-full flex flex-col flex-1 items-center gap-12">
       <form
         onSubmit={form.handleSubmit(onSubmit)}

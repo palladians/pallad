@@ -1,4 +1,3 @@
 {
-  "extends": "@palladxyz/common/tsconfig.json",
-  "compilerOptions": { "types": ["vitest/globals"] }
+  "extends": "@palladxyz/common/tsconfig.json"
 }

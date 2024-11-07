@@ -45,15 +45,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TURBO_SERVER_TOKEN: ${{ secrets.TURBO_SERVER_TOKEN }}
       - name: Lint the code
-        run: pnpm lint
+        run: bun run lint
       - name: Build extension
         env:
           TURBO_API: "http://127.0.0.1:9080"
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: pallad
-        run: VITE_APP_DEFAULT_NETWORK_ID=$VITE_APP_DEFAULT_NETWORK_ID pnpm build:extension
+        run: VITE_APP_DEFAULT_NETWORK_ID=$VITE_APP_DEFAULT_NETWORK_ID bun run build:extension
       - name: Run unit tests
-        run: pnpm test:unit
+        run: bun run test:unit
       - uses: actions/upload-artifact@v4
         with:
           name: pallad-chromium

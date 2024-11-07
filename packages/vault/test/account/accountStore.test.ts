@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, it } from "bun:test"
 import { type AccountInfo, Mina } from "@palladxyz/mina-core"
 import { act, renderHook } from "@testing-library/react"
-import { expect } from "vitest"
 
 import { initialSingleAccountState } from "../../src"
 import { useVault } from "../../src"
@@ -43,11 +43,8 @@ describe("AccountStore", () => {
         },
       ],
     }
-  })
-
-  afterEach(() => {
     const { result } = renderHook(() => useVault())
-    act(() => result.current.clear())
+    act(() => result.current.clearAccounts())
   })
 
   it("should create a new accountStore", () => {
@@ -171,7 +168,7 @@ describe("AccountStore", () => {
     const { result } = renderHook(() => useVault())
     act(() => {
       result.current.addAccount(network, address)
-      result.current.clear()
+      result.current.clearAccounts()
     })
     const accountInfo = result.current.getAccountsInfo(network, address)
     expect(accountInfo).toEqual(initialSingleAccountState)

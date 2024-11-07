@@ -12,10 +12,9 @@
     }
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test:unit": "vitest run",
-    "cleanup": "rimraf node_modules dist .turbo"
+    "build": "bunx --bun tsc --noEmit && bunx --bun tsup",
+    "dev": "bunx --bun tsup --watch",
+    "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
     "@mina-js/klesia-sdk": "https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@a51d3b4",
@@ -37,10 +36,7 @@
   },
   "devDependencies": {
     "@palladxyz/common": "workspace:*",
-    "@testing-library/react": "16.0.0",
     "@types/chrome": "0.0.269",
-    "@types/mocha": "10.0.7",
-    "@types/node": "22.0.0",
     "@types/webextension-polyfill": "0.10.7",
     "type-fest": "4.23.0"
   }

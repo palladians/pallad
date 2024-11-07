@@ -1,13 +1,13 @@
 import { mnemonic } from "@palladxyz/common"
 import type { Mina } from "@palladxyz/mina-core"
-import { Network, constructTransaction } from "@palladxyz/pallad-core"
+import { Network } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import Client from "mina-signer"
-import { expect } from "vitest"
 
-import { SignedTransaction, TransactionBodySchema } from "@mina-js/utils"
+import { beforeEach, describe, expect, it } from "bun:test"
+
+import { TransactionBodySchema } from "@mina-js/utils"
 import { utf8ToBytes } from "@noble/hashes/utils"
-//import { emip3encrypt } from '../src/emip3'
 import {
   type FromBip39MnemonicWordsProps,
   InMemoryKeyAgent,
@@ -52,15 +52,15 @@ describe("Mina InMemoryKeyAgent", () => {
   })
 
   it("should create an agent with given properties", () => {
-    expect(agent).to.be.instanceOf(InMemoryKeyAgent)
+    expect(agent).toBeInstanceOf(InMemoryKeyAgent)
   })
   it("should create an agent with given properties and return the getSeralizableData", () => {
-    expect(agent).to.be.instanceOf(InMemoryKeyAgent)
+    expect(agent).toBeInstanceOf(InMemoryKeyAgent)
     expect(agent.getSeralizableData()).not.toBe(undefined)
   })
   it("should export root private key", async () => {
     const result = await agent.exportRootPrivateKey()
-    expect(result).to.deep.equal(rootKeyBytes)
+    expect(result).toStrictEqual(rootKeyBytes)
   })
   describe("Restore InMemory KeyAgent", () => {
     /*
@@ -107,10 +107,10 @@ describe("Mina InMemoryKeyAgent", () => {
       }
 
       await agent.restoreKeyAgent(args, getPassphrase)
-      expect(agent).to.be.instanceOf(InMemoryKeyAgent)
+      expect(agent).toBeInstanceOf(InMemoryKeyAgent)
       expect(
         agent.serializableData.credentialSubject.contents[0]?.address,
-      ).to.deep.equal(expectedGroupedCredentials.address)
+      ).toStrictEqual(expectedGroupedCredentials.address)
     })
     it("should throw on invalid operation", async () => {
       const args: MinaDerivationArgs = {
@@ -144,7 +144,7 @@ describe("Mina InMemoryKeyAgent", () => {
             operation: "mina_signNotATransaction",
           },
         )
-        fail("Expected an error but did not get one.")
+        throw Error("Expected an error but did not get one.")
       } catch (error) {
         expect(error.message).toContain("Unsupported private key operation")
       }

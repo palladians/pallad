@@ -6,29 +6,30 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "turbo run build",
-    "b": "pnpm build",
+    "b": "bun run build",
     "build:extension": "turbo run build --filter=@palladxyz/extension...",
     "build:features": "turbo run build --filter=@palladxyz/features...",
     "story:features": "turbo run story:build --filter=@palladxyz/features",
     "dev:extension": "turbowatch extension.turbowatch.ts",
-    "lint": "pnpm biome check .",
-    "lint:fix": "pnpm lint --write",
+    "lint": "bunx biome check .",
+    "lint:fix": "bun run lint --write",
     "test:unit": "turbo run test:unit",
     "test:e2e:extension": "turbo run test:e2e --filter=@palladxyz/extension",
-    "format": "pnpm biome check --write .",
-    "format:unsafe": "pnpm biome check --write --unsafe .",
-    "f": "pnpm format",
+    "format": "bunx biome check --write --unsafe .",
+    "f": "bun run format",
     "cleanup": "turbo run cleanup && rimraf node_modules .turbo",
     "prepare": "husky install",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "bunx only-allow bun"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
-    "@testing-library/react": "16.0.0",
+    "@happy-dom/global-registrator": "^15.11.0",
+    "@testing-library/react": "16.0.1",
     "@tsconfig/strictest": "2.0.5",
     "@turbo/gen": "2.0.9",
     "@vitest/coverage-v8": "2.0.5",
     "@mina-js/utils": "https://pkg.pr.new/palladians/mina-js/@mina-js/utils@261950d",
+    "@types/bun": "^1.1.13",
     "autoprefixer": "10.4.19",
     "happy-dom": "14.12.3",
     "husky": "9.1.4",
@@ -40,8 +41,8 @@
     "tsup": "8.2.3",
     "turbo": "2.0.9",
     "turbowatch": "2.29.4",
-    "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "typescript": "5.6.3"
   },
-  "packageManager": "pnpm@9.0.1"
+  "workspaces": ["packages/*", "apps/*"],
+  "packageManager": "bun@1.1.34"
 }

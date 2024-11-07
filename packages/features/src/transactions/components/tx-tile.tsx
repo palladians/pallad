@@ -5,7 +5,11 @@ import { clsx } from "clsx"
 import { Link } from "react-router-dom"
 
 type TxTileProps = {
-  tx: Mina.TransactionBody
+  tx: Mina.TransactionBody & {
+    time: string
+    fiatAmount: string
+    minaAmount: string
+  }
   currentWalletAddress: string
 }
 
