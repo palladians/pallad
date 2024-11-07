@@ -52,7 +52,7 @@ export type AccountActions = {
 
   removeAccount: (networkId: string, address: ChainAddress) => void
 
-  clear: () => void
+  clearAccounts: () => void
 }
 
 export type AccountStore = AccountState & AccountActions

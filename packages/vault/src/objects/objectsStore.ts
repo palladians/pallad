@@ -60,10 +60,10 @@ export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
     }
     return filteredObjects
   },
-  clear: () => {
+  clearObjects: () => {
     set(
       produce((draft) => {
-        draft.objects = {}
+        draft.objects = DEFAULT_OBJECTS
       }),
     )
   },

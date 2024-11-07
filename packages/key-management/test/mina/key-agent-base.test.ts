@@ -1,9 +1,9 @@
+import { beforeEach, describe, expect, it } from "bun:test"
 import { mnemonic } from "@palladxyz/common"
 import type { Mina } from "@palladxyz/mina-core"
 import { Network } from "@palladxyz/pallad-core"
 import * as bip32 from "@scure/bip32"
 import Client from "mina-signer"
-import { expect } from "vitest"
 
 import { TransactionBodySchema } from "@mina-js/utils"
 import { utf8ToBytes } from "@noble/hashes/utils"
@@ -75,13 +75,13 @@ describe("KeyAgentBase (Mina Functionality)", () => {
       instance = new KeyAgentBaseInstance(serializableData, getPassphrase)
     })
     it("should return the correct empty knownAddresses", () => {
-      expect(instance.knownCredentials).to.deep.equal(
+      expect(instance.knownCredentials).toStrictEqual(
         serializableData.credentialSubject.contents,
       )
     })
 
     it("should return the correct empty serializableData", () => {
-      expect(instance.serializableData).to.deep.equal(serializableData)
+      expect(instance.serializableData).toStrictEqual(serializableData)
     })
 
     it("should derive a mina private key", () => {
@@ -144,7 +144,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         true,
       )
 
-      expect(groupedCredential.address).to.deep.equal(
+      expect(groupedCredential.address).toStrictEqual(
         expectedGroupedCredentials.address,
       )
     })
@@ -180,7 +180,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         getPassphrase,
         true,
       )
-      expect(groupedCredential.address).to.deep.equal(
+      expect(groupedCredential.address).toStrictEqual(
         expectedGroupedCredentials.address,
       )
     })
@@ -244,10 +244,10 @@ describe("KeyAgentBase (Mina Functionality)", () => {
       }
 
       // Check if the credentials were stored properly.
-      expect(instance.knownCredentials[0]?.address).to.deep.equal(
+      expect(instance.knownCredentials[0]?.address).toStrictEqual(
         expectedGroupedCredentialsArray[0]?.address,
       )
-      expect(instance.knownCredentials[1]?.address).to.deep.equal(
+      expect(instance.knownCredentials[1]?.address).toStrictEqual(
         expectedGroupedCredentialsArray[1]?.address,
       )
     })
@@ -256,12 +256,12 @@ describe("KeyAgentBase (Mina Functionality)", () => {
       const originalBuffer = utf8ToBytes("1234")
       const reversedBuffer = utf8ToBytes("4321")
 
-      expect(originalBuffer.reverse()).to.deep.equal(reversedBuffer)
+      expect(originalBuffer.reverse()).toStrictEqual(reversedBuffer)
     })
 
     it("should export root key successfully", async () => {
       const decryptedRootKey = await instance.exportRootPrivateKey()
-      expect(decryptedRootKey).to.deep.equal(rootKeyBytes)
+      expect(decryptedRootKey).toStrictEqual(rootKeyBytes)
     })
     it("should use the generic sign<T> function for signing a transaction", async () => {
       // Define a mocked publicKey, which should be expected from the derivation
@@ -295,7 +295,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         true,
       )
 
-      expect(groupedCredential.address).to.deep.equal(
+      expect(groupedCredential.address).toStrictEqual(
         expectedGroupedCredentials.address,
       )
 
@@ -354,7 +354,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         getPassphrase,
         true,
       )
-      expect(groupedCredential.address).to.deep.equal(
+      expect(groupedCredential.address).toStrictEqual(
         expectedGroupedCredentials.address,
       )
 
@@ -367,7 +367,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         networkType: "testnet",
       } as ChainOperationArgs)
       const minaClient = new Client({ network: args.networkType })
-      const isVerified = await minaClient.verifyMessage(
+      const isVerified = minaClient.verifyMessage(
         signedMessage as Mina.SignedMessage,
       )
       expect(isVerified).toBeTruthy()
@@ -402,7 +402,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         getPassphrase,
         true,
       )
-      expect(groupedCredential.address).to.deep.equal(
+      expect(groupedCredential.address).toStrictEqual(
         expectedGroupedCredentials.address,
       )
 
@@ -454,7 +454,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         getPassphrase,
         true,
       )
-      expect(groupedCredential.address).to.deep.equal(
+      expect(groupedCredential.address).toStrictEqual(
         expectedGroupedCredentials.address,
       )
 
@@ -475,8 +475,8 @@ describe("KeyAgentBase (Mina Functionality)", () => {
         networkType: "testnet",
       } as ChainOperationArgs)
       const minaClient = new Client({ network: args.networkType })
-      const isVerified = await minaClient.verifyFields(
-        signedFields as Mina.SignedFields,
+      const isVerified = minaClient.verifyFields(
+        signedFields as unknown as Mina.SignedFields,
       )
       expect(isVerified).toBeTruthy()
     })
@@ -545,7 +545,7 @@ describe("KeyAgentBase (Mina Functionality)", () => {
 
     it("should decrypt seed successfully", async () => {
       const decryptedSeed = await instance.decryptSeed()
-      expect(decryptedSeed).to.deep.equal(seed)
+      expect(decryptedSeed).toStrictEqual(seed)
     })
 
     it("should fail to decrypt seed successfully", async () => {

@@ -1,5 +1,5 @@
+import { describe, expect, it } from "bun:test"
 import type { Mina } from "@palladxyz/mina-core"
-import { test } from "vitest"
 
 import {
   isConstructedTransaction,
@@ -9,7 +9,7 @@ import {
 } from "../../src/chains/Mina/guards"
 
 describe("Guard functions tests", () => {
-  test("isMessageBody", () => {
+  it("isMessageBody", () => {
     const validPayload: Mina.MessageBody = {
       message: "anyMessage",
     }
@@ -22,7 +22,7 @@ describe("Guard functions tests", () => {
     expect(isMessageBody(invalidPayload)).not.toBeTruthy()
   })
 
-  test("isFields", () => {
+  it("isFields", () => {
     const validPayload: Mina.SignableFields = {
       fields: [10n, 20n, 30n, 340817401n, 2091283n, 1n, 0n],
       // any other properties as per your SignableFields type
@@ -36,7 +36,7 @@ describe("Guard functions tests", () => {
     expect(isFields(invalidPayload)).not.toBeFalsy()
   })
 
-  test("should validate zkAppCommand correctly", () => {
+  it("should validate zkAppCommand correctly", () => {
     const zkAppCommand: Mina.SignableZkAppCommand = {
       command: {
         zkappCommand: {

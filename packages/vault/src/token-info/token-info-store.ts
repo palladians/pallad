@@ -30,10 +30,10 @@ export const tokenInfoSlice: StateCreator<TokenInfoStore> = (set, get) => ({
       }),
     )
   },
-  clear: () => {
+  clearTokenInfo: () => {
     set(
       produce((state) => {
-        state.tokenInfo = {}
+        state.tokenInfo = DEFAULT_TOKEN_INFO
       }),
     )
   },

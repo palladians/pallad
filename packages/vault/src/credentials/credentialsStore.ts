@@ -63,8 +63,8 @@ export const credentialSlice: StateCreator<CredentialStore> = (set, get) => ({
     }
     return filteredCredentials
   },
-  clear: () => {
-    set(
+  clearCredentials: () => {
+    return set(
       produce((state) => {
         state.credentials = {}
       }),

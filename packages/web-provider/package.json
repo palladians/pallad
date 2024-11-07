@@ -14,7 +14,6 @@
   "scripts": {
     "build": "bunx --bun tsup",
     "dev": "bunx --bun tsup --watch",
-    "test:unit": "bunx --bun vitest run",
     "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
@@ -37,10 +36,7 @@
   },
   "devDependencies": {
     "@palladxyz/common": "workspace:*",
-    "@testing-library/react": "16.0.0",
     "@types/chrome": "0.0.269",
-    "@types/mocha": "10.0.7",
-    "@types/node": "22.0.0",
     "@types/webextension-polyfill": "0.10.7",
     "type-fest": "4.23.0"
   }

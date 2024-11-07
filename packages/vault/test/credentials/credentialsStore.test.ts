@@ -1,7 +1,7 @@
+import { beforeEach, describe, expect, it } from "bun:test"
 import type { GroupedCredentials } from "@palladxyz/key-management"
 import { Network } from "@palladxyz/pallad-core"
 import { act, renderHook } from "@testing-library/react"
-import { afterEach, beforeEach, describe, expect, it } from "vitest"
 
 import {
   type CredentialName,
@@ -66,17 +66,13 @@ describe("CredentialStore", () => {
       keyAgentName: keyAgentName,
       credential: credential,
     }
-
     credentialStateTwo = {
       credentialName: "green crocodile credential",
       keyAgentName: "keyAgentNameTwo",
       credential: credentialTwo as StoredCredential,
     }
-  })
-
-  afterEach(() => {
     const { result } = renderHook(() => useVault())
-    act(() => result.current.clear())
+    act(() => result.current.clearCredentials())
   })
 
   it("should create an credential store", () => {

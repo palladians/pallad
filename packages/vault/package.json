@@ -14,7 +14,7 @@
   "scripts": {
     "build": "bunx --bun tsup",
     "dev": "bunx --bun tsup --watch",
-    "test:unit": "bunx --bun vitest run",
+    "test:unit": "bun test",
     "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
@@ -38,9 +38,6 @@
   },
   "devDependencies": {
     "@palladxyz/common": "workspace:*",
-    "@testing-library/react": "16.0.0",
-    "@types/mocha": "10.0.7",
-    "@types/node": "22.0.0",
     "@types/secp256k1": "4.0.6",
     "mina-signer": "3.0.7",
     "msw": "2.3.4",
