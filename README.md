@@ -109,6 +109,9 @@ Thanks goes to these wonderful people
       <td align="center" valign="top" width="14.28%"><a href="https://yaodingyd.github.io/"><img src="https://avatars.githubusercontent.com/u/11392695?v=4?s=100" width="100px;" alt="Yao Ding"/><br /><sub><b>Yao Ding</b></sub></a><br /><a href="https://github.com/palladians/pallad/commits?author=yaodingyd" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.myestery.com"><img src="https://avatars.githubusercontent.com/u/49923152?v=4?s=100" width="100px;" alt="Chiwetelu Johnpaul Chidera"/><br /><sub><b>Chiwetelu Johnpaul Chidera</b></sub></a><br /><a href="https://github.com/palladians/pallad/commits?author=Myestery" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ManyRios"><img src="https://avatars.githubusercontent.com/u/34518489?v=4?s=100" width="100px;" alt="MANUEL RIOS"/><br /><sub><b>MANUEL RIOS</b></sub></a><br /><a href="https://github.com/palladians/pallad/commits?author=ManyRios" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 
