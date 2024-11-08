@@ -1,6 +1,6 @@
-import type { ChainOperationArgs } from "@palladxyz/key-management"
-import { TransactionType } from "@palladxyz/mina-core"
-import { useVault } from "@palladxyz/vault"
+import type { ChainOperationArgs } from "@palladco/key-management"
+import { TransactionType } from "@palladco/mina-core"
+import { useVault } from "@palladco/vault"
 import dayjs from "dayjs"
 import type { SubmitHandler, UseFormReturn } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
@@ -8,7 +8,7 @@ import type { z } from "zod"
 
 import { useAccount } from "@/common/hooks/use-account"
 import { useTransactionStore } from "@/common/store/transaction"
-import { usePendingTransactionStore } from "@palladxyz/vault"
+import { usePendingTransactionStore } from "@palladco/vault"
 
 import type { SignedTransaction, TransactionBody } from "@mina-js/utils"
 import { utf8ToBytes } from "@noble/hashes/utils"

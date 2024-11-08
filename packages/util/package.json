@@ -1,5 +1,5 @@
 {
-  "name": "@palladxyz/util",
+  "name": "@palladco/util",
   "version": "0.0.1",
   "type": "module",
   "description": "Util Package SDK for Pallad",
@@ -18,13 +18,9 @@
     "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "bs58check": "4.0.0",
-    "buffer": "6.0.3",
-    "mina-signer": "3.0.7",
     "ts-custom-error": "3.3.1"
   },
   "devDependencies": {
-    "@palladxyz/common": "workspace:*",
-    "@types/secp256k1": "4.0.6"
+    "@palladco/common": "workspace:*"
   }
 }

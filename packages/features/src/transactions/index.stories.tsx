@@ -1,5 +1,5 @@
 import { type StoryDefault, action } from "@ladle/react"
-import { Mina } from "@palladxyz/mina-core"
+import { Mina } from "@palladco/mina-core"
 
 import { TransactionDetailsView } from "./views/transaction-details"
 import { TransactionsView } from "./views/transactions"

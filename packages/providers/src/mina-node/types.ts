@@ -8,7 +8,7 @@ import type {
   TransactionsByIdsArgs,
   TxStatus,
   TxStatusArgs,
-} from "@palladxyz/mina-core"
+} from "@palladco/mina-core"
 /**
  * An interface that abstracts over Mina node queries.
  */

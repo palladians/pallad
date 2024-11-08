@@ -1,6 +1,6 @@
-import { mnemonic } from "@palladxyz/common"
-import type { Mina } from "@palladxyz/mina-core"
-import { Network } from "@palladxyz/pallad-core"
+import { mnemonic } from "@palladco/common"
+import type { Mina } from "@palladco/mina-core"
+import { Network } from "@palladco/pallad-core"
 import * as bip32 from "@scure/bip32"
 import Client from "mina-signer"
 

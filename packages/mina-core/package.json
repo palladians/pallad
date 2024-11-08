@@ -1,5 +1,5 @@
 {
-  "name": "@palladxyz/mina-core",
+  "name": "@palladco/mina-core",
   "version": "0.0.1",
   "type": "module",
   "description": "Core Mina Package SDK for Pallad",
@@ -17,13 +17,9 @@
     "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@palladxyz/util": "workspace:*",
-    "bs58check": "4.0.0",
-    "buffer": "6.0.3",
-    "mina-signer": "3.0.7"
+    "@palladco/util": "workspace:*"
   },
   "devDependencies": {
-    "@palladxyz/common": "workspace:*",
-    "@types/secp256k1": "4.0.6"
+    "@palladco/common": "workspace:*"
   }
 }

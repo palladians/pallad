@@ -1,6 +1,7 @@
 import { AppLayout } from "@/components/app-layout"
 import { MenuBar } from "@/components/menu-bar"
 import { Skeleton } from "@/components/skeleton"
+import { useEffect } from "react"
 import type { SubmitHandler } from "react-hook-form"
 import { ConfirmationForm } from "../components/confirmation-form"
 import { InputForm } from "../components/input-form"
@@ -19,6 +20,10 @@ type WebConnectorViewProps = {
   loading: boolean
 }
 
+const eventListener = (event: MessageEvent) => {
+  console.log(">>>P_EVENT", event.data)
+}
+
 export const WebConnectorView = ({
   title,
   payload,
@@ -35,10 +40,29 @@ export const WebConnectorView = ({
     onReject()
     onDecline()
   }
+  const compileAdd = async () => {
+    const sandbox = document.querySelector(
+      "#o1sandbox",
+    ) as HTMLIFrameElement | null
+    if (!sandbox) return
+    sandbox.contentWindow?.postMessage(
+      { type: "compile", payload: payload },
+      "*",
+    )
+  }
+  useEffect(() => {
+    window.addEventListener("message", eventListener)
+    return () => {
+      window.removeEventListener("message", eventListener)
+    }
+  }, [])
   return (
     <div className="flex flex-1 justify-center items-center bg-secondary">
       <div className="flex max-w-[480px] max-h-[772px] h-full flex-1 bg-neutral rounded-xl">
         <AppLayout>
+          <button type="button" onClick={compileAdd}>
+            Compile
+          </button>
           <MenuBar variant="card" onCloseClicked={onClose} />
           <div className="flex flex-1 flex-col px-8 pb-8">
             <div className="flex flex-col flex-1 gap-4">

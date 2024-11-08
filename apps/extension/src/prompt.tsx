@@ -1,7 +1,7 @@
-import "@palladxyz/features/dist/index.css"
+import "@palladco/features/dist/index.css"
 import "@total-typescript/ts-reset"
 
-import { WebConnectorRoute } from "@palladxyz/features"
+import { WebConnectorRoute } from "@palladco/features"
 import { ThemeProvider } from "next-themes"
 import React from "react"
 import ReactDOM from "react-dom/client"

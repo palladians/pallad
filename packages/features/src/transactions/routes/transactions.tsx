@@ -2,9 +2,9 @@ import { useEffect } from "react"
 
 import { useAccount } from "@/common/hooks/use-account"
 import { useTransactions } from "@/common/hooks/use-transactions"
-import { usePendingTransactionStore, useVault } from "@palladxyz/vault"
+import { usePendingTransactionStore, useVault } from "@palladco/vault"
 
-import { useFiatPrice } from "@palladxyz/offchain-data"
+import { useFiatPrice } from "@palladco/offchain-data"
 import { TransactionsView } from "../views/transactions"
 
 export const TransactionsRoute = () => {

@@ -2,7 +2,7 @@ import type {
   AccountInfo,
   AccountInfoArgs,
   AccountInfoProvider,
-} from "@palladxyz/pallad-core"
+} from "@palladco/pallad-core"
 
 import { createGraphQLRequest } from "../utils/fetch-utils"
 import { healthCheck } from "../utils/health-check-utils"

@@ -1,4 +1,4 @@
-import type { Mina } from "@palladxyz/mina-core"
+import type { Mina } from "@palladco/mina-core"
 import type { Address, Chain } from "viem"
 
 import type { Provider } from "../"

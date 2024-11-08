@@ -13,7 +13,7 @@ import {
   SignTransactionRequestParamsSchema,
   SwitchChainRequestParamsSchema,
 } from "@mina-js/providers"
-import { createMinaProvider } from "@palladxyz/web-provider"
+import { createMinaProvider } from "@palladco/web-provider"
 import { serializeError } from "serialize-error"
 import { z } from "zod"
 import type { Handler } from "."

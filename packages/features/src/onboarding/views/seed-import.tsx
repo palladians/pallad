@@ -1,4 +1,4 @@
-import { wordlist } from "@palladxyz/key-management"
+import { wordlist } from "@palladco/key-management"
 import { Loader2Icon } from "lucide-react"
 import type { UseFormReturn } from "react-hook-form"
 

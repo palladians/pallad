@@ -1,5 +1,5 @@
-import type { GroupedCredentials } from "@palladxyz/key-management"
-import type { Network } from "@palladxyz/pallad-core"
+import type { GroupedCredentials } from "@palladco/key-management"
+import type { Network } from "@palladco/pallad-core"
 
 import type { SingleCredentialState } from "../../credentials"
 import { NetworkError, WalletError } from "../../lib/Errors"

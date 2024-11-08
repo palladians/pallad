@@ -1,6 +1,6 @@
 import { getTxKind } from "@/common/lib/tx"
 import { TxIcon } from "@/components/tx-icon"
-import type { Mina } from "@palladxyz/mina-core"
+import type { Mina } from "@palladco/mina-core"
 import { clsx } from "clsx"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"

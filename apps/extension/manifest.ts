@@ -17,6 +17,9 @@ export const manifest: chrome.runtime.ManifestV3 = {
   version: packageJson.version,
   action: { default_title: "Click to open panel" },
   side_panel: { default_path: "index.html" },
+  sandbox: {
+    pages: ["sandbox.html"],
+  },
   permissions: ["storage", "activeTab", "background", "sidePanel"],
   background: {
     service_worker: "src/background/index.ts",
@@ -47,5 +50,15 @@ export const manifest: chrome.runtime.ManifestV3 = {
       },
       description: "Open the Pallad extension",
     },
+  },
+  content_security_policy: {
+    sandbox:
+      "sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; worker-src blob: 'self'; child-src blob: 'self'",
+  },
+  cross_origin_embedder_policy: {
+    value: "require-corp",
+  },
+  cross_origin_opener_policy: {
+    value: "same-origin",
   },
 }

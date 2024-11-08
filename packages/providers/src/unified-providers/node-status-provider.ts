@@ -2,7 +2,7 @@ import type {
   HealthCheckResponse,
   NodeStatus,
   NodeStatusProvider,
-} from "@palladxyz/pallad-core"
+} from "@palladco/pallad-core"
 
 import { createNodeStatusProvider as mn } from "../mina-node"
 import type { ProviderConfig } from "./types"

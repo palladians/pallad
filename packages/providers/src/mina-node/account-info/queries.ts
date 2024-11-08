@@ -17,7 +17,7 @@ export const getAccountBalance = `
     }
   }
 `
-import type { TokenIdMap } from "@palladxyz/mina-core"
+import type { TokenIdMap } from "@palladco/mina-core"
 
 export function getTokenAccountInfoQuery(tokenIds: TokenIdMap): string {
   // Start with the base part of the query

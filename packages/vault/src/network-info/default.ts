@@ -1,4 +1,4 @@
-import type { ProviderConfig } from "@palladxyz/providers"
+import type { ProviderConfig } from "@palladco/providers"
 
 import type { NetworkId } from "./network-info-state"
 

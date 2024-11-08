@@ -1,4 +1,4 @@
-import { createMinaProvider } from "@palladxyz/web-provider"
+import { createMinaProvider } from "@palladco/web-provider"
 import { onMessage, sendMessage } from "webext-bridge/background"
 import { runtime, tabs } from "webextension-polyfill"
 import {

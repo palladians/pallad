@@ -1,5 +1,5 @@
 {
-  "name": "@palladxyz/common",
+  "name": "@palladco/common",
   "description": "The proto package for shareable common configuration.",
   "version": "1.0.0",
   "type": "module",

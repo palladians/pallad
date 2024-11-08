@@ -12,8 +12,8 @@ import { utf8ToBytes } from "@noble/hashes/utils"
 import type {
   ChainOperationArgs,
   ChainSignablePayload,
-} from "@palladxyz/key-management"
-import type { SearchQuery } from "@palladxyz/vault"
+} from "@palladco/key-management"
+import type { SearchQuery } from "@palladco/vault"
 import mitt from "mitt"
 import { P, match } from "ts-pattern"
 import { showUserPrompt } from "../utils/prompts"

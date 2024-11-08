@@ -3,7 +3,7 @@ import type {
   AccountInfoArgs,
   AccountInfoProvider,
   HealthCheckResponse,
-} from "@palladxyz/pallad-core"
+} from "@palladco/pallad-core"
 
 import { createAccountInfoProvider as mn } from "../mina-node"
 import type { ProviderConfig } from "./types"

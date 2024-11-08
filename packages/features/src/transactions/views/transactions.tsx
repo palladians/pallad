@@ -1,4 +1,4 @@
-import type { Mina } from "@palladxyz/mina-core"
+import type { Mina } from "@palladco/mina-core"
 import { Filter, X } from "lucide-react"
 import { groupBy } from "rambda"
 import { Link } from "react-router-dom"

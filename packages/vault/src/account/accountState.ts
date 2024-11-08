@@ -1,5 +1,5 @@
-import type { ChainAddress } from "@palladxyz/key-management"
-import type { AccountInfo, Tx } from "@palladxyz/pallad-core"
+import type { ChainAddress } from "@palladco/key-management"
+import type { AccountInfo, Tx } from "@palladco/pallad-core"
 
 export type SingleAccountState = {
   accountInfo: Record<string, AccountInfo>
