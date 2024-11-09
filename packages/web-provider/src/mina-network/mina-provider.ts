@@ -19,8 +19,15 @@ import { P, match } from "ts-pattern"
 import { showUserPrompt } from "../utils/prompts"
 import { createVaultService } from "../vault-service"
 import type { ConnectOps } from "../web-provider-types"
-import { CredentialValidator } from "./credential-validator"
 import { serializeField, serializeGroup } from "./utils"
+
+import { sendMessage } from "webext-bridge/window"
+
+type ValidationResponse = {
+  success: boolean
+  credential?: string
+  error?: string
+}
 
 export function getMinaChainId(chains: string[]) {
   return Number(chains[0]?.split(":")[1])
@@ -107,6 +114,28 @@ export const createMinaProvider = async (): Promise<
       )) as T
     } catch (error) {
       throw createProviderRpcError(4100, "Unauthorized")
+    }
+  }
+  const validateInSandbox = async (credential: any): Promise<string> => {
+    try {
+      // Send message to sandbox and wait for response
+      const response = await sendMessage<ValidationResponse>(
+        "validate-credential-request",
+        {
+          credential,
+        },
+        "background",
+      )
+
+      if (!response.success) {
+        throw new Error(response.error || "Validation failed")
+      }
+
+      return response.credential!
+    } catch (error) {
+      throw new Error(
+        `Sandbox validation failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      )
     }
   }
   return {
@@ -347,14 +376,11 @@ export const createMinaProvider = async (): Promise<
           if (!confirmation) {
             throw createProviderRpcError(4001, "User Rejected Request")
           }
-
+          console.log("plswork")
           try {
-            const validator = CredentialValidator.initialize(
-              chrome.runtime.getURL("credential-sandbox/index.html"),
-            )
-
-            const validatedCredential =
-              await validator.validateCredential(credential)
+            // Send validation request via background script
+            const validatedCredential = await validateInSandbox(credential)
+            console.log("validatedCredential:", validatedCredential)
             await _vault.storePrivateCredential(validatedCredential)
             return { success: true }
           } catch (error: any) {

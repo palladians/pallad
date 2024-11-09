@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Credential Validator Sandbox</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import { setNamespace, allowWindowMessaging } from 'webext-bridge/window'
+    
+    // Set namespace for this sandbox
+    setNamespace('credential-sandbox')
+    // Allow messaging since this is a sandbox page
+    allowWindowMessaging('credential-sandbox')
+    
+    // Initialize your sandbox app
+    import('./src/sandbox.tsx')
+  </script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 import { createMinaProvider } from "@palladxyz/web-provider"
-import { onMessage, sendMessage } from "webext-bridge/background"
+import { onMessage, sendMessage } from "webext-bridge/window"
 import { runtime, tabs } from "webextension-polyfill"
 import {
   minaAccounts,
@@ -49,6 +49,27 @@ onMessage("mina_storePrivateCredential", minaStorePrivateCredential)
 onMessage("pallad_switchNetwork", palladSwitchNetwork)
 onMessage("pallad_connected", palladConnected)
 onMessage("pallad_sidePanel", palladSidePanel)
+
+/**
+ * Private Credential Validation handler
+ */
+onMessage("validate-credential-request", async (message) => {
+  try {
+    // Use proper window@namespace format
+    const response = await sendMessage(
+      "validate-credential",
+      message.data,
+      "window@credential-sandbox",
+    )
+    return response
+  } catch (error) {
+    console.error("Error in credential validation:", error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    }
+  }
+})
 
 /**
  * Runtime
