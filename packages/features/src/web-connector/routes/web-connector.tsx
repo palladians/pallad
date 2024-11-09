@@ -1,3 +1,4 @@
+import type { Json } from "@mina-js/utils"
 import { useEffect, useState } from "react"
 import type { SubmitHandler } from "react-hook-form"
 import { MemoryRouter } from "react-router-dom"
@@ -14,36 +15,78 @@ const sanitizePayload = async (payload: string) => {
   return xss(yamlPayload)
 }
 
+const sendSandboxMessage = (payload: Json) => {
+  const sandbox = document.querySelector(
+    "#o1sandbox",
+  ) as HTMLIFrameElement | null
+  if (!sandbox) return
+  return sandbox.contentWindow?.postMessage(payload, "*")
+}
+
 type ActionRequest = {
   title: string
   submitButtonLabel?: string
   rejectButtonLabel?: string
   payload: string
   inputType: "text" | "password" | "confirmation"
-  loading: boolean
+  contract: string | undefined
   emitConnected: boolean
 }
 
 export const WebConnectorRoute = () => {
+  const [loading, setLoading] = useState(true)
   const [request, setRequest] = useState<ActionRequest>({
     title: "",
     payload: "",
     inputType: "confirmation",
-    loading: true,
+    contract: undefined,
     emitConnected: false,
   })
-  const onSubmit: SubmitHandler<UserInputForm> = async ({ userInput }) => {
+  const startSubmitting: SubmitHandler<UserInputForm> = async ({
+    userInput,
+  }) => {
+    if (!request.contract) return onSubmit({ userInput })
+    setLoading(true)
+    try {
+      return sendSandboxMessage({
+        type: "run",
+        contract: request.contract,
+        payload: request.payload,
+        userInput,
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+  const onSubmit: SubmitHandler<
+    UserInputForm & { contractResult?: Json }
+  > = async ({ userInput, contractResult }) => {
     const { id } = await windows.getCurrent()
     await runtime.sendMessage({
       userInput,
+      contractResult,
       windowId: id,
     })
     window.close()
   }
-  const confirm = async () => {
+  const startConfirming = async () => {
+    if (!request.contract) return confirm({})
+    setLoading(true)
+    try {
+      return sendSandboxMessage({
+        type: "run",
+        contract: request.contract,
+        payload: request.payload,
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+  const confirm = async ({ contractResult }: { contractResult?: Json }) => {
     const { id } = await windows.getCurrent()
     await runtime.sendMessage({
       userConfirmed: true,
+      contractResult,
       windowId: id,
     })
     if (request.emitConnected) {
@@ -67,6 +110,21 @@ export const WebConnectorRoute = () => {
     })
     window.close()
   }
+  const eventListener = (event: MessageEvent) => {
+    if (request.inputType === "confirmation")
+      return confirm({ contractResult: event.data.result })
+    return onSubmit({
+      userInput: event.data.userInput,
+      contractResult: event.data.result,
+    })
+  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: wontdo
+  useEffect(() => {
+    window.addEventListener("message", eventListener)
+    return () => {
+      window.removeEventListener("message", eventListener)
+    }
+  }, [])
   useEffect(() => {
     runtime.onMessage.addListener(async (message) => {
       if (message.type === "action_request") {
@@ -75,10 +133,11 @@ export const WebConnectorRoute = () => {
           submitButtonLabel: message.params.submitButtonLabel,
           rejectButtonLabel: message.params.rejectButtonLabel,
           payload: await sanitizePayload(message.params.payload),
+          contract: message.params.contract,
           inputType: message.params.inputType,
-          loading: false,
           emitConnected: message.params.emitConnected,
         })
+        setLoading(false)
       }
     })
   }, [])
@@ -86,15 +145,15 @@ export const WebConnectorRoute = () => {
     <MemoryRouter>
       <WebConnectorView
         inputType={request.inputType}
-        onConfirm={confirm}
+        onConfirm={startConfirming}
         onDecline={decline}
         rejectButtonLabel={request.rejectButtonLabel}
         onReject={reject}
         submitButtonLabel={request.submitButtonLabel}
-        onSubmit={onSubmit}
+        onSubmit={startSubmitting}
         title={request.title}
         payload={request.payload}
-        loading={request.loading}
+        loading={loading}
       />
     </MemoryRouter>
   )

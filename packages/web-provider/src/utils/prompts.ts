@@ -9,10 +9,12 @@ type Metadata = {
 export const showUserPrompt = async <T extends boolean | string = boolean>({
   inputType,
   metadata,
+  contract,
   emitConnected = false,
 }: {
   inputType: InputType
   metadata: Metadata
+  contract?: string
   emitConnected?: boolean
 }): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
@@ -53,6 +55,7 @@ export const showUserPrompt = async <T extends boolean | string = boolean>({
                   rejectButtonLabel: metadata.rejectButtonLabel,
                   payload: metadata.payload ?? "{}",
                   inputType,
+                  contract,
                   emitConnected,
                 },
               })

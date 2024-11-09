@@ -69,7 +69,7 @@
     "webext-bridge": "6.0.1",
     "webextension-polyfill": "0.12.0",
     "xss": "1.0.15",
-    "yaml": "2.5.0",
+    "yaml": "2.6.0",
     "zustand": "4.5.4"
   },
   "devDependencies": {
