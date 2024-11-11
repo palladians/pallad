@@ -6,6 +6,17 @@ type Metadata = {
   payload?: string
 }
 
+type ContractResult = {
+  type?: string
+  result?: string
+  error?: string
+}
+
+type PromptResult<T> = {
+  value: T
+  contractResult?: ContractResult
+}
+
 export const showUserPrompt = async <T extends boolean | string = boolean>({
   inputType,
   metadata,
@@ -16,8 +27,8 @@ export const showUserPrompt = async <T extends boolean | string = boolean>({
   metadata: Metadata
   contract?: string
   emitConnected?: boolean
-}): Promise<T> => {
-  return new Promise<T>((resolve, reject) => {
+}): Promise<PromptResult<T>> => {
+  return new Promise<PromptResult<T>>((resolve, reject) => {
     chrome.windows
       .create({
         url: "prompt.html",
@@ -34,11 +45,20 @@ export const showUserPrompt = async <T extends boolean | string = boolean>({
               return reject(new Error("4001 - User Rejected Request"))
             }
             if (inputType === "confirmation") {
-              if (response.userConfirmed) return resolve(true as any)
+              if (response.userConfirmed) {
+                return resolve({
+                  value: true as T,
+                  contractResult: response.contractResult,
+                })
+              }
               return reject(new Error("4001 - User Rejected Request"))
             }
-            if (response.userInput.length > 0)
-              return resolve(response.userInput)
+            if (response.userInput.length > 0) {
+              return resolve({
+                value: response.userInput,
+                contractResult: response.contractResult,
+              })
+            }
             return reject(new Error("4100 - Unauthorized"))
           }
           return reject(new Error("Wrong window context"))

@@ -9,6 +9,12 @@ import yaml from "yaml"
 import type { UserInputForm } from "../types"
 import { WebConnectorView } from "../views/web-connector"
 
+type ContractResult = {
+  type?: string
+  result?: string
+  error?: string
+}
+
 const sanitizePayload = async (payload: string) => {
   const parsedPayload = JSON.parse(payload) as Record<string, any>
   const yamlPayload = yaml.stringify(parsedPayload)
@@ -59,7 +65,7 @@ export const WebConnectorRoute = () => {
     }
   }
   const onSubmit: SubmitHandler<
-    UserInputForm & { contractResult?: Json }
+    UserInputForm & { contractResult?: ContractResult }
   > = async ({ userInput, contractResult }) => {
     const { id } = await windows.getCurrent()
     await runtime.sendMessage({
@@ -82,7 +88,9 @@ export const WebConnectorRoute = () => {
       setLoading(false)
     }
   }
-  const confirm = async ({ contractResult }: { contractResult?: Json }) => {
+  const confirm = async ({
+    contractResult,
+  }: { contractResult?: ContractResult }) => {
     const { id } = await windows.getCurrent()
     await runtime.sendMessage({
       userConfirmed: true,
@@ -111,6 +119,15 @@ export const WebConnectorRoute = () => {
     window.close()
   }
   const eventListener = (event: MessageEvent) => {
+    if (event.data.type === "validate-credential-result") {
+      return confirm({
+        contractResult: {
+          type: event.data.type,
+          result: event.data.result,
+          error: event.data.error,
+        },
+      })
+    }
     if (request.inputType === "confirmation")
       return confirm({ contractResult: event.data.result })
     return onSubmit({

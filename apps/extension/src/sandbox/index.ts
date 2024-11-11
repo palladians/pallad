@@ -1,6 +1,8 @@
 import { Add } from "@palladco/contracts"
 import { Credential } from "mina-credentials"
+import { serializeError } from "serialize-error"
 import { match } from "ts-pattern"
+import yaml from "yaml"
 import { z } from "zod"
 
 const EventTypeSchema = z.enum(["run"])
@@ -8,9 +10,13 @@ const ContractTypeSchema = z.enum(["add", "validate-credential"])
 
 type ValidationResult = {
   type: "validate-credential-result"
-  success: boolean
-  credential?: string
+  result?: string
   error?: string
+}
+
+const recoverOriginalPayload = (sanitizedPayload: string) => {
+  const parsedYaml = yaml.parse(sanitizedPayload)
+  return JSON.stringify(parsedYaml)
 }
 
 window.addEventListener("message", async (event) => {
@@ -34,24 +40,21 @@ window.addEventListener("message", async (event) => {
         })
         .with("validate-credential", async () => {
           try {
-            const credentialInput = event.data.payload
-            const credentialDeserialized = Credential.fromJSON(credentialInput)
+            const sanitizedPayload = event.data.payload
+            const originalPayload = recoverOriginalPayload(sanitizedPayload)
+            const credentialDeserialized = Credential.fromJSON(originalPayload)
             await Credential.validate(credentialDeserialized)
 
-            // Use the existing ValidationResult type structure
             const result: ValidationResult = {
               type: "validate-credential-result",
-              success: true,
-              credential: Credential.toJSON(credentialDeserialized),
+              result: Credential.toJSON(credentialDeserialized),
             }
 
             window.parent.postMessage(result, "*")
           } catch (error: any) {
             const result: ValidationResult = {
               type: "validate-credential-result",
-              success: false,
-              error:
-                error instanceof Error ? error.message : "Validation Error",
+              error: serializeError(error),
             }
             window.parent.postMessage(result, "*")
           }

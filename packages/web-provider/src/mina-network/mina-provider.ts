@@ -37,20 +37,29 @@ const verifyInitialized = async () => {
   return !PalladApp.includes("UNINITIALIZED")
 }
 
+const getPromptValue = async <T extends boolean | string>(
+  promptPromise: Promise<{ value: T; contractResult?: any }>,
+): Promise<T> => {
+  const { value } = await promptPromise
+  return value
+}
+
 export const createMinaProvider = async (): Promise<
   MinaProviderClient & { emit: (type: any, event: any) => void }
 > => {
   const _emitter = mitt()
   const _vault = createVaultService()
   const unlockWallet = async () => {
-    const passphrase = await showUserPrompt<string>({
-      inputType: "password",
-      metadata: {
-        title: "Unlock your wallet",
-        submitButtonLabel: "Unlock",
-        rejectButtonLabel: "Cancel",
-      },
-    })
+    const passphrase = await getPromptValue(
+      showUserPrompt<string>({
+        inputType: "password",
+        metadata: {
+          title: "Unlock your wallet",
+          submitButtonLabel: "Unlock",
+          rejectButtonLabel: "Cancel",
+        },
+      }),
+    )
     if (passphrase === null) throw createProviderRpcError(4100, "Unauthorized")
     await _vault.unlockWallet(passphrase)
   }
@@ -77,14 +86,16 @@ export const createMinaProvider = async (): Promise<
   }
   const enableOrigin = async ({ origin }: { origin: string }) => {
     await checkAndUnlockWallet()
-    const userConfirmed = await showUserPrompt<boolean>({
-      inputType: "confirmation",
-      metadata: {
-        title: "Connection request.",
-        payload: JSON.stringify({ origin }),
-      },
-      emitConnected: true,
-    })
+    const userConfirmed = await getPromptValue(
+      showUserPrompt<boolean>({
+        inputType: "confirmation",
+        metadata: {
+          title: "Connection request.",
+          payload: JSON.stringify({ origin }),
+        },
+        emitConnected: true,
+      }),
+    )
     if (!userConfirmed) {
       throw createProviderRpcError(4001, "User Rejected Request")
     }
@@ -152,13 +163,15 @@ export const createMinaProvider = async (): Promise<
           if (!networkIds.includes(networkId)) {
             throw createProviderRpcError(4100, "Unauthorized.")
           }
-          const userConfirmed = await showUserPrompt<boolean>({
-            inputType: "confirmation",
-            metadata: {
-              title: "Switch to different chain.",
-              payload: JSON.stringify({ networkId }),
-            },
-          })
+          const userConfirmed = await getPromptValue(
+            showUserPrompt<boolean>({
+              inputType: "confirmation",
+              metadata: {
+                title: "Switch to different chain.",
+                payload: JSON.stringify({ networkId }),
+              },
+            }),
+          )
           if (!userConfirmed) {
             throw createProviderRpcError(4001, "User Rejected Request")
           }
@@ -166,12 +179,14 @@ export const createMinaProvider = async (): Promise<
           return networkId
         })
         .with({ method: "mina_requestNetwork" }, async () => {
-          const userConfirmed = await showUserPrompt<boolean>({
-            inputType: "confirmation",
-            metadata: {
-              title: "Request to current Mina network information.",
-            },
-          })
+          const userConfirmed = await getPromptValue(
+            showUserPrompt<boolean>({
+              inputType: "confirmation",
+              metadata: {
+                title: "Request to current Mina network information.",
+              },
+            }),
+          )
           if (!userConfirmed) {
             throw createProviderRpcError(4001, "User Rejected Request")
           }
@@ -181,15 +196,16 @@ export const createMinaProvider = async (): Promise<
         .with(
           { method: P.union("mina_sign", "mina_signTransaction") },
           async (signatureRequest) => {
-            const passphrase = await showUserPrompt<string>({
-              inputType: "password",
-              // TODO: Testing only
-              contract: "add",
-              metadata: {
-                title: "Signature request",
-                payload: JSON.stringify(signatureRequest.params),
-              },
-            })
+            const passphrase = await getPromptValue(
+              showUserPrompt<string>({
+                inputType: "password",
+                contract: "add",
+                metadata: {
+                  title: "Signature request",
+                  payload: JSON.stringify(signatureRequest.params),
+                },
+              }),
+            )
             if (passphrase === null)
               throw createProviderRpcError(4100, "Unauthorized.")
             const operationArgs: ChainOperationArgs = {
@@ -229,13 +245,15 @@ export const createMinaProvider = async (): Promise<
         .with(
           { method: P.union("mina_createNullifier", "mina_signFields") },
           async (signatureRequest) => {
-            const passphrase = await showUserPrompt<string>({
-              inputType: "password",
-              metadata: {
-                title: "Signature request",
-                payload: JSON.stringify(signatureRequest.params),
-              },
-            })
+            const passphrase = await getPromptValue(
+              showUserPrompt<string>({
+                inputType: "password",
+                metadata: {
+                  title: "Signature request",
+                  payload: JSON.stringify(signatureRequest.params),
+                },
+              }),
+            )
             if (passphrase === null)
               throw createProviderRpcError(4100, "Unauthorized.")
             const operationArgs: ChainOperationArgs = {
@@ -305,13 +323,15 @@ export const createMinaProvider = async (): Promise<
             query as SearchQuery,
             props as string[],
           )
-          const confirmation = await showUserPrompt<boolean>({
-            inputType: "confirmation",
-            metadata: {
-              title: "Credential read request",
-              payload: JSON.stringify({ ...params, credentials }),
-            },
-          })
+          const confirmation = await getPromptValue(
+            showUserPrompt<boolean>({
+              inputType: "confirmation",
+              metadata: {
+                title: "Credential read request",
+                payload: JSON.stringify({ ...params, credentials }),
+              },
+            }),
+          )
           if (!confirmation) {
             throw createProviderRpcError(4001, "User Rejected Request")
           }
@@ -320,13 +340,15 @@ export const createMinaProvider = async (): Promise<
         .with({ method: "mina_setState" }, async ({ params }) => {
           const payload = params?.[0]
           if (!payload) throw createProviderRpcError(4000, "Invalid Request")
-          const confirmation = await showUserPrompt<boolean>({
-            inputType: "confirmation",
-            metadata: {
-              title: "Credential write request",
-              payload: JSON.stringify(payload),
-            },
-          })
+          const confirmation = await getPromptValue(
+            showUserPrompt<boolean>({
+              inputType: "confirmation",
+              metadata: {
+                title: "Credential write request",
+                payload: JSON.stringify(payload),
+              },
+            }),
+          )
           if (!confirmation) {
             throw createProviderRpcError(4001, "User Rejected Request")
           }
@@ -339,38 +361,60 @@ export const createMinaProvider = async (): Promise<
 
           const stringifiedCredential = JSON.stringify(credential)
 
-          const confirmation = await showUserPrompt<boolean>({
-            inputType: "confirmation",
-            contract: "validate-credential",
-            metadata: {
-              title: "Store private credential request",
-              payload: stringifiedCredential,
-            },
-          })
-
-          if (!confirmation) {
-            throw createProviderRpcError(4001, "User Rejected Request")
-          }
           try {
-            await _vault.storePrivateCredential(stringifiedCredential)
-            return { success: true }
+            const { value: userConfirmed, contractResult } =
+              await showUserPrompt<boolean>({
+                inputType: "confirmation",
+                contract: "validate-credential",
+                metadata: {
+                  title: "Store private credential request",
+                  payload: stringifiedCredential,
+                },
+              })
+
+            if (!userConfirmed) {
+              throw createProviderRpcError(4001, "User Rejected Request")
+            }
+
+            if (contractResult?.error) {
+              throw createProviderRpcError(
+                4100,
+                `Credential validation failed: ${contractResult.error}`,
+              )
+            }
+
+            if (!contractResult?.result) {
+              throw createProviderRpcError(4100, "Missing validation result")
+            }
+
+            try {
+              await _vault.storePrivateCredential(contractResult.result)
+              return { success: contractResult.result }
+            } catch (error: any) {
+              throw createProviderRpcError(
+                4100,
+                `Failed to store private credential: ${error}`,
+              )
+            }
           } catch (error: any) {
             throw createProviderRpcError(
               4100,
-              `Failed to store private credential: ${error}`,
+              error.message || "Failed to validate credential",
             )
           }
         })
         .with({ method: "mina_sendTransaction" }, async ({ params }) => {
           const [payload] = params
           if (!payload) throw createProviderRpcError(4000, "Invalid Request")
-          const passphrase = await showUserPrompt<string>({
-            inputType: "password",
-            metadata: {
-              title: "Send transaction request",
-              payload: JSON.stringify(payload),
-            },
-          })
+          const passphrase = await getPromptValue(
+            showUserPrompt<string>({
+              inputType: "password",
+              metadata: {
+                title: "Send transaction request",
+                payload: JSON.stringify(payload),
+              },
+            }),
+          )
           if (passphrase === null)
             throw createProviderRpcError(4100, "Unauthorized.")
           try {
