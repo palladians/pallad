@@ -2,6 +2,7 @@ import { AppLayout } from "@/components/app-layout"
 
 import { SettingsPageLayout } from "@/components/settings-page-layout"
 import { ChevronRight, SquareArrowOutUpRight } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import packageJson from "../../../package.json"
 
@@ -32,6 +33,21 @@ type AboutViewProps = {
 }
 
 export const AboutView = ({ onCloseClicked }: AboutViewProps) => {
+  const getLabel = (label: string) => {
+    const { t } = useTranslation()
+    switch (label) {
+      case "FAQ":
+        return t("settings.faq")
+      case "Support":
+        return t("settings.support")
+      case "Terms of Service":
+        return t("settings.termOfServices")
+      case "Version":
+        return t("settings.version")
+      default:
+        return ""
+    }
+  }
   return (
     <AppLayout>
       <SettingsPageLayout title="About" onCloseClicked={onCloseClicked}>
@@ -40,7 +56,7 @@ export const AboutView = ({ onCloseClicked }: AboutViewProps) => {
             if (link.content) {
               return (
                 <div key={link.label} className={ButtonWrapperStyles}>
-                  <p>{link.label}</p>
+                  <p>{getLabel(link.label)}</p>
                   <p className="text-[#7D7A9C]">{link.content}</p>
                 </div>
               )
@@ -54,7 +70,7 @@ export const AboutView = ({ onCloseClicked }: AboutViewProps) => {
                   rel="noreferrer"
                   className={ButtonWrapperStyles}
                 >
-                  <p>{link.label}</p>
+                  <p>{getLabel(link.label)}</p>
                   <SquareArrowOutUpRight
                     width={24}
                     height={24}
@@ -69,7 +85,7 @@ export const AboutView = ({ onCloseClicked }: AboutViewProps) => {
                 to={link.href || ""}
                 className={ButtonWrapperStyles}
               >
-                <p>{link.label}</p>
+                <p>{getLabel(link.label)}</p>
                 <ChevronRight
                   width={24}
                   height={24}

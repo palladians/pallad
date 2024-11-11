@@ -1,0 +1,29 @@
+{
+  "extends": "@palladco/common/tsconfig.json",
+  "compilerOptions": {
+    // "experimentalDecorators": true,
+    // "noImplicitOverride": false,
+    // "strictPropertyInitialization": false,
+    // "skipLibCheck": true,
+    // "emitDecoratorMetadata": true,
+    // "useDefineForClassFields": false,
+    "target": "es2020",
+    "module": "es2022",
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowJs": true,
+    "declaration": true,
+    "sourceMap": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "useDefineForClassFields": false,
+    "noImplicitOverride": false,
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}

@@ -4,7 +4,7 @@ import type {
   GetPassphrase,
   GroupedCredentials,
   InMemoryKeyAgent,
-} from "@palladxyz/key-management"
+} from "@palladco/key-management"
 
 import { WalletError } from "../../lib/Errors"
 

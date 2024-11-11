@@ -1,7 +1,7 @@
-import "@palladxyz/features/dist/index.css"
+import "@palladco/features/dist/index.css"
 import "./assets/app.css"
 
-import { Router } from "@palladxyz/features"
+import { Router } from "@palladco/features"
 import { ThemeProvider } from "next-themes"
 import { useEffect } from "react"
 

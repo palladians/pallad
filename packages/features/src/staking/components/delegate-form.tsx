@@ -9,8 +9,9 @@ import { FormError } from "@/components/form-error"
 
 import { FeePicker, TransactionFeeShort } from "@/components/fee-picker"
 import type { SendFormSchemaProps } from "@/send/components/send-form.schema"
-import { TransactionType } from "@palladxyz/mina-core"
+import { TransactionType } from "@palladco/mina-core"
 import { ExternalLinkIcon } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { DelegateFormSchema } from "./delegate-form.schema"
 
 type DelegateFormProps = {
@@ -54,17 +55,18 @@ export const DelegateForm = ({ advanced, setAdvanced }: DelegateFormProps) => {
   useEffect(() => {
     setValue("to", location.state?.address || "")
   }, [])
+  const { t } = useTranslation()
   return (
     <form
       className="flex flex-col flex-1 gap-4 px-8 pb-8 items-center"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h1 className="text-3xl w-full">Select a validator</h1>
+      <h1 className="text-3xl w-full">{t("staking.selectValidator")}</h1>
       <Link
         to="/staking/producers"
         className="card bg-secondary w-full flex-row py-2 px-4 items-center justify-between"
       >
-        <h2 className="text-mint">Find a validator</h2>
+        <h2 className="text-mint">{t("staking.findValidator")}</h2>
         <div className="bg-neutral rounded-full p-2">
           <ExternalLinkIcon />
         </div>
@@ -93,7 +95,7 @@ export const DelegateForm = ({ advanced, setAdvanced }: DelegateFormProps) => {
         className="btn btn-primary max-w-48 w-full"
         data-testid="formSubmit"
       >
-        <span>Next</span>
+        <span>{t("staking.next")}</span>
       </button>
     </form>
   )

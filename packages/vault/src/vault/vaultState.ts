@@ -4,15 +4,15 @@ import type {
   ChainOperationArgs,
   ChainSignablePayload,
   FromBip39MnemonicWordsProps,
-} from "@palladxyz/key-management"
-import type { GetPassphrase } from "@palladxyz/key-management"
+} from "@palladco/key-management"
+import type { GetPassphrase } from "@palladco/key-management"
 import type {
   AccountInfo,
   Network,
   SubmitTxArgs,
   Tx,
-} from "@palladxyz/pallad-core"
-import type { ProviderConfig } from "@palladxyz/providers"
+} from "@palladco/pallad-core"
+import type { ProviderConfig } from "@palladco/providers"
 
 import type { TransactionBody } from "@mina-js/utils"
 import type {

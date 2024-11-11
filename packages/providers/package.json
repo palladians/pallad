@@ -1,5 +1,5 @@
 {
-  "name": "@palladxyz/providers",
+  "name": "@palladco/providers",
   "version": "0.0.1",
   "description": "Proivder Package SDK for Pallad.",
   "type": "module",
@@ -19,26 +19,19 @@
   },
   "dependencies": {
     "@noble/hashes": "1.4.0",
-    "@palladxyz/key-management": "workspace:*",
-    "@palladxyz/mina-core": "workspace:*",
-    "@palladxyz/pallad-core": "workspace:*",
-    "@palladxyz/util": "workspace:*",
-    "bs58check": "4.0.0",
-    "buffer": "6.0.3",
-    "events": "3.3.0",
+    "@palladco/key-management": "workspace:*",
+    "@palladco/mina-core": "workspace:*",
+    "@palladco/pallad-core": "workspace:*",
+    "@palladco/util": "workspace:*",
     "graphql": "16.9.0",
     "graphql-request": "7.1.0",
     "json-bigint": "1.0.0",
     "mina-signer": "3.0.7",
-    "subscriptions-transport-ws": "0.11.0",
-    "viem": "2.18.4",
-    "ws": "8.18.0"
+    "subscriptions-transport-ws": "0.11.0"
   },
   "devDependencies": {
-    "@palladxyz/common": "workspace:*",
-    "@types/events": "3.0.3",
+    "@palladco/common": "workspace:*",
     "@types/json-bigint": "1.0.4",
-    "esbuild-plugin-polyfill-node": "0.3.0",
-    "msw": "2.3.4"
+    "esbuild-plugin-polyfill-node": "0.3.0"
   }
 }

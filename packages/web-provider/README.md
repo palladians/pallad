@@ -1,4 +1,4 @@
-# @palladxyz/web-extension
+# @palladco/web-extension
 
 🚧 This package is a WIP & implementation of RFC-0008/-0009 🚧
 
@@ -8,7 +8,7 @@ This is a typescript package that allows applications to interact with the walle
 
 ## Implementation & Testing
 
-For implementation of this package, you should investigate the `apps/extension` folder. In there you can view the background script, the injected script, and the content script together allow Pallad to interact with applications. See the e2e tests for a good test suite of this provider's implementation. 
+For implementation of this package, you should investigate the `apps/extension` folder. In there you can view the background script, the injected script, and the content script together allow Pallad to interact with applications. See the e2e tests for a good test suite of this provider's implementation.
 
 ## Current Design
 

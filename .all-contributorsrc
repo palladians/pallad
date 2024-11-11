@@ -53,6 +53,13 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/49923152?v=4",
       "profile": "https://www.myestery.com",
       "contributions": ["code"]
+    },
+    {
+      "login": "ManyRios",
+      "name": "MANUEL RIOS",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34518489?v=4",
+      "profile": "https://github.com/ManyRios",
+      "contributions": ["code"]
     }
   ],
   "contributorsPerLine": 7,

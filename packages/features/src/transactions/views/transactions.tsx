@@ -1,4 +1,4 @@
-import type { Mina } from "@palladxyz/mina-core"
+import type { Mina } from "@palladco/mina-core"
 import { Filter, X } from "lucide-react"
 import { groupBy } from "rambda"
 import { Link } from "react-router-dom"
@@ -12,6 +12,8 @@ import clsx from "clsx"
 import dayjs from "dayjs"
 import { useState } from "react"
 import { TxTile } from "../components/tx-tile"
+
+import { useTranslation } from "react-i18next"
 
 const Filters = {
   all: "All",
@@ -69,18 +71,19 @@ export const TransactionsView = ({
     return side === (currentFilter === Filters.sent ? "outgoing" : "incoming")
   })
   const txsGrouped = groupBy((tx) => tx.date, txsFiltered)
+  const { t } = useTranslation()
   return (
     <AppLayout>
       <MenuBar variant="dashboard" />
       <div className="px-8 mt-1 flex items-center justify-between">
-        <h2 className="text-3xl">Activity</h2>
+        <h2 className="text-3xl">{t("transactions.activity")}</h2>
         {showTransactions && (
           <button
             type="button"
             className="flex items-center space-x-1"
             onClick={() => setFiltersOpen(!filtersOpen)}
           >
-            <p>Filters</p>
+            <p>{t("transactions.filters")}</p>
             {filtersOpen ? (
               <X
                 width={24}
@@ -120,9 +123,9 @@ export const TransactionsView = ({
         <div className="px-8 pb-8 mt-6 space-y-4">
           {pendingHashes.length > 0 && (
             <p data-testid="transactions/pendingTransactions">
-              There are pending transactions.{" "}
+              {t("transactions.pendingTransactions")}{" "}
               <button type="button" onClick={openPendingTransactions}>
-                Preview
+                {t("transactions.preview")}
               </button>
             </p>
           )}
@@ -141,13 +144,10 @@ export const TransactionsView = ({
         </div>
       ) : (
         <div className="flex flex-col flex-1 items-center justify-center text-center">
-          <p className="mb-2 text-xl">Nothing here yet :(</p>
-          <p className="mb-4 w-64">
-            Here you'll find details about your transactions. Fund your wallet
-            to get started!
-          </p>
+          <p className="mb-2 text-xl">{t("transactions.nothingHere")}</p>
+          <p className="mb-4 w-64">{t("transactions.detailsGetStarted")}</p>
           <Link to="/receive" className="w-36 btn btn-primary">
-            Receive
+            {t("transactions.receive")}
           </Link>
         </div>
       )}

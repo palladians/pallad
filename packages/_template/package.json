@@ -1,5 +1,5 @@
 {
-  "name": "@palladxyz/template",
+  "name": "@palladco/template",
   "description": "Module template for new packages",
   "version": "1.0.0",
   "type": "module",
@@ -18,6 +18,6 @@
     "cleanup": "rimraf node_modules dist .turbo"
   },
   "devDependencies": {
-    "@palladxyz/common": "workspace:*"
+    "@palladco/common": "workspace:*"
   }
 }

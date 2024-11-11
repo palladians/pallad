@@ -1,10 +1,12 @@
 import { InfoIcon, XIcon } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 type InfoBarProps = {
   onClose: () => void
 }
 
 export const InfoBar = ({ onClose }: InfoBarProps) => {
+  const { t } = useTranslation()
   return (
     <div className="px-8">
       <div className="flex gap-2 items-center w-full bg-secondary p-4 rounded-xl">
@@ -12,9 +14,9 @@ export const InfoBar = ({ onClose }: InfoBarProps) => {
           <InfoIcon className="text-primary" />
         </div>
         <div className="flex flex-col">
-          <h2>Open Beta version</h2>
+          <h2>{t("wallet.openBeta")}</h2>
           <p className="text-gray-400 text-sm">
-            Only works for Devnet before Mainnet launch
+            {t("wallet.onlyWorksForDevnet")}
           </p>
         </div>
         <button type="button" onClick={onClose}>

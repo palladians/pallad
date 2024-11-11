@@ -1,5 +1,5 @@
-import type { MinaSignablePayload } from "@palladxyz/key-management"
-import type { BorrowedTypes } from "@palladxyz/mina-core"
+import type { MinaSignablePayload } from "@palladco/key-management"
+import type { BorrowedTypes } from "@palladco/mina-core"
 
 export const serializeField = (field: BorrowedTypes.Field) => {
   if (typeof field === "bigint" || typeof field === "number") {

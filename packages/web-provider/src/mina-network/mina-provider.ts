@@ -12,8 +12,8 @@ import { utf8ToBytes } from "@noble/hashes/utils"
 import type {
   ChainOperationArgs,
   ChainSignablePayload,
-} from "@palladxyz/key-management"
-import type { SearchQuery } from "@palladxyz/vault"
+} from "@palladco/key-management"
+import type { SearchQuery } from "@palladco/vault"
 import mitt from "mitt"
 import { P, match } from "ts-pattern"
 import { showUserPrompt } from "../utils/prompts"
@@ -216,6 +216,8 @@ export const createMinaProvider = async (): Promise<
           async (signatureRequest) => {
             const passphrase = await showUserPrompt<string>({
               inputType: "password",
+              // TODO: Testing only
+              contract: "add",
               metadata: {
                 title: "Signature request",
                 payload: JSON.stringify(signatureRequest.params),
@@ -379,13 +381,12 @@ export const createMinaProvider = async (): Promise<
           if (!confirmation) {
             throw createProviderRpcError(4001, "User Rejected Request")
           }
-          console.log("plswork")
           try {
             // Send validation request via background script
             // TODO: modify
-            const validatedCredential = await validateInSandbox(credential)
-            console.log("validatedCredential:", validatedCredential)
-            await _vault.storePrivateCredential(validatedCredential)
+            // const validatedCredential = await validateInSandbox(credential)
+            // console.log("validatedCredential:", validatedCredential)
+            // await _vault.storePrivateCredential(validatedCredential)
             return { success: true }
           } catch (error: any) {
             throw createProviderRpcError(

@@ -1,4 +1,4 @@
-import tailwindConfig from "@palladxyz/features/tailwind.config.mjs"
+import tailwindConfig from "@palladco/features/tailwind.config.mjs"
 
 export default {
   content: [

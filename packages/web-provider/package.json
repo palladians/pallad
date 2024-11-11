@@ -1,5 +1,5 @@
 {
-  "name": "@palladxyz/web-provider",
+  "name": "@palladco/web-provider",
   "version": "0.0.1",
   "type": "module",
   "description": "A web-provider for Mina wallets",
@@ -17,27 +17,21 @@
     "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@mina-js/klesia-sdk": "https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@a51d3b4",
+    "@mina-js/klesia-sdk": "https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@261950d",
     "@mina-js/providers": "https://pkg.pr.new/palladians/mina-js/@mina-js/providers@261950d",
     "@noble/hashes": "1.4.0",
-    "@palladxyz/key-management": "workspace:*",
-    "@palladxyz/mina-core": "workspace:*",
-    "@palladxyz/providers": "workspace:*",
-    "@palladxyz/vault": "workspace:*",
+    "@palladco/key-management": "workspace:*",
+    "@palladco/mina-core": "workspace:*",
+    "@palladco/providers": "workspace:*",
+    "@palladco/vault": "workspace:*",
     "dayjs": "1.11.12",
-    "eventemitter3": "^5.0.1",
     "mina-signer": "3.0.7",
     "mitt": "3.0.1",
-    "superjson": "2.2.1",
     "ts-pattern": "5.5.0",
-    "webext-bridge": "6.0.1",
-    "webextension-polyfill": "0.12.0",
     "zod": "3.23.8"
   },
   "devDependencies": {
-    "@palladxyz/common": "workspace:*",
-    "@types/chrome": "0.0.269",
-    "@types/webextension-polyfill": "0.10.7",
-    "type-fest": "4.23.0"
+    "@palladco/common": "workspace:*",
+    "@types/chrome": "0.0.269"
   }
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import type { Mina } from "@palladxyz/mina-core"
+import type { Mina } from "@palladco/mina-core"
 
 import {
   isConstructedTransaction,

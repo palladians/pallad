@@ -1,5 +1,5 @@
-import { createChainProvider } from "@palladxyz/providers"
-import type { ProviderConfig } from "@palladxyz/providers"
+import { createChainProvider } from "@palladco/providers"
+import type { ProviderConfig } from "@palladco/providers"
 
 import { AddressError } from "../../lib/Errors"
 

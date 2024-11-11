@@ -10,9 +10,11 @@ import { FormError } from "@/components/form-error"
 import MinaIcon from "@/common/assets/mina.svg?react"
 import { formatCurrency } from "@/common/lib/currency"
 import { FeePicker, TransactionFeeShort } from "@/components/fee-picker"
-import { TransactionType } from "@palladxyz/mina-core"
+import { TransactionType } from "@palladco/mina-core"
 import { ChevronRightIcon, SearchIcon } from "lucide-react"
 import { SendFormSchema, type SendFormSchemaProps } from "./send-form.schema"
+
+import { useTranslation } from "react-i18next"
 
 type SendFormProps = {
   balance: number
@@ -71,16 +73,17 @@ export const SendForm = ({
     })
     navigate("/transactions/summary")
   }
+  const { t } = useTranslation()
   return (
     <form
       className="flex flex-col gap-1 flex-1 pb-8 items-center"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex justify-between items-center w-full">
-        <h1 className="text-3xl">Send</h1>
+        <h1 className="text-3xl">{t("send.send")}</h1>
         <div className="form-control">
           <label className="label cursor-pointer gap-2">
-            <span className="label-text">Advanced</span>
+            <span className="label-text">{t("send.advanced")}</span>
             <input
               type="checkbox"
               className="toggle toggle-primary border-none"
@@ -163,7 +166,7 @@ export const SendForm = ({
               {...register("memo")}
             />
             <button type="button" className="badge badge-neutral -mr-3">
-              optional
+              {t("send.optional")}
             </button>
           </label>
           <FormError>{errors.memo?.message}</FormError>
@@ -181,7 +184,7 @@ export const SendForm = ({
         data-testid="formSubmit"
         disabled={!isValid}
       >
-        Next
+        {t("send.next")}
       </button>
     </form>
   )

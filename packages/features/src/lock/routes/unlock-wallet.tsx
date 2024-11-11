@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { securePersistence, sessionPersistence } from "@palladxyz/vault"
-import { useVault } from "@palladxyz/vault"
+import { securePersistence, sessionPersistence } from "@palladco/vault"
+import { useVault } from "@palladco/vault"
 import { type FormEvent, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"

@@ -4,6 +4,8 @@ import type { SubmitHandler, UseFormReturn } from "react-hook-form"
 import { FormError } from "@/components/form-error"
 import { useState } from "react"
 
+import { useTranslation } from "react-i18next"
+
 type ConfirmTransactionFormProps = {
   confirmationForm: UseFormReturn<{ spendingPassword: string }>
   submitTransaction: SubmitHandler<any>
@@ -17,6 +19,7 @@ export const ConfirmTransactionForm = ({
   const {
     formState: { errors },
   } = confirmationForm
+  const { t } = useTranslation()
   return (
     <form
       onSubmit={confirmationForm.handleSubmit(submitTransaction)}
@@ -50,7 +53,7 @@ export const ConfirmTransactionForm = ({
         {confirmationForm.formState.isSubmitting && (
           <Loader2Icon size={16} className="animate-spin" />
         )}
-        <span>Send</span>
+        <span>{t("send.send")}</span>
       </button>
     </form>
   )

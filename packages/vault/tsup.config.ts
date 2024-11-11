@@ -1,4 +1,4 @@
-import { baseTsupConfig } from "@palladxyz/common"
+import { baseTsupConfig } from "@palladco/common"
 import { defineConfig } from "tsup"
 
 import packageJson from "./package.json"

@@ -1,9 +1,9 @@
-import type { Mina } from "@palladxyz/mina-core"
+import type { Mina } from "@palladco/mina-core"
 import type {
   ChainHistoryProvider,
   TransactionsByAddressesArgs,
   Tx,
-} from "@palladxyz/pallad-core"
+} from "@palladco/pallad-core"
 
 //import { healthCheck } from "../utils/health-check-utils";
 

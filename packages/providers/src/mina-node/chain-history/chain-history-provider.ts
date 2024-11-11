@@ -3,7 +3,7 @@ import type {
   TransactionsByAddressesArgs,
   TransactionsByHashesArgs,
   Tx,
-} from "@palladxyz/pallad-core"
+} from "@palladco/pallad-core"
 
 import { createGraphQLRequest } from "../utils/fetch-utils"
 import {

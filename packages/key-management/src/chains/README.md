@@ -1,6 +1,6 @@
-# `@palladxyz/key-management` Package - `chains` Subfolder Documentation
+# `@palladco/key-management` Package - `chains` Subfolder Documentation
 
-The `chains` subfolder of the `@palladxyz/key-management` package contains TypeScript modules that provide functionality related to key management, including credential derivation, key derivation, and signing operations specific to the Mina protocol. Each chain's folder follows a specific strucutre, below is an overview of each file for this strucutre within the `mina` subfolder as an example:
+The `chains` subfolder of the `@palladco/key-management` package contains TypeScript modules that provide functionality related to key management, including credential derivation, key derivation, and signing operations specific to the Mina protocol. Each chain's folder follows a specific strucutre, below is an overview of each file for this strucutre within the `mina` subfolder as an example:
 
 ## `credentialDerivation.ts`
 
