@@ -366,8 +366,8 @@ export const createMinaProvider = async (): Promise<
             }
 
             try {
-              await _vault.storePrivateCredential(result.result)
-              return { success: result.result }
+              await _vault.storePrivateCredential(JSON.parse(result.result))
+              return { success: JSON.parse(result.result) }
             } catch (error: any) {
               throw createProviderRpcError(
                 4100,
