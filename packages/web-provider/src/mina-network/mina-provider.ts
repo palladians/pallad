@@ -357,7 +357,7 @@ export const createMinaProvider = async (): Promise<
             if (result?.error) {
               throw createProviderRpcError(
                 4100,
-                `Credential validation failed: ${result.error}`,
+                `Credential validation failed: ${JSON.stringify(result.error)}`,
               )
             }
 
