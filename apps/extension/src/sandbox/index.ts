@@ -1,15 +1,10 @@
+import { Add } from "@palladco/contracts"
 import { Credential } from "mina-credentials"
 import { match } from "ts-pattern"
 import { z } from "zod"
 
-// TODO: for now leave it hear but later move to separate package
-async function validateCredential(credential: string): Promise<string> {
-  const credentialDeserialized = Credential.fromJSON(credential)
-  await Credential.validate(credentialDeserialized)
-  return Credential.toJSON(credentialDeserialized)
-}
-
-const EventTypeSchema = z.enum(["validate-credential"])
+const EventTypeSchema = z.enum(["run"])
+const ContractTypeSchema = z.enum(["add", "validate-credential"])
 
 type ValidationResult = {
   type: "validate-credential-result"
@@ -21,28 +16,46 @@ type ValidationResult = {
 window.addEventListener("message", async (event) => {
   console.log(event.data)
   const type = EventTypeSchema.parse(event.data.type)
+  const contract = ContractTypeSchema.parse(event.data.contract)
+
   return match(type)
-    .with("validate-credential", async () => {
-      try {
-        const credentialInput = event.data.credential
+    .with("run", async () => {
+      return match(contract)
+        .with("add", async () => {
+          await Add.compile()
+          window.parent.postMessage(
+            {
+              type: "compiled",
+              result: "test",
+              userInput: event.data.userInput,
+            },
+            "*",
+          )
+        })
+        .with("validate-credential", async () => {
+          try {
+            const credentialInput = event.data.payload
+            const credentialDeserialized = Credential.fromJSON(credentialInput)
+            await Credential.validate(credentialDeserialized)
 
-        const validatedCredential = await validateCredential(credentialInput)
+            // Use the existing ValidationResult type structure
+            const result: ValidationResult = {
+              type: "validate-credential-result",
+              success: true,
+              credential: Credential.toJSON(credentialDeserialized),
+            }
 
-        const result: ValidationResult = {
-          type: "validate-credential-result",
-          success: true,
-          credential: validatedCredential,
-        }
-
-        window.parent.postMessage(result, "*")
-      } catch (error: any) {
-        const result: ValidationResult = {
-          type: "validate-credential-result",
-          success: false,
-          error: error instanceof Error ? error.message : "Validation Error",
-        }
-        window.parent.postMessage(result, "*")
-      }
+            window.parent.postMessage(result, "*")
+          } catch (error: any) {
+            const result: ValidationResult = {
+              type: "validate-credential-result",
+              success: false,
+              error:
+                error instanceof Error ? error.message : "Validation Error",
+            }
+            window.parent.postMessage(result, "*")
+          }
+        })
     })
     .exhaustive()
 })

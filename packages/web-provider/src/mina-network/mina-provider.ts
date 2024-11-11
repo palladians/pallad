@@ -108,39 +108,6 @@ export const createMinaProvider = async (): Promise<
       throw createProviderRpcError(4100, "Unauthorized")
     }
   }
-  // const validateInSandbox = async (credential: any): Promise<string> => {
-  //   try {
-  //     const sandbox = document.getElementById("o1sandbox") as HTMLIFrameElement
-  //     if (!sandbox) throw new Error("Sandbox iframe not found")
-
-  //     return new Promise((resolve, reject) => {
-  //       const messageHandler = (event: MessageEvent) => {
-  //         window.removeEventListener("message", messageHandler)
-  //         const response = event.data
-
-  //         if (response.success) {
-  //           resolve(JSON.stringify(response.credential))
-  //         } else {
-  //           reject(new Error(response.error || "Validation failed"))
-  //         }
-  //       }
-
-  //       window.addEventListener("message", messageHandler)
-
-  //       sandbox.contentWindow?.postMessage(
-  //         {
-  //           type: "validate-credential",
-  //           credential,
-  //         },
-  //         "*",
-  //       )
-  //     })
-  //   } catch (error) {
-  //     throw new Error(
-  //       `Sandbox validation failed: ${error instanceof Error ? error.message : "Unknown error"}`,
-  //     )
-  //   }
-  // }
   return {
     on: _emitter.on,
     removeListener: _emitter.off,
@@ -370,11 +337,14 @@ export const createMinaProvider = async (): Promise<
           const [credential] = params
           if (!credential) throw createProviderRpcError(4000, "Invalid Request")
 
+          const stringifiedCredential = JSON.stringify(credential)
+
           const confirmation = await showUserPrompt<boolean>({
             inputType: "confirmation",
+            contract: "validate-credential",
             metadata: {
               title: "Store private credential request",
-              payload: JSON.stringify(credential),
+              payload: stringifiedCredential,
             },
           })
 
@@ -382,11 +352,7 @@ export const createMinaProvider = async (): Promise<
             throw createProviderRpcError(4001, "User Rejected Request")
           }
           try {
-            // Send validation request via background script
-            // TODO: modify
-            // const validatedCredential = await validateInSandbox(credential)
-            // console.log("validatedCredential:", validatedCredential)
-            // await _vault.storePrivateCredential(validatedCredential)
+            await _vault.storePrivateCredential(stringifiedCredential)
             return { success: true }
           } catch (error: any) {
             throw createProviderRpcError(
