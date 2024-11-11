@@ -65,12 +65,12 @@ export const WebConnectorRoute = () => {
     }
   }
   const onSubmit: SubmitHandler<
-    UserInputForm & { contractResult?: ContractResult }
-  > = async ({ userInput, contractResult }) => {
+    UserInputForm & { result?: ContractResult }
+  > = async ({ userInput, result }) => {
     const { id } = await windows.getCurrent()
     await runtime.sendMessage({
       userInput,
-      contractResult,
+      result,
       windowId: id,
     })
     window.close()
@@ -88,13 +88,11 @@ export const WebConnectorRoute = () => {
       setLoading(false)
     }
   }
-  const confirm = async ({
-    contractResult,
-  }: { contractResult?: ContractResult }) => {
+  const confirm = async ({ result }: { result?: ContractResult }) => {
     const { id } = await windows.getCurrent()
     await runtime.sendMessage({
       userConfirmed: true,
-      contractResult,
+      result,
       windowId: id,
     })
     if (request.emitConnected) {
@@ -121,7 +119,7 @@ export const WebConnectorRoute = () => {
   const eventListener = (event: MessageEvent) => {
     if (event.data.type === "validate-credential-result") {
       return confirm({
-        contractResult: {
+        result: {
           type: event.data.type,
           result: event.data.result,
           error: event.data.error,
@@ -129,10 +127,10 @@ export const WebConnectorRoute = () => {
       })
     }
     if (request.inputType === "confirmation")
-      return confirm({ contractResult: event.data.result })
+      return confirm({ result: event.data.result })
     return onSubmit({
       userInput: event.data.userInput,
-      contractResult: event.data.result,
+      result: event.data.result,
     })
   }
   // biome-ignore lint/correctness/useExhaustiveDependencies: wontdo

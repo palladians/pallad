@@ -340,7 +340,7 @@ export const createMinaProvider = async (): Promise<
           const stringifiedCredential = JSON.stringify(credential)
 
           try {
-            const { value: userConfirmed, contractResult } =
+            const { value: userConfirmed, result } =
               await showUserPrompt<boolean>({
                 inputType: "confirmation",
                 contract: "validate-credential",
@@ -354,20 +354,20 @@ export const createMinaProvider = async (): Promise<
               throw createProviderRpcError(4001, "User Rejected Request")
             }
 
-            if (contractResult?.error) {
+            if (result?.error) {
               throw createProviderRpcError(
                 4100,
-                `Credential validation failed: ${contractResult.error}`,
+                `Credential validation failed: ${result.error}`,
               )
             }
 
-            if (!contractResult?.result) {
+            if (!result?.result) {
               throw createProviderRpcError(4100, "Missing validation result")
             }
 
             try {
-              await _vault.storePrivateCredential(contractResult.result)
-              return { success: contractResult.result }
+              await _vault.storePrivateCredential(result.result)
+              return { success: result.result }
             } catch (error: any) {
               throw createProviderRpcError(
                 4100,

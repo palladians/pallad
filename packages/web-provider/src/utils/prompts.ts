@@ -14,7 +14,7 @@ type ContractResult = {
 
 type PromptResult<T> = {
   value: T
-  contractResult?: ContractResult
+  result?: ContractResult
 }
 
 export const showUserPrompt = async <T extends boolean | string = boolean>({
@@ -48,7 +48,7 @@ export const showUserPrompt = async <T extends boolean | string = boolean>({
               if (response.userConfirmed) {
                 return resolve({
                   value: true as T,
-                  contractResult: response.contractResult,
+                  result: response.result,
                 })
               }
               return reject(new Error("4001 - User Rejected Request"))
@@ -56,7 +56,7 @@ export const showUserPrompt = async <T extends boolean | string = boolean>({
             if (response.userInput.length > 0) {
               return resolve({
                 value: response.userInput,
-                contractResult: response.contractResult,
+                result: response.result,
               })
             }
             return reject(new Error("4100 - Unauthorized"))
