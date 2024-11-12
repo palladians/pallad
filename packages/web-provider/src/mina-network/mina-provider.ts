@@ -381,6 +381,9 @@ export const createMinaProvider = async (): Promise<
             )
           }
         })
+        .with({ method: "mina_requestPresentation" }, async ({ params }) => {
+          return params
+        })
         .with({ method: "mina_sendTransaction" }, async ({ params }) => {
           const [payload] = params
           if (!payload) throw createProviderRpcError(4000, "Invalid Request")

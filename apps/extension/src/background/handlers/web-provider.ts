@@ -5,6 +5,7 @@ import {
   GetBalanceRequestParamsSchema,
   GetStateRequestParamsSchema,
   NetworkIdRequestParamsSchema,
+  PresentationRequestParamsSchema,
   RequestAccountsRequestParamsSchema,
   SendTransactionRequestParamsSchema,
   SetStateRequestParamsSchema,
@@ -207,7 +208,20 @@ export const minaStorePrivateCredential: Handler = async ({ data }) => {
     const provider = await createMinaProvider()
     const payload = StorePrivateCredentialRequestParamsSchema.parse({
       method: "mina_storePrivateCredential",
-      // TODO: might have to add parsing
+      params: data.params,
+      context: data.context,
+    })
+    return await provider.request(payload)
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+}
+
+export const minaRequestPresentation: Handler = async ({ data }) => {
+  try {
+    const provider = await createMinaProvider()
+    const payload = PresentationRequestParamsSchema.parse({
+      method: "mina_requestPresentation",
       params: data.params,
       context: data.context,
     })
