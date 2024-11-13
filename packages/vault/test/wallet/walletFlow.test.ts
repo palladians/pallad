@@ -11,7 +11,6 @@ import { act, renderHook } from "@testing-library/react"
 import { type CredentialName, KeyAgents } from "../../src"
 import { useVault } from "../../src"
 import { DEFAULT_NETWORK } from "../../src/network-info/default"
-import { EXAMPLE_CREDENTIAL } from "../../src/objects/default"
 
 const PREGENERATED_MNEMONIC = mnemonic
 
@@ -96,15 +95,15 @@ describe.skip("WalletTest", () => {
     expect(accountInfo).toBeDefined()
     act(() => {
       result.current.setObject({
-        objectName: "example credential",
-        object: EXAMPLE_CREDENTIAL,
+        credentialId: "0",
+        credential: { test: true },
       })
     })
 
-    const allObjects = result.current.searchObjects(
-      { issuer: "University of Example" },
-      [],
-    )
+    const allObjects = result.current.searchObjects({
+      query: { issuer: "University of Example" },
+      props: [],
+    })
     expect(allObjects.length).toEqual(2)
     // get keyAgentName
     const currentKeyAgentName = result.current.keyAgentName

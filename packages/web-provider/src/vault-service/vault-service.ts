@@ -95,31 +95,30 @@ export const createVaultService = (): IVaultService => {
     getState: async (params, props?) => {
       await rehydrate()
       const store = useVault.getState()
-      if (props === undefined) {
-        return store.searchObjects(params)
-      }
-      return store.searchObjects(params, props)
+      return store.searchObjects({ query: params, props })
     },
-    setState: async (state) => {
+    setState: async ({ credentialId, credential }) => {
       await rehydrate()
       const store = useVault.getState()
-      store.setObject(state)
+      store.setObject({ credentialId, credential })
     },
     storePrivateCredential: async (credential) => {
       await rehydrate()
       const store = useVault.getState()
-      store.setObject({
-        type: "private-credential",
+      return store.setObject({
         credentialId: crypto.randomUUID(),
-        credential: credential,
+        credential: {
+          ...(credential as object),
+          type: "private-credential",
+        },
       })
     },
-    getPrivateCredential: async (query?) => {
+    getPrivateCredential: async () => {
       await rehydrate()
       const store = useVault.getState()
-      return await store.searchObjects({
-        type: "private-credential",
-        ...query,
+      return store.searchObjects({
+        query: { type: "private-credential" },
+        props: [],
       })
     },
     getEnabled: async ({ origin }) => {

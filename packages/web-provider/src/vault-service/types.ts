@@ -18,7 +18,7 @@ export interface IVaultService {
   getBalance(): Promise<number>
   getNetworkId(): Promise<string | undefined>
   getNetworkIds(): Promise<string[]>
-  setState(state: Json): Promise<void>
+  setState(props: { credentialId: string; credential: Json }): Promise<void>
   storePrivateCredential(state: Json): Promise<void>
   getPrivateCredential(query?: SearchQuery): Promise<StoredObject[]>
   getEnabled({ origin }: { origin: string }): Promise<boolean>

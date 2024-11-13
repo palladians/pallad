@@ -318,19 +318,20 @@ export const createMinaProvider = async (): Promise<
           return credentials
         })
         .with({ method: "mina_setState" }, async ({ params }) => {
-          const payload = params?.[0]
-          if (!payload) throw createProviderRpcError(4000, "Invalid Request")
+          const [credential] = params
+          if (!credential) throw createProviderRpcError(4000, "Invalid Request")
           const { value: confirmation } = await showUserPrompt<boolean>({
             inputType: "confirmation",
             metadata: {
               title: "Credential write request",
-              payload: JSON.stringify(payload),
+              payload: JSON.stringify(credential),
             },
           })
           if (!confirmation) {
             throw createProviderRpcError(4001, "User Rejected Request")
           }
-          await _vault.setState(payload)
+          const { id } = credential as { id: string }
+          await _vault.setState({ credentialId: id, credential })
           return { success: true }
         })
         .with({ method: "mina_storePrivateCredential" }, async ({ params }) => {
@@ -404,27 +405,25 @@ export const createMinaProvider = async (): Promise<
             const storedCredentials: StoredObject[] =
               await _vault.getPrivateCredential()
 
-            return storedCredentials
-
             // Show credential selection prompt
-            // const { value: selectedCredentials } = await showUserPrompt<
-            //   string[]
-            // >({
-            //   inputType: "selection",
-            //   metadata: {
-            //     title: "Select credentials for presentation",
-            //     payload: JSON.stringify(storedCredentials),
-            //     submitButtonLabel: "Continue",
-            //     rejectButtonLabel: "Cancel",
-            //   },
-            // })
+            const { value: selectedCredentials } = await showUserPrompt<
+              string[]
+            >({
+              inputType: "selection",
+              metadata: {
+                title: "Select credentials for presentation",
+                payload: JSON.stringify(storedCredentials),
+                submitButtonLabel: "Continue",
+                rejectButtonLabel: "Cancel",
+              },
+            })
 
-            // if (!selectedCredentials) {
-            //   throw createProviderRpcError(
-            //     4001,
-            //     "User Rejected Credential Selection",
-            //   )
-            // }
+            if (!selectedCredentials) {
+              throw createProviderRpcError(
+                4001,
+                "User Rejected Credential Selection",
+              )
+            }
           } catch (error: any) {
             throw createProviderRpcError(
               4100,
