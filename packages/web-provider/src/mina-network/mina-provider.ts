@@ -382,7 +382,14 @@ export const createMinaProvider = async (): Promise<
           }
         })
         .with({ method: "mina_requestPresentation" }, async ({ params }) => {
-          return params
+          try {
+            const [presentationRequest] = params
+          } catch (error: any) {
+            throw createProviderRpcError(
+              4100,
+              error.message || "Failed to create presentation",
+            )
+          }
         })
         .with({ method: "mina_sendTransaction" }, async ({ params }) => {
           const [payload] = params

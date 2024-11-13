@@ -1,14 +1,14 @@
-import { Credential } from "mina-credentials"
+import { Credential, PresentationRequest } from "mina-credentials"
 import { serializeError } from "serialize-error"
 import { match } from "ts-pattern"
 import yaml from "yaml"
 import { z } from "zod"
 
 const EventTypeSchema = z.enum(["run"])
-const ContractTypeSchema = z.enum(["validate-credential"])
+const ContractTypeSchema = z.enum(["validate-credential", "presentation"])
 
-type ValidationResult = {
-  type: "validate-credential-result"
+type Result = {
+  type: string
   result?: string
   error?: string
 }
@@ -25,27 +25,45 @@ window.addEventListener("message", async (event) => {
 
   return match(type)
     .with("run", async () => {
-      return match(contract).with("validate-credential", async () => {
-        try {
-          const sanitizedPayload = event.data.payload
-          const originalPayload = recoverOriginalPayload(sanitizedPayload)
-          const credentialDeserialized = Credential.fromJSON(originalPayload)
-          await Credential.validate(credentialDeserialized)
+      return match(contract)
+        .with("validate-credential", async () => {
+          try {
+            const sanitizedPayload = event.data.payload
+            const originalPayload = recoverOriginalPayload(sanitizedPayload)
+            const credentialDeserialized = Credential.fromJSON(originalPayload)
+            await Credential.validate(credentialDeserialized)
 
-          const result: ValidationResult = {
-            type: "validate-credential-result",
-            result: Credential.toJSON(credentialDeserialized),
-          }
+            const result: Result = {
+              type: "validate-credential-result",
+              result: Credential.toJSON(credentialDeserialized),
+            }
 
-          window.parent.postMessage(result, "*")
-        } catch (error: any) {
-          const result: ValidationResult = {
-            type: "validate-credential-result",
-            error: serializeError(error),
+            window.parent.postMessage(result, "*")
+          } catch (error: any) {
+            const result: Result = {
+              type: "validate-credential-result",
+              error: serializeError(error),
+            }
+            window.parent.postMessage(result, "*")
           }
-          window.parent.postMessage(result, "*")
-        }
-      })
+        })
+        .with("presentation", async () => {
+          try {
+            // TODO: create presentation
+            const result: Result = {
+              type: "presentation-result",
+              result: serializedPresentation,
+            }
+            window.parent.postMessage(result, "*")
+          } catch (error: any) {
+            const result: Result = {
+              type: "presentation-result",
+              error: serializeError(error),
+            }
+            window.parent.postMessage(result, "*")
+          }
+        })
+        .exhaustive()
     })
     .exhaustive()
 })
