@@ -43,7 +43,7 @@ export const objectSlice: StateCreator<ObjectStore> = (set, get) => ({
     // TODO: improve
     const { objects } = get()
     const objectsStatesArray = Object.values(objects)
-    const objectsArray = objectsStatesArray.map((obj: any) => obj?.object)
+    const objectsArray = objectsStatesArray.map((obj: any) => obj?.credential)
     const filteredObjects = objectsArray.filter((object) => {
       if (!object) {
         return false

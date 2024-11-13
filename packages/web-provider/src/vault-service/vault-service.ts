@@ -110,7 +110,8 @@ export const createVaultService = (): IVaultService => {
       const store = useVault.getState()
       store.setObject({
         type: "private-credential",
-        credential,
+        credentialId: crypto.randomUUID(),
+        credential: credential,
       })
     },
     getPrivateCredential: async (query?) => {

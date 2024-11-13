@@ -404,25 +404,27 @@ export const createMinaProvider = async (): Promise<
             const storedCredentials: StoredObject[] =
               await _vault.getPrivateCredential()
 
-            // Show credential selection prompt
-            const { value: selectedCredentials } = await showUserPrompt<
-              string[]
-            >({
-              inputType: "selection",
-              metadata: {
-                title: "Select credentials for presentation",
-                payload: JSON.stringify(storedCredentials),
-                submitButtonLabel: "Continue",
-                rejectButtonLabel: "Cancel",
-              },
-            })
+            return storedCredentials
 
-            if (!selectedCredentials) {
-              throw createProviderRpcError(
-                4001,
-                "User Rejected Credential Selection",
-              )
-            }
+            // Show credential selection prompt
+            // const { value: selectedCredentials } = await showUserPrompt<
+            //   string[]
+            // >({
+            //   inputType: "selection",
+            //   metadata: {
+            //     title: "Select credentials for presentation",
+            //     payload: JSON.stringify(storedCredentials),
+            //     submitButtonLabel: "Continue",
+            //     rejectButtonLabel: "Cancel",
+            //   },
+            // })
+
+            // if (!selectedCredentials) {
+            //   throw createProviderRpcError(
+            //     4001,
+            //     "User Rejected Credential Selection",
+            //   )
+            // }
           } catch (error: any) {
             throw createProviderRpcError(
               4100,

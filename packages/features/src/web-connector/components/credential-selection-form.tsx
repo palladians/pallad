@@ -25,8 +25,8 @@ export const SelectionForm = ({
     try {
       const parsedCredentials = JSON.parse(payload) as any[]
       return parsedCredentials.map((credential) => ({
-        id: Buffer.from(JSON.stringify(credential)).toString("base64"),
-        credential,
+        id: credential.credentialId,
+        credential: credential.credential,
       }))
     } catch {
       return []
