@@ -3,6 +3,7 @@ import { MenuBar } from "@/components/menu-bar"
 import { Skeleton } from "@/components/skeleton"
 import type { SubmitHandler } from "react-hook-form"
 import { ConfirmationForm } from "../components/confirmation-form"
+import { SelectionForm } from "../components/credential-selection-form"
 import { InputForm } from "../components/input-form"
 import type { UserInputForm } from "../types"
 
@@ -35,6 +36,9 @@ export const WebConnectorView = ({
     onReject()
     onDecline()
   }
+  const handleSelectionSubmit = (selectedCredentials: string) => {
+    onSubmit({ userInput: selectedCredentials })
+  }
   return (
     <div className="flex flex-1 justify-center items-center bg-secondary">
       <div className="flex max-w-[480px] max-h-[772px] h-full flex-1 bg-neutral rounded-xl">
@@ -65,6 +69,16 @@ export const WebConnectorView = ({
                   submitButtonLabel={submitButtonLabel}
                   onSubmit={onSubmit}
                   rejectButtonLabel={rejectButtonLabel}
+                  onReject={onReject}
+                  loading={loading}
+                />
+              )}
+              {inputType === "selection" && (
+                <SelectionForm
+                  payload={payload}
+                  submitButtonLabel={submitButtonLabel}
+                  rejectButtonLabel={rejectButtonLabel}
+                  onSubmit={handleSelectionSubmit}
                   onReject={onReject}
                   loading={loading}
                 />

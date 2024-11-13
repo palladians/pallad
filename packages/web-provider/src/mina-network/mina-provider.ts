@@ -13,7 +13,7 @@ import type {
   ChainOperationArgs,
   ChainSignablePayload,
 } from "@palladco/key-management"
-import type { SearchQuery } from "@palladco/vault"
+import type { SearchQuery, StoredObject } from "@palladco/vault"
 import mitt from "mitt"
 import { P, match } from "ts-pattern"
 import { showUserPrompt } from "../utils/prompts"
@@ -384,6 +384,45 @@ export const createMinaProvider = async (): Promise<
         .with({ method: "mina_requestPresentation" }, async ({ params }) => {
           try {
             const [presentationRequest] = params
+            if (!presentationRequest)
+              throw createProviderRpcError(4000, "Invalid Request")
+
+            // First, ask for approval to proceed with the presentation request
+            const { value: userConfirmed } = await showUserPrompt<boolean>({
+              inputType: "confirmation",
+              metadata: {
+                title: "Presentation request",
+                payload: JSON.stringify(presentationRequest),
+              },
+            })
+
+            if (!userConfirmed) {
+              throw createProviderRpcError(4001, "User Rejected Request")
+            }
+
+            // Get stored credentials that could be used for the presentation
+            const storedCredentials: StoredObject[] =
+              await _vault.getPrivateCredential()
+
+            // Show credential selection prompt
+            const { value: selectedCredentials } = await showUserPrompt<
+              string[]
+            >({
+              inputType: "selection",
+              metadata: {
+                title: "Select credentials for presentation",
+                payload: JSON.stringify(storedCredentials),
+                submitButtonLabel: "Continue",
+                rejectButtonLabel: "Cancel",
+              },
+            })
+
+            if (!selectedCredentials) {
+              throw createProviderRpcError(
+                4001,
+                "User Rejected Credential Selection",
+              )
+            }
           } catch (error: any) {
             throw createProviderRpcError(
               4100,

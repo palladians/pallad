@@ -1,4 +1,4 @@
-import { Credential, PresentationRequest } from "mina-credentials"
+import { Credential } from "mina-credentials"
 import { serializeError } from "serialize-error"
 import { match } from "ts-pattern"
 import yaml from "yaml"
@@ -48,20 +48,20 @@ window.addEventListener("message", async (event) => {
           }
         })
         .with("presentation", async () => {
-          try {
-            // TODO: create presentation
-            const result: Result = {
-              type: "presentation-result",
-              result: serializedPresentation,
-            }
-            window.parent.postMessage(result, "*")
-          } catch (error: any) {
-            const result: Result = {
-              type: "presentation-result",
-              error: serializeError(error),
-            }
-            window.parent.postMessage(result, "*")
-          }
+          // try {
+          //   // TODO: create presentation
+          //   const result: Result = {
+          //     type: "presentation-result",
+          //     result: serializedPresentation,
+          //   }
+          //   window.parent.postMessage(result, "*")
+          // } catch (error: any) {
+          //   const result: Result = {
+          //     type: "presentation-result",
+          //     error: serializeError(error),
+          //   }
+          //   window.parent.postMessage(result, "*")
+          // }
         })
         .exhaustive()
     })

@@ -1,4 +1,4 @@
-type InputType = "text" | "password" | "confirmation"
+type InputType = "text" | "password" | "confirmation" | "selection"
 type Metadata = {
   title: string
   submitButtonLabel?: string
@@ -17,7 +17,9 @@ type PromptResult<T> = {
   result?: ContractResult
 }
 
-export const showUserPrompt = async <T extends boolean | string = boolean>({
+export const showUserPrompt = async <
+  T extends boolean | string | string[] = boolean,
+>({
   inputType,
   metadata,
   contract,
