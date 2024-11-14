@@ -44,6 +44,7 @@ export const SelectionForm = ({
       const originalPayload = recoverOriginalPayload(payload)
       const parsedCredentials = JSON.parse(originalPayload) as any[]
       return parsedCredentials.map((credential) => ({
+        // TODO: use stored hash when implemented
         id: createCredentialHash(credential),
         credential,
         sanitizedDisplay: sanitizeCredential(credential),
