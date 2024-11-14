@@ -116,9 +116,16 @@ export const createVaultService = (): IVaultService => {
     getPrivateCredential: async () => {
       await rehydrate()
       const store = useVault.getState()
-      return store.searchObjects({
+      const credentials = await store.searchObjects({
         query: { type: "private-credential" },
         props: [],
+      })
+
+      // Remove the type field from each credential in the results
+      return credentials.map((credential) => {
+        if (!credential) return credential
+        const { type, ...credentialWithoutType } = credential as any
+        return credentialWithoutType
       })
     },
     getEnabled: async ({ origin }) => {

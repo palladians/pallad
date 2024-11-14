@@ -1,3 +1,5 @@
+import { sha256 } from "@noble/hashes/sha256"
+import { utf8ToBytes } from "@noble/hashes/utils"
 import type { MinaSignablePayload } from "@palladco/key-management"
 import type { BorrowedTypes } from "@palladco/mina-core"
 
@@ -45,4 +47,15 @@ export const serializeTransaction = (transaction: MinaSignablePayload) => {
   // Clone the transaction object to avoid mutating the original object
   const clonedTransaction = JSON.parse(JSON.stringify(transaction))
   return serializeObject(clonedTransaction)
+}
+
+// Hash credential
+export const createCredentialHash = (credential: any): string => {
+  // Create a stable string representation by sorting keys
+  const stableString = JSON.stringify(credential)
+  const bytes = utf8ToBytes(stableString)
+  const hash = sha256(bytes)
+  return Array.from(hash)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
 }

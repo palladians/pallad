@@ -1,5 +1,8 @@
+import { createCredentialHash } from "@palladco/web-provider"
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
+import xss from "xss"
+import yaml from "yaml"
 
 type SelectionFormProps = {
   onSubmit: (selectedCredentials: string) => void
@@ -8,6 +11,21 @@ type SelectionFormProps = {
   rejectButtonLabel?: string
   payload: string
   loading: boolean
+}
+
+const sanitizeCredential = (credential: any) => {
+  const yamlOptions = {
+    indent: 2,
+    lineWidth: 32,
+    minContentWidth: 0,
+  }
+  const yamlPayload = yaml.stringify(credential, yamlOptions)
+  return xss(yamlPayload)
+}
+
+const recoverOriginalPayload = (sanitizedPayload: string) => {
+  const parsedYaml = yaml.parse(sanitizedPayload)
+  return JSON.stringify(parsedYaml)
 }
 
 export const SelectionForm = ({
@@ -23,13 +41,15 @@ export const SelectionForm = ({
 
   const credentials = React.useMemo(() => {
     try {
-      const parsedCredentials = JSON.parse(payload) as any[]
+      const originalPayload = recoverOriginalPayload(payload)
+      const parsedCredentials = JSON.parse(originalPayload) as any[]
       return parsedCredentials.map((credential) => ({
-        id: credential.credentialId,
-        credential: credential.credential,
+        id: createCredentialHash(credential),
+        credential,
+        sanitizedDisplay: sanitizeCredential(credential),
       }))
-    } catch {
-      return []
+    } catch (error: any) {
+      throw Error(`Issue with parsing: ${error}: ${payload}`)
     }
   }, [payload])
 
@@ -69,7 +89,7 @@ export const SelectionForm = ({
               disabled={loading}
             />
             <span className="font-medium">
-              {credentialData.credential.witness?.type || "Unknown Credential"}
+              {credentialData.sanitizedDisplay || "Unknown Credential"}
             </span>
           </label>
         ))}

@@ -19,7 +19,7 @@ import { P, match } from "ts-pattern"
 import { showUserPrompt } from "../utils/prompts"
 import { createVaultService } from "../vault-service"
 import type { ConnectOps } from "../web-provider-types"
-import { serializeField, serializeGroup } from "./utils"
+import { createCredentialHash, serializeField, serializeGroup } from "./utils"
 
 export function getMinaChainId(chains: string[]) {
   return Number(chains[0]?.split(":")[1])
@@ -338,37 +338,68 @@ export const createMinaProvider = async (): Promise<
           const [credential] = params
           if (!credential) throw createProviderRpcError(4000, "Invalid Request")
 
+          const credentialWitnessType = credential.witness.type
+
           const stringifiedCredential = JSON.stringify(credential)
 
           try {
-            const { value: userConfirmed, result } =
-              await showUserPrompt<boolean>({
+            if (!(credentialWitnessType === "unsigned")) {
+              const { value: userConfirmed, result } =
+                await showUserPrompt<boolean>({
+                  inputType: "confirmation",
+                  contract: "validate-credential",
+                  metadata: {
+                    title: "Store private credential request",
+                    payload: stringifiedCredential,
+                  },
+                })
+
+              if (!userConfirmed) {
+                throw createProviderRpcError(4001, "User Rejected Request")
+              }
+
+              if (result?.error) {
+                throw createProviderRpcError(
+                  4100,
+                  `Credential validation failed: ${JSON.stringify(result.error)}`,
+                )
+              }
+
+              if (!result?.result) {
+                throw createProviderRpcError(4100, "Missing validation result")
+              }
+            } else {
+              const { value: userConfirmed } = await showUserPrompt<boolean>({
                 inputType: "confirmation",
-                contract: "validate-credential",
                 metadata: {
                   title: "Store private credential request",
                   payload: stringifiedCredential,
                 },
               })
 
-            if (!userConfirmed) {
-              throw createProviderRpcError(4001, "User Rejected Request")
+              if (!userConfirmed) {
+                throw createProviderRpcError(4001, "User Rejected Request")
+              }
             }
 
-            if (result?.error) {
-              throw createProviderRpcError(
-                4100,
-                `Credential validation failed: ${JSON.stringify(result.error)}`,
-              )
-            }
+            // Generate hash of the new credential
+            const newCredentialHash = createCredentialHash(credential)
 
-            if (!result?.result) {
-              throw createProviderRpcError(4100, "Missing validation result")
+            // Get existing credentials and check for duplicates
+            const existingCredentials = await _vault.getPrivateCredential()
+            const isDuplicate = existingCredentials.some((existing) => {
+              const existingHash = createCredentialHash(existing)
+              return existingHash === newCredentialHash
+            })
+
+            if (isDuplicate) {
+              throw createProviderRpcError(4100, "Credential already stored")
             }
 
             try {
-              await _vault.storePrivateCredential(JSON.parse(result.result))
-              return { success: JSON.parse(result.result) }
+              const parsedResult = JSON.parse(stringifiedCredential)
+              await _vault.storePrivateCredential(parsedResult)
+              return { success: parsedResult }
             } catch (error: any) {
               throw createProviderRpcError(
                 4100,
@@ -406,17 +437,17 @@ export const createMinaProvider = async (): Promise<
               await _vault.getPrivateCredential()
 
             // Show credential selection prompt
-            const { value: selectedCredentials } = await showUserPrompt<
-              string[]
-            >({
-              inputType: "selection",
-              metadata: {
-                title: "Select credentials for presentation",
-                payload: JSON.stringify(storedCredentials),
-                submitButtonLabel: "Continue",
-                rejectButtonLabel: "Cancel",
+            const { value: selectedCredentials } = await showUserPrompt<string>(
+              {
+                inputType: "selection",
+                metadata: {
+                  title: "Select credentials for presentation",
+                  payload: JSON.stringify(storedCredentials),
+                  submitButtonLabel: "Continue",
+                  rejectButtonLabel: "Cancel",
+                },
               },
-            })
+            )
 
             if (!selectedCredentials) {
               throw createProviderRpcError(
@@ -424,6 +455,7 @@ export const createMinaProvider = async (): Promise<
                 "User Rejected Credential Selection",
               )
             }
+            return selectedCredentials
           } catch (error: any) {
             throw createProviderRpcError(
               4100,

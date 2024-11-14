@@ -15,7 +15,7 @@ type ContractResult = {
   error?: string
 }
 
-const sanitizePayload = async (payload: string) => {
+export const sanitizePayload = async (payload: string) => {
   const parsedPayload = JSON.parse(payload) as Record<string, any>
   const yamlPayload = yaml.stringify(parsedPayload)
   return xss(yamlPayload)
@@ -34,7 +34,7 @@ type ActionRequest = {
   submitButtonLabel?: string
   rejectButtonLabel?: string
   payload: string
-  inputType: "text" | "password" | "confirmation"
+  inputType: "text" | "password" | "confirmation" | "selection"
   contract: string | undefined
   emitConnected: boolean
 }

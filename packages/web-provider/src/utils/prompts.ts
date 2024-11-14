@@ -17,9 +17,7 @@ type PromptResult<T> = {
   result?: ContractResult
 }
 
-export const showUserPrompt = async <
-  T extends boolean | string | string[] = boolean,
->({
+export const showUserPrompt = async <T extends boolean | string = boolean>({
   inputType,
   metadata,
   contract,
