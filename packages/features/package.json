@@ -42,6 +42,7 @@
     "@palladco/offchain-data": "workspace:*",
     "@palladco/pallad-core": "workspace:*",
     "@palladco/vault": "workspace:*",
+    "@palladco/web-provider": "workspace:*",
     "@total-typescript/ts-reset": "0.5.1",
     "@zxcvbn-ts/core": "3.0.4",
     "array-shuffle": "3.0.0",

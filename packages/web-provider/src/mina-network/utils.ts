@@ -49,9 +49,7 @@ export const serializeTransaction = (transaction: MinaSignablePayload) => {
   return serializeObject(clonedTransaction)
 }
 
-// Hash credential
 export const createCredentialHash = (credential: any): string => {
-  // Create a stable string representation by sorting keys
   const stableString = JSON.stringify(credential)
   const bytes = utf8ToBytes(stableString)
   const hash = sha256(bytes)
