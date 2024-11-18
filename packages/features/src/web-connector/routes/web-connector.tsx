@@ -95,6 +95,10 @@ export const WebConnectorRoute = () => {
               })
             } catch (error) {
               console.error("Error signing fields:", error)
+              sendSandboxMessage({
+                type: "presentation-signature-error",
+                error: error instanceof Error ? error.message : "Unknown error",
+              })
             }
           }
         }
@@ -165,7 +169,8 @@ export const WebConnectorRoute = () => {
   }
   const eventListener = async (event: MessageEvent) => {
     if (event.data.type === "presentation-result") {
-      return confirm({
+      return onSubmit({
+        userInput, // TODO: userInput out of scope
         result: {
           type: event.data.type,
           result: event.data.result,
