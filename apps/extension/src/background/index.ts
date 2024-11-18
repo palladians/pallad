@@ -15,6 +15,7 @@ import {
   minaSetState,
   minaSign,
   minaSignFields,
+  minaSignFieldsWithPassphrase,
   minaSignTransaction,
   minaStorePrivateCredential,
   minaSwitchChain,
@@ -44,6 +45,7 @@ onMessage("mina_createNullifier", minaCreateNullifier)
 onMessage("mina_sendTransaction", minaSendTransaction)
 onMessage("mina_storePrivateCredential", minaStorePrivateCredential)
 onMessage("mina_requestPresentation", minaRequestPresentation)
+onMessage("mina_signFieldsWithPassphrase", minaSignFieldsWithPassphrase)
 
 /**
  * Wallet handlers

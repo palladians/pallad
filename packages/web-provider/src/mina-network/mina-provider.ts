@@ -307,6 +307,45 @@ export const createMinaProvider = async (): Promise<
                 .exhaustive()
             },
           )
+          .with(
+            { method: "mina_signFieldsWithPassphrase" },
+            async ({ params }) => {
+              const [fieldsAndPassphrase] = params
+              if (
+                !fieldsAndPassphrase ||
+                !fieldsAndPassphrase.fields ||
+                !fieldsAndPassphrase.fields.length ||
+                !fieldsAndPassphrase.passphrase
+              ) {
+                throw createProviderRpcError(4100, "Unauthorized.")
+              }
+              const { fields, passphrase } = fieldsAndPassphrase
+
+              const operationArgs: ChainOperationArgs = {
+                operation: args.method,
+                network: "Mina",
+              }
+
+              const signedResponse = await signPayload<SignedFields>({
+                signable: {
+                  fields: fields.map((item: any) => BigInt(item)),
+                },
+                operationArgs,
+                passphrase,
+              })
+              const serializedResponseData = signedResponse.data.map((item) => {
+                if (typeof item === "bigint") {
+                  return String(item)
+                }
+                return item
+              })
+              const seriliasedResponse = {
+                ...signedResponse,
+                data: serializedResponseData,
+              }
+              return seriliasedResponse
+            },
+          )
           .with({ method: "mina_getState" }, async ({ params }) => {
             const [query, props] = params
             const credentials = await _vault.getState(
