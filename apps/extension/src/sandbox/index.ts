@@ -4,8 +4,18 @@ import { match } from "ts-pattern"
 import yaml from "yaml"
 import { z } from "zod"
 
-const EventTypeSchema = z.enum(["run"])
-const ContractTypeSchema = z.enum(["validate-credential", "presentation"])
+const MessageSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("run"),
+    contract: z.enum(["validate-credential", "presentation"]),
+    payload: z.string(),
+  }),
+  z.object({
+    type: z.literal("presentation-signing-response"),
+    signature: z.any().optional(),
+    error: z.string().optional(),
+  }),
+])
 
 type Result = {
   type: string
@@ -18,52 +28,84 @@ const recoverOriginalPayload = (sanitizedPayload: string) => {
   return JSON.stringify(parsedYaml)
 }
 
+let presentationSigningPromise: {
+  resolve: (value: any) => void
+  reject: (reason: any) => void
+} | null = null
+
 window.addEventListener("message", async (event) => {
   console.log(event.data)
-  const type = EventTypeSchema.parse(event.data.type)
-  const contract = ContractTypeSchema.parse(event.data.contract)
+  try {
+    const message = MessageSchema.parse(event.data)
 
-  return match(type)
-    .with("run", async () => {
-      return match(contract)
-        .with("validate-credential", async () => {
-          try {
-            const sanitizedPayload = event.data.payload
-            const originalPayload = recoverOriginalPayload(sanitizedPayload)
-            const credentialDeserialized = Credential.fromJSON(originalPayload)
-            await Credential.validate(credentialDeserialized)
+    if (message.type === "presentation-signing-response") {
+      if (presentationSigningPromise) {
+        if (message.error) {
+          presentationSigningPromise.reject(new Error(message.error))
+        } else {
+          presentationSigningPromise.resolve(message.signature)
+        }
+        presentationSigningPromise = null
+        return
+      }
+      return
+    }
 
-            const result: Result = {
-              type: "validate-credential-result",
-              result: Credential.toJSON(credentialDeserialized),
+    return match(message)
+      .with({ type: "run" }, async (msg) => {
+        return match(msg.contract)
+          .with("validate-credential", async () => {
+            try {
+              const sanitizedPayload = msg.payload
+              const originalPayload = recoverOriginalPayload(sanitizedPayload)
+              const credentialDeserialized =
+                Credential.fromJSON(originalPayload)
+              await Credential.validate(credentialDeserialized)
+
+              const result: Result = {
+                type: "validate-credential-result",
+                result: Credential.toJSON(credentialDeserialized),
+              }
+
+              window.parent.postMessage(result, "*")
+            } catch (error: any) {
+              const result: Result = {
+                type: "validate-credential-result",
+                error: serializeError(error),
+              }
+              window.parent.postMessage(result, "*")
+            }
+          })
+          .with("presentation", async () => {
+            const mockFieldsToSign = [
+              "15194438335254979123992673494772742932886141479807135737958843785282001151979",
+              "13058445919007356413345300070030973942059862825965583483176167800381508277987",
+              "26067489438851605530938171293652363087823200555042082718868551789908955769071",
+            ]
+
+            window.parent.postMessage(
+              {
+                type: "presentation-signing-request",
+                fields: mockFieldsToSign,
+              },
+              "*",
+            )
+
+            const signature = await new Promise((resolve, reject) => {
+              presentationSigningPromise = { resolve, reject }
+            })
+
+            const mockResult: Result = {
+              type: "presentation-result",
+              result: JSON.stringify(signature),
             }
 
-            window.parent.postMessage(result, "*")
-          } catch (error: any) {
-            const result: Result = {
-              type: "validate-credential-result",
-              error: serializeError(error),
-            }
-            window.parent.postMessage(result, "*")
-          }
-        })
-        .with("presentation", async () => {
-          // try {
-          //   // TODO: create presentation
-          //   const result: Result = {
-          //     type: "presentation-result",
-          //     result: serializedPresentation,
-          //   }
-          //   window.parent.postMessage(result, "*")
-          // } catch (error: any) {
-          //   const result: Result = {
-          //     type: "presentation-result",
-          //     error: serializeError(error),
-          //   }
-          //   window.parent.postMessage(result, "*")
-          // }
-        })
-        .exhaustive()
-    })
-    .exhaustive()
+            window.parent.postMessage(mockResult, "*")
+          })
+          .exhaustive()
+      })
+      .exhaustive()
+  } catch (error: any) {
+    throw Error(`Sandbox Error: ${error}`)
+  }
 })

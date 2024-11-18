@@ -116,7 +116,49 @@ export const WebConnectorRoute = () => {
     })
     window.close()
   }
-  const eventListener = (event: MessageEvent) => {
+  const eventListener = async (event: MessageEvent) => {
+    if (event.data.type === "presentation-signing-request") {
+      // Handle signing request from sandbox
+      try {
+        const response = await runtime.sendMessage({
+          method: "mina_signFields",
+          params: [event.data.fields],
+          context: {},
+        })
+
+        // Send signature back to sandbox
+        const sandbox = document.querySelector(
+          "#o1sandbox",
+        ) as HTMLIFrameElement
+        sandbox?.contentWindow?.postMessage(
+          {
+            type: "presentation-signing-response",
+            signature: response,
+          },
+          "*",
+        )
+      } catch (error: any) {
+        const sandbox = document.querySelector(
+          "#o1sandbox",
+        ) as HTMLIFrameElement
+        sandbox?.contentWindow?.postMessage(
+          {
+            type: "presentation-signing-response",
+            error: error.message,
+          },
+          "*",
+        )
+      }
+    }
+    if (event.data.type === "presentation-result") {
+      return confirm({
+        result: {
+          type: event.data.type,
+          result: event.data.result,
+          error: event.data.error,
+        },
+      })
+    }
     if (event.data.type === "validate-credential-result") {
       return confirm({
         result: {
@@ -139,7 +181,7 @@ export const WebConnectorRoute = () => {
     return () => {
       window.removeEventListener("message", eventListener)
     }
-  }, [])
+  }, [request.inputType])
   useEffect(() => {
     runtime.onMessage.addListener(async (message) => {
       if (message.type === "action_request") {
