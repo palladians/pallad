@@ -15,6 +15,12 @@ type ContractResult = {
   error?: string
 }
 
+type SignedFieldsResponse = {
+  data: string[]
+  publicKey: string
+  signature: string
+}
+
 export const sanitizePayload = async (payload: string) => {
   const parsedPayload = JSON.parse(payload) as Record<string, any>
   const yamlPayload = yaml.stringify(parsedPayload)
@@ -54,6 +60,47 @@ export const WebConnectorRoute = () => {
     if (!request.contract) return onSubmit({ userInput })
     setLoading(true)
     try {
+      // For presentation contract, set up message handler for signing request
+      if (request.contract === "presentation") {
+        const messageHandler = async (event: MessageEvent) => {
+          if (event.data.type === "presentation-signing-request") {
+            try {
+              // Use the passphrase we already have to sign fields
+              const response = (await sendMessage(
+                "mina_signFieldsWithPassphrase",
+                {
+                  params: [
+                    {
+                      fields: event.data.fields,
+                      passphrase: userInput,
+                    },
+                  ],
+                  context: {
+                    origin: `chrome-extension://${chrome.runtime.id}`,
+                  },
+                },
+                "background",
+              )) as SignedFieldsResponse
+
+              if (!response || !response.signature) {
+                throw new Error(
+                  `Failed to sign fields; response: ${JSON.stringify(response)}`,
+                )
+              }
+
+              // Send signature back to sandbox
+              sendSandboxMessage({
+                type: "presentation-signature",
+                signature: response.signature,
+              })
+            } catch (error) {
+              console.error("Error signing fields:", error)
+            }
+          }
+        }
+
+        window.addEventListener("message", messageHandler)
+      }
       return sendSandboxMessage({
         type: "run",
         contract: request.contract,
@@ -117,42 +164,6 @@ export const WebConnectorRoute = () => {
     window.close()
   }
   const eventListener = async (event: MessageEvent) => {
-    if (event.data.type === "presentation-signing-request") {
-      // Handle signing request from sandbox
-      try {
-        const response = await sendMessage(
-          "mina_signFields",
-          {
-            params: [event.data.fields],
-            context: {},
-          },
-          "background",
-        )
-
-        // Send signature back to sandbox
-        const sandbox = document.querySelector(
-          "#o1sandbox",
-        ) as HTMLIFrameElement
-        sandbox?.contentWindow?.postMessage(
-          {
-            type: "presentation-signing-response",
-            signature: response,
-          },
-          "*",
-        )
-      } catch (error: any) {
-        const sandbox = document.querySelector(
-          "#o1sandbox",
-        ) as HTMLIFrameElement
-        sandbox?.contentWindow?.postMessage(
-          {
-            type: "presentation-signing-response",
-            error: error.message,
-          },
-          "*",
-        )
-      }
-    }
     if (event.data.type === "presentation-result") {
       return confirm({
         result: {
