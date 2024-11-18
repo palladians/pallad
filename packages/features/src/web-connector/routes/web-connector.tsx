@@ -120,13 +120,14 @@ export const WebConnectorRoute = () => {
     if (event.data.type === "presentation-signing-request") {
       // Handle signing request from sandbox
       try {
-        const { id } = await windows.getCurrent()
-        const response = await runtime.sendMessage({
-          method: "mina_signFields",
-          params: [event.data.fields],
-          context: {},
-          windowId: id,
-        })
+        const response = await sendMessage(
+          "mina_signFields",
+          {
+            params: [event.data.fields],
+            context: {},
+          },
+          "background",
+        )
 
         // Send signature back to sandbox
         const sandbox = document.querySelector(
