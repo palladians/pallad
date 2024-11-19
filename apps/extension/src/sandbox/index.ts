@@ -11,9 +11,12 @@ const MessageSchema = z.discriminatedUnion("type", [
     payload: z.string(),
   }),
   z.object({
-    type: z.literal("presentation-signing-response"),
-    signature: z.any().optional(),
-    error: z.string().optional(),
+    type: z.literal("presentation-signature"),
+    signature: z.string(),
+  }),
+  z.object({
+    type: z.literal("presentation-signature-error"),
+    error: z.string(),
   }),
 ])
 
@@ -28,7 +31,7 @@ const recoverOriginalPayload = (sanitizedPayload: string) => {
   return JSON.stringify(parsedYaml)
 }
 
-let presentationSigningPromise: {
+let presentationSignaturePromise: {
   resolve: (value: any) => void
   reject: (reason: any) => void
 } | null = null
@@ -38,15 +41,18 @@ window.addEventListener("message", async (event) => {
   try {
     const message = MessageSchema.parse(event.data)
 
-    if (message.type === "presentation-signing-response") {
-      if (presentationSigningPromise) {
-        if (message.error) {
-          presentationSigningPromise.reject(new Error(message.error))
-        } else {
-          presentationSigningPromise.resolve(message.signature)
-        }
-        presentationSigningPromise = null
-        return
+    if (message.type === "presentation-signature") {
+      if (presentationSignaturePromise) {
+        presentationSignaturePromise.resolve(message.signature)
+        presentationSignaturePromise = null
+      }
+      return
+    }
+
+    if (message.type === "presentation-signature-error") {
+      if (presentationSignaturePromise) {
+        presentationSignaturePromise.reject(new Error(message.error))
+        presentationSignaturePromise = null
       }
       return
     }
@@ -92,7 +98,7 @@ window.addEventListener("message", async (event) => {
             )
 
             const signature = await new Promise((resolve, reject) => {
-              presentationSigningPromise = { resolve, reject }
+              presentationSignaturePromise = { resolve, reject }
             })
 
             const mockResult: Result = {

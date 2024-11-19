@@ -170,7 +170,7 @@ export const WebConnectorRoute = () => {
   const eventListener = async (event: MessageEvent) => {
     if (event.data.type === "presentation-result") {
       return onSubmit({
-        userInput, // TODO: userInput out of scope
+        userInput: "passphrase", // TODO: userInput out of scope
         result: {
           type: event.data.type,
           result: event.data.result,
