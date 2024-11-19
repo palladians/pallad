@@ -71,7 +71,7 @@ export const WebConnectorRoute = () => {
                 {
                   params: [
                     {
-                      fields: event.data.fields,
+                      fields: event.data.fields as string[],
                       passphrase: userInput,
                     },
                   ],
@@ -169,14 +169,17 @@ export const WebConnectorRoute = () => {
   }
   const eventListener = async (event: MessageEvent) => {
     if (event.data.type === "presentation-result") {
-      return onSubmit({
-        userInput: "passphrase", // TODO: userInput out of scope
+      const { id } = await windows.getCurrent()
+      await runtime.sendMessage({
+        userInput: "passphrase",
         result: {
           type: event.data.type,
           result: event.data.result,
           error: event.data.error,
         },
+        windowId: id,
       })
+      window.close()
     }
     if (event.data.type === "validate-credential-result") {
       return confirm({
