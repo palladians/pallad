@@ -120,6 +120,7 @@ export const WebConnectorRoute = () => {
   > = async ({ userInput, result }) => {
     const { id } = await windows.getCurrent()
     await runtime.sendMessage({
+      type: "onSubmit",
       userInput,
       result,
       windowId: id,
@@ -171,6 +172,7 @@ export const WebConnectorRoute = () => {
     if (event.data.type === "presentation-result") {
       const { id } = await windows.getCurrent()
       await runtime.sendMessage({
+        type: "presentation-result",
         userInput: "passphrase",
         result: {
           type: event.data.type,
@@ -192,10 +194,10 @@ export const WebConnectorRoute = () => {
     }
     if (request.inputType === "confirmation")
       return confirm({ result: event.data.result })
-    return onSubmit({
-      userInput: event.data.userInput,
-      result: event.data.result,
-    })
+    // return onSubmit({
+    //   userInput: JSON.stringify(request),
+    //   result: event.data.result,
+    // })
   }
   // biome-ignore lint/correctness/useExhaustiveDependencies: wontdo
   useEffect(() => {

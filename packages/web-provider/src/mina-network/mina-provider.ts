@@ -114,6 +114,7 @@ export const createMinaProvider = async (): Promise<
     removeListener: _emitter.off,
     emit: _emitter.emit,
     request: async (args) => {
+      console.log(`In request: ${JSON.stringify(args)}`)
       const typedArgs: ProviderRequestParams = args
       const { context } = typedArgs
       const { origin } = context as Record<string, string>
@@ -302,6 +303,9 @@ export const createMinaProvider = async (): Promise<
         .with(
           { method: "mina_signFieldsWithPassphrase" },
           async ({ params }) => {
+            console.log(
+              `In mina_signFieldsWithPassphrase ${JSON.stringify(params)}`,
+            )
             const [fieldsAndPassphrase] = params
             if (
               !fieldsAndPassphrase ||
@@ -328,16 +332,19 @@ export const createMinaProvider = async (): Promise<
               operationArgs,
               passphrase,
             })
+
             const serializedResponseData = signedResponse.data.map((item) => {
               if (typeof item === "bigint") {
                 return String(item)
               }
               return item
             })
+
             const seriliasedResponse = {
               ...signedResponse,
               data: serializedResponseData,
             }
+
             return seriliasedResponse
           },
         )
@@ -526,6 +533,7 @@ export const createMinaProvider = async (): Promise<
             }
 
             // TODO: return presentation
+            return result.result
           } catch (error: any) {
             throw createProviderRpcError(
               4100,

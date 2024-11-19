@@ -157,7 +157,9 @@ export const minaSignFieldsWithPassphrase: Handler = async ({ data }) => {
       params: data.params,
       context: data.context,
     })
-    return await provider.request(payload)
+    const response = await provider.request(payload)
+    console.log(`response in handler ${JSON.stringify(response)}`)
+    return response
   } catch (error: unknown) {
     return { error: serializeError(error) }
   }

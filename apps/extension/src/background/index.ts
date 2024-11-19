@@ -55,27 +55,6 @@ onMessage("pallad_connected", palladConnected)
 onMessage("pallad_sidePanel", palladSidePanel)
 
 /**
- * Private Credential Validation handler
- */
-onMessage("validate-credential-request", async (message) => {
-  try {
-    // Use proper window@namespace format
-    const response = await sendMessage(
-      "validate-credential",
-      message.data,
-      "window@credential-sandbox",
-    )
-    return response
-  } catch (error) {
-    console.error("Error in credential validation:", error)
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Unknown error",
-    }
-  }
-})
-
-/**
  * Runtime
  */
 runtime.onConnect.addListener(async (port) => {

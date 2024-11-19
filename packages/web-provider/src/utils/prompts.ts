@@ -53,6 +53,9 @@ export const showUserPrompt = async <T extends boolean | string = boolean>({
               }
               return reject(new Error("4001 - User Rejected Request"))
             }
+            console.log(
+              `in event handler - response: ${JSON.stringify(response)}`,
+            )
             if (response.userInput.length > 0) {
               return resolve({
                 value: response.userInput,
