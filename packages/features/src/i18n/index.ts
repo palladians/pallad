@@ -1,10 +1,9 @@
 import i18next from "i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
+import Backend from "i18next-http-backend"
 import { initReactI18next } from "react-i18next"
 import ns1 from "./locales/en/en.json"
 import ns2 from "./locales/tr/tr.json"
-
-const defaultNS = "ns1"
 
 const resources = {
   en: {
@@ -16,11 +15,12 @@ const resources = {
 }
 
 i18next
-  .use(LanguageDetector)
   .use(initReactI18next)
+  .use(Backend)
+  .use(LanguageDetector)
   .init({
-    debug: false,
-    fallbackLng: ["en", "tr"],
-    resources: resources,
-    defaultNS,
+    debug: true,
+    preload: ["ns1", "ns2"],
+    fallbackNS: ["ns1", "ns2"],
+    resources,
   })

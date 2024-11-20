@@ -147,5 +147,10 @@
     "deny": "Deny",
     "sign": "Sign",
     "reject": "Reject"
+  },
+  "labels": {
+    "settings": "Settings",
+    "display": "Display",
+    "language": "Language"
   }
 }
