@@ -16,7 +16,7 @@ type SelectionFormProps = {
 const sanitizeCredential = (credential: any) => {
   const yamlOptions = {
     indent: 2,
-    lineWidth: 32,
+    lineWidth: 70,
     minContentWidth: 0,
   }
   const yamlPayload = yaml.stringify(credential, yamlOptions)
@@ -76,22 +76,22 @@ export const SelectionForm = ({
       onSubmit={handleSubmit}
       className="flex flex-1 flex-col items-center gap-2 w-full"
     >
-      <div className="w-full overflow-y-auto max-h-48 flex flex-col gap-2">
+      <div className="w-full overflow-y-auto max-w-[448px] max-h-48 flex flex-col gap-2 bg-base-200 p-2 rounded-2xl">
         {credentials.map((credentialData) => (
           <label
             key={credentialData.id}
-            className="flex items-center gap-2 p-3 rounded-lg bg-base-200 cursor-pointer hover:bg-base-300 transition-colors"
+            className="flex items-center gap-2 p-3 rounded-2xl bg-base-200 cursor-pointer hover:bg-base-300 transition-colors"
           >
             <input
               type="checkbox"
-              className="checkbox"
+              className="checkbox checkbox-xs"
               checked={isSelected(credentialData)}
               onChange={() => handleToggleCredential(credentialData)}
               disabled={loading}
             />
-            <span className="font-medium">
+            <div className="font-medium break-all whitespace-pre-wrap max-w-[398px] text-2xs leading-tight">
               {credentialData.sanitizedDisplay || "Unknown Credential"}
-            </span>
+            </div>
           </label>
         ))}
       </div>

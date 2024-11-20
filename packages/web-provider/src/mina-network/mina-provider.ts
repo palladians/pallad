@@ -185,7 +185,6 @@ export const createMinaProvider = async (): Promise<
           async (signatureRequest) => {
             const { value: passphrase } = await showUserPrompt<string>({
               inputType: "password",
-              contract: "add",
               metadata: {
                 title: "Signature request",
                 payload: JSON.stringify(signatureRequest.params),
