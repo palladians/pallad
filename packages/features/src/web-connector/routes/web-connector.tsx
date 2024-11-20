@@ -192,12 +192,6 @@ export const WebConnectorRoute = () => {
         },
       })
     }
-    if (request.inputType === "confirmation")
-      return confirm({ result: event.data.result })
-    // return onSubmit({
-    //   userInput: JSON.stringify(request),
-    //   result: event.data.result,
-    // })
   }
   // biome-ignore lint/correctness/useExhaustiveDependencies: wontdo
   useEffect(() => {
