@@ -1,4 +1,4 @@
-import { Credential } from "mina-credentials"
+import { Credential, Presentation, PresentationRequest } from "mina-credentials"
 import { serializeError } from "serialize-error"
 import { match } from "ts-pattern"
 import yaml from "yaml"
@@ -26,6 +26,11 @@ type Result = {
   error?: string
 }
 
+type PresentationRequestPayload = {
+  presentationRequest: string
+  selectedCredentials: string[]
+}
+
 const recoverOriginalPayload = (sanitizedPayload: string) => {
   const parsedYaml = yaml.parse(sanitizedPayload)
   return JSON.stringify(parsedYaml)
@@ -37,7 +42,6 @@ let presentationSignaturePromise: {
 } | null = null
 
 window.addEventListener("message", async (event) => {
-  console.log(event.data)
   try {
     const message = MessageSchema.parse(event.data)
 
@@ -83,30 +87,71 @@ window.addEventListener("message", async (event) => {
             }
           })
           .with("presentation", async () => {
-            const mockFieldsToSign = [
-              "15194438335254979123992673494772742932886141479807135737958843785282001151979",
-              "13058445919007356413345300070030973942059862825965583483176167800381508277987",
-              "26067489438851605530938171293652363087823200555042082718868551789908955769071",
-            ]
+            try {
+              const mockFieldsToSign = [
+                "15194438335254979123992673494772742932886141479807135737958843785282001151979",
+                "13058445919007356413345300070030973942059862825965583483176167800381508277987",
+                "26067489438851605530938171293652363087823200555042082718868551789908955769071",
+              ]
 
-            window.parent.postMessage(
-              {
-                type: "presentation-signing-request",
-                fields: mockFieldsToSign,
-              },
-              "*",
-            )
+              window.parent.postMessage(
+                {
+                  type: "presentation-signing-request",
+                  fields: mockFieldsToSign,
+                },
+                "*",
+              )
 
-            const signature = await new Promise((resolve, reject) => {
-              presentationSignaturePromise = { resolve, reject }
-            })
+              const signature = await new Promise((resolve, reject) => {
+                presentationSignaturePromise = { resolve, reject }
+              })
 
-            const mockResult: Result = {
-              type: "presentation-result",
-              result: JSON.stringify(signature),
+              const originalPayload = recoverOriginalPayload(msg.payload)
+
+              const parsedPayload = JSON.parse(
+                originalPayload,
+              ) as PresentationRequestPayload
+
+              const { presentationRequest, selectedCredentials } = parsedPayload
+
+              const stringifiedPresentationRequest =
+                JSON.stringify(presentationRequest)
+
+              const storedCredentials = selectedCredentials.map(
+                (credential) => {
+                  return Credential.fromJSON(JSON.stringify(credential))
+                },
+              )
+
+              const parsedPresentationRequest = JSON.parse(
+                stringifiedPresentationRequest,
+              ) as PresentationRequest
+              const requestType = parsedPresentationRequest.type
+
+              const deserialized = PresentationRequest.fromJSON(
+                requestType,
+                stringifiedPresentationRequest,
+              )
+              const compiled = await Presentation.compile(deserialized)
+
+              // TODO: delete later, only here to not get unused errors
+              console.log(compiled)
+              console.log(signature)
+              console.log(storedCredentials)
+
+              const mockResult: Result = {
+                type: "presentation-result",
+                result: "works so far",
+              }
+
+              window.parent.postMessage(mockResult, "*")
+            } catch (error: any) {
+              const result: Result = {
+                type: "presentation-result",
+                error: serializeError(error),
+              }
+              window.parent.postMessage(result, "*")
             }
-
-            window.parent.postMessage(mockResult, "*")
           })
           .exhaustive()
       })
