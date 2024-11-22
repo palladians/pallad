@@ -1,4 +1,5 @@
 import { Credential, Presentation, PresentationRequest } from "mina-credentials"
+import { Signature } from "o1js"
 import { serializeError } from "serialize-error"
 import { match } from "ts-pattern"
 import yaml from "yaml"
@@ -88,26 +89,10 @@ window.addEventListener("message", async (event) => {
           })
           .with("presentation", async () => {
             try {
-              const mockFieldsToSign = [
-                "15194438335254979123992673494772742932886141479807135737958843785282001151979",
-                "13058445919007356413345300070030973942059862825965583483176167800381508277987",
-                "26067489438851605530938171293652363087823200555042082718868551789908955769071",
-              ]
-
-              window.parent.postMessage(
-                {
-                  type: "presentation-signing-request",
-                  fields: mockFieldsToSign,
-                },
-                "*",
-              )
-
-              const signature = await new Promise((resolve, reject) => {
-                presentationSignaturePromise = { resolve, reject }
-              })
-
+              // get back original payload
               const originalPayload = recoverOriginalPayload(msg.payload)
 
+              // parse payload as PresentationRequestPayload
               const parsedPayload = JSON.parse(
                 originalPayload,
               ) as PresentationRequestPayload
@@ -117,6 +102,7 @@ window.addEventListener("message", async (event) => {
               const stringifiedPresentationRequest =
                 JSON.stringify(presentationRequest)
 
+              // create mina-credentials StoredCredential[] from selectedCredentials
               const storedCredentials = selectedCredentials.map(
                 (credential) => {
                   return Credential.fromJSON(JSON.stringify(credential))
@@ -128,20 +114,52 @@ window.addEventListener("message", async (event) => {
               ) as PresentationRequest
               const requestType = parsedPresentationRequest.type
 
+              // deserialize presentation request
               const deserialized = PresentationRequest.fromJSON(
                 requestType,
                 stringifiedPresentationRequest,
               )
+
+              // compile
               const compiled = await Presentation.compile(deserialized)
 
-              // TODO: delete later, only here to not get unused errors
-              console.log(compiled)
-              console.log(signature)
-              console.log(storedCredentials)
+              // prepare presentation request and get fields to sign
+              const prepared = await Presentation.prepare({
+                request: compiled,
+                credentials: storedCredentials,
+                context: { verifierIdentity: "test.com" },
+              })
+
+              // ask wallet to sign fields
+              window.parent.postMessage(
+                {
+                  type: "presentation-signing-request",
+                  fields: prepared.messageFields,
+                },
+                "*",
+              )
+
+              // get signature from wallet
+              const signature = (await new Promise((resolve, reject) => {
+                presentationSignaturePromise = { resolve, reject }
+              })) as string
+
+              // o1js Signature type
+              const ownerSignature = Signature.fromBase58(signature)
+
+              // finalize presentation
+              const presentation = await Presentation.finalize(
+                compiled,
+                ownerSignature,
+                prepared,
+              )
+
+              // serialize presentation
+              const serializedPresentation = Presentation.toJSON(presentation)
 
               const mockResult: Result = {
                 type: "presentation-result",
-                result: "works so far",
+                result: serializedPresentation,
               }
 
               window.parent.postMessage(mockResult, "*")
