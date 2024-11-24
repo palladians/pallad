@@ -11,8 +11,22 @@ type DisplayViewProps = {
   onCloseClicked: () => void
 }
 
+interface ILang {
+  [key: string]: string
+}
+
+const langs: ILang = {
+  en: "ENG",
+  tr: "TUR",
+  es: "SPA",
+  fr: "FRA",
+  pt: "POR",
+  zh: "CHN",
+}
+
 export const DisplayView = ({ onCloseClicked }: DisplayViewProps) => {
   const { t, i18n } = useTranslation()
+
   const Links = [
     {
       label: "Currency",
@@ -21,7 +35,7 @@ export const DisplayView = ({ onCloseClicked }: DisplayViewProps) => {
     },
     {
       label: "Language",
-      value: i18n.language === "en" ? "ENG" : "TUR",
+      value: langs[i18n.language],
       href: "/settings/display/language",
     },
   ]

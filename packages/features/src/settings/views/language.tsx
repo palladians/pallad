@@ -12,7 +12,7 @@ interface ILanguages {
 const Languages: Record<string, ILanguages> = {
   en: { nativeName: "English" },
   //fr: { nativeName: "French" },
-  //es: { nativeName: "Spanish" },
+  es: { nativeName: "Spanish" },
   tr: { nativeName: "Turkish" },
   //pt: { nativeName: "Portugese" },
   //zh: { nativeName: "Chinese" },
@@ -26,7 +26,6 @@ export const LanguageView = ({ onCloseClicked }: LanguageViewProps) => {
   const { t, i18n } = useTranslation()
   const [selected, setSelected] = useState(i18n.language)
 
-  console.log(i18n.language)
   return (
     <AppLayout>
       <SettingsPageLayout
