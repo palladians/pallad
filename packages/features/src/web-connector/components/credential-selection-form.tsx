@@ -13,6 +13,11 @@ type SelectionFormProps = {
   loading: boolean
 }
 
+interface PayloadWithPresentation {
+  storedCredentials: any[]
+  presentationRequest: any
+}
+
 const sanitizeCredential = (credential: any) => {
   const yamlOptions = {
     indent: 2,
@@ -26,6 +31,17 @@ const sanitizeCredential = (credential: any) => {
 const recoverOriginalPayload = (sanitizedPayload: string) => {
   const parsedYaml = yaml.parse(sanitizedPayload)
   return JSON.stringify(parsedYaml)
+}
+
+const isPayloadWithPresentation = (
+  payload: unknown,
+): payload is PayloadWithPresentation => {
+  return (
+    typeof payload === "object" &&
+    payload !== null &&
+    "storedCredentials" in payload &&
+    Array.isArray((payload as PayloadWithPresentation).storedCredentials)
+  )
 }
 
 export const SelectionForm = ({
@@ -42,9 +58,16 @@ export const SelectionForm = ({
   const credentials = React.useMemo(() => {
     try {
       const originalPayload = recoverOriginalPayload(payload)
-      const parsedCredentials = JSON.parse(originalPayload) as any[]
-      return parsedCredentials.map((credential) => ({
-        // TODO: use stored hash when implemented
+      const parsedPayload = JSON.parse(originalPayload)
+
+      // Extract credentials using type guard
+      const storedCredentials = Array.isArray(parsedPayload)
+        ? parsedPayload
+        : isPayloadWithPresentation(parsedPayload)
+          ? parsedPayload.storedCredentials
+          : []
+
+      return storedCredentials.map((credential: any) => ({
         id: createCredentialHash(credential),
         credential,
         sanitizedDisplay: sanitizeCredential(credential),

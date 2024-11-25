@@ -386,12 +386,28 @@ export const createMinaProvider = async (): Promise<
           const [credential] = params
           if (!credential) throw createProviderRpcError(4000, "Invalid Request")
 
-          const credentialWitnessType = credential.witness.type
-
           const stringifiedCredential = JSON.stringify(credential)
 
+          let credentialToStore
+
           try {
-            if (!(credentialWitnessType === "unsigned")) {
+            const credentialWitnessType = credential.witness.type
+            if (credentialWitnessType === "unsigned") {
+              const { value: userConfirmed } = await showUserPrompt<boolean>({
+                inputType: "confirmation",
+                metadata: {
+                  title: "Store private credential request",
+                  payload: stringifiedCredential,
+                },
+              })
+
+              if (!userConfirmed) {
+                throw createProviderRpcError(4001, "User Rejected Request")
+              }
+
+              credentialToStore = stringifiedCredential
+            } else {
+              // prompt user to approve incoming credential and validate if approved
               const { value: userConfirmed, result } =
                 await showUserPrompt<boolean>({
                   inputType: "confirmation",
@@ -416,21 +432,12 @@ export const createMinaProvider = async (): Promise<
               if (!result?.result) {
                 throw createProviderRpcError(4100, "Missing validation result")
               }
-            } else {
-              const { value: userConfirmed } = await showUserPrompt<boolean>({
-                inputType: "confirmation",
-                metadata: {
-                  title: "Store private credential request",
-                  payload: stringifiedCredential,
-                },
-              })
 
-              if (!userConfirmed) {
-                throw createProviderRpcError(4001, "User Rejected Request")
-              }
+              credentialToStore = result.result
             }
 
             // TODO: hash should be stored with the credential
+            // TODO: handle metadata
             // Generate hash of the new credential
             const newCredentialHash = createCredentialHash(credential)
 
@@ -446,7 +453,7 @@ export const createMinaProvider = async (): Promise<
             }
 
             try {
-              const parsedResult = JSON.parse(stringifiedCredential)
+              const parsedResult = JSON.parse(credentialToStore)
               await _vault.storePrivateCredential(parsedResult)
               return { success: parsedResult }
             } catch (error: any) {
@@ -468,7 +475,7 @@ export const createMinaProvider = async (): Promise<
             if (!presentationRequest)
               throw createProviderRpcError(4000, "Invalid Request")
 
-            // First, ask for approval to proceed with the presentation request
+            // Ask for approval to proceed with the presentation request
             const { value: userConfirmed } = await showUserPrompt<boolean>({
               inputType: "confirmation",
               metadata: {
@@ -491,7 +498,10 @@ export const createMinaProvider = async (): Promise<
                 inputType: "selection",
                 metadata: {
                   title: "Select credentials for presentation",
-                  payload: JSON.stringify(storedCredentials),
+                  payload: JSON.stringify({
+                    presentationRequest,
+                    storedCredentials,
+                  }),
                   submitButtonLabel: "Continue",
                   rejectButtonLabel: "Cancel",
                 },
@@ -531,7 +541,6 @@ export const createMinaProvider = async (): Promise<
               throw createProviderRpcError(4100, "Missing presentation result")
             }
 
-            // TODO: return presentation
             return result.result
           } catch (error: any) {
             throw createProviderRpcError(

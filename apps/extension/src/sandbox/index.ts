@@ -71,13 +71,13 @@ window.addEventListener("message", async (event) => {
               const originalPayload = recoverOriginalPayload(sanitizedPayload)
               const credentialDeserialized =
                 Credential.fromJSON(originalPayload)
+
               await Credential.validate(credentialDeserialized)
 
               const result: Result = {
                 type: "validate-credential-result",
                 result: Credential.toJSON(credentialDeserialized),
               }
-
               window.parent.postMessage(result, "*")
             } catch (error: any) {
               const result: Result = {
@@ -109,6 +109,7 @@ window.addEventListener("message", async (event) => {
                 },
               )
 
+              // parse presentation request
               const parsedPresentationRequest = JSON.parse(
                 stringifiedPresentationRequest,
               ) as PresentationRequest
@@ -144,7 +145,7 @@ window.addEventListener("message", async (event) => {
                 presentationSignaturePromise = { resolve, reject }
               })) as string
 
-              // o1js Signature type
+              // get o1js Signature type signature
               const ownerSignature = Signature.fromBase58(signature)
 
               // finalize presentation
@@ -166,7 +167,6 @@ window.addEventListener("message", async (event) => {
                 type: "presentation-result",
                 result: serializedPresentation,
               }
-
               window.parent.postMessage(mockResult, "*")
             } catch (error: any) {
               const result: Result = {
