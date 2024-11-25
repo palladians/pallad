@@ -18,6 +18,7 @@ type WebConnectorViewProps = {
   submitButtonLabel?: string
   onSubmit: SubmitHandler<UserInputForm>
   loading: boolean
+  loadingMessage?: string
 }
 
 export const WebConnectorView = ({
@@ -31,6 +32,7 @@ export const WebConnectorView = ({
   submitButtonLabel,
   onSubmit,
   loading,
+  loadingMessage,
 }: WebConnectorViewProps) => {
   const onClose = () => {
     onReject()
@@ -39,6 +41,9 @@ export const WebConnectorView = ({
   const handleSelectionSubmit = (selectedCredentials: string) => {
     onSubmit({ userInput: selectedCredentials })
   }
+
+  const displayTitle = loadingMessage || title
+
   return (
     <div className="flex flex-1 justify-center items-center bg-secondary">
       <div className="flex max-w-[480px] max-h-[772px] h-full flex-1 bg-neutral rounded-xl">
@@ -46,7 +51,7 @@ export const WebConnectorView = ({
           <MenuBar variant="card" onCloseClicked={onClose} />
           <div className="flex flex-1 flex-col px-8 pb-8">
             <div className="flex flex-col flex-1 gap-4">
-              <h1 className="text-2xl">{title}</h1>
+              <h1 className="text-2xl">{displayTitle}</h1>
               <Skeleton loading={loading} h="192px">
                 <div
                   // biome-ignore lint: Sanitized by `xss`

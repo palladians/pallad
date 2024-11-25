@@ -47,6 +47,7 @@ type ActionRequest = {
 
 export const WebConnectorRoute = () => {
   const [loading, setLoading] = useState(true)
+  const [loadingMessage, setLoadingMessage] = useState<string>()
   const [request, setRequest] = useState<ActionRequest>({
     title: "",
     payload: "",
@@ -62,6 +63,7 @@ export const WebConnectorRoute = () => {
     try {
       // For presentation contract, set up message handler for signing request
       if (request.contract === "presentation") {
+        setLoadingMessage("Creating presentation...")
         const messageHandler = async (event: MessageEvent) => {
           if (event.data.type === "presentation-signing-request") {
             try {
@@ -113,6 +115,7 @@ export const WebConnectorRoute = () => {
       })
     } catch (error) {
       setLoading(false)
+      setLoadingMessage(undefined)
       throw error
     }
   }
@@ -183,10 +186,12 @@ export const WebConnectorRoute = () => {
         windowId: id,
       })
       setLoading(false)
+      setLoadingMessage(undefined)
       window.close()
     }
     if (event.data.type === "validate-credential-result") {
       setLoading(false)
+      setLoadingMessage(undefined)
       return confirm({
         result: {
           type: event.data.type,
@@ -216,6 +221,7 @@ export const WebConnectorRoute = () => {
           emitConnected: message.params.emitConnected,
         })
         setLoading(false)
+        setLoadingMessage(undefined)
       }
     })
   }, [])
@@ -232,6 +238,7 @@ export const WebConnectorRoute = () => {
         title={request.title}
         payload={request.payload}
         loading={loading}
+        loadingMessage={loadingMessage}
       />
     </MemoryRouter>
   )
