@@ -134,14 +134,19 @@ export const WebConnectorRoute = () => {
   const startConfirming = async () => {
     if (!request.contract) return confirm({})
     setLoading(true)
+    if (request.contract === "validate-credential") {
+      setLoadingMessage("Validating credential...")
+    }
     try {
       return sendSandboxMessage({
         type: "run",
         contract: request.contract,
         payload: request.payload,
       })
-    } finally {
+    } catch (error) {
       setLoading(false)
+      setLoadingMessage(undefined)
+      throw error
     }
   }
   const confirm = async ({ result }: { result?: ContractResult }) => {
