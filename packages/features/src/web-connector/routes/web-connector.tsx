@@ -111,8 +111,9 @@ export const WebConnectorRoute = () => {
         payload: request.payload,
         userInput,
       })
-    } finally {
+    } catch (error) {
       setLoading(false)
+      throw error
     }
   }
   const onSubmit: SubmitHandler<
@@ -181,9 +182,11 @@ export const WebConnectorRoute = () => {
         },
         windowId: id,
       })
+      setLoading(false)
       window.close()
     }
     if (event.data.type === "validate-credential-result") {
+      setLoading(false)
       return confirm({
         result: {
           type: event.data.type,

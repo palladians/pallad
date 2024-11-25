@@ -519,7 +519,7 @@ export const createMinaProvider = async (): Promise<
               inputType: "password",
               contract: "presentation",
               metadata: {
-                title: "Prepare presentation",
+                title: "Create presentation",
                 payload: JSON.stringify({
                   presentationRequest,
                   selectedCredentials: JSON.parse(selectedCredentials),
