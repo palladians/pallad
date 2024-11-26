@@ -30,6 +30,7 @@ type Result = {
 type PresentationRequestPayload = {
   presentationRequest: string
   selectedCredentials: string[]
+  verifierIdentity: string
 }
 
 const recoverOriginalPayload = (sanitizedPayload: string) => {
@@ -97,7 +98,11 @@ window.addEventListener("message", async (event) => {
                 originalPayload,
               ) as PresentationRequestPayload
 
-              const { presentationRequest, selectedCredentials } = parsedPayload
+              const {
+                presentationRequest,
+                selectedCredentials,
+                verifierIdentity,
+              } = parsedPayload
 
               const stringifiedPresentationRequest =
                 JSON.stringify(presentationRequest)
@@ -113,6 +118,7 @@ window.addEventListener("message", async (event) => {
               const parsedPresentationRequest = JSON.parse(
                 stringifiedPresentationRequest,
               ) as PresentationRequest
+
               const requestType = parsedPresentationRequest.type
 
               // deserialize presentation request
@@ -128,7 +134,8 @@ window.addEventListener("message", async (event) => {
               const prepared = await Presentation.prepare({
                 request: compiled,
                 credentials: storedCredentials,
-                context: { verifierIdentity: "test.com" },
+                // TODO: handle zk-app verifierIdentity
+                context: { verifierIdentity },
               })
 
               // ask wallet to sign fields
@@ -159,15 +166,21 @@ window.addEventListener("message", async (event) => {
               const serializedPresentation = Presentation.toJSON(presentation)
 
               // TODO: delete later, only used for testing verification
-              // const receivedPresentationDeserialized = Presentation.fromJSON(serializedPresentation)
+              const receivedPresentationDeserialized = Presentation.fromJSON(
+                serializedPresentation,
+              )
 
-              // const outputClaim = await Presentation.verify(deserialized, receivedPresentationDeserialized, { verifierIdentity: "test.com" })
+              const outputClaim = await Presentation.verify(
+                deserialized,
+                receivedPresentationDeserialized,
+                { verifierIdentity: "http://localhost:5173" },
+              )
 
-              const mockResult: Result = {
+              const result: Result = {
                 type: "presentation-result",
-                result: serializedPresentation,
+                result: JSON.stringify(outputClaim),
               }
-              window.parent.postMessage(mockResult, "*")
+              window.parent.postMessage(result, "*")
             } catch (error: any) {
               const result: Result = {
                 type: "presentation-result",

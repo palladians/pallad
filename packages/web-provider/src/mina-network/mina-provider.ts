@@ -521,6 +521,8 @@ export const createMinaProvider = async (): Promise<
               metadata: {
                 title: "Create presentation",
                 payload: JSON.stringify({
+                  // TODO: handle zk-app verifierIdentity
+                  verifierIdentity: origin,
                   presentationRequest,
                   selectedCredentials: JSON.parse(selectedCredentials),
                 }),
