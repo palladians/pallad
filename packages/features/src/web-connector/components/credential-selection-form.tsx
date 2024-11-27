@@ -28,7 +28,7 @@ const sanitizeCredential = (credential: any) => {
   return xss(yamlPayload)
 }
 
-const recoverOriginalPayload = (sanitizedPayload: string) => {
+export const recoverOriginalPayload = (sanitizedPayload: string) => {
   const parsedYaml = yaml.parse(sanitizedPayload)
   return JSON.stringify(parsedYaml)
 }
