@@ -7,6 +7,8 @@ import { I18nextProvider } from "react-i18next"
 import { Toaster } from "sonner"
 import { AddressBookRoute } from "./address-book/routes/address-book"
 import { NewAddressRoute } from "./address-book/routes/new-address"
+import { CredentialDetailsRoute } from "./credentials/routes/credential-details"
+import { CredentialsRoute } from "./credentials/routes/credentials"
 import { ErrorView } from "./error-renderer/views/error"
 import { i18n } from "./lib/i18n"
 import { UnlockWalletRoute } from "./lock/routes/unlock-wallet"
@@ -121,6 +123,10 @@ export const Router = () => {
                   element={<AuthorizedZkAppsRoute />}
                 />
                 <Route path="privacy" element={<PrivacyRoute />} />
+              </Route>
+              <Route path="credentials" element={<Outlet />}>
+                <Route path="" element={<CredentialsRoute />} />
+                <Route path=":id" element={<CredentialDetailsRoute />} />
               </Route>
               <Route path="/*" element={<NotFoundRoute />} />
             </Routes>

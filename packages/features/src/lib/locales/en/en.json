@@ -147,5 +147,9 @@
     "deny": "Deny",
     "sign": "Sign",
     "reject": "Reject"
+  },
+  "credentials": {
+    "credentials": "Credentials",
+    "delete": "Delete"
   }
 }
