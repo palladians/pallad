@@ -41,20 +41,16 @@ export const WebConnectorView = ({
     onReject()
     onDecline()
   }
+
   const handleSelectionSubmit = (selectedCredentials: string) => {
     onSubmit({ userInput: selectedCredentials })
   }
 
   const decodeHexString = (hex: string): string => {
-    // Convert hex to bytes and then to characters, stopping at first null byte
-    const bytes = hex.match(/.{1,2}/g) || []
-    let result = ""
-    for (const byte of bytes) {
-      const charCode = Number.parseInt(byte, 16)
-      if (charCode === 0) break // Stop at first null byte
-      result += String.fromCharCode(charCode)
-    }
-    return result
+    const bytes = new Uint8Array(
+      hex.match(/.{2}/g)!.map((byte) => Number.parseInt(byte, 16)),
+    )
+    return new TextDecoder().decode(bytes).replace(/\0/g, "")
   }
 
   const simplifyCredentialData = (data: Record<string, any>) => {
@@ -78,38 +74,36 @@ export const WebConnectorView = ({
     return simplified
   }
 
-  const getDisplayPayload = (payload: string) => {
-    try {
-      const originalPayload = recoverOriginalPayload(payload)
-      const parsedPayload = JSON.parse(originalPayload) as Record<string, any>
+  const isCredential = (value: unknown): value is Record<string, any> => {
+    if (typeof value !== "object" || value === null) return false
 
-      // Check if this is a credential with data
-      if (
-        "credential" in parsedPayload &&
-        typeof parsedPayload.credential === "object" &&
-        parsedPayload.credential !== null &&
-        "data" in parsedPayload.credential
-      ) {
-        const displayObj: Record<string, any> = {
-          data: simplifyCredentialData(parsedPayload.credential.data),
-        }
+    const obj = value as Record<string, any>
+    return (
+      "credential" in obj &&
+      typeof obj.credential === "object" &&
+      obj.credential !== null &&
+      "data" in obj.credential
+    )
+  }
 
-        // Only add description if metadata exists and has description
-        if (
-          typeof parsedPayload.metadata === "object" &&
-          parsedPayload.metadata !== null &&
-          "description" in parsedPayload.metadata
-        ) {
-          displayObj.description = parsedPayload.metadata.description
-        }
-
-        return JSON.stringify(displayObj, null, 2)
-      }
-
-      return payload
-    } catch (error: any) {
-      return `Error in getDisplayPayload: ${error}`
+  const renderPayload = (payload: string) => {
+    const originalPayload = recoverOriginalPayload(payload)
+    const parsedPayload = JSON.parse(originalPayload) as Record<string, any>
+    if (!isCredential(parsedPayload)) {
+      return <pre className="whitespace-pre-wrap break-all">{payload}</pre>
     }
+
+    const simplifiedData = simplifyCredentialData(parsedPayload.credential.data)
+    const description = parsedPayload.metadata?.description
+
+    return (
+      <div className="space-y-4">
+        {description && <p className="text-sm">{description}</p>}
+        <pre className="whitespace-pre-wrap break-all bg-neutral-900 p-3 rounded">
+          {JSON.stringify(simplifiedData, null, 2)}
+        </pre>
+      </div>
+    )
   }
 
   const displayTitle = loadingMessage || title
@@ -123,13 +117,17 @@ export const WebConnectorView = ({
             <div className="flex flex-col flex-1 gap-4">
               <h1 className="text-2xl">{displayTitle}</h1>
               <Skeleton loading={loading} h="192px">
-                <div
-                  // biome-ignore lint: Sanitized by `xss`
-                  dangerouslySetInnerHTML={{
-                    __html: getDisplayPayload(payload),
-                  }}
-                  className="card bg-secondary h-48 p-4 overflow-y-scroll whitespace-pre-wrap break-all"
-                />
+                <div className="card bg-secondary h-48 p-4 overflow-y-scroll">
+                  {(() => {
+                    try {
+                      return renderPayload(payload)
+                    } catch (error) {
+                      return (
+                        <pre className="whitespace-pre-wrap break-all">{`Error: ${error}`}</pre>
+                      )
+                    }
+                  })()}
+                </div>
               </Skeleton>
             </div>
             <div className="flex justify-center items-center">
