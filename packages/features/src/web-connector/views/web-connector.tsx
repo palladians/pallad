@@ -46,13 +46,6 @@ export const WebConnectorView = ({
     onSubmit({ userInput: selectedCredentials })
   }
 
-  const decodeHexString = (hex: string): string => {
-    const bytes = new Uint8Array(
-      hex.match(/.{2}/g)!.map((byte) => Number.parseInt(byte, 16)),
-    )
-    return new TextDecoder().decode(bytes).replace(/\0/g, "")
-  }
-
   const isCredential = (value: unknown): value is Record<string, any> => {
     if (typeof value !== "object" || value === null) return false
 
@@ -71,23 +64,16 @@ export const WebConnectorView = ({
     return false
   }
 
-  const decodeBytes = (bytes: Array<{ value: string }>): string => {
-    return bytes
-      .map((b) => String.fromCharCode(Number.parseInt(b.value)))
-      .join("")
-      .replace(/\0/g, "")
-  }
-
   const simplifyCredentialData = (
     data: Record<string, any>,
   ): Record<string, string> => {
     const simplified: Record<string, string> = {}
     for (const [key, value] of Object.entries(data)) {
       if (typeof value === "object" && value !== null) {
-        if (value._type === "Bytes") {
-          simplified[key] = decodeHexString(value.value)
-        } else if ("bytes" in value) {
-          simplified[key] = decodeBytes(value.bytes)
+        if ("bytes" in value) {
+          simplified[key] = value.bytes
+            .map((b: { value: string }) => b.value)
+            .join("")
         } else if ("value" in value) {
           simplified[key] = value.value
         } else {
