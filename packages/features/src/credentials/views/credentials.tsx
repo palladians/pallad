@@ -1,7 +1,7 @@
 import { AppLayout } from "@/components/app-layout"
 import { MenuBar } from "@/components/menu-bar"
 import type { Json } from "@mina-js/utils"
-import { KeyRound } from "lucide-react"
+import { IdCard } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
@@ -24,7 +24,7 @@ export const CredentialsView = ({ credentials }: CredentialsViewProps) => {
               className="p-4 flex items-center space-x-4 bg-secondary rounded-2xl"
             >
               <div className="flex items-center justify-center w-12 h-12 rounded-full bg-neutral">
-                <KeyRound />
+                <IdCard />
               </div>
               <div>
                 <p>{id}</p>
