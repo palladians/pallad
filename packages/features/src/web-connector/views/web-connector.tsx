@@ -3,7 +3,10 @@ import { MenuBar } from "@/components/menu-bar"
 import { Skeleton } from "@/components/skeleton"
 import type { SubmitHandler } from "react-hook-form"
 import { ConfirmationForm } from "../components/confirmation-form"
-import { SelectionForm } from "../components/credential-selection-form"
+import {
+  SelectionForm,
+  recoverOriginalPayload,
+} from "../components/credential-selection-form"
 import { InputForm } from "../components/input-form"
 import type { UserInputForm } from "../types"
 
@@ -38,8 +41,69 @@ export const WebConnectorView = ({
     onReject()
     onDecline()
   }
+
   const handleSelectionSubmit = (selectedCredentials: string) => {
     onSubmit({ userInput: selectedCredentials })
+  }
+
+  const decodeHexString = (hex: string): string => {
+    const bytes = new Uint8Array(
+      hex.match(/.{2}/g)!.map((byte) => Number.parseInt(byte, 16)),
+    )
+    return new TextDecoder().decode(bytes).replace(/\0/g, "")
+  }
+
+  const simplifyCredentialData = (data: Record<string, any>) => {
+    const simplified: Record<string, string> = {}
+    for (const [key, value] of Object.entries(data)) {
+      if (
+        typeof value === "object" &&
+        value !== null &&
+        "_type" in value &&
+        "value" in value
+      ) {
+        if (value._type === "Bytes") {
+          simplified[key] = decodeHexString(value.value)
+        } else {
+          simplified[key] = value.value
+        }
+      } else {
+        simplified[key] = value
+      }
+    }
+    return simplified
+  }
+
+  const isCredential = (value: unknown): value is Record<string, any> => {
+    if (typeof value !== "object" || value === null) return false
+
+    const obj = value as Record<string, any>
+    return (
+      "credential" in obj &&
+      typeof obj.credential === "object" &&
+      obj.credential !== null &&
+      "data" in obj.credential
+    )
+  }
+
+  const renderPayload = (payload: string) => {
+    const originalPayload = recoverOriginalPayload(payload)
+    const parsedPayload = JSON.parse(originalPayload) as Record<string, any>
+    if (!isCredential(parsedPayload)) {
+      return <pre className="whitespace-pre-wrap break-all">{payload}</pre>
+    }
+
+    const simplifiedData = simplifyCredentialData(parsedPayload.credential.data)
+    const description = parsedPayload.metadata?.description
+
+    return (
+      <div className="space-y-4">
+        {description && <p className="text-sm">{description}</p>}
+        <pre className="whitespace-pre-wrap break-all bg-neutral-900 p-3 rounded">
+          {JSON.stringify(simplifiedData, null, 2)}
+        </pre>
+      </div>
+    )
   }
 
   const displayTitle = loadingMessage || title
@@ -53,11 +117,17 @@ export const WebConnectorView = ({
             <div className="flex flex-col flex-1 gap-4">
               <h1 className="text-2xl">{displayTitle}</h1>
               <Skeleton loading={loading} h="192px">
-                <div
-                  // biome-ignore lint: Sanitized by `xss`
-                  dangerouslySetInnerHTML={{ __html: payload }}
-                  className="card bg-secondary h-48 p-4 overflow-y-scroll whitespace-pre-wrap break-all"
-                />
+                <div className="card bg-secondary h-48 p-4 overflow-y-scroll">
+                  {(() => {
+                    try {
+                      return renderPayload(payload)
+                    } catch (error) {
+                      return (
+                        <pre className="whitespace-pre-wrap break-all">{`Error: ${error}`}</pre>
+                      )
+                    }
+                  })()}
+                </div>
               </Skeleton>
             </div>
             <div className="flex justify-center items-center">

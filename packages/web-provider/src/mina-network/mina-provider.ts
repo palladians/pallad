@@ -413,7 +413,7 @@ export const createMinaProvider = async (): Promise<
                   inputType: "confirmation",
                   contract: "validate-credential",
                   metadata: {
-                    title: "Store private credential request",
+                    title: "Store Private Credential",
                     payload: stringifiedCredential,
                   },
                 })
