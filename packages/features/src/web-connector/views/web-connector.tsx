@@ -53,19 +53,45 @@ export const WebConnectorView = ({
     return new TextDecoder().decode(bytes).replace(/\0/g, "")
   }
 
-  const simplifyCredentialData = (data: Record<string, any>) => {
+  const isCredential = (value: unknown): value is Record<string, any> => {
+    if (typeof value !== "object" || value === null) return false
+
+    const obj = value as Record<string, any>
+    if ("credential" in obj) {
+      const cred = obj.credential
+      return (
+        typeof cred === "object" &&
+        cred !== null &&
+        ("data" in cred || // Simple credential
+          ("value" in cred &&
+            typeof cred.value === "object" &&
+            "data" in cred.value)) // Recursive/struct credential
+      )
+    }
+    return false
+  }
+
+  const decodeBytes = (bytes: Array<{ value: string }>): string => {
+    return bytes
+      .map((b) => String.fromCharCode(Number.parseInt(b.value)))
+      .join("")
+      .replace(/\0/g, "")
+  }
+
+  const simplifyCredentialData = (
+    data: Record<string, any>,
+  ): Record<string, string> => {
     const simplified: Record<string, string> = {}
     for (const [key, value] of Object.entries(data)) {
-      if (
-        typeof value === "object" &&
-        value !== null &&
-        "_type" in value &&
-        "value" in value
-      ) {
+      if (typeof value === "object" && value !== null) {
         if (value._type === "Bytes") {
           simplified[key] = decodeHexString(value.value)
-        } else {
+        } else if ("bytes" in value) {
+          simplified[key] = decodeBytes(value.bytes)
+        } else if ("value" in value) {
           simplified[key] = value.value
+        } else {
+          simplified[key] = value
         }
       } else {
         simplified[key] = value
@@ -74,26 +100,17 @@ export const WebConnectorView = ({
     return simplified
   }
 
-  const isCredential = (value: unknown): value is Record<string, any> => {
-    if (typeof value !== "object" || value === null) return false
-
-    const obj = value as Record<string, any>
-    return (
-      "credential" in obj &&
-      typeof obj.credential === "object" &&
-      obj.credential !== null &&
-      "data" in obj.credential
-    )
-  }
-
   const renderPayload = (payload: string) => {
     const originalPayload = recoverOriginalPayload(payload)
     const parsedPayload = JSON.parse(originalPayload) as Record<string, any>
+
     if (!isCredential(parsedPayload)) {
       return <pre className="whitespace-pre-wrap break-all">{payload}</pre>
     }
 
-    const simplifiedData = simplifyCredentialData(parsedPayload.credential.data)
+    const credentialData =
+      parsedPayload.credential.value?.data || parsedPayload.credential.data
+    const simplifiedData = simplifyCredentialData(credentialData)
     const description = parsedPayload.metadata?.description
 
     return (
