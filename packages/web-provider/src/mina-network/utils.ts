@@ -50,7 +50,10 @@ export const serializeTransaction = (transaction: MinaSignablePayload) => {
 }
 
 export const createCredentialHash = (credential: any): string => {
-  const stableString = JSON.stringify(credential)
+  // exclude metadata from hash
+  const { metadata: _, ...credentialWithoutMetadata } = credential
+
+  const stableString = JSON.stringify(credentialWithoutMetadata)
   const bytes = utf8ToBytes(stableString)
   const hash = sha256(bytes)
   return Array.from(hash)
