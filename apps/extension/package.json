@@ -23,7 +23,7 @@
     "@palladco/web-provider": "workspace:*",
     "@plasmohq/messaging": "0.6.2",
     "buffer": "6.0.3",
-    "mina-credentials": "^0.2.2",
+    "mina-credentials": "^0.2.3",
     "mitt": "3.0.1",
     "next-themes": "0.3.0",
     "o1js": "^2.1.0",
