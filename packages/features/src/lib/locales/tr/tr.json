@@ -147,5 +147,9 @@
     "deny": "Reddet",
     "sign": "İmzala",
     "reject": "Reddet"
+  },
+  "credentials": {
+    "credentials": "Kimlik",
+    "delete": "Silmek"
   }
 }
