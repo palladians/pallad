@@ -3,12 +3,10 @@ import { MenuBar } from "@/components/menu-bar"
 import { Skeleton } from "@/components/skeleton"
 import type { SubmitHandler } from "react-hook-form"
 import { ConfirmationForm } from "../components/confirmation-form"
-import {
-  SelectionForm,
-  recoverOriginalPayload,
-} from "../components/credential-selection-form"
+import { SelectionForm } from "../components/credential-selection-form"
 import { InputForm } from "../components/input-form"
 import type { UserInputForm } from "../types"
+import { renderPayload } from "../utils/render-payload"
 
 type WebConnectorViewProps = {
   title: string
@@ -46,69 +44,6 @@ export const WebConnectorView = ({
     onSubmit({ userInput: selectedCredentials })
   }
 
-  const isCredential = (value: unknown): value is Record<string, any> => {
-    if (typeof value !== "object" || value === null) return false
-
-    const obj = value as Record<string, any>
-    if ("credential" in obj) {
-      const cred = obj.credential
-      return (
-        typeof cred === "object" &&
-        cred !== null &&
-        ("data" in cred || // Simple credential
-          ("value" in cred &&
-            typeof cred.value === "object" &&
-            "data" in cred.value)) // Recursive/struct credential
-      )
-    }
-    return false
-  }
-
-  const simplifyCredentialData = (
-    data: Record<string, any>,
-  ): Record<string, string> => {
-    const simplified: Record<string, string> = {}
-    for (const [key, value] of Object.entries(data)) {
-      if (typeof value === "object" && value !== null) {
-        if ("bytes" in value) {
-          simplified[key] = value.bytes
-            .map((b: { value: string }) => b.value)
-            .join("")
-        } else if ("value" in value) {
-          simplified[key] = value.value
-        } else {
-          simplified[key] = value
-        }
-      } else {
-        simplified[key] = value
-      }
-    }
-    return simplified
-  }
-
-  const renderPayload = (payload: string) => {
-    const originalPayload = recoverOriginalPayload(payload)
-    const parsedPayload = JSON.parse(originalPayload) as Record<string, any>
-
-    if (!isCredential(parsedPayload)) {
-      return <pre className="whitespace-pre-wrap break-all">{payload}</pre>
-    }
-
-    const credentialData =
-      parsedPayload.credential.value?.data || parsedPayload.credential.data
-    const simplifiedData = simplifyCredentialData(credentialData)
-    const description = parsedPayload.metadata?.description
-
-    return (
-      <div className="space-y-4">
-        {description && <p className="text-sm">{description}</p>}
-        <pre className="whitespace-pre-wrap break-all bg-neutral-900 p-3 rounded">
-          {JSON.stringify(simplifiedData, null, 2)}
-        </pre>
-      </div>
-    )
-  }
-
   const displayTitle = loadingMessage || title
 
   return (
@@ -121,15 +56,7 @@ export const WebConnectorView = ({
               <h1 className="text-2xl">{displayTitle}</h1>
               <Skeleton loading={loading} h="192px">
                 <div className="card bg-secondary h-48 p-4 overflow-y-scroll">
-                  {(() => {
-                    try {
-                      return renderPayload(payload)
-                    } catch (error) {
-                      return (
-                        <pre className="whitespace-pre-wrap break-all">{`Error: ${error}`}</pre>
-                      )
-                    }
-                  })()}
+                  {renderPayload(payload)}
                 </div>
               </Skeleton>
             </div>
