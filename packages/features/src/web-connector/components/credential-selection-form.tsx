@@ -1,7 +1,6 @@
 import { createCredentialHash } from "@palladco/web-provider"
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
-import xss from "xss"
 import yaml from "yaml"
 
 type SelectionFormProps = {
@@ -34,14 +33,26 @@ interface PayloadWithPresentation {
   }
 }
 
-const sanitizeCredential = (credential: any) => {
-  const yamlOptions = {
-    indent: 2,
-    lineWidth: 70,
-    minContentWidth: 0,
+const simplifyCredentialData = (
+  data: Record<string, any>,
+): Record<string, string> => {
+  const simplified: Record<string, string> = {}
+  for (const [key, value] of Object.entries(data)) {
+    if (typeof value === "object" && value !== null) {
+      if ("bytes" in value) {
+        simplified[key] = value.bytes
+          .map((b: { value: string }) => b.value)
+          .join("")
+      } else if ("value" in value) {
+        simplified[key] = value.value
+      } else {
+        simplified[key] = value
+      }
+    } else {
+      simplified[key] = value
+    }
   }
-  const yamlPayload = yaml.stringify(credential, yamlOptions)
-  return xss(yamlPayload)
+  return simplified
 }
 
 export const recoverOriginalPayload = (sanitizedPayload: string) => {
@@ -125,6 +136,28 @@ const credentialMatchesRequest = (
   return requestedFields.every((field) => credentialFields.includes(field))
 }
 
+const CredentialDisplay = ({ credential }: { credential: any }) => {
+  const witnessType = credential.witness?.type || "unknown"
+  const credentialData =
+    credential.credential.value?.data || credential.credential.data
+  const simplifiedData = simplifyCredentialData(credentialData)
+  const description = credential.metadata?.description
+
+  return (
+    <div className="space-y-2">
+      {description && <p className="text-xs text-primary">{description}</p>}
+      <pre className="text-2xs whitespace-pre-wrap break-all bg-neutral-900 p-2 rounded">
+        {JSON.stringify(simplifiedData, null, 2)}
+      </pre>
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-medium text-neutral-400">
+          Type: {witnessType}
+        </span>
+      </div>
+    </div>
+  )
+}
+
 export const SelectionForm = ({
   onSubmit,
   onReject,
@@ -164,7 +197,6 @@ export const SelectionForm = ({
         // TODO: use correct id
         id: createCredentialHash(credential),
         credential,
-        sanitizedDisplay: sanitizeCredential(credential),
       }))
     } catch (error: any) {
       throw Error(`Issue with parsing: ${error}: ${payload}`)
@@ -206,9 +238,7 @@ export const SelectionForm = ({
               onChange={() => handleToggleCredential(credentialData)}
               disabled={loading}
             />
-            <div className="font-medium break-all whitespace-pre-wrap max-w-[398px] text-2xs leading-tight">
-              {credentialData.sanitizedDisplay || "Unknown Credential"}
-            </div>
+            <CredentialDisplay credential={credentialData.credential} />
           </label>
         ))}
       </div>
@@ -232,3 +262,5 @@ export const SelectionForm = ({
     </form>
   )
 }
+
+export default SelectionForm
