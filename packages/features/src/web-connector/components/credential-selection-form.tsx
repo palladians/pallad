@@ -22,7 +22,12 @@ interface PayloadWithPresentation {
         {
           type: string
           credentialType?: string
-          data?: Record<string, unknown>
+          data?:
+            | Record<string, unknown>
+            | {
+                _type: "Struct"
+                properties: Record<string, unknown>
+              }
         }
       >
     }
@@ -64,18 +69,30 @@ const isPayloadWithPresentation = (
   )
 }
 
+// Extract data fields from input data which could be direct or nested in properties
+const extractDataFields = (data: any): string[] => {
+  if (!data) return []
+
+  // Handle Struct type with properties
+  if (data._type === "Struct" && data.properties) {
+    return Object.keys(data.properties)
+  }
+
+  // Handle direct data fields
+  return Object.keys(data)
+}
+
 // Get requested credential info from presentation request
 const getRequestedCredentialInfo = (
   presentationRequest: PayloadWithPresentation["presentationRequest"],
 ) => {
   const credentialRequests: Array<{ type: string; dataFields: string[] }> = []
 
-  // get credentialType and the required keys
   for (const input of Object.values(presentationRequest.spec.inputs)) {
     if (input.type === "credential" && input.credentialType && input.data) {
       credentialRequests.push({
         type: input.credentialType,
-        dataFields: Object.keys(input.data),
+        dataFields: extractDataFields(input.data),
       })
     }
   }
