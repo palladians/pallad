@@ -15,7 +15,18 @@ type SelectionFormProps = {
 
 interface PayloadWithPresentation {
   storedCredentials: any[]
-  presentationRequest: any
+  presentationRequest: {
+    spec: {
+      inputs: Record<
+        string,
+        {
+          type: string
+          credentialType?: string
+          data?: Record<string, unknown>
+        }
+      >
+    }
+  }
 }
 
 const sanitizeCredential = (credential: any) => {
@@ -40,8 +51,61 @@ const isPayloadWithPresentation = (
     typeof payload === "object" &&
     payload !== null &&
     "storedCredentials" in payload &&
-    Array.isArray((payload as PayloadWithPresentation).storedCredentials)
+    Array.isArray((payload as PayloadWithPresentation).storedCredentials) &&
+    "presentationRequest" in payload &&
+    typeof (payload as PayloadWithPresentation).presentationRequest ===
+      "object" &&
+    (payload as PayloadWithPresentation).presentationRequest !== null &&
+    "spec" in (payload as PayloadWithPresentation).presentationRequest &&
+    typeof (payload as PayloadWithPresentation).presentationRequest.spec ===
+      "object" &&
+    (payload as PayloadWithPresentation).presentationRequest.spec !== null &&
+    "inputs" in (payload as PayloadWithPresentation).presentationRequest.spec
   )
+}
+
+// Get requested credential info from presentation request
+const getRequestedCredentialInfo = (
+  presentationRequest: PayloadWithPresentation["presentationRequest"],
+) => {
+  const credentialRequests: Array<{ type: string; dataFields: string[] }> = []
+
+  // get credentialType and the required keys
+  for (const input of Object.values(presentationRequest.spec.inputs)) {
+    if (input.type === "credential" && input.credentialType && input.data) {
+      credentialRequests.push({
+        type: input.credentialType,
+        dataFields: Object.keys(input.data),
+      })
+    }
+  }
+
+  return credentialRequests
+}
+
+// Get credential data keys accounting for both simple and recursive/struct credentials
+const getCredentialDataKeys = (credential: any): string[] => {
+  // get data from either credential.data or credential.value.data
+  const data = credential.credential.value?.data || credential.credential.data
+  return data ? Object.keys(data) : []
+}
+
+// Check if credential matches request requirements
+const credentialMatchesRequest = (
+  credential: any,
+  requestedType: string,
+  requestedFields: string[],
+): boolean => {
+  // Check witness type
+  if (credential.witness?.type !== requestedType) {
+    return false
+  }
+
+  // Get credential data fields
+  const credentialFields = getCredentialDataKeys(credential)
+
+  // Check request data fields are subset of credential fields
+  return requestedFields.every((field) => credentialFields.includes(field))
 }
 
 export const SelectionForm = ({
@@ -60,14 +124,26 @@ export const SelectionForm = ({
       const originalPayload = recoverOriginalPayload(payload)
       const parsedPayload = JSON.parse(originalPayload)
 
-      // Extract credentials using type guard
+      // Get requested credential requirements
+      const credentialRequirements = isPayloadWithPresentation(parsedPayload)
+        ? getRequestedCredentialInfo(parsedPayload.presentationRequest)
+        : []
+
+      // Extract credentials
       const storedCredentials = Array.isArray(parsedPayload)
         ? parsedPayload
         : isPayloadWithPresentation(parsedPayload)
           ? parsedPayload.storedCredentials
           : []
 
-      return storedCredentials.map((credential: any) => ({
+      // Filter credentials based on matching both type and required data fields
+      const filteredCredentials = storedCredentials.filter((credential: any) =>
+        credentialRequirements.some((req) =>
+          credentialMatchesRequest(credential, req.type, req.dataFields),
+        ),
+      )
+
+      return filteredCredentials.map((credential: any) => ({
         // TODO: use correct id
         id: createCredentialHash(credential),
         credential,
