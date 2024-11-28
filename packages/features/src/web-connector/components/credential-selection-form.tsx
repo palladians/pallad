@@ -68,6 +68,7 @@ export const SelectionForm = ({
           : []
 
       return storedCredentials.map((credential: any) => ({
+        // TODO: use correct id
         id: createCredentialHash(credential),
         credential,
         sanitizedDisplay: sanitizeCredential(credential),
