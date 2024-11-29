@@ -103,50 +103,78 @@ const extractDataFields = (data: any): string[] => {
   return Object.keys(data)
 }
 
-// Get requested credential info from presentation request
-const getRequestedCredentialInfo = (
+// Get all credential requirements from presentation request
+const getCredentialRequirements = (
   presentationRequest: PayloadWithPresentation["presentationRequest"],
 ) => {
-  const credentialRequests: Array<{ type: string; dataFields: string[] }> = []
+  const requirements: Array<{
+    inputKey: string
+    type: string
+    dataFields: string[]
+  }> = []
 
-  for (const input of Object.values(presentationRequest.spec.inputs)) {
+  for (const [key, input] of Object.entries(presentationRequest.spec.inputs)) {
     if (input.type === "credential" && input.credentialType && input.data) {
-      credentialRequests.push({
+      requirements.push({
+        inputKey: key,
         type: input.credentialType,
         dataFields: extractDataFields(input.data),
       })
     }
   }
 
-  return credentialRequests
+  return requirements
 }
 
 // Get credential data keys accounting for both simple and recursive/struct credentials
 const getCredentialDataKeys = (credential: any): string[] => {
-  // get data from either credential.data or credential.value.data
   const data = credential.credential.value?.data || credential.credential.data
   return data ? Object.keys(data) : []
 }
 
-// Check if credential matches request requirements
-const credentialMatchesRequest = (
+// Check if credential matches a specific requirement
+const credentialMatchesRequirement = (
   credential: any,
-  requestedType: string,
-  requestedFields: string[],
+  requirement: {
+    type: string
+    dataFields: string[]
+  },
 ): boolean => {
-  // Check witness type
-  if (credential.witness?.type !== requestedType) {
+  if (credential.witness?.type !== requirement.type) {
     return false
   }
 
-  // Get credential data fields
   const credentialFields = getCredentialDataKeys(credential)
-
-  // Check request data fields are subset of credential fields
-  return requestedFields.every((field) => credentialFields.includes(field))
+  return requirement.dataFields.every((field) =>
+    credentialFields.includes(field),
+  )
 }
 
-const CredentialDisplay = ({ credential }: { credential: any }) => {
+// Find all requirements that a credential can satisfy
+const findMatchingRequirements = (
+  credential: any,
+  requirements: Array<{
+    inputKey: string
+    type: string
+    dataFields: string[]
+  }>,
+) => {
+  return requirements.filter((req) =>
+    credentialMatchesRequirement(credential, req),
+  )
+}
+
+const CredentialDisplay = ({
+  credential,
+  matchingRequirements,
+}: {
+  credential: any
+  matchingRequirements: Array<{
+    inputKey: string
+    type: string
+    dataFields: string[]
+  }>
+}) => {
   const witnessType = credential.witness?.type || "unknown"
   const credentialData =
     credential.credential.value?.data || credential.credential.data
@@ -159,9 +187,13 @@ const CredentialDisplay = ({ credential }: { credential: any }) => {
       <pre className="text-2xs whitespace-pre-wrap break-all bg-neutral-900 p-2 rounded">
         {JSON.stringify(simplifiedData, null, 2)}
       </pre>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-1">
         <span className="text-xs font-medium text-neutral-400">
           Type: {witnessType}
+        </span>
+        <span className="text-xs text-neutral-400">
+          Can be used for:{" "}
+          {matchingRequirements.map((r) => r.inputKey).join(", ")}
         </span>
       </div>
     </div>
@@ -177,37 +209,44 @@ export const SelectionForm = ({
   loading,
 }: SelectionFormProps) => {
   const { t } = useTranslation()
-  const [selectedCredentials, setSelectedCredentials] = useState<any[]>([])
+  const [selectedCredentials, setSelectedCredentials] = useState<
+    Map<string, { credential: any; credentialId: string }>
+  >(new Map())
 
-  const credentials = React.useMemo(() => {
+  const { credentials, requirements } = React.useMemo(() => {
     try {
       const originalPayload = recoverOriginalPayload(payload)
       const parsedPayload = JSON.parse(originalPayload)
 
-      // Get requested credential requirements
       const credentialRequirements = isPayloadWithPresentation(parsedPayload)
-        ? getRequestedCredentialInfo(parsedPayload.presentationRequest)
+        ? getCredentialRequirements(parsedPayload.presentationRequest)
         : []
 
-      // Extract credentials
       const storedCredentials = Array.isArray(parsedPayload)
         ? parsedPayload
         : isPayloadWithPresentation(parsedPayload)
           ? parsedPayload.storedCredentials
           : []
 
-      // Filter credentials based on matching both type and required data fields
-      const filteredCredentials = storedCredentials.filter((credential: any) =>
-        credentialRequirements.some((req) =>
-          credentialMatchesRequest(credential, req.type, req.dataFields),
-        ),
-      )
+      const validCredentials = storedCredentials
+        .filter(
+          (credential: any) =>
+            findMatchingRequirements(credential, credentialRequirements)
+              .length > 0,
+        )
+        .map((credential: any) => ({
+          id: createCredentialHash(credential),
+          credential,
+          matchingRequirements: findMatchingRequirements(
+            credential,
+            credentialRequirements,
+          ),
+        }))
 
-      return filteredCredentials.map((credential: any) => ({
-        // TODO: use correct id
-        id: createCredentialHash(credential),
-        credential,
-      }))
+      return {
+        credentials: validCredentials,
+        requirements: credentialRequirements,
+      }
     } catch (error: any) {
       throw Error(`Issue with parsing: ${error}: ${payload}`)
     }
@@ -215,48 +254,104 @@ export const SelectionForm = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(JSON.stringify(selectedCredentials.map((c) => c.credential)))
+    // Create an array of credentials in the same order as the requirements
+    const orderedCredentials = requirements
+      .map((req) => {
+        const selected = selectedCredentials.get(req.inputKey)
+        return selected?.credential
+      })
+      .filter(Boolean)
+
+    onSubmit(JSON.stringify(orderedCredentials))
   }
 
-  const handleToggleCredential = (credentialData: any) => {
-    setSelectedCredentials((prev) =>
-      prev.some((c) => c.id === credentialData.id)
-        ? prev.filter((c) => c.id !== credentialData.id)
-        : [...prev, credentialData],
-    )
+  const handleCredentialSelect = (credentialData: any, inputKey: string) => {
+    setSelectedCredentials((prev) => {
+      const newMap = new Map(prev)
+
+      // Update or add the selection for this input
+      newMap.set(inputKey, {
+        credential: credentialData.credential,
+        credentialId: credentialData.id,
+      })
+
+      return newMap
+    })
   }
 
-  const isSelected = (credentialData: any) => {
-    return selectedCredentials.some((c) => c.id === credentialData.id)
+  const isSelectedFor = (credentialId: string, inputKey: string) => {
+    const selection = selectedCredentials.get(inputKey)
+    return selection?.credentialId === credentialId
   }
+
+  const allRequirementsMet = requirements.every((req) =>
+    selectedCredentials.has(req.inputKey),
+  )
 
   return (
     <form
       onSubmit={handleSubmit}
       className="flex flex-1 flex-col items-center gap-2 w-full"
     >
-      <div className="w-full overflow-y-auto max-w-[448px] max-h-48 flex flex-col gap-2 bg-base-200 p-2 rounded-2xl">
-        {credentials.map((credentialData) => (
-          <label
-            key={credentialData.id}
-            className="flex items-center gap-2 p-3 rounded-2xl bg-base-200 cursor-pointer hover:bg-base-300 transition-colors"
-          >
-            <input
-              type="checkbox"
-              className="checkbox checkbox-xs"
-              checked={isSelected(credentialData)}
-              onChange={() => handleToggleCredential(credentialData)}
-              disabled={loading}
-            />
-            <CredentialDisplay credential={credentialData.credential} />
-          </label>
-        ))}
+      <div className="w-full space-y-4 overflow-y-auto bg-base-200 max-h-[280px] mb-4 rounded-2xl">
+        {requirements.map((requirement) => {
+          const matchingCredentials = credentials.filter((cred) =>
+            cred.matchingRequirements.some(
+              (req) => req.inputKey === requirement.inputKey,
+            ),
+          )
+
+          return (
+            <div key={requirement.inputKey} className="space-y-2">
+              <h3 className="text-sm font-medium pt-1 pl-1">
+                Select credential for {requirement.inputKey}:
+              </h3>
+              <div className="flex flex-col gap-2 bg-base-100 p-2 rounded-2xl">
+                {matchingCredentials.length > 0 ? (
+                  matchingCredentials.map((credentialData) => (
+                    <label
+                      key={`${credentialData.id}-${requirement.inputKey}`}
+                      className="flex items-center gap-2 p-3 rounded-2xl bg-base-100 cursor-pointer hover:bg-base-300 transition-colors"
+                    >
+                      <input
+                        type="radio"
+                        name={requirement.inputKey}
+                        className="radio radio-xs"
+                        checked={isSelectedFor(
+                          credentialData.id,
+                          requirement.inputKey,
+                        )}
+                        onChange={() =>
+                          handleCredentialSelect(
+                            credentialData,
+                            requirement.inputKey,
+                          )
+                        }
+                        disabled={loading}
+                      />
+                      <CredentialDisplay
+                        credential={credentialData.credential}
+                        matchingRequirements={
+                          credentialData.matchingRequirements
+                        }
+                      />
+                    </label>
+                  ))
+                ) : (
+                  <div className="p-4 text-sm text-neutral-500 text-center">
+                    No matching credentials found for this input
+                  </div>
+                )}
+              </div>
+            </div>
+          )
+        })}
       </div>
 
       <button
         type="submit"
         className="btn btn-primary max-w-48 w-full"
-        disabled={loading || selectedCredentials.length === 0}
+        disabled={loading || !allRequirementsMet}
       >
         {submitButtonLabel ?? t("webConnector.continue")}
       </button>

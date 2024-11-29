@@ -60,7 +60,7 @@ export const WebConnectorView = ({
                 </div>
               </Skeleton>
             </div>
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center pt-4">
               {inputType === "confirmation" && (
                 <ConfirmationForm
                   onConfirm={onConfirm}
