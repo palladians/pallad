@@ -27,6 +27,11 @@ interface PayloadWithPresentation {
                 _type: "Struct"
                 properties: Record<string, unknown>
               }
+            | {
+                _type: "DynamicRecord"
+                maxEntries: number
+                knownShape: Record<string, unknown>
+              }
         }
       >
     }
@@ -80,13 +85,18 @@ const isPayloadWithPresentation = (
   )
 }
 
-// Extract data fields from input data which could be direct or nested in properties
+// Extract data fields from input data which could be direct, nested in properties, or in knownShape
 const extractDataFields = (data: any): string[] => {
   if (!data) return []
 
   // Handle Struct type with properties
   if (data._type === "Struct" && data.properties) {
     return Object.keys(data.properties)
+  }
+
+  // Handle DynamicRecord with knownShape
+  if (data._type === "DynamicRecord" && data.knownShape) {
+    return Object.keys(data.knownShape)
   }
 
   // Handle direct data fields
