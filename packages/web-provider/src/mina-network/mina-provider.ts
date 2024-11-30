@@ -480,7 +480,7 @@ export const createMinaProvider = async (): Promise<
               inputType: "confirmation",
               metadata: {
                 title: "Presentation request",
-                payload: JSON.stringify(presentationRequest),
+                payload: JSON.stringify({ presentationRequest }),
               },
             })
 
