@@ -184,7 +184,7 @@ const CredentialDisplay = ({
   return (
     <div className="space-y-2">
       {description && <p className="text-xs text-primary">{description}</p>}
-      <pre className="text-2xs whitespace-pre-wrap break-all bg-neutral-900 p-2 rounded">
+      <pre className="text-2xs whitespace-pre-wrap break-all bg-neutral-900 p-2 rounded-2xl">
         {JSON.stringify(simplifiedData, null, 2)}
       </pre>
       <div className="flex flex-col gap-1">
@@ -293,7 +293,7 @@ export const SelectionForm = ({
       onSubmit={handleSubmit}
       className="flex flex-1 flex-col items-center gap-2 w-full"
     >
-      <div className="w-full space-y-4 overflow-y-auto bg-base-200 max-h-[280px] mb-4 rounded-2xl">
+      <div className="w-full space-y-4 overflow-y-auto bg-base-200 max-h-[240px] mb-4 rounded-2xl">
         {requirements.map((requirement) => {
           const matchingCredentials = credentials.filter((cred) =>
             cred.matchingRequirements.some(
