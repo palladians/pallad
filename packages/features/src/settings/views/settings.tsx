@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 const Links = [
-  // TODO: Uncomment when we add multi-account
   // {
   //   label: "Wallet",
   //   description: "Management and networks",

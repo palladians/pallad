@@ -61,23 +61,3 @@ export const LanguageView = ({ onCloseClicked }: LanguageViewProps) => {
     </AppLayout>
   )
 }
-
-/* {Languages.map((language) => {
-  const active = language === selected
-  return (
-    <button
-      key={language}
-      type="button"
-      className={clsx(
-        "w-full pl-6 pr-4 py-4 flex items-center justify-between rounded-2xl hover:bg-secondary",
-        active && "bg-secondary",
-      )}
-      onClick={() => setSelected(language)}
-    >
-      <p>{language}</p>
-      {active && (
-        <Check width={24} height={24} className="text-[#F6C177]" />
-      )}
-    </button>
-  )
-})} */
