@@ -177,7 +177,7 @@ const formatClaimValues = (
   return formatted
 }
 
-const isPresentationRequest = (
+const containsPresentationRequest = (
   value: unknown,
 ): value is { presentationRequest: any } => {
   if (typeof value !== "object" || value === null) return false
@@ -217,21 +217,23 @@ export const renderPayload = (payload: string) => {
     const parsedPayload = JSON.parse(originalPayload)
 
     // Handle presentation request format
-    if (isPresentationRequest(parsedPayload)) {
+    if (containsPresentationRequest(parsedPayload)) {
       const request = parsedPayload.presentationRequest
       const formatted = {
+        ...("origin" in parsedPayload ? { origin: parsedPayload.origin } : {}),
         type: request.type,
+        logic: formatLogicNode(request.spec.logic.assert),
+        outputClaim: formatLogicNode(request.spec.logic.outputClaim),
         inputs: formatInputs(request.spec.inputs),
-        logic: {
-          assert: formatLogicNode(request.spec.logic.assert),
-          outputClaim: formatLogicNode(request.spec.logic.outputClaim),
-        },
         claims: formatClaimValues(request.claims),
         context: request.inputContext
           ? {
               type: request.inputContext.type,
               action: request.inputContext.action,
               serverNonce: request.inputContext.serverNonce.value,
+              ...("verifierIdentity" in parsedPayload
+                ? { verifierIdentity: parsedPayload.verifierIdentity }
+                : {}),
             }
           : null,
       }
