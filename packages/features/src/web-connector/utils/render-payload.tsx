@@ -35,35 +35,58 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
 
   switch (node.type) {
     case "and":
-      if (!node.inputs?.length) return "all conditions must be true"
+      if (!node.inputs) {
+        throw Error("AND node must have 'inputs' array")
+      }
+      if (node.inputs.length === 0) {
+        throw Error("AND node must have at least one input")
+      }
       return `${indent}All of these conditions must be true:\n${node.inputs
         .map((n) => `${indent}- ${formatLogicNode(n, level + 1)}`)
         .join("\n")}`
+
     case "or":
-      if (!node.left || !node.right) return "any condition must be true"
+      if (!node.left || !node.right) {
+        throw Error("OR node must have both 'left' and 'right' nodes")
+      }
       return `${indent}Either:\n${indent}- ${formatLogicNode(node.left, level + 1)}\n${indent}Or:\n${indent}- ${formatLogicNode(node.right, level + 1)}`
+
     case "equals":
-      return node.left && node.right
-        ? `${formatLogicNode(node.left)} equals ${formatLogicNode(node.right)}`
-        : ""
+      if (!node.left || !node.right) {
+        throw Error("EQUALS node must have both 'left' and 'right' nodes")
+      }
+      return `${formatLogicNode(node.left)} equals ${formatLogicNode(node.right)}`
+
     case "equalsOneOf": {
-      const input = node.input ? formatLogicNode(node.input, level) : ""
+      if (!node.input) {
+        throw Error("EQUALS_ONE_OF node must have 'input' node")
+      }
+      if (!node.options) {
+        throw Error("EQUALS_ONE_OF node must have 'options'")
+      }
+      const input = formatLogicNode(node.input, level)
       const options = Array.isArray(node.options)
         ? node.options.map((o) => formatLogicNode(o, level)).join(", ")
-        : node.options
-          ? formatLogicNode(node.options, level)
-          : ""
+        : formatLogicNode(node.options, level)
       return `${options} contains ${input}`
     }
+
     case "lessThan":
-      return node.left && node.right
-        ? `${formatLogicNode(node.left)} < ${formatLogicNode(node.right)}`
-        : ""
+      if (!node.left || !node.right) {
+        throw Error("LESS_THAN node must have both 'left' and 'right' nodes")
+      }
+      return `${formatLogicNode(node.left)} < ${formatLogicNode(node.right)}`
+
     case "lessThanEq":
-      return node.left && node.right
-        ? `${formatLogicNode(node.left)} ≤ ${formatLogicNode(node.right)}`
-        : ""
+      if (!node.left || !node.right) {
+        throw Error("LESS_THAN_EQ node must have both 'left' and 'right' nodes")
+      }
+      return `${formatLogicNode(node.left)} ≤ ${formatLogicNode(node.right)}`
+
     case "property": {
+      if (!node.key) {
+        throw Error("PROPERTY node must have 'key'")
+      }
       if (
         node.inner?.type === "property" &&
         node.inner.key === "data" &&
@@ -72,35 +95,47 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
       ) {
         return `${node.inner.inner.key}.${node.key}`
       }
-      if (
-        node.key === "data" &&
-        node.inner?.type === "property" &&
-        node.inner.key === "credential" &&
-        node.inner.inner?.type === "root"
-      ) {
-        return "credential"
-      }
       if (node.inner?.type === "root") {
-        return node.key || ""
+        return node.key
       }
       return `${node.key}${node.inner ? `.${formatLogicNode(node.inner)}` : ""}`
     }
+
     case "root":
       return ""
+
     case "hash":
-      return `hash(${node.inputs?.map((n) => formatLogicNode(n, level)).join(", ") || ""})`
+      if (!node.inputs) {
+        throw Error("HASH node must have 'inputs' array")
+      }
+      return `hash(${node.inputs.map((n) => formatLogicNode(n, level)).join(", ")})`
+
     case "issuer":
-      return `issuer(${node.credentialKey || ""})`
+      if (!node.credentialKey) {
+        throw Error("ISSUER node must have 'credentialKey'")
+      }
+      return `issuer(${node.credentialKey})`
+
     case "not":
-      return `not ${node.inner ? formatLogicNode(node.inner, level) : ""}`
+      if (!node.inner) {
+        throw Error("NOT node must have 'inner' node")
+      }
+      return `not ${formatLogicNode(node.inner, level)}`
+
     case "record": {
-      if (!node.data || Object.keys(node.data).length === 0) return ""
+      if (!node.data) {
+        throw Error("RECORD node must have 'data' object")
+      }
+      if (Object.keys(node.data).length === 0) {
+        throw Error("RECORD node must have at least one data field")
+      }
       return Object.entries(node.data)
         .map(([key, value]) => `${key}: ${formatLogicNode(value, level)}`)
         .join(`\n${indent}`)
     }
+
     default:
-      return JSON.stringify(node)
+      throw Error(`Unknown node type: ${node.type}`)
   }
 }
 
@@ -130,7 +165,7 @@ const formatInputsHumanReadable = (inputs: Record<string, any>): string => {
     ([_, input]) => input.type === "claim",
   )
   if (claims.length > 0) {
-    sections.push("\nRequired claims:")
+    sections.push("\nClaims:")
     for (const [key, input] of claims) {
       sections.push(`- ${key}: ${input.data._type}`)
     }
