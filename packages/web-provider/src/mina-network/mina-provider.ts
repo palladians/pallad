@@ -437,7 +437,6 @@ export const createMinaProvider = async (): Promise<
             }
 
             // TODO: hash should be stored with the credential
-            // TODO: handle metadata
             // Generate hash of the new credential
             const newCredentialHash = createCredentialHash(credential)
 
