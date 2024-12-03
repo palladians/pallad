@@ -11,12 +11,11 @@ type LogicNode = {
   credentialKey?: string
   input?: LogicNode
   options?: LogicNode[] | LogicNode
-  condition: LogicNode
-  thenNode: LogicNode
-  elseNode: LogicNode
+  condition?: LogicNode
+  thenNode?: LogicNode
+  elseNode?: LogicNode
 }
 
-// Extract fields from credential shape
 const extractCredentialFields = (data: any): string[] => {
   if (!data) return []
 
@@ -31,65 +30,40 @@ const extractCredentialFields = (data: any): string[] => {
   return Object.keys(data)
 }
 
-const formatLogicNode = (node: LogicNode, indent = ""): string => {
-  const nextIndent = `${indent}  `
+const formatLogicNode = (node: LogicNode, level = 0): string => {
+  const indent = "  ".repeat(level)
 
   switch (node.type) {
     case "and":
-      if (!node.inputs?.length) return "AND()"
-      return `AND(\n${nextIndent}${node.inputs.map((n) => formatLogicNode(n, nextIndent)).join(`,\n${nextIndent}`)}\n${indent})`
+      if (!node.inputs?.length) return "all conditions must be true"
+      return `${indent}All of these conditions must be true:\n${node.inputs
+        .map((n) => `${indent}- ${formatLogicNode(n, level + 1)}`)
+        .join("\n")}`
     case "or":
-      if (!node.left || !node.right) return "OR()"
-      return `OR(\n${nextIndent}${formatLogicNode(node.left, nextIndent)},\n${nextIndent}${formatLogicNode(node.right, nextIndent)}\n${indent})`
+      if (!node.left || !node.right) return "any condition must be true"
+      return `${indent}Either:\n${indent}- ${formatLogicNode(node.left, level + 1)}\n${indent}Or:\n${indent}- ${formatLogicNode(node.right, level + 1)}`
     case "equals":
-      return `EQUALS(${node.left && node.right ? [formatLogicNode(node.left, nextIndent), formatLogicNode(node.right, nextIndent)].join(", ") : ""})`
+      return node.left && node.right
+        ? `${formatLogicNode(node.left)} equals ${formatLogicNode(node.right)}`
+        : ""
     case "equalsOneOf": {
-      const input = node.input ? formatLogicNode(node.input, nextIndent) : ""
+      const input = node.input ? formatLogicNode(node.input, level) : ""
       const options = Array.isArray(node.options)
-        ? `[\n${nextIndent}${node.options.map((o) => formatLogicNode(o, nextIndent)).join(`,\n${nextIndent}`)}\n${indent}]`
+        ? node.options.map((o) => formatLogicNode(o, level)).join(", ")
         : node.options
-          ? formatLogicNode(node.options, nextIndent)
+          ? formatLogicNode(node.options, level)
           : ""
-      return `EQUALS_ONE_OF(${input}, ${options})`
+      return `${options} contains ${input}`
     }
     case "lessThan":
       return node.left && node.right
-        ? `(${formatLogicNode(node.left)} < ${formatLogicNode(node.right)})`
+        ? `${formatLogicNode(node.left)} < ${formatLogicNode(node.right)}`
         : ""
     case "lessThanEq":
       return node.left && node.right
-        ? `(${formatLogicNode(node.left)} ≤ ${formatLogicNode(node.right)})`
+        ? `${formatLogicNode(node.left)} ≤ ${formatLogicNode(node.right)}`
         : ""
-    case "add":
-      return node.left && node.right
-        ? `(${formatLogicNode(node.left)} + ${formatLogicNode(node.right)})`
-        : ""
-    case "sub":
-      return node.left && node.right
-        ? `(${formatLogicNode(node.left)} - ${formatLogicNode(node.right)})`
-        : ""
-    case "mul":
-      return node.left && node.right
-        ? `(${formatLogicNode(node.left)} × ${formatLogicNode(node.right)})`
-        : ""
-    case "div":
-      return node.left && node.right
-        ? `(${formatLogicNode(node.left)} ÷ ${formatLogicNode(node.right)})`
-        : ""
-    case "constant":
-      return node.data ? JSON.stringify(node.data.value || node.data) : ""
-    case "ifThenElse":
-      if (!node.condition || !node.thenNode || !node.elseNode) return ""
-      return [
-        "IF",
-        formatLogicNode(node.condition, nextIndent),
-        "THEN",
-        formatLogicNode(node.thenNode, nextIndent),
-        "ELSE",
-        formatLogicNode(node.elseNode, nextIndent),
-      ].join(`\n${nextIndent}`)
     case "property": {
-      // Check if this is accessing a specific property of a credential
       if (
         node.inner?.type === "property" &&
         node.inner.key === "data" &&
@@ -98,7 +72,6 @@ const formatLogicNode = (node: LogicNode, indent = ""): string => {
       ) {
         return `${node.inner.inner.key}.${node.key}`
       }
-      // Check if this is accessing the full credential
       if (
         node.key === "data" &&
         node.inner?.type === "property" &&
@@ -115,66 +88,81 @@ const formatLogicNode = (node: LogicNode, indent = ""): string => {
     case "root":
       return ""
     case "hash":
-      return `HASH(${node.inputs?.map((n) => formatLogicNode(n, nextIndent)).join(", ") || ""})`
+      return `hash(${node.inputs?.map((n) => formatLogicNode(n, level)).join(", ") || ""})`
     case "issuer":
-      return `ISSUER(${node.credentialKey || ""})`
+      return `issuer(${node.credentialKey || ""})`
     case "not":
-      return `NOT(${node.inner ? formatLogicNode(node.inner, nextIndent) : ""})`
+      return `not ${node.inner ? formatLogicNode(node.inner, level) : ""}`
     case "record": {
-      if (!node.data || Object.keys(node.data).length === 0) return "RECORD()"
-      return `{\n${nextIndent}${Object.entries(node.data)
-        .map(([key, value]) => `${key}: ${formatLogicNode(value, nextIndent)}`)
-        .join(`,\n${nextIndent}`)}\n${indent}}`
+      if (!node.data || Object.keys(node.data).length === 0) return ""
+      return Object.entries(node.data)
+        .map(([key, value]) => `${key}: ${formatLogicNode(value, level)}`)
+        .join(`\n${indent}`)
     }
     default:
       return JSON.stringify(node)
   }
 }
 
-const formatInputs = (inputs: Record<string, any>): Record<string, any> => {
-  const grouped: Record<string, any> = {
-    credentials: {},
-    claims: {},
-    constants: {},
-  }
+const formatInputsHumanReadable = (inputs: Record<string, any>): string => {
+  const sections: string[] = []
 
-  for (const [key, input] of Object.entries(inputs)) {
-    switch (input.type) {
-      case "credential":
-        grouped.credentials[key] = {
-          type: input.credentialType,
-          fields: extractCredentialFields(input.data),
-        }
-        break
-      case "claim":
-        grouped.claims[key] = input.data._type
-        break
-      case "constant":
-        grouped.constants[key] = {
-          type: input.data._type,
-          value: input.value,
-        }
-        break
+  // Handle credentials
+  const credentials = Object.entries(inputs).filter(
+    ([_, input]) => input.type === "credential",
+  )
+  if (credentials.length > 0) {
+    sections.push("Required credentials:")
+    for (const [key, input] of credentials) {
+      const fields = extractCredentialFields(input.data)
+      const wrappedFields = fields.reduce((acc, field, i) => {
+        if (i === fields.length - 1) return acc + field
+        return `${acc + field}, `
+      }, "")
+      sections.push(
+        `- ${key} (type: ${input.credentialType}):\n  Contains: ${wrappedFields}`,
+      )
     }
   }
 
-  return grouped
+  // Handle claims
+  const claims = Object.entries(inputs).filter(
+    ([_, input]) => input.type === "claim",
+  )
+  if (claims.length > 0) {
+    sections.push("\nRequired claims:")
+    for (const [key, input] of claims) {
+      sections.push(`- ${key}: ${input.data._type}`)
+    }
+  }
+
+  // Handle constants
+  const constants = Object.entries(inputs).filter(
+    ([_, input]) => input.type === "constant",
+  )
+  if (constants.length > 0) {
+    sections.push("\nConstants:")
+    for (const [key, input] of constants) {
+      sections.push(`- ${key}: ${input.data._type} = ${input.value}`)
+    }
+  }
+
+  return sections.join("\n")
 }
 
-const formatClaimValues = (
-  claims: Record<string, any>,
-): Record<string, any> => {
-  const formatted: Record<string, any> = {}
+const formatClaimsHumanReadable = (claims: Record<string, any>): string => {
+  const sections = ["\nClaimed values:"]
 
   for (const [key, claim] of Object.entries(claims)) {
     if (claim._type === "DynamicArray" && claim.value) {
-      formatted[key] = claim.value.map((v: any) => v.value)
+      const values = claim.value.map((v: any) => v.value).join(", ")
+      sections.push(`- ${key}:\n  ${values}`)
     } else {
-      formatted[key] = claim.value
+      sections.push(`- ${key}: ${claim.value}`)
     }
   }
 
-  return formatted
+  return sections.join("\n")
 }
 
 const containsPresentationRequest = (
@@ -219,33 +207,28 @@ export const renderPayload = (payload: string) => {
     // Handle presentation request format
     if (containsPresentationRequest(parsedPayload)) {
       const request = parsedPayload.presentationRequest
-      const formatted = {
-        ...("origin" in parsedPayload ? { origin: parsedPayload.origin } : {}),
-        type: request.type,
-        logic: formatLogicNode(request.spec.logic.assert),
-        outputClaim: formatLogicNode(request.spec.logic.outputClaim),
-        inputs: formatInputs(request.spec.inputs),
-        claims: formatClaimValues(request.claims),
-        context: request.inputContext
-          ? {
-              type: request.inputContext.type,
-              action: request.inputContext.action,
-              serverNonce: request.inputContext.serverNonce.value,
-              ...("verifierIdentity" in parsedPayload
-                ? { verifierIdentity: parsedPayload.verifierIdentity }
-                : {}),
-            }
-          : null,
-      }
 
-      let jsonString = JSON.stringify(formatted, null, 2)
-      jsonString = jsonString.replace(/\\n/g, "\n")
+      const formatted = [
+        `Type: ${request.type}`,
+        "",
+        formatInputsHumanReadable(request.spec.inputs),
+        "",
+        `Requirements:\n${formatLogicNode(request.spec.logic.assert, 0)}`,
+        "",
+        `Output:\n${formatLogicNode(request.spec.logic.outputClaim, 0)}`,
+        formatClaimsHumanReadable(request.claims),
+        request.inputContext
+          ? `\nContext:\n- Type: ${request.inputContext.type}\n- Action: ${
+              request.inputContext.action
+            }\n- Server Nonce: ${request.inputContext.serverNonce.value}`
+          : "",
+        "origin" in parsedPayload ? `\nOrigin: ${parsedPayload.origin}` : "",
+        "verifierIdentity" in parsedPayload
+          ? `\nVerifier Identity: ${parsedPayload.verifierIdentity}`
+          : "",
+      ].join("\n")
 
-      return (
-        <div>
-          <pre className="whitespace-pre-wrap break-all">{jsonString}</pre>
-        </div>
-      )
+      return <div className="whitespace-pre-wrap break-all">{formatted}</div>
     }
 
     // Handle credential format
