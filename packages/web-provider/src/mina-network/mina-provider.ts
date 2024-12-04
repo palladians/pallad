@@ -470,16 +470,24 @@ export const createMinaProvider = async (): Promise<
         })
         .with({ method: "mina_requestPresentation" }, async ({ params }) => {
           try {
-            const [presentationRequest] = params
-            if (!presentationRequest)
-              throw createProviderRpcError(4000, "Invalid Request")
+            const [request] = params
+            if (!request) throw createProviderRpcError(4000, "Invalid Request")
+
+            const { presentationRequest, zkAppAccount } = request
+
+            const verifierIdentity =
+              presentationRequest.type === "zk-app" ? zkAppAccount : origin
 
             // Ask for approval to proceed with the presentation request
             const { value: userConfirmed } = await showUserPrompt<boolean>({
               inputType: "confirmation",
               metadata: {
                 title: "Presentation request",
-                payload: JSON.stringify({ origin, presentationRequest }),
+                payload: JSON.stringify({
+                  origin,
+                  presentationRequest,
+                  verifierIdentity: verifierIdentity,
+                }),
               },
             })
 
@@ -520,8 +528,7 @@ export const createMinaProvider = async (): Promise<
               metadata: {
                 title: "Create presentation",
                 payload: JSON.stringify({
-                  // TODO: handle zk-app verifierIdentity
-                  verifierIdentity: origin,
+                  verifierIdentity,
                   presentationRequest,
                   selectedCredentials: JSON.parse(selectedCredentials),
                 }),

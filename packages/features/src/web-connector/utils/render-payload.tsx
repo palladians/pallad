@@ -30,6 +30,21 @@ const extractCredentialFields = (data: any): string[] => {
   return Object.keys(data)
 }
 
+const buildPropertyPath = (node: LogicNode): string => {
+  const parts: string[] = []
+  let currentNode: LogicNode | undefined = node
+
+  while (currentNode?.type === "property") {
+    if (!currentNode.key) {
+      throw Error("PROPERTY node must have 'key'")
+    }
+    parts.unshift(currentNode.key)
+    currentNode = currentNode.inner
+  }
+
+  return parts.join(".")
+}
+
 const formatLogicNode = (node: LogicNode, level = 0): string => {
   const indent = "  ".repeat(level)
 
@@ -87,18 +102,14 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
       if (!node.key) {
         throw Error("PROPERTY node must have 'key'")
       }
-      if (
-        node.inner?.type === "property" &&
-        node.inner.key === "data" &&
-        node.inner.inner?.type === "property" &&
-        node.inner.inner.key
-      ) {
-        return `${node.inner.inner.key}.${node.key}`
-      }
+
+      // If this is the root property, just return the path
       if (node.inner?.type === "root") {
         return node.key
       }
-      return `${node.key}${node.inner ? `.${formatLogicNode(node.inner)}` : ""}`
+
+      // For nested properties, build the complete path
+      return buildPropertyPath(node)
     }
 
     case "root":
@@ -202,7 +213,12 @@ const formatClaimsHumanReadable = (claims: Record<string, any>): string => {
 
 const containsPresentationRequest = (
   value: unknown,
-): value is { presentationRequest: any } => {
+): value is {
+  presentationRequest: any
+  verifierIdentity:
+    | string
+    | { address: string; tokenId: string; network: "devnet" | "mainnet" }
+} => {
   if (typeof value !== "object" || value === null) return false
   return "presentationRequest" in value
 }
@@ -243,6 +259,13 @@ export const renderPayload = (payload: string) => {
     if (containsPresentationRequest(parsedPayload)) {
       const request = parsedPayload.presentationRequest
 
+      // Construct verifierUrl if it's a zk-app request and verifierIdentity is a zkAppAccount
+      const verifierUrl =
+        request.type === "zk-app" &&
+        typeof parsedPayload.verifierIdentity === "object"
+          ? `minascan.io/${parsedPayload.verifierIdentity.network}/account/${parsedPayload.verifierIdentity.address}`
+          : undefined
+
       const formatted = [
         `Type: ${request.type}`,
         "",
@@ -253,14 +276,17 @@ export const renderPayload = (payload: string) => {
         `Output:\n${formatLogicNode(request.spec.logic.outputClaim, 0)}`,
         formatClaimsHumanReadable(request.claims),
         request.inputContext
-          ? `\nContext:\n- Type: ${request.inputContext.type}\n- Action: ${
-              request.inputContext.action
-            }\n- Server Nonce: ${request.inputContext.serverNonce.value}`
+          ? `\nContext:\n- Type: ${request.inputContext.type}\n- Action: ${typeof request.inputContext.action === "string" ? request.inputContext.action : request.inputContext.action.value}\n- Server Nonce: ${request.inputContext.serverNonce.value}`
           : "",
         "origin" in parsedPayload ? `\nOrigin: ${parsedPayload.origin}` : "",
-        "verifierIdentity" in parsedPayload
-          ? `\nVerifier Identity: ${parsedPayload.verifierIdentity}`
+        parsedPayload.verifierIdentity
+          ? `\nVerifier Identity: ${
+              request.type === "zk-app"
+                ? JSON.stringify(parsedPayload.verifierIdentity, null, 2)
+                : parsedPayload.verifierIdentity
+            }`
           : "",
+        verifierUrl ? `\nSee verifier on Minascan: https://${verifierUrl}` : "",
       ].join("\n")
 
       return <div className="whitespace-pre-wrap break-all">{formatted}</div>

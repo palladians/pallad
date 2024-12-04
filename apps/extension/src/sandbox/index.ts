@@ -30,7 +30,13 @@ type Result = {
 type PresentationRequestPayload = {
   presentationRequest: string
   selectedCredentials: string[]
-  verifierIdentity: string
+  verifierIdentity:
+    | string
+    | {
+        address: string
+        tokenId: string
+        network: "devnet" | "mainnet"
+      }
 }
 
 const recoverOriginalPayload = (sanitizedPayload: string) => {
@@ -130,12 +136,17 @@ window.addEventListener("message", async (event) => {
               // compile
               const compiled = await Presentation.compile(deserialized)
 
+              // format verifierIdentity
+              const verifierIdentityString =
+                requestType === "zk-app"
+                  ? JSON.stringify(verifierIdentity)
+                  : (verifierIdentity as string)
+
               // prepare presentation request and get fields to sign
               const prepared = await Presentation.prepare({
                 request: compiled,
                 credentials: storedCredentials,
-                // TODO: handle zk-app verifierIdentity
-                context: { verifierIdentity },
+                context: { verifierIdentity: verifierIdentityString },
               })
 
               // ask wallet to sign fields
