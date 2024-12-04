@@ -1,4 +1,4 @@
-import { useVault } from "@palladxyz/vault"
+import { useVault } from "@palladco/vault"
 import clsx from "clsx"
 import { CopyIcon, ExternalLinkIcon } from "lucide-react"
 import { toast } from "sonner"

@@ -1,5 +1,5 @@
 import { truncateString } from "@/common/lib/string"
-import { useVault } from "@palladxyz/vault"
+import { useVault } from "@palladco/vault"
 import clsx from "clsx"
 import { CopyIcon, ExternalLinkIcon, UserPlusIcon } from "lucide-react"
 import { Link } from "react-router-dom"

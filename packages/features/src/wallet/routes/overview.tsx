@@ -1,4 +1,4 @@
-import { useFiatPrice } from "@palladxyz/offchain-data"
+import { useFiatPrice } from "@palladco/offchain-data"
 
 import { useAccount } from "@/common/hooks/use-account"
 import { useTransactions } from "@/common/hooks/use-transactions"

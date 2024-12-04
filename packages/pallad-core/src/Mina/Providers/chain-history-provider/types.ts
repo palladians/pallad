@@ -1,5 +1,5 @@
-import type { Mina } from "@palladxyz/mina-core"
-import type { Range } from "@palladxyz/util"
+import type { Mina } from "@palladco/mina-core"
+import type { Range } from "@palladco/util"
 
 import type { Provider } from "../.."
 

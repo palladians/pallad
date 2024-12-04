@@ -1,12 +1,12 @@
-# @palladxyz/vault
+# @palladco/vault
 
 ## Introduction
 
-The `@palladxyz/vault` package offers a robust solution for managing key agents, credentials, and accounts within the wallet.
+The `@palladco/vault` package offers a robust solution for managing key agents, credentials, and accounts within the wallet.
 
 ## `useVault`: Central Interface for Wallet Management
 
-The `useVault` hook is the core interface of the `@palladxyz/vault` package, encapsulating the functionalities of account, credential, and key agent management in an integrated manner. It utilizes `zustand` for state management and `immer` for immutable state updates.
+The `useVault` hook is the core interface of the `@palladco/vault` package, encapsulating the functionalities of account, credential, and key agent management in an integrated manner. It utilizes `zustand` for state management and `immer` for immutable state updates.
 
 ## Features
 
@@ -17,8 +17,8 @@ The `useVault` hook is the core interface of the `@palladxyz/vault` package, enc
 ## Example Usage
 
 ```ts
-import { useVault } from '@palladxyz/vault';
-import { Network } from '@palladxyz/key-management';
+import { useVault } from '@palladco/vault';
+import { Network } from '@palladco/key-management';
 
 // Example usage within a component or function
 const MyComponent = () => {

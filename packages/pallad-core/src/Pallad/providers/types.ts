@@ -1,4 +1,4 @@
-import type { Mina } from "@palladxyz/mina-core"
+import type { Mina } from "@palladco/mina-core"
 import type { Address, GetTransactionReturnType, Hash } from "viem"
 
 export type TransactionHash = Mina.TxId[] | Hash[]
