@@ -1,6 +1,6 @@
 # @palladxyz/mina-core
 
-@palladxyz/mina-core is a TypeScript package designed for helping other libraries to interact with Mina. It provides interfaces & types for many the main data strcutures of Mina that are relevant for wallets and applications. This includes providers that retrieve account information, process transaction history, submit transactions, and fetch health checks.
+@palladxyz/mina-core is a TypeScript package designed for helping other libraries to interact with Mina. It provides interfaces & types for many the main data structures of Mina that are relevant for wallets and applications. This includes providers that retrieve account information, process transaction history, submit transactions, and fetch health checks.
 
 ## Installation
 
