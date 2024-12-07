@@ -1,4 +1,4 @@
-import { securePersistence, sessionPersistence } from "@palladxyz/vault"
+import { securePersistence, sessionPersistence } from "@palladco/vault"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 

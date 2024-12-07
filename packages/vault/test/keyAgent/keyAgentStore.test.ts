@@ -1,15 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test"
 import { utf8ToBytes } from "@noble/hashes/utils"
-import { mnemonic } from "@palladxyz/common"
+import { mnemonic } from "@palladco/common"
 import {
   type ChainOperationArgs,
   type FromBip39MnemonicWordsProps,
   type GroupedCredentials,
   type MinaDerivationArgs,
   generateMnemonicWords,
-} from "@palladxyz/key-management"
-import type { Mina } from "@palladxyz/mina-core"
-import { Network } from "@palladxyz/pallad-core"
+} from "@palladco/key-management"
+import type { Mina } from "@palladco/mina-core"
+import { Network } from "@palladco/pallad-core"
 import { act, renderHook } from "@testing-library/react"
 
 import { KeyAgents } from "../../src"

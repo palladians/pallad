@@ -1,4 +1,4 @@
-import type { OpaqueNumber } from "@palladxyz/util"
+import type { OpaqueNumber } from "@palladco/util"
 
 /**
  * The block number.

@@ -4,7 +4,7 @@ import type {
   TransactionsByAddressesArgs,
   TransactionsByHashesArgs,
   Tx,
-} from "@palladxyz/pallad-core"
+} from "@palladco/pallad-core"
 
 import { createChainHistoryProvider as ms } from "../blockberry-provider"
 import { createChainHistoryProvider as zs } from "../zeko-scan"

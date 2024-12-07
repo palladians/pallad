@@ -1,6 +1,6 @@
 import Logo from "@/common/assets/logo.svg?react"
 import MenuIcon from "@/common/assets/menu.svg?react"
-import { useVault } from "@palladxyz/vault"
+import { useVault } from "@palladco/vault"
 import { ChevronDownIcon, XIcon } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 

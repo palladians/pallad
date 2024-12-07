@@ -1,4 +1,4 @@
-import { type ProviderConfig, createChainProvider } from "@palladxyz/providers"
+import { type ProviderConfig, createChainProvider } from "@palladco/providers"
 
 export async function syncAccountHelper(
   get: any,

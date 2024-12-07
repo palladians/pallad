@@ -1,5 +1,5 @@
-import type { Mina } from "@palladxyz/mina-core"
-import { getPublicKey, useVault } from "@palladxyz/vault"
+import type { Mina } from "@palladco/mina-core"
+import { getPublicKey, useVault } from "@palladco/vault"
 import useSWR from "swr"
 
 export const useTransactions = () => {
