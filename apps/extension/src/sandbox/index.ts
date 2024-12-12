@@ -77,7 +77,7 @@ window.addEventListener("message", async (event) => {
               const sanitizedPayload = msg.payload
               const originalPayload = recoverOriginalPayload(sanitizedPayload)
               const credentialDeserialized =
-                Credential.fromJSON(originalPayload)
+                await Credential.fromJSON(originalPayload)
 
               await Credential.validate(credentialDeserialized)
 
@@ -114,11 +114,13 @@ window.addEventListener("message", async (event) => {
                 JSON.stringify(presentationRequest)
 
               // create mina-credentials StoredCredential[] from selectedCredentials
-              const storedCredentials = selectedCredentials.map(
-                (credential) => {
-                  return Credential.fromJSON(JSON.stringify(credential))
-                },
-              )
+              const storedCredentials = []
+              for (const credential of selectedCredentials) {
+                const stored = await Credential.fromJSON(
+                  JSON.stringify(credential),
+                )
+                storedCredentials.push(stored)
+              }
 
               // parse presentation request
               const parsedPresentationRequest = JSON.parse(
@@ -176,20 +178,20 @@ window.addEventListener("message", async (event) => {
               // serialize presentation
               const serializedPresentation = Presentation.toJSON(presentation)
 
-              // TODO: delete later, only used for testing verification
-              const receivedPresentationDeserialized = Presentation.fromJSON(
-                serializedPresentation,
-              )
+              // // TODO: delete later, only used for testing verification
+              // const receivedPresentationDeserialized = Presentation.fromJSON(
+              //   serializedPresentation,
+              // )
 
-              const outputClaim = await Presentation.verify(
-                deserialized,
-                receivedPresentationDeserialized,
-                { verifierIdentity: "http://localhost:5173" },
-              )
+              // const outputClaim = await Presentation.verify(
+              //   deserialized,
+              //   receivedPresentationDeserialized,
+              //   { verifierIdentity: "http://localhost:5173" },
+              // )
 
               const result: Result = {
                 type: "presentation-result",
-                result: JSON.stringify(outputClaim),
+                result: serializedPresentation,
               }
               window.parent.postMessage(result, "*")
             } catch (error: any) {
