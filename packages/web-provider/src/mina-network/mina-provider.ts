@@ -114,7 +114,6 @@ export const createMinaProvider = async (): Promise<
     removeListener: _emitter.off,
     emit: _emitter.emit,
     request: async (args) => {
-      console.log(`In request: ${JSON.stringify(args)}`)
       const typedArgs: ProviderRequestParams = args
       const { context } = typedArgs
       const { origin } = context as Record<string, string>
@@ -302,9 +301,6 @@ export const createMinaProvider = async (): Promise<
         .with(
           { method: "mina_signFieldsWithPassphrase" },
           async ({ params }) => {
-            console.log(
-              `In mina_signFieldsWithPassphrase ${JSON.stringify(params)}`,
-            )
             const [fieldsAndPassphrase] = params
             if (
               !fieldsAndPassphrase ||
@@ -436,7 +432,6 @@ export const createMinaProvider = async (): Promise<
               credentialToStore = result.result
             }
 
-            // TODO: hash should be stored with the credential
             // Generate hash of the new credential
             const newCredentialHash = createCredentialHash(credential)
 

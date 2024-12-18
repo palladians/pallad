@@ -178,17 +178,6 @@ window.addEventListener("message", async (event) => {
               // serialize presentation
               const serializedPresentation = Presentation.toJSON(presentation)
 
-              // // TODO: delete later, only used for testing verification
-              // const receivedPresentationDeserialized = Presentation.fromJSON(
-              //   serializedPresentation,
-              // )
-
-              // const outputClaim = await Presentation.verify(
-              //   deserialized,
-              //   receivedPresentationDeserialized,
-              //   { verifierIdentity: "http://localhost:5173" },
-              // )
-
               const result: Result = {
                 type: "presentation-result",
                 result: serializedPresentation,
