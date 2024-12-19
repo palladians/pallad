@@ -1,5 +1,5 @@
 {
-  "extends": "@palladxyz/common/tsconfig.json",
+  "extends": "@palladco/common/tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",

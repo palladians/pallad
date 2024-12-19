@@ -1,4 +1,4 @@
-import { InvalidStringError, type OpaqueString } from "@palladxyz/util"
+import { InvalidStringError, type OpaqueString } from "@palladco/util"
 
 import type { BorrowedTypes } from ".."
 

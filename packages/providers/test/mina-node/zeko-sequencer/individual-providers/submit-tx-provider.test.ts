@@ -6,9 +6,9 @@ import {
   type GroupedCredentials,
   InMemoryKeyAgent,
   type MinaSpecificArgs,
-} from "@palladxyz/key-management"
-import { type AccountInfo, Mina, type TokenIdMap } from "@palladxyz/mina-core"
-import { Network } from "@palladxyz/pallad-core"
+} from "@palladco/key-management"
+import { type AccountInfo, Mina, type TokenIdMap } from "@palladco/mina-core"
+import { Network } from "@palladco/pallad-core"
 import type {
   Payment,
   SignedLegacy,

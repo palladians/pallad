@@ -1,5 +1,5 @@
 {
-  "name": "@palladxyz/offchain-data",
+  "name": "@palladco/offchain-data",
   "description": "Off-chain data fetching services.",
   "type": "module",
   "version": "1.0.0",
@@ -21,6 +21,6 @@
     "swr": "2.2.5"
   },
   "devDependencies": {
-    "@palladxyz/common": "workspace:*"
+    "@palladco/common": "workspace:*"
   }
 }

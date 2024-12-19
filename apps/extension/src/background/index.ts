@@ -1,4 +1,4 @@
-import { createMinaProvider } from "@palladxyz/web-provider"
+import { createMinaProvider } from "@palladco/web-provider"
 import { onMessage, sendMessage } from "webext-bridge/background"
 import { runtime, tabs } from "webextension-polyfill"
 import {
@@ -10,11 +10,14 @@ import {
   minaNetworkId,
   minaRequestAccounts,
   minaRequestNetwork,
+  minaRequestPresentation,
   minaSendTransaction,
   minaSetState,
   minaSign,
   minaSignFields,
+  minaSignFieldsWithPassphrase,
   minaSignTransaction,
+  minaStorePrivateCredential,
   minaSwitchChain,
   palladConnected,
   palladSidePanel,
@@ -40,6 +43,9 @@ onMessage("mina_signTransaction", minaSignTransaction)
 onMessage("mina_getBalance", minaGetBalance)
 onMessage("mina_createNullifier", minaCreateNullifier)
 onMessage("mina_sendTransaction", minaSendTransaction)
+onMessage("mina_storePrivateCredential", minaStorePrivateCredential)
+onMessage("mina_requestPresentation", minaRequestPresentation)
+onMessage("mina_signFieldsWithPassphrase", minaSignFieldsWithPassphrase)
 
 /**
  * Wallet handlers

@@ -1,4 +1,4 @@
-import type { CredentialName } from "@palladxyz/vault"
+import type { CredentialName } from "@palladco/vault"
 import {
   type Config,
   adjectives,
