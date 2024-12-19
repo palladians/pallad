@@ -1,0 +1,156 @@
+{
+  "addressBook": {
+    "contactName": "Nombre del contacto",
+    "receiverAddress": "Dirección del destinatario",
+    "createContact": "Crear contacto",
+    "addressBook": "Libreta de direcciones",
+    "addNewContact": "Añadir nuevo contacto",
+    "newContact": "Nuevo contacto",
+    "addContact": "Añadir contacto"
+  },
+  "components": {
+    "copyAddress": "Copiar dirección",
+    "openInMinascan": "Abrir en Minascan",
+    "transactionFee": "Tarifa de transacción:",
+    "from": "Desde",
+    "to": "Hasta",
+    "copyHash": "Copiar hash",
+    "dashboard": "Panel de control",
+    "activity": "Actividad",
+    "staking": "Staking",
+    "settings": "Configuración",
+    "adressBook": "Libreta de direcciónes"
+  },
+  "error": {
+    "errorHappend": "Ha sucedido un error.",
+    "checkServiceStatus": "Verificar el estado de los servicios.",
+    "tryAgain": "Intentar de nuevo",
+    "sendReport": "Enviar informe"
+  },
+  "lock": {
+    "unlock": "Desbloquear",
+    "spendingPassword": "Contraseña"
+  },
+  "notFound": {
+    "couldntFindPage": "Lo sentimos, pero no pudimos encontrar esta página",
+    "goToDashboard": "Ir al panel de control"
+  },
+  "onboarding": {
+    "confirm": "Confirmar",
+    "youreAlone": "Asegúrese de estar solo al hacer esto",
+    "screenNotRecording": "Confirme que su pantalla no se está grabando y que nadie más esté mirando actualmente.",
+    "termService": "Acepto los Términos de servicio.",
+    "next": "Siguiente",
+    "slow": "Lento",
+    "normal": "Normal",
+    "fast": "Rápido",
+    "walletName": "Nombre de la billetera",
+    "password": "Contraseña",
+    "yourPassword": "Tu contraseña es...",
+    "savedIt": "La guardé",
+    "wordNumber": "Número de palabra",
+    "keepThisSafe": "Guarda esto en un lugar seguro, nunca lo compartas con nadie",
+    "confirmSavedSeed": "Confirma que guardaste la semilla escribiendo esta palabra aleatoria",
+    "backedUp": "Hice una copia de seguridad de la frase semilla y reconozco que no se me mostrará de nuevo",
+    "enter12Word": "Ingresa tu frase semilla de 12 palabras en el orden correcto en las entradas a continuación",
+    "yourGateway": "Tu puerta de entrada al Minaverse.",
+    "goToDashboard": "Ir al Tablero",
+    "allDone": "¡Listo!",
+    "followUs": "Síguenos para estar al día con las actualizaciones y las comunicaciones"
+  },
+  "receive": {
+    "copyClipboard": "Copiar al portapapeles",
+    "yourAddress": "Tu dirección",
+    "comingSoon": "¡Próximamente!"
+  },
+  "send": {
+    "send": "Enviar",
+    "advanced": "Avanzado",
+    "optional": "opcional",
+    "next": "Siguiente",
+    "summary": "Resumen",
+    "amount": "Monto",
+    "fee": "Tarifa",
+    "total": "Total",
+    "close": "Cerrar"
+  },
+  "settings": {
+    "send": "Enviar",
+    "settings": "Configuración",
+    "darkMode": "Modo oscuro",
+    "sharedData": "Compartir datos",
+    "faq": "Preguntas frecuentes",
+    "support": "Soporte",
+    "termOfServices": "Condiciones del servicio",
+    "version": "Versión",
+    "buyUsACoffee": "¡Invítanos a un café!",
+    "logOut": "Cerrar sesión",
+    "needHelp": "¿Necesitas ayuda?",
+    "contactSupport": "Contacta con el soporte",
+    "anomymousData": "Solo datos anónimos",
+    "currency": "Moneda",
+    "language": "Idioma",
+    "wallet": "Billetera",
+    "display": "Mostrar",
+    "privacy": "Privacidad",
+    "about": "Acerca de",
+    "zkapps": "ZkApps autorizadas"
+  },
+  "staking": {
+    "staking": "Staking",
+    "next": "Siguiente",
+    "delegators": "Delegadores",
+    "selectValidator": "Seleccióne un validador",
+    "findValidator": "Encuentre un validador",
+    "edit": "Editar",
+    "enjoySeamless": "Disfrute de un staking sin inconvenientes y comience a ganar recompensas",
+    "stake": "Stake",
+    "blockRewards": "Bloquear recompensas",
+    "lastReward": "Última recompensa",
+    "avgReward": "Prom. recompensa",
+    "totalReward": "Recompensa total"
+  },
+  "transactions": {
+    "received": "Recibido",
+    "receive": "Recibido",
+    "sent": "Enviado",
+    "portfolio": "Billetera",
+    "staked": "Staked",
+    "amount": "Monto",
+    "transactionDetail": "Detalle de la transacción",
+    "type": "Tipo",
+    "dateTime": "Fecha y hora",
+    "kind": "Tipo",
+    "activity": "Actividad",
+    "filters": "Filtros",
+    "pendingTransactions": "Hay transacciónes pendientes.",
+    "preview": "Vista previa",
+    "nothingHere": "Aún no hay nada aquí :",
+    "detailsGetStarted": "Aquí encontrará detalles sobre sus transacciones. ¡Agrega fondos a tu billetera para comenzar!"
+  },
+  "wallet": {
+    "openBeta": "Versión beta abierta",
+    "onlyWorksForDevnet": "Solo funciona para Devnet antes del lanzamiento de Mainnet",
+    "available": "Disponible",
+    "networks": "Redes",
+    "use": "Usar",
+    "recent": "Reciente",
+    "portfolioValue": "Valor de la Billetera",
+    "transactions": "Transacciones",
+    "send": "Enviar",
+    "receive": "Recibir",
+    "seeAll": "Ver todo",
+    "noTransactionsYet": "Aún no hay transacciones"
+  },
+  "webConnector": {
+    "approve": "Aprobar",
+    "deny": "Denegar",
+    "sign": "Firmar",
+    "reject": "Rechazar"
+  },
+  "labels": {
+    "settings": "Configuración",
+    "display": "Mostrar",
+    "language": "Idioma"
+  }
+}
