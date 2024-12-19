@@ -1,5 +1,5 @@
-import type { Mina } from "@palladxyz/mina-core"
-import { Network } from "@palladxyz/pallad-core"
+import type { Mina } from "@palladco/mina-core"
+import { Network } from "@palladco/pallad-core"
 
 import type {
   Nullifier,

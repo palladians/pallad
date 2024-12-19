@@ -3,7 +3,7 @@
  * @typedef {Object} NetworkInfoStore
  */
 
-import type { ProviderConfig } from "@palladxyz/providers"
+import type { ProviderConfig } from "@palladco/providers"
 
 export type NetworkId = string
 

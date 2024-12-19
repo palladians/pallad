@@ -12,8 +12,8 @@ import { utf8ToBytes } from "@noble/hashes/utils"
 import type {
   ChainOperationArgs,
   ChainSignablePayload,
-} from "@palladxyz/key-management"
-import type { SearchQuery } from "@palladxyz/vault"
+} from "@palladco/key-management"
+import type { SearchQuery } from "@palladco/vault"
 import mitt from "mitt"
 import { P, match } from "ts-pattern"
 import { showUserPrompt } from "../utils/prompts"
@@ -43,7 +43,7 @@ export const createMinaProvider = async (): Promise<
   const _emitter = mitt()
   const _vault = createVaultService()
   const unlockWallet = async () => {
-    const passphrase = await showUserPrompt<string>({
+    const { value: passphrase } = await showUserPrompt<string>({
       inputType: "password",
       metadata: {
         title: "Unlock your wallet",
@@ -51,6 +51,7 @@ export const createMinaProvider = async (): Promise<
         rejectButtonLabel: "Cancel",
       },
     })
+
     if (passphrase === null) throw createProviderRpcError(4100, "Unauthorized")
     await _vault.unlockWallet(passphrase)
   }
@@ -152,7 +153,7 @@ export const createMinaProvider = async (): Promise<
           if (!networkIds.includes(networkId)) {
             throw createProviderRpcError(4100, "Unauthorized.")
           }
-          const userConfirmed = await showUserPrompt<boolean>({
+          const { value: userConfirmed } = await showUserPrompt<boolean>({
             inputType: "confirmation",
             metadata: {
               title: "Switch to different chain.",
@@ -166,7 +167,7 @@ export const createMinaProvider = async (): Promise<
           return networkId
         })
         .with({ method: "mina_requestNetwork" }, async () => {
-          const userConfirmed = await showUserPrompt<boolean>({
+          const { value: userConfirmed } = await showUserPrompt<boolean>({
             inputType: "confirmation",
             metadata: {
               title: "Request to current Mina network information.",
@@ -181,8 +182,9 @@ export const createMinaProvider = async (): Promise<
         .with(
           { method: P.union("mina_sign", "mina_signTransaction") },
           async (signatureRequest) => {
-            const passphrase = await showUserPrompt<string>({
+            const { value: passphrase } = await showUserPrompt<string>({
               inputType: "password",
+              contract: "add",
               metadata: {
                 title: "Signature request",
                 payload: JSON.stringify(signatureRequest.params),
@@ -227,7 +229,7 @@ export const createMinaProvider = async (): Promise<
         .with(
           { method: P.union("mina_createNullifier", "mina_signFields") },
           async (signatureRequest) => {
-            const passphrase = await showUserPrompt<string>({
+            const { value: passphrase } = await showUserPrompt<string>({
               inputType: "password",
               metadata: {
                 title: "Signature request",
@@ -303,7 +305,7 @@ export const createMinaProvider = async (): Promise<
             query as SearchQuery,
             props as string[],
           )
-          const confirmation = await showUserPrompt<boolean>({
+          const { value: confirmation } = await showUserPrompt<boolean>({
             inputType: "confirmation",
             metadata: {
               title: "Credential read request",
@@ -318,7 +320,7 @@ export const createMinaProvider = async (): Promise<
         .with({ method: "mina_setState" }, async ({ params }) => {
           const payload = params?.[0]
           if (!payload) throw createProviderRpcError(4000, "Invalid Request")
-          const confirmation = await showUserPrompt<boolean>({
+          const { value: confirmation } = await showUserPrompt<boolean>({
             inputType: "confirmation",
             metadata: {
               title: "Credential write request",
@@ -331,10 +333,58 @@ export const createMinaProvider = async (): Promise<
           await _vault.setState(payload)
           return { success: true }
         })
+        .with({ method: "mina_storePrivateCredential" }, async ({ params }) => {
+          const [credential] = params
+          if (!credential) throw createProviderRpcError(4000, "Invalid Request")
+
+          const stringifiedCredential = JSON.stringify(credential)
+
+          try {
+            const { value: userConfirmed, result } =
+              await showUserPrompt<boolean>({
+                inputType: "confirmation",
+                contract: "validate-credential",
+                metadata: {
+                  title: "Store private credential request",
+                  payload: stringifiedCredential,
+                },
+              })
+
+            if (!userConfirmed) {
+              throw createProviderRpcError(4001, "User Rejected Request")
+            }
+
+            if (result?.error) {
+              throw createProviderRpcError(
+                4100,
+                `Credential validation failed: ${JSON.stringify(result.error)}`,
+              )
+            }
+
+            if (!result?.result) {
+              throw createProviderRpcError(4100, "Missing validation result")
+            }
+
+            try {
+              await _vault.storePrivateCredential(JSON.parse(result.result))
+              return { success: JSON.parse(result.result) }
+            } catch (error: any) {
+              throw createProviderRpcError(
+                4100,
+                `Failed to store private credential: ${error}`,
+              )
+            }
+          } catch (error: any) {
+            throw createProviderRpcError(
+              4100,
+              error.message || "Failed to validate credential",
+            )
+          }
+        })
         .with({ method: "mina_sendTransaction" }, async ({ params }) => {
           const [payload] = params
           if (!payload) throw createProviderRpcError(4000, "Invalid Request")
-          const passphrase = await showUserPrompt<string>({
+          const { value: passphrase } = await showUserPrompt<string>({
             inputType: "password",
             metadata: {
               title: "Send transaction request",

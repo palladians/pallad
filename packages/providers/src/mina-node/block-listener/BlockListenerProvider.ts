@@ -1,4 +1,4 @@
-import type { AccountInfo, AccountInfoArgs } from "@palladxyz/mina-core"
+import type { AccountInfo, AccountInfoArgs } from "@palladco/mina-core"
 import type { ExecutionResult } from "graphql"
 import { GraphQLClient, gql } from "graphql-request"
 import { SubscriptionClient } from "subscriptions-transport-ws"

@@ -1,4 +1,4 @@
-import { baseTsupConfig } from "@palladxyz/common"
+import { baseTsupConfig } from "@palladco/common"
 import { polyfillNode } from "esbuild-plugin-polyfill-node"
 import { defineConfig } from "tsup"
 

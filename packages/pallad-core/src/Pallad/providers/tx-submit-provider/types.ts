@@ -1,4 +1,4 @@
-import type { BorrowedTypes, Mina } from "@palladxyz/mina-core"
+import type { BorrowedTypes, Mina } from "@palladco/mina-core"
 
 import type { Provider } from "../provider"
 

@@ -2,7 +2,7 @@
  * @file Represents the state definitions related to credentials specific to keyAgents & accounts.
  */
 
-import type { GroupedCredentials } from "@palladxyz/key-management"
+import type { GroupedCredentials } from "@palladco/key-management"
 
 import type { KeyAgentName } from "../keyAgent"
 import type { SearchQuery } from "../utils/utils"

@@ -11,9 +11,10 @@ import {
   SignFieldsRequestParamsSchema,
   SignRequestParamsSchema,
   SignTransactionRequestParamsSchema,
+  StorePrivateCredentialRequestParamsSchema,
   SwitchChainRequestParamsSchema,
 } from "@mina-js/providers"
-import { createMinaProvider } from "@palladxyz/web-provider"
+import { createMinaProvider } from "@palladco/web-provider"
 import { serializeError } from "serialize-error"
 import { z } from "zod"
 import type { Handler } from "."
@@ -192,6 +193,21 @@ export const minaSendTransaction: Handler = async ({ data }) => {
     const provider = await createMinaProvider()
     const payload = SendTransactionRequestParamsSchema.parse({
       method: "mina_sendTransaction",
+      params: data.params,
+      context: data.context,
+    })
+    return await provider.request(payload)
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+}
+
+export const minaStorePrivateCredential: Handler = async ({ data }) => {
+  try {
+    const provider = await createMinaProvider()
+    const payload = StorePrivateCredentialRequestParamsSchema.parse({
+      method: "mina_storePrivateCredential",
+      // TODO: might have to add parsing
       params: data.params,
       context: data.context,
     })

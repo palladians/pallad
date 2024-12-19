@@ -1,9 +1,9 @@
 import { createClient } from "@mina-js/klesia-sdk"
-import type { ChainOperationArgs } from "@palladxyz/key-management"
-import type { ProviderConfig } from "@palladxyz/providers"
-import { securePersistence, sessionPersistence } from "@palladxyz/vault"
-import { usePendingTransactionStore } from "@palladxyz/vault"
-import { useVault } from "@palladxyz/vault"
+import type { ChainOperationArgs } from "@palladco/key-management"
+import type { ProviderConfig } from "@palladco/providers"
+import { securePersistence, sessionPersistence } from "@palladco/vault"
+import { usePendingTransactionStore } from "@palladco/vault"
+import { useVault } from "@palladco/vault"
 import dayjs from "dayjs"
 import Client from "mina-signer"
 
@@ -104,6 +104,22 @@ export const createVaultService = (): IVaultService => {
       await rehydrate()
       const store = useVault.getState()
       store.setObject(state)
+    },
+    storePrivateCredential: async (credential) => {
+      await rehydrate()
+      const store = useVault.getState()
+      store.setObject({
+        type: "private-credential",
+        credential,
+      })
+    },
+    getPrivateCredential: async (query?) => {
+      await rehydrate()
+      const store = useVault.getState()
+      return await store.searchObjects({
+        type: "private-credential",
+        ...query,
+      })
     },
     getEnabled: async ({ origin }) => {
       const { permissions } = await chrome.storage.local.get({

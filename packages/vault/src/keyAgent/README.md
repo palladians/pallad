@@ -1,6 +1,6 @@
 # Key Agent Store
 
-This TypeScript module provides a state management store for cryptographic key agents using Zustand, Immer, and the `@palladxyz/key-management` package. It is the key agent store for Pallad and it offers a robust set of functionalities to manage key agents securely in memory.
+This TypeScript module provides a state management store for cryptographic key agents using Zustand, Immer, and the `@palladco/key-management` package. It is the key agent store for Pallad and it offers a robust set of functionalities to manage key agents securely in memory.
 
 ## Key Files
 - `key-agent-store.ts`: Contains the core logic for the Zustand store slice managing the state of key agents.
