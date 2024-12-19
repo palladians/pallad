@@ -13,16 +13,16 @@ const convertToTransactionBody = (
 ): Mina.TransactionBody[] => {
   return data.map((item) => ({
     type: item.type.toLowerCase() as Mina.TransactionType,
-    from: item.direction === "OUT" ? address : item.account,
-    to: item.direction === "OUT" ? item.account : address,
+    from: item.direction === "OUT" ? address : item.accountAddress,
+    to: item.direction === "OUT" ? item.accountAddress : address,
     fee: item.fee,
     nonce: "", //  Not available
     amount: item.amount,
     memo: item.memo,
     validUntil: "", //  Not available
-    blockHeight: item.block,
+    blockHeight: item.blockHeight,
     token: "", //  Not available
-    hash: item.transactionHash,
+    hash: item.txHash,
     failureReason: "", //  Not available
     dateTime: new Date(item.age).toISOString(),
     isDelegation: item.type === "delegation",
@@ -35,8 +35,9 @@ export const createChainHistoryProvider = (
   const transactionsByAddresses = async (
     args: TransactionsByAddressesArgs,
   ): Promise<Tx[]> => {
-    const limit = 20
-    const endpoint = `${url}/api/core/accounts/${args.addresses[0]}/activity?page=0&limit=${limit}&sortBy=age&orderBy=DESC&size=${limit}&pk=${args.addresses[0]}&direction=all`
+    console.log(">>>>ARGS", args, url)
+    const limit = 50
+    const endpoint = `${url}/v1/accounts/${args.addresses[0]}/txs?page=0&sortBy=AGE&orderBy=DESC&size=${limit}&direction=ALL`
     const response = await fetch(endpoint)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)

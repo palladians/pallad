@@ -4,7 +4,7 @@ import type { Mina } from "@palladxyz/mina-core"
 import { Blockberry } from "../../src"
 
 const explorerUrl =
-  process.env.ARCHIVE_NODE_URL || "https://minascan.io/devnet/api/"
+  process.env.ARCHIVE_NODE_URL || "https://pallad.co/api/proxy/mina-devnet"
 const publicKey =
   process.env.PUBLIC_KEY ||
   "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb"
