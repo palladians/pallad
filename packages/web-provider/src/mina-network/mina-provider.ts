@@ -392,7 +392,7 @@ export const createMinaProvider = async (): Promise<
               const { value: userConfirmed } = await showUserPrompt<boolean>({
                 inputType: "confirmation",
                 metadata: {
-                  title: "Store private credential request",
+                  title: "Store Private Credential",
                   payload: stringifiedCredential,
                 },
               })
