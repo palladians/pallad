@@ -28,7 +28,7 @@ type Result = {
 }
 
 type PresentationRequestPayload = {
-  presentationRequest: string
+  presentationRequest: PresentationRequest
   selectedCredentials: string[]
   verifierIdentity:
     | string
@@ -121,16 +121,9 @@ window.addEventListener("message", async (event) => {
               storedCredentials.push(stored)
             }
 
-            // parse presentation request
-            const parsedPresentationRequest = JSON.parse(
-              stringifiedPresentationRequest,
-            ) as PresentationRequest
-
-            const requestType = parsedPresentationRequest.type
-
             // deserialize presentation request
             const deserialized = PresentationRequest.fromJSON(
-              requestType,
+              presentationRequest.type,
               stringifiedPresentationRequest,
             )
 
@@ -139,7 +132,7 @@ window.addEventListener("message", async (event) => {
 
             // format verifierIdentity
             const verifierIdentityString =
-              requestType === "zk-app"
+              presentationRequest.type === "zk-app"
                 ? JSON.stringify(verifierIdentity)
                 : (verifierIdentity as string)
 
