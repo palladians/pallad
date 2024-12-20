@@ -144,6 +144,30 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
       }
       return `not ${formatLogicNode(node.inner, level)}`
 
+    case "add":
+      if (!node.left || !node.right) {
+        throw Error("ADD node must have both 'left' and 'right' nodes")
+      }
+      return `${formatLogicNode(node.left)} + ${formatLogicNode(node.right)}`
+
+    case "sub":
+      if (!node.left || !node.right) {
+        throw Error("SUB node must have both 'left' and 'right' nodes")
+      }
+      return `${formatLogicNode(node.left)} - ${formatLogicNode(node.right)}`
+
+    case "mul":
+      if (!node.left || !node.right) {
+        throw Error("MUL node must have both 'left' and 'right' nodes")
+      }
+      return `${formatLogicNode(node.left)} x ${formatLogicNode(node.right)}`
+
+    case "div":
+      if (!node.left || !node.right) {
+        throw Error("DIV node must have both 'left' and 'right' nodes")
+      }
+      return `${formatLogicNode(node.left)} ÷ ${formatLogicNode(node.right)}`
+
     case "record": {
       if (!node.data) {
         throw Error("RECORD node must have 'data' object")

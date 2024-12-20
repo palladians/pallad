@@ -17,7 +17,7 @@
     "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "o1js": "https://pkg.pr.new/o1-labs/o1js@996ebb3"
+    "o1js": "2.2.0"
   },
   "devDependencies": {
     "@palladco/common": "workspace:*"
