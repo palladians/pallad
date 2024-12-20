@@ -18,7 +18,7 @@ type LogicNode = {
   right?: LogicNode
   key?: string
   inner?: LogicNode
-  data?: Record<string, LogicNode>
+  data?: Record<string, any>
   credentialKey?: string
   input?: LogicNode
   options?: LogicNode[] | LogicNode
@@ -179,11 +179,22 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
         .map(([key, value]) => `${key}: ${formatLogicNode(value, level)}`)
         .join(`\n${indent}`)
     }
-    case "constant":
-      if (!node.data) {
-        throw Error("CONSTANT node must have 'data'")
+    case "constant": {
+      if (!node.data || typeof node.data !== "object") {
+        throw Error("CONSTANT node must have 'data' object")
       }
-      return `${node.data}`
+      if (node.data._type === "Undefined") {
+        return "undefined"
+      }
+      return JSON.stringify(node.data.value)
+    }
+    case "ifThenElse":
+      if (!node.condition || !node.thenNode || !node.elseNode) {
+        throw Error(
+          "IF_THEN_ELSE node must have 'condition', 'thenNode', and 'elseNode'",
+        )
+      }
+      return `${indent}If this condition is true:\n${indent}- ${formatLogicNode(node.condition, level + 1)}\n${indent}Then:\n${indent}- ${formatLogicNode(node.thenNode, level + 1)}\n${indent}Otherwise:\n${indent}- ${formatLogicNode(node.elseNode, level + 1)}`
 
     default:
       throw Error(`Unknown node type: ${node.type}`)
