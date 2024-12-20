@@ -262,11 +262,11 @@ export const createMinaProvider = async (): Promise<
                     return item
                   },
                 )
-                const seriliasedResponse = {
+                const serializedResponse = {
                   ...signedResponse,
                   data: serializedResponseData,
                 }
-                return seriliasedResponse
+                return serializedResponse
               })
               .with({ method: "mina_createNullifier" }, async ({ params }) => {
                 const [message] = params
