@@ -184,6 +184,13 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
         throw Error("CONSTANT node must have 'data'")
       }
       return `${node.data}`
+    case "ifThenElse":
+      if (!node.condition || !node.thenNode || !node.elseNode) {
+        throw Error(
+          "IF_THEN_ELSE node must have 'condition', 'thenNode', and 'elseNode'",
+        )
+      }
+      return `${indent}If this condition is true:\n${indent}- ${formatLogicNode(node.condition, level + 1)}\n${indent}Then:\n${indent}- ${formatLogicNode(node.thenNode, level + 1)}\n${indent}Otherwise:\n${indent}- ${formatLogicNode(node.elseNode, level + 1)}`
 
     default:
       throw Error(`Unknown node type: ${node.type}`)
