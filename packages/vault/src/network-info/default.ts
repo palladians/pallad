@@ -15,7 +15,7 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkId, ProviderConfig> = {
     },
     archiveNodeEndpoint: {
       providerName: "mina-scan",
-      url: "https://minascan.io/devnet/api/",
+      url: "https://pallad.co/api/proxy/mina-devnet",
     },
     explorer: {
       transactionUrl: "https://minascan.io/devnet/tx/{hash}/txInfo",
@@ -36,7 +36,7 @@ export const DEFAULT_NETWORK_INFO: Record<NetworkId, ProviderConfig> = {
     },
     archiveNodeEndpoint: {
       providerName: "mina-scan",
-      url: "https://minascan.io/mainnet/api/",
+      url: "https://pallad.co/api/proxy/mina-mainnet",
     },
     explorer: {
       transactionUrl: "https://minascan.io/mainnet/tx/{hash}/txInfo",

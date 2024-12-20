@@ -5,7 +5,7 @@ import type { Tx } from "@palladco/pallad-core"
 import { type ProviderConfig, createChainProvider } from "../../src"
 
 const explorerUrl =
-  process.env.EXPLORER_URL || "https://minascan.io/devnet/api/"
+  process.env.EXPLORER_URL || "https://pallad.co/api/proxy/mina-devnet"
 const nodeUrl =
   process.env.NODE_URL || "https://api.minascan.io/node/devnet/v1/graphql"
 const publicKey =

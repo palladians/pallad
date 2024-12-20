@@ -154,9 +154,7 @@ export const createVaultService = (): IVaultService => {
     getBalance: async () => {
       await rehydrate()
       const store = useVault.getState()
-      return Number(
-        (store.getCurrentWallet().accountInfo.MINA?.balance.total ?? 0) / 1e9,
-      ) as number
+      return store.getCurrentWallet().accountInfo.MINA?.balance.total ?? 0
     },
     addChain: async (providerConfig: ProviderConfig) => {
       await rehydrate()

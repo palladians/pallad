@@ -7,7 +7,11 @@ export interface TransactionsByAddressesArgs {
   chainInfo?: Chain
 }
 
-export type TransactionsByHashesArgs = { ids: TxHash; chainInfo?: Chain }
+export type TransactionsByHashesArgs = {
+  ids: TxHash
+  publicKey: ChainAddress
+  chainInfo?: Chain
+}
 
 export interface ChainHistoryProvider extends Provider {
   /**
