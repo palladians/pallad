@@ -9,7 +9,7 @@ type Metadata = {
 type ContractResult = {
   type?: string
   result?: string
-  error?: string
+  error?: any
 }
 
 type PromptResult<T> = {
