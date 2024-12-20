@@ -1,4 +1,15 @@
+import xss from "xss"
 import { recoverOriginalPayload } from "../components/credential-selection-form"
+
+const handleRenderError = (error: Error) => {
+  const sanitizedError = xss(error.message)
+
+  return (
+    <pre className="whitespace-pre-wrap break-all">
+      {`Error: ${sanitizedError}`}
+    </pre>
+  )
+}
 
 type LogicNode = {
   type: string
@@ -312,8 +323,14 @@ export const renderPayload = (payload: string) => {
     // Default fallback
     return <pre className="whitespace-pre-wrap break-all">{payload}</pre>
   } catch (error) {
+    if (error instanceof Error) {
+      return handleRenderError(error)
+    }
+    // This case should never occur given the error sources
     return (
-      <pre className="whitespace-pre-wrap break-all">{`Error: ${error}`}</pre>
+      <pre className="whitespace-pre-wrap break-all">
+        Error: Unexpected render error
+      </pre>
     )
   }
 }
