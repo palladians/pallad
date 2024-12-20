@@ -127,18 +127,17 @@ window.addEventListener("message", async (event) => {
               stringifiedPresentationRequest,
             )
 
-            // compile
-            const compiled = await Presentation.compile(deserialized)
-
             // format verifierIdentity
             const verifierIdentityString =
               presentationRequest.type === "zk-app"
                 ? JSON.stringify(verifierIdentity)
                 : (verifierIdentity as string)
 
+            // TODO: cache compiled presentation request?
+
             // prepare presentation request and get fields to sign
             const prepared = await Presentation.prepare({
-              request: compiled,
+              request: deserialized,
               credentials: storedCredentials,
               context: { verifierIdentity: verifierIdentityString },
             })
@@ -162,7 +161,7 @@ window.addEventListener("message", async (event) => {
 
             // finalize presentation
             const presentation = await Presentation.finalize(
-              compiled,
+              deserialized,
               ownerSignature,
               prepared,
             )
