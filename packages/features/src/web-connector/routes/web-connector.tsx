@@ -215,12 +215,15 @@ export const WebConnectorRoute = () => {
   }, [request.inputType])
   useEffect(() => {
     runtime.onMessage.addListener(async (message) => {
+      const payload = message.params.contract
+        ? message.params.payload
+        : await sanitizePayload(message.params.payload)
       if (message.type === "action_request") {
         setRequest({
           title: message.params.title,
           submitButtonLabel: message.params.submitButtonLabel,
           rejectButtonLabel: message.params.rejectButtonLabel,
-          payload: await sanitizePayload(message.params.payload),
+          payload: payload,
           contract: message.params.contract,
           inputType: message.params.inputType,
           emitConnected: message.params.emitConnected,

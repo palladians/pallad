@@ -2,7 +2,6 @@ import { Credential, Presentation, PresentationRequest } from "mina-credentials"
 import { Signature } from "o1js"
 import { serializeError } from "serialize-error"
 import { match } from "ts-pattern"
-import yaml from "yaml"
 import { z } from "zod"
 
 const MessageSchema = z.discriminatedUnion("type", [
@@ -39,11 +38,6 @@ type PresentationRequestPayload = {
       }
 }
 
-const recoverOriginalPayload = (sanitizedPayload: string) => {
-  const parsedYaml = yaml.parse(sanitizedPayload)
-  return JSON.stringify(parsedYaml)
-}
-
 let presentationSignaturePromise: {
   resolve: (value: any) => void
   reject: (reason: any) => void
@@ -73,10 +67,8 @@ window.addEventListener("message", async (event) => {
       return match(msg.contract)
         .with("validate-credential", async () => {
           try {
-            const sanitizedPayload = msg.payload
-            const originalPayload = recoverOriginalPayload(sanitizedPayload)
-            const credentialDeserialized =
-              await Credential.fromJSON(originalPayload)
+            const payload = msg.payload
+            const credentialDeserialized = await Credential.fromJSON(payload)
 
             await Credential.validate(credentialDeserialized)
 
@@ -96,11 +88,11 @@ window.addEventListener("message", async (event) => {
         .with("presentation", async () => {
           try {
             // get back original payload
-            const originalPayload = recoverOriginalPayload(msg.payload)
+            const payload = msg.payload
 
             // parse payload as PresentationRequestPayload
             const parsedPayload = JSON.parse(
-              originalPayload,
+              payload,
             ) as PresentationRequestPayload
 
             const {
