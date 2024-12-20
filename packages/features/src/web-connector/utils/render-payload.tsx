@@ -179,6 +179,11 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
         .map(([key, value]) => `${key}: ${formatLogicNode(value, level)}`)
         .join(`\n${indent}`)
     }
+    case "constant":
+      if (!node.data) {
+        throw Error("CONSTANT node must have 'data'")
+      }
+      return `${node.data}`
 
     default:
       throw Error(`Unknown node type: ${node.type}`)
