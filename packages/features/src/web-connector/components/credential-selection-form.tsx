@@ -218,17 +218,17 @@ export const SelectionForm = ({
       const originalPayload = recoverOriginalPayload(payload)
       const parsedPayload = JSON.parse(originalPayload)
 
-      const credentialRequirements = isPayloadWithPresentation(parsedPayload)
-        ? getCredentialRequirements(parsedPayload.presentationRequest)
-        : []
+      if (!isPayloadWithPresentation(parsedPayload)) {
+        throw new Error(
+          "Invalid payload format: Expected PayloadWithPresentation",
+        )
+      }
 
-      const storedCredentials = Array.isArray(parsedPayload)
-        ? parsedPayload
-        : isPayloadWithPresentation(parsedPayload)
-          ? parsedPayload.storedCredentials
-          : []
+      const credentialRequirements = getCredentialRequirements(
+        parsedPayload.presentationRequest,
+      )
 
-      const validCredentials = storedCredentials
+      const validCredentials = parsedPayload.storedCredentials
         .filter(
           (credential: any) =>
             findMatchingRequirements(credential, credentialRequirements)
