@@ -248,7 +248,8 @@ export const SelectionForm = ({
         requirements: credentialRequirements,
       }
     } catch (error: any) {
-      throw Error(`Issue with parsing: ${error}: ${payload}`)
+      error.message = `Issue with parsing: ${error.message}: ${payload}`
+      throw error
     }
   }, [payload])
 
