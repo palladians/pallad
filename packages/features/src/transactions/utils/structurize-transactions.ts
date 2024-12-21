@@ -1,4 +1,4 @@
-import type { Mina } from "@palladxyz/mina-core"
+import type { Mina } from "@palladco/mina-core"
 import dayjs from "dayjs"
 import { groupBy, map, pipe } from "rambda"
 

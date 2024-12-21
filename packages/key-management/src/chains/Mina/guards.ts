@@ -1,5 +1,5 @@
 import { TransactionBodySchema } from "@mina-js/utils"
-import type { Mina } from "@palladxyz/mina-core"
+import type { Mina } from "@palladco/mina-core"
 
 export function isConstructedTransaction(payload: any) {
   const transaction = TransactionBodySchema.parse(payload)

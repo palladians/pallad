@@ -1,4 +1,4 @@
-import { getPublicKey, useVault } from "@palladxyz/vault"
+import { getPublicKey, useVault } from "@palladco/vault"
 import useSWR from "swr"
 
 export const useTransaction = ({ hash }: { hash: string }) => {

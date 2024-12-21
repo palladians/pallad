@@ -10,7 +10,7 @@ import { FormError } from "@/components/form-error"
 import MinaIcon from "@/common/assets/mina.svg?react"
 import { formatCurrency } from "@/common/lib/currency"
 import { FeePicker, TransactionFeeShort } from "@/components/fee-picker"
-import { TransactionType } from "@palladxyz/mina-core"
+import { TransactionType } from "@palladco/mina-core"
 import { ChevronRightIcon, SearchIcon } from "lucide-react"
 import { SendFormSchema, type SendFormSchemaProps } from "./send-form.schema"
 

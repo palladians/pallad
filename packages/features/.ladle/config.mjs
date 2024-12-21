@@ -6,16 +6,15 @@ export default {
     width: {
       enabled: true,
       options: {
-        xsmall: 370,
+        xsmall: 480,
         small: 640,
         medium: 768,
         large: 1024,
       },
-      defaultState: 370,
+      defaultState: 480,
     },
   },
   appendToHead: `<style>
-      .ladle-iframe { max-height: 600px; }
       .frame-content { display: flex; flex-direction: column; min-height: 100vh; }
     </style>`,
 }

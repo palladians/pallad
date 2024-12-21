@@ -12,7 +12,7 @@ import type {
   GroupedCredentials,
   InMemoryKeyAgent,
   SerializableInMemoryKeyAgentData,
-} from "@palladxyz/key-management"
+} from "@palladco/key-management"
 
 export type KeyAgentName = string
 export enum KeyAgents {

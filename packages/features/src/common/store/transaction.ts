@@ -1,4 +1,4 @@
-import { Mina } from "@palladxyz/mina-core"
+import { Mina } from "@palladco/mina-core"
 import { create } from "zustand"
 
 import type { OutgoingTransaction } from "../types"

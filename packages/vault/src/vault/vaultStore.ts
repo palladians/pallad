@@ -1,5 +1,5 @@
-import { generateMnemonicWords } from "@palladxyz/key-management"
-import { Network } from "@palladxyz/pallad-core"
+import { generateMnemonicWords } from "@palladco/key-management"
+import { Network } from "@palladco/pallad-core"
 import { produce } from "immer"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
