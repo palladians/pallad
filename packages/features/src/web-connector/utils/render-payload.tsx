@@ -142,31 +142,31 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
       if (!node.inner) {
         throw Error("NOT node must have 'inner' node")
       }
-      return `not ${formatLogicNode(node.inner, level)}`
+      return `not(${formatLogicNode(node.inner, level)})`
 
     case "add":
       if (!node.left || !node.right) {
         throw Error("ADD node must have both 'left' and 'right' nodes")
       }
-      return `${formatLogicNode(node.left)} + ${formatLogicNode(node.right)}`
+      return `(${formatLogicNode(node.left)} + ${formatLogicNode(node.right)})`
 
     case "sub":
       if (!node.left || !node.right) {
         throw Error("SUB node must have both 'left' and 'right' nodes")
       }
-      return `${formatLogicNode(node.left)} - ${formatLogicNode(node.right)}`
+      return `(${formatLogicNode(node.left)} - ${formatLogicNode(node.right)})`
 
     case "mul":
       if (!node.left || !node.right) {
         throw Error("MUL node must have both 'left' and 'right' nodes")
       }
-      return `${formatLogicNode(node.left)} x ${formatLogicNode(node.right)}`
+      return `(${formatLogicNode(node.left)} x ${formatLogicNode(node.right)})`
 
     case "div":
       if (!node.left || !node.right) {
         throw Error("DIV node must have both 'left' and 'right' nodes")
       }
-      return `${formatLogicNode(node.left)} ÷ ${formatLogicNode(node.right)}`
+      return `(${formatLogicNode(node.left)} ÷ ${formatLogicNode(node.right)})`
 
     case "record": {
       if (!node.data) {
