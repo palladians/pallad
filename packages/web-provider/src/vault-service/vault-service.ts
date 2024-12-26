@@ -163,8 +163,8 @@ export const createVaultService = (): IVaultService => {
       }
     },
     requestNetwork: async () => {
-      const { currentNetworkId, networkInfoV2 } = useVault.getState()
-      const currentNetwork = networkInfoV2[currentNetworkId]
+      const { currentNetworkId, networkInfoV3 } = useVault.getState()
+      const currentNetwork = networkInfoV3[currentNetworkId]
       if (!currentNetwork) {
         throw new Error(
           `Network Configuration is not defined for the networkId: ${currentNetworkId}`,
