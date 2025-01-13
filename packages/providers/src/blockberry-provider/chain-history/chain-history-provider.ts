@@ -35,7 +35,6 @@ export const createChainHistoryProvider = (
   const transactionsByAddresses = async (
     args: TransactionsByAddressesArgs,
   ): Promise<Tx[]> => {
-    console.log(">>>>ARGS", args, url)
     const limit = 50
     const endpoint = `${url}/v1/accounts/${args.addresses[0]}/txs?page=0&sortBy=AGE&orderBy=DESC&size=${limit}&direction=ALL`
     const response = await fetch(endpoint)
