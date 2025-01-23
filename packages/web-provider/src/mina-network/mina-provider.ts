@@ -1,8 +1,4 @@
 import type {
-  MinaProviderClient,
-  ProviderRequestParams,
-} from "@mina-js/providers"
-import type {
   Nullifier,
   SignedFields,
   SignedMessage,
@@ -19,6 +15,10 @@ import { P, match } from "ts-pattern"
 import { showUserPrompt } from "../utils/prompts"
 import { createVaultService } from "../vault-service"
 import type { ConnectOps } from "../web-provider-types"
+import type {
+  ExtendedMinaProviderClient,
+  ExtendedProviderRequestParams,
+} from "./provider-type"
 import { createCredentialHash, serializeField, serializeGroup } from "./utils"
 
 export function getMinaChainId(chains: string[]) {
@@ -38,7 +38,7 @@ const verifyInitialized = async () => {
 }
 
 export const createMinaProvider = async (): Promise<
-  MinaProviderClient & { emit: (type: any, event: any) => void }
+  ExtendedMinaProviderClient & { emit: (type: any, event: any) => void }
 > => {
   const _emitter = mitt()
   const _vault = createVaultService()
@@ -114,7 +114,7 @@ export const createMinaProvider = async (): Promise<
     removeListener: _emitter.off,
     emit: _emitter.emit,
     request: async (args) => {
-      const typedArgs: ProviderRequestParams = args
+      const typedArgs: ExtendedProviderRequestParams = args
       const { context } = typedArgs
       const { origin } = context as Record<string, string>
       if (!origin) {

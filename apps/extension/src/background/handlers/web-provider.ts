@@ -14,9 +14,11 @@ import {
   SignTransactionRequestParamsSchema,
   StorePrivateCredentialRequestParamsSchema,
   SwitchChainRequestParamsSchema,
-  signFieldsWithPassphraseRequestParamsSchema,
 } from "@mina-js/providers"
-import { createMinaProvider } from "@palladco/web-provider"
+import {
+  SignFieldsWithPassphraseRequestParams,
+  createMinaProvider,
+} from "@palladco/web-provider"
 import { serializeError } from "serialize-error"
 import { z } from "zod"
 import type { Handler } from "."
@@ -152,7 +154,7 @@ export const minaSignFields: Handler = async ({ data }) => {
 export const minaSignFieldsWithPassphrase: Handler = async ({ data }) => {
   try {
     const provider = await createMinaProvider()
-    const payload = signFieldsWithPassphraseRequestParamsSchema.parse({
+    const payload = SignFieldsWithPassphraseRequestParams.parse({
       method: "mina_signFieldsWithPassphrase",
       params: data.params,
       context: data.context,
