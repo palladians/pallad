@@ -8,7 +8,7 @@ import type { ProviderConfig } from "@palladxyz/providers"
 export type NetworkId = string
 
 export type NetworkInfoState = {
-  networkInfoV2: Record<NetworkId, ProviderConfig>
+  networkInfoV3: Record<NetworkId, ProviderConfig>
   currentNetworkId: string
 }
 
