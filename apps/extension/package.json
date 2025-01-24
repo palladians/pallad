@@ -15,7 +15,7 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@mina-js/providers": "https://pkg.pr.new/palladians/mina-js/@mina-js/providers@3",
+    "@mina-js/providers": "https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a9d6774",
     "@palladco/common": "workspace:*",
     "@palladco/features": "workspace:*",
     "@palladco/key-management": "workspace:*",
