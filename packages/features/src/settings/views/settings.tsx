@@ -1,4 +1,4 @@
-import { AppWindowMac, Eye, Info } from "lucide-react"
+import { AppWindowMac, Eye, Globe, Info } from "lucide-react"
 
 import { AppLayout } from "@/components/app-layout"
 import { SettingsPageLayout } from "@/components/settings-page-layout"
@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 const Links = [
-  // TODO: Uncomment when we add multi-account
   // {
   //   label: "Wallet",
   //   description: "Management and networks",
@@ -26,12 +25,12 @@ const Links = [
     Icon: Eye,
   },
   // TODO: Uncomment when we add multiple locales
-  // {
-  //   label: "Display",
-  //   description: "Languages and currencies",
-  //   href: "/settings/display",
-  //   Icon: Globe,
-  // },
+  {
+    label: "Display",
+    description: "Languages and currencies",
+    href: "/settings/display",
+    Icon: Globe,
+  },
   {
     label: "About",
     description: "Everything about us",
@@ -71,7 +70,7 @@ export const SettingsView = ({
   return (
     <AppLayout>
       <SettingsPageLayout
-        title="Settings"
+        title={t("labels.settings")}
         onCloseClicked={onCloseClicked}
         headerContent={
           <div className="mt-6 px-6 py-4 flex items-center justify-between bg-neutral rounded-2xl">

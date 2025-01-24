@@ -7,25 +7,38 @@ import { Link } from "react-router-dom"
 const ButtonWrapperStyles =
   "pl-6 pr-4 py-6 flex items-center justify-between rounded-2xl bg-secondary"
 
-const Links = [
-  {
-    label: "Currency",
-    value: "$USD",
-    href: "/settings/display/currency",
-  },
-  {
-    label: "Language",
-    value: "ENG",
-    href: "/settings/display/language",
-  },
-]
-
 type DisplayViewProps = {
   onCloseClicked: () => void
 }
 
+interface ILang {
+  [key: string]: string
+}
+
+const langs: ILang = {
+  en: "ENG",
+  tr: "TUR",
+  es: "SPA",
+  fr: "FRA",
+  pt: "POR",
+  zh: "CHN",
+}
+
 export const DisplayView = ({ onCloseClicked }: DisplayViewProps) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+
+  const Links = [
+    {
+      label: "Currency",
+      value: "$USD",
+      href: "/settings/display/currency",
+    },
+    {
+      label: "Language",
+      value: langs[i18n.language],
+      href: "/settings/display/language",
+    },
+  ]
   const getLabel = (label: string) => {
     return label === "Currency"
       ? t("settings.currency")
@@ -33,7 +46,10 @@ export const DisplayView = ({ onCloseClicked }: DisplayViewProps) => {
   }
   return (
     <AppLayout>
-      <SettingsPageLayout title="Display" onCloseClicked={onCloseClicked}>
+      <SettingsPageLayout
+        title={t("labels.display")}
+        onCloseClicked={onCloseClicked}
+      >
         <div className="space-y-2">
           <div className={ButtonWrapperStyles}>
             <p>{t("settings.darkMode")}</p>

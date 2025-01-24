@@ -147,5 +147,10 @@
     "deny": "Reddet",
     "sign": "İmzala",
     "reject": "Reddet"
+  },
+  "labels": {
+    "settings": "Ayarlar",
+    "display": "Görüntüleme",
+    "language": "Dil"
   }
 }

@@ -3,39 +3,53 @@ import { SettingsPageLayout } from "@/components/settings-page-layout"
 import clsx from "clsx"
 import { Check } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
-const Languages = [
-  "English",
-  "French",
-  "Spanish",
-  "Turkish",
-  "Portugese",
-  "Chinese",
-]
+interface ILanguages {
+  nativeName: string
+}
+
+const Languages: Record<string, ILanguages> = {
+  en: { nativeName: "English" },
+  //fr: { nativeName: "French" },
+  es: { nativeName: "Spanish" },
+  tr: { nativeName: "Turkish" },
+  //pt: { nativeName: "Portugese" },
+  //zh: { nativeName: "Chinese" },
+}
 
 type LanguageViewProps = {
   onCloseClicked: () => void
 }
 
 export const LanguageView = ({ onCloseClicked }: LanguageViewProps) => {
-  const [selected, setSelected] = useState(Languages[0])
+  const { t, i18n } = useTranslation()
+  const [selected, setSelected] = useState(i18n.language)
+
   return (
     <AppLayout>
-      <SettingsPageLayout title="Language" onCloseClicked={onCloseClicked}>
+      <SettingsPageLayout
+        title={t("labels.language")}
+        onCloseClicked={onCloseClicked}
+      >
         <div className="space-y-2">
-          {Languages.map((language) => {
-            const active = language === selected
+          {Object.keys(Languages).map((lng) => {
+            const active = lng === selected
             return (
               <button
-                key={language}
+                key={lng}
                 type="button"
                 className={clsx(
                   "w-full pl-6 pr-4 py-4 flex items-center justify-between rounded-2xl hover:bg-secondary",
                   active && "bg-secondary",
                 )}
-                onClick={() => setSelected(language)}
+                onClick={() => {
+                  i18n.changeLanguage(lng)
+                  setSelected(lng)
+                }}
+                disabled={i18n.resolvedLanguage === lng}
               >
-                <p>{language}</p>
+                <p>{Languages[lng].nativeName}</p>
                 {active && (
                   <Check width={24} height={24} className="text-[#F6C177]" />
                 )}
