@@ -17,7 +17,7 @@ We agree to use these ways of working.
 
 #### Merge commits
 
-The merging process in all modern software projects can turn into a never-ending debate over whether to use merge commits, sqush, or rebase strategies. Our approach is to use the strategy that requires the least care before merging into main, which is the merge commit. Yes, the git blame and logs can get messy, but from our point of view it generates the least friction and potential rebasing problems.
+The merging process in all modern software projects can turn into a never-ending debate over whether to use merge commits, squash, or rebase strategies. Our approach is to use the strategy that requires the least care before merging into main, which is the merge commit. Yes, the git blame and logs can get messy, but from our point of view it generates the least friction and potential rebasing problems.
 
 #### Code delivery stages
 
