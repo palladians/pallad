@@ -1,4 +1,4 @@
-import type { GroupedCredentials } from "@palladxyz/key-management"
+import type { GroupedCredentials } from "@palladco/key-management"
 
 import { AddressError, NetworkError, WalletError } from "../../lib/Errors"
 

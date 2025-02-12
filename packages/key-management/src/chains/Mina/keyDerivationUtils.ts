@@ -1,4 +1,4 @@
-import { Network } from "@palladxyz/pallad-core"
+import { Network } from "@palladco/pallad-core"
 
 import type { MinaDerivationArgs } from "./types"
 

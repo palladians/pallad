@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 import { useAccount } from "@/common/hooks/use-account"
-import { useFiatPrice } from "@palladxyz/offchain-data"
+import { useFiatPrice } from "@palladco/offchain-data"
 import { useState } from "react"
 import { SendView } from "../views/send"
 

@@ -5,7 +5,7 @@ import type {
   TransactionsByAddressesArgs,
   Tx,
   UnifiedChainProviderType,
-} from "@palladxyz/pallad-core"
+} from "@palladco/pallad-core"
 
 import { createAccountInfoProvider } from "./account-info-provider"
 import { createChainHistoryProvider } from "./chain-history-provider"

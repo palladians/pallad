@@ -9,7 +9,7 @@ import { FormError } from "@/components/form-error"
 
 import { FeePicker, TransactionFeeShort } from "@/components/fee-picker"
 import type { SendFormSchemaProps } from "@/send/components/send-form.schema"
-import { TransactionType } from "@palladxyz/mina-core"
+import { TransactionType } from "@palladco/mina-core"
 import { ExternalLinkIcon } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { DelegateFormSchema } from "./delegate-form.schema"

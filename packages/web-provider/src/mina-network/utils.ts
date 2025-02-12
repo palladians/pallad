@@ -1,5 +1,7 @@
-import type { MinaSignablePayload } from "@palladxyz/key-management"
-import type { BorrowedTypes } from "@palladxyz/mina-core"
+import { sha256 } from "@noble/hashes/sha256"
+import { utf8ToBytes } from "@noble/hashes/utils"
+import type { MinaSignablePayload } from "@palladco/key-management"
+import type { BorrowedTypes } from "@palladco/mina-core"
 
 export const serializeField = (field: BorrowedTypes.Field) => {
   if (typeof field === "bigint" || typeof field === "number") {
@@ -45,4 +47,16 @@ export const serializeTransaction = (transaction: MinaSignablePayload) => {
   // Clone the transaction object to avoid mutating the original object
   const clonedTransaction = JSON.parse(JSON.stringify(transaction))
   return serializeObject(clonedTransaction)
+}
+
+export const createCredentialHash = (credential: any): string => {
+  // exclude metadata from hash
+  const { metadata: _, ...credentialWithoutMetadata } = credential
+
+  const stableString = JSON.stringify(credentialWithoutMetadata)
+  const bytes = utf8ToBytes(stableString)
+  const hash = sha256(bytes)
+  return Array.from(hash)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
 }

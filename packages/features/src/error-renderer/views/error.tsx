@@ -1,6 +1,5 @@
 import type { FallbackProps } from "react-error-boundary"
 import { useTranslation } from "react-i18next"
-//import { useMixpanel } from "react-mixpanel-browser"
 
 export const ErrorView = ({ error, resetErrorBoundary }: FallbackProps) => {
   const stringifiedError = JSON.stringify(

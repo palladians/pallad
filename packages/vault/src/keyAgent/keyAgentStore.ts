@@ -1,7 +1,7 @@
 import {
   type FromBip39MnemonicWordsProps,
   InMemoryKeyAgent,
-} from "@palladxyz/key-management"
+} from "@palladco/key-management"
 import { produce } from "immer"
 import type { StateCreator } from "zustand"
 

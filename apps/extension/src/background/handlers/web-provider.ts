@@ -5,18 +5,27 @@ import {
   GetBalanceRequestParamsSchema,
   GetStateRequestParamsSchema,
   NetworkIdRequestParamsSchema,
+  // PresentationRequestParamsSchema, // TODO update these in mina-js and import again
   RequestAccountsRequestParamsSchema,
   SendTransactionRequestParamsSchema,
   SetStateRequestParamsSchema,
   SignFieldsRequestParamsSchema,
   SignRequestParamsSchema,
   SignTransactionRequestParamsSchema,
+  // StorePrivateCredentialRequestParamsSchema,
   SwitchChainRequestParamsSchema,
 } from "@mina-js/providers"
-import { createMinaProvider } from "@palladxyz/web-provider"
+import {
+  SignFieldsWithPassphraseRequestParams,
+  createMinaProvider,
+} from "@palladco/web-provider"
 import { serializeError } from "serialize-error"
 import { z } from "zod"
 import type { Handler } from "."
+import {
+  PresentationRequestParamsSchema,
+  StorePrivateCredentialRequestParamsSchema,
+} from "./mina-attestations-schemas"
 
 export const OriginSchema = z.string().url()
 
@@ -146,6 +155,21 @@ export const minaSignFields: Handler = async ({ data }) => {
   }
 }
 
+export const minaSignFieldsWithPassphrase: Handler = async ({ data }) => {
+  try {
+    const provider = await createMinaProvider()
+    const payload = SignFieldsWithPassphraseRequestParams.parse({
+      method: "mina_signFieldsWithPassphrase",
+      params: data.params,
+      context: data.context,
+    })
+    const response = await provider.request(payload)
+    return response
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+}
+
 export const minaSignTransaction: Handler = async ({ data }) => {
   try {
     const provider = await createMinaProvider()
@@ -192,6 +216,34 @@ export const minaSendTransaction: Handler = async ({ data }) => {
     const provider = await createMinaProvider()
     const payload = SendTransactionRequestParamsSchema.parse({
       method: "mina_sendTransaction",
+      params: data.params,
+      context: data.context,
+    })
+    return await provider.request(payload)
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+}
+
+export const minaStorePrivateCredential: Handler = async ({ data }) => {
+  try {
+    const provider = await createMinaProvider()
+    const payload = StorePrivateCredentialRequestParamsSchema.parse({
+      method: "mina_storePrivateCredential",
+      params: data.params,
+      context: data.context,
+    })
+    return await provider.request(payload)
+  } catch (error: unknown) {
+    return { error: serializeError(error) }
+  }
+}
+
+export const minaRequestPresentation: Handler = async ({ data }) => {
+  try {
+    const provider = await createMinaProvider()
+    const payload = PresentationRequestParamsSchema.parse({
+      method: "mina_requestPresentation",
       params: data.params,
       context: data.context,
     })

@@ -1,0 +1,23 @@
+{
+  "name": "@palladco/contracts",
+  "version": "0.0.1",
+  "type": "module",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "bunx --bun tsc",
+    "test:unit": "bun test",
+    "coverage": "bun test --coverage",
+    "cleanup": "bunx --bun rimraf node_modules dist .turbo"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@palladco/common": "workspace:*"
+  }
+}
