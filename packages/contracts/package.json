@@ -16,9 +16,7 @@
     "coverage": "bun test --coverage",
     "cleanup": "bunx --bun rimraf node_modules dist .turbo"
   },
-  "dependencies": {
-    "o1js": "2.2.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@palladco/common": "workspace:*"
   }

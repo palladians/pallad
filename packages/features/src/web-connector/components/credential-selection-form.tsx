@@ -1,4 +1,5 @@
 import { createCredentialHash } from "@palladco/web-provider"
+import { PrettyPrinter } from "mina-attestations/validation"
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import yaml from "yaml"
@@ -36,28 +37,6 @@ interface PayloadWithPresentation {
       >
     }
   }
-}
-
-const simplifyCredentialData = (
-  data: Record<string, any>,
-): Record<string, string> => {
-  const simplified: Record<string, string> = {}
-  for (const [key, value] of Object.entries(data)) {
-    if (typeof value === "object" && value !== null) {
-      if ("bytes" in value) {
-        simplified[key] = value.bytes
-          .map((b: { value: string }) => b.value)
-          .join("")
-      } else if ("value" in value) {
-        simplified[key] = value.value
-      } else {
-        simplified[key] = value
-      }
-    } else {
-      simplified[key] = value
-    }
-  }
-  return simplified
 }
 
 export const recoverOriginalPayload = (sanitizedPayload: string) => {
@@ -176,9 +155,7 @@ const CredentialDisplay = ({
   }>
 }) => {
   const witnessType = credential.witness?.type || "unknown"
-  const credentialData =
-    credential.credential.value?.data || credential.credential.data
-  const simplifiedData = simplifyCredentialData(credentialData)
+  const simplifiedData = PrettyPrinter.simplifyCredentialData(credential)
   const description = credential.metadata?.description
 
   return (
