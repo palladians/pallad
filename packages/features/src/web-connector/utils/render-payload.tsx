@@ -75,13 +75,18 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
       if (!node.left || !node.right) {
         throw Error("OR node must have both 'left' and 'right' nodes")
       }
-      return `${indent}Either:\n${indent}- ${formatLogicNode(node.left, level + 1)}\n${indent}Or:\n${indent}- ${formatLogicNode(node.right, level + 1)}`
+      return `${indent}Either:\n${indent}- ${formatLogicNode(
+        node.left,
+        level + 1,
+      )}\n${indent}Or:\n${indent}- ${formatLogicNode(node.right, level + 1)}`
 
     case "equals":
       if (!node.left || !node.right) {
         throw Error("EQUALS node must have both 'left' and 'right' nodes")
       }
-      return `${formatLogicNode(node.left)} equals ${formatLogicNode(node.right)}`
+      return `${formatLogicNode(node.left)} equals ${formatLogicNode(
+        node.right,
+      )}`
 
     case "equalsOneOf": {
       if (!node.input) {
@@ -130,7 +135,9 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
       if (!node.inputs) {
         throw Error("HASH node must have 'inputs' array")
       }
-      return `hash(${node.inputs.map((n) => formatLogicNode(n, level)).join(", ")})`
+      return `hash(${node.inputs
+        .map((n) => formatLogicNode(n, level))
+        .join(", ")})`
 
     case "issuer":
       if (!node.credentialKey) {
@@ -194,7 +201,16 @@ const formatLogicNode = (node: LogicNode, level = 0): string => {
           "IF_THEN_ELSE node must have 'condition', 'thenNode', and 'elseNode'",
         )
       }
-      return `${indent}If this condition is true:\n${indent}- ${formatLogicNode(node.condition, level + 1)}\n${indent}Then:\n${indent}- ${formatLogicNode(node.thenNode, level + 1)}\n${indent}Otherwise:\n${indent}- ${formatLogicNode(node.elseNode, level + 1)}`
+      return `${indent}If this condition is true:\n${indent}- ${formatLogicNode(
+        node.condition,
+        level + 1,
+      )}\n${indent}Then:\n${indent}- ${formatLogicNode(
+        node.thenNode,
+        level + 1,
+      )}\n${indent}Otherwise:\n${indent}- ${formatLogicNode(
+        node.elseNode,
+        level + 1,
+      )}`
 
     default:
       throw Error(`Unknown node type: ${node.type}`)
@@ -322,12 +338,16 @@ export const renderPayload = (payload: string) => {
         "",
         formatInputsHumanReadable(request.spec.inputs),
         "",
-        `Requirements:\n${formatLogicNode(request.spec.logic.assert, 0)}`,
+        `Requirements:\n${formatLogicNode(request.spec.assert, 0)}`,
         "",
-        `Output:\n${formatLogicNode(request.spec.logic.outputClaim, 0)}`,
+        `Output:\n${formatLogicNode(request.spec.outputClaim, 0)}`,
         formatClaimsHumanReadable(request.claims),
         request.inputContext
-          ? `\nContext:\n- Type: ${request.inputContext.type}\n- Action: ${typeof request.inputContext.action === "string" ? request.inputContext.action : request.inputContext.action.value}\n- Server Nonce: ${request.inputContext.serverNonce.value}`
+          ? `\nContext:\n- Type: ${request.inputContext.type}\n- Action: ${
+              typeof request.inputContext.action === "string"
+                ? request.inputContext.action
+                : request.inputContext.action.value
+            }\n- Server Nonce: ${request.inputContext.serverNonce.value}`
           : "",
         "origin" in parsedPayload ? `\nOrigin: ${parsedPayload.origin}` : "",
         parsedPayload.verifierIdentity
