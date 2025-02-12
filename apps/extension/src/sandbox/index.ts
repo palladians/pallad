@@ -1,4 +1,8 @@
-import { Credential, Presentation, PresentationRequest } from "mina-credentials"
+import {
+  Credential,
+  Presentation,
+  PresentationRequest,
+} from "mina-attestations"
 import { Signature } from "o1js"
 import { serializeError } from "serialize-error"
 import { match } from "ts-pattern"

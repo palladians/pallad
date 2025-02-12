@@ -5,14 +5,14 @@ import {
   GetBalanceRequestParamsSchema,
   GetStateRequestParamsSchema,
   NetworkIdRequestParamsSchema,
-  PresentationRequestParamsSchema,
+  // PresentationRequestParamsSchema, // TODO update these in mina-js and import again
   RequestAccountsRequestParamsSchema,
   SendTransactionRequestParamsSchema,
   SetStateRequestParamsSchema,
   SignFieldsRequestParamsSchema,
   SignRequestParamsSchema,
   SignTransactionRequestParamsSchema,
-  StorePrivateCredentialRequestParamsSchema,
+  // StorePrivateCredentialRequestParamsSchema,
   SwitchChainRequestParamsSchema,
 } from "@mina-js/providers"
 import {
@@ -22,6 +22,10 @@ import {
 import { serializeError } from "serialize-error"
 import { z } from "zod"
 import type { Handler } from "."
+import {
+  PresentationRequestParamsSchema,
+  StorePrivateCredentialRequestParamsSchema,
+} from "./mina-attestations-schemas"
 
 export const OriginSchema = z.string().url()
 
