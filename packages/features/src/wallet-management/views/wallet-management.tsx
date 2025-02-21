@@ -2,15 +2,22 @@ import Plus from "@/common/assets/plus.svg?react"
 import { AppLayout } from "@/components/app-layout"
 import { ManagementPageLayout } from "@/components/management-layout"
 import { useTranslation } from "react-i18next"
+import { WalletDetails } from "../components/wallet-details"
 
 type WalletManagementProps = {
   onGoBack: () => void
   networkId: string
+  publicKey: string
+  walletName: string
+  onCopyWalletAddress: () => void
 }
 
 export const WalletManagementView = ({
+  publicKey,
   onGoBack,
   networkId,
+  walletName,
+  onCopyWalletAddress,
 }: WalletManagementProps) => {
   const { t } = useTranslation()
   return (
@@ -20,14 +27,18 @@ export const WalletManagementView = ({
         onCloseClicked={onGoBack}
         headerContent={
           <div className="flex items-center">
-            Add{" "}
+            Add
             <div className="mx-2">
               <Plus />
             </div>
           </div>
         }
       >
-        <div className="flex flex-col gap-1 flex-1 pb-8 items-center">Test</div>
+        <WalletDetails
+          onCopyWalletAddress={onCopyWalletAddress}
+          walletName={walletName}
+          publicKey={publicKey}
+        />
       </ManagementPageLayout>
     </AppLayout>
   )
