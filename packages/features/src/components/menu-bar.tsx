@@ -29,10 +29,16 @@ export const MenuBarBase = ({
   )
 }
 
-const LogoButton = ({ onClick }: { onClick?: () => void }) => {
+export const LogoButton = ({
+  onClick,
+  color,
+}: {
+  onClick?: () => void
+  color?: string
+}) => {
   return (
     <button type="button" onClick={onClick}>
-      <Logo width={32} height={32} />
+      <Logo width={32} height={32} {...(color ? { color: color } : {})} />
     </button>
   )
 }
