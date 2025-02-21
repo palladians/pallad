@@ -6,6 +6,9 @@ export const WalletManagement = () => {
     <WalletManagementView
       onGoBack={action("Go Back")}
       networkId="mina:devnet"
+      publicKey="B62qizYjLtUebFFQuAnPjpLrUdWx4rLnptvzbVdNpY6EXff2U68Ljf5"
+      walletName="Test"
+      onCopyWalletAddress={action("Address Copied")}
     />
   )
 }
