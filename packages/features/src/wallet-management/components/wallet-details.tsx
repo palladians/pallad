@@ -1,16 +1,16 @@
+import { truncateString } from "@/common/lib/string"
 import { LogoButton } from "@/components/menu-bar"
 import { EyeOff, Pencil } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import QRCode from "react-qr-code"
 import { DetailsDropdown } from "./details-dropdown"
 
 type WalletDetailsProps = {
-  onCopyWalletAddress: () => void
   walletName: string
   publicKey: string
 }
 
 export const WalletDetails = ({
-  onCopyWalletAddress,
   walletName,
   publicKey,
 }: WalletDetailsProps) => {
@@ -37,6 +37,24 @@ export const WalletDetails = ({
         </div>
         <DetailsDropdown options={dropdownOptions} />
       </nav>
+      <div className="flex w-full justify-between">
+        <div className="flex flex-col py-3 justify-end">
+          <div className="text-xl text-secondary">{walletName}</div>
+          <div className="text-lg text-secondary break-all">
+            {truncateString({
+              value: publicKey,
+              endCharCount: 3,
+              firstCharCount: 5,
+            })}
+          </div>
+        </div>
+        <QRCode
+          value={publicKey}
+          bgColor={"#25233A"}
+          fgColor={"#D1B4F4"}
+          className="relative w-[120px] h-[120px]"
+        />
+      </div>
     </div>
   )
 }
