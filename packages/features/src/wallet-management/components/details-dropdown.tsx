@@ -1,5 +1,6 @@
 import { Ellipsis, X } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 type DropdownOption = {
   name: string
@@ -13,6 +14,8 @@ type DetailsDropdownProps = {
 
 export const DetailsDropdown = ({ options }: DetailsDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
+
+  const { t } = useTranslation()
 
   return (
     <div className="relative">
@@ -28,8 +31,8 @@ export const DetailsDropdown = ({ options }: DetailsDropdownProps) => {
         )}
       </button>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-secondary rounded-lg shadow-lg z-10">
-          <ul className="py-2 text-sm">
+        <div className="absolute right-0 mt-2 w-30 bg-secondary rounded-lg shadow-lg z-10">
+          <ul className="p-2 shadow menu dropdown-content border-2 border-secondary z-[1] bg-neutral rounded-box w-52">
             {options.map((option, index) => (
               <li key={`${option.name}`}>
                 <button
@@ -38,9 +41,9 @@ export const DetailsDropdown = ({ options }: DetailsDropdownProps) => {
                     option.onClick()
                     setIsOpen(false)
                   }}
-                  className="flex justify-between items-center px-4 py-2 w-full text-left hover:bg-accent"
+                  className="flex justify-between items-center px-4 py-2 w-full text-left"
                 >
-                  {option.name}
+                  <span>{t(option.name)}</span>
                   {option.icon}
                 </button>
               </li>
