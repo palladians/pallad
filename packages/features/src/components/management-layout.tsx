@@ -31,7 +31,7 @@ export const ManagementPageLayout = ({
           </div>
         </div>
       </div>
-      <div className="py-6 px-8">{children}</div>
+      <div className="py-2 px-8">{children}</div>
     </div>
   )
 }

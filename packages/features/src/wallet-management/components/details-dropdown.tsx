@@ -1,12 +1,7 @@
 import { Ellipsis, X } from "lucide-react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-
-type DropdownOption = {
-  name: string
-  icon: JSX.Element
-  onClick: () => void
-}
+import type { DropdownOption } from "../types"
 
 type DetailsDropdownProps = {
   options: DropdownOption[]
@@ -32,7 +27,7 @@ export const DetailsDropdown = ({ options }: DetailsDropdownProps) => {
       </button>
       {isOpen && (
         <div className="absolute right-0 mt-2 w-30 bg-secondary rounded-lg shadow-lg z-10">
-          <ul className="p-2 shadow menu dropdown-content border-2 border-secondary z-[1] bg-neutral rounded-box w-52">
+          <ul className="p-2 shadow menu dropdown-content border-2 border-secondary z-[1] bg-neutral rounded-box w-40">
             {options.map((option, index) => (
               <li key={`${option.name}`}>
                 <button
