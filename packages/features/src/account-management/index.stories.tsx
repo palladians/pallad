@@ -1,6 +1,6 @@
 import { type StoryDefault, action } from "@ladle/react"
 import type { Account } from "./types"
-import { WalletManagementView } from "./views/wallet-management"
+import { AccountManagementView } from "./views/account-management"
 
 const accounts: Account[] = [
   {
@@ -17,10 +17,10 @@ const accounts: Account[] = [
   },
 ]
 
-export const WalletManagement = () => {
+export const AccountManagement = () => {
   const selectedIndex = 1
   return (
-    <WalletManagementView
+    <AccountManagementView
       onGoBack={action("Go Back")}
       networkId="mina:devnet"
       publicKey={accounts[selectedIndex].publicKey}

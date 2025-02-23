@@ -6,11 +6,11 @@ import QRCode from "react-qr-code"
 import type { Account } from "../types"
 import { DetailsDropdown } from "./details-dropdown"
 
-type WalletDetailsProps = {
+type AccountDetailsProps = {
   account: Account
 }
 
-export const WalletDetails = ({ account }: WalletDetailsProps) => {
+export const AccountDetails = ({ account }: AccountDetailsProps) => {
   const { t } = useTranslation()
 
   const dropdownOptions = [

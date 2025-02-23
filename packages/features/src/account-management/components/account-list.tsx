@@ -1,14 +1,14 @@
 import { truncateString } from "@/common/lib/string"
 import clsx from "clsx"
-import { type Dispatch, type SetStateAction, useState } from "react"
+import type { Dispatch, SetStateAction } from "react"
 import type { Account } from "../types"
 
-type WalletListProps = {
+type AccountListProps = {
   accounts: Account[]
   handleSelect: Dispatch<SetStateAction<Account>>
 }
 
-export const WalletList = ({ accounts, handleSelect }: WalletListProps) => {
+export const AccountList = ({ accounts, handleSelect }: AccountListProps) => {
   return (
     <div className="space-y-2 py-5">
       <div className="text-mint">Other</div>

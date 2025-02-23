@@ -1,13 +1,13 @@
+import type { Account } from "@/account-management/types"
 import Plus from "@/common/assets/plus.svg?react"
 import { AppLayout } from "@/components/app-layout"
 import { ManagementPageLayout } from "@/components/management-layout"
-import { WalletDetails } from "@/wallet-management/components/wallet-details"
-import { WalletList } from "@/wallet-management/components/wallet-list"
-import type { Account } from "@/wallet-management/types"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
+import { AccountDetails } from "../components/account-details"
+import { AccountList } from "../components/account-list"
 
-type WalletManagementProps = {
+type AccountManagementProps = {
   onGoBack: () => void
   networkId: string
   publicKey: string
@@ -15,13 +15,13 @@ type WalletManagementProps = {
   accounts: Account[]
 }
 
-export const WalletManagementView = ({
+export const AccountManagementView = ({
   publicKey,
   onGoBack,
   networkId,
   walletName,
   accounts,
-}: WalletManagementProps) => {
+}: AccountManagementProps) => {
   const { t } = useTranslation()
   const [selectedWallet, setSelectedWallet] = useState<Account>(accounts[0])
 
@@ -39,8 +39,8 @@ export const WalletManagementView = ({
           </div>
         }
       >
-        <WalletDetails account={selectedWallet} />
-        <WalletList accounts={accounts} handleSelect={setSelectedWallet} />
+        <AccountDetails account={selectedWallet} />
+        <AccountList accounts={accounts} handleSelect={setSelectedWallet} />
       </ManagementPageLayout>
     </AppLayout>
   )
