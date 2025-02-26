@@ -28,7 +28,7 @@ export const DetailsDropdown = ({ options }: DetailsDropdownProps) => {
       {isOpen && (
         <div className="absolute right-0 mt-2 w-30 bg-secondary rounded-lg shadow-lg z-10">
           <ul className="p-2 shadow menu dropdown-content border-2 border-secondary z-[1] bg-neutral rounded-box w-40">
-            {options.map((option, index) => (
+            {options.map((option) => (
               <li key={`${option.name}`}>
                 <button
                   type="button"

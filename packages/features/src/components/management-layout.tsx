@@ -26,8 +26,8 @@ export const ManagementPageLayout = ({
         />
         <div className={`${headerContent ? "pb-6" : "pb-12"} px-8`}>
           <div className="flex justify-between">
-            <p className="text-3xl">{title}</p>
-            <p className="flex items-center">{headerContent}</p>
+            <div className="text-3xl">{title}</div>
+            <div className="flex items-center">{headerContent}</div>
           </div>
         </div>
       </div>
