@@ -73,7 +73,7 @@ export const MenuBar = ({
           rightSlot={<MenuDrawer />}
         >
           {(publicAddress?.length ?? 0) > 0 && (
-            <Link to="/receive" className="btn flex gap-1 min-h-10 h-10">
+            <Link to="/accounts" className="btn flex gap-1 min-h-10 h-10">
               {truncateString({
                 value: publicAddress ?? "",
                 firstCharCount: 5,
