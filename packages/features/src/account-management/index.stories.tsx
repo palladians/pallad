@@ -1,6 +1,7 @@
 import { type StoryDefault, action } from "@ladle/react"
 import type { Account } from "./types"
 import { AccountManagementView } from "./views/account-management"
+import { EditAccountView } from "./views/edit-account"
 
 const accounts: Account[] = [
   {
@@ -22,11 +23,15 @@ export const AccountManagement = () => {
   return (
     <AccountManagementView
       onGoBack={action("Go Back")}
-      networkId="mina:devnet"
-      publicKey={accounts[selectedIndex].publicKey}
       walletName={accounts[selectedIndex].name}
       accounts={accounts}
     />
+  )
+}
+
+export const EditAccount = () => {
+  return (
+    <EditAccountView account={accounts[2]} onSubmit={action("Update name")} />
   )
 }
 
