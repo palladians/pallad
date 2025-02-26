@@ -1,21 +1,31 @@
-import { useAccount } from "@/common/hooks/use-account"
-import { useNavigate } from "react-router"
+import { useVault } from "@palladxyz/vault"
+import { useCallback, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import type { Account } from "../types"
 import { AccountManagementView } from "../views/account-management"
 
-export const AccounttManagementRoute = () => {
+export const AccountManagementRoute = () => {
   const navigate = useNavigate()
-  const { networkId, publicKey } = useAccount()
+  const [accounts, setAccounts] = useState<Account[]>([])
+
+  const { knownAccounts } = useVault()
+
+  const mapArrayToObject = useCallback((array: string[]): Account[] => {
+    return array.map((item, index) => ({
+      name: `account ${index}`,
+      publicKey: item,
+    }))
+  }, [])
+
+  useEffect(() => {
+    setAccounts(mapArrayToObject(knownAccounts))
+  }, [knownAccounts, mapArrayToObject])
+
   return (
     <AccountManagementView
       onGoBack={() => navigate(-1)}
-      networkId={networkId}
-      publicKey={publicKey}
-      walletName={""}
-      accounts={[]}
+      walletName={"TEST 1"}
+      accounts={accounts}
     />
-    //   publicKey={publicKey}
-    //   walletName={currentWallet.credential.keyAgentName}
-    //   onCopyWalletAddress={copyWalletAddress}
-    // />
   )
 }

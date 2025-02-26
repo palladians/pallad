@@ -13,23 +13,24 @@ export const AccountList = ({ accounts, handleSelect }: AccountListProps) => {
     <div className="space-y-2 py-5">
       <div className="text-mint">Other</div>
       <div className="text-2xl">Wallets</div>
-      {accounts.map((account) => {
+      {accounts?.map((account) => {
         return (
           <button
-            key={account.name}
+            key={account?.name}
             type="button"
             className={clsx(
               "bg-secondary w-full px-6 py-4 flex justify-between rounded-2xl hover:bg-primary",
             )}
             onClick={() => handleSelect(account)}
           >
-            <p>{account.name}</p>
+            <p>{account?.name}</p>
             <p>
-              {truncateString({
-                value: account.publicKey,
-                endCharCount: 3,
-                firstCharCount: 5,
-              })}
+              {account?.publicKey &&
+                truncateString({
+                  value: account.publicKey,
+                  endCharCount: 3,
+                  firstCharCount: 5,
+                })}
             </p>
           </button>
         )

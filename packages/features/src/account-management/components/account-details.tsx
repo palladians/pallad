@@ -3,26 +3,40 @@ import { LogoButton } from "@/components/menu-bar"
 import { EyeOff, Pencil } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import QRCode from "react-qr-code"
+import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 import type { Account } from "../types"
 import { DetailsDropdown } from "./details-dropdown"
 
 type AccountDetailsProps = {
   account: Account
+  accounts: Account[]
 }
 
-export const AccountDetails = ({ account }: AccountDetailsProps) => {
+export const AccountDetails = ({ account, accounts }: AccountDetailsProps) => {
+  const navigate = useNavigate()
   const { t } = useTranslation()
+
+  console.log("Account details", account)
 
   const dropdownOptions = [
     {
       name: t("Edit"),
       icon: <Pencil className="w-4 h-4" />,
-      onClick: () => console.log("Edit clicked"),
+      onClick: () => navigate("/accounts/edit"),
     },
     {
       name: t("Remove"),
       icon: <EyeOff className="w-4 h-4" />,
-      onClick: () => console.log("Remove clicked"),
+      onClick: () => {
+        console.log("Remove clicked")
+        const updatedAccounts = accounts.filter(
+          (a) => a.publicKey !== account.publicKey,
+        )
+        accounts = updatedAccounts
+        console.log("Account removed")
+        toast.success("Account removed")
+      },
     },
   ]
 
@@ -36,21 +50,24 @@ export const AccountDetails = ({ account }: AccountDetailsProps) => {
       </nav>
       <div className="flex w-full justify-between">
         <div className="flex flex-col py-3 justify-end">
-          <div className="text-xl text-secondary">{account.name}</div>
+          <div className="text-xl text-secondary">{account?.name}</div>
           <div className="text-lg text-secondary break-all">
-            {truncateString({
-              value: account.publicKey,
-              endCharCount: 3,
-              firstCharCount: 5,
-            })}
+            {account?.publicKey &&
+              truncateString({
+                value: account.publicKey,
+                endCharCount: 3,
+                firstCharCount: 5,
+              })}
           </div>
         </div>
-        <QRCode
-          value={account.publicKey}
-          bgColor={"#25233A"}
-          fgColor={"#D1B4F4"}
-          className="relative w-[120px] h-[120px]"
-        />
+        {account?.publicKey && (
+          <QRCode
+            value={account.publicKey}
+            bgColor={"#25233A"}
+            fgColor={"#D1B4F4"}
+            className="relative w-[120px] h-[120px]"
+          />
+        )}
       </div>
     </div>
   )
