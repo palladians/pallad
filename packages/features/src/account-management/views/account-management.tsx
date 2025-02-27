@@ -4,7 +4,7 @@ import type { Account } from "@/account-management/types"
 import Plus from "@/common/assets/plus.svg?react"
 import { AppLayout } from "@/components/app-layout"
 import { ManagementPageLayout } from "@/components/management-layout"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
@@ -24,6 +24,10 @@ export const AccountManagementView = ({
   const [selectedWallet, setSelectedWallet] = useState<Account>(accounts[0])
 
   console.log("Account management", selectedWallet)
+
+  useEffect(() => {
+    if (accounts) setSelectedWallet(accounts[0])
+  }, [accounts])
 
   return (
     <AppLayout>
