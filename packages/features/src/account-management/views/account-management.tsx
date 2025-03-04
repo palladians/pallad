@@ -6,7 +6,6 @@ import { AppLayout } from "@/components/app-layout"
 import { ManagementPageLayout } from "@/components/management-layout"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
 
 type AccountManagementProps = {
   onGoBack: () => void
@@ -19,11 +18,8 @@ export const AccountManagementView = ({
   walletName,
   accounts,
 }: AccountManagementProps) => {
-  const navigate = useNavigate()
   const { t } = useTranslation()
   const [selectedWallet, setSelectedWallet] = useState<Account>(accounts[0])
-
-  console.log("Account management", selectedWallet)
 
   useEffect(() => {
     if (accounts) setSelectedWallet(accounts[0])
@@ -37,9 +33,7 @@ export const AccountManagementView = ({
         headerContent={
           <button
             className="flex items-center"
-            onClick={() => {
-              navigate("/accounts/add")
-            }}
+            onClick={() => {}}
             type="button"
           >
             Add

@@ -1,7 +1,6 @@
 import { type StoryDefault, action } from "@ladle/react"
 import type { Account } from "./types"
 import { AccountManagementView } from "./views/account-management"
-import { EditAccountView } from "./views/edit-account"
 
 const accounts: Account[] = [
   {
@@ -26,12 +25,6 @@ export const AccountManagement = () => {
       walletName={accounts[selectedIndex].name}
       accounts={accounts}
     />
-  )
-}
-
-export const EditAccount = () => {
-  return (
-    <EditAccountView account={accounts[2]} onSubmit={action("Update name")} />
   )
 }
 

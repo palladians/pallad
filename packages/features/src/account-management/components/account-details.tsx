@@ -1,9 +1,8 @@
 import { truncateString } from "@/common/lib/string"
 import { LogoButton } from "@/components/menu-bar"
-import { EyeOff, Pencil } from "lucide-react"
+import { EyeOff } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import QRCode from "react-qr-code"
-import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import type { Account } from "../types"
 import { DetailsDropdown } from "./details-dropdown"
@@ -14,17 +13,9 @@ type AccountDetailsProps = {
 }
 
 export const AccountDetails = ({ account, accounts }: AccountDetailsProps) => {
-  const navigate = useNavigate()
   const { t } = useTranslation()
 
-  console.log("Account details", account)
-
   const dropdownOptions = [
-    {
-      name: t("Edit"),
-      icon: <Pencil className="w-4 h-4" />,
-      onClick: () => navigate("/accounts/edit"),
-    },
     {
       name: t("Remove"),
       icon: <EyeOff className="w-4 h-4" />,
