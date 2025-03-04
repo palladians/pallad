@@ -1,4 +1,4 @@
-import { AddEditAccountView } from "../views/add-edit-account";
+import { AddEditAccountView } from "../views/add-edit-account"
 
 export const EditAccountRoute = () => {
   return (
@@ -9,5 +9,5 @@ export const EditAccountRoute = () => {
       }}
       title={"Edit Account"}
     />
-  );
-};
+  )
+}

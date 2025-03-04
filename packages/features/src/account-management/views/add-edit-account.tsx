@@ -1,20 +1,20 @@
-import { AppLayout } from "@/components/app-layout";
-import { FormError } from "@/components/form-error";
-import { WizardLayout } from "@/components/wizard-layout";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { z } from "zod";
-import type { Account } from "../types";
+import { AppLayout } from "@/components/app-layout"
+import { FormError } from "@/components/form-error"
+import { WizardLayout } from "@/components/wizard-layout"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { z } from "zod"
+import type { Account } from "../types"
 
 interface AddEditAccountProps {
-  title: string;
-  account?: Account;
+  title: string
+  account?: Account
 }
 
 const formSchema = z.object({
   accountName: z.string().min(1).max(48),
-});
+})
 
 export const AddEditAccountView = ({ title, account }: AddEditAccountProps) => {
   const {
@@ -26,9 +26,9 @@ export const AddEditAccountView = ({ title, account }: AddEditAccountProps) => {
       accountName: account?.name,
     },
     resolver: zodResolver(formSchema),
-  });
+  })
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <AppLayout>
@@ -67,5 +67,5 @@ export const AddEditAccountView = ({ title, account }: AddEditAccountProps) => {
         </div>
       </WizardLayout>
     </AppLayout>
-  );
-};
+  )
+}
