@@ -7,8 +7,7 @@ import { AccountManagementView } from "../views/account-management"
 export const AccountManagementRoute = () => {
   const navigate = useNavigate()
   const [accounts, setAccounts] = useState<Account[]>([])
-
-  const { knownAccounts } = useVault()
+  const { knownAccounts, deriveNewAccount } = useVault()
 
   const mapArrayToObject = useCallback((array: string[]): Account[] => {
     return array.map((item, index) => ({
@@ -20,6 +19,13 @@ export const AccountManagementRoute = () => {
   useEffect(() => {
     setAccounts(mapArrayToObject(knownAccounts))
   }, [knownAccounts, mapArrayToObject])
+
+  useEffect(() => {
+    const x = async () => {
+      await deriveNewAccount()
+    }
+    x()
+  }, [deriveNewAccount])
 
   return (
     <AccountManagementView

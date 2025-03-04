@@ -1,4 +1,7 @@
-import { generateMnemonicWords } from "@palladxyz/key-management"
+import {
+  type ChainDerivationArgs,
+  generateMnemonicWords,
+} from "@palladxyz/key-management"
 import { Network } from "@palladxyz/pallad-core"
 import { produce } from "immer"
 import { create } from "zustand"
@@ -6,14 +9,16 @@ import { createJSONStorage, persist } from "zustand/middleware"
 
 import { createClient } from "@mina-js/klesia-sdk"
 import { TransactionBodySchema } from "@mina-js/utils"
+import { utf8ToBytes } from "@noble/hashes/utils"
 import { type AccountStore, accountSlice } from "../account"
 import { type CredentialStore, credentialSlice } from "../credentials"
 import { type KeyAgentStore, KeyAgents, keyAgentSlice } from "../keyAgent"
+import { WalletError } from "../lib/Errors"
 import { getRandomAnimalName } from "../lib/utils"
 import { type NetworkInfoStore, networkInfoSlice } from "../network-info"
 import { type ObjectStore, objectSlice } from "../objects"
 import { type TokenInfoStore, tokenInfoSlice } from "../token-info"
-import { securePersistence } from "../utils"
+import { securePersistence, sessionPersistence } from "../utils"
 import {
   getBalanceHelper,
   getCurrentWalletHelper,
@@ -93,6 +98,83 @@ export const useVault = create<
       // the credential doesn't need to be returned, nor does the transactions, nor the singleKeyAgentState
       getCurrentWallet() {
         return getCurrentWalletHelper(get)
+      },
+      deriveNewAccount: async () => {
+        const { restoreKeyAgent, keyAgentName } = get()
+        // const agentArgs: FromBip39MnemonicWordsProps = {
+        //   getPassphrase: getPassphrase,
+        //   mnemonicWords: mnemonicWords,
+        //   mnemonic2ndFactorPassphrase: "",
+        // };
+        const spendingPassword =
+          (await sessionPersistence.getItem("spendingPassword")) || ""
+        const getPassphrase = () => utf8ToBytes(spendingPassword)
+        // await initialiseKeyAgent(keyAgentName, KeyAgents.InMemory, agentArgs);
+        console.log("spendingPassword", spendingPassword)
+        const passphrase = utf8ToBytes(spendingPassword)
+        console.log("Passphrase:", passphrase)
+
+        await useVault.persist.rehydrate()
+
+        const keyAgent = restoreKeyAgent(keyAgentName, getPassphrase)
+        if (!keyAgent)
+          throw new WalletError("keyAgent is undefined in restoreWallet method") // TODO: we can derive credential direct from the key Agent Store
+
+        console.log(
+          "Encrypted Seed Bytes:",
+          keyAgent.serializableData.encryptedSeedBytes,
+        )
+
+        await useVault.persist.rehydrate()
+
+        const x = await keyAgent.decryptSeed()
+        console.log("decrypt", x)
+
+        console.log("keyAgent", keyAgent)
+        console.log(
+          "keyAgentName singleKeyAgentState",
+          getCurrentWalletHelper(get)?.singleKeyAgentState?.name!,
+        )
+        console.log("keyAgentName get()", keyAgentName)
+
+        const args: ChainDerivationArgs = {
+          network: Network.Mina,
+          accountIndex: 0,
+          addressIndex: 0,
+        }
+
+        const derivedCredential = await keyAgent?.deriveCredentials(
+          args,
+          getPassphrase,
+          true, // has to be true
+        )
+        if (!derivedCredential)
+          throw new WalletError(
+            "Derived credential is undefined in restoreWallet method",
+          )
+
+        // const keyAgent = get().restoreKeyAgent(get().keyAgentName, getPassphrase);
+        // if (!keyAgent)
+        //   throw new WalletError(
+        //     "keyAgent is undefined in restoreWallet method"
+        //   ); //
+        // const restore = get().restoreKeyAgent(get().keyAgentName, (
+        // );
+
+        // console.log("restore", restore);
+
+        // const args = {
+        //   network: Network.Mina,
+        //   accountIndex: get().knownAccounts.length + 1,
+        //   addressIndex: get().knownAccounts.length + 1,
+        // };
+        // const derived = restore?.deriveCredentials(
+        //   args,
+        //   () => utf8ToBytes(spendingPassword),
+        //   false
+        // );
+
+        // console.log("derived", derived);
       },
       _syncAccountInfo: async (providerConfig, publicKey) => {
         await syncAccountHelper(get, providerConfig, publicKey)
