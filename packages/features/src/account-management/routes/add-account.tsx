@@ -1,13 +1,13 @@
 import { AddEditAccountView } from "../views/add-edit-account";
 
-export const EditAccountRoute = () => {
+export const AddAccountRoute = () => {
   return (
     <AddEditAccountView
       account={{
         name: "",
         publicKey: "",
       }}
-      title={"Edit Account"}
+      title={"Add Account"}
     />
   );
 };
