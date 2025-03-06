@@ -100,47 +100,25 @@ export const useVault = create<
         return getCurrentWalletHelper(get)
       },
       deriveNewAccount: async () => {
-        const { restoreKeyAgent, keyAgentName } = get()
-        // const agentArgs: FromBip39MnemonicWordsProps = {
-        //   getPassphrase: getPassphrase,
-        //   mnemonicWords: mnemonicWords,
-        //   mnemonic2ndFactorPassphrase: "",
-        // };
+        const {
+          restoreKeyAgent,
+          keyAgentName,
+          knownAccounts,
+          setKnownAccounts,
+        } = get()
         const spendingPassword =
           (await sessionPersistence.getItem("spendingPassword")) || ""
         const getPassphrase = () => utf8ToBytes(spendingPassword)
-        // await initialiseKeyAgent(keyAgentName, KeyAgents.InMemory, agentArgs);
-        console.log("spendingPassword", spendingPassword)
-        const passphrase = utf8ToBytes(spendingPassword)
-        console.log("Passphrase:", passphrase)
-
         await useVault.persist.rehydrate()
-
         const keyAgent = restoreKeyAgent(keyAgentName, getPassphrase)
         if (!keyAgent)
-          throw new WalletError("keyAgent is undefined in restoreWallet method") // TODO: we can derive credential direct from the key Agent Store
-
-        console.log(
-          "Encrypted Seed Bytes:",
-          keyAgent.serializableData.encryptedSeedBytes,
-        )
-
+          throw new WalletError("keyAgent is undefined in restoreWallet method")
         await useVault.persist.rehydrate()
-
-        const x = await keyAgent.decryptSeed()
-        console.log("decrypt", x)
-
-        console.log("keyAgent", keyAgent)
-        console.log(
-          "keyAgentName singleKeyAgentState",
-          getCurrentWalletHelper(get)?.singleKeyAgentState?.name!,
-        )
-        console.log("keyAgentName get()", keyAgentName)
 
         const args: ChainDerivationArgs = {
           network: Network.Mina,
-          accountIndex: 0,
-          addressIndex: 0,
+          accountIndex: knownAccounts.length + 1,
+          addressIndex: knownAccounts.length + 1,
         }
 
         const derivedCredential = await keyAgent?.deriveCredentials(
@@ -152,29 +130,7 @@ export const useVault = create<
           throw new WalletError(
             "Derived credential is undefined in restoreWallet method",
           )
-
-        // const keyAgent = get().restoreKeyAgent(get().keyAgentName, getPassphrase);
-        // if (!keyAgent)
-        //   throw new WalletError(
-        //     "keyAgent is undefined in restoreWallet method"
-        //   ); //
-        // const restore = get().restoreKeyAgent(get().keyAgentName, (
-        // );
-
-        // console.log("restore", restore);
-
-        // const args = {
-        //   network: Network.Mina,
-        //   accountIndex: get().knownAccounts.length + 1,
-        //   addressIndex: get().knownAccounts.length + 1,
-        // };
-        // const derived = restore?.deriveCredentials(
-        //   args,
-        //   () => utf8ToBytes(spendingPassword),
-        //   false
-        // );
-
-        // console.log("derived", derived);
+        setKnownAccounts(derivedCredential.address)
       },
       _syncAccountInfo: async (providerConfig, publicKey) => {
         await syncAccountHelper(get, providerConfig, publicKey)
