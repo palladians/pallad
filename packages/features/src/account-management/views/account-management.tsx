@@ -1,29 +1,28 @@
 import { AccountDetails } from "@/account-management/components/account-details"
 import { AccountList } from "@/account-management/components/account-list"
-import type { Account } from "@/account-management/types"
 import Plus from "@/common/assets/plus.svg?react"
 import { AppLayout } from "@/components/app-layout"
 import { ManagementPageLayout } from "@/components/management-layout"
-import { useEffect, useState } from "react"
+import { type SingleCredentialState, useVault } from "@palladxyz/vault"
 import { useTranslation } from "react-i18next"
 
 type AccountManagementProps = {
   onGoBack: () => void
   walletName: string
-  accounts: Account[]
+  accounts: SingleCredentialState[]
+  onSelectAccount: (account: SingleCredentialState) => void
+  selectedAccount: SingleCredentialState
 }
 
 export const AccountManagementView = ({
   onGoBack,
   walletName,
   accounts,
+  onSelectAccount,
+  selectedAccount,
 }: AccountManagementProps) => {
   const { t } = useTranslation()
-  const [selectedWallet, setSelectedWallet] = useState<Account>(accounts[0])
-
-  useEffect(() => {
-    if (accounts) setSelectedWallet(accounts[0])
-  }, [accounts])
+  const { deriveNewAccount } = useVault()
 
   return (
     <AppLayout>
@@ -33,7 +32,9 @@ export const AccountManagementView = ({
         headerContent={
           <button
             className="flex items-center"
-            onClick={() => {}}
+            onClick={async () => {
+              await deriveNewAccount()
+            }}
             type="button"
           >
             Add
@@ -43,8 +44,9 @@ export const AccountManagementView = ({
           </button>
         }
       >
-        <AccountDetails account={selectedWallet} accounts={accounts} />
-        <AccountList accounts={accounts} handleSelect={setSelectedWallet} />
+        {/* <AccountDetails account={selectedWallet} accounts={accounts} /> */}
+        <AccountDetails account={selectedAccount} />
+        <AccountList accounts={accounts} handleSelect={onSelectAccount} />
       </ManagementPageLayout>
     </AppLayout>
   )

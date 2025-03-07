@@ -1,11 +1,10 @@
 import { truncateString } from "@/common/lib/string"
+import type { SingleCredentialState } from "@palladxyz/vault"
 import clsx from "clsx"
-import type { Dispatch, SetStateAction } from "react"
-import type { Account } from "../types"
 
 type AccountListProps = {
-  accounts: Account[]
-  handleSelect: Dispatch<SetStateAction<Account>>
+  accounts: SingleCredentialState[]
+  handleSelect: (account: SingleCredentialState) => void
 }
 
 export const AccountList = ({ accounts, handleSelect }: AccountListProps) => {
@@ -16,18 +15,18 @@ export const AccountList = ({ accounts, handleSelect }: AccountListProps) => {
       {accounts?.map((account) => {
         return (
           <button
-            key={account?.name}
+            key={account?.credentialName}
             type="button"
             className={clsx(
               "bg-secondary w-full px-6 py-4 flex justify-between rounded-2xl hover:bg-primary",
             )}
             onClick={() => handleSelect(account)}
           >
-            <p>{account?.name}</p>
+            <p>{account?.credentialName}</p>
             <p>
-              {account?.publicKey &&
+              {account?.credential?.address &&
                 truncateString({
-                  value: account.publicKey,
+                  value: account?.credential?.address,
                   endCharCount: 3,
                   firstCharCount: 5,
                 })}

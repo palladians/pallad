@@ -11,7 +11,12 @@ import { createClient } from "@mina-js/klesia-sdk"
 import { TransactionBodySchema } from "@mina-js/utils"
 import { utf8ToBytes } from "@noble/hashes/utils"
 import { type AccountStore, accountSlice } from "../account"
-import { type CredentialStore, credentialSlice } from "../credentials"
+import {
+  type CredentialName,
+  type CredentialStore,
+  type SingleCredentialState,
+  credentialSlice,
+} from "../credentials"
 import { type KeyAgentStore, KeyAgents, keyAgentSlice } from "../keyAgent"
 import { WalletError } from "../lib/Errors"
 import { getRandomAnimalName } from "../lib/utils"
@@ -105,6 +110,10 @@ export const useVault = create<
           keyAgentName,
           knownAccounts,
           setKnownAccounts,
+          addAccount,
+          getNetworkId,
+          setCurrentWallet,
+          setCredential,
         } = get()
         const spendingPassword =
           (await sessionPersistence.getItem("spendingPassword")) || ""
@@ -130,7 +139,25 @@ export const useVault = create<
           throw new WalletError(
             "Derived credential is undefined in restoreWallet method",
           )
+
+        const credentialName: CredentialName = getRandomAnimalName()
+        const singleCredentialState: SingleCredentialState = {
+          credentialName: credentialName,
+          keyAgentName: keyAgentName,
+          credential: derivedCredential,
+        }
+
+        setCredential(singleCredentialState)
+
+        setCurrentWallet({
+          keyAgentName,
+          credentialName,
+          currentAccountIndex: 1,
+          currentAddressIndex: 1,
+        })
+
         setKnownAccounts(derivedCredential.address)
+        addAccount(getNetworkId(), derivedCredential.address)
       },
       _syncAccountInfo: async (providerConfig, publicKey) => {
         await syncAccountHelper(get, providerConfig, publicKey)

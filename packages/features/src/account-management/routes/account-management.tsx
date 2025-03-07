@@ -1,37 +1,46 @@
-import { useVault } from "@palladxyz/vault"
-import { useCallback, useEffect, useState } from "react"
+import { type SingleCredentialState, useVault } from "@palladxyz/vault"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import type { Account } from "../types"
 import { AccountManagementView } from "../views/account-management"
 
 export const AccountManagementRoute = () => {
   const navigate = useNavigate()
-  const [accounts, setAccounts] = useState<Account[]>([])
-  const { knownAccounts, deriveNewAccount } = useVault()
 
-  const mapArrayToObject = useCallback((array: string[]): Account[] => {
-    return array.map((item, index) => ({
-      name: `account ${index}`,
-      publicKey: item,
-    }))
-  }, [])
+  const {
+    setCurrentWallet,
+    setCredential,
+    keyAgentName,
+    credentials,
+    walletName,
+  } = useVault()
+  const [accountList, setAccountlist] = useState<SingleCredentialState[]>([])
+  const [selectedAccount, setSelectedAccount] = useState<SingleCredentialState>(
+    accountList[0],
+  )
+
+  const onSelectAccount = (account: SingleCredentialState) => {
+    setSelectedAccount(account)
+    setCredential(account)
+    setCurrentWallet({
+      keyAgentName,
+      credentialName: account?.credentialName,
+      currentAccountIndex: account?.credential?.accountIndex ?? 0,
+      currentAddressIndex: account?.credential?.addressIndex ?? 0,
+    })
+  }
 
   useEffect(() => {
-    setAccounts(mapArrayToObject(knownAccounts))
-  }, [knownAccounts, mapArrayToObject])
-
-  useEffect(() => {
-    const x = async () => {
-      await deriveNewAccount()
-    }
-    x()
-  }, [deriveNewAccount])
+    const serializedList = Object.values(credentials)
+    setAccountlist(serializedList)
+  }, [credentials])
 
   return (
     <AccountManagementView
       onGoBack={() => navigate(-1)}
-      walletName={"TEST 1"}
-      accounts={accounts}
+      walletName={walletName}
+      accounts={accountList}
+      onSelectAccount={onSelectAccount}
+      selectedAccount={selectedAccount}
     />
   )
 }

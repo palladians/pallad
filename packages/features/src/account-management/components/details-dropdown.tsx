@@ -1,3 +1,4 @@
+import type { SingleCredentialState } from "@palladxyz/vault"
 import { Ellipsis, X } from "lucide-react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -5,9 +6,10 @@ import type { DropdownOption } from "../types"
 
 type DetailsDropdownProps = {
   options: DropdownOption[]
+  account: SingleCredentialState
 }
 
-export const DetailsDropdown = ({ options }: DetailsDropdownProps) => {
+export const DetailsDropdown = ({ options, account }: DetailsDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const { t } = useTranslation()
@@ -33,8 +35,10 @@ export const DetailsDropdown = ({ options }: DetailsDropdownProps) => {
                 <button
                   type="button"
                   onClick={() => {
-                    option.onClick()
-                    setIsOpen(false)
+                    if (account?.credential?.address) {
+                      option.onClick(account?.credential?.address)
+                      setIsOpen(false)
+                    }
                   }}
                   className="flex justify-between items-center px-4 py-2 w-full text-left"
                 >

@@ -2,14 +2,14 @@ import { AppLayout } from "@/components/app-layout"
 import { FormError } from "@/components/form-error"
 import { WizardLayout } from "@/components/wizard-layout"
 import { zodResolver } from "@hookform/resolvers/zod"
+import type { SingleCredentialState } from "@palladxyz/vault"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
-import type { Account } from "../types"
 
 interface AddEditAccountProps {
   title: string
-  account?: Account
+  account?: SingleCredentialState
 }
 
 const formSchema = z.object({
@@ -23,7 +23,7 @@ export const AddEditAccountView = ({ title, account }: AddEditAccountProps) => {
     formState: { errors, dirtyFields },
   } = useForm({
     defaultValues: {
-      accountName: account?.name,
+      accountName: account?.credentialName,
     },
     resolver: zodResolver(formSchema),
   })
