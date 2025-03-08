@@ -1,7 +1,4 @@
-import {
-  type ChainDerivationArgs,
-  generateMnemonicWords,
-} from "@palladxyz/key-management"
+import { generateMnemonicWords } from "@palladxyz/key-management"
 import { Network } from "@palladxyz/pallad-core"
 import { produce } from "immer"
 import { create } from "zustand"
@@ -9,21 +6,14 @@ import { createJSONStorage, persist } from "zustand/middleware"
 
 import { createClient } from "@mina-js/klesia-sdk"
 import { TransactionBodySchema } from "@mina-js/utils"
-import { utf8ToBytes } from "@noble/hashes/utils"
 import { type AccountStore, accountSlice } from "../account"
-import {
-  type CredentialName,
-  type CredentialStore,
-  type SingleCredentialState,
-  credentialSlice,
-} from "../credentials"
+import { type CredentialStore, credentialSlice } from "../credentials"
 import { type KeyAgentStore, KeyAgents, keyAgentSlice } from "../keyAgent"
-import { WalletError } from "../lib/Errors"
 import { getRandomAnimalName } from "../lib/utils"
 import { type NetworkInfoStore, networkInfoSlice } from "../network-info"
 import { type ObjectStore, objectSlice } from "../objects"
 import { type TokenInfoStore, tokenInfoSlice } from "../token-info"
-import { securePersistence, sessionPersistence } from "../utils"
+import { securePersistence } from "../utils"
 import {
   getBalanceHelper,
   getCurrentWalletHelper,
@@ -37,6 +27,7 @@ import {
   syncTransactionHelper,
   syncWalletHelper,
 } from "./utils"
+import { deriveAccountHelper } from "./utils/derive-account"
 import type { GlobalVaultState, GlobalVaultStore } from "./vaultState"
 
 const defaultGlobalVaultState: GlobalVaultState = {
@@ -105,59 +96,7 @@ export const useVault = create<
         return getCurrentWalletHelper(get)
       },
       deriveNewAccount: async () => {
-        const {
-          restoreKeyAgent,
-          keyAgentName,
-          knownAccounts,
-          setKnownAccounts,
-          addAccount,
-          getNetworkId,
-          setCurrentWallet,
-          setCredential,
-        } = get()
-        const spendingPassword =
-          (await sessionPersistence.getItem("spendingPassword")) || ""
-        const getPassphrase = () => utf8ToBytes(spendingPassword)
-        await useVault.persist.rehydrate()
-        const keyAgent = restoreKeyAgent(keyAgentName, getPassphrase)
-        if (!keyAgent)
-          throw new WalletError("keyAgent is undefined in restoreWallet method")
-        await useVault.persist.rehydrate()
-
-        const args: ChainDerivationArgs = {
-          network: Network.Mina,
-          accountIndex: knownAccounts.length + 1,
-          addressIndex: knownAccounts.length + 1,
-        }
-
-        const derivedCredential = await keyAgent?.deriveCredentials(
-          args,
-          getPassphrase,
-          true, // has to be true
-        )
-        if (!derivedCredential)
-          throw new WalletError(
-            "Derived credential is undefined in restoreWallet method",
-          )
-
-        const credentialName: CredentialName = getRandomAnimalName()
-        const singleCredentialState: SingleCredentialState = {
-          credentialName: credentialName,
-          keyAgentName: keyAgentName,
-          credential: derivedCredential,
-        }
-
-        setCredential(singleCredentialState)
-
-        setCurrentWallet({
-          keyAgentName,
-          credentialName,
-          currentAccountIndex: 1,
-          currentAddressIndex: 1,
-        })
-
-        setKnownAccounts(derivedCredential.address)
-        addAccount(getNetworkId(), derivedCredential.address)
+        await deriveAccountHelper(get)
       },
       _syncAccountInfo: async (providerConfig, publicKey) => {
         await syncAccountHelper(get, providerConfig, publicKey)
