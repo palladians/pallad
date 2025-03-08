@@ -5,13 +5,14 @@ import { AccountManagementView } from "../views/account-management"
 
 export const AccountManagementRoute = () => {
   const navigate = useNavigate()
-
   const {
     setCurrentWallet,
     setCredential,
     keyAgentName,
     credentials,
     walletName,
+    deriveNewAccount,
+    getCurrentWallet,
   } = useVault()
   const [accountList, setAccountlist] = useState<SingleCredentialState[]>([])
   const [selectedAccount, setSelectedAccount] = useState<SingleCredentialState>(
@@ -32,7 +33,8 @@ export const AccountManagementRoute = () => {
   useEffect(() => {
     const serializedList = Object.values(credentials)
     setAccountlist(serializedList)
-  }, [credentials])
+    setSelectedAccount(getCurrentWallet().credential)
+  }, [credentials, getCurrentWallet])
 
   return (
     <AccountManagementView
@@ -41,6 +43,7 @@ export const AccountManagementRoute = () => {
       accounts={accountList}
       onSelectAccount={onSelectAccount}
       selectedAccount={selectedAccount}
+      deriveNewAccount={deriveNewAccount}
     />
   )
 }

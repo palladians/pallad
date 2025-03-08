@@ -27,10 +27,12 @@ export async function deriveAccountHelper(get: any) {
     throw new WalletError("keyAgent is undefined in restoreWallet method")
   await useVault.persist.rehydrate()
 
+  const derivedAccountIndex = knownAccounts.length + 1
+
   const args: ChainDerivationArgs = {
     network: Network.Mina,
-    accountIndex: knownAccounts.length + 1,
-    addressIndex: knownAccounts.length + 1,
+    accountIndex: derivedAccountIndex,
+    addressIndex: derivedAccountIndex,
   }
 
   const derivedCredential = await keyAgent?.deriveCredentials(
@@ -51,14 +53,12 @@ export async function deriveAccountHelper(get: any) {
   }
 
   setCredential(singleCredentialState)
-
   setCurrentWallet({
     keyAgentName,
     credentialName,
-    currentAccountIndex: 1,
-    currentAddressIndex: 1,
+    currentAccountIndex: derivedAccountIndex,
+    currentAddressIndex: derivedAccountIndex,
   })
-
   setKnownAccounts(derivedCredential.address)
   addAccount(getNetworkId(), derivedCredential.address)
 }
