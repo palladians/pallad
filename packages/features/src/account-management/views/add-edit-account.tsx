@@ -39,7 +39,7 @@ export const AddEditAccountView = ({
   return (
     <AppLayout>
       <WizardLayout
-        title="Edit wallet"
+        title={title}
         backButtonPath={-1}
         footer={
           <button
