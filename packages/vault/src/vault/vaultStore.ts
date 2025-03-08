@@ -94,8 +94,8 @@ export const useVault = create<
       getCurrentWallet() {
         return getCurrentWalletHelper(get)
       },
-      deriveNewAccount: async () => {
-        await deriveAccountHelper(get)
+      deriveNewAccount: async (credentialName) => {
+        await deriveAccountHelper(get, credentialName)
       },
       _syncAccountInfo: async (providerConfig, publicKey) => {
         await syncAccountHelper(get, providerConfig, publicKey)

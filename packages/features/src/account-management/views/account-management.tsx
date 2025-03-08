@@ -5,6 +5,7 @@ import { AppLayout } from "@/components/app-layout"
 import { ManagementPageLayout } from "@/components/management-layout"
 import type { SingleCredentialState } from "@palladxyz/vault"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 
 type AccountManagementProps = {
   onGoBack: () => void
@@ -12,7 +13,6 @@ type AccountManagementProps = {
   accounts: SingleCredentialState[]
   onSelectAccount: (account: SingleCredentialState) => void
   selectedAccount: SingleCredentialState
-  deriveNewAccount: () => void
 }
 
 export const AccountManagementView = ({
@@ -21,9 +21,9 @@ export const AccountManagementView = ({
   accounts,
   onSelectAccount,
   selectedAccount,
-  deriveNewAccount,
 }: AccountManagementProps) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   return (
     <AppLayout>
@@ -34,7 +34,7 @@ export const AccountManagementView = ({
           <button
             className="flex items-center"
             onClick={async () => {
-              await deriveNewAccount()
+              navigate("/accounts/add")
             }}
             type="button"
           >

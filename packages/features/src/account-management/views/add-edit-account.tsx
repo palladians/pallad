@@ -6,9 +6,11 @@ import type { SingleCredentialState } from "@palladxyz/vault"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
+import { getRandomAnimalName } from "../../../../vault/src/lib/utils"
 
 interface AddEditAccountProps {
   title: string
+  handleAddEditAccount: (credentialName: string) => Promise<void>
   account?: SingleCredentialState
 }
 
@@ -16,14 +18,18 @@ const formSchema = z.object({
   accountName: z.string().min(1).max(48),
 })
 
-export const AddEditAccountView = ({ title, account }: AddEditAccountProps) => {
+export const AddEditAccountView = ({
+  title,
+  account,
+  handleAddEditAccount,
+}: AddEditAccountProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors, dirtyFields },
   } = useForm({
     defaultValues: {
-      accountName: account?.credentialName,
+      accountName: account ? account.credentialName : getRandomAnimalName(),
     },
     resolver: zodResolver(formSchema),
   })
@@ -40,7 +46,9 @@ export const AddEditAccountView = ({ title, account }: AddEditAccountProps) => {
             type="button"
             className="btn btn-primary max-w-48 w-full"
             disabled={!dirtyFields.accountName}
-            onClick={handleSubmit(() => console.log())}
+            onClick={handleSubmit((data) =>
+              handleAddEditAccount(data.accountName),
+            )}
             data-testid="formSubmit"
           >
             <span>{t(title)}</span>

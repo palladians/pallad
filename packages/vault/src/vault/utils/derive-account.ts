@@ -1,13 +1,12 @@
 import { utf8ToBytes } from "@noble/hashes/utils"
 import type { ChainDerivationArgs } from "@palladxyz/key-management"
 import { Network } from "@palladxyz/pallad-core"
-import type { CredentialName, SingleCredentialState } from "../../credentials"
+import type { SingleCredentialState } from "../../credentials"
 import { WalletError } from "../../lib/Errors"
-import { getRandomAnimalName } from "../../lib/utils"
 import { sessionPersistence } from "../../utils"
 import { useVault } from "../vaultStore"
 
-export async function deriveAccountHelper(get: any) {
+export async function deriveAccountHelper(get: any, credentialName: string) {
   const {
     restoreKeyAgent,
     keyAgentName,
@@ -45,7 +44,6 @@ export async function deriveAccountHelper(get: any) {
       "Derived credential is undefined in restoreWallet method",
     )
 
-  const credentialName: CredentialName = getRandomAnimalName()
   const singleCredentialState: SingleCredentialState = {
     credentialName: credentialName,
     keyAgentName: keyAgentName,

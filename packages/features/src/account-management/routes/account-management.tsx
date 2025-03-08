@@ -11,7 +11,6 @@ export const AccountManagementRoute = () => {
     keyAgentName,
     credentials,
     walletName,
-    deriveNewAccount,
     getCurrentWallet,
   } = useVault()
   const [accountList, setAccountlist] = useState<SingleCredentialState[]>([])
@@ -43,7 +42,6 @@ export const AccountManagementRoute = () => {
       accounts={accountList}
       onSelectAccount={onSelectAccount}
       selectedAccount={selectedAccount}
-      deriveNewAccount={deriveNewAccount}
     />
   )
 }
