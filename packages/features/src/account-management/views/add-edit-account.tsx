@@ -3,6 +3,7 @@ import { FormError } from "@/components/form-error"
 import { WizardLayout } from "@/components/wizard-layout"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { SingleCredentialState } from "@palladxyz/vault"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
@@ -12,6 +13,7 @@ interface AddEditAccountProps {
   title: string
   handleAddEditAccount: (credentialName: string) => Promise<void>
   account?: SingleCredentialState
+  isLoading: boolean
 }
 
 const formSchema = z.object({
@@ -22,11 +24,13 @@ export const AddEditAccountView = ({
   title,
   account,
   handleAddEditAccount,
+  isLoading,
 }: AddEditAccountProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors, dirtyFields },
+    reset,
   } = useForm({
     defaultValues: {
       accountName: account ? account.credentialName : getRandomAnimalName(),
@@ -35,6 +39,12 @@ export const AddEditAccountView = ({
   })
 
   const { t } = useTranslation()
+
+  useEffect(() => {
+    if (account) {
+      reset({ accountName: account.credentialName })
+    }
+  }, [account, reset])
 
   return (
     <AppLayout>
@@ -45,7 +55,7 @@ export const AddEditAccountView = ({
           <button
             type="button"
             className="btn btn-primary max-w-48 w-full"
-            disabled={!dirtyFields.accountName}
+            disabled={!dirtyFields.accountName || isLoading}
             onClick={handleSubmit((data) =>
               handleAddEditAccount(data.accountName),
             )}
