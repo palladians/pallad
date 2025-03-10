@@ -34,8 +34,11 @@ export const AccountDetails = ({
       icon: <EyeOff className="w-4 h-4" />,
       onClick: async (account: SingleCredentialState) => {
         const serializedList = Object.values(credentials)
-        if (serializedList.length === 1) {
-          toast.error("Must have at least one credential")
+        if (
+          account.credential?.accountIndex === 0 ||
+          account.credential?.addressIndex === 0
+        ) {
+          toast.error("Cannot remove first credential")
           return
         }
 
