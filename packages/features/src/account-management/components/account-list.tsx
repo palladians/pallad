@@ -22,7 +22,14 @@ export const AccountList = ({ accounts, handleSelect }: AccountListProps) => {
             )}
             onClick={() => handleSelect(account)}
           >
-            <p>{account?.credentialName}</p>
+            <p>
+              {account?.credentialName &&
+                truncateString({
+                  value: account?.credentialName,
+                  endCharCount: 1,
+                  firstCharCount: 12,
+                })}
+            </p>
             <p>
               {account?.credential?.address &&
                 truncateString({
