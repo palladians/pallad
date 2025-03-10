@@ -124,7 +124,7 @@ export const Router = () => {
             </Route>
             <Route path="accounts" element={<Outlet />}>
               <Route path="" element={<AccountManagementRoute />} />
-              <Route path="edit" element={<EditAccountRoute />} />
+              <Route path="edit/:addressIndex" element={<EditAccountRoute />} />
               <Route path="add" element={<AddAccountRoute />} />
             </Route>
             <Route path="/*" element={<NotFoundRoute />} />

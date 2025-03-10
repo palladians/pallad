@@ -35,8 +35,8 @@ export const DetailsDropdown = ({ options, account }: DetailsDropdownProps) => {
                 <button
                   type="button"
                   onClick={() => {
-                    if (account?.credential?.address) {
-                      option.onClick(account?.credential?.address)
+                    if (account) {
+                      option.onClick(account)
                       setIsOpen(false)
                     }
                   }}
