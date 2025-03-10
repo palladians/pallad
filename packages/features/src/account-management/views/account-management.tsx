@@ -13,6 +13,7 @@ type AccountManagementProps = {
   accounts: SingleCredentialState[]
   onSelectAccount: (account: SingleCredentialState) => void
   selectedAccount: SingleCredentialState
+  onCopyWalletAddress: () => void
 }
 
 export const AccountManagementView = ({
@@ -21,6 +22,7 @@ export const AccountManagementView = ({
   accounts,
   onSelectAccount,
   selectedAccount,
+  onCopyWalletAddress,
 }: AccountManagementProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -45,8 +47,10 @@ export const AccountManagementView = ({
           </button>
         }
       >
-        {/* <AccountDetails account={selectedWallet} accounts={accounts} /> */}
-        <AccountDetails account={selectedAccount} />
+        <AccountDetails
+          account={selectedAccount}
+          onCopyWalletAddress={onCopyWalletAddress}
+        />
         <AccountList accounts={accounts} handleSelect={onSelectAccount} />
       </ManagementPageLayout>
     </AppLayout>

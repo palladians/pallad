@@ -1,3 +1,4 @@
+import { useAccount } from "@/common/hooks/use-account"
 import { type SingleCredentialState, useVault } from "@palladxyz/vault"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -17,8 +18,9 @@ export const AccountManagementRoute = () => {
   const [selectedAccount, setSelectedAccount] = useState<SingleCredentialState>(
     accountList[0],
   )
+  const { copyWalletAddress } = useAccount()
 
-  const onSelectAccount = (account: SingleCredentialState) => {
+  const selectAccount = (account: SingleCredentialState) => {
     setSelectedAccount(account)
     setCredential(account)
     setCurrentWallet({
@@ -40,8 +42,9 @@ export const AccountManagementRoute = () => {
       onGoBack={() => navigate(-1)}
       walletName={walletName}
       accounts={accountList}
-      onSelectAccount={onSelectAccount}
+      onSelectAccount={selectAccount}
       selectedAccount={selectedAccount}
+      onCopyWalletAddress={copyWalletAddress}
     />
   )
 }

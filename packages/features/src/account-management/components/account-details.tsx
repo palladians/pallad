@@ -1,4 +1,3 @@
-import { useAccount } from "@/common/hooks/use-account"
 import { truncateString } from "@/common/lib/string"
 import { LogoButton } from "@/components/menu-bar"
 import { type SingleCredentialState, useVault } from "@palladxyz/vault"
@@ -11,9 +10,13 @@ import { DetailsDropdown } from "./details-dropdown"
 
 type AccountDetailsProps = {
   account: SingleCredentialState
+  onCopyWalletAddress: () => void
 }
 
-export const AccountDetails = ({ account }: AccountDetailsProps) => {
+export const AccountDetails = ({
+  account,
+  onCopyWalletAddress,
+}: AccountDetailsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -24,8 +27,6 @@ export const AccountDetails = ({ account }: AccountDetailsProps) => {
     setCurrentWallet,
     keyAgentName,
   } = useVault()
-
-  const { copyWalletAddress } = useAccount()
 
   const dropdownOptions = [
     {
@@ -93,7 +94,7 @@ export const AccountDetails = ({ account }: AccountDetailsProps) => {
             fgColor={"#D1B4F4"}
             className="relative w-[120px] h-[120px]"
             onClick={() => {
-              copyWalletAddress()
+              onCopyWalletAddress()
             }}
           />
         )}
