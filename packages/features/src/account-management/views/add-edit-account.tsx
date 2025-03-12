@@ -68,7 +68,7 @@ export const AddEditAccountView = ({
         <div className="flex flex-col flex-1 gap-4">
           <div className="flex flex-col">
             <label htmlFor="accountNameInput" className="label">
-              {t("wallet-management.editAccount")}
+              {t("account-management.addEditAccount")}
             </label>
             <input
               id="accountNameInput"

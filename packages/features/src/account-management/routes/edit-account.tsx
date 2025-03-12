@@ -1,5 +1,6 @@
 import { type SingleCredentialState, useVault } from "@palladxyz/vault"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "sonner"
 import { AddEditAccountView } from "../views/add-edit-account"
@@ -12,6 +13,7 @@ export const EditAccountRoute = () => {
     setCurrentWallet,
     keyAgentName,
   } = useVault()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { addressIndex } = useParams<{ addressIndex: string }>()
   const [editingAccount, setEditingAccount] = useState<SingleCredentialState>()
@@ -58,7 +60,7 @@ export const EditAccountRoute = () => {
 
   return (
     <AddEditAccountView
-      title={"Edit Account"}
+      title={t("account-management.editAccount")}
       account={editingAccount}
       handleAddEditAccount={handleEditAccount}
       isLoading={isLoading}
