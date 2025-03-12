@@ -1,6 +1,7 @@
 import { truncateString } from "@/common/lib/string"
 import type { SingleCredentialState } from "@palladxyz/vault"
 import clsx from "clsx"
+import { useEffect, useState } from "react"
 
 type AccountListProps = {
   accounts: SingleCredentialState[]
@@ -8,11 +9,28 @@ type AccountListProps = {
 }
 
 export const AccountList = ({ accounts, handleSelect }: AccountListProps) => {
+  const [sortedAccounts, setSortedAccounts] = useState<SingleCredentialState[]>(
+    [],
+  )
+
+  useEffect(() => {
+    const sorted = accounts
+      ? [...accounts].sort(
+          (a, b) =>
+            //orderd by addressIndex - not sure if this is the correct way to sort
+            (a?.credential?.addressIndex ?? Number.POSITIVE_INFINITY) -
+            (b?.credential?.addressIndex ?? Number.POSITIVE_INFINITY),
+        )
+      : []
+
+    setSortedAccounts(sorted)
+  }, [accounts])
+
   return (
     <div className="space-y-2 py-5">
       <div className="text-mint">Other</div>
       <div className="text-2xl">Wallets</div>
-      {accounts?.map((account) => {
+      {sortedAccounts?.map((account) => {
         return (
           <button
             key={account?.credentialName}

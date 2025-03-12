@@ -43,8 +43,8 @@ export const AccountDetails = ({
         }
 
         if (
-          serializedList[serializedList.length - 1]?.credentialName ===
-          account?.credentialName
+          account.credential?.accountIndex === serializedList.length - 1 &&
+          serializedList.length > 1
         ) {
           removeCredential(account?.credentialName)
           setCredential(serializedList[0])
@@ -87,6 +87,14 @@ export const AccountDetails = ({
                 value: account?.credentialName,
                 endCharCount: 1,
                 firstCharCount: 12,
+              })}
+          </div>
+          <div className="text-xl text-secondary">
+            {account?.credentialName &&
+              truncateString({
+                value: account?.credential?.address ?? "",
+                endCharCount: 3,
+                firstCharCount: 5,
               })}
           </div>
         </div>
