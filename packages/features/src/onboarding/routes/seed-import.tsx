@@ -56,7 +56,7 @@ export const SeedImportRoute = () => {
         },
         walletName,
         KeyAgents.InMemory,
-        "Test", // TODO: make this a configurable credential name or random if not provided
+        "Personal", // TODO: make this a configurable credential name or random if not provided
       )
       setVaultStateInitialized()
       return navigate("/onboarding/finish")
