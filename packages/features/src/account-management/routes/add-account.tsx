@@ -12,7 +12,7 @@ export const AddAccountRoute = () => {
 
   const handleAddAccount = async (credentialName: string) => {
     setIsLoading(true)
-    await deriveNewAccount(credentialName).then(() => navigate(-1))
+    await deriveNewAccount(credentialName).then(() => navigate("/dashboard"))
     setIsLoading(false)
   }
 
