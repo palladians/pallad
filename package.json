@@ -22,26 +22,25 @@
     "preinstall": "bunx only-allow bun"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.3",
+    "@biomejs/biome": "1.9.4",
     "@happy-dom/global-registrator": "^15.11.0",
-    "@testing-library/react": "16.0.1",
+    "@testing-library/react": "16.2.0",
     "@tsconfig/strictest": "2.0.5",
-    "@turbo/gen": "2.0.9",
-    "@vitest/coverage-v8": "2.0.5",
+    "@turbo/gen": "2.4.4",
     "@mina-js/utils": "https://pkg.pr.new/palladians/mina-js/@mina-js/utils@a9d6774",
-    "@types/bun": "^1.1.13",
-    "autoprefixer": "10.4.19",
+    "@types/bun": "1.2.5",
+    "autoprefixer": "10.4.21",
     "happy-dom": "14.12.3",
-    "husky": "9.1.4",
-    "postcss": "8.4.40",
+    "husky": "9.1.7",
+    "postcss": "8.5.3",
     "rimraf": "6.0.1",
-    "tailwindcss": "3.4.7",
+    "tailwindcss": "3.4.17",
     "tailwindcss-animate": "1.0.7",
-    "tsup": "8.2.3",
-    "turbo": "2.0.9",
+    "tsup": "8.4.0",
+    "turbo": "2.4.4",
     "turbowatch": "2.29.4",
-    "typescript": "5.6.3"
+    "typescript": "5.8.2"
   },
   "workspaces": ["packages/*", "apps/*"],
-  "packageManager": "bun@1.1.34"
+  "packageManager": "bun@1.2.5"
 }

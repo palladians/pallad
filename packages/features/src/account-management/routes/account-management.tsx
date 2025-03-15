@@ -1,5 +1,5 @@
 import { useAccount } from "@/common/hooks/use-account"
-import { type SingleCredentialState, useVault } from "@palladxyz/vault"
+import { type SingleCredentialState, useVault } from "@palladco/vault"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { AccountManagementView } from "../views/account-management"

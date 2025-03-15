@@ -32,13 +32,13 @@ export const HashDropdown = ({ hash, className }: HashDropdownProps) => {
   const { t } = useTranslation()
   return (
     <div className={clsx("dropdown dropdown-top dropdown-end")}>
-      <div
-        role="button"
+      <button
+        type="button"
         tabIndex={0}
         className={clsx("cursor-pointer", className)}
       >
         {hash}
-      </div>
+      </button>
       <ul className="p-2 shadow menu dropdown-content border-2 border-secondary z-[1] bg-neutral rounded-box w-52">
         <li onClick={handleClick}>
           <button type="button" onClick={copyHash} className="flex gap-2">

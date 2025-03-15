@@ -4,11 +4,11 @@
 @tailwind utilities;
 
 :base {
-    --mint: #a3dbe4;
+  --mint: #a3dbe4;
 }
 
 @layer base {
-    body {
-        @apply font-work-sans font-[500] bg-neutral;
-    }
+  body {
+    @apply font-work-sans font-[500] bg-neutral;
+  }
 }

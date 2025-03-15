@@ -36,7 +36,7 @@ export const useAccount = () => {
       refreshInterval: 30000,
     },
   )
-  const rawBalance = swr.isLoading ? 0 : swr.data?.balance ?? 0
+  const rawBalance = swr.isLoading ? 0 : (swr.data?.balance ?? 0)
   const minaBalance =
     rawBalance && Number.parseInt(String(rawBalance)) / 1_000_000_000
   const gradientBackground = useMemo(

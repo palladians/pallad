@@ -1,6 +1,6 @@
 import { type StoryDefault, action } from "@ladle/react"
-import { Network } from "@palladxyz/pallad-core"
-import type { SingleCredentialState } from "@palladxyz/vault"
+import { Network } from "@palladco/pallad-core"
+import type { SingleCredentialState } from "@palladco/vault"
 import { AccountManagementView } from "./views/account-management"
 import { AddEditAccountView } from "./views/add-edit-account"
 const keyAgentName = "TestKeyAgent"

@@ -1,4 +1,4 @@
-import type { SingleCredentialState } from "@palladxyz/vault"
+import type { SingleCredentialState } from "@palladco/vault"
 
 export type DropdownOption = {
   name: string

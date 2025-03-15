@@ -3,7 +3,7 @@ import { AccountList } from "@/account-management/components/account-list"
 import Plus from "@/common/assets/plus.svg?react"
 import { AppLayout } from "@/components/app-layout"
 import { ManagementPageLayout } from "@/components/management-layout"
-import type { SingleCredentialState } from "@palladxyz/vault"
+import type { SingleCredentialState } from "@palladco/vault"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 

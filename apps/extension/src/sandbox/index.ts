@@ -48,6 +48,7 @@ let presentationSignaturePromise: {
 } | null = null
 
 window.addEventListener("message", async (event) => {
+  console.log(">>>EV", event)
   const message = MessageSchema.parse(event.data)
 
   if (message.type === "presentation-signature") {
