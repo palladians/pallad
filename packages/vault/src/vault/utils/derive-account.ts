@@ -31,7 +31,7 @@ export async function deriveAccountHelper(get: any, credentialName: string) {
 
   const args: ChainDerivationArgs = {
     network: Network.Mina,
-    accountIndex: derivedAccountIndex,
+    accountIndex: 0,
     addressIndex: derivedAccountIndex,
   }
 
@@ -55,7 +55,7 @@ export async function deriveAccountHelper(get: any, credentialName: string) {
   setCurrentWallet({
     keyAgentName,
     credentialName,
-    currentAccountIndex: derivedAccountIndex,
+    currentAccountIndex: 0,
     currentAddressIndex: derivedAccountIndex,
   })
   setKnownAccounts(derivedCredential.address)

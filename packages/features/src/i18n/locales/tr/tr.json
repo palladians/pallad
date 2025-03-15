@@ -147,5 +147,20 @@
     "deny": "Reddet",
     "sign": "İmzala",
     "reject": "Reddet"
+  },
+  "accountManagement": {
+    "addAccount": "Hesap Ekle",
+    "editAccount": "Hesap Düzenle",
+    "addEditAccount": "Hesap Etiketi",
+    "setAccountName": "Hesap Adını Ayarla",
+    "add": "Ekle",
+    "other": "Diğer",
+    "wallets": "Cüzdanlar",
+    "remove": "Kaldır",
+    "edit": "Düzenle",
+    "cannotRemoveFirstCredential": "İlk kimlik bilgisi silinemez",
+    "onlyLastCredentialCanBeRemoved": "Sadece son kimlik bilgisi silinebilir",
+    "accountRemoved": "Hesap kaldırıldı",
+    "accountEdited": "Hesap düzenlendi"
   }
 }

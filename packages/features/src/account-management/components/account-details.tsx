@@ -1,5 +1,6 @@
 import { truncateString } from "@/common/lib/string"
 import { LogoButton } from "@/components/menu-bar"
+import { MinaKeyConst } from "@palladxyz/key-management"
 import { type SingleCredentialState, useVault } from "@palladxyz/vault"
 import { EyeOff, Pencil } from "lucide-react"
 import { useTranslation } from "react-i18next"
@@ -11,6 +12,10 @@ import { DetailsDropdown } from "./details-dropdown"
 type AccountDetailsProps = {
   account: SingleCredentialState
   onCopyWalletAddress: () => void
+}
+
+function getDerivationPath(accountIndex: number, addressIndex: number) {
+  return `m/${MinaKeyConst.PURPOSE}'/${MinaKeyConst.MINA_COIN_TYPE}'/${accountIndex}'/0/${addressIndex}`
 }
 
 export const AccountDetails = ({
@@ -30,7 +35,7 @@ export const AccountDetails = ({
 
   const dropdownOptions = [
     {
-      name: t("Remove"),
+      name: t("accountManagement.remove"),
       icon: <EyeOff className="w-4 h-4" />,
       onClick: async (account: SingleCredentialState) => {
         const serializedList = Object.values(credentials)
@@ -38,7 +43,7 @@ export const AccountDetails = ({
           account.credential?.accountIndex === 0 ||
           account.credential?.addressIndex === 0
         ) {
-          toast.error("Cannot remove first credential")
+          toast.error(t("accountManagement.cannotRemoveFirstCredential"))
           return
         }
 
@@ -56,14 +61,14 @@ export const AccountDetails = ({
             currentAddressIndex:
               serializedList[0]?.credential?.addressIndex ?? 0,
           })
-          toast.success("Account removed")
+          toast.success(t("accountManagement.accountRemoved"))
         } else {
-          toast.error("Only the last credential can be removed")
+          toast.error(t("accountManagement.onlyLastCredentialCanBeRemoved"))
         }
       },
     },
     {
-      name: t("Edit"),
+      name: t("accountManagement.edit"),
       icon: <Pencil className="w-4 h-4" />,
       onClick: async (account: SingleCredentialState) => {
         navigate(`/accounts/edit/${account.credential?.addressIndex}`)
@@ -80,7 +85,7 @@ export const AccountDetails = ({
         <DetailsDropdown options={dropdownOptions} account={account} />
       </nav>
       <div className="flex w-full justify-between">
-        <div className="flex flex-col py-3 justify-end">
+        <div className="flex flex-col py-3 justify-end items-start text-left">
           <div className="text-xl text-secondary">
             {account?.credentialName &&
               truncateString({
@@ -96,6 +101,12 @@ export const AccountDetails = ({
                 endCharCount: 3,
                 firstCharCount: 5,
               })}
+          </div>
+          <div className="text-xl text-secondary">
+            {getDerivationPath(
+              account?.credential?.accountIndex ?? 0,
+              account?.credential?.addressIndex ?? 0,
+            )}
           </div>
         </div>
         {account?.credential?.address && (

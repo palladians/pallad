@@ -40,7 +40,7 @@ export const AccountManagementView = ({
             }}
             type="button"
           >
-            Add
+            {t("accountManagement.addAccount")}
             <div className="mx-2">
               <Plus />
             </div>

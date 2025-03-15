@@ -147,5 +147,20 @@
     "deny": "Deny",
     "sign": "Sign",
     "reject": "Reject"
+  },
+  "accountManagement": {
+    "addAccount": "Add Account",
+    "editAccount": "Edit Account",
+    "addEditAccount": "Account Label",
+    "setAccountName": "Set Account Name",
+    "add": "Add",
+    "other": "Other",
+    "wallets": "Wallets",
+    "remove": "Remove",
+    "edit": "Edit",
+    "cannotRemoveFirstCredential": "Cannot remove first credential",
+    "onlyLastCredentialCanBeRemoved": "Only the last credential can be removed",
+    "accountRemoved": "Account removed",
+    "accountEdited": "Account edited"
   }
 }

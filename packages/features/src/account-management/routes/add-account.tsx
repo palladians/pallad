@@ -18,7 +18,7 @@ export const AddAccountRoute = () => {
 
   return (
     <AddEditAccountView
-      title={t("account-management.addAccount")}
+      title={t("accountManagement.addAccount")}
       handleAddEditAccount={handleAddAccount}
       isLoading={isLoading}
     />

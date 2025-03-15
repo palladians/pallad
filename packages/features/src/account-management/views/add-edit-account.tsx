@@ -29,11 +29,12 @@ export const AddEditAccountView = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, dirtyFields },
+    formState: { errors },
     reset,
+    setValue,
   } = useForm({
     defaultValues: {
-      accountName: account ? account.credentialName : getRandomAnimalName(),
+      accountName: "",
     },
     resolver: zodResolver(formSchema),
   })
@@ -42,9 +43,10 @@ export const AddEditAccountView = ({
 
   useEffect(() => {
     if (account) {
-      reset({ accountName: account.credentialName })
+      return reset({ accountName: account.credentialName })
     }
-  }, [account, reset])
+    return setValue("accountName", getRandomAnimalName())
+  }, [account, reset, setValue])
 
   return (
     <AppLayout>
@@ -55,7 +57,7 @@ export const AddEditAccountView = ({
           <button
             type="button"
             className="btn btn-primary max-w-48 w-full"
-            disabled={!dirtyFields.accountName || isLoading}
+            disabled={isLoading}
             onClick={handleSubmit((data) =>
               handleAddEditAccount(data.accountName),
             )}
@@ -68,11 +70,11 @@ export const AddEditAccountView = ({
         <div className="flex flex-col flex-1 gap-4">
           <div className="flex flex-col">
             <label htmlFor="accountNameInput" className="label">
-              {t("account-management.addEditAccount")}
+              {t("accountManagement.addEditAccount")}
             </label>
             <input
               id="accountNameInput"
-              placeholder="Set account name"
+              placeholder={t("accountManagement.setAccountName")}
               data-testid="editAccount/accountNameInput"
               className="input"
               autoComplete="off"

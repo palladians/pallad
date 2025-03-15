@@ -52,7 +52,7 @@ export const EditAccountRoute = () => {
           currentAddressIndex: updatedAccount?.credential?.addressIndex ?? 0,
         })
       }
-      toast.success("Account updated")
+      toast.success(t("accountManagement.accountEdited"))
       navigate(-1)
     }
     setIsLoading(false)
@@ -60,7 +60,7 @@ export const EditAccountRoute = () => {
 
   return (
     <AddEditAccountView
-      title={t("account-management.editAccount")}
+      title={t("accountManagement.editAccount")}
       account={editingAccount}
       handleAddEditAccount={handleEditAccount}
       isLoading={isLoading}
