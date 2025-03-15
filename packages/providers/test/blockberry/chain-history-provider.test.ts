@@ -45,7 +45,7 @@ describe("Mina Explorer Chain History Provider (Functional)", () => {
       //expect(transaction).toHaveProperty("kind")
       expect(transaction).toHaveProperty("to")
       expect(transaction).toHaveProperty("token")
-    })
+    }, 60000)
   })
 
   //TODO: Other tests...
