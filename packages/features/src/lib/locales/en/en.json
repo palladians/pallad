@@ -148,6 +148,10 @@
     "sign": "Sign",
     "reject": "Reject"
   },
+  "credentials": {
+    "credentials": "Credentials",
+    "delete": "Delete"
+  },
   "accountManagement": {
     "addAccount": "Add Account",
     "editAccount": "Edit Account",

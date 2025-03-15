@@ -12,7 +12,8 @@ const callPalladAsync = ({
   context: Record<string, string>
 }) => {
   return new Promise((resolve, reject) => {
-    const privateChannelId = `private-${Math.random()}`
+    const randomId = crypto.getRandomValues(new Uint32Array(8)).join("")
+    const privateChannelId = `private-${randomId}`
     const channel = new BroadcastChannel(BROADCAST_CHANNEL_ID)
     const responseChannel = new BroadcastChannel(privateChannelId)
     const messageListener = ({ data }: any) => {

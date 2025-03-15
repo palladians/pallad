@@ -1,9 +1,9 @@
 import { createClient } from "@mina-js/klesia-sdk"
-import type { ChainOperationArgs } from "@palladxyz/key-management"
-import type { ProviderConfig } from "@palladxyz/providers"
-import { securePersistence, sessionPersistence } from "@palladxyz/vault"
-import { usePendingTransactionStore } from "@palladxyz/vault"
-import { useVault } from "@palladxyz/vault"
+import type { ChainOperationArgs } from "@palladco/key-management"
+import type { ProviderConfig } from "@palladco/providers"
+import { securePersistence, sessionPersistence } from "@palladco/vault"
+import { usePendingTransactionStore } from "@palladco/vault"
+import { useVault } from "@palladco/vault"
 import dayjs from "dayjs"
 import Client from "mina-signer"
 
@@ -95,15 +95,38 @@ export const createVaultService = (): IVaultService => {
     getState: async (params, props?) => {
       await rehydrate()
       const store = useVault.getState()
-      if (props === undefined) {
-        return store.searchObjects(params)
-      }
-      return store.searchObjects(params, props)
+      return store.searchObjects({ query: params, props })
     },
-    setState: async (state) => {
+    setState: async ({ credentialId, credential }) => {
       await rehydrate()
       const store = useVault.getState()
-      store.setObject(state)
+      store.setObject({ credentialId, credential })
+    },
+    storePrivateCredential: async (credential) => {
+      await rehydrate()
+      const store = useVault.getState()
+      return store.setObject({
+        credentialId: crypto.randomUUID(),
+        credential: {
+          ...(credential as object),
+          type: "private-credential",
+        },
+      })
+    },
+    getPrivateCredential: async () => {
+      await rehydrate()
+      const store = useVault.getState()
+      const credentials = await store.searchObjects({
+        query: { type: "private-credential" },
+        props: [],
+      })
+
+      // Remove the type field from each credential in the results
+      return credentials.map((credential) => {
+        if (!credential) return credential
+        const { type, ...credentialWithoutType } = credential as any
+        return credentialWithoutType
+      })
     },
     getEnabled: async ({ origin }) => {
       const { permissions } = await chrome.storage.local.get({

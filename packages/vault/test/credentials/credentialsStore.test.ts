@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "bun:test"
-import type { GroupedCredentials } from "@palladxyz/key-management"
-import { Network } from "@palladxyz/pallad-core"
+import type { GroupedCredentials } from "@palladco/key-management"
+import { Network } from "@palladco/pallad-core"
 import { act, renderHook } from "@testing-library/react"
 
 import {

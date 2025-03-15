@@ -139,7 +139,10 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
               {showPassword ? <EyeOffIcon size={24} /> : <EyeIcon size={24} />}
             </button>
           </label>
-          <label className="text-[#7D7A9C] text-sm my-2 h-px">
+          <label
+            htmlFor="spendingPassword"
+            className="text-[#7D7A9C] text-sm my-2 h-px"
+          >
             {dirtyFields.spendingPassword && (
               <span>
                 {t("onboarding.yourPassword")}

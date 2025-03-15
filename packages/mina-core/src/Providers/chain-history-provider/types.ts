@@ -1,4 +1,4 @@
-import type { Range } from "@palladxyz/util"
+import type { Range } from "@palladco/util"
 
 import type { Mina, Provider } from "../.."
 

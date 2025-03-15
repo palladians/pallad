@@ -1,4 +1,4 @@
-import { useVault } from "@palladxyz/vault"
+import { useVault } from "@palladco/vault"
 import type { ReactNode } from "react"
 import { MenuBar } from "./menu-bar"
 

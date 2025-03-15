@@ -1,4 +1,4 @@
-type InputType = "text" | "password" | "confirmation"
+type InputType = "text" | "password" | "confirmation" | "selection"
 type Metadata = {
   title: string
   submitButtonLabel?: string
@@ -6,16 +6,29 @@ type Metadata = {
   payload?: string
 }
 
+type ContractResult = {
+  type?: string
+  result?: string
+  error?: any
+}
+
+type PromptResult<T> = {
+  value: T
+  result?: ContractResult
+}
+
 export const showUserPrompt = async <T extends boolean | string = boolean>({
   inputType,
   metadata,
+  contract,
   emitConnected = false,
 }: {
   inputType: InputType
   metadata: Metadata
+  contract?: string
   emitConnected?: boolean
-}): Promise<T> => {
-  return new Promise<T>((resolve, reject) => {
+}): Promise<PromptResult<T>> => {
+  return new Promise<PromptResult<T>>((resolve, reject) => {
     chrome.windows
       .create({
         url: "prompt.html",
@@ -32,11 +45,20 @@ export const showUserPrompt = async <T extends boolean | string = boolean>({
               return reject(new Error("4001 - User Rejected Request"))
             }
             if (inputType === "confirmation") {
-              if (response.userConfirmed) return resolve(true as any)
+              if (response.userConfirmed) {
+                return resolve({
+                  value: true as T,
+                  result: response.result,
+                })
+              }
               return reject(new Error("4001 - User Rejected Request"))
             }
-            if (response.userInput.length > 0)
-              return resolve(response.userInput)
+            if (response.userInput.length > 0) {
+              return resolve({
+                value: response.userInput,
+                result: response.result,
+              })
+            }
             return reject(new Error("4100 - Unauthorized"))
           }
           return reject(new Error("Wrong window context"))
@@ -53,6 +75,7 @@ export const showUserPrompt = async <T extends boolean | string = boolean>({
                   rejectButtonLabel: metadata.rejectButtonLabel,
                   payload: metadata.payload ?? "{}",
                   inputType,
+                  contract,
                   emitConnected,
                 },
               })

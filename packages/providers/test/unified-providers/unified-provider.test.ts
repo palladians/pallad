@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "bun:test"
-import type { TokenIdMap } from "@palladxyz/mina-core"
-import type { Tx } from "@palladxyz/pallad-core"
+import type { TokenIdMap } from "@palladco/mina-core"
+import type { Tx } from "@palladco/pallad-core"
 
 import { type ProviderConfig, createChainProvider } from "../../src"
 

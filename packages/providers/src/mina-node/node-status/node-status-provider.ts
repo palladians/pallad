@@ -1,4 +1,4 @@
-import type { NodeStatus, NodeStatusProvider } from "@palladxyz/pallad-core"
+import type { NodeStatus, NodeStatusProvider } from "@palladco/pallad-core"
 
 import { createGraphQLRequest } from "../utils/fetch-utils"
 import { healthCheck } from "../utils/health-check-utils"

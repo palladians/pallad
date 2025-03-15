@@ -1,6 +1,6 @@
 import Logo from "@/common/assets/logo.svg?react"
 import MenuIcon from "@/common/assets/menu.svg?react"
-import { useVault } from "@palladxyz/vault"
+import { useVault } from "@palladco/vault"
 import { ChevronDownIcon, XIcon } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 
@@ -85,6 +85,14 @@ export const MenuDrawer = () => {
               data-testid="menu/staking"
             >
               {t("components.staking")}
+            </button>
+            <button
+              type="button"
+              className="text-3xl text-left"
+              onClick={() => navigate("/credentials")}
+              data-testid="menu/credentials"
+            >
+              {t("credentials.credentials")}
             </button>
             <button
               type="button"

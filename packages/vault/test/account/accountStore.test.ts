@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "bun:test"
-import { type AccountInfo, Mina } from "@palladxyz/mina-core"
+import { type AccountInfo, Mina } from "@palladco/mina-core"
 import { act, renderHook } from "@testing-library/react"
 
 import { initialSingleAccountState } from "../../src"

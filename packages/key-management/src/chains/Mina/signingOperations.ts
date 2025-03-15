@@ -33,6 +33,7 @@ export function MinaSigningOperations<T extends MinaSignablePayload>(
         throw new Error("Invalid transaction payload")
       }
 
+      case "mina_signFieldsWithPassphrase":
       case "mina_signFields": {
         if (util.isFields(payload)) {
           return minaClient.signFields(payload.fields, privateKey)

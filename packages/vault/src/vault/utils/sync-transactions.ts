@@ -1,5 +1,5 @@
-import type { Tx } from "@palladxyz/pallad-core"
-import { type ProviderConfig, createChainProvider } from "@palladxyz/providers"
+import type { Tx } from "@palladco/pallad-core"
+import { type ProviderConfig, createChainProvider } from "@palladco/providers"
 
 export async function syncTransactionHelper(
   get: any,

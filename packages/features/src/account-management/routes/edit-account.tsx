@@ -1,4 +1,4 @@
-import { type SingleCredentialState, useVault } from "@palladxyz/vault"
+import { type SingleCredentialState, useVault } from "@palladco/vault"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useParams } from "react-router-dom"

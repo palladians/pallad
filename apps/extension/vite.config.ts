@@ -10,7 +10,7 @@ export default defineConfig(() => {
     plugins: [
       react(),
       webExtension({
-        additionalInputs: ["prompt.html"],
+        additionalInputs: ["prompt.html", "sandbox.html"],
         manifest: () => manifest,
       }),
       svgr(),
@@ -23,6 +23,12 @@ export default defineConfig(() => {
     build: {
       chunkSizeWarningLimit: 5000,
       emptyOutDir: true,
+    },
+    server: {
+      headers: {
+        "Cross-Origin-Embedder-Policy": "require-corp",
+        "Cross-Origin-Opener-Policy": "same-origin",
+      },
     },
   }
 })

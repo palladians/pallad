@@ -1,6 +1,6 @@
-import { Network, getAccountProperties } from "@palladxyz/pallad-core"
-import { sessionPersistence } from "@palladxyz/vault"
-import { getPublicKey, isDelegated, useVault } from "@palladxyz/vault"
+import { Network, getAccountProperties } from "@palladco/pallad-core"
+import { sessionPersistence } from "@palladco/vault"
+import { getPublicKey, isDelegated, useVault } from "@palladco/vault"
 import easyMeshGradient from "easy-mesh-gradient"
 import { useMemo } from "react"
 import { useNavigate } from "react-router-dom"
@@ -36,7 +36,7 @@ export const useAccount = () => {
       refreshInterval: 30000,
     },
   )
-  const rawBalance = swr.isLoading ? 0 : swr.data?.balance ?? 0
+  const rawBalance = swr.isLoading ? 0 : (swr.data?.balance ?? 0)
   const minaBalance =
     rawBalance && Number.parseInt(String(rawBalance)) / 1_000_000_000
   const gradientBackground = useMemo(

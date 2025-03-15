@@ -148,6 +148,10 @@
     "sign": "İmzala",
     "reject": "Reddet"
   },
+  "credentials": {
+    "credentials": "Kimlik",
+    "delete": "Silmek"
+  },
   "accountManagement": {
     "addAccount": "Hesap Ekle",
     "editAccount": "Hesap Düzenle",

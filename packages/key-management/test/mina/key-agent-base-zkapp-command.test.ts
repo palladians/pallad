@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "bun:test"
-import { mnemonic } from "@palladxyz/common"
-import type { Mina } from "@palladxyz/mina-core"
-import { Network } from "@palladxyz/pallad-core"
+import { mnemonic } from "@palladco/common"
+import type { Mina } from "@palladco/mina-core"
+import { Network } from "@palladco/pallad-core"
 import Client from "mina-signer"
 
 import { utf8ToBytes } from "@noble/hashes/utils"

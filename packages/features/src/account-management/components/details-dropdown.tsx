@@ -1,4 +1,4 @@
-import type { SingleCredentialState } from "@palladxyz/vault"
+import type { SingleCredentialState } from "@palladco/vault"
 import { Ellipsis, X } from "lucide-react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"

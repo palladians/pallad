@@ -1,8 +1,8 @@
 import type {
   ChainDerivationArgs,
   FromBip39MnemonicWordsProps,
-} from "@palladxyz/key-management"
-import { createChainProvider } from "@palladxyz/providers"
+} from "@palladco/key-management"
+import { createChainProvider } from "@palladco/providers"
 
 import type { CredentialName, SingleCredentialState } from "../../credentials"
 import type { KeyAgentName, KeyAgents } from "../../keyAgent"

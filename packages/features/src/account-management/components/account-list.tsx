@@ -1,5 +1,5 @@
 import { truncateString } from "@/common/lib/string"
-import type { SingleCredentialState } from "@palladxyz/vault"
+import type { SingleCredentialState } from "@palladco/vault"
 import clsx from "clsx"
 import { useEffect, useState } from "react"
 

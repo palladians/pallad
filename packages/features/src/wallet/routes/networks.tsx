@@ -1,5 +1,5 @@
 import { useAccount } from "@/common/hooks/use-account"
-import { useVault } from "@palladxyz/vault"
+import { useVault } from "@palladco/vault"
 import { useNavigate } from "react-router-dom"
 import { sendMessage } from "webext-bridge/popup"
 import { NetworksView } from "../views/networks"

@@ -1,6 +1,6 @@
-import { useVault } from "@palladxyz/vault"
-import type { NetworkId } from "@palladxyz/vault"
-import { createMinaProvider } from "@palladxyz/web-provider"
+import { useVault } from "@palladco/vault"
+import type { NetworkId } from "@palladco/vault"
+import { createMinaProvider } from "@palladco/web-provider"
 import { serializeError } from "serialize-error"
 import type { Handler } from "./"
 

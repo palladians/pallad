@@ -1,4 +1,4 @@
-import { localPersistence } from "@palladxyz/vault"
+import { localPersistence } from "@palladco/vault"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 

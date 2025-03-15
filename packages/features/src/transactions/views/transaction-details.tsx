@@ -1,4 +1,4 @@
-import { Mina } from "@palladxyz/mina-core"
+import { Mina } from "@palladco/mina-core"
 
 import { AppLayout } from "@/components/app-layout"
 import dayjs from "dayjs"

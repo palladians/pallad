@@ -2,11 +2,11 @@ import type {
   ChainOperationArgs,
   ChainSignablePayload,
   GetPassphrase,
-} from "@palladxyz/key-management"
+} from "@palladco/key-management"
 
 import type { Json, Sendable } from "@mina-js/utils"
-import type { ProviderConfig } from "@palladxyz/providers"
-import type { SearchQuery, StoredObject } from "@palladxyz/vault"
+import type { ProviderConfig } from "@palladco/providers"
+import type { SearchQuery, StoredObject } from "@palladco/vault"
 
 export interface IVaultService {
   getAccounts(): Promise<string[]>
@@ -18,7 +18,9 @@ export interface IVaultService {
   getBalance(): Promise<number>
   getNetworkId(): Promise<string | undefined>
   getNetworkIds(): Promise<string[]>
-  setState(state: Json): Promise<void>
+  setState(props: { credentialId: string; credential: Json }): Promise<void>
+  storePrivateCredential(state: Json): Promise<void>
+  getPrivateCredential(query?: SearchQuery): Promise<StoredObject[]>
   getEnabled({ origin }: { origin: string }): Promise<boolean>
   setEnabled({ origin }: { origin: string }): Promise<void>
   switchNetwork(
