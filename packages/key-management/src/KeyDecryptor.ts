@@ -51,10 +51,10 @@ export class KeyDecryptor {
     const passphrase = this.#getPassphrase(noCache)
     let decryptedKeyBytes: Uint8Array
     try {
-      decryptedKeyBytes = await emip3decrypt(
-        new Uint8Array(serializableData[keyPropertyName]),
-        passphrase,
-      )
+      const encryptedKeyObj = serializableData[keyPropertyName] as Uint8Array
+      const encryptedKeyArray = Object.values(encryptedKeyObj)
+      const encryptedKeyBytes = new Uint8Array(encryptedKeyArray)
+      decryptedKeyBytes = await emip3decrypt(encryptedKeyBytes, passphrase)
     } catch (error) {
       throw new errors.AuthenticationError(errorMessage, error)
     }

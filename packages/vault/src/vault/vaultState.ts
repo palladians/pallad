@@ -95,6 +95,7 @@ export type GlobalVaultActions = {
   getAccounts: () => string[]
   getBalance: (ticker?: string) => number
   getNetworkId: () => string
+  deriveNewAccount: (credentialName: string) => Promise<void>
 }
 
 export type GlobalVaultStore = GlobalVaultState & GlobalVaultActions
