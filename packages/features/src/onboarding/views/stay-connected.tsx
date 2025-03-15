@@ -1,9 +1,7 @@
 import HeartIcon from "@/common/assets/heart.svg?react"
 import SocialDiscordIcon from "@/common/assets/social-discord.svg?react"
 import SocialXIcon from "@/common/assets/social-x.svg?react"
-
 import { WizardLayout } from "@/components/wizard-layout"
-
 import { useTranslation } from "react-i18next"
 
 const DISCORD_URL = "https://discord.gg/ExzzfTGUnB"

@@ -4,6 +4,9 @@ import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { ErrorBoundary } from "react-error-boundary"
 import { Toaster } from "sonner"
+import { AccountManagementRoute } from "./account-management/routes/account-management"
+import { AddAccountRoute } from "./account-management/routes/add-account"
+import { EditAccountRoute } from "./account-management/routes/edit-account"
 import { AddressBookRoute } from "./address-book/routes/address-book"
 import { NewAddressRoute } from "./address-book/routes/new-address"
 import { ErrorView } from "./error-renderer/views/error"
@@ -118,6 +121,11 @@ export const Router = () => {
                 element={<AuthorizedZkAppsRoute />}
               />
               <Route path="privacy" element={<PrivacyRoute />} />
+            </Route>
+            <Route path="accounts" element={<Outlet />}>
+              <Route path="" element={<AccountManagementRoute />} />
+              <Route path="edit/:addressIndex" element={<EditAccountRoute />} />
+              <Route path="add" element={<AddAccountRoute />} />
             </Route>
             <Route path="/*" element={<NotFoundRoute />} />
           </Routes>

@@ -29,10 +29,16 @@ export const MenuBarBase = ({
   )
 }
 
-const LogoButton = ({ onClick }: { onClick?: () => void }) => {
+export const LogoButton = ({
+  onClick,
+  color,
+}: {
+  onClick?: () => void
+  color?: string
+}) => {
   return (
     <button type="button" onClick={onClick}>
-      <Logo width={32} height={32} />
+      <Logo width={32} height={32} {...(color ? { color: color } : {})} />
     </button>
   )
 }
@@ -67,7 +73,7 @@ export const MenuBar = ({
           rightSlot={<MenuDrawer />}
         >
           {(publicAddress?.length ?? 0) > 0 && (
-            <Link to="/receive" className="btn flex gap-1 min-h-10 h-10">
+            <Link to="/accounts" className="btn flex gap-1 min-h-10 h-10">
               {truncateString({
                 value: publicAddress ?? "",
                 firstCharCount: 5,

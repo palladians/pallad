@@ -1,11 +1,10 @@
+import { createClient } from "@mina-js/klesia-sdk"
+import { TransactionBodySchema } from "@mina-js/utils"
 import { generateMnemonicWords } from "@palladxyz/key-management"
 import { Network } from "@palladxyz/pallad-core"
 import { produce } from "immer"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
-
-import { createClient } from "@mina-js/klesia-sdk"
-import { TransactionBodySchema } from "@mina-js/utils"
 import { type AccountStore, accountSlice } from "../account"
 import { type CredentialStore, credentialSlice } from "../credentials"
 import { type KeyAgentStore, KeyAgents, keyAgentSlice } from "../keyAgent"
@@ -27,6 +26,7 @@ import {
   syncTransactionHelper,
   syncWalletHelper,
 } from "./utils"
+import { deriveAccountHelper } from "./utils/derive-account"
 import type { GlobalVaultState, GlobalVaultStore } from "./vaultState"
 
 const defaultGlobalVaultState: GlobalVaultState = {
@@ -93,6 +93,9 @@ export const useVault = create<
       // the credential doesn't need to be returned, nor does the transactions, nor the singleKeyAgentState
       getCurrentWallet() {
         return getCurrentWalletHelper(get)
+      },
+      deriveNewAccount: async (credentialName) => {
+        await deriveAccountHelper(get, credentialName)
       },
       _syncAccountInfo: async (providerConfig, publicKey) => {
         await syncAccountHelper(get, providerConfig, publicKey)

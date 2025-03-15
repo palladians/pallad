@@ -37,6 +37,7 @@ This file implements the state and actions defined in `account-info-state.ts`, p
 - **getTransactions:** Retrieves transactions for a specified address, network, and ticker.
 - **getTransaction:** Finds a specific transaction by its hash for a given address, network, and ticker.
 - **clear:** Clears all account information from the store.
+- **deriveNewAccount:** Creates a new account for current KeyAgent with new credentials abd public key.
 
 ### Usage
 
