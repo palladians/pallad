@@ -89,7 +89,7 @@
       "dependencies": {
         "@github/hotkey": "3.1.1",
         "@headlessui/react": "2.1.2",
-        "@hookform/resolvers": "3.9.0",
+        "@hookform/resolvers": "4.0.0",
         "@noble/hashes": "1.4.0",
         "@palladco/key-management": "workspace:*",
         "@palladco/mina-core": "workspace:*",
@@ -144,7 +144,7 @@
         "vite-plugin-node-polyfills": "0.17.0",
         "vite-plugin-svgr": "4.2.0",
         "vite-plugin-top-level-await": "1.4.2",
-        "zod": "3.23.8",
+        "zod": "3.24.2",
       },
       "peerDependencies": {
         "react": "18.3.1",
@@ -271,7 +271,7 @@
         "mina-signer": "3.0.7",
         "mitt": "3.0.1",
         "ts-pattern": "5.5.0",
-        "zod": "3.23.8",
+        "zod": "3.24.2",
       },
       "devDependencies": {
         "@palladco/common": "workspace:*",
@@ -438,7 +438,7 @@
 
     "@headlessui/react": ["@headlessui/react@2.1.2", "", { "dependencies": { "@floating-ui/react": "^0.26.16", "@react-aria/focus": "^3.17.1", "@react-aria/interactions": "^3.21.3", "@tanstack/react-virtual": "^3.8.1" }, "peerDependencies": { "react": "^18", "react-dom": "^18" } }, "sha512-Kb3hgk9gRNRcTZktBrKdHhF3xFhYkca1Rk6e1/im2ENf83dgN54orMW0uSKTXFnUpZOUFZ+wcY05LlipwgZIFQ=="],
 
-    "@hookform/resolvers": ["@hookform/resolvers@3.9.0", "", { "peerDependencies": { "react-hook-form": "^7.0.0" } }, "sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg=="],
+    "@hookform/resolvers": ["@hookform/resolvers@4.0.0", "", { "peerDependencies": { "react-hook-form": "^7.0.0" } }, "sha512-93ZueVlTaeMF0pRbrLbcnzrxeb2mGA/xyO3RgfrsKs5OCtcfjoWcdjBJm+N7096Jfg/JYlGPjuyQCgqVEodSTg=="],
 
     "@humanwhocodes/config-array": ["@humanwhocodes/config-array@0.13.0", "", { "dependencies": { "@humanwhocodes/object-schema": "^2.0.3", "debug": "^4.3.1", "minimatch": "^3.0.5" } }, "sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw=="],
 
@@ -2838,8 +2838,6 @@
 
     "@palladco/features/vite-plugin-svgr": ["vite-plugin-svgr@4.2.0", "", { "dependencies": { "@rollup/pluginutils": "^5.0.5", "@svgr/core": "^8.1.0", "@svgr/plugin-jsx": "^8.1.0" }, "peerDependencies": { "vite": "^2.6.0 || 3 || 4 || 5" } }, "sha512-SC7+FfVtNQk7So0XMjrrtLAbEC8qjFPifyD7+fs/E6aaNdVde6umlVVh0QuwDLdOMu7vp5RiGFsB70nj5yo0XA=="],
 
-    "@palladco/features/zod": ["zod@3.23.8", "", {}, "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g=="],
-
     "@palladco/vault/vite": ["vite@5.3.5", "", { "dependencies": { "esbuild": "^0.21.3", "postcss": "^8.4.39", "rollup": "^4.13.0" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "peerDependencies": { "@types/node": "^18.0.0 || >=20.0.0", "less": "*", "lightningcss": "^1.21.0", "sass": "*", "stylus": "*", "sugarss": "*", "terser": "^5.4.0" }, "optionalPeers": ["@types/node", "less", "lightningcss", "sass", "stylus", "sugarss", "terser"], "bin": { "vite": "bin/vite.js" } }, "sha512-MdjglKR6AQXQb9JGiS7Rc2wC6uMjcm7Go/NHNO63EwiJXfuk9PgqiP/n5IDJCziMkfw9n4Ubp7lttNwz+8ZVKA=="],
 
     "@palladco/web-provider/@mina-js/klesia-sdk": ["@mina-js/klesia-sdk@0.1.0", "", { "dependencies": { "micro-ftch": "0.4.2", "ts-pattern": "5.6.2" }, "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-pV9Yt7sVHd4rP6yVOBNRRZjMLsklqphFkVUFNWk5UVW/XKkyzIVJuldC6XQdaxKBus0tZU/FliH/ni8zvrShdQ=="],
@@ -2847,8 +2845,6 @@
     "@palladco/web-provider/@types/chrome": ["@types/chrome@0.0.269", "", { "dependencies": { "@types/filesystem": "*", "@types/har-format": "*" } }, "sha512-vF7x8YywnhXX2F06njQ/OE7a3Qeful43C5GUOsUksXWk89WoSFUU3iLeZW8lDpVO9atm8iZIEiLQTRC3H7NOXQ=="],
 
     "@palladco/web-provider/ts-pattern": ["ts-pattern@5.5.0", "", {}, "sha512-jqbIpTsa/KKTJYWgPNsFNbLVpwCgzXfFJ1ukNn4I8hMwyQzHMJnk/BqWzggB0xpkILuKzaO/aMYhS0SkaJyKXg=="],
-
-    "@palladco/web-provider/zod": ["zod@3.23.8", "", {}, "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g=="],
 
     "@plasmohq/messaging/nanoid": ["nanoid@5.0.3", "", { "bin": { "nanoid": "bin/nanoid.js" } }, "sha512-I7X2b22cxA4LIHXPSqbBCEQSL+1wv8TuoefejsX4HFWyC6jc5JG7CEaxOltiKjc1M+YCS2YkrZZcj4+dytw9GA=="],
 

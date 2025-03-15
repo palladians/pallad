@@ -7,6 +7,7 @@ import {
   NetworkIdRequestParamsSchema,
   // PresentationRequestParamsSchema, // TODO update these in mina-js and import again
   RequestAccountsRequestParamsSchema,
+  RequestWithContext,
   SendTransactionRequestParamsSchema,
   SetStateRequestParamsSchema,
   SignFieldsRequestParamsSchema,
@@ -15,10 +16,7 @@ import {
   // StorePrivateCredentialRequestParamsSchema,
   SwitchChainRequestParamsSchema,
 } from "@mina-js/providers"
-import {
-  SignFieldsWithPassphraseRequestParams,
-  createMinaProvider,
-} from "@palladco/web-provider"
+import { createMinaProvider } from "@palladco/web-provider"
 import { serializeError } from "serialize-error"
 import { z } from "zod"
 import type { Handler } from "."
@@ -158,12 +156,15 @@ export const minaSignFields: Handler = async ({ data }) => {
 export const minaSignFieldsWithPassphrase: Handler = async ({ data }) => {
   try {
     const provider = await createMinaProvider()
-    const payload = SignFieldsWithPassphraseRequestParams.parse({
+    const payload = RequestWithContext.extend({
+      method: z.literal("mina_signFieldsWithPassphrase"),
+      params: z.any(),
+    }).parse({
       method: "mina_signFieldsWithPassphrase",
       params: data.params,
       context: data.context,
     })
-    const response = await provider.request(payload)
+    const response = await provider.request(payload as any)
     return response
   } catch (error: unknown) {
     return { error: serializeError(error) }

@@ -53,7 +53,7 @@ export const WalletInfoForm = ({ title, onSubmit }: WalletInfoFormProps) => {
       walletName: "",
       spendingPassword: "",
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema as any),
   })
   const [strengthLabel, strengthColor] = getPasswordStrengthConfig(
     zxcvbn(watch("spendingPassword")).score,

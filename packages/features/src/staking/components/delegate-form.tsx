@@ -32,7 +32,7 @@ export const DelegateForm = ({ advanced, setAdvanced }: DelegateFormProps) => {
     formState: { errors },
     watch,
   } = useForm({
-    resolver: zodResolver(DelegateFormSchema),
+    resolver: zodResolver(DelegateFormSchema as any),
     defaultValues: {
       to: "",
       fee: "default",

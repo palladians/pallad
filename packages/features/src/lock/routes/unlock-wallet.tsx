@@ -23,7 +23,7 @@ export const UnlockWalletRoute = () => {
     defaultValues: {
       spendingPassword: "",
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema as any),
   })
   const onSubmit = async ({
     spendingPassword,

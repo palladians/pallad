@@ -36,7 +36,7 @@ export const AddEditAccountView = ({
     defaultValues: {
       accountName: "",
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema as any),
   })
 
   const { t } = useTranslation()

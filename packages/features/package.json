@@ -35,7 +35,7 @@
   "dependencies": {
     "@github/hotkey": "3.1.1",
     "@headlessui/react": "2.1.2",
-    "@hookform/resolvers": "3.9.0",
+    "@hookform/resolvers": "4.0.0",
     "@noble/hashes": "1.4.0",
     "@palladco/key-management": "workspace:*",
     "@palladco/mina-core": "workspace:*",
@@ -90,7 +90,7 @@
     "vite-plugin-node-polyfills": "0.17.0",
     "vite-plugin-svgr": "4.2.0",
     "vite-plugin-top-level-await": "1.4.2",
-    "zod": "3.23.8"
+    "zod": "3.24.2"
   },
   "peerDependencies": {
     "react": "18.3.1",

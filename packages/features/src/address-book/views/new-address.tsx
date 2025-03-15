@@ -24,7 +24,7 @@ export const NewAddressView = ({ onGoBack, onSubmit }: NewAddressViewProps) => {
     watch,
     setValue,
   } = useForm({
-    resolver: zodResolver(NewAddressFormSchema),
+    resolver: zodResolver(NewAddressFormSchema as any),
     defaultValues: { name: "", address: "" },
   })
   const disableSubmit = watch(["name", "address"]).includes("")

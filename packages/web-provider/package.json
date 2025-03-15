@@ -28,7 +28,7 @@
     "mina-signer": "3.0.7",
     "mitt": "3.0.1",
     "ts-pattern": "5.5.0",
-    "zod": "3.23.8"
+    "zod": "3.24.2"
   },
   "devDependencies": {
     "@palladco/common": "workspace:*",

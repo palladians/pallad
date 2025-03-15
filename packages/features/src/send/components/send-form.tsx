@@ -41,7 +41,7 @@ export const SendForm = ({
     formState: { errors, isValid },
     watch,
   } = useForm({
-    resolver: zodResolver(SendFormSchema),
+    resolver: zodResolver(SendFormSchema as any),
     defaultValues: {
       to: "",
       amount: undefined as number | undefined,

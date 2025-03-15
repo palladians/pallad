@@ -47,7 +47,7 @@ export const renderPayload = (payload: string) => {
         PrettyPrinter.printPresentationRequest(request),
         PrettyPrinter.printVerifierIdentity(
           request.type as any, // TODO
-          parsedPayload.verifierIdentity,
+          parsedPayload.verifierIdentity as string,
         ),
       ].join("\n")
 

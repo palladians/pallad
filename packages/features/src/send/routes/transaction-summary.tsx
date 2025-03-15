@@ -21,7 +21,7 @@ export const TransactionSummaryRoute = () => {
   )
   const type = useTransactionStore((state) => state.type)
   const confirmationForm = useForm<ConfirmTransactionData>({
-    resolver: zodResolver(ConfirmTransactionSchema),
+    resolver: zodResolver(ConfirmTransactionSchema as any),
     defaultValues: {
       spendingPassword: "",
     },
