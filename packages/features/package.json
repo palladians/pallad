@@ -1,6 +1,6 @@
 {
   "name": "@palladco/features",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "description": "",
   "type": "module",
   "module": "dist/index.js",

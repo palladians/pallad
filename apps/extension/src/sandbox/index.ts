@@ -48,7 +48,10 @@ let presentationSignaturePromise: {
 } | null = null
 
 window.addEventListener("message", async (event) => {
-  console.log(">>>EV", event)
+  const allowedOrigin = "chrome-extension://bboennpbcdmjdgmbggdlemijpijnaflh"
+  if (event.origin !== allowedOrigin) {
+    throw new Error("Invalid origin")
+  }
   const message = MessageSchema.parse(event.data)
 
   if (message.type === "presentation-signature") {

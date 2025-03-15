@@ -6,7 +6,7 @@
       "devDependencies": {
         "@biomejs/biome": "1.9.4",
         "@happy-dom/global-registrator": "^15.11.0",
-        "@mina-js/utils": "https://pkg.pr.new/palladians/mina-js/@mina-js/utils@a9d6774",
+        "@mina-js/utils": "0.1.0",
         "@testing-library/react": "16.2.0",
         "@tsconfig/strictest": "2.0.5",
         "@turbo/gen": "2.4.4",
@@ -26,9 +26,9 @@
     },
     "apps/extension": {
       "name": "@palladco/extension",
-      "version": "0.6.3",
+      "version": "0.7.0",
       "dependencies": {
-        "@mina-js/providers": "https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a9d6774",
+        "@mina-js/providers": "0.1.0",
         "@palladco/common": "workspace:*",
         "@palladco/features": "workspace:*",
         "@palladco/key-management": "workspace:*",
@@ -85,7 +85,7 @@
     },
     "packages/features": {
       "name": "@palladco/features",
-      "version": "0.6.3",
+      "version": "0.7.0",
       "dependencies": {
         "@github/hotkey": "3.1.1",
         "@headlessui/react": "2.1.2",
@@ -260,8 +260,8 @@
       "name": "@palladco/web-provider",
       "version": "0.0.1",
       "dependencies": {
-        "@mina-js/klesia-sdk": "https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@a9d6774",
-        "@mina-js/providers": "https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a9d6774",
+        "@mina-js/klesia-sdk": "0.1.0",
+        "@mina-js/providers": "0.1.0",
         "@noble/hashes": "1.4.0",
         "@palladco/key-management": "workspace:*",
         "@palladco/mina-core": "workspace:*",
@@ -478,9 +478,9 @@
 
     "@mina-js/klesia-sdk": ["@mina-js/klesia-sdk@https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@a9d6774", { "dependencies": { "micro-ftch": "^0.4.0", "ts-pattern": "^5.3.1" }, "peerDependencies": { "typescript": "^5.0.0" } }],
 
-    "@mina-js/providers": ["@mina-js/providers@https://pkg.pr.new/palladians/mina-js/@mina-js/providers@a9d6774", { "dependencies": { "mina-credentials": "0.2.6" }, "peerDependencies": { "typescript": "^5.0.0" } }],
+    "@mina-js/providers": ["@mina-js/providers@0.1.0", "", { "dependencies": { "mina-credentials": "0.2.6" }, "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-TnRa89vd7w8N90Kfq7uQoiQU1VCwa8ODIPAd+NfNCNMoXc6urRwgmLs+vt/DexfEMHNsHyToOSb++BoWb59Suw=="],
 
-    "@mina-js/utils": ["@mina-js/utils@https://pkg.pr.new/palladians/mina-js/@mina-js/utils@a9d6774", { "dependencies": { "mina-signer": "3.0.7", "serialize-error": "^11.0.3", "superjson": "2.2.1" }, "peerDependencies": { "typescript": "^5.0.0" } }],
+    "@mina-js/utils": ["@mina-js/utils@0.1.0", "", { "dependencies": { "mina-signer": "3.0.7", "serialize-error": "12.0.0", "superjson": "2.2.2" }, "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-aQu+MECKtVelOJGKtHyDYw5T1TNjxS9Ofgi0pvDM7mfBgH6/1DJu37dv9SA3KdqPODQtOMEwHfX8IlXmo9XI5w=="],
 
     "@molt/command": ["@molt/command@0.9.0", "", { "dependencies": { "@molt/types": "0.2.0", "alge": "0.8.1", "chalk": "^5.3.0", "lodash.camelcase": "^4.3.0", "lodash.snakecase": "^4.1.1", "readline-sync": "^1.4.10", "string-length": "^6.0.0", "strip-ansi": "^7.1.0", "ts-toolbelt": "^9.6.0", "type-fest": "^4.3.1", "zod": "^3.22.2" } }, "sha512-1JI8dAlpqlZoXyKWVQggX7geFNPxBpocHIXQCsnxDjKy+3WX4SGyZVJXuLlqRRrX7FmQCuuMAfx642ovXmPA9g=="],
 
@@ -2818,11 +2818,17 @@
 
     "@mdx-js/mdx/source-map": ["source-map@0.7.4", "", {}, "sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA=="],
 
+    "@mina-js/utils/serialize-error": ["serialize-error@12.0.0", "", { "dependencies": { "type-fest": "^4.31.0" } }, "sha512-ZYkZLAvKTKQXWuh5XpBw7CdbSzagarX39WyZ2H07CDLC5/KfsRGlIXV8d4+tfqX1M7916mRqR1QfNHSij+c9Pw=="],
+
+    "@mina-js/utils/superjson": ["superjson@2.2.2", "", { "dependencies": { "copy-anything": "^3.0.2" } }, "sha512-5JRxVqC8I8NuOUjzBbvVJAKNM8qoVuH0O77h4WInc/qC2q5IreqKxYwgkga3PfA22OayK2ikceb/B26dztPl+Q=="],
+
     "@molt/command/chalk": ["chalk@5.4.1", "", {}, "sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w=="],
 
     "@molt/command/strip-ansi": ["strip-ansi@7.1.0", "", { "dependencies": { "ansi-regex": "^6.0.1" } }, "sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ=="],
 
     "@molt/command/type-fest": ["type-fest@4.37.0", "", {}, "sha512-S/5/0kFftkq27FPNye0XM1e2NsnoD/3FS+pBmbjmmtLT6I+i344KoOf7pvXreaFsDamWeaJX55nczA1m5PsBDg=="],
+
+    "@palladco/web-provider/@mina-js/klesia-sdk": ["@mina-js/klesia-sdk@0.1.0", "", { "dependencies": { "micro-ftch": "0.4.2", "ts-pattern": "5.6.2" }, "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-pV9Yt7sVHd4rP6yVOBNRRZjMLsklqphFkVUFNWk5UVW/XKkyzIVJuldC6XQdaxKBus0tZU/FliH/ni8zvrShdQ=="],
 
     "@palladco/web-provider/ts-pattern": ["ts-pattern@5.5.0", "", {}, "sha512-jqbIpTsa/KKTJYWgPNsFNbLVpwCgzXfFJ1ukNn4I8hMwyQzHMJnk/BqWzggB0xpkILuKzaO/aMYhS0SkaJyKXg=="],
 
@@ -3132,7 +3138,11 @@
 
     "@ladle/react/open/is-wsl": ["is-wsl@3.1.0", "", { "dependencies": { "is-inside-container": "^1.0.0" } }, "sha512-UcVfVfaK4Sc4m7X3dUSoHoozQGBEFeDC+zVo06t98xe8CzHSZZBekNXH+tu0NalHolcJ/QAGqS46Hef7QXBIMw=="],
 
+    "@mina-js/utils/serialize-error/type-fest": ["type-fest@4.37.0", "", {}, "sha512-S/5/0kFftkq27FPNye0XM1e2NsnoD/3FS+pBmbjmmtLT6I+i344KoOf7pvXreaFsDamWeaJX55nczA1m5PsBDg=="],
+
     "@molt/command/strip-ansi/ansi-regex": ["ansi-regex@6.1.0", "", {}, "sha512-7HSX4QQb4CspciLpVFwyRe79O3xsIZDDLER21kERQ71oaPodF8jL725AgJMFAYbooIqolJoRLuM81SpeUkpkvA=="],
+
+    "@palladco/web-provider/@mina-js/klesia-sdk/ts-pattern": ["ts-pattern@5.6.2", "", {}, "sha512-d4IxJUXROL5NCa3amvMg6VQW2HVtZYmUTPfvVtO7zJWGYLJ+mry9v2OmYm+z67aniQoQ8/yFNadiEwtNS9qQiw=="],
 
     "@types/inquirer/rxjs/tslib": ["tslib@1.14.1", "", {}, "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="],
 
