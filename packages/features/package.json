@@ -86,7 +86,7 @@
     "esbuild-plugin-svgr": "2.1.0",
     "graphql-request": "7.1.0",
     "swr": "2.2.5",
-    "vite": "5.3.5",
+    "vite": "5.3.6",
     "vite-plugin-node-polyfills": "0.17.0",
     "vite-plugin-svgr": "4.2.0",
     "vite-plugin-top-level-await": "1.4.2",
