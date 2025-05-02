@@ -47,11 +47,35 @@ let presentationSignaturePromise: {
   reject: (reason: any) => void
 } | null = null
 
+let allowedOrigin: string | null = null
+
 window.addEventListener("message", async (event) => {
-  const allowedOrigin = "chrome-extension://bboennpbcdmjdgmbggdlemijpijnaflh"
-  if (event.origin !== allowedOrigin) {
-    throw new Error("Invalid origin")
+  if (event.data.type === "init") {
+    allowedOrigin = `chrome-extension://${event.data.extensionId}`
+    return
   }
+
+  if (!allowedOrigin) {
+    window.parent.postMessage(
+      {
+        type: `${event.data?.contract}-result`,
+        error: "allowedOrigin is not set",
+      },
+      "*",
+    )
+    return
+  }
+  if (event.origin !== allowedOrigin) {
+    window.parent.postMessage(
+      {
+        type: `${event.data?.contract}-result`,
+        error: `Invalid origin: ${event.origin}`,
+      },
+      "*",
+    )
+    return
+  }
+
   const message = MessageSchema.parse(event.data)
 
   if (message.type === "presentation-signature") {

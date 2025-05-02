@@ -228,6 +228,10 @@ export const WebConnectorRoute = () => {
           inputType: message.params.inputType,
           emitConnected: message.params.emitConnected,
         })
+        sendSandboxMessage({
+          type: "init",
+          extensionId: chrome.runtime.id,
+        })
         setLoading(false)
         setLoadingMessage(undefined)
       }
