@@ -8,6 +8,11 @@ import dayjs from "dayjs"
 import Client from "mina-signer"
 
 import type { SignedTransaction } from "@mina-js/utils"
+import type {
+  Payment,
+  StakeDelegation,
+  ZkappCommand,
+} from "mina-signer/dist/node/mina-signer/src/types"
 import type { IVaultService } from "./types"
 
 export enum AuthorizationState {
@@ -74,9 +79,23 @@ export const createVaultService = (): IVaultService => {
       const accounts = await getAccounts()
       const publicKey = accounts?.[0]
       if (!publicKey) throw new Error("Wallet is not initialized.")
-      const validTransaction = signer.verifyTransaction(sendable.input as never)
-      if (!validTransaction) throw new Error("Invalid transaction.")
       const type = getTxType(sendable.input as never)
+      const signedData: StakeDelegation | Payment | ZkappCommand =
+        sendable.input as any
+      const verifyTransactionParams =
+        "feePayer" in signedData
+          ? {
+              signature: signedData.zkappCommand.feePayer.authorization,
+              publicKey: signedData.zkappCommand.feePayer.body.publicKey,
+              data: signedData,
+            }
+          : {
+              signature: (sendable as any).signature,
+              publicKey: signedData.from,
+              data: signedData,
+            }
+      if (!signer.verifyTransaction(verifyTransactionParams))
+        throw new Error("Invalid transaction.")
       const payload =
         type === "zkapp"
           ? { input: sendable.input }
