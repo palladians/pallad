@@ -33,13 +33,7 @@ type Result = {
 type PresentationRequestPayload = {
   presentationRequest: PresentationRequest
   selectedCredentials: string[]
-  verifierIdentity:
-    | string
-    | {
-        address: string
-        tokenId: string
-        network: "devnet" | "mainnet"
-      }
+  origin: string
 }
 
 let presentationSignaturePromise: {
@@ -47,10 +41,16 @@ let presentationSignaturePromise: {
   reject: (reason: any) => void
 } | null = null
 
+const IS_DEV = false
+
 window.addEventListener("message", async (event) => {
   const allowedOrigin = "chrome-extension://bboennpbcdmjdgmbggdlemijpijnaflh"
-  if (event.origin !== allowedOrigin) {
-    throw new Error("Invalid origin")
+  const devOrigin = "chrome-extension://lpggapgakiicbhggmmkfklhoikbbboal"
+  if (
+    event.origin !== allowedOrigin &&
+    !(IS_DEV && event.origin === devOrigin)
+  ) {
+    throw new Error(`Invalid origin ${event.origin}`)
   }
   const message = MessageSchema.parse(event.data)
 
@@ -103,11 +103,8 @@ window.addEventListener("message", async (event) => {
               payload,
             ) as PresentationRequestPayload
 
-            const {
-              presentationRequest,
-              selectedCredentials,
-              verifierIdentity,
-            } = parsedPayload
+            const { presentationRequest, selectedCredentials, origin } =
+              parsedPayload
 
             const stringifiedPresentationRequest =
               JSON.stringify(presentationRequest)
@@ -127,19 +124,16 @@ window.addEventListener("message", async (event) => {
               stringifiedPresentationRequest,
             )
 
-            // format verifierIdentity
-            const verifierIdentityString =
-              presentationRequest.type === "zk-app"
-                ? JSON.stringify(verifierIdentity)
-                : (verifierIdentity as string)
-
             // TODO: cache compiled presentation request?
 
             // prepare presentation request and get fields to sign
             const prepared = await Presentation.prepare({
               request: deserialized,
               credentials: storedCredentials,
-              context: { verifierIdentity: verifierIdentityString },
+              context:
+                presentationRequest.type === "https"
+                  ? { verifierIdentity: origin }
+                  : undefined,
             })
 
             // ask wallet to sign fields

@@ -10,16 +10,6 @@ const RequestWithContext = z
   })
   .strict()
 
-const PublicKeySchema = z.string().length(55).startsWith("B62")
-
-const MinaScanNetwork = z.enum(["devnet", "mainnet"])
-
-const zkAppAccountSchema = z.object({
-  address: PublicKeySchema,
-  tokenId: z.string(),
-  network: MinaScanNetwork,
-})
-
 export const StorePrivateCredentialRequestParamsSchema =
   RequestWithContext.extend({
     method: z.literal("mina_storePrivateCredential"),
@@ -33,7 +23,6 @@ export const PresentationRequestParamsSchema = RequestWithContext.extend({
       .object({
         presentationRequest:
           PresentationRequestSchema as unknown as z.ZodType<any>,
-        zkAppAccount: zkAppAccountSchema.optional(),
       })
       .strict(),
   ),

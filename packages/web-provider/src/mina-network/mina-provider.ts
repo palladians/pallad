@@ -468,10 +468,7 @@ export const createMinaProvider = async (): Promise<
             const [request] = params
             if (!request) throw createProviderRpcError(4000, "Invalid Request")
 
-            const { presentationRequest, zkAppAccount } = request
-
-            const verifierIdentity =
-              presentationRequest.type === "zk-app" ? zkAppAccount : origin
+            const { presentationRequest } = request
 
             // Ask for approval to proceed with the presentation request
             const { value: userConfirmed } = await showUserPrompt<boolean>({
@@ -481,7 +478,6 @@ export const createMinaProvider = async (): Promise<
                 payload: JSON.stringify({
                   origin,
                   presentationRequest,
-                  verifierIdentity: verifierIdentity,
                 }),
               },
             })
@@ -523,7 +519,7 @@ export const createMinaProvider = async (): Promise<
               metadata: {
                 title: "Create presentation",
                 payload: JSON.stringify({
-                  verifierIdentity,
+                  origin,
                   presentationRequest,
                   selectedCredentials: JSON.parse(selectedCredentials),
                 }),
