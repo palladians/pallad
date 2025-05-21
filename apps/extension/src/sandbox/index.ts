@@ -41,15 +41,12 @@ let presentationSignaturePromise: {
   reject: (reason: any) => void
 } | null = null
 
+// TODO can we get this from an environment variable?
 const IS_DEV = false
 
 window.addEventListener("message", async (event) => {
   const allowedOrigin = "chrome-extension://bboennpbcdmjdgmbggdlemijpijnaflh"
-  const devOrigin = "chrome-extension://lpggapgakiicbhggmmkfklhoikbbboal"
-  if (
-    event.origin !== allowedOrigin &&
-    !(IS_DEV && event.origin === devOrigin)
-  ) {
+  if (event.origin !== allowedOrigin && !IS_DEV) {
     throw new Error(`Invalid origin ${event.origin}`)
   }
   const message = MessageSchema.parse(event.data)
