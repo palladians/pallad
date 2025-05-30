@@ -6,8 +6,7 @@ import type {
   SignedFields,
   SignedMessage,
   SignedTransaction,
-  TransactionPayload,
-  ZkAppCommandProperties,
+  TransactionOrZkAppCommandProperties,
 } from "@mina-js/utils"
 import type {
   ChainSpecificPayload,
@@ -72,8 +71,7 @@ export type MinaSessionCredentials = {
 }
 
 export type MinaSignablePayload =
-  | TransactionPayload
-  | ZkAppCommandProperties
+  | TransactionOrZkAppCommandProperties
   | Mina.MessageBody
   | Mina.SignableFields
   | Mina.CreatableNullifer
