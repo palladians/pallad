@@ -23,7 +23,7 @@ export async function restoreWalletHelper(
     initialiseKeyAgent,
     restoreKeyAgent,
     setCredential,
-    setCurrentWallet,
+    updateCurrentWallet,
     _syncWallet,
     ensureAccount,
     setKnownAccounts,
@@ -58,7 +58,7 @@ export async function restoreWalletHelper(
   // TODO: set the current network info, restore and create wallet
   // should take some providerConfig object
   setCredential(singleCredentialState)
-  setCurrentWallet({
+  updateCurrentWallet({
     keyAgentName,
     credentialName,
     currentAccountIndex: derivedCredential.accountIndex,

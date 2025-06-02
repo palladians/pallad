@@ -32,7 +32,7 @@ export type CurrentWallet = {
   transactions: Record<string, Tx[]> // string here is token ticker
 }
 
-type CurrentWalletPayload = {
+export type CurrentWalletPayload = {
   keyAgentName: string
   credentialName: string
   currentAccountIndex: number
@@ -59,7 +59,8 @@ export type GlobalVaultActions = {
   setChain: (chain: Network) => void
   setKnownAccounts: (address: string) => void
   getCurrentWallet: () => CurrentWallet
-  setCurrentWallet: (payload: CurrentWalletPayload) => void
+  updateCurrentWallet: (payload: CurrentWalletPayload) => void
+  _setCurrentWallet: (payload: CurrentWalletPayload) => void
   _syncAccountInfo: (
     providerConfig: ProviderConfig,
     publicKey: ChainAddress,

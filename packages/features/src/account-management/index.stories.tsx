@@ -23,6 +23,7 @@ const accounts: SingleCredentialState[] = [
       address: "B62qjzAXN9NkX8K6JfGzYz4qVQoMrkL4uJ3FgkFjVZd4W5X5cQFQkCG",
       encryptedPrivateKeyBytes: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
     },
+    lastSelected: undefined,
   },
   {
     credentialName: "Second",
@@ -40,6 +41,7 @@ const accounts: SingleCredentialState[] = [
       address: "B62qjzAXN9NkX8K6JfGzYz4qVQoMrkL4uJ3FgkFjVZd4W5X5cQFQkCF",
       encryptedPrivateKeyBytes: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 11]),
     },
+    lastSelected: undefined,
   },
 ]
 

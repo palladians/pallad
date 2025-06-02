@@ -10,7 +10,7 @@ export const EditAccountRoute = () => {
     credentials,
     setCredential,
     removeCredential,
-    setCurrentWallet,
+    updateCurrentWallet,
     keyAgentName,
   } = useVault()
   const { t } = useTranslation()
@@ -45,7 +45,7 @@ export const EditAccountRoute = () => {
         removeCredential(editingAccount.credentialName)
         setEditingAccount(updatedAccount)
         setCredential(updatedAccount)
-        setCurrentWallet({
+        updateCurrentWallet({
           keyAgentName,
           credentialName: updatedAccount?.credentialName,
           currentAccountIndex: updatedAccount?.credential?.accountIndex ?? 0,

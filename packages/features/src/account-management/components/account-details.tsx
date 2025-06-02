@@ -29,7 +29,7 @@ export const AccountDetails = ({
     removeCredential,
     credentials,
     setCredential,
-    setCurrentWallet,
+    updateCurrentWallet,
     keyAgentName,
   } = useVault()
 
@@ -53,7 +53,7 @@ export const AccountDetails = ({
         ) {
           removeCredential(account?.credentialName)
           setCredential(serializedList[0])
-          setCurrentWallet({
+          updateCurrentWallet({
             keyAgentName,
             credentialName: serializedList[0]?.credentialName,
             currentAccountIndex:

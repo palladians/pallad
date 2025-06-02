@@ -13,7 +13,7 @@ export async function deriveAccountHelper(get: any, credentialName: string) {
     setKnownAccounts,
     addAccount,
     getNetworkId,
-    setCurrentWallet,
+    updateCurrentWallet,
     setCredential,
     credentials,
   } = get()
@@ -52,7 +52,7 @@ export async function deriveAccountHelper(get: any, credentialName: string) {
   }
 
   setCredential(singleCredentialState)
-  setCurrentWallet({
+  updateCurrentWallet({
     keyAgentName,
     credentialName,
     currentAccountIndex: 0,

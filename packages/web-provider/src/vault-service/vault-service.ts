@@ -27,9 +27,9 @@ export const createVaultService = (): IVaultService => {
     await rehydrate()
     const store = useVault.getState()
     const credentials = store.credentials
-    const addresses = Object.values(credentials).map(
-      (cred) => cred?.credential?.address,
-    )
+    const addresses = Object.values(credentials)
+      .sort((a, b) => (b.lastSelected ?? 0) - (a.lastSelected ?? 0))
+      .map((cred) => cred?.credential?.address)
     return addresses.filter((address) => address !== undefined) as string[]
   }
   const isLocked = async () => {

@@ -10,12 +10,14 @@ export type SingleCredentialState = {
   credentialName: CredentialName
   keyAgentName: KeyAgentName
   credential: StoredCredential
+  lastSelected: number | undefined
 }
 
 export const initialCredentialState: SingleCredentialState = {
   credentialName: "",
   keyAgentName: "",
   credential: undefined,
+  lastSelected: undefined,
 }
 
 export type CredentialStore = {

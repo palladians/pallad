@@ -7,7 +7,7 @@ import { AccountManagementView } from "../views/account-management"
 export const AccountManagementRoute = () => {
   const navigate = useNavigate()
   const {
-    setCurrentWallet,
+    updateCurrentWallet,
     setCredential,
     keyAgentName,
     credentials,
@@ -23,7 +23,7 @@ export const AccountManagementRoute = () => {
   const selectAccount = (account: SingleCredentialState) => {
     setSelectedAccount(account)
     setCredential(account)
-    setCurrentWallet({
+    updateCurrentWallet({
       keyAgentName,
       credentialName: account?.credentialName,
       currentAccountIndex: account?.credential?.accountIndex ?? 0,
