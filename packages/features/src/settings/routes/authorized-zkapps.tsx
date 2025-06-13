@@ -10,6 +10,11 @@ export type ZkApp = {
   image: string
   url: string
 }
+
+// https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+const URLRegex =
+  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
+
 export const AuthorizedZkAppsRoute = () => {
   const navigate = useNavigate()
   const [connectedApps, setConnectedApps] = useState([] as ZkApp[])
@@ -22,16 +27,18 @@ export const AuthorizedZkAppsRoute = () => {
     const { permissions } = (await chrome.storage.local.get({
       permissions: [],
     })) as Record<string, "ALLOWED">
-    // https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-    const URLRegex =
-      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
     const appsWithMetadata = await Promise.all(
       Object.keys(permissions)
         .filter((key) => URLRegex.test(key))
         .map(async (url) => {
-          const metadata = (await fetcher(
-            `https://api.dub.co/metatags?url=${url}`,
-          )) as Omit<ZkApp, "url">
+          let metadata: Omit<ZkApp, "url"> = {
+            title: "",
+            description: "",
+            image: "",
+          }
+          try {
+            metadata = await fetcher(`https://api.dub.co/metatags?url=${url}`)
+          } catch (e) {}
           return { url, ...metadata }
         }),
     )
@@ -42,7 +49,19 @@ export const AuthorizedZkAppsRoute = () => {
     const filteredApps = connectedApps.filter(
       (app) => app.url !== appToDelete.url,
     )
-    await chrome.storage.local.set({ permissions: filteredApps })
+
+    const { permissions } = await chrome.storage.local.get({
+      permissions: {} as ZkApp[] & Record<string, "ALLOWED">,
+    })
+    const newPermissions = Object.assign({}, filteredApps) as ZkApp[] &
+      Record<string, "ALLOWED">
+    for (const k of Object.keys(permissions).filter(
+      (key) => URLRegex.test(key) && key !== appToDelete.url,
+    )) {
+      newPermissions[k] = permissions[k]
+    }
+    await chrome.storage.local.set({ permissions: newPermissions })
+
     setConnectedApps(filteredApps)
   }
 

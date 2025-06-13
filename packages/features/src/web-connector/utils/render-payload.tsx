@@ -19,13 +19,11 @@ const handleRenderError = (error: Error) => {
 const containsPresentationRequest = (
   value: unknown,
 ): value is {
+  origin: string
   presentationRequest: PresentationRequestJSON
-  verifierIdentity:
-    | string
-    | { address: string; tokenId: string; network: "devnet" | "mainnet" }
 } => {
   if (typeof value !== "object" || value === null) return false
-  return "presentationRequest" in value
+  return "presentationRequest" in value && "origin" in value
 }
 
 const isCredential = (
@@ -45,10 +43,7 @@ export const renderPayload = (payload: string) => {
       const request = parsedPayload.presentationRequest
       const formatted = [
         PrettyPrinter.printPresentationRequest(request),
-        PrettyPrinter.printVerifierIdentity(
-          request.type as any, // TODO
-          parsedPayload.verifierIdentity as string,
-        ),
+        PrettyPrinter.printVerifierIdentity(request, parsedPayload.origin),
       ].join("\n")
 
       return <div className="whitespace-pre-wrap break-all">{formatted}</div>
