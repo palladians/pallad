@@ -22,11 +22,11 @@ export const credentialSlice: StateCreator<CredentialStore> = (set, get) => ({
       }),
     )
   },
-  setCredential: (credentialState) => {
-    const { credentialName } = credentialState
+  setCredential: (singleCredentialState) => {
+    const { credentialName } = singleCredentialState
     set(
       produce((state) => {
-        state.credentials[credentialName] = credentialState
+        state.credentials[credentialName] = singleCredentialState
       }),
     )
   },

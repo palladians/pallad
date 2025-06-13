@@ -27,6 +27,7 @@ import {
   syncWalletHelper,
 } from "./utils"
 import { deriveAccountHelper } from "./utils/derive-account"
+import { updateCurrentWalletHelper } from "./utils/update-current-wallet"
 import type { GlobalVaultState, GlobalVaultStore } from "./vaultState"
 
 const defaultGlobalVaultState: GlobalVaultState = {
@@ -79,8 +80,11 @@ export const useVault = create<
           }),
         )
       },
+      updateCurrentWallet(payload) {
+        return updateCurrentWalletHelper(get, payload)
+      },
       // TODO: create a new store for wallet?
-      setCurrentWallet(payload) {
+      _setCurrentWallet(payload) {
         return set(
           produce((state) => {
             state.keyAgentName = payload.keyAgentName
