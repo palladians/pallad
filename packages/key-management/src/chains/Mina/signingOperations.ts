@@ -1,5 +1,10 @@
 import Client from "mina-signer"
 
+import {
+  SignedTransactionSchema,
+  toMinaSignerFormat,
+  toNodeApiFormat,
+} from "@mina-js/utils"
 import { SignableData } from "../../../../mina-core/src/borrowed-types"
 import * as errors from "../../errors"
 import type { ChainOperationArgs } from "../../types"
@@ -25,10 +30,17 @@ export function MinaSigningOperations<T extends MinaSignablePayload>(
           return minaClient.signTransaction<string>(payload.message, privateKey)
         }
         if ("transaction" in payload) {
-          return minaClient.signTransaction(payload.transaction, privateKey)
+          return SignedTransactionSchema.parse(
+            minaClient.signTransaction(payload.transaction, privateKey),
+          )
         }
         if ("command" in payload) {
-          return minaClient.signTransaction(payload.command, privateKey)
+          const signablePayload = toMinaSignerFormat(payload.command)
+          const signed = minaClient.signTransaction(signablePayload, privateKey)
+          return SignedTransactionSchema.parse({
+            ...signed,
+            data: toNodeApiFormat(signed.data),
+          })
         }
         throw new Error("Invalid transaction payload")
       }
