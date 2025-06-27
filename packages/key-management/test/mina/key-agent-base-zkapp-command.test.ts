@@ -4,7 +4,13 @@ import type { Mina } from "@palladco/mina-core"
 import { Network } from "@palladco/pallad-core"
 import Client from "mina-signer"
 
+import {
+  SignedTransaction,
+  toMinaSignerFormat,
+  toNodeApiFormat,
+} from "@mina-js/utils"
 import { utf8ToBytes } from "@noble/hashes/utils"
+import type { SignedZkAppCommand } from "../../../mina-core/src/Mina"
 import { KeyAgentBase } from "../../src/KeyAgentBase"
 import type { MinaSpecificArgs } from "../../src/chains/Mina"
 import { emip3encrypt } from "../../src/emip3"
@@ -116,14 +122,15 @@ describe("KeyAgentBase (Mina zkApp Functionality)", () => {
             },
           },
           feePayer: {
-            feePayer: "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
+            publicKey:
+              "B62qjsV6WQwTeEWrNrRRBP6VaaLvQhwWTnFi4WP4LQjGvpfZEumXzxb",
             fee: "100000000",
+            validUntil: "100000",
             nonce: "1",
-            memo: "test memo",
           },
         },
       }
-      const signedZkAppCommand = await instance.sign(
+      const signedZkAppCommand = (await instance.sign(
         groupedCredential,
         zkAppCommand,
         {
@@ -131,11 +138,12 @@ describe("KeyAgentBase (Mina zkApp Functionality)", () => {
           operation: "mina_signTransaction",
           networkType: "testnet",
         } as ChainOperationArgs,
-      )
+      )) as SignedZkAppCommand
       const minaClient = new Client({ network: args.networkType })
-      const isVerified = minaClient.verifyZkappCommand(
-        signedZkAppCommand as unknown as Mina.SignedZkAppCommand,
-      )
+      const isVerified = minaClient.verifyZkappCommand({
+        ...signedZkAppCommand,
+        data: toMinaSignerFormat(signedZkAppCommand.data),
+      })
       expect(isVerified).toBeTruthy()
     })
   })

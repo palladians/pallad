@@ -1,3 +1,5 @@
+import type { ZkAppCommandTransactionInput } from "@mina-js/utils"
+
 type SignatureJson = { field: string; scalar: string }
 
 export type UInt32 = number | bigint | string
@@ -35,26 +37,7 @@ export type StrictCommon = {
 export type StakeDelegation = Common
 export type Payment = Common & { readonly amount: UInt64 }
 
-type FeePayer = {
-  readonly feePayer: PublicKey
-  readonly fee: UInt64
-  readonly nonce: UInt32
-  readonly memo?: string
-  readonly validUntil?: UInt32 | null
-}
-export type StrictFeePayer = {
-  readonly feePayer: PublicKey
-  readonly fee: string
-  readonly nonce: string
-  readonly memo: string
-  readonly validUntil: string | null
-}
-
-export type ZkappCommand = {
-  // TODO: any goes brrr, ditch it with o1js later
-  readonly zkappCommand: any
-  readonly feePayer: FeePayer
-}
+export type ZkappCommand = ZkAppCommandTransactionInput
 
 export type SignableData = string | StakeDelegation | Payment
 

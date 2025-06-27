@@ -7,10 +7,11 @@ import { useVault } from "@palladco/vault"
 import dayjs from "dayjs"
 import Client from "mina-signer"
 
-import type { SignedTransaction } from "@mina-js/utils"
+import { type SignedTransaction, toMinaSignerFormat } from "@mina-js/utils"
 import type {
-  Payment,
-  StakeDelegation,
+  SignableData,
+  Signed,
+  SignedLegacy,
   ZkappCommand,
 } from "mina-signer/dist/node/mina-signer/src/types"
 import type { IVaultService } from "./types"
@@ -79,30 +80,31 @@ export const createVaultService = (): IVaultService => {
       const accounts = await getAccounts()
       const publicKey = accounts?.[0]
       if (!publicKey) throw new Error("Wallet is not initialized.")
-      const type = getTxType(sendable.input as never)
-      const signedData: StakeDelegation | Payment | ZkappCommand =
-        sendable.input as any
+      const type = getTxType(sendable.input)
       const verifyTransactionParams =
-        "feePayer" in signedData
-          ? {
-              signature: signedData.zkappCommand.feePayer.authorization,
-              publicKey: signedData.zkappCommand.feePayer.body.publicKey,
-              data: signedData,
-            }
-          : {
-              signature: (sendable as any).signature,
-              publicKey: signedData.from,
-              data: signedData,
-            }
+        "signature" in sendable
+          ? ({
+              signature: sendable.signature,
+              publicKey: sendable.input.from,
+              data: sendable.input,
+            } as SignedLegacy<SignableData>)
+          : ({
+              signature: sendable.input.zkappCommand.feePayer.authorization,
+              publicKey: sendable.input.zkappCommand.feePayer.body.publicKey,
+              data: toMinaSignerFormat(sendable.input),
+            } as Signed<ZkappCommand>)
       if (!signer.verifyTransaction(verifyTransactionParams))
         throw new Error("Invalid transaction.")
       const payload =
-        type === "zkapp"
-          ? { input: sendable.input }
-          : { input: sendable.input, signature: (sendable as any).signature }
+        "signature" in sendable
+          ? {
+              input: sendable.input,
+              signature: sendable.signature,
+            }
+          : { input: sendable.input }
       const result = await klesia.request<"mina_sendTransaction">({
         method: "mina_sendTransaction",
-        params: [payload as never, type],
+        params: [payload, type],
       })
       addPendingTransaction({
         hash: result,

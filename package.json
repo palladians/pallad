@@ -24,10 +24,10 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@happy-dom/global-registrator": "^15.11.0",
+    "@mina-js/utils": "0.1.2",
     "@testing-library/react": "16.2.0",
     "@tsconfig/strictest": "2.0.5",
     "@turbo/gen": "2.4.4",
-    "@mina-js/utils": "0.1.0",
     "@types/bun": "1.2.5",
     "autoprefixer": "10.4.21",
     "happy-dom": "14.12.3",

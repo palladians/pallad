@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@mina-js/klesia-sdk": "0.1.0",
-    "@mina-js/providers": "0.1.0",
+    "@mina-js/providers": "0.1.2",
     "@noble/hashes": "1.4.0",
     "@palladco/key-management": "workspace:*",
     "@palladco/mina-core": "workspace:*",
