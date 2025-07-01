@@ -16,6 +16,10 @@ import {
   // StorePrivateCredentialRequestParamsSchema,
   SwitchChainRequestParamsSchema,
 } from "@mina-js/providers"
+import {
+  type TransactionOrZkAppCommandProperties,
+  toNodeApiFormat,
+} from "@mina-js/utils"
 import { createMinaProvider } from "@palladco/web-provider"
 import { serializeError } from "serialize-error"
 import { z } from "zod"
@@ -176,7 +180,24 @@ export const minaSignTransaction: Handler = async ({ data }) => {
     const provider = await createMinaProvider()
     const payload = SignTransactionRequestParamsSchema.parse({
       method: "mina_signTransaction",
-      params: data.params,
+      params: data.params.map(
+        (
+          txData:
+            | TransactionOrZkAppCommandProperties
+            | {
+                command: Parameters<typeof toNodeApiFormat>[0]
+              },
+        ) => {
+          // backward compatibility with the old feePayer input schema
+          if ("command" in txData && "feePayer" in txData.command.feePayer) {
+            return {
+              ...txData,
+              command: toNodeApiFormat(txData.command),
+            }
+          }
+          return txData
+        },
+      ),
       context: data.context,
     })
     return await provider.request(payload)
